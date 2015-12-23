@@ -1,16 +1,16 @@
-﻿using System;
-using System.Web.Mvc;
-using System.Web.Security;
+﻿using Design.Web.Front.Models;
+using DotNetOpenAuth.AspNet;
 using Makersn.BizDac;
 using Makersn.Models;
-using Design.Web.Front.Models;
 using Makersn.Util;
 using Microsoft.Web.WebPages.OAuth;
-using DotNetOpenAuth.AspNet;
+using Net.Common.Helper;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Net;
-using Newtonsoft.Json;
-using Design.Web.Front.Helper;
+using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Design.Web.Front.Controllers
 {
@@ -45,7 +45,7 @@ namespace Design.Web.Front.Controllers
             response.Success = false;
             if (ModelState.IsValid)
             {
-                string ip = Design.Web.Front.Helper.IPAddressHelper.GetIP(this);
+                string ip = IPAddressHelper.GetIP(this);
                 MemberT member = _memberDac.GetMemberForMemberLogOn(model.UserId, model.Password, ip);
                 if (member != null)
                 {

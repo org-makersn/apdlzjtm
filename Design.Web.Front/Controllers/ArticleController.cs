@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using Newtonsoft.Json;
-using PagedList;
+﻿using Design.Web.Front.Helper;
+using Design.Web.Front.Models;
+using Ionic.Zip;
+using Library.ObjParser;
 using Makersn.BizDac;
 using Makersn.Models;
 using Makersn.Util;
-using Design.Web.Front.Helper;
-using Design.Web.Front.Filter;
-using Design.Web.Front.Models;
-using System.Text.RegularExpressions;
-using System.IO.Compression;
-using Ionic.Zip;
+using Net.Common.Filter;
+using Net.Common.Helper;
+using Newtonsoft.Json;
+using PagedList;
 using QuantumConcepts.Formats.StereoLithography;
-using Library.ObjParser;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Mvc;
 
 
 namespace Design.Web.Front.Controllers
@@ -180,7 +180,7 @@ namespace Design.Web.Front.Controllers
 
                 ViewBag.MetaDescription = detail.Contents;
 
-                detail.Contents = new ContentFilter().HtmlEncode(detail.Contents);
+                detail.Contents = new HtmlFilter().HtmlEncode(detail.Contents);
                 //detail.Contents = detail.Contents.Replace("#", "");
                 detail.Contents = chkContent(detail.Contents);
                 if ((detail.MemberNo != visitorNo && Profile.UserLevel < 50) && detail.Visibility.ToUpper() == "N")
@@ -1580,7 +1580,7 @@ namespace Design.Web.Front.Controllers
             if (Int32.TryParse(no, out articleNo))
             {
                 detail = _articleDac.GetArticleDetailByArticleNo(articleNo, Profile.UserNo);
-                detail.Contents = new ContentFilter().HtmlEncode(detail.Contents);
+                detail.Contents = new HtmlFilter().HtmlEncode(detail.Contents);
 
                 ViewBag.Files = _articleFileDac.GetFileList(articleNo);
                 ViewBag.MainImg = detail.MainImgName;

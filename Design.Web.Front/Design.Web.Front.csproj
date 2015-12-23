@@ -198,14 +198,9 @@
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PrintingProfileController.cs" />
-    <Compile Include="Filter\ContentFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\Base64Helper.cs" />
-    <Compile Include="Helper\DateTimeHelper.cs" />
-    <Compile Include="Helper\IPAddressHelper.cs" />
-    <Compile Include="Helper\IPScanner.cs" />
     <Compile Include="Helper\PagenationHelper.cs" />
     <Compile Include="Helper\STLHelper.cs" />
     <Compile Include="Helper\UrlHelperExtensions.cs" />
@@ -427,7 +422,6 @@
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />
     <Content Include="Content\css\NanumBarunGothicBold.woff" />
-    <Content Include="IP\Searchwry.dat" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular-ng-grid.js" />
     <Content Include="Scripts\angular-resource.js" />

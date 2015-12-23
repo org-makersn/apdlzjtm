@@ -178,15 +178,11 @@
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ArticleRecommendRequestController.cs" />
     <Compile Include="Controllers\TranslationController.cs" />
-    <Compile Include="Filter\ContentFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\CheckBoxListHelper.cs" />
-    <Compile Include="Helper\DateTimeHelper.cs" />
     <Compile Include="Helper\FileAutoVersioningHelper.cs" />
-    <Compile Include="Helper\IPAddressHelper.cs" />
-    <Compile Include="Helper\IPScanner.cs" />
     <Compile Include="Helper\RadioBoxListHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AjaxResponseModel.cs" />
@@ -879,7 +875,6 @@
     <Content Include="Content\uploadify.swf" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="IP\Searchwry.dat" />
     <None Include="Properties\PublishProfiles\makersn_admin.pubxml" />
     <None Include="Properties\PublishProfiles\디자인 관리페이지.pubxml" />
     <Content Include="log4net.xml" />

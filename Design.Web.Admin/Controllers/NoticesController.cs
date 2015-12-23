@@ -1,12 +1,12 @@
-﻿using Makersn.BizDac;
+﻿using Design.Web.Admin.Models;
+using Makersn.BizDac;
+using Makersn.Models;
+using Net.Common.Filter;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Makersn.Models;
-using PagedList;
-using Design.Web.Admin.Filter;
-using Design.Web.Admin.Models;
 
 
 
@@ -49,7 +49,7 @@ namespace Design.Web.Admin.Controllers
 
             ViewData["Group"] = MenuModel(1);
             BoardT notices = nd.GetBoard(no);
-            notices.SemiContent = new ContentFilter().HtmlDecode(notices.SemiContent);
+            notices.SemiContent = new HtmlFilter().HtmlDecode(notices.SemiContent);
             ViewData["pre"] = nd.GetPreBoard(no);
             ViewData["next"] = nd.GetNextBoard(no);
             return View(notices);

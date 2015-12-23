@@ -1,20 +1,16 @@
-﻿using System;
+﻿using Design.Web.Front.Helper;
+using Design.Web.Front.Models;
+using Library.ObjParser;
+using Makersn.BizDac;
+using Makersn.Models;
+using Makersn.Util;
+using Net.Common.Filter;
+using Net.Common.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Makersn.Util;
-using Makersn.BizDac;
-using Makersn.Models;
-using Library.ObjParser;
-using Design.Web.Front.Helper;
-using Design.Web.Front.Models;
-using QuantumConcepts.Formats.StereoLithography;
-using Design.Web.Front.Filter;
-using System.Net;
-using System.Text;
-using System.IO;
-using Newtonsoft.Json;
 
 namespace Design.Web.Front.Controllers
 {
@@ -56,7 +52,7 @@ namespace Design.Web.Front.Controllers
 
                 ViewBag.ContClass = "w100";
 
-                if (member.ProfileMsg != null) { member.ProfileMsg = new ContentFilter().HtmlEncode(member.ProfileMsg); };
+                if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlEncode(member.ProfileMsg); };
 
 
 

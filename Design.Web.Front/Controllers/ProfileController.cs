@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using Design.Web.Front.Helper;
+﻿using Design.Web.Front.Models;
 using Makersn.BizDac;
 using Makersn.Models;
-using PagedList;
-using Design.Web.Front.Filter;
-using System.Text.RegularExpressions;
-using Design.Web.Front.Models;
-using System.Web;
-using System.IO;
 using Makersn.Util;
-using System.Web.Security;
+using Net.Common.Filter;
+using Net.Common.Helper;
 using Newtonsoft.Json;
+using PagedList;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
 
 
 namespace Design.Web.Front.Controllers
@@ -83,7 +83,7 @@ namespace Design.Web.Front.Controllers
 
             if (member.ProfileMsg != null)
             {
-                member.ProfileMsg = new ContentFilter().HtmlEncode(member.ProfileMsg);
+                member.ProfileMsg = new HtmlFilter().HtmlEncode(member.ProfileMsg);
                 member.ProfileMsg = CreateATag(member.ProfileMsg);
             };
             ViewBag.PrinterMember = _printerMemberDac.CheckSpotOpen(memberNo);
@@ -207,7 +207,7 @@ namespace Design.Web.Front.Controllers
 
             MemberT member = _memberDac.GetMemberProfile(memberNo);
 
-            if (member.ProfileMsg != null) { member.ProfileMsg = new ContentFilter().HtmlEncode(member.ProfileMsg); };
+            if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlEncode(member.ProfileMsg); };
             return PartialView(member);
         }
         #endregion
@@ -329,7 +329,7 @@ namespace Design.Web.Front.Controllers
             string memberNo = Base64Helper.Base64Encode(Profile.UserNo.ToString());
             ViewBag.No = memberNo;
             MemberT member = _memberDac.GetMemberProfile(Profile.UserNo);
-            if (member.ProfileMsg != null) { member.ProfileMsg = new ContentFilter().HtmlDecode(member.ProfileMsg); };
+            if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlDecode(member.ProfileMsg); };
             return PartialView(member);
         }
         //public ActionResult Setting()
@@ -337,7 +337,7 @@ namespace Design.Web.Front.Controllers
         //    string memberNo = Base64Helper.Base64Encode(Profile.UserNo.ToString());
         //    ViewBag.No = memberNo;
         //    MemberT member = memberDac.GetMemberProfile(Profile.UserNo);
-        //    if (member.ProfileMsg != null) { member.ProfileMsg = new ContentFilter().HtmlDecode(member.ProfileMsg); };
+        //    if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlDecode(member.ProfileMsg); };
         //    return View(member);
         //}
         #endregion

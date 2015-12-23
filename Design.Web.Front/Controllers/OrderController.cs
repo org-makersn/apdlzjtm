@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
+using Net.Common.Helper;
 
 namespace Design.Web.Front.Controllers
 {
