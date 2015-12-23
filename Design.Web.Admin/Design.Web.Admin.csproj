@@ -1003,7 +1003,6 @@
   <ItemGroup>
     <Folder Include="App_Code\" />
     <Folder Include="Controllers\App_Data\" />
-    <Folder Include="Data\" />
     <Folder Include="FileUpload\Banner\" />
     <Folder Include="FileUpload\KindEditor\attached\flash\" />
     <Folder Include="FileUpload\KindEditor\attached\image\" />
@@ -1017,6 +1016,14 @@
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{4226cb43-c074-47ef-8bd8-a136b098bf3f}</Project>
       <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Net.Common\Net.Common.csproj">
+      <Project>{65c05f9a-ee28-4908-a18d-48a5bf36829d}</Project>
+      <Name>Net.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Net.Framwork\Net.Framwork.csproj">
+      <Project>{b5dbd124-8c5a-4b94-97d7-014bd7c97549}</Project>
+      <Name>Net.Framwork</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

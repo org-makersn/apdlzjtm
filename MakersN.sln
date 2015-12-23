@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.ObjParser", "Librar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.StlParser", "Library.StlParser\Library.StlParser.csproj", "{F7EDD416-199A-4928-844F-2CD3237B7852}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Common", "Net.Common\Net.Common.csproj", "{65C05F9A-EE28-4908-A18D-48A5BF36829D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Framwork", "Net.Framwork\Net.Framwork.csproj", "{B5DBD124-8C5A-4B94-97D7-014BD7C97549}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +120,42 @@ Global
 		{F7EDD416-199A-4928-844F-2CD3237B7852}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F7EDD416-199A-4928-844F-2CD3237B7852}.Release|x64.ActiveCfg = Release|Any CPU
 		{F7EDD416-199A-4928-844F-2CD3237B7852}.Release|x86.ActiveCfg = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.MacOSX|Any CPU.ActiveCfg = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.MacOSX|Any CPU.Build.0 = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.MacOSX|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.MacOSX|Mixed Platforms.Build.0 = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.MacOSX|x64.ActiveCfg = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.MacOSX|x86.ActiveCfg = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Release|x64.ActiveCfg = Release|Any CPU
+		{65C05F9A-EE28-4908-A18D-48A5BF36829D}.Release|x86.ActiveCfg = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.MacOSX|Any CPU.ActiveCfg = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.MacOSX|Any CPU.Build.0 = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.MacOSX|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.MacOSX|Mixed Platforms.Build.0 = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.MacOSX|x64.ActiveCfg = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.MacOSX|x86.ActiveCfg = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|x64.ActiveCfg = Release|Any CPU
+		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
