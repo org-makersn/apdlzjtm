@@ -1,0 +1,141 @@
+﻿@model Makersn.Models.ReportT
+@using Design.Web.Admin.Filter
+@using Design.Web.Admin.Helper
+@{
+    ViewBag.Title = "리포트";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="cont_sub_title">* 게시물 정보</div>
+<table class="tbl_style1" summary="게시판 테이블">
+    <colgroup>
+        <col width="15%" />
+        <col width="35%" />
+        <col width="15%" />
+        <col width="35%" />
+    </colgroup>
+    <caption>게시판</caption>
+    <tbody>
+        <tr>
+            <th>게시물제목</th>
+            <td colspan="3">
+                @Model.Title
+            </td>
+        </tr>
+        <tr>
+            <th>카테고리</th>
+            <td>
+                @Model.Cate
+            </td>
+            <th>리포트 일자</th>
+            <td>
+                @Model.RDt
+            </td>
+
+        </tr>
+        <tr>
+            <th>게시자이름</th>
+            <td>
+                @Model.AName
+                (<a href="mailto:<?=$itemMemb['m_id']?>">@Model.AId</a>)
+            </td>
+            <th>리포터이름</th>
+            <td>
+                @Model.RName
+                (<a href="mailto:<?=$reportMemb['m_id']?>">@Model.RId</a>)
+            </td>
+        </tr>
+        <tr>
+            <th>리포트 내용</th>
+            <td colspan="3" style="word-break:break-all">
+                @Html.Raw(new ContentFilter().HtmlEncode(Model.Report))
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="cont_sub_title">* 알림 보내기</div>
+<table class="tbl_style1" summary="게시판 테이블" style="margin-bottom: 10px;">
+    <colgroup>
+        <col width="20%" />
+        <col width="80%" />
+    </colgroup>
+    <caption>게시판</caption>
+    <tbody>
+        <tr>
+            <th>게시자(피드백)</th>
+            <td>
+                <input type="text" id="register_comment" name="register_comment" class="input_text" style="width:90%;" value="@Model.RegisterComment"/>
+            </td>
+        </tr>
+        <tr>
+            <th>리포터(피드백)</th>
+            <td>
+                <input type="text" id="reporter_comment" name="reporter_comment" class="input_text" style="width:90%;" value="@Model.ReporterComment"/>
+            </td>
+        </tr>
+        <tr>
+            <th>알림 보내기</th>
+            <td>
+                @Html.RadioBoxList("State")
+                &nbsp;&nbsp;&nbsp;
+					<span class="btnWrap small"><a href="#" class="_btn_reg">메시지 보내기</a></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+<!-- btn -->
+<div class="btn_center">
+    <span class="btnWrap medium"><a href="/report" class="_btn_list">목록</a></span>
+    <span class="btnWrap medium"><a href="#" class="_btn_del">삭제</a></span>
+</div>
+
+<!-- // btn -->
+
+@section Scripts{
+    <style>
+        .tbl_style1 {
+            table-layout:fixed;
+        }
+    </style>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //$("._btn_list").click(function () {
+
+            //})
+            $("._btn_del").click(function () {
+                var no = "@Model.No";
+
+                var onSuccess = function (result) {
+                    if (result.Success == true) {
+                        location.replace("/report");
+                    }
+                }
+                Ajax.AjaxResponseModelService(this, "/report/Delete", { no: no }, onSuccess);
+            })
+
+            $("._btn_reg").click(function () {
+                var registerComment = $("#register_comment").val();
+                var reporterComment = $("#reporter_comment").val();
+                var no = "@Model.No";
+                var state = $("input:radio[name=State]:checked").val();
+                data = {
+                    registerComment: registerComment,
+                    reporterComment: reporterComment,
+                    no: no,
+                    state: state
+                }
+                var onSuccess = function (result) {
+                    if (result.Success == true) {
+                        location.replace("/report");
+                    }
+                }
+                Ajax.AjaxResponseModelService(this, "/report/SendMessgae", data, onSuccess);
+            })
+        })
+    </script>
+}

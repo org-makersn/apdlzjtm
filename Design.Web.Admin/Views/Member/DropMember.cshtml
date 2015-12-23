@@ -1,0 +1,190 @@
+﻿@model PagedList.IPagedList<Makersn.Models.MemberT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "탈퇴회원";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+<h2 class="contents_title">탈퇴회원</h2>
+<div class="contents_zone" style="width: 950px;">
+
+    <form id="search" name="search">
+        <input type="hidden" id="date" name="date">
+        <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="17%" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">가입일</th>
+                    <td>
+                         <input type="text" id="sdate" name="sdate" value="@ViewData["startDt"]" readonly="readonly" class="input_text" style="width: 106px; margin-right: 5px" />
+                        ~
+						<input type="text" id="edate" name="edate" value="@ViewData["endDt"]" readonly="readonly" class="input_text" style="width: 106px; margin-right: 5px" />
+                        <span class="btnWrap small"><a href="javascript:dropMemberList.SearchDtBnt(0);" class="_date" id="_date_1">오늘</a></span>
+                        <span class="btnWrap small"><a href="javascript:dropMemberList.SearchDtBnt(7);" class="_date" id="_date_2">일주일</a></span>
+                        <span class="btnWrap small"><a href="javascript:dropMemberList.SearchDtBnt(30);" class="_date" id="_date_3">1개월</a></span>
+                        <span class="btnWrap small"><a href="javascript:dropMemberList.SearchDtBnt(90);" class="_date" id="_date_4">3개월</a></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">검색</th>
+                    <td>
+                        <label for="per_page" style="font-weight:bold;">리스트수</label>
+							<input type="text" id="per_page" name="per_page" class="input_text" value="@ViewData["listCnt"]" style="width:30px;margin-right:5px" />
+                        <select id="slt" name="sfl" style="width: 130px">
+                            <option value="name">이름</option>
+                            <option value="id"@(ViewData["option"] == "id" ? " selected" : "")>아이디</option>
+                        </select>
+                        <input type="text" id="searchBox" name="stx" value="@ViewData["text"]" class="input_text" style="width: 200px; padding: 1px 0" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <div class="btn_center">
+        <span class="btnWrap medium" id="btnSearch"><a href="javascript:dropMemberList.Search()">검색</a></span>
+        <span class="btnWrap medium" id="btnClear"><a href="/Member/DropMember">초기화</a></span>
+    </div>
+
+    <div class="right_float_wrap">
+        <div class="left"><strong>@ViewData["cnt"]</strong>명의 회원</div>
+    </div>
+
+    <input type="hidden" id="date" name="date">
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="5%" />
+            <col width="8%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="auto" />
+            <col width="13%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <!-- <th><input type="checkbox" name="chkAll" onclick="checkedAll();"></th> -->
+                <th>
+                    <input type="checkbox" /></th>
+                <th>번호</th>
+                <th>이름</th>
+                <th>아이디(관리)</th>
+                <th>탈퇴사유</th>
+                <th>탈퇴일</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var member in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" /></td>
+                    <td>@member.No</td>
+                    <td>@member.Name</td>
+                    <td>@member.Id</td>
+                    <td>@member.DropComment</td>
+                    <td>@member.DelDt</td>
+                </tr>   
+            }
+
+
+
+        </tbody>
+    </table>
+
+    @Html.PagedListPager(Model, page => Url.Action("/DropMember", new { startDt = ViewData["startDt"], endDt = ViewData["endDt"], page ,listCnt = ViewData["listCnt"]}))
+
+    <!-- // page_navi -->
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="two_btn_wrap">
+        <div class="box_left_zone">
+            <!-- <span class="btnWrap medium"><a href="javascript:void(0);" class="_sel_init" data-val="10" data-type="일반회원">일반회원</a></span> -->
+        </div>
+
+        <div class="box_right_zone">
+            <!-- <span class="btnWrap medium"><a href="javascript:void(0);" class="_sel_del">선택삭제</a></span> -->
+            <!-- <span class="btnWrap medium"><a href="javascript:void(0);" class="_btn_write">임의회원가입</a></span> -->
+        </div>
+    </div>
+
+
+    <!-- // btn -->
+
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function dropMemberList() { };
+
+        dropMemberList.Init = function () {
+
+        }
+        dropMemberList.Search = function () {
+            var startDt = $("#sdate").val();
+            var endDt = $("#edate").val();
+            var text = $("#searchBox").val();
+            var option = $("#slt").val();
+            var listCnt = $("#per_page").val();
+            location.replace("/Member/DropMember?startDt=" + startDt + "&endDt=" + endDt + "&" + option + "=" + text + "&listCnt=" + listCnt);
+        }
+        dropMemberList.GoProfile = function (val) {
+            window.open(
+                '../profile/' + val,
+                'blank'
+                );
+        }
+
+        dropMemberList.SearchDtBnt = function (val) {
+            var date = new Date();
+            date.setDate(date.getDate() - val);
+            var string = date.toLocaleDateString();
+            var index = string.lastIndexOf(".");
+            string = string.substring(0, index);
+            var array = string.split(". ");
+            string = array[0] + "-" + array[1] + "-" + array[2];
+            location.replace("/Member/DropMember?startDt=" + string);
+        }
+
+
+
+        $(document).ready(function () {
+            $("#sdate,#edate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showOn: 'both',
+                buttonImageOnly: true,
+                buttonImage: '/Content/images/admin/icon_calender.png',
+                dateFormat: 'yy-mm-dd'
+            });
+
+            dropMemberList.Init();
+
+            $('#searchBox').keyup(function (event) {
+                if (event.keyCode == 13) {
+                    dropMemberList.Search()
+                }
+            });
+
+        });
+    </script>
+   @* <style type="text/css">
+        .ui-datepicker {
+            background: #EEE;
+            border: 1px solid #555;
+            color: #333;
+            font-size: 20px;
+        }
+    </style>*@
+
+}

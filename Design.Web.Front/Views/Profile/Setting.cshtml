@@ -1,0 +1,507 @@
+﻿@model Makersn.Models.MemberT
+@{
+    ViewBag.Title = "Setting";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+}
+
+@*@{Html.RenderAction("TopArea", "Profile", new { no = ViewBag.No });}*@
+
+<!-- Setting -->
+@*<div class="profCont">*@
+<div class="mySetting">
+    <!-- inputArea -->
+    <div class="inputArea">
+        <form name="insert_form" id="insert_form" enctype="multipart/form-data" method="post">
+            <input name="mode" type="hidden" value="edit">
+            <input name="id" id="id" type="hidden" value="253">
+            <!-- line1 -->
+            <div class="line">
+                <div class="box">
+                    <div class="headerInput">
+                        <p class="tit">이름</p>
+                        <div class="countBox" id="countBox1">
+                            <input id="_count1" type="hidden" value="14">
+                            <span class="countNumber" id="_countNum1"></span>/<span class="maxNumber" id="_max1">20</span>
+                        </div>
+                    </div>
+                    <div class="inputZone">
+                        <input name="name" id="name" type="text" value="@Model.Name">
+                    </div>
+                </div>
+
+
+                <input name="old_bl_id" type="hidden" value="">
+
+                <div class="box flR">
+                    <div class="headerInput">
+                        <p class="tit">프로필 페이지 URL</p>
+                        <p class="flR">
+                            <a class="btnUseCheck" id="id_check" href="javascript:chkBlog();">
+                                <img alt="중복확인" src="/content/images/common/btn/btn_checkdup.gif"></a>
+                        </p>
+                    </div>
+                    <div class="inputZone"><span class="url">www.makersn.com/</span><input name="bl_id" class="inputUrl" id="bl_id" type="text" value="@Model.BlogUrl"></div>
+                </div>
+            </div>
+            <!-- //line1 -->
+            <!-- line2 -->
+            <div class="line">
+                <div class="box">
+                    <p class="title">이메일</p>
+                    <div class="inputZone">
+                        <input name="email" id="email" type="text" value="@Model.Email">
+                    </div>
+                </div>
+                <div class="box flR">
+                    <div class="pwWrapZone">
+                        <div class="linePwLeft">
+                            <p class="title">비밀번호</p>
+                            <div class="inputZone">
+                                <input name="password" type="password" id="password" value="******">
+                            </div>
+                        </div>
+                        <div class="linePwRight">
+                            <p class="title">비밀번호 확인</p>
+                            <div class="inputZone">
+                                <input name="re_password" type="password" id="re_password" value="******">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- //line2 -->
+            <!-- line3 -->
+            <div class="line">
+                <div class="box">
+                    <div class="headerInput">
+                        <p class="tit">자기소개</p>
+                        <div class="countBox" id="countBox2">
+                            <input id="_count2" type="hidden" value="150">
+                            <span class="countNumber" id="_countNum2">0</span>/<span class="maxNumber" id="_max2">150</span>
+                        </div>
+                    </div>
+                    <textarea name="profile_msg" id="profile_msg">@Model.ProfileMsg</textarea>
+
+                </div>
+                <div class="alarmZone flR">
+                    <p class="title">알림 설정</p>
+                    <ul class="control">
+                        <li>
+                            <span class="boldF">알림 전체</span>
+                            @{
+                                string lbl01 = string.Empty;
+                                string lbl02 = string.Empty;
+                                string input01 = string.Empty;
+                                string input02 = string.Empty;
+                                if (Model.AllIs == "on")
+                                {
+                                    lbl01 = "display:block";
+                                    lbl02 = "display:none";
+                                    input01 = "checked=checked";
+                                    input02 = "";
+                                }
+                                else
+                                {
+                                    lbl01 = "display:none";
+                                    lbl02 = "display:block";
+                                    input01 = "";
+                                    input02 = "checked=checked";
+                                }
+                            }
+                            <label title="off" class="btnOff" for="alarm02" style="@lbl02"></label>
+                            <label title="on" class="btnOn" for="alarm01" style="@lbl01"></label>
+
+                            <input name="all_is" title="off" id="alarm01" type="radio" @input02 value="off">
+                            <input name="all_is" title="on" id="alarm02" type="radio" @input01 value="on">
+                        </li>
+                        <li>
+                            <span>댓글</span>
+                            @{
+                                string lbl03 = string.Empty;
+                                string lbl04 = string.Empty;
+                                string input03 = string.Empty;
+                                string input04 = string.Empty;
+                                if (Model.RepleIs == "on")
+                                {
+                                    lbl03 = "display:block";
+                                    lbl04 = "display:none";
+                                    input03 = "checked=checked";
+                                    input04 = "";
+                                }
+                                else
+                                {
+                                    lbl03 = "display:none";
+                                    lbl04 = "display:block";
+                                    input03 = "";
+                                    input04 = "checked=checked";
+                                }
+                            }
+
+                            <label title="off" class="btnOff" for="alarm04" style="@lbl04"></label>
+                            <label title="on" class="btnOn" for="alarm03"   style="@lbl03"></label>
+
+                            <input name="reple_is" title="off" id="alarm03" type="radio" @input04 value="off">
+                            <input name="reple_is" title="on" id="alarm04" type="radio"  @input03 value="on">
+                        </li>
+                        <li>
+                            <span>좋아요</span>
+                            @{
+                                string lbl05 = string.Empty;
+                                string lbl06 = string.Empty;
+                                string input05 = string.Empty;
+                                string input06 = string.Empty;
+                                if (Model.LikeIs == "on")
+                                {
+                                    lbl05 = "display:block";
+                                    lbl06 = "display:none";
+                                    input05 = "checked=checked";
+                                    input06 = "";
+                                }
+                                else
+                                {
+                                    lbl05 = "display:none";
+                                    lbl06 = "display:block";
+                                    input05 = "";
+                                    input06 = "checked=checked";
+                                }
+                            }
+                            <label title="off" class="btnOff" for="alarm06" style="@lbl06"></label>
+                            <label title="on" class="btnOn" for="alarm05"   style="@lbl05"></label>
+
+                            <input name="like_is" title="off" id="alarm05" type="radio" @input06 value="off">
+                            <input name="like_is" title="on" id="alarm06" type="radio"  @input05 value="on">
+                        </li>
+                        <li>
+                            <span>팔로워</span>
+                            @{
+                                string lbl07 = string.Empty;
+                                string lbl08 = string.Empty;
+                                string input07 = string.Empty;
+                                string input08 = string.Empty;
+                                if (Model.FollowIs == "on")
+                                {
+                                    lbl07 = "display:block";
+                                    lbl08 = "display:none";
+                                    input07 = "checked=checked";
+                                    input08 = "";
+                                }
+                                else
+                                {
+                                    lbl07 = "display:none";
+                                    lbl08 = "display:block";
+                                    input07 = "";
+                                    input08 = "checked=checked";
+                                }
+                            }
+                            <label title="off" class="btnOff" for="alarm08" style="@lbl08"></label>
+                            <label title="on" class="btnOn" for="alarm07"   style="@lbl07"></label>
+
+                            <input name="follower_is" title="off" id="alarm07" type="radio" @input08 value="off">
+                            <input name="follower_is" title="on" id="alarm08" type="radio"  @input07 value="on">
+                        </li>
+                    </ul>
+                </div>
+                <!-- //alarmZone -->
+            </div>
+            <!-- //line3 -->
+        </form>
+    </div>
+    <!-- //inputZone -->
+
+    <!-- alarmZone -->
+
+
+    <!-- btZone -->
+    <div class="btZone">
+        <button title="취소" onclick="javascript:location.href='/profile'" class="btnCancel _reload" id="btnCancle"></button>
+        <button title="설정 저장" class="btnSave _btn_reg" id="btnSubmit"></button>
+        <button title="로그아웃" class="logOut" onclick="LogOff()">로그아웃</button>
+        <button title="회원탈퇴" class="joinOut" onclick="joinOutPop()">회원탈퇴</button>
+    </div>
+    <!--//btnZone -->
+</div>
+@*</div>*@
+
+
+
+<!-- 회원탈퇴 팝업 -->
+<div class="popupArea joinOut">
+    <div class="bgArea" id="divJoinOut"></div>
+    <div class="popBox">
+        <form id="drop_form" method="post" name="drop_form">
+            <input type="hidden" value="253" name="memb_no">
+            <div class="contactZone">
+                <p class="titleContact">회원을 탈퇴하시겠습니까?</p>
+                <p class="info">
+                    혹시라도 불편이나 불만 사항 때문이라면,<br>
+                    <a href="/info/customer">고객센터</a>로 문의해주시겠어요?<br>
+                    그래도 탈퇴를 원하실 경우에는<br>
+                    이유를 알려주시면 귀담아 듣도록 하겠습니다.
+                </p>
+                <div class="textOut">
+                    <div class="countBox">0/200</div>
+                    <div class="outText">
+                        <textarea id="drop_comment" name="drop_comment"></textarea>
+                    </div>
+                    <p class="btn">
+                        <input type="button" id="drop_submit" class="leave" title="회원탈퇴"></input>
+                    </p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- //회원탈퇴 팝업 -->
+
+<!-- 회원탈퇴 완료 팝업 -->
+<div class="popupArea joinOutCom">
+    <div class="bgArea"></div>
+    <div class="popBox">
+        <div class="contactZone">
+            <p class="info">
+                탈퇴되었습니다.
+                <br>
+                그동안 이용해주셔서 감사합니다.
+            </p>
+            <img alt="makersN" src="content/images/common/pop_logo.gif">
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="hfChkBlog" value="0" />
+
+<!-- //Setting -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //$("#upload").removeClass();
+        //$("#setting").removeClass();
+        //$("#upload").addClass("cnt");
+        //$("#setting").addClass("on");
+
+        //$("#_countNum1").text(byteLength($("#name").val()));
+        $("#_countNum1").text($("#name").val().length);
+        //$("#_countNum2").text(byteLength($("#profile_msg").val()));
+        $("#_countNum2").text($("#profile_msg").val().length);
+
+        $("#bl_id").change(function () {
+            $("#hfChkBlog").val(1);
+        })
+
+        $("#name").on('input', function () {
+            //$("#_countNum1").text(byteLength($("#name").val()));
+            $("#_countNum1").text($("#name").val().length);
+        })
+
+        $("#profile_msg").on('input', function () {
+            //$("#_countNum2").text(byteLength($("#profile_msg").val()));
+            $("#_countNum2").text($("#profile_msg").val().length);
+        })
+
+        $('.control li label').on('click', function () {
+            $(this).hide();
+            $(this).siblings('label').show();
+        });
+
+        // 프로필 페이지 URL 포커스
+        $('.inputZone .url').on('click', function () {
+            $('.inputUrl').focus();
+        });
+
+        $('#id_check').on('click', function () {
+            userCheckPop();
+        });
+
+        $("input[name='all_is']").change(function () {
+            var chked = $("input[name='all_is']:checked").val();
+
+            if (chked == "on") {
+                $(".btnOff").css("display", "none");
+                $(".btnOn").css("display", "block");
+
+                $('input:radio[name=reple_is]:input[value="off"]').attr("checked", false);
+                $('input:radio[name=like_is]:input[value="off"]').attr("checked", false);
+                $('input:radio[name=follower_is]:input[value="off"]').attr("checked", false);
+
+                $('input:radio[name=reple_is]:input[value="on"]').attr("checked", true);
+                $('input:radio[name=like_is]:input[value="on"]').attr("checked", true);
+                $('input:radio[name=follower_is]:input[value="on"]').attr("checked", true);
+            }
+            else {
+                $(".btnOn").css("display", "none");
+                $(".btnOff").css("display", "block");
+
+                $('input:radio[name=reple_is]:input[value="on"]').attr("checked", false);
+                $('input:radio[name=like_is]:input[value="on"]').attr("checked", false);
+                $('input:radio[name=follower_is]:input[value="on"]').attr("checked", false);
+
+                $('input:radio[name=reple_is]:input[value="off"]').attr("checked", true);
+                $('input:radio[name=like_is]:input[value="off"]').attr("checked", true);
+                $('input:radio[name=follower_is]:input[value="off"]').attr("checked", true);
+            }
+
+        })
+
+        $("#btnSubmit").click(function () {
+
+            if (check_msg("name", "이름을 입력해주세요.", "required:name") == false) return false;
+            if (check_msg("email", "이메일을 입력해주세요.", "required:email") == false) return false;
+            if (check_msg("password", "비밀번호를 입력해주세요.", "required:password") == false) return false;
+            if (check_msg("profile_msg", "자기소개를 입력해주세요.", "profile_msg") == false) return false;
+            if ($("#hfChkBlog").val() == 1) { alert("중복 확인을 해주세요"); return false; };
+
+            var no = "@ViewBag.No";
+            var name = $("#name").val();
+            var blog = $("#bl_id").val();
+            var email = $("#email").val();
+            //var webUrl = $("#url").val();
+            var pw = $("#password").val();
+            var rePw = $("#re_password").val();
+            var profileMsg = $("#profile_msg").val();
+            var armAll = $("input[name='all_is']:checked").val();
+            var armReply = $("input[name='reple_is']:checked").val();
+            var armLikes = $("input[name='like_is']:checked").val();
+            var armFollower = $("input[name='follower_is']:checked").val();
+
+            armReply = armReply == undefined ? armAll : armReply;
+            armLikes = armLikes == undefined ? armAll : armLikes;
+            armFollower = armFollower == undefined ? armAll : armFollower;
+
+            var data = {
+                no: no,
+                name: name,
+                blog: blog,
+                email: email,
+                //webUrl: webUrl,
+                pw: pw,
+                rePw: rePw,
+                profileMsg: profileMsg,
+                armAll: armAll,
+                armReply: armReply,
+                armLikes: armLikes,
+                armFollower: armFollower
+            }
+            //console.log(armAll + "//" +armReply +"???" + armLikes + "????"+ armFollower);
+            var onSuccess = function (result) {
+                if (result.Success == true) {
+                    alert("변경되었습니다.");
+                    //location.href = "/profile/lists?no=@ViewBag.No";
+                    location.reload(true);
+                }
+                if (result.Success == false) {
+                    switch (result.Result) {
+                        case 1:
+                            alert("본인만 수정 가능합니다");
+                            break;
+                        case 2:
+                            alert("비밀번호가 일치하지 않습니다.");
+                            $("#password").val("");
+                            $("#re_password").val("");
+                            break;
+                        case 3:
+                            alert("이미 사용중인 주소입니다.");
+                            break;
+                        case 4:
+                            alert("올바른 이메일을 입력해 주세요.");
+                            break;
+                        case 5:
+                            alert("프로필 주소를 확인해 주세요. \n 영문자만 입력 가능합니다");
+                            break;
+                        case 6:
+                            alert("최대 글자수를 초과하였습니다");
+                            break;
+                        case 7:
+                            alert("이메일을 발송하였습니다.\n이메일 인증을 해주세요.");
+                            break;
+                        default:
+                            alert("오류가 생겼습니다.\n 관리자에게 문의해주세요");
+                            break;
+                    }
+                }
+            }
+            var onFail = function () {
+                alert("오류가 생겼습니다.\n 관리자에게 문의해 주세요");
+            }
+
+            Ajax.AjaxResponseModelService(this, "/Profile/UpdateProfile", data, onSuccess, onFail);
+        });
+
+        $("#drop_submit").click(function () {
+            var dropComment = $("#drop_comment").val();
+            var data = {
+                dropComment: dropComment
+            }
+            var onSuccess = function (result) {
+                if (result.Success == true) {
+                    alert("성공적으로 탈퇴 되었습니다. \n이용해주셔서 감사합니다.");
+                    //location.href = "/account/logoff";
+                    $("#logoutForm").submit();
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/Profile/DropMember", data, onSuccess);
+        });
+
+    });
+
+
+    function chkBlog() {
+        var no = "@ViewBag.No";
+            var blog = $("#bl_id").val();
+
+            var data = {
+                no: no,
+                blog: blog
+            }
+
+            var onSuccess = function (result) {
+                switch (result.Result) {
+                    case 0:
+                        alert("사용 가능한 주소입니다.");
+                        $("#hfChkBlog").val(0);
+                        break;
+                    case 1:
+                        alert("이미 사용중인 주소입니다");
+                        $("#hfChkBlog").val(1);
+                        break;
+                    case 2:
+                        alert("영문자와 숫자만 입력 가능합니다.");
+                        $("#hfChkBlog").val(1);
+                        break;
+                    case 3:
+                        alert("사용할수 없는 주소입니다");
+                        $("#hfChkBlog").val(1);
+                        break;
+                    case 4:
+                        alert("주소는 5글자 이상 20글자 이하만 가능합니다");
+                        $("#hfChkBlog").val(1);
+                        break;
+                }
+            }
+
+            Ajax.AjaxResponseModelService(this, "/Profile/ChkBlogUrl", data, onSuccess);
+        };
+
+        function byteLength(text) {
+            var str = new String(text);
+            var _byte = 0;
+            if (str.length != 0) {
+                for (var i = 0; i < str.length; i++) {
+                    var str2 = str.charAt(i);
+                    if (escape(str2).length > 4) {
+                        _byte += 2;
+                    }
+                    else {
+                        _byte++;
+                    }
+                }
+            }
+            return _byte;
+        }
+
+        function LogOff() {
+            $("#logoutForm").submit();
+        }
+</script>

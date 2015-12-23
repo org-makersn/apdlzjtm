@@ -1,0 +1,542 @@
+﻿@model MemberT
+@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+    bool changeAble = ViewBag.VisitorNo == Model.No || profile.UserLevel > 50;
+
+    string btnClass = changeAble ? "" : "usp";
+    string profilePic = string.Empty;
+    if (string.IsNullOrEmpty(Model.ProfilePic))
+    {
+        profilePic = "/Content/images/common/profile_photo2.png";
+    }
+    else
+    {
+        profilePic = ViewBag.ProfileImgUrl + Model.ProfilePic;
+    }
+    string memberNo = Design.Web.Front.Helper.Base64Helper.Base64Encode(Model.No.ToString());
+    string followClass = ViewBag.CheckFollow == 0 ? "flw" : "flwing";
+
+    ProfileT cntList = ViewBag.CntList;
+}
+
+<div class="profInfo">
+    <div class="infoWrap">
+
+        <a name="uploaded"></a>
+        <div class="profileBox">
+            <div id="_memb_pic" class="profileImg">
+                <img alt="기본프로필" id="defPhoto" class="defPhoto" src="@profilePic">
+                @if (profile.UserNo != 0 && changeAble)
+                {
+                    <form id="profile_form" name="insert_form" method="post" enctype="multipart/form-data">
+                        <div class="btnProfileGo">
+                            <a class="editProfile">
+                                <img alt="프로필편집" src="/content/images/common/profile_photo_over.png"></a>
+                            <div class="photoUpZone">
+                                @if (profile.UserNo != 0 && profile.UserNo == Model.No)
+                                {
+                                    <div class="photoUp">
+                                        <button class="file_input_button" title="사진 업로드"></button>
+                                        <input type="file" id="memb_pic" name="memb_pic" class="file_input_hidden" title="사진 업로드">
+                                    </div>
+                                    <input type="button" id="memb_pic_del" class="btnPhotoDel" title="사진 삭제" onclick="DeleteProfileImg()">
+                                }
+                                else
+                                {
+                                    <div class="photoUp">
+                                    </div>
+                                    <input type="button" id="memb_pic_del" class="btnPhotoDel" title="사진 삭제" onclick="DeleteProfileImg()">
+                                }
+
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.form.min.js")"></script>
+                    <script type="text/javascript">
+                        $(function () {
+                            $("#memb_pic").on("change", function (e) {
+                                e.preventDefault();
+                                var $form_data = $("#profile_form").serialize();
+
+                                var options = {
+                                    beforeSend: function () {
+                                    },
+                                    uploadProgress: function (event, position, total, percentComplete) {
+
+                                    },
+                                    success: function (response) {
+                                        d = new Date();
+                                        $("#_memb_pic > img").attr("src", "@ViewBag.ProfileImgUrl" + response.Result + "?" + d.getTime());
+                                        if ("@ViewBag.CheckSelf" == 1) {
+                                            $("#topProfileImg").attr("src", "@ViewBag.ProfileImgUrl" + response.Result + "?" + d.getTime());
+                                        }
+                                    },
+                                    complete: function (response) {
+                                    },
+                                    error: function () {
+                                    }
+                                };
+
+                                $('#profile_form').attr("action", "/Profile/ProfileImgUpload").ajaxForm(options).submit();
+
+                                $(this).val('');
+                            });
+                        });
+                    </script>
+                }
+            </div>
+        </div>
+
+        <p class="tit1">@Model.Name</p>
+        @*<p class="tit2">@Model.BlogUrl</p>*@
+
+        @*<div @btnClass>
+            <a href="javascript:SendMessage('@No')" class="btMsg" title="메세지"></a>
+            <a href="javascript:SetFollowUser('@No');" class="btFollow @followClass" title="팔로우" id="userFollow"></a>
+        </div>*@
+
+        <p class="txt1" id="profileMsgZone">
+            @Html.Raw(Model.ProfileMsg)
+        </p>
+    </div>
+</div>
+
+<div class="myGroup">
+    <div class="groupWrap @btnClass">
+        <ul class="tits">
+            <li>
+                @*<a href="/Profile?no=@ViewBag.No" class="cnt" id="upload">*@
+                <a href="#" class="cnt" id="upload">
+                    <span class="cnt">@cntList.DesignCnt</span><br />
+                    <span class="tit">디자인</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="cnt" id="collection">
+                    <span class="cnt">@cntList.ListCnt</span><br />
+                    <span class="tit">리스트</span>
+                </a>
+            </li>
+            @if (changeAble)
+            {
+                <li>
+                    @*<a href="/Profile?no=@ViewBag.No&gubun=D" class="cnt" id="draft">*@
+                    <a href="#" class="cnt" id="draft">
+                        <span class="cnt">@cntList.DraftCnt</span><br />
+                        <span class="tit">임시저장</span>
+                    </a>
+                </li>
+            }
+            <li>
+                @*<a href="/Profile?no=@ViewBag.No&gubun=L" class="cnt" id="likes">*@
+                <a href="#" class="cnt" id="likes">
+                    <span class="cnt">@cntList.LikesCnt</span><br />
+                    <span class="tit">좋아요</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="cnt" id="following">
+                    <span class="cnt">@cntList.FollowingCnt</span><br />
+                    <span class="tit">팔로잉</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="cnt" id="follower">
+                    <span class="cnt">@cntList.FollowerCnt</span><br />
+                    <span class="tit">팔로워</span>
+                </a>
+            </li>
+        </ul>
+
+        @if (Model.No == ViewBag.VisitorNo)
+        {
+            <ul class="bts">
+                <li class="noti">
+                    <a href="#notices" title="알림" id="notices"></a>
+                    @if (cntList.NoticeCnt > 0)
+                    {
+                        <img class="new" alt="NEW" src="/content/images/common/ico/ico_new.png">
+                    }
+                </li>
+                <li class="msg">
+                    <a href="#message" title="메시지" id="message"></a>
+                    @if (cntList.MessageCnt > 0)
+                    {
+                        <img class="new" alt="NEW" src="/content/images/common/ico/ico_new.png">
+                    }
+                </li>
+                <li class="set">
+                    <a href="#setting" title="설정" id="setting"></a>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <ul class="bts">
+                <li class="@followClass" id="userFollow">
+                    <a href="javascript:SetFollowUser2('@memberNo');" title="팔로우"></a>
+                    <!--img class="new" alt="NEW" src="content/images/common/ico/ico_new.png"-->
+                </li>
+                <li class="msg">
+                    @*<a href="javascript:SendMessage('@memberNo')" id="sendMessage" title="메세지"></a>*@
+                    <a href="javascript:void(0);" id="sendMessage" title="메세지"></a>
+
+                    <!--img class="new" alt="NEW" src="content/images/common/ico/ico_new.png"-->
+                </li>
+            </ul>
+
+        }
+    </div>
+</div>
+
+<div class="profCont" id="partial-part">
+</div>
+
+<form id="profileForm" action="/profile" method="post">
+    <input type="hidden" id="no" name="no" />
+    <input type="hidden" id="gubun" name="gubun" />
+    <input type="hidden" id="page" name="page" />
+    <input type="hidden" id="listNo" name="listNo" />
+</form>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        //메시지 보내기
+        function SendMessage() {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+                if (check_msg("txtMessage", "내용을 입력해주세요.", "required:message") == false) return false;
+                var comment = $("#txtMessage").val();
+                $("#txtMessage").val("");
+                var data = {
+                    comment: comment
+                }
+                var onSuccess = function () {
+                    getMessage();
+
+                    $("#txtMessage").focus();
+                }
+                Ajax.AjaxResponseModelService(this, "/profile/SendMessage", data, onSuccess);
+
+
+            }
+        }
+
+        function getMessage() {
+            var data = {
+                val1: "@ViewBag.No"
+            };
+
+            var url = "/Profile/UserMessageRoom";
+
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+
+        function sendFile(action) {
+
+            var options = {
+                beforeSend: function () {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        $("#txtMessage").val("");
+                        getMessage();
+                        $("#txtMessage").focus();
+                    }
+                    console.log(response);
+
+                },
+                complete: function (response) {
+                    //$(".msgWrap").scrollTop($(".msgWrap")[0].scrollHeight);
+                },
+                error: function (error) {
+                    //console.log(error);
+                }
+            };
+
+            $('#msg_file_form').attr("action", action).ajaxForm(options).submit();
+        }
+
+        $(document).ready(function () {
+            //$(".gnbArea").remove();
+            $("#no").val("@ViewBag.No");
+            $("#page").val("@ViewBag.page");
+            $("#listNo").val("@ViewBag.ListNo");
+
+            switch ("@ViewBag.Gubun") {
+                case "U":
+                    $("#upload").addClass("on");
+                    GetArticle("U");
+                    break;
+                case "D":
+                    $("#draft").addClass("on");
+                    GetArticle("D");
+                    break;
+                case "L":
+                    $("#likes").addClass("on");
+                    GetArticle("L");
+                    break;
+                case "ing":
+                    GetFollow("ing");
+                    break;
+                case "wer":
+                    GetFollow("wer");
+                    break;
+                case "S":
+                    GetSetting();
+                    $(".myGroup").find(".on").removeClass("on");
+                    $("#setting").addClass("on");
+                    break;
+                case "N":
+                    GetNotice();
+                    $(".myGroup").find(".on").removeClass("on");
+                    $("#notices").addClass("on");
+                    break;
+                case "message":
+                    $("#message").addClass("on");
+                    GetMessageList();
+                    break;
+                case "collection":
+                    $("#collection").addClass("on");
+                    GetList();
+                    break;
+                case "CD":
+                    $("#collection").addClass("on");
+                    GoListDetail();
+                    break;
+                default:
+                    GetArticle("U");
+                    $("#upload").addClass("on");
+                    break;
+            }
+
+            $("#upload").on("click", function (e) {
+                //GetArticle("U");
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+
+                $("#gubun").val("U");
+                $("#profileForm").submit();
+                //location.href = "/profile?gubun=U&no=" + "@ViewBag.No" + "&page=" + "@ViewBag.Page";
+            });
+
+            $("#draft").on("click", function (e) {
+                //GetArticle("D");
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+
+                $("#gubun").val("D");
+                $("#profileForm").submit();
+                
+                //location.href = "/profile?gubun=D&no=" + "@ViewBag.No" + "&page=" + "@ViewBag.Page";
+            });
+
+            $("#likes").on("click", function (e) {
+                //GetArticle("L");
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+
+                $("#gubun").val("L");
+                $("#profileForm").submit();
+                
+                //location.href = "/profile?gubun=L&no=" + "@ViewBag.No" + "&page=" + "@ViewBag.Page";
+            });
+
+            $("#following").on("click", function (e) {
+                //GetFollow("ing");
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+
+                $("#gubun").val("ing");
+                $("#profileForm").submit();
+                //location.href = "/profile?gubun=ing&no=" + "@ViewBag.No";
+            });
+
+            $("#follower").on("click", function (e) {
+                //GetFollow("wer");
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+
+                $("#gubun").val("wer");
+                $("#profileForm").submit();
+                //location.href = "/profile?gubun=wer&no=" + "@ViewBag.No";
+            });
+
+            $("#notices").on("click", function (e) {
+                //GetNotice();
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+                //$(".noti").find("img").remove();
+
+                $("#gubun").val("N");
+                $("#profileForm").submit();
+                //location.href = "/profile?gubun=N";
+            });
+
+            $("#collection").on("click", function (e) {
+                //GetList();
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+
+                $("#gubun").val("collection");
+                $("#profileForm").submit();
+                //location.href = "/profile?gubun=collection&no=" + "@ViewBag.No";
+
+            })
+
+            $("#message").on("click", function (e) {
+                //GetMessageList();
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+                //$(".msg").find("img").remove();
+
+                $("#gubun").val("message");
+                $("#profileForm").submit();
+                //location.href = "/profile?gubun=message";
+            });
+
+            $("#setting").on("click", function (e) {
+                //GetSetting();
+                //$(".myGroup").find(".on").removeClass("on");
+                //$(this).addClass("on");
+
+                $("#gubun").val("S");
+                $("#profileForm").submit();
+                //location.href = "/profile?gubun=S";
+            });
+
+            $("#sendMessage").on("click", function (e) {
+
+                if (!loginPop("@ViewBag.LogOnChk")) {
+                    @*var data = {
+                        no: "@ViewBag.No"
+                    };
+
+                    var url = "/Profile/Message";
+
+                    Ajax.SyncGetPartialView(url, data, "partial-part");*@
+                    var data = {
+                        val1: "@ViewBag.No"
+                    };
+
+                    var url = "/Profile/UserMessageRoom";
+
+                    Ajax.SyncGetPartialView(url, data, "partial-part");
+
+                    $(".myGroup").find(".on").removeClass("on");
+                    $(this).addClass("on");
+
+                    location.hash = "#message";
+                }
+            });
+
+            //$("#memb_pic_del").on("click", function () {
+            //    DeleteProfileImg();
+            //});
+
+
+            $("#profileMsgZone a").mouseover(function () {
+                $(this).css("text-decoration","underline");
+            })
+            $("#profileMsgZone a").mouseleave(function () {
+                $(this).css("text-decoration","none");
+            })
+
+        })
+
+        function DeleteProfileImg() {
+            var data = {
+                memberNo: "@ViewBag.No"
+            }
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    $("#_memb_pic > img").attr("src", "/Content/images/common/profile_photo2.png");
+                    if ("@ViewBag.CheckSelf" == 1) {
+                        $("#topProfileImg").attr("src", "/Content/images/common/profile_photo2.png");
+                    }
+                }
+                else {
+                    alert("삭제에 실패하였습니다.\n 관리자에게 문의해주세요");
+                }
+            }
+
+            Ajax.AjaxResponseModelService(this, "/profile/DeleteProfileImg", data, onSuccess);
+        }
+
+        function GetMessageList() {
+            var data = {
+                no: "@ViewBag.No"
+            };
+            var url = "/Profile/Message";
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+
+        function GetArticle(gubun) {
+            var data = {
+                no: "@ViewBag.No",
+                gubun: gubun,
+                page: "@ViewBag.Page"
+            };
+
+            var url = "/Profile/Lists";
+
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+
+        function GetFollow(gubun) {
+            var data = {
+                no: "@ViewBag.No",
+                gubun: gubun
+            };
+
+            var url = "/Profile/follow";
+
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+
+        function GetNotice() {
+            var data = {
+                page: "@ViewBag.Page"
+            };
+
+        var url = "/Profile/notice";
+
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+
+        function GetList() {
+            var data = {
+                no: "@ViewBag.No",
+                userNm: "@Model.Name"
+            };
+
+            var url = "/Profile/Collection";
+
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+        
+        var GoListDetail = function () {
+            var data = {
+                no: "@ViewBag.No",
+                listNo: "@ViewBag.ListNo"
+            };
+
+            var url = "/Profile/CollectionDetail";
+
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+
+        function GetSetting() {
+
+            var url = "/Profile/Setting";
+
+            Ajax.SyncGetPartialView(url, {}, "partial-part");
+        }
+
+
+    </script>
+}

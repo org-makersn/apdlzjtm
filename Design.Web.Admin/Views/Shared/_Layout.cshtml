@@ -1,0 +1,112 @@
+﻿@{
+    Design.Web.Admin.Models.MenuModel menu = (Design.Web.Admin.Models.MenuModel)ViewData["Group"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Scripts/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/common")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="admin_body blueskin">
+    <!-- page_wrap -->
+    <div class="page_wrap">
+
+        <!-- top_wrap -->
+        <div class="top_wrap">
+            <div class="top_menu_wrap">
+                <ul class="top_menu">
+                    <li><span>@Html.ActionLink("전체현황", "Index", "DashBoard")</span></li>
+                    <li><span>@Html.ActionLink("회원관리", "State", "Member")</span></li>
+                    <li><span>@Html.ActionLink("디자인", "State", "Article")</span></li>
+                    <li><span>@Html.ActionLink("프린팅", "State", "Printing")</span></li>
+                    <li><span>@Html.ActionLink("일반", "Index", "Banner")</span></li>
+                    <li><span>@Html.ActionLink("관리자", "admin_auth", "Admin")</span></li>
+                </ul>
+            </div>
+            <!-- // -->
+            <div class="util_m" style="padding-top:17px;">
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+                    @Html.AntiForgeryToken()
+                    <span class="btnWrap small"><a href="/main">사용자메인</a></span>
+                    <span class="btnWrap small"><a href="javascript:document.getElementById('logoutForm').submit()">로그오프</a></span>
+                }
+            </div>
+        </div>
+        <!-- middle_wrap -->
+        <div class="middle_wrap">
+            <div class="left_wrap">
+                <!-- menu_wrap -->
+                <div class="menu_wrap">
+                    <ul class="menu_list">
+                        @if (menu.Group == "_DashBoard")
+                        {
+                            <li><span class="one">@Html.ActionLink("전체현황", "Index", "DashBoard")</span></li>
+                        }
+                        @if (menu.Group == "_Member")
+                        {
+                            <li><span class="one">@Html.ActionLink("회원현황", "State", "Member")</span></li>
+                            <li><span class="one">@Html.ActionLink("회원정보", "Index", "Member")</span></li>
+                            <li><span class="one">@Html.ActionLink("스팟회원정보", "PrinterMember", "Member")</span></li>
+                            <li><span class="one">@Html.ActionLink("탈퇴회원", "DropMember", "Member")</span></li>
+                        }
+                        @if (menu.Group == "_Article")
+                        {
+                            <li><span class="one">@Html.ActionLink("디자인 현황", "State", "Article")</span></li>
+                            <li><span class="one">@Html.ActionLink("디자인 리스트", "Index", "Article")</span></li>
+                        }
+                         @if (menu.Group == "_Printing")
+                        {
+                            <li><span class="one">@Html.ActionLink("프린팅 현황", "State", "Printing")</span></li>
+                            <li><span class="one">@Html.ActionLink("프린팅 리스트", "Listing", "Printing")</span></li>
+                         }
+                        @if (menu.Group == "_Management")
+                        {
+                        <li><span class="one">@Html.ActionLink("메인 배너관리", "Index", "Banner")</span></li> 
+                        <li><span class="one">@Html.ActionLink("공지사항", "Index", "Notices")</span></li>
+                        <li><span class="one">@Html.ActionLink("추천관리", "Design", "ArticleRecommendRequest")</span></li>
+                        <li><span class="one">@Html.ActionLink("문의사항", "Index", "Contact")</li>
+                        <li><span class="one">@Html.ActionLink("리포트", "Index", "Report")</span></li>
+                        <li><span class="one">@Html.ActionLink("검색키워드", "Index", "Popular")</span></li>
+                        }
+                        @if (menu.Group == "_Admin")
+                        {
+                            <li><span class="one">@Html.ActionLink("관리자 설정", "admin_auth", "Admin")</span></li>
+                        }
+                       
+
+                    </ul>
+                </div>
+                <!-- // menu_wrap -->
+            </div>
+            <!-- // left_wrap -->
+            <!-- right_wrap -->
+            <div class="right_wrap">
+                @RenderBody()
+            </div>
+        </div>
+        <div class="footer_wrap">
+            © Makersn.com
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    <script src="@Url.Content("~/Scripts/AjaxModel.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.11.4.min.js")"></script>
+    @*<script src="@Url.Content("~/Content/KindEditor/kindeditor-min.js")"></script>*@
+    <script src="@Url.Content("~/Content/KindEditor/kindeditor-all.js")"></script>
+    <script src="@Url.Content("~/Scripts/calendar/ui.datepicker-ko.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var $topm = $("ul.top_menu").find("li");
+            var $leftm = $("ul.menu_list").find("li");
+            $topm.eq(@menu.MainIndex).find("span").addClass("active");
+            $leftm.eq(@menu.SubIndex).find("span").addClass("active");
+        })
+        
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

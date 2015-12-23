@@ -1,0 +1,150 @@
+* {
+	margin: 0px; padding: 0px;
+}
+svg {
+	border-radius: 3px; display: inline-block;
+}
+canvas {
+	border-radius: 3px; display: inline-block;
+}
+body {
+	background:rgb(200, 200, 200); font: 12px/normal Helvetica, arial, freesans, clean, sans-serif; overflow: hidden; font-size-adjust: none; font-stretch: normal;
+}
+.center {
+	margin: 0px auto; display: block;
+}
+.render-shell {
+	left: 0px; top: 0px; right: 0px; bottom: 0px; position: absolute;
+}
+.is-embedded .render-shell {
+	border-width: 1px; border-style: solid; border-color: rgb(221, 221, 221) rgb(221, 221, 221) rgb(204, 204, 204); border-radius: 3px; border-image: none;
+}
+.render-viewport {
+	left: 0px; top: 0px; /*right: 0px; bottom: 0px;*/ width:630px; height:470px; position: absolute;
+}
+.render-info {
+	top: 10px; right: 10px; vertical-align: middle; position: absolute; z-index: 999;
+}
+.render-info .symbol {
+	color: rgb(119, 119, 119); line-height: 1; font-size: 20px; float: right; cursor: pointer; text-shadow: -1px -1px 0px #fff, 1px -1px 0px #fff, -1px 1px 0px #fff, 1px 1px 0px #fff;
+}
+.render-info .message {
+	background: rgba(0, 0, 0, 0.8); padding: 10px; border-radius: 3px; border: 1px solid rgb(238, 238, 238); border-image: none; color: rgb(170, 170, 170); margin-top: -8px; margin-right: 18px; display: none; z-index: 9999;
+}
+.render-info .message a {
+	color: rgb(65, 131, 196); text-decoration: none;
+}
+.render-attribution {
+	float: right; display: block; position: relative; z-index: 9999;
+}
+.render-attribution:hover .symbol {
+	color: rgb(0, 0, 0);
+}
+.render-attribution:hover .message {
+	display: block;
+}
+.render-health:hover .symbol {
+	color: rgb(0, 0, 0);
+}
+.render-health:hover .message {
+	display: block;
+}
+.render-health {
+	margin-left: 5px; float: right; display: none; position: relative;
+}
+.render-health .symbol {
+	line-height: 15px; font-size: 25px;
+}
+.render-health.is-viewer-bad {
+	display: block;
+}
+.render-bar {
+	padding: 10px; left: 0px; text-align: center; right: 0px; bottom: 0px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; border-top-style: solid; position: absolute; z-index: 9999; background-color: rgb(247, 247, 247);
+}
+.render-bar-with-modes {
+	font: 12px/normal "Helvetica Neue", Helvetica, arial, freesans, clean, sans-serif; font-size-adjust: none; font-stretch: normal;
+}
+.render-bar-with-modes .render-message {
+	float: right;
+}
+.render-message {
+	color: rgb(153, 153, 153); display: none;
+}
+.render-message a {
+	color: rgb(102, 102, 102); font-weight: bold; text-decoration: none;
+}
+.is-embedded .render-bar {
+	display: block; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;
+}
+.is-embedded .render-bar-with-modes {
+	text-align: left;
+}
+.is-embedded .render-message {
+	display: inline-block;
+}
+.render-view-modes {
+	background: no-repeat; display: inline-block;
+}
+.render-view-modes li {
+	background: none; padding: 0px 5px; color: rgb(102, 102, 102); border-right-color: rgb(204, 204, 204); border-right-width: 1px; border-right-style: solid; display: inline-block; position: relative; cursor: pointer;
+}
+.render-view-modes li:first-child {
+	padding-left: 0px;
+}
+.render-view-modes li:last-child {
+	padding-right: 0px; border-right-color: currentColor; border-right-width: medium; border-right-style: none;
+}
+.render-view-modes li.active {
+	font-weight: bold;
+}
+.render-view-modes li.active::before {
+	left: 40%; top: -13px; color: rgb(221, 221, 221); font-size: 10px; position: absolute; content: "¡å";
+}
+.is-viewer-good {
+	display: none;
+}
+.is-viewer-bad {
+	display: inline-block;
+}
+a.failed {
+	color: rgb(255, 0, 0);
+}
+a.failed:hover {
+	color: rgb(255, 0, 0);
+}
+a.failed:visited {
+	color: rgb(255, 0, 0);
+}
+.slider {
+	margin: 10px auto; width: 100%; height: 25px; border-top-color: rgb(17, 17, 17); border-top-width: 1px; border-top-style: solid; z-index: 999; background-color: rgba(100, 100, 100, 0.8);
+}
+.slider .slider-track {
+	margin: 12px auto; width: 100%; height: 0px; border-top-color: rgb(255, 255, 255); border-top-width: 1px; border-top-style: solid; position: static;
+}
+.slider .dragger {
+	left: 25%; top: 6.5px; position: absolute; text-shadow: none;
+}
+.slider .dragger:hover {
+	color: rgb(238, 238, 238); cursor: pointer;
+}
+.slider .dragger:active {
+	color: rgb(238, 238, 238); cursor: pointer;
+}
+body {
+	background: rgb(255, 255, 255);
+}
+#solid-viewer {
+	cursor: pointer;
+}
+#solid-viewer:active {
+	cursor: move;
+}
+.slider {
+	margin: 10px auto; border-radius: 4px; border: 1px solid rgb(17, 17, 17); border-image: none; width: 325px; display: none; position: relative;
+}
+.slider .slider-track {
+	width: 100%;
+}
+.slider .dragger {
+	left: 315px;
+}

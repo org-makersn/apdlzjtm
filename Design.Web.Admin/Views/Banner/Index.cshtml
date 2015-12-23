@@ -1,0 +1,128 @@
+﻿@model PagedList.IPagedList<Makersn.Models.BannerT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Banner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="contents_zone">
+    <h2 class="contents_title">배너 관리</h2>
+
+    <div class="bannerCate">
+        <a href="/banner">메인</a>l<a href="/banner?type=1">디자인</a>l<a href="/banner?type=2">프린팅</a>
+    </div>
+    <!-- list_search_zone -->
+    <form id="search" name="search">
+        <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="100px" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">검색</th>
+                    <td>
+                        <select id="sfl" name="sfl" style="width: 130px">
+                            <option value="title">제목</option>
+                        </select>
+                        <input type="text" id="query" name="query" class="input_text" style="width: 200px; padding: 1px 0" value="@ViewData["query"]" />
+                        <span class="btnWrap small"><a href="javascript:void(0);" class="_search_btn" id="search_btn">검색</a></span>
+                        <span class="btnWrap small" style="margin-left: 10px;"><a href="javascript:void(0);" class="_reset" onclick="$('#query').val('');">재설정</a></span>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </form>
+    <!-- //list_search_zone -->
+
+    <div class="right_float_wrap">
+        <div class="left"><strong>@ViewData["cnt"]</strong> 의 리스트</div>
+    </div>
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="8%" />
+            <col width="10%" />
+            <col width="*" />
+            <col width="10%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>이미지</th>
+                <th>관리제목(수정)</th>
+                <th>우선순위</th>
+                <th>노출여부</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if ((int)ViewData["cnt"] > 0)
+            {
+                foreach (var b in Model)
+                {
+                <tr>
+                    <td>@b.No</td>
+                    <td>
+                        <p class="memb_img">
+                            <a href="javascript:Banner.GoEdit(@b.No)" class="_btn_edit" id="img">
+                                <img src="@Url.Content(ViewBag.BannerUrl+"thumb/"+ b.Image)" /></a>
+                        <p>
+                    </td>
+                    <td class="ta_left"><a href="javascript:Banner.GoEdit(@b.No)" class="_btn_edit" id="title">@b.Title</a></td>
+                    <td>@b.Priority</td>
+                    <td>@b.PublishYn</td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;">등록된 배너가 없습니다.</td>
+                </tr>	
+            }
+
+
+        </tbody>
+    </table>
+    <!-- page_navi -->
+    <div class="page_navi">
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+    </div>
+    <!-- // page_navi -->
+    <!-- btn -->
+    <div class="btn_right">
+        <span class="btnWrap medium"><a href="#" id="AddBanner" class="_btn_write">등록</a></span>
+    </div>
+    <!-- // btn -->
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function Banner() { }
+        Banner.Init = function () {
+            $("#AddBanner").click(function () {
+                location.replace("/Banner/Write?type="+"@ViewBag.BannerType");
+            });
+
+            $("#search_btn").click(function () {
+                var gubun = $("#sfl").val();
+                var query = $("#query").val();
+                location.replace("/Banner?sfl=" + gubun + "&query=" + query);
+            });
+        }
+
+        Banner.GoEdit = function (val) {
+            location.replace("/Banner/Edit?no=" + val);
+        }
+
+        $(document).ready(function () {
+            Banner.Init();
+        });
+    </script>
+}

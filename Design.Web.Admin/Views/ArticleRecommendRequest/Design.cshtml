@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "추천";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="bannerCate">
+    <a href="/ArticleRecommendRequest/Design">디자인</a>l<a href="../PrinterRecommendRequest/Printer">프린터</a>
+</div>
+
+<div id="RecommendList">
+</div>
+
+<div id="RecommendEdit">
+</div>
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
+    <script type="text/javascript">
+
+
+        function ArticleRecommendRequest() { };
+
+        ArticleRecommendRequest.orderby = function (val) {
+            var recEditUrl = "/ArticleRecommendRequest/RecommendEdit";
+            Ajax.SyncGetPartialView(recEditUrl, {orderby:val}, "RecommendEdit");
+        }
+
+        ArticleRecommendRequest.checkedAll = function () {
+            var chk = $("#btnAll").is(":checked");
+            $("input[name=chkAll]").each(function () {
+                this.checked = chk;
+            });
+        }
+
+        ArticleRecommendRequest.goArticle = function (val) {
+            window.open(
+              'http://www.makersn.com/Article/Detail?no=' + val,
+              'blank'
+              );
+        }
+
+        ArticleRecommendRequest.SearchEdit = function () {
+            var cate = $("#sltCate").val();
+            var RecommendYn = $("#sltRecommendYn").val();
+            //var option = $("#sltOption").val();
+            var text = $("#searchBox").val()
+            Ajax.SyncGetPartialView("/ArticleRecommendRequest/RecommendEdit", { cate: cate, RecommendYn: RecommendYn, text: text }, "RecommendEdit");
+        }
+
+        ArticleRecommendRequest.visibility = function (val) {
+            var no = "";
+            $("input[name=chkAll]").each(function () {
+                if ($(this).is(":checked")) {
+                    if ($(this).val() != "on") {
+                        no += $(this).val() + ",";
+                    }
+                }
+            });
+            var result = Ajax.SyncPostService("/ArticleRecommendRequest/SetVisibiliy", { no: no, setVisi: val });
+            console.log(result);
+            if (result.result == 1) {
+                location.reload(true);
+            }
+        }
+
+        ArticleRecommendRequest.recommend = function (val) {
+            var no = "";
+            $("input[name=chkAll]").each(function () {
+                if ($(this).is(":checked")) {
+                    if ($(this).val() != "on") {
+                        no += $(this).val() + ",";
+                    }
+                }
+            });
+            var result = Ajax.SyncPostService("/ArticleRecommendRequest/SetRecommend", { no: no, setNo: val });
+            console.log(result);
+            if (result.result == 1) {
+                //location.reload(true);
+                var recListUrl = "/ArticleRecommendRequest/RecommendList";
+                Ajax.SyncGetPartialView(recListUrl, {}, "RecommendList");
+                goTop();
+            }
+        }
+
+        $(document).ready(function () {
+
+            var recListUrl = "/ArticleRecommendRequest/RecommendList";
+            Ajax.SyncGetPartialView(recListUrl, {}, "RecommendList");
+
+            var recEditUrl = "/ArticleRecommendRequest/RecommendEdit";
+            Ajax.SyncGetPartialView(recEditUrl, {}, "RecommendEdit");
+
+
+        })
+
+
+        ArticleRecommendRequest.SearchList = function () {
+                var text = $("#query").val();
+                Ajax.SyncGetPartialView("/ArticleRecommendRequest/RecommendList", { text: text }, "RecommendList");
+        }
+
+        ArticleRecommendRequest.RecommendListEdit = function (val) {
+            var no = val;
+            Ajax.SyncGetPartialView("/ArticleRecommendRequest/RecommendListEdit", { no: no }, "RecommendList");
+        }
+
+        ArticleRecommendRequest.RecommendListUpdatePriority = function (val) {
+            var no = val;
+            var priority = $("#priority").val();
+            Ajax.SyncGetPartialView("/ArticleRecommendRequest/RecommendListUpdatePriority", { no: no, priority: priority }, "RecommendList");
+        }
+
+        ArticleRecommendRequest.RecommendListUpdateVisibility = function (val) {
+            var no = val;
+            Ajax.SyncGetPartialView("/ArticleRecommendRequest/RecommendListUpdateVisibility", { no: no}, "RecommendList");
+        }
+
+        function goTop() {
+            
+            $('html, body').animate({ scrollTop: 0 }, 500);
+        }
+
+        function submitPriority(val) {
+            var no = $(val).parents("td").find("input").attr("value");
+            var priority = $(val).val();
+            Ajax.SyncGetPartialView("/ArticleRecommendRequest/RecommendListUpdatePriority", { no: no, priority: priority }, "RecommendList");
+        }
+    </script>
+
+
+}

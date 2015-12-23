@@ -1,0 +1,185 @@
+﻿@model MemberT
+@{
+    ViewBag.Title = "TopArea";
+    Layout = null;
+
+    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+
+    string btnClass = ViewBag.VisitorNo == Model.No ? "" : "usp";
+    string profilePic = string.Empty;
+    if (string.IsNullOrEmpty(Model.ProfilePic))
+    {
+        profilePic = "/Content/images/common/profile_photo2.png";
+    }
+    else
+    {
+        profilePic = ViewBag.ProfileImgUrl + Model.ProfilePic;
+    }
+    string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(Model.No.ToString());
+    string followClass = ViewBag.CheckFollow == 0 ? "flw" : "flwing";
+
+    ProfileT cntLIst = ViewBag.CntList;
+}
+
+<div class="profInfo">
+    <div class="infoWrap">
+
+        <div class="profileBox">
+            <div id="_memb_pic" class="profileImg">
+                <img alt="기본프로필" id="defPhoto" class="defPhoto" src="@profilePic">
+                @if (profile.UserNo != 0 && Model.No == profile.UserNo)
+                {
+                    <form id="profile_form" name="insert_form" method="post" enctype="multipart/form-data">
+                        <div class="btnProfileGo">
+                            <a class="editProfile" href="#">
+                                <img alt="프로필편집" src="/content/images/common/profile_photo_over.png"></a>
+                            <div class="photoUpZone">
+                                <div class="photoUp">
+                                    <button class="file_input_button" title="사진 업로드"></button>
+                                    <input type="file" id="memb_pic" name="memb_pic" class="file_input_hidden" title="사진 업로드">
+                                </div>
+                                <button id="memb_pic_del" class="btnPhotoDel" title="사진 삭제"></button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.form.min.js")"></script>
+                    <script type="text/javascript">
+                        $(function () {
+                            $("#memb_pic").on("change", function (e) {
+                                e.preventDefault();
+                                var $form_data = $("#profile_form").serialize();
+
+                                console.log($form_data);
+
+                                var options = {
+                                    beforeSend: function () {
+                                    },
+                                    uploadProgress: function (event, position, total, percentComplete) {
+
+                                    },
+                                    success: function (response) {
+                                        d = new Date();
+                                        $("#_memb_pic > img").attr("src", "@ViewBag.ProfileImgUrl" +response.Result + "?" + d.getTime());
+                                        $("#topProfileImg").attr("src", "@ViewBag.ProfileImgUrl" +response.Result + "?" + d.getTime());
+                                    },
+                                    complete: function (response) {
+                                    },
+                                    error: function () {
+                                    }
+                                };
+
+                                $('#profile_form').attr("action", "/Profile/ProfileImgUpload").ajaxForm(options).submit();
+
+                                $(this).val('');
+                            });
+                        });
+                    </script>
+                }
+            </div>
+        </div>
+
+        <p class="tit1">@Model.Name</p>
+        <p class="tit2">@Model.BlogUrl</p>
+
+        @*<div @btnClass>
+            <a href="javascript:SendMessage('@No')" class="btMsg" title="메세지"></a>
+            <a href="javascript:SetFollowUser('@No');" class="btFollow @followClass" title="팔로우" id="userFollow"></a>
+        </div>*@
+
+        <p class="txt1">
+            @Html.Raw(Model.ProfileMsg)
+        </p>
+    </div>
+</div>
+
+
+
+
+<div class="myGroup">
+    <div class="groupWrap @btnClass">
+        <ul class="tits">
+            <li>
+                <a href="/Profile?no=@ViewBag.No" class="on" id="upload">
+                    <span class="cnt">@cntLIst.DesignCnt</span><br />
+                    <span class="tit">디자인</span>
+                </a>
+            </li>
+            @if (Model.No == ViewBag.VisitorNo)
+            {
+                <li>
+                    <a href="/Profile?no=@ViewBag.No&gubun=D" class="cnt" id="draft">
+                        <span class="cnt">@cntLIst.DraftCnt</span><br />
+                        <span class="tit">임시저장</span>
+                    </a>
+                </li>
+            }
+            <li>
+                <a href="/Profile?no=@ViewBag.No&gubun=L" class="cnt" id="likes">
+                    <span class="cnt">@cntLIst.LikesCnt</span><br />
+                    <span class="tit">좋아요</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Profile?no=@ViewBag.No&gubun=ing" class="cnt" id="following">
+                    <span class="cnt">@cntLIst.FollowingCnt</span><br />
+                    <span class="tit">팔로잉</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Profile?no=@ViewBag.No&gubun=wer" class="cnt" id="follower">
+                    <span class="cnt">@cntLIst.FollowerCnt</span><br />
+                    <span class="tit">팔로워</span>
+                </a>
+            </li>
+        </ul>
+        @if (Model.No == ViewBag.VisitorNo)
+        {
+            <ul class="bts">
+                <li class="noti">
+                    <a href="/profile/Notice" title="알림" id="notices"></a>
+                    @if (cntLIst.NoticeCnt > 0)
+                    {
+                        <img class="new" alt="NEW" src="/content/images/common/ico/ico_new.png">
+                    }
+                </li>
+                <li class="msg">
+                    <a href="/profile?gubun=M" title="메시지" id="message"></a>
+                    @if (cntLIst.MessageCnt > 0)
+                    {
+                        <img class="new" alt="NEW" src="/content/images/common/ico/ico_new.png">
+                    }
+                </li>
+                <li class="set">
+                    <a href="/profile/Setting" title="설정" id="setting"></a>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <ul class="bts">
+                <li class="@followClass" id="userFollow">
+                    <a href="javascript:SetFollowUser2('@No');" title="팔로우"></a>
+                    <!--img class="new" alt="NEW" src="content/images/common/ico/ico_new.png"-->
+                </li>
+                <li class="msg">
+                    <a href="javascript:SendMessage('@No')" title="메세지"></a>
+
+                    <!--img class="new" alt="NEW" src="content/images/common/ico/ico_new.png"-->
+                </li>
+            </ul>
+
+        }
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    //메시지 보내기
+    function SendMessage(val) {
+        if (loginPop("@ViewBag.LogOnChk")) return false;
+        location.href = "/profile/message?no=" + val;
+    }
+
+</script>

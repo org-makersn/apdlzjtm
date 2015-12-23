@@ -1,0 +1,171 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>GoogleMap</h1>
+
+@(
+ Html.GoogleMap()
+        .Name("map-canvas")
+        .Height(300)
+        .Center(c => c.Latitude(23.140971656573335)
+                    .Longitude(-82.39435493946075))
+        .Markers(m => m.Add().Title("Hello World!"))
+)
+
+@section Scripts{
+    @(Html.GoogleMap().ScriptRegistrar())
+    <script type="text/javascript">
+        function isIE() {
+            return ;
+        }
+        var Browser = Browser || (function (window) {
+            var document = window.document,
+                navigator = window.navigator,
+                agent = navigator.userAgent.toLowerCase(),
+                IEMode = document.documentMode,
+                //chorme
+                chrome = window.chrome || false,
+                System = {
+                    //user-agent
+                    agent: agent,
+                    //is IE
+                    isIE: ((navigator.appName == 'Microsoft Internet Explorer') || ((navigator.appName == 'Netscape') && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null))),
+                    //Gecko ?
+                    isGecko: agent.indexOf("gecko") > 0 && agent.indexOf("like gecko") < 0,
+                    //webkit
+                    isWebkit: agent.indexOf("webkit") > 0,
+                    //표준인가?
+                    isStrict: document.compatMode === "CSS1Compat",
+                    //subtitle 지원?
+                    supportSubTitle: function () {
+                        return "track" in document.createElement("track");
+                    },
+                    //scoped 지원?
+                    supportScope: function () {
+                        return "scoped" in document.createElement("style");
+                    },
+                    //IE 버전
+                    ieVersion: function () {
+                        try {
+                            return agent.match(/msie ([\d.]+)/)[1] || 0;
+                        } catch (e) {
+                            console.log("error");
+                            return IEMode;
+                        }
+                    },
+                    //Opera 버전
+                    operaVersion: function () {
+                        try {
+                            if (window.opera) {
+                                return agent.match(/opera.([\d.]+)/)[1];
+                            } else if (agent.indexOf("opr") > 0) {
+                                return agent.match(/opr\/([\d.]+)/)[1];
+                            }
+                        } catch (e) {
+                            console.log("error");
+                            return 0;
+                        }
+                    },
+                    //버전 
+                    versionFilter: function () {
+                        if (arguments.length === 1 && typeof arguments[0] === "string") {
+                            var version = arguments[0];
+                            start = version.indexOf(".");
+                            if (start > 0) {
+                                end = version.indexOf(".", start + 1);
+                                if (end !== -1) {
+                                    return version.substr(0, end);
+                                }
+                            }
+                            return version;
+                        } else if (arguments.length === 1) {
+                            return arguments[0];
+                        }
+                        return 0;
+                    }
+                };
+
+            try {
+                //브라우저 종류(IE、Opera、Chrome、Safari、Firefox)
+                System.type = System.isIE ? "IE" :
+                    window.opera || (agent.indexOf("opr") > 0) ? "Opera" :
+                    (agent.indexOf("chrome") > 0) ? "Chrome" :
+                    //safari 제공
+                    window.openDatabase ? "Safari" :
+                    (agent.indexOf("firefox") > 0) ? "Firefox" :
+                    'unknow';
+
+                //버전   
+                System.version = (System.type === "IE") ? System.ieVersion() :
+                    (System.type === "Firefox") ? agent.match(/firefox\/([\d.]+)/)[1] :
+                    (System.type === "Chrome") ? agent.match(/chrome\/([\d.]+)/)[1] :
+                    (System.type === "Opera") ? System.operaVersion() :
+                    (System.type === "Safari") ? agent.match(/version\/([\d.]+)/)[1] :
+                    "0";
+
+                //브라우저 껍데기
+                System.shell = function () {
+                    //aoyou 브라우저
+                    if (agent.indexOf("maxthon") > 0) {
+                        System.version = agent.match(/maxthon\/([\d.]+)/)[1] || System.version;
+                        return "aoyou";
+                    }
+                    //qq 브라우저
+                    if (agent.indexOf("qqbrowser") > 0) {
+                        System.version = agent.match(/qqbrowser\/([\d.]+)/)[1] || System.version;
+                        return "qq";
+                    }
+
+                    //sougou 브라우저
+                    if (agent.indexOf("se 2.x") > 0) {
+                        return 'sougou';
+                    }
+
+                    //Chrome: window.chrome && window.chrome.webstore 
+                    if (chrome && System.type !== "Opera") {
+                        var external = window.external,
+                            clientInfo = window.clientInformation,
+                            //zh-cn,zh.360 이면 undefined
+                            clientLanguage = clientInfo.languages;
+
+                        //liebao 브라우저 or agent.indexOf("lbbrowser")>0
+                        if (external && 'LiebaoGetVersion' in external) {
+                            return 'liebao';
+                        }
+                        //baidu 브라우저
+                        if (agent.indexOf("bidubrowser") > 0) {
+                            System.version = agent.match(/bidubrowser\/([\d.]+)/)[1] ||
+                                agent.match(/chrome\/([\d.]+)/)[1];
+                            return "baidu";
+                        }
+                        //360 브라우저
+                        if (System.supportSubTitle() && typeof clientLanguage === "undefined") {
+                            //object.key()
+                            var storeKeyLen = Object.keys(chrome.webstore).length,
+                                v8Locale = "v8Locale" in window;
+                            return storeKeyLen > 1 ? '360 jisu' : '360 anquan';
+                        }
+                        return "Chrome";
+                    }
+                    return System.type;
+                };
+
+                //브라우저 이름
+                System.name = System.shell();
+                //버전 별 필터링
+                System.version = System.versionFilter(System.version);
+
+            } catch (e) {
+                console.log("error");
+            }
+            return {
+                client: System
+            };
+
+        })(window);
+        alert(Browser.client.name + " " + Browser.client.version);
+
+    </script>
+}

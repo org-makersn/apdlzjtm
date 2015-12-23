@@ -1,0 +1,115 @@
+﻿@model Makersn.Models.BoardT
+@using Design.Web.Admin.Filter
+@{
+    ViewBag.Title = "공지사항";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2 class="contents_title">공지사항</h2>
+<!-- contents_zone -->
+<div class="contents_zone">
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @*<input type="hidden" id="_url_base" name="_url_base" value="/page/1/b_id/1" />
+        <input type="hidden" name="mode" value="write">*@
+
+        <input type="hidden" id="b_id" name="b_id" value="1">
+        <input type="hidden" id="no" name="no" value="@Model.No">
+
+        <!-- fileup -->
+        @*<input type="hidden" id="img_temp" name="img_temp" value="">
+        <input type="hidden" id="doc_temp" name="doc_temp" value="">*@
+        <!-- ckeditor -->
+        <input type="hidden" id="temp" name="temp" value="1429161564">
+        <input type="hidden" id="writer" name="writer" value="@ViewData["Name"]" />
+
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="20%" />
+                <col width="80%" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <label for="title">제목</label></th>
+                    <td>
+
+                        <input type="text" id="title" name="title" title="제목" value="@Model.Title" class="inputText" style="width: 65%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="semi_content">내용</label></th>
+                    <td>
+                        @*@Html.TextArea("content", new { id = "content", style = "width:750px;height:350px" })*@
+                        <textarea id="content" style="width:750px;height:350px;">@(new ContentFilter().HtmlDecode(Model.SemiContent))</textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <!-- btn -->
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="#" class="_btn_write">등록</a></span>
+        <span class="btnWrap medium"><a href="#" class="_btn_list">취소</a></span>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var editor;
+        var editorItems = [
+					'source', '|', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+					'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+					'insertunorderedlist', '|', 'emoticons', 'image', 'link', 'unlink', '|', 'preview', 'fullscreen'
+        ];
+        KindEditor.ready(function (K) {
+            //console.log(K);
+            editor = K.create('textarea[id="content"]', {
+                allowFileManager: true,
+                allowUpload: true,
+                langType: 'ko',
+                items: editorItems,
+                fileManagerJson: '/KindEditor/FileManager',     //Browse file method 
+                uploadJson: '/KindEditor/UploadImage'           //Upload file method     
+            });
+            @*editor.html('@Html.Raw((new ContentFilter().HtmlDecode(Model.SemiContent)))');*@
+        });
+
+
+
+        $(document).ready(function () {
+
+            $("._btn_list").click(function () {
+                if (confirm("취소 하시겠습니까?") == true) {
+                    location.replace("/notices");
+                }
+            });
+
+            $("._btn_write").click(function () {
+                var no = $("#no").val();
+                var eventContent = (editor.html());
+                var title = $("#title").val();
+                data = {
+                    no: no,
+                    title: title,
+                    content: eventContent
+                }
+                console.log(data);
+                var onSuccess = function (result) {
+                    if (result.Success == true) {
+                        alert(result.Message);
+                        location.replace("/notices");
+                    }
+                }
+                Ajax.AjaxResponseModelService(this, "/notices/UpdateNotices", data, onSuccess);
+
+            })
+        })
+    </script>
+}

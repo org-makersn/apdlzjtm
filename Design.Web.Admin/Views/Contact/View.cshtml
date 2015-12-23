@@ -1,0 +1,55 @@
+﻿@model Makersn.Models.ContactT
+@using Design.Web.Admin.Filter
+@{
+    ViewBag.Title = "문의사항";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="contents_zone">
+	
+	<table class="tbl_style1" summary="게시판 테이블">
+		<colgroup>
+			<col width="200x" />
+			<col width="auto" />
+		</colgroup>
+		<caption>게시판</caption>
+		<tbody>
+			<tr>
+				<th scope="row"><label for="cate_no">카테고리</label></th>
+				<td colspan="5">
+					@Model.CodeName
+				</td>
+			</tr>
+			<tr>
+				<th>제목</th>
+				<td>@Model.Title</td>
+			</tr>
+			<tr>
+				<th>이메일</th>
+				<td><a href="mailto:@Model.Email">@Model.Email</a></td>
+			</tr>			
+			<tr>
+				<th>내용</th>
+				<td>@Html.Raw(new ContentFilter().HtmlEncode(Model.Comment))</td>
+			</tr>
+			<tr>
+				<th>답변</th>
+				<td>@Html.Raw(new ContentFilter().HtmlEncode(Model.Reply))</td>
+			</tr>
+			<tr>
+				<th>처리상태</th>
+				<td>
+					@Model.StrState
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="btn_center">
+		<span class="btnWrap medium"><a href="/contact" class="_btn_list">목록</a></span>
+		<span class="btnWrap medium"><a href="/contact/edit?no=@Model.No" class="_btn_edit" id="_btn_edit_<?= $view_row['id']?>">수정</a></span>
+		<span class="btnWrap medium"><a href="#" class="_btn_del" id="_btn_del_<?= $view_row['id']?>">삭제</a></span>
+	</div>
+</div>

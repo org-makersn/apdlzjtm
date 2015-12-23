@@ -1,0 +1,410 @@
+﻿@*@model ArticleDetailT
+@{
+    ViewBag.Title = "makersN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string profilePic = string.Empty;
+    if (Model.MemberProfilePic == "")
+    {
+        profilePic = "/Content/images/common/profile_photo2.png";
+    }
+    else
+    {
+        profilePic = ViewBag.ProfileImgUrl + Model.MemberProfilePic;
+    }
+
+    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+
+    string No = Base64Helper.Base64Encode(Model.MemberNo.ToString());
+    string className = ViewBag.ShowLikes > 0 ? "class=on" : "";
+    string pageUrl = Request.Url.ToString();
+
+    int index = 0;
+    int setNum = 0;
+    int sildNum = 0;
+}
+@section head{
+    <meta name="author" content="@Model.MemberName" />
+    <meta property="og:title" content="@Html.Encode(Model.Title)" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@pageUrl" />
+    <meta property="og:image" content="@ViewBag.ArticleImgUrl@ViewBag.MainImg" />
+
+    <meta property="og:image:width" content="200" />
+    <meta property="og:description" content="@Html.Encode(Model.Contents)" />
+    <meta property="og:article:author" content="MakersN" />
+    <meta property="og:site_name" content="MakersN" />
+}
+
+
+@section editBtnzone{
+    <ul class="btnSet">
+        <li><a href="javascript:Global()">
+            <img src="@Url.Content("~/Content/images/common/btn/btn_language.gif")" /></a></li>
+        @if (Model.MemberNo == ViewBag.VisitorNo || profile.UserLevel > 50)
+        {
+            <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">
+                <img src="@Url.Content("~/Content/images/common/btn/btn_edit.gif")" /></a></li>
+        }
+    </ul>
+}
+<!-- contWrap -->
+<div class="contWrap mgT90">
+    <!-- DetailWrap -->
+    <div class="detailWrap">
+
+        <!-- LeftCont -->
+        <div class="leftCont">
+
+            <div class="detailSlide">
+                <div class="mainBigImg">
+                    <ul class="bxslider">
+                        @foreach (Makersn.Models.ArticleFileT file in ViewBag.Files)
+                        {
+                            file.ImgName = file.ImgName != null ? file.ImgName : file.Rename;
+
+                            string ImgPath = ViewBag.ArticleImgUrl + file.ImgName;
+                            string jsUrl = ViewBag.ArticleJsUrl + file.Rename;
+                            <li>
+                                <img class="lazy-load" src="@ImgPath" />
+
+                                @{if (setNum == 0)
+                                  {
+                                    <div id="viewer">
+                                    </div>
+                                  }
+                                }
+                                @if (file.FileType.ToLower() == "stl")
+                                {
+                                    
+                                    <a href="#none" class="viewer3d" data-js="@jsUrl" data-file="@file.Rename">3D View</a>
+                                }
+
+                            </li>
+                                setNum++;
+
+                                if (Model.MainImage == file.No)
+                                {
+                                    sildNum = setNum;
+                                }
+
+                        }
+                    </ul>
+                    <div class="thumb3dImg">
+                        <img src="/Content/images/common/loading_bar.gif" alt="로딩중" />
+                    </div>
+                </div>
+                <input type="hidden" id="sildeNum" value="@(sildNum - 1)" />
+
+                <div class="thumbArea">
+                    <div id="bx-pager">
+                        @foreach (Makersn.Models.ArticleFileT file in ViewBag.Files)
+                        {
+                            string ThumbImgPath = ViewBag.ArticleImgUrl + file.ImgName;
+                            <a data-slide-index="@index" href="javascript:void(0);">
+                                <img class="lazy-load" data-original="@ThumbImgPath" /></a>
+                            index++;
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- About -->
+            <div class="aboutZone" id="aboutZone">
+                <ul class="title">
+                    <li id="infoTit" class="infoTit on"><a href="javascript:void(0);" onclick="goDesign()">디자인 소개</a></li>
+                    <li id="downTit" class="downTit"><a href="javascript:void(0);" onclick="goDownFile()">파일 다운로드</a></li>
+                </ul>
+                <div class="txt">
+                    <p style="word-break: break-all">
+                        @Html.Raw(Model.Contents)
+                    </p>
+                </div>
+
+                <!-- 파일 다운로드 -->
+                <div class="downloadList">
+                    <ul class="middleList">
+
+                        @foreach (Makersn.Models.ArticleFileT file in ViewBag.Files)
+                        {
+                            if (file.FileType == "stl")
+                            {
+                                string ThumbImgPath = ViewBag.ArticleImgUrl + file.ImgName;
+                                string downloadUrl = "/FileUpload" + file.Path + file.Rename;
+                                downloadUrl = Html.Encode(downloadUrl);
+                                float m = float.Parse(file.Size) / (float)1024;
+                                float size = float.Parse(m.ToString("F1"));
+                            <li>
+                                <div class="downBox">
+                                    <div class="img">
+                                        <img class="lazy-load" data-original="@ThumbImgPath" alt="썸네일" />
+                                    </div>
+                                    <div class="txts">
+                                        <p class="tit">@file.Name</p>
+                                        <span class="fileNum">@size KB</span>
+                                    </div>
+                                    <div class="btnDown">
+                                        @Html.ActionLink("download", "FileDownload", new { articleNo = Model.No, filePath = downloadUrl, fileName = file.Name })
+                                    </div>
+                                </div>
+                            </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <!-- //파일 다운로드 -->
+
+            </div>
+            <!-- //About -->
+
+
+            <!-- Comment -->
+
+            <div id="goComment" class="commentZone">
+                
+            </div>
+            <!-- //Comment -->
+        </div>
+        <!-- //LeftCont -->
+
+
+        <!-- RightCont -->
+        <div class="rightCont">
+
+            <!-- userInfoArea -->
+            <div class="userInfoArea">
+
+                <p class="title">@Model.Title</p>
+
+                <div class="btnSet">
+                    <p class="download">
+                        <a href="javascript:void(0);" onclick="goDownFile();">
+                            <img src="/content/images/common/btn/btn_download.jpg" alt="다운로드" /></a>
+                    </p>
+                    <ul class="socialArea">
+                        <li>
+                            <a href="javascript:pstFaceBook()" title="페이스북">
+
+                                <img src="/content/images/common/btn/btn_facebook.png" alt="페이스북" /></a>
+
+                        <li><a href="javascript:pstTwitter()" title="트위터">
+                            <img src="/content/images/common/btn/btn_twitter.png" alt="트위터" /></a>
+                        <li><a href="javascript:pstPinterest();" title="P">
+                            <img src="/content/images/common/btn/btn_p.png" alt="P" /></a>
+
+                    </ul>
+                </div>
+
+                <div class="licenseZone">
+                    <p class="licenTit">이용 권한</p>
+                    <div class="iconZone">
+                        @{switch (Model.Copyright)
+                          {
+                              case 1:
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                  break;
+                              case 2:
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen4.png" alt="동일조건변경허락" /></a>
+                                  break;
+                              case 3:
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/ic_nd.png" alt="변경금지" /></a>
+                                  break;
+                              case 4:
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                                  break;
+                              case 5:
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen4.png" alt="동일조건변경허락" /></a>
+                                  break;
+                              case 6:
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                            <a href="/Info/#/license" target="_blank">
+                                <img src="/content/images/common/btn/ic_nd.png" alt="변경금지" /></a>
+                                  break;
+                          }
+                        }
+                    </div>
+                    <div class="repoartBtn">
+                        <a href="javascript:void(0);">
+                            <img src="/content/images/common/btn/btn_report.png" alt="Report" /></a>
+                    </div>
+                </div>
+
+                <div class="reportArea">
+                    <p class="arrowTop">
+                        <img src="/content/images/arrowReport.png" alt="" />
+                    </p>
+                    <div class="reportText">
+                        <form id="report_form" name="report_form" method="post">
+                            <input type="hidden" name="item_no" value="">
+                            <textarea id="txtReport" name="report" placeholder="이 게시물이 부적절하거나 관리자의 확인이 필요할 경우 이유를 적어주시면 검토 및 조치하겠습니다."></textarea>
+                        </form>
+                        <button title="보내기" id="btnSendReport">보내기</button>
+                        <a href="javascript:void(0);" class="closeReport">
+                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+                    </div>
+                    <div class="repoartComplete">
+                        <p>
+                            접수가 완료되었습니다.<br />
+                            빠른 시일 내로 검토 및 조치하겠습니다.
+                        </p>
+                        <a href="javascript:void(0);" class="closeReport">
+                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+                    </div>
+                </div>
+
+                <div class="tagZone">
+                    <p class="tagTit">태그</p>
+                    <div class="tagText">
+
+                        @{
+                            if (!string.IsNullOrEmpty(Model.Tag))
+                            {
+                                string[] tagList = Model.Tag.Split(',');
+                                foreach (string tag in tagList)
+                                {
+                            <a href="/design/Search?text=@tag.Trim()">@tag </a> 
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+
+
+                <ul class="countBox" id="ctnList">
+                    @{
+                        string likeclassName = Model.IsLikes > 0 ? "class=on" : "";
+                    }
+
+                    <li class="show"><span>@Model.ViewCnt</span></li>
+                    <li class="heart"><a href="javascript:SetLikes('@Model.No','@ViewBag.LogOnChk')" onclick="return !count++"><span @likeclassName id="likeChk_@Model.No">@Model.LikeCnt</span></a></li>
+
+                    <li class="collect"><span>0</span></li>
+                    <li class="comment bdR_no"><span id="replyCnt">@Model.CommentCnt</span></li>
+                </ul>
+
+                <div class="profileZone">
+                    <div class="user">
+                        <div class="photo">
+                            <a href="/Profile?no=@No">
+                                <img src="@profilePic" alt="기본프로필" /></a>
+                        </div>
+                        <p class="userId"><span>by <a href="/Profile?no=@No">@Model.MemberName</a></span></p>
+                    </div>
+                    <ul class="profileBtn" id="profileArea">
+                    </ul>
+                </div>
+            </div>
+            <!-- //userInfoArea -->
+
+            <div id="otherArticle">
+            </div>
+        </div>
+        <!-- //RightCont -->
+
+    </div>
+    <!-- //DetailWrap -->
+</div>
+<!-- //contWrap -->
+
+
+
+
+@section Scripts{
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+    <script src="@Url.VersionedContent("~/Scripts/testThree.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/thingiviewTest.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/plane.js")"></script>
+ 
+    <script src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+
+    <style>
+        .wrap {
+              background: #fff !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+     
+        //3dviewer 보이기
+        $('.viewer3d').on('click', function (e) {
+            var thingiview = null;
+
+            $('.thumb3dImg').show();
+            var view = $('#viewer');
+            view.find('canvas').empty();
+            $(this).siblings('img').hide();
+            $(this).parent('li').append(view);
+            $(this).siblings('#viewer').show();
+
+
+            thingiurlbase = "/Scripts";
+            thingiview = new Thingiview("viewer");
+            
+            thingiview.initScene();
+            //thingiview.setShowPlane(true);
+
+            var filePath = "../FileUpload/Article/article_3d/" + $(this).attr('data-file');
+
+            //var filePath = "../FileUpload/Article/article_3d/48a7fcb6-583c-48cf-af16-44a949099634.stl";
+            //var filePath = "../FileUpload/Article/article_3d/Football.stl";
+            
+            thingiview.loadSTL(filePath);
+            
+
+            $('.thumb3dImg').show();
+            console.log($('.thumb3dImg'));
+            var view = $('#viewer');
+            view.find('canvas').empty();
+            $(this).siblings('img').hide();
+            $(this).parent('li').append(view);
+            $(this).siblings('#viewer').show();
+
+            //var thingiviewanimate = function () {
+            //    if (thingiview != undefined) {
+            //        requestAnimationFrame(thingiviewanimate);
+            //        thingiview.render();
+            //    }
+            //}
+            //thingiviewanimate();
+
+
+
+            thingiview.setObjectColor('#66F8F0');
+            thingiview.setBackgroundColor('#a0a0a0')
+        });
+
+      
+    </script>
+}*@

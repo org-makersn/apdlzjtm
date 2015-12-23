@@ -1,0 +1,143 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<Makersn.Models.NoticeT>
+@{
+    ViewBag.Title = "Notice";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    string profilePic = string.Empty;
+    
+}
+
+@*@{Html.RenderAction("TopArea", "Profile", new { no = ViewBag.No });}*@
+
+
+
+<!-- notice -->
+<div class="profCont">
+    <div class="noticeList">
+
+        <ul style="height: auto">
+
+            @foreach (Makersn.Models.NoticeT n in Model)
+            {
+                string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(n.MemberNo.ToString());
+                //n.MemberProfilePic = n.MemberProfilePic == null ? "/Content/images/profile_photo.jpg" : n.MemberProfilePic;
+                if (string.IsNullOrEmpty(n.MemberProfilePic))
+                {
+                    profilePic = "/Content/images/common/profile_photo2.png";
+                }
+                else
+                {
+                    profilePic = ViewBag.ProfileImgUrl + n.MemberProfilePic;
+                }
+                <li class="noticeBox">
+                    <a href="javascript:void(0);" title="해당페이지 이동"></a>
+
+                    <p class="photo">
+                        <a href="/Profile?no=@No">
+                            <img src="@profilePic" alt="프로필사진" /></a>
+                    </p>
+                    @*  @if (n.Type == "notice")
+                        {
+                            <span class="text">
+                                <a href="/Profile?no=@No">[@n.MemberName] </a>메시지:
+								@n.Comment</span>
+                            <span class="date">@n.RegDt</span>
+                        }*@
+                    @switch (n.Type)
+                    {
+                        case "notice":
+                        <p class="text">
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName] </span></a>메시지:
+								@n.Comment
+                        </p>
+                        <span class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</span>
+                            break;
+
+                        case "like":
+                        <p class="text">
+                            <a href="/Profile?no=@No"><span class="boldF">@n.MemberName</span></a>님이 <span class="boldF"><a href="/design/Detail?no=@n.RefNo">[@n.ArticleTItle]</a></span> 을 좋아합니다.
+                        </p>
+
+                        <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</p>
+                            break;
+
+                        case "comment":
+                        <p class="text">
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a>님이 <span class="boldF"><a href="/design/Detail?no=@n.RefNo">[@n.ArticleTItle]</a></span> 에 댓글을 남겼습니다.
+                        </p>
+                        <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</p>
+                            break;
+                            
+                        case "inComment":
+                        <p class="text">
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a>님이 <span class="boldF"><a href="/design/Detail/@n.RefNo">[@n.ArticleTItle]</a></span>의 내 댓글에 답글을 남겼습니다.
+                        </p>
+                        <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</p>
+                            break;
+
+                        case "newArticle":
+                        <p class="text">
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a>님이 <a href="/design/Detail?no=@n.RefNo">새 게시물을 업로드 했습니다.</a>
+                        </p>
+                        <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</p>
+                            break;
+
+                        case "newFollower":
+                        <p class="text">
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a>님이 회원님을 팔로우 했습니다.
+                        </p>
+                        <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:mm")</p>
+                            break;
+
+                        case "AllNotice":
+                        <p class="text" style="line-height: 20px">
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName] </span></a>
+                            <br />
+                            @Html.Raw(new Design.Web.Front.Filter.ContentFilter().HtmlEncode(n.Comment.Substring(0, n.Comment.IndexOf("내용:"))))
+                            <br />
+                            @Html.Raw(new Design.Web.Front.Filter.ContentFilter().HtmlEncode(n.Comment.Substring(n.Comment.IndexOf("내용:"))))
+                        </p>
+                        <span class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</span>
+                            break;
+                    }
+                </li>
+            }
+        </ul>
+
+        @* <!-- 페이징 -->
+        <div class="paging pdB35">
+            <a href="#">
+                <img src="content/images/common/btn/btn_first.gif" alt="처음 페이지" /></a>
+            <a href="#">
+                <img src="content/images/common/btn/btn_prev.gif" alt="이전 페이지" /></a>
+            <span class="number">
+                <a href="#" class="on">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+            </span>
+            <a href="#">
+                <img src="content/images/common/btn/btn_next.gif" alt="다음 페이지" /></a>
+            <a href="#">
+                <img src="content/images/common/btn/btn_last.gif" alt="마지막 페이지" /></a>
+        </div>
+        <!-- //페이징 -->*@
+
+    </div>
+
+</div>
+<!-- //notice -->
+
+@Html.PagedListPager((PagedList.IPagedList)Model,
+            //page => Url.Action("Notice", new {   no = ViewBag.No, page, gubun = ViewBag.Gubun }), 
+            page =>("/Profile/Notice?page="+ page +"&no="+ ViewBag.No+"&gubun="+ ViewBag.Gubun),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                HttpMethod = "POST",
+                UpdateTargetId = "partial-part",
+                OnSuccess="$('.back-to-top').trigger('click');"
+            })
+        )
+

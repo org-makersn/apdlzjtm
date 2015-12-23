@@ -1,0 +1,125 @@
+﻿@model IList<Makersn.Models.DashBoardStateT>
+@{
+    ViewBag.Title = "MonthState";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int index = 1;
+}
+
+<h2 class="contents_title">회원현황 - 월간</h2>
+<!-- contents_zone -->
+<div class="contents_zone">
+
+    <form id="search" name="search" method="get">
+        <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="17%" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">구분</th>
+                    <td>
+                        <span class="btnWrap medium">@Html.ActionLink("전체", "State", "Member")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("일간", "DailyState", "Member")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("월간", "MonthState", "Member")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("년간", "YearState", "Member")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">기간선택</th>
+                    <td>
+                        @*@Html.DropDownList("year", new SelectList(
+                          new List<Object>{ 
+                               new { Key = 2015 , Value = "2015년"  },
+                               new { Key = 2014 , Value = "2014년" }
+                            },
+                          "Key", "Value", DateTime.Now.ToString("yyyy")
+                         ))*@
+                        @Html.DropDownList("year")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+
+
+    <form id="insert_form" name="insert_form" method="post" action="/admin/member/multi_del/member/">
+
+        <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <caption>리스트 게시판</caption>
+            <colgroup>
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th rowspan="2">구분</th>
+                    <th colspan="5">회원</th>
+                    <th colspan="5">사이트 이용</th>
+                </tr>
+                <tr>
+                    <th>전체</th>
+                    <th>이메일</th>
+                    <th>페이스북</th>
+                    <th>누적</th>
+                    <th>탈퇴자</th>
+                    <th>업로드</th>
+                    <th>다운로드</th>
+                    <th>스팟개설</th>
+                    <th>프린터</th>
+                    <th>주문자</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var state in Model)
+                {
+                    <tr>
+                        <td>@index 월</td>
+                        <td>@(state.EmailCnt + state.FacebookCnt)</td>
+                        <td>@state.EmailCnt</td>
+                        <td>@state.FacebookCnt</td>
+                        <td>@(state.EmailCnt + state.FacebookCnt + state.DropMemberCnt)</td>
+                        <td>@state.DropMemberCnt</td>
+                        <td>@state.ArticleCnt</td>
+                        <td>@state.DownloadCnt</td>
+                        <td>@state.SpotCnt</td>
+                        <td>@state.PrinterCnt</td>
+                        <td>@state.OrderMemCnt</td>
+
+                    </tr>
+                    index++;
+                }
+            </tbody>
+        </table>
+    </form>
+    <!-- // page_navi -->
+
+
+</div>
+<br />
+<br />
+<br />
+
+<!-- // contents_zone -->
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#year").change(function () {
+                var returnUrl = "/Member/MonthState?year=" + $(this).val();
+                $(location).attr("href", returnUrl);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MailFormats>
+  <MailFormat Id="Email">
+    <Subject>0?</Subject>
+    <Body>
+      <![CDATA[ 
+        
+        <div style="width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff;">
+        <div style="width:645px;margin:0 auto; overflow:hidden;">
+          <div style="height:86px;text-align:left;background:url(http://makersn.com/content/images/common/em_logo.png) no-repeat 5px 38px ">
+          </div>
+          <div style="padding:50px 33px 50px 33px;background:#f5f5f5;border-top-left-radius:7px;border-top-right-radius:7px;word-break:break-all;">
+            <p style="margin-bottom:49px;text-align:left;font-size:30px;color:#6d6d6d">임시 비밀번호 발급</p>
+            <p style="margin-bottom:45px;text-align:left;font-size:17px;color:#505050;line-height:35px">
+              안녕하세요.<br />
+        MakersN입니다.<br />
+        회원님의 임시 비밀번호는 <b>1?</b> 입니다.<br />
+        로그인 하신 후 Setting에서 꼭 비밀번호를 변경 후 사용하시기 바랍니다.<br /></p>
+            <a href="http://www.makersn.com" style="width:579px;margin:0 0 45px 0;text-align:left;font-size:16px;color:#0096ff">http://www.makersn.com</a>
+          </div>
+          <div style="height:87px;background:url(http://makersn.com/content/images/common/em_footer.png) #FF7900 no-repeat 380px 21px;border-bottom-left-radius:7px;border-bottom-right-radius:7px">
+          </div>
+
+        </div>
+
+      </div>
+     ]]>
+    </Body>
+  </MailFormat>
+  
+  
+  <MailFormat Id="mailCertify">
+    <Subject>0?</Subject>
+    <Body>
+      <![CDATA[ 
+      <div style="width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff;">
+        <div style="width:645px;margin:0 auto; overflow:hidden;">
+          <div style="height:86px;text-align:left;background:url(http://makersn.com/content/images/common/em_logo.png) no-repeat 5px 38px ">
+          </div>
+          <div style="padding:50px 33px 50px 33px;background:#f5f5f5;border-top-left-radius:7px;border-top-right-radius:7px;word-break:break-all;">
+            <p style="margin-bottom:49px;text-align:left;font-size:30px;color:#6d6d6d">회원가입 이메일 인증</p>
+            <p style="margin-bottom:45px;text-align:left;font-size:17px;color:#505050;line-height:35px">
+              1?님께<br />
+아래 링크를 클릭하시면 회원 가입 절차가 완료됩니다.</p>
+            <a href="2?" style="width:579px;margin:0 0 45px 0;text-align:left;font-size:16px;color:#0096ff">인증하기</a>
+          </div>
+          <div style="height:87px;background:url(http://makersn.com/content/images/common/em_footer.png) #FF7900 no-repeat 380px 21px;border-bottom-left-radius:7px;border-bottom-right-radius:7px">
+          </div>
+
+        </div>
+
+      </div>
+    ]]>
+    </Body>
+  </MailFormat>
+
+  <MailFormat Id="chgMailCertify">
+    <Subject>0?</Subject>
+    <Body>
+      <![CDATA[ 
+      <div style="width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff;">
+        <div style="width:645px;margin:0 auto; overflow:hidden;">
+          <div style="height:86px;text-align:left;background:url(http://makersn.com/content/images/common/em_logo.png) no-repeat 5px 38px ">
+          </div>
+          <div style="padding:50px 33px 50px 33px;background:#f5f5f5;border-top-left-radius:7px;border-top-right-radius:7px;word-break:break-all;">
+            <p style="margin-bottom:49px;text-align:left;font-size:30px;color:#6d6d6d">이메일 변경 인증</p>
+            <p style="margin-bottom:45px;text-align:left;font-size:17px;color:#505050;line-height:35px">
+              1?님께<br />
+변경하기를 클릭하시면 이메일 변경이 완료되며 <br />로그인 아이디가 현제 이메일 주소로 변경됩니다.</p>
+            <a href="2?" style="width:579px;margin:0 0 45px 0;text-align:left;font-size:16px;color:#0096ff">변경하기</a>
+            <a href="3?" style="width:579px;margin:0 0 45px 0;text-align:left;font-size:16px;color:#0096ff">변경취소</a>
+          </div>
+          <div style="height:87px;background:url(http://makersn.com/content/images/common/em_footer.png) #FF7900 no-repeat 380px 21px;border-bottom-left-radius:7px;border-bottom-right-radius:7px">
+          </div>
+
+        </div>
+
+      </div>
+    ]]>
+    </Body>
+  </MailFormat>
+
+
+  <MailFormat Id="sendQnA">
+    <Subject>0?</Subject>
+    <Body>
+      <![CDATA[ 
+      <div style="width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff;">
+        <div style="width:645px;margin:0 auto; overflow:hidden;">
+          <div style="height:86px;text-align:left;background:url(http://makersn.com/content/images/common/em_logo.png) no-repeat 5px 38px ">
+          </div>
+          <div style="padding:50px 33px 50px 33px;background:#f5f5f5;border-top-left-radius:7px;border-top-right-radius:7px;word-break:break-all;">
+          1?<br />
+          2?
+          </div>
+          <div style="height:87px;background:url(http://makersn.com/content/images/common/em_footer.png) #FF7900 no-repeat 380px 21px;border-bottom-left-radius:7px;border-bottom-right-radius:7px">
+          </div>
+
+        </div>
+
+      </div>
+    ]]>
+    </Body>
+  </MailFormat>
+
+  <MailFormat Id="sendReport">
+    <Subject>0?</Subject>
+    <Body>
+      <![CDATA[ 
+      <div style="width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff;">
+        <div style="width:645px;margin:0 auto; overflow:hidden;">
+          <div style="height:86px;text-align:left;background:url(http://makersn.com/content/images/common/em_logo.png) no-repeat 5px 38px ">
+          </div>
+          <div style="padding:50px 33px 50px 33px;background:#f5f5f5;border-top-left-radius:7px;border-top-right-radius:7px;word-break:break-all;">
+          신고된 게시물<br />
+          1?<br />
+          신고 내용 <br ?>
+          2?
+          </div>
+          <div style="height:87px;background:url(http://makersn.com/content/images/common/em_footer.png) #FF7900 no-repeat 380px 21px;border-bottom-left-radius:7px;border-bottom-right-radius:7px">
+          </div>
+
+        </div>
+
+      </div>
+    ]]>
+    </Body>
+  </MailFormat>
+  
+</MailFormats>

@@ -1,0 +1,172 @@
+﻿@model IList<Makersn.Models.DashBoardStateT>
+@{
+    ViewBag.Title = "State";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int index = 1;
+}
+
+<h2 class="contents_title">회원현황 - 전체</h2>
+<div class="contents_zone">
+
+    <form id="search" name="search">
+        <input type="hidden" id="date" name="date">
+        <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="17%" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">구분</th>
+                    <td>
+                        <span class="btnWrap medium">@Html.ActionLink("전체", "State", "Member")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("일간", "DailyState", "Member")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("월간", "MonthState", "Member")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("년간", "YearState", "Member")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">기간선택</th>
+                    <td>
+                        <input type="text" id="sdate" name="sdate" class="input_text" style="width: 106px; margin-right: 5px" readonly="readonly" value="@ViewBag.Start"/>
+                        ~                                                                                                     
+						<input type="text" id="edate" name="edate" class="input_text" style="width: 106px; margin-right: 5px" readonly="readonly" value="@ViewBag.End"/>
+                        <span class="btnWrap small"><a href="javascript:void(0);" id="search_btn">검색</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+
+
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th rowspan="2" colspan="2">구분</th>
+                <th colspan="5">회원</th>
+                <th colspan="5">사이트이용</th>
+                @* <th rowspan="2">게시물업로드</th>
+                <th rowspan="2">게시물다운로드</th>
+                <th rowspan="2">탈퇴자</th>*@
+            </tr>
+            <tr>
+                <th>전체</th>
+                <th>이메일</th>
+                <th>페이스북</th>
+                <th>누적</th>
+                <th>탈퇴자</th>
+                <th>업로드</th>
+                <th>다운로드</th>
+                <th>스팟개설</th>
+                <th>프린터</th>
+                <th>주문자</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var state in Model)
+            {
+                string strTd = string.Empty;
+                switch (index)
+                {
+                    case 2:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "일간");
+                        break;
+                    case 4:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "주간");
+                        break;
+                    case 6:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "월간");
+                        break;
+                    default:
+                        break;
+                }
+                  
+                <tr>
+                    @if (index == 1)
+                    {
+                        <td colspan="2">@state.Gbn</td>
+                    }
+                    else if (index == 8)
+                    {
+                        <td colspan="2">@state.Gbn</td>
+                        @Html.Raw(strTd)
+                    }
+                    else
+                    {
+                        @Html.Raw(strTd)
+                        <td>@state.Gbn</td>
+                    }
+                    <td>@(state.EmailCnt + state.FacebookCnt)</td>
+                    <td>@state.EmailCnt</td>
+                    <td>@state.FacebookCnt</td>
+                    <td>@(state.EmailCnt + state.FacebookCnt + state.DropMemberCnt)</td>
+                    <td>@state.DropMemberCnt</td>
+                    <td>@state.ArticleCnt</td>
+                    <td>@state.DownloadCnt</td>
+                    <td>@state.SpotCnt</td>
+                    <td>@state.PrinterCnt</td>
+                    <td>@state.OrderMemCnt</td>
+                    @*<td>@state.DropMemberCnt</td>*@
+                </tr>
+                    index++;
+            }
+            @*<tr>
+
+                <td colspan="2">기간선택</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>*@
+        </tbody>
+    </table>
+
+
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#search_btn").click(function () {
+                var start = $("#sdate").val();
+                var end = $("#edate").val();
+                //var end = new Date($("#edate").val());
+                //end.setDate(end.getDate() + 1);
+                //end = end.toISOString().substring(0, 10);
+                //alert(end);
+                location.href = '/Member/State?start=' + start + '&end=' + end;
+            });
+
+            $("#sdate,#edate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showOn: 'both',
+                buttonImage: '/Content/images/admin/icon_calender.png',
+                buttonImageOnly: true,
+                dateFormat: 'yy-mm-dd'
+            });
+
+        })
+    </script>
+}

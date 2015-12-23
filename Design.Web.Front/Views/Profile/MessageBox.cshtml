@@ -1,0 +1,40 @@
+﻿<div class="textArea">
+    @*  <div class="btSet">
+        <a href="#" class="aFile" title="파일 첨부"></a>
+        <a href="#" class="aImg" title="이미지 첨부"></a>
+    </div>*@
+    <form id="msg_file_form" name="msg_file_form" method="post" enctype="multipart/form-data">
+        <textarea id="txtMessage" name="txtMessage" placeholder="답장쓰기 (Shift + Enter 줄바꿈)" class="txt"></textarea>
+        <div class="btSet">
+            <a href="javascript:test()" class="aImg" title="이미지 첨부"></a>
+            <div style="display: none">
+                <input type="file" class="aImg" name="imgupload" id="messageFile" title="이미지 첨부" />
+                <input type="hidden" name="test" value="1" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#txtMessage").focus();
+    })
+
+    $('#txtMessage').keyup(function (event) {
+        if (event.keyCode == 13 && !event.shiftKey) {
+            if ($("#txtMessage").val().trim() != "") {
+                SendMessage();
+            }
+        }
+    });
+
+    $("#messageFile").on("change", function (e) {
+        e.preventDefault();
+        sendFileInMyProfile("/Profile/sendImage");
+    });
+
+    function test() {
+        $("#messageFile").trigger('click');
+    }
+
+</script>

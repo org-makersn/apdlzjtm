@@ -1,0 +1,179 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<Makersn.Models.ArticleT>
+@{
+    ViewBag.Title = "Lists";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    int index = 1;
+}
+
+<div class="profCont">
+    <div class="mainTitle">
+        <h2>@ViewBag.List.ListName</h2>
+        <ul class="cMenu">
+            @if (ViewBag.ChangeAble)
+            {
+                <li><a href="javascript:showChgListName()">변경</a></li>
+                <li><a href="javascript:showDeleteList()">삭제</a></li>
+            }
+        </ul>
+    </div>
+</div>
+<!-- BaseList -->
+<div class="baseList">
+    <ul class="item_area">
+
+        @foreach (Makersn.Models.ArticleT a in Model)
+        {
+            string className = index % 4 == 0 ? "class=mgR0" : "";
+            string likeChk = a.chkLikes == 1 ? "class=on" : "";
+            string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(@a.MemberNo.ToString());
+            
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/design/Detail?no=@a.No">
+                            <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.MainImage" /></a>
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/design/Detail?no=@a.No">@a.Title</a>
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="/Profile?no=@No">@a.MemberName</a></span></p>
+                            @if (ViewBag.ChangeAble)
+                            {
+                                <p>
+                                    <a href="javascript:DeleteArticle('@a.No')" class="by_delete"></a>
+                                </p>
+@*<a href="javascript:DeleteArticle('@a.No')">삭제</a>*@
+                            }
+                        </div>
+                        <ul class="countBox">
+                            <li class="show"><a href="javascript:void(0);"><span>@a.ViewCnt</span></a></li>
+
+                            <li class="heart"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                                <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>
+                            <li class="comment"><a href="javascript:void(0);"><span>@a.CommentCnt</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+                            index++;
+        }
+
+    </ul>
+</div>
+<!-- //BaseList -->
+
+
+<div class="popupArea chgListName">
+    <div class="bgArea">
+    </div>
+    <div class="popBox2">
+        <div class="pop_wrap2">
+            <!--창 크기 357(w)x315(h)-->
+            <div class="pop_txt">
+                새로운 리스트 이름을 입력하세요.
+       <input id="newListNm" placeholder=""></input>
+            </div>
+            <a href="javascript:ChgListName()" class="pop_btn">저장하기</a>
+            <a href="#" class="pop_close">창 닫기</a>
+        </div>
+    </div>
+</div>
+<div class="popupArea deleteList">
+    <div class="bgArea">
+    </div>
+    <div class="popBox2">
+        <div class="pop_wrap2">
+            <!--창 크기 357(w)x315(h)-->
+            <div class="pop_txt">
+                리스트와 이곳에 수집된<br>
+                모든 디자인을 삭제할까요? 
+            </div>
+            <a href="javascript:DeleteList()" class="pop_btn">삭제하기</a>
+            <a href="#" class="pop_close">창 닫기</a>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("img.lazy-load").lazyload({ effect: "fadeIn" });
+        $('.popupArea').hide();
+        $(".pop_close").click(function () {
+            $('.popupArea').hide();
+        })
+    });
+    function showChgListName() {
+        $(".popupArea.chgListName").show();
+    }
+
+    function showDeleteList() {
+        $(".popupArea.deleteList").show();
+    }
+
+    function ChgListName() {
+        var listName = $("#newListNm").val();
+        var no = "@ViewBag.List.No";
+
+        var data = {
+            listName: listName,
+            no: no
+        }
+        var onSuccess = function (result) {
+            $('.popupArea').hide();
+            GetList();
+        }
+        Ajax.AjaxResponseModelService(this, "/profile/ChgListName", data, onSuccess);
+    }
+
+    function DeleteList() {
+        var no = "@ViewBag.List.No";
+
+        var data = {
+            no: no
+        }
+        var onSuccess = function (result) {
+            if (result.Success) {
+                $('.popupArea').hide();
+                $("#collection").find(".cnt").text(parseInt($("#collection").find(".cnt").text(), 10) - 1);
+                GetList();
+            }
+        }
+        Ajax.AjaxResponseModelService(this, "/profile/DeleteList", data, onSuccess);
+    }
+
+    function DeleteArticle(articleNo) {
+        if (confirm("삭제하시겠습니까?")) {
+            var data = {
+                articleNo: articleNo,
+                ListNo: "@ViewBag.ListNo"
+            }
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    GoListDetail("@ViewBag.ListNo");
+                    //$("#collection").find(".cnt").text(parseInt($("#collection").find(".cnt").text(), 10) - 1);
+                }
+                else {
+                    alert("삭제에 실패하였습니다");
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/profile/DeleteArticleInList", data, onSuccess);
+        }
+    }
+</script>
+@Html.PagedListPager((PagedList.IPagedList)Model,
+        //page => Url.Action("Lists", new { page = page, no = ViewBag.No,  gubun = ViewBag.Gubun }),
+    page => ("/Profile/CollectionDetail?page=" + page + "&no=" + ViewBag.No),
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+    new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "partial-part",
+        OnSuccess = "$('.back-to-top').trigger('click');"
+    })
+)

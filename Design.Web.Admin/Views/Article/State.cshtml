@@ -1,0 +1,178 @@
+﻿@model IList<Makersn.Models.ArticleStateT>
+@{
+    ViewBag.Title = "State";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int index = 1;
+}
+
+<h2 class="contents_title">디자인현황 - 전체</h2>
+<!-- contents_zone -->
+<div class="contents_zone">
+
+    <form id="search" name="search">
+        <input type="hidden" id="date" name="date">
+        <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="17%" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">구분</th>
+                    <td>
+                        <span class="btnWrap medium">@Html.ActionLink("전체", "State", "Article")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("일간", "DailyState", "Article")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("월간", "MonthState", "Article")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("년간", "YearState", "Article")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">기간선택</th>
+                    <td>
+                        <input type="text" id="sdate" name="sdate" class="input_text" style="width: 106px; margin-right: 5px" readonly="readonly" value="@ViewBag.Start"/>
+                        ~
+						<input type="text" id="edate" name="edate" class="input_text" style="width: 106px; margin-right: 5px" readonly="readonly" value="@ViewBag.End"/>
+                        <span class="btnWrap small"><a href="javascript:void(0);" id="search_btn">검색</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+
+
+    <form id="insert_form" name="insert_form" method="post" action="/admin/items/multi_del//">
+
+        <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <caption>리스트 게시판</caption>
+            <colgroup>
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th rowspan="2" colspan="2">구분</th>
+                    <th rowspan="2">업로드</th>
+                    <th rowspan="2">공개</th>
+                    <th rowspan="2">비공개</th>
+                    <th rowspan="2">다운로드</th>
+                    <th rowspan="2">프린팅</th>
+                    <th colspan="6">카테고리</th>
+                </tr>
+                <tr>
+                    <th>아트&건축</th>
+                    <th>패션&악세사리</th>
+                    <th>캐릭터&토이</th>
+                    <th>생활용품&데코</th>
+                    <th>테크&툴</th>
+                    <th>교육&학습도구</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var state in Model)
+                {
+                    string strTd = string.Empty;
+                    switch (index)
+                    {
+                        case 2:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "일간");
+                            break;
+                        case 4:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "주간");
+                            break;
+                        case 6:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "월간");
+                            break;
+                        default:
+                            break;
+                    }
+                  
+                    <tr>
+                        @if (index == 1)
+                        {
+                            <td colspan="2">@state.Gbn</td>
+                        }
+                        else if (index==8){
+                            <td colspan="2">@state.Gbn</td>
+                        }
+                        else
+                        {
+                            @Html.Raw(strTd)
+                            <td>@state.Gbn</td>
+                        }
+                        <td>@(state.PublicCnt+@state.SavedCnt)</td>
+                        <td>@state.PublicCnt</td>
+                        <td>@state.SavedCnt</td>
+                        <td>@state.DownloadCnt</td>
+                        <td>@state.PrintingCnt </td>
+                        <td>@state.CodeNo1001</td>
+                        <td>@state.CodeNo1002</td>
+                        <td>@state.CodeNo1003</td>
+                        <td>@state.CodeNo1004</td>
+                        <td>@state.CodeNo1005</td>
+                        <td>@state.CodeNo1006</td>
+                    </tr>
+                        index++;
+                }
+               @* <tr>
+
+                    <td colspan="2">기간선택</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>*@
+            </tbody>
+        </table>
+    </form>
+    <!-- // page_navi -->
+
+
+</div>
+<br />
+<br />
+<br />
+
+<!-- // contents_zone -->
+
+<!-- //============ 컨텐츠부분 끝 ==================== -->
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#search_btn").click(function () {
+                var start = $("#sdate").val();
+                var end = $("#edate").val();
+                location.href = '/Article/State?start=' + start + '&end=' + end;
+            });
+
+            $("#sdate,#edate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showOn: 'both',
+                buttonImage: '/Content/images/admin/icon_calender.png',
+                buttonImageOnly: true,
+                dateFormat: 'yy-mm-dd'
+            });
+
+        })
+    </script>
+}

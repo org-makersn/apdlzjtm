@@ -1,0 +1,116 @@
+﻿@model PagedList.IPagedList<Makersn.Models.ReportT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "리포트";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<h2 class="contents_title">리포트</h2>
+<!-- contents_zone -->
+<div class="contents_zone" style="width: 950px;">
+
+
+
+    <!-- //list_search_zone -->
+    <form id="insert_form" name="insert_form" method="post" action="">
+        <input type="hidden" id="_gubun" name="_gubun" />
+        <input type="hidden" id="_url_base" name="_url_base" />
+        <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <caption>리스트 게시판</caption>
+            <colgroup>
+                <col width="5%" />
+                <col width="8%" />
+                <col width="*" />
+                <col width="12%" />
+                <col width="9%" />
+                <col width="10%" />
+                <col width="8%" />
+                <col width="12%" />
+                <col width="9%" />
+                <col width="9%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이미지</th>
+                    <th>게시물 제목</th>
+                    <th>카테고리</th>
+                    <th>게시자이름</th>
+                    <th>게시일자</th>
+                    <th>리포터이름</th>
+                    <th>리포트 일자<br />
+                        (알림발송 일자)</th>
+                    <th>피드백</th>
+                    <th>숨김설정</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Makersn.Models.ReportT r in Model)
+                {
+                    <tr>
+                        <td>@r.No</td>
+                        <td>
+                            @*<img src="@r.Path" />*@
+                        </td>
+                        <td>@r.Title</td>
+                        <td>@r.Cate</td>
+                        <td>@r.AName</td>
+                        <td>@r.ADt.ToString("yyyy-MM-dd")</td>
+                        <td>@r.RName</td>
+                        <td>@r.RDt.ToString("yyyy-MM-dd")</td>
+                        <td><span class="btnWrap small"><a href="javascript:Report.Edit(@r.No);" class="_btn_edit" data-val="">피드백</a></span></td>
+                        <td>
+                            @if(r.Visibility == "N"){
+                                <a href="javascript:Report.SetVisibility(@r.ANo,'Y');" class="ext_button ext_red ext_small _btn_drop">노출</a><br />@Html.Raw("현재<br />숨김상태")
+                            }
+                            else{
+                                <a href="javascript:Report.SetVisibility(@r.ANo,'N');" class="ext_button ext_white ext_small _btn_drop">숨기기</a><br />@Html.Raw("현재<br />노출상태")
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </form>
+    <!-- page_navi -->
+    <div class="page_navi">
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+    </div>
+    <!-- // page_navi -->
+    <!-- btn -->
+    <div class="two_btn_wrap">
+    </div>
+    <!-- // btn -->
+
+</div>
+<!-- // contents_zone -->
+
+@section Scripts{
+    <script type="text/javascript">
+        function Report() { }
+        Report.SetVisibility = function (no, val) {
+            var data = {
+                no: no,
+                visibility: val
+            }
+            var onSuccess = function (result) {
+                if (result.Success == true) {
+                    location.reload(true);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/Report/SetVisibility", data, onSuccess);
+        }
+
+        Report.Edit = function (val) {
+            location.replace("/Report/Edit?no=" + val);
+        }
+
+        $(document).ready(function () {
+          
+        })
+    </script>
+}

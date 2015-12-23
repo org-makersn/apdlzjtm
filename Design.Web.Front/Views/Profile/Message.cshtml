@@ -1,0 +1,154 @@
+﻿@model IList<Makersn.Models.MessageT>
+@{
+    ViewBag.Title = "Message";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+}
+
+@*@{Html.RenderAction("TopArea", "Profile", new { no = ViewBag.No });}
+
+<div class="profCont">*@
+<!-- notice -->
+
+<div class="message">
+    <div class="messageL">
+        <p class="tit">메세지 보관함</p>
+        <ul>
+
+            @foreach (Makersn.Models.MessageT message in Model)
+            {
+                string memberNo = Design.Web.Front.Helper.Base64Helper.Base64Encode(message.MemberNo.ToString());
+                string memberNoRef = Design.Web.Front.Helper.Base64Helper.Base64Encode(message.MemberNoRef.ToString());
+
+                string profilePic = string.Empty;
+
+                if (message.ProfilePic != "")
+                {
+                    profilePic = ViewBag.ProfileImgUrl + message.ProfilePic;
+                }
+                else
+                {
+                    profilePic = "/Content/images/common/profile_photo2.png";
+                }
+                    
+                <!-- message 1set -->
+                <li class="messageBox"  data-no="@memberNo" data-ref="@memberNoRef" style="cursor:pointer">
+
+                    <p class="photo">
+                        <a href="/Profile?no=@(memberNo == ViewBag.No ? memberNoRef : memberNo)">
+                            <img alt="프로필사진" src="@profilePic"></a>
+                    </p>
+                    <div class="flL">
+                        @*<p class="name"><a href="/Profile?no=@(memberNo == ViewBag.No ? memberNoRef : memberNo)" class="boldF">@message.MemberName</a></p>*@
+                        <p class="name"><a class="boldF">@message.MemberName</a></p>
+
+                        <p class="txt" style="word-break:break-all;">@(message.MsgGubun == "MSG" ? message.Comment : "사진")</p>
+                    </div>
+                    <p class="date">@message.RegDt.ToString("M")</p>
+                </li>
+                <!--//message 1set --> 
+            }
+
+        </ul>
+    </div>
+    <div class="messageR">
+        <div id="messageR">
+            @if (ViewBag.GetMessage != null)
+            {
+                Html.RenderAction("MessageRoom", "Profile");
+            }
+        </div>
+        <div id="messageBox">
+            @if (ViewBag.GetMessage != null)
+            {
+                Html.RenderAction("messagebox", "Profile");
+            }
+        </div>
+    </div>
+
+</div>
+
+@*</div>*@
+<!-- //notice -->
+<style>
+    .profCont .message .messageL .messageBox .txt {
+        width: 235px;
+        font-size: 12px;
+        color: #808080;
+        line-height: 20px;
+        padding-top: 5px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#upload").removeClass();
+        //$("#message").removeClass();
+        //$("#upload").addClass("cnt");
+        //$("#message").addClass("on");
+        $(".messageBox").on("click", function () {
+            var memberNo = $(this).attr("data-no");
+            var memberNoRef = $(this).attr("data-ref");
+            console.log(memberNo, memberNoRef);
+            $(".messageBox").removeClass("on");
+            $(this).addClass("on");
+            GetMessage(memberNo, memberNoRef);
+        })
+    });
+
+    function GetMessage(val1, val2) {
+        var data = {
+            val1: val1,
+            val2: val2
+        }
+        Ajax.SyncGetPartialView('/profile/messageroom', data, "messageR");
+        Ajax.SyncGetPartialView('/profile/messagebox', {}, "messageBox");
+
+        $('html,body').animate({ scrollTop: $('.messageL').offset().top }); // 스크롤 이동
+    }
+
+    function SendMessage() {
+        if (check_msg("txtMessage", "내용을 입력해주세요.", "required:message") == false) return false;
+        var comment = $("#txtMessage").val();
+        $("#txtMessage").val("");
+        var data = {
+            comment: comment
+        }
+        var onSuccess = function () {
+
+            getMessage();
+
+            $("#txtMessage").focus();
+        }
+        Ajax.AjaxResponseModelService(this, "/profile/SendMessage", data, onSuccess);
+    }
+
+    function sendFileInMyProfile(action) {
+        var options = {
+            beforeSend: function () {
+            },
+            success: function (response) {
+                if (response.Success) {
+                    $("#txtMessage").val("");
+                    getMessage();
+                    $("#txtMessage").focus();
+                }
+                //console.log(response);
+             
+            },
+            complete: function (response) {
+                //$(".msgWrap").scrollTop($(".msgWrap")[0].scrollHeight);
+            },
+            error: function (error) {
+                //console.log(error);
+            }
+        };
+
+        $('#msg_file_form').attr("action", action).ajaxForm(options).submit();
+    }
+
+    function getMessage() {
+        var url = "/profile/MessageRoom";
+        Ajax.SyncGetPartialView(url, {}, "messageR");
+    }
+</script>

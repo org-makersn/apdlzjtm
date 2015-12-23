@@ -1,0 +1,129 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<Makersn.Models.ArticleT>
+@{
+    ViewBag.Title = "Lists";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    int index = 1;
+}
+
+
+<!-- BaseList -->
+<div class="baseList">
+    <ul class="item_area">
+
+        @foreach (Makersn.Models.ArticleT a in Model)
+        {
+            string className = index % 4 == 0 ? "class=mgR0" : "";
+            string likeChk = a.chkLikes == 1 ? "class=on" : "";
+            string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(@a.MemberNo.ToString());
+            
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/design/Detail?no=@a.No">
+                            <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.MainImage" /></a>
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/design/Detail?no=@a.No">@a.Title</a>
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="javascript:GoPage('@No')">@a.MemberName</a></span></p>
+                        </div>
+                        <ul class="countBox">
+                            <li class="show" title="조회수"><a href="/design/Detail?no=@a.No"><span>@a.ViewCnt</span></a></li>
+
+                            <li class="heart" title="좋아요"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                                <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>
+                            <li class="comment" title="댓글"><a href="/design/Detail?no=@a.No&goReply=Y"><span>@a.CommentCnt</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            index++;
+        }
+
+    </ul>
+
+    @if (Model.Count == 0)
+    {
+        switch ((string)ViewBag.Gubun)
+        {
+            case "D":
+        <div class="default">
+            @if ((int)ViewBag.CheckSelf == 1)
+            {
+                <span class="my">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_1.png")" />
+                </span>
+            }
+            else
+            {
+                <span class="other">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_other_1.png")" />
+                </span>
+            }
+        </div>
+            break;
+            case "L":
+        <div class="default">
+             @if ((int)ViewBag.CheckSelf == 1)
+            {
+                <span class="my">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_3.png")" />
+                </span>
+            }
+            else
+            {
+                <span class="other">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_other_3.png")" />
+                </span>
+            }
+        </div>
+            break;
+            default:
+        <div class="default">
+            @if ((int)ViewBag.CheckSelf == 1)
+            {
+                <span class="my">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_1.png")" />
+                </span>
+            }
+            else
+            {
+                <span class="other">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_other_1.png")" />
+                </span>
+            }
+        </div>
+            break;
+        }
+
+    }
+</div>
+<!-- //BaseList -->
+@if (Model.Count != 0)
+{
+    @Html.PagedListPager((PagedList.IPagedList)Model,
+        //page => Url.Action("Lists", new { page = page, no = ViewBag.No,  gubun = ViewBag.Gubun }),
+    page => ("/Profile/Lists?page=" + page + "&no=" + ViewBag.No + "&gubun=" + ViewBag.Gubun),
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+    new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "partial-part",
+        OnSuccess = "$('.back-to-top').trigger('click');"
+    })
+)
+}
+
+<script type="text/javascript">
+    function GoPage(val) {
+        location.href = "/Profile?no=" + val;
+    }
+    $(function () {
+        $("img.lazy-load").lazyload({ effect: "fadeIn" });
+    });
+</script>

@@ -1,0 +1,251 @@
+﻿@{
+    ViewBag.Title = "메이커스앤";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int recommendIndex = 1;
+    int popularIndex = 1;
+    int newArticleIndex = 1;
+
+    int comIndex = 1;
+}
+
+@section head{
+    <meta property="og:title" content="makersN" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://www.makersn.com" />
+    <meta property="og:image" content="http://www.makersn.com/content/images/common/makers_logo.png" />
+
+    <meta property="og:image:width" content="200" />
+    <meta property="og:description" content="메이커스앤은 메이커들의 플랫폼이에요. 원하는 3D 모델을 찾고, 만들고, 나눌 수 있어요. 메이커스앤을 통해 당신의 상상을 현실로 만들어보세요!" />
+    <meta property="og:article:author" content="MakersN" />
+    <meta property="og:site_name" content="makersN" />
+}
+
+@section designMian{
+    <!-- MainSlide -->
+    <div class="unslider-carousel has-dots topVisu">
+        @*@Html.Action("GetMainBanner","Main", null)*@
+        <ul>
+            <li style="cursor: pointer; background: url(http://www.makersn.com/fileupload/banner/fullsize/main_background.png) top center no-repeat #fff; background-size: cover;" onclick="index.GoBannerPage('http://www.makersn.com/info/notice?competition=on', 'n')">
+                <span style="position:absolute;left:50%;margin-left:-420px;display:block;width:834px;height:100%;background:url(http://www.makersn.com/fileupload/banner/fullsize/main_contents.png) no-repeat"></span>
+            </li>
+            <li style="cursor: pointer; width: 50%; background: url(http://www.makersn.com//fileupload/banner/fullsize/9beeabc5-b425-49f0-a5b8-d631c5b13d76.jpg) 50% 0% / cover no-repeat rgb(255, 255, 255);" onclick="index.GoBannerPage('', 'n');">
+                <div class="container">
+                    <p class="txt1"></p>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+    <!-- //MainSlide -->
+
+}
+
+<!-- 추천 디자인 -->
+<div class="mainTitle">
+    <h2>컨테스트</h2>
+    <p>
+        <a href="/design?codeNo=10203">더보기 +</a>
+    </p>
+</div>
+
+<!-- BaseList -->
+<div class="baseList">
+    <ul class="item_area">
+        @foreach (Makersn.Models.ArticleDetailT recommened in ViewBag.ComList)
+        {
+            string className = comIndex % 4 == 0 ? "class=mgR0" : "";
+            string likeChk = recommened.IsLikes == 1 ? "class=on" : "";
+            string No = Base64Helper.Base64Encode(recommened.MemberNo.ToString());
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/design/Detail?no=@recommened.No">
+                            <img src="@ViewBag.ArticleImgUrl@recommened.MainImgName" alt="@recommened.Title" /></a>
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/design/Detail?no=@recommened.No">@recommened.Title </a>
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="/Profile?no=@No">@recommened.MemberName</a></span></p>
+                        </div>
+                        <ul class="countBox">
+                            <li class="show" title="조회수"><a href="/design/Detail?no=@recommened.No"><span>@recommened.ViewCnt</span></a></li>
+
+                            <li class="heart" title="좋아요"><a href="javascript:SetLikes('@recommened.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                                <span @likeChk id="likeChk_@recommened.No">@recommened.LikeCnt</span></a></li>
+                            <li class="comment" title="댓글"><a href="/design/Detail?no=@recommened.No&goReply=Y"><span>@recommened.CommentCnt</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- //ProductBox -->
+            </li>
+            comIndex++;
+        }
+    </ul>
+</div>
+<!-- //BaseList -->
+<!-- //추천 디자인 -->
+
+
+<!-- 추천 디자인 -->
+<div class="mainTitle">
+    <h2>추천 디자인</h2>
+    <p>
+        <a href="/design?pageGubun=R">더보기 +</a>
+    </p>
+</div>
+
+<!-- BaseList -->
+<div class="baseList">
+    <ul class="item_area">
+        @foreach (Makersn.Models.ArticleDetailT recommened in ViewBag.RecommendList)
+        {
+            string className = recommendIndex % 4 == 0 ? "class=mgR0" : "";
+            string likeChk = recommened.IsLikes == 1 ? "class=on" : "";
+            string No = Base64Helper.Base64Encode(recommened.MemberNo.ToString());
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/design/Detail?no=@recommened.No">
+                            <img src="@ViewBag.ArticleImgUrl@recommened.MainImgName" alt="@recommened.Title" /></a>
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/design/Detail?no=@recommened.No">@recommened.Title </a>
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="/Profile?no=@No">@recommened.MemberName</a></span></p>
+                        </div>
+                        <ul class="countBox">
+                            <li class="show" title="조회수"><a href="/design/Detail?no=@recommened.No"><span>@recommened.ViewCnt</span></a></li>
+
+                            <li class="heart" title="좋아요"><a href="javascript:SetLikes('@recommened.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                                <span @likeChk id="likeChk_@recommened.No">@recommened.LikeCnt</span></a></li>
+                            <li class="comment" title="댓글"><a href="/design/Detail?no=@recommened.No&goReply=Y"><span>@recommened.CommentCnt</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- //ProductBox -->
+            </li>
+            recommendIndex++;
+        }
+    </ul>
+</div>
+<!-- //BaseList -->
+<!-- //추천 디자인 -->
+
+<!-- 인기 디자인 -->
+<div class="mainTitle">
+    <h2>인기 디자인</h2>
+    <p>
+        <a href="/design?pageGubun=P">더보기 +</a>
+    </p>
+</div>
+
+<!-- BaseList -->
+<div class="baseList">
+    <ul class="item_area">
+        @foreach (Makersn.Models.ArticleDetailT popular in ViewBag.PopularList)
+        {
+            string className = popularIndex % 4 == 0 ? "class=mgR0" : "";
+            string likeChk = popular.IsLikes == 1 ? "class=on" : "";
+            string No = Base64Helper.Base64Encode(popular.MemberNo.ToString());
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/design/Detail?no=@popular.No">
+                            <img src="@ViewBag.ArticleImgUrl@popular.MainImgName" alt="@popular.Title" /></a>
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/design/Detail?no=@popular.No">@popular.Title </a>
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="/Profile?no=@No">@popular.MemberName</a></span></p>
+                        </div>
+                        <ul class="countBox">
+                            <li class="show" title="조회수"><a href="/design/Detail?no=@popular.No"><span>@popular.ViewCnt</span></a></li>
+
+                            <li class="heart" title="좋아요"><a href="javascript:SetLikes('@popular.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                                <span @likeChk id="likeChk_@popular.No">@popular.LikeCnt</span></a></li>
+                            <li class="comment" title="댓글"><a href="/design/Detail?no=@popular.No"><span>@popular.CommentCnt</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- //ProductBox -->
+            </li>
+            popularIndex++;
+        }
+    </ul>
+</div>
+<!-- //BaseList -->
+<!-- //인기 디자인 -->
+
+<!-- 신규 디자인 -->
+<div class="mainTitle">
+    <h2>신규 디자인</h2>
+    <p>
+        <a href="/design?pageGubun=N">더보기 +</a>
+    </p>
+</div>
+
+<!-- BaseList -->
+<div class="baseList">
+    <ul class="item_area">
+        @foreach (Makersn.Models.ArticleDetailT newArticle in ViewBag.NewList)
+        {
+            string className = newArticleIndex % 4 == 0 ? "class=mgR0" : "";
+            string likeChk = newArticle.IsLikes == 1 ? "class=on" : "";
+            string No = Base64Helper.Base64Encode(newArticle.MemberNo.ToString());
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/design/Detail?no=@newArticle.No">
+                            <img src="@ViewBag.ArticleImgUrl@newArticle.MainImgName" alt="@newArticle.Title" /></a>
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/design/Detail?no=@newArticle.No">@newArticle.Title </a>
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="/Profile?no=@No">@newArticle.MemberName</a></span></p>
+                        </div>
+                        <ul class="countBox">
+                            <li class="show" title="조회수"><a href="/design/Detail?no=@newArticle.No"><span>@newArticle.ViewCnt</span></a></li>
+
+                            <li class="heart" title="좋아요"><a href="javascript:SetLikes('@newArticle.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                                <span @likeChk id="likeChk_@newArticle.No">@newArticle.LikeCnt</span></a></li>
+                            <li class="comment" title="댓글"><a href="/design/Detail?no=@newArticle.No"><span>@newArticle.CommentCnt</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- //ProductBox -->
+            </li>
+            if (newArticleIndex == 4) { break; }
+            newArticleIndex++;
+        }
+    </ul>
+</div>
+<!-- //BaseList -->
+<!-- //신규 디자인 -->
+
+@section Scripts{
+    <script type="text/javascript">
+        function index() { };
+
+        index.GoBannerPage = function (link, opener) {
+            if (opener == 'n') { location.href = link; }
+            else {
+                var newWindow = window.open("about:blank");
+                newWindow.location.href = link;
+            }
+        }
+    </script>
+    <script src="@Url.VersionedContent("~/Scripts/shared.jquery.js")"></script>
+}
+

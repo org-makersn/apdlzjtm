@@ -1,0 +1,104 @@
+﻿@model Makersn.Models.ContactT
+@using Design.Web.Admin.Filter
+@using Design.Web.Admin.Helper
+@{
+    ViewBag.Title = "문의사항";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="contents_zone">
+
+    <table class="tbl_style1" summary="게시판 테이블">
+        <colgroup>
+            <col width="200x" />
+            <col width="auto" />
+        </colgroup>
+        <caption>게시판</caption>
+        <tbody>
+            <tr>
+                <th scope="row">
+                    <label for="cate_no">카테고리</label></th>
+                <td colspan="5">
+                    @Model.CodeName
+                </td>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <td>@Model.Title</td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td><a href="mailto:<?=$view_row['email']?>">@Model.Email</a></td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td>@Html.Raw(new ContentFilter().HtmlEncode(Model.Comment))</td>
+            </tr>
+            <tr>
+                <th>답변</th>
+                <td>
+                    <textarea id="reply" name="reply" style="height: 100px;">@Model.Reply</textarea></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="btn_center">
+        <span class="btnWrap medium"><a class="_btn_edit" id="_btn_edit_">등록</a></span>
+        <span class="btnWrap medium"><a href="/contact" class="_btn_list">목록</a></span>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        @*var sendAnswer = function () {
+            if (confirm("답변메일을 발송하시겠습니까?")) {
+             
+                var data = {
+                    no: "@Model.No",
+                    answer: $("#reply").val()
+                }
+                var onSuccess = function (result) {
+                    if (result.Success) {
+                        alert(result.Message);
+                        $("input:radio[name=State]").removeAttr("checked");
+                        $("#State1").click();
+                        editContact();
+                    }
+                }
+                Ajax.AjaxResponseModelService(this, "/contact/sendAnswer", data, onSuccess);
+            }
+        };*@
+
+        $(document).ready(function () {
+            $("._btn_edit").click(function () {
+                if (!confirm("답변을 등록 하시겠습니까?")) { return false }
+                editContact();
+               
+            })
+
+        })
+
+        function editContact() {
+            var no = "@Model.No";
+            var reply = $("#reply").val();
+
+            var data = {
+                no: no,
+                reply: reply
+            }
+
+            var onSuccess = function (result) {
+                if (result.Success == true) {
+                    alert("등록되었습니다.");
+                    location.replace("/contact");
+                }
+                else {
+                    alert(result.Message);
+                }
+
+            }
+            var result = Ajax.AjaxResponseModelService(this, "/contact/SendReply", data, onSuccess);
+        }
+    </script>
+}

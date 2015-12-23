@@ -1,0 +1,172 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<Makersn.Models.FollowerT>
+
+@{
+    ViewBag.Title = "Follow";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    int index = 1;
+    string profilePic = string.Empty;
+}
+
+
+<div class="followList">
+    @foreach (Makersn.Models.FollowerT follower in Model)
+    {
+        if (string.IsNullOrEmpty(follower.ProfilePic))
+        {
+            profilePic = "/Content/images/common/profile_photo2.png";
+        }
+        else
+        {
+            profilePic = ViewBag.ProfileImgUrl + follower.ProfilePic;
+        }
+        //string No = follower.MemberBlog == null ? "?no="+ Design.Web.Front.Helper.Base64Helper.Base64Encode(@follower.MemberNo.ToString()) : follower.MemberBlog;
+        string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(@follower.MemberNo.ToString());
+        string className = index % 4 == 0 ? "mgR0" : "";
+        <!-- 팔로워 1set -->
+        <div class="followBox @className">
+            <p class="photo">
+                <a href="/Profile?no=@No">
+                    <img alt="프로필사진" src="@profilePic"></a>
+            </p>
+            <p class="name"><a href="/Profile?no=@No">@follower.MemberName</a></p>
+            <ul class="followG">
+                <li>
+                    <p class="cnt">@follower.DesignCnt</p>
+                    <p class="txt">디자인</p>
+                </li>
+                <li>
+                    <p class="cnt">@follower.LikesCnt</p>
+                    <p class="txt">좋아요</p>
+                </li>
+                <li>
+                    <p class="cnt">@follower.FollowerCnt</p>
+                    <p class="txt">팔로워</p>
+                </li>
+            </ul>
+
+            <div class="mgT30">
+                <a href="javascript:SetFollowInFollowPage('@No','@index')">
+                    @{switch (follower.ChkFollow)
+                      {
+                          case 0:
+                        <img alt="팔로우" src="/content/images/common/btn/btn_follow.png" id="btnFollow_@index">
+                              break;
+                          case 1:
+                        <img alt="팔로우" src="/content/images/common/btn/btn_following.png" id="btnFollow_@index">
+                              break;
+                          case 2:
+                              break;
+                      }
+                    }
+                </a>
+            </div>
+
+        </div>
+                      index++;
+    }
+    <!--//팔로워 1set -->
+    @if (Model.Count == 0)
+    {
+        switch ((string)ViewBag.Gubun)
+        {
+            case "wer":
+        <div class="default">
+            @if ((int)ViewBag.CheckSelf == 1)
+            {
+                <span class="my">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_4.png")" />
+                </span>
+            }
+            else
+            {
+                <span class="other">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_other_4.png")" />
+                </span>
+            }
+        </div>
+            break;
+            case "ing":
+        <div class="default">
+            @if ((int)ViewBag.CheckSelf == 1)
+            {
+                <span class="my">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_5.png")" />
+                </span>
+            }
+            else
+            {
+                <span class="other">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_other_5.png")" />
+                </span>
+            }
+        </div>
+            break;
+        }
+    }
+</div>
+
+
+<!-- //Setting -->
+@if (Model.Count != 0)
+{
+    @Html.PagedListPager((PagedList.IPagedList)Model,
+        //page => Url.Action("follow", new {  no = ViewBag.No, page, gubun = ViewBag.Gubun }), 
+            page => ("/Profile/follow?page=" + page + "&no=" + ViewBag.No + "&gubun=" + ViewBag.Gubun),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                HttpMethod = "POST",
+                UpdateTargetId = "partial-part",
+                OnSuccess = "$('.back-to-top').trigger('click');"
+            })
+        )
+}
+
+<script type="text/javascript">
+    @*function Follow(val) { };
+
+    Follow.SetFollow = function (val, name) {
+        if (!loginPop("@ViewBag.LogOnChk")) {
+            var data = {
+                memberNo: val
+            }
+            var onSuccess = function (result) {
+                if (result.Result == 1) {
+                    $("#btnFollow_" + name).attr("src", "/content/images/common/btn/btn_following.png");
+                    if ("@ViewBag.CheckSelf" == "1") {
+                        $("#following").find(".cnt").text(parseInt($("#following").find(".cnt").text(), 10) + 1);
+                    }
+                }
+                else {
+                    $("#btnFollow_" + name).attr("src", "/content/images/common/btn/btn_follow.png");
+                    if ("@ViewBag.CheckSelf" == "1") {
+                        $("#following").find(".cnt").text(parseInt($("#following").find(".cnt").text(), 10) - 1);
+                    }
+                }
+            }
+
+            Ajax.AjaxResponseModelService(this, "/profile/SetFollow", data, onSuccess);
+        }
+    }*@
+    $(document).ready(function () {
+        switch ("@ViewBag.Gubun") {
+            case "ing":
+                $("#upload").removeClass();
+                $("#following").removeClass();
+                $("#upload").addClass("cnt");
+                $("#following").addClass("on");
+                $("#following").find(".cnt").text("@Model.Count");
+                break;
+            case "wer":
+                $("#upload").removeClass();
+                $("#follower").removeClass();
+                $("#upload").addClass("cnt");
+                $("#follower").addClass("on");
+                $("#follower").find(".cnt").text("@Model.Count");
+                break;
+        }
+    });
+
+</script>

@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4226CB43-C074-47EF-8BD8-A136B098BF3F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DAL</RootNamespace>
+    <AssemblyName>DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ExtendedCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ExtendedCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentNHibernate, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentNHibernate.2.0.1.0\lib\net40\FluentNHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate.Caches.SysCache, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.Caches.SysCache.4.0.0.4000\lib\net40\NHibernate.Caches.SysCache.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BizDac\AdminDac.cs" />
+    <Compile Include="BizDac\ArticleCommentDac.cs" />
+    <Compile Include="BizDac\ArticleDac.cs" />
+    <Compile Include="BizDac\ArticleFileDac.cs" />
+    <Compile Include="BizDac\BannerDac.cs" />
+    <Compile Include="BizDac\BizDacHelper.cs" />
+    <Compile Include="BizDac\CodeDac.cs" />
+    <Compile Include="BizDac\ContactDac.cs" />
+    <Compile Include="BizDac\DownloadDac.cs" />
+    <Compile Include="BizDac\FollowerDac.cs" />
+    <Compile Include="BizDac\LikesDac.cs" />
+    <Compile Include="BizDac\ListDac.cs" />
+    <Compile Include="BizDac\MemberDac.cs" />
+    <Compile Include="BizDac\MessageDac.cs" />
+    <Compile Include="BizDac\NoticesDac.cs" />
+    <Compile Include="BizDac\PopularDac.cs" />
+    <Compile Include="BizDac\PrinterDac.cs" />
+    <Compile Include="BizDac\ReportDac.cs" />
+    <Compile Include="BizDac\PrinterFileDac.cs" />
+    <Compile Include="Models\ArticleCommentT.cs" />
+    <Compile Include="Models\ArticleCommentTMap.cs" />
+    <Compile Include="Models\ArticleDetailT.cs" />
+    <Compile Include="Models\ArticleDetailTMap.cs" />
+    <Compile Include="Models\ArticleFileT.cs" />
+    <Compile Include="Models\ArticleFileTMap.cs" />
+    <Compile Include="Models\ArticleStateT.cs" />
+    <Compile Include="Models\ArticleStateTMap.cs" />
+    <Compile Include="Models\ArticleT.cs" />
+    <Compile Include="Models\ArticleTMap.cs" />
+    <Compile Include="Models\BannerT.cs" />
+    <Compile Include="Models\BannerTMap.cs" />
+    <Compile Include="Models\ChgPwT.cs" />
+    <Compile Include="Models\ChgPwTMap.cs" />
+    <Compile Include="Models\PrinterFileMap.cs" />
+    <Compile Include="Models\PrinterTMap.cs" />
+    <Compile Include="Models\PrinterT.cs" />
+    <Compile Include="Models\CodeT.cs" />
+    <Compile Include="Models\CodeTMap.cs" />
+    <Compile Include="Models\ContactT.cs" />
+    <Compile Include="Models\ContactTMap.cs" />
+    <Compile Include="Models\DashBoardStateT.cs" />
+    <Compile Include="Models\DashBoardStateTMap.cs" />
+    <Compile Include="Models\DashBoardT.cs" />
+    <Compile Include="Models\DownloadT.cs" />
+    <Compile Include="Models\DownloadTMap.cs" />
+    <Compile Include="Models\DropMemberT.cs" />
+    <Compile Include="Models\DropMemberTMap.cs" />
+    <Compile Include="Models\FollowerT.cs" />
+    <Compile Include="Models\FollowerTMap.cs" />
+    <Compile Include="Models\LikesT.cs" />
+    <Compile Include="Models\LikesTMap.cs" />
+    <Compile Include="Models\ListArticleT.cs" />
+    <Compile Include="Models\ListArticleTMap.cs" />
+    <Compile Include="Models\ListT.cs" />
+    <Compile Include="Models\ListTMap.cs" />
+    <Compile Include="Models\MemberStateT.cs" />
+    <Compile Include="Models\MemberStateTMap.cs" />
+    <Compile Include="Models\MemberT.cs" />
+    <Compile Include="Models\MemberTMap.cs" />
+    <Compile Include="Models\MessageT.cs" />
+    <Compile Include="Models\MessageTMap.cs" />
+    <Compile Include="Models\BoardT.cs" />
+    <Compile Include="Models\BoardTMap.cs" />
+    <Compile Include="Models\NoticeT.cs" />
+    <Compile Include="Models\NoticeTMap.cs" />
+    <Compile Include="Models\PopularStateT.cs" />
+    <Compile Include="Models\PopularStateTMap.cs" />
+    <Compile Include="Models\PopularT.cs" />
+    <Compile Include="Models\PopularTMap.cs" />
+    <Compile Include="Models\PrinterMemberStateT.cs" />
+    <Compile Include="Models\PrinterMemberT.cs" />
+    <Compile Include="Models\PrinterStateT.cs" />
+    <Compile Include="Models\PrinterStateTMap.cs" />
+    <Compile Include="Models\ProfileT.cs" />
+    <Compile Include="Models\ReportT.cs" />
+    <Compile Include="Models\ReportTMap.cs" />
+    <Compile Include="Models\PrinterMemberStateTMap.cs" />
+    <Compile Include="Models\PrinterFileT.cs" />
+    <Compile Include="NHibernate\NHibernateHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\CryptFilter.cs" />
+    <Compile Include="Util\EnumHelper.cs" />
+    <Compile Include="Util\FileUpload.cs" />
+    <Compile Include="Util\ImageSize.cs" />
+    <Compile Include="Util\MakersnEnumTypes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

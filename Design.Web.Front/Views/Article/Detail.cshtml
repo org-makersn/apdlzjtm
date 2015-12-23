@@ -1,0 +1,998 @@
+﻿@model ArticleDetailT
+@{
+    ViewBag.Title = "makersN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string profilePic = string.Empty;
+    if (Model.MemberProfilePic == "")
+    {
+        profilePic = "/Content/images/common/profile_photo2.png";
+    }
+    else
+    {
+        profilePic = ViewBag.ProfileImgUrl + Model.MemberProfilePic;
+    }
+
+    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+
+    string No = Base64Helper.Base64Encode(Model.MemberNo.ToString());
+    string className = ViewBag.ShowLikes > 0 ? "class=on" : "";
+    string pageUrl = Request.Url.ToString();
+
+    Design.Web.Front.Filter.ContentFilter filter = new Design.Web.Front.Filter.ContentFilter();
+
+    int index = 0;
+    int setNum = 0;
+    int sildeNum = 0;
+    
+    IList<ArticleFileT> fileList = ViewBag.Files;
+    
+
+}
+@section head{
+    <meta name="author" content="@Model.MemberName" />
+    <meta property="og:title" content="@Model.Title" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@pageUrl" />
+    <meta property="og:image" content="@ViewBag.ArticleImgUrl@ViewBag.MainImg" />
+    @*<meta property="og:image" content="http://www.makersn.com/FIleUpload/Article/Article_img/thumb/9617498b-af97-4a9c-a382-24cb50c8169a.jpg" />*@
+
+    <meta property="og:image:width" content="200" />
+    <meta property="og:description" content="@ViewBag.MetaDescription" />
+    <meta property="og:article:author" content="MakersN" />
+    <meta property="og:site_name" content="MakersN" />
+}
+
+
+@section editBtnzone{
+    <ul class="btnSet">
+        @*<li><a href="javascript:Global()">
+            <img src="@Url.Content("~/Content/images/common/btn/btn_language.gif")" /></a></li>*@
+        @if (Model.MemberNo == ViewBag.VisitorNo || profile.UserLevel > 50)
+        {
+@*<li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">
+                <img src="@Url.Content("~/Content/images/common/btn/btn_edit.gif")" /></a></li>*@
+            <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">편집</a></li>
+        }
+    </ul>
+}
+<!-- contWrap -->
+<div class="contWrap">
+    <!-- DetailWrap -->
+    <div class="detailWrap">
+
+        <!-- LeftCont -->
+        <div class="leftCont">
+
+            <div class="detailSlide">
+                <div class="mainBigImg">
+                    <ul class="bxslider">
+                        @foreach (Makersn.Models.ArticleFileT file in fileList)
+                        {
+                            file.ImgName = file.ImgName != null ? file.ImgName : file.Rename;
+
+                            string ImgPath = ViewBag.ArticleImgUrl + file.ImgName;
+                            string filePath = ViewBag.Article3DUrl + file.Rename;
+                            string jsUrl = ViewBag.ArticleJsUrl + file.Rename + ".js";
+                            <li style="display:none">
+                                <img class="lazy-load" src="@ImgPath" />
+
+                                @{if (setNum == 0)
+                                  {
+                                    <div id="viewer">
+                                        @*<iframe src="#" id="viewer_frame" width="630" height="470" border="0" frameborder="0" scrolling="no"></iframe>*@
+                                    </div>
+                                  }
+                                }
+                                @if (file.FileType.ToLower() == "stl")
+                                {
+                                    
+                                    <a href="#none" class="viewer3d" data-file="@filePath" data-js="@jsUrl" data-ext="@file.Ext">3D View</a>
+                                }
+
+                            </li>
+                                setNum++;
+
+                                if (Model.MainImage == file.No)
+                                {
+                                    sildeNum = setNum;
+                                }
+
+                        }
+                    </ul>
+                    <div class="thumb3dImg">
+                        <img src="/Content/images/common/loading_bar.gif" alt="로딩중" />
+                    </div>
+                </div>
+                <input type="hidden" id="sildeNum" value="@(sildeNum - 1)" />
+
+                <div class="thumbArea">
+                    <div id="bx-pager" style="display:none">
+                        @foreach (Makersn.Models.ArticleFileT file in ViewBag.Files)
+                        {
+                            string ThumbImgPath = ViewBag.ArticleImgUrl + file.ImgName;
+                            <a data-slide-index="@index" href="javascript:void(0);">
+                                @*<img class="lazy-load" data-original="@ThumbImgPath" /></a>*@
+                                <img src="@ThumbImgPath" /></a>
+                            index++;
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- About -->
+            <div class="aboutZone" id="aboutZone">
+                <ul class="title">
+                    <li id="infoTit" class="infoTit on"><a href="javascript:void(0);" onclick="goDesign()">디자인 소개</a></li>
+                    <li id="downTit" class="downTit"><a href="javascript:void(0);" onclick="goDownFile()">파일 다운로드</a></li>
+                </ul>
+                <div class="txt">
+                    <p style="word-break: break-all">
+                        @Html.Raw(Model.Contents)
+                        @if (Model.VideoUrl != null && Model.VideoUrl != "")
+                        {
+                            <br />
+                            <iframe width="606" height="340" src="@Model.VideoUrl" frameborder="0" allowfullscreen></iframe> 
+                        }
+                    </p>
+                </div>
+
+                <!-- 파일 다운로드 -->
+                <div class="downloadList">
+                    <ul class="middleList">
+
+                        @if (ViewBag.chkStlCnt > 0)
+                        {
+                            if (ViewBag.chkStlCnt > 1)
+                            {
+                            <li>
+                                <div class="downBox">
+                                    <div class="img">
+                                        @*<img class="lazy-load" data-original="@ViewBag.ArticleImgUrl@Model.MainImgName" alt="썸네일" />*@
+                                        <img class="lazy-load" src="@ViewBag.ArticleImgUrl@Model.MainImgName" alt="썸네일" />
+                                    </div>
+                                    <div class="txts">
+                                        <p class="tit">@Model.Title .zip</p>
+                                        <span class="fileNum"></span>
+                                    </div>
+                                    <div class="btnDown zip">
+                                        @Html.ActionLink("download", "AllDownloadForZip", new { articleNo = Model.No, zipName = Model.Title })
+                                    </div>
+                                </div>
+                            </li>
+                            }
+                        }
+                        else
+                        {
+                            <p style="padding: 13px 10px 0 13px; margin-bottom: 30px; font-size: 14px; line-height: 23px;">
+                                다운받을 파일이 없습니다
+                            </p>
+                        }
+
+                        @foreach (Makersn.Models.ArticleFileT file in ViewBag.Files)
+                        {
+                            if (file.FileType == "stl")
+                            {
+                                string ThumbImgPath = ViewBag.ArticleImgUrl + file.ImgName;
+                                string downloadUrl = "/FileUpload" + file.Path + file.Rename;
+                                downloadUrl = Html.Encode(downloadUrl);
+                                float m = float.Parse(file.Size) / (float)1024;
+                                float size = float.Parse(m.ToString("F1"));
+                                float size2 = float.Parse((size/1024).ToString("F1"));
+                                string resize = size > 1000 ? size2 + "MB" : size + "KB";
+                            <li>
+                                <div class="downBox">
+                                    <div class="img">
+                                        @*<img class="lazy-load" data-original="@ThumbImgPath" alt="썸네일" />*@
+                                        <img class="lazy-load" src="@ThumbImgPath" alt="썸네일" />
+                                    </div>
+                                    <div class="txts">
+                                        <p class="tit">@file.Name</p>
+                                        @*<span class="fileNum">@(size)KB</span>*@
+                                        <span class="fileNum">@resize</span>
+                                    </div>
+                                    <div class="btnDown">
+                                        @Html.ActionLink("download", "FileDownload", new { articleNo = Model.No, filePath = downloadUrl, fileName = file.Name })
+                                    </div>
+                                </div>
+                            </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <!-- //파일 다운로드 -->
+
+            </div>
+            <!-- //About -->
+
+
+            <!-- Comment -->
+
+            <div id="goComment" class="commentZone">
+            </div>
+            <!-- //Comment -->
+        </div>
+        <!-- //LeftCont -->
+
+
+        <!-- RightCont -->
+        <div class="rightCont">
+
+            <!-- userInfoArea -->
+            <div class="userInfoArea">
+
+                <p class="title">@Model.Title</p>
+                <p class="date">@Model.RegDt.ToString("yyyy-MM-dd")</p>
+                <div class="btnSet">
+                    @*<p class="download">
+                        <a href="javascript:void(0);" onclick="goDownFile();">
+                            <img src="/content/images/common/btn/btn_download.jpg" alt="다운로드" /></a>
+                    </p>*@
+                    <p><a href="javascript:void(0);" onclick="goDownFile();" class="download" title="다운로드">다운로드</a></p>
+                    @*<p><a href="#" onclick="goPrint();" class="print" title="프린트">프린트</a></p>*@
+                    @*   <ul class="socialArea">
+                        <li>
+                            <a href="javascript:pstFaceBook()" title="페이스북">
+                                <img src="/content/images/common/btn/btn_facebook.png" alt="페이스북" /></a>
+                        <li><a href="javascript:pstTwitter()" title="트위터">
+                            <img src="/content/images/common/btn/btn_twitter.png" alt="트위터" /></a>
+                        <li><a href="javascript:pstPinterest();" title="P">
+                            <img src="/content/images/common/btn/btn_p.png" alt="P" /></a>
+                    </ul>*@
+                    <ul class="socialArea2">
+                        @if (Model.Visibility == "Y")
+                        {
+                            <li><a href="javascript:pstFaceBook()" target="_blank" title="페이스북" class="facebook"></a></li>
+                            <li><a href="javascript:pstTwitter()" target="_blank" title="트위터" class="twit"></a></li>
+                            <li><a href="javascript:pstPinterest();" target="_blank" title="P" class="p"></a></li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="licenseZone">
+                    <p class="licenTit">이용 권한</p>
+                    <div class="iconZone">
+                        @*@Model.Copyright*@
+                        @{switch (Model.Copyright)
+                          {
+                              case 1:
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                  break;
+                              case 2:
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                                  break;
+                              case 3:
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/ic_nd.png" alt="변경금지" /></a>
+                                  break;
+                              case 4:
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen4.png" alt="동일조건변경허락" /></a>
+                                  break;
+                              case 5:
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen4.png" alt="동일조건변경허락" /></a>
+                                  break;
+                              case 6:
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                            <a href="/Info/license" target="_blank">
+                                <img src="/content/images/common/btn/ic_nd.png" alt="변경금지" /></a>
+                                  break;
+                          }
+                        }
+                    </div>
+                    <div class="repoartBtn">
+                        <a href="javascript:void(0);">
+                            <img src="/content/images/common/btn/btn_report.png" alt="Report" /></a>
+                    </div>
+                </div>
+
+                <div class="reportArea">
+                    <p class="arrowTop">
+                        <img src="/content/images/arrowReport.png" alt="" />
+                    </p>
+                    <div class="reportText">
+                        <form id="report_form" name="report_form" method="post">
+                            <input type="hidden" name="item_no" value="">
+                            <textarea id="txtReport" name="report" placeholder="이 게시물이 부적절하거나 관리자의 확인이 필요할 경우 이유를 적어주시면 검토 및 조치하겠습니다."></textarea>
+                        </form>
+                        <button title="보내기" id="btnSendReport">보내기</button>
+                        <a href="javascript:void(0);" class="closeReport">
+                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+                    </div>
+                    <div class="repoartComplete">
+                        <p>
+                            접수가 완료되었습니다.<br />
+                            빠른 시일 내로 검토 및 조치하겠습니다.
+                        </p>
+                        <a href="javascript:void(0);" class="closeReport">
+                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+                    </div>
+                </div>
+
+                <div class="tagZone">
+                    <p class="tagTit">태그</p>
+
+                    @{
+                        if (!string.IsNullOrEmpty(Model.Tag))
+                        {
+                            string[] tagList = Model.Tag.Split(',');
+                        <div class="tagText">
+                            @foreach (string tag in tagList)
+                            {
+                                <a href="/design/Search?text=@tag.Trim()&tag=Y">@tag </a>
+                            }
+                        </div>
+                        }
+                    }
+                </div>
+
+
+                <ul class="countBox" id="ctnList">
+                    @{
+                        string likeclassName = Model.IsLikes > 0 ? "class=on" : "";
+                    }
+
+                    <li class="show"><span title="조회수">@Model.ViewCnt</span></li>
+                    @*<li class="heart"><a href="javascript:detail.LikeArticle(@Model.No)" onclick="return !count++"><span @className id="likeChk">@Model.LikeCnt</span></a></li>*@
+                    <li class="heart"><a href="javascript:SetLikes('@Model.No','@ViewBag.LogOnChk')" onclick="return !count++"><span @likeclassName id="likeChk_@Model.No" title="좋아요">@Model.LikeCnt</span></a></li>
+
+                    <li class="collect"><span title="리스트">@ViewBag.ListCnt</span></li>
+                    <li class="comment bdR_no"><span id="replyCnt" style="cursor: pointer" title="댓글">@Model.CommentCnt</span></li>
+                </ul>
+
+                <div class="collectArea list">
+                    <p class="arrowTop">
+                        <img src="/content/images/arrowReport.png" alt="" />
+                    </p>
+                    <div class="reportText">
+
+                        <div class="addNewList">
+                            <input id="newListName" placeholder="새로운 리스트 이름을 입력하세요." />
+                            <div class="collectbtns">
+                                <a class="saveListName" title="저장">저장</a>
+                            </div>
+                        </div>
+
+                        <div class="saveToList">
+
+                            <input type="hidden" value="0" id="listNo" />
+                            @if (ViewBag.ListList.Count == 0)
+                            {
+                                <input type="hidden" value="0" id="chkList" />
+                            }
+                            <div class="selPrint">
+                                <p class="valPrint">리스트를 선택해 주세요</p>
+                                <div class="sub">
+                                    <ul class="valuePrint">
+                                        @foreach (Makersn.Models.ListT list in ViewBag.ListList)
+                                        {
+                                            <li class="listName">
+                                                <input type="radio" name="lv1" value="@list.No" /><label onclick="listName(this)">@list.ListName</label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                            <div class="collectbtns">
+                                <a class="NewList" title="새 리스트">새 리스트</a>
+                                <a class="saveList" title="저장">저장</a>
+                            </div>
+                        </div>
+
+
+                        <a href="#" class="closeNewList">
+                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profileZone">
+                    <div class="user">
+                        <div class="photo">
+                            <a href="/Profile?no=@No">
+                                <img src="@profilePic" alt="기본프로필" /></a>
+                        </div>
+                        <p class="userId"><span>by <a href="/Profile?no=@No">@Model.MemberName</a></span></p>
+                    </div>
+                    <ul class="profileBtn" id="profileArea">
+                    </ul>
+                </div>
+            </div>
+            <!-- //userInfoArea -->
+
+            <div id="otherArticle">
+            </div>
+        </div>
+        <!-- //RightCont -->
+
+    </div>
+    <!-- //DetailWrap -->
+</div>
+<!-- //contWrap -->
+
+
+
+@section Scripts{
+    <script src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
+    @Scripts.Render("~/bundles/viewer")
+    @* <script src="@Url.VersionedContent("~/Scripts/three.71.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/Thingiview2.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/NormalControls.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/OBJLoader.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/STLLoader.js")"></script>*@
+
+    <script src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+
+    @*<script src="@Url.VersionedContent("~/Scripts/thingiloader.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/binaryReader.js")"></script>*@
+
+    <style>
+        .wrap {
+            background: #fff !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function detail() { }
+
+        //댓글 삭제
+        detail.CommentDel = function (val) {
+            if (confirm("삭제하시겠습니까?") == true) {
+                var onSuccess = function (result) {
+                    if (result.Success == true) {
+                        Ajax.SyncGetPartialView("/design/reply", { no: "@Model.No" }, "goComment");
+                        $("#replyCnt").text(parseInt($("#replyCnt").text(), 10) - 1);
+                    }
+                }
+                Ajax.AjaxResponseModelService(this, "/design/CommentDel", { commentNo: val }, onSuccess);
+            }
+        }
+
+        //댓글 수정
+        detail.CommentUpd = function (val) {
+            var content = $("#content_" + val).val();
+            var data = {
+                commentNo: val,
+                content: content
+            }
+            var onSuccess = function (result) {
+                if (result.Success == true) {
+                    Ajax.SyncGetPartialView("/design/reply", { no: "@Model.No" }, "goComment");
+            }
+            }
+            Ajax.AjaxResponseModelService(this, "/design/CommentUpd", data, onSuccess);
+        }
+
+    //댓글 게시
+    detail.CommentAdd = function () {
+        if (loginPop("@ViewBag.LogOnChk")) return false;
+
+        //var content = $("#addComment").val().replace("\n","<br>");
+        var content = $("#addComment").val();
+        if (content.length < 200) {
+            var articleNo = "@Model.No";
+            var articleMemberNo = "@Base64Helper.Base64Encode(Model.MemberNo.ToString())";
+            console.log(content);
+            var data = {
+                articleNo: articleNo,
+                content: content,
+                articleMemberNo: articleMemberNo
+            }
+            var onSuccess = function (result) {
+                if (result.Success == true) {
+                    Ajax.SyncGetPartialView("/design/reply", { no: "@Model.No" }, "goComment");
+                    $("#replyCnt").text(parseInt($("#replyCnt").text(), 10) + 1);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/design/CommentAdd", data, onSuccess);
+        }
+        else {
+            alert("댓글은 200자 내외로 적어주세요");
+        }
+    }
+
+    //댓글수정 보이기 가리기
+    detail.ShowEditComment = function (val) {
+        $("#comment_view_" + val).addClass("dbNo");
+        $("#comment_edit_" + val).removeClass("dbNo");
+    }
+
+    detail.HideEditComment = function (val) {
+        $("#comment_view_" + val).removeClass("dbNo");
+        $("#comment_edit_" + val).addClass("dbNo");
+    }
+
+    //파일 다운로드
+    detail.FileDownload = function (filePath, fileName) {
+
+        var data = {
+            filePath: filePath,
+            fileName: fileName
+        }
+        $.ajax({
+            type: 'GET',
+            url: '/design/Download',
+            data: data,
+            contentType: 'application/octet-stream',
+            dataType: 'json',
+            success: function (returnValue) {
+                console.log(returnValue);
+            },
+            error: function (result) {
+                console.log(result);
+            }
+        });
+    }
+
+    //트위터 공유
+    function pstTwitter() {
+        var url = $("meta[property='og:url']").attr('content');
+        var msg = $("meta[property='og:title']").attr('content');
+
+        var href = "http://twitter.com/home?status=" + encodeURIComponent(msg) + " " + encodeURIComponent(url);
+        var a = window.open(href, 'twitter', 'width=800, height=500');
+        if (a) {
+            a.focus();
+        }
+    }
+
+    //페이스북 공유
+    function pstFaceBook() {
+        var url = $("meta[property='og:url']").attr('content');
+        var msg = $("meta[property='og:title']").attr('content');
+        var img = $("meta[property='og:image']").attr('content');
+        var href = "http://www.facebook.com/sharer.php?u=" + encodeURIComponent(url) + "&t=" + encodeURIComponent(msg);
+
+        var a = window.open(href, 'facebook', 'width=800, height=500');
+        if (a) {
+            a.focus();
+        }
+    }
+
+    //핀터레스트 공유
+    function pstPinterest() {
+        var url = $("meta[property='og:url']").attr('content');
+        var media = $("meta[property='og:image']").attr('content');
+        var description = $("meta[property='og:title']").attr('content');
+
+        var href = "http://pinterest.com/pin/create/button/?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media) + "&description=" + encodeURIComponent(description);
+
+        var a = window.open(href, 'pinterest', 'width=800, height=500');
+        if (a) {
+            a.focus();
+        }
+    }
+
+    /* 파일 다운로드 보이기*/
+    function goDownFile() {
+
+        $('.aboutZone .txt').hide();
+        $('.downloadList').show();
+
+        $('#infoTit').removeClass('on');
+        $('#downTit').addClass('on');
+
+        $('html,body').animate({ scrollTop: $('.aboutZone').offset().top - 100 }); // 스크롤 이동
+    }
+
+    function goPrint() {
+        alert("서비스 준비중입니다.");
+    }
+
+    /* 디자인 소개 보이기*/
+    function goDesign() {
+
+        $('.downloadList').hide();
+        $('.aboutZone .txt').show();
+
+        $('#downTit').removeClass('on');
+        $('#infoTit').addClass('on');
+
+    }
+
+    function Global() {
+        alert("서비스 준비중입니다.");
+    }
+
+    function GoShop() {
+        alert("서비스 준비중입니다.");
+    }
+
+    //3dviewer 보이기
+    $('.viewer3d').on('click', function (e) {
+        e.preventDefault();
+        var thingiview = null;
+
+        $('.thumb3dImg').show();
+        console.log($('.thumb3dImg'));
+        var view = $('#viewer');
+        view.find('canvas').empty();
+        $(this).siblings('img').hide();
+        $(this).parent('li').append(view);
+        $(this).siblings('#viewer').show();
+
+        //js파일 이용
+        var js = $(this).attr('data-js');
+        jQuery('html, body').animate({ scrollTop: 0 }, 300);
+
+        var ThreeJsonLoader = new THREE.JSONLoader(true);
+        ThreeJsonLoader.statusDomElement.style.left = "0px";
+        ThreeJsonLoader.statusDomElement.style.width = "auto";
+
+        document.body.appendChild(ThreeJsonLoader.statusDomElement);
+        ThreeLoadCallback = function (geometry, materials) {
+            thingiview.addModel(geometry);
+            document.body.removeChild(ThreeJsonLoader.statusDomElement);
+            $('.thumb3dImg').hide();
+        };
+
+        thingiview = new Thingiview('viewer');
+        thingiview.resize(630, 472);
+        ThreeJsonLoader.load(js, ThreeLoadCallback);
+        //여기까지
+
+
+        ////stl파일 이용
+        //var filePath = $(this).attr('data-file');
+        //var fileExt = $(this).attr('data-ext');
+
+        //thingiview = new Thingiview('viewer');
+
+        //thingiview.resize(630, 472);
+
+        //switch (fileExt) {
+        //    case "stl":
+        //        var stlLoader = new THREE.STLLoader();
+        //        stlLoader.load(filePath, function (geometry) {
+        //            thingiview.addModel(geometry);
+        //            $('.thumb3dImg').hide();
+        //        });
+        //        break;
+        //    case "obj":
+        //        var objTest = new THREE.OBJLoader();
+        //        objTest.load(filePath, function (geometry) {
+        //            console.log(geometry);
+        //            thingiview.addModel(geometry);
+        //            $('.thumb3dImg').hide();
+        //        });
+        //        break;
+        //}
+
+        var thingiviewanimate = function () {
+            if (thingiview != undefined) {
+                requestAnimationFrame(thingiviewanimate);
+                thingiview.render();
+            }
+        }
+        thingiviewanimate();
+
+    });
+
+
+    function isIE() { //ie?  
+        if (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject)
+            return true;
+        else
+            return false;
+    };
+
+    //리스트 선택
+    function listName(val) {
+        $(".valPrint").text($(val).text());
+        $("#listNo").val($(val).parent().find('input').val());
+        $(".selPrint .sub").hide();
+    }
+
+    function getInternetExplorerVersion() {
+        var rv = -1; // Return value assumes failure.
+        if (navigator.appName == 'Microsoft Internet Explorer') {
+            var ua = navigator.userAgent;
+            var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+            if (re.exec(ua) != null)
+                rv = parseFloat(RegExp.$1);
+        }
+        return rv;
+    }
+    $(document).ready(function () {
+        $("#bx-pager").removeAttr("style");
+        slideNumber = $("#sildeNum").val();
+
+        $('.mainBigImg .bxslider').bxSlider({
+            mode: 'fade',
+            pagerCustom: '#bx-pager',
+            speed: 1,
+            startSlide: slideNumber   // 초기 슬라이드 지정번호
+        });
+
+        $('.thumbArea #bx-pager').bxSlider({
+            slideWidth: 80,
+            minSlides: 2,
+            maxSlides: 6,
+            slideMargin: 11,
+            infiniteLoop: !1
+        });
+
+        $('.thumbArea #bx-pager a').on('click', function () {
+            $('#viewer').hide();
+            $('.viewer3d').siblings('img').show();
+            //$('#viewer div').fadeOut();
+        });
+
+        $('#bx-pager a').on('click', function () {
+            thingiview = null;
+
+        })
+        //$(".gnbArea").addClass("bdA_no");
+
+        // 브라우저체크하여 안내
+
+        var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
+        var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+        var heightSafari = 0;
+        if ((is_chrome) && (is_safari)) { is_safari = false; }
+
+        var Browser = {
+            chk: navigator.userAgent.toLowerCase()
+        }
+
+        Browser = {
+            ie: Browser.chk.indexOf('msie') != -1,
+            ie6: Browser.chk.indexOf('msie 6') != -1,
+            ie7: Browser.chk.indexOf('msie 7') != -1,
+            ie8: Browser.chk.indexOf('msie 8') != -1,
+            ie9: Browser.chk.indexOf('msie 9') != -1,
+            ie10: Browser.chk.indexOf('msie 10') != -1,
+            opera: !!window.opera,
+            safari: Browser.chk.indexOf('safari') != -1,
+            safari3: Browser.chk.indexOf('applewebkir/5') != -1,
+            mac: Browser.chk.indexOf('mac') != -1,
+            chrome: Browser.chk.indexOf('chrome') != -1,
+            firefox: Browser.chk.indexOf('firefox') != -1
+        }
+
+
+        //var trident = Browser.chk.match(/Trident\/(\d.\d)/i);
+        //var ieChk = false;
+        //if(trident != null){
+        //    ieChk = trident[1] =="7.0";
+        //}
+        //Browser = {
+        //    chrome : Browser.chk.indexOf('chrome') != -1,
+        //    firefox : Browser.chk.indexOf('firefox') != -1
+        //}
+
+        //if(!(ieChk|| Browser.chrome || Browser.firefox))
+        //{
+        //    $('.viewer3d').removeClass('viewer3d').removeAttr('onclick').text('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요. ');
+        //}
+        //if ((Browser.ie8) ||(Browser.ie9) || (Browser.ie10)) {
+        //    $('.viewer3d').removeClass('viewer3d').removeAttr('onclick').text('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요. ');
+        //}
+
+        //if (Browser.safari && !Browser.chrome) {
+        //    $('.viewer3d').removeClass('viewer3d').removeAttr('onclick').text('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요. ');
+        //}
+
+        // alert("ie8/9/10:"+Browser.ie8+Browser.ie9+Browser.ie10);
+
+        if ((Browser.ie8) || (Browser.ie9) || (Browser.ie10)) {
+            $('.viewer3d').removeClass('viewer3d').removeAttr('href').text('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요. ');
+        }
+        //alert("chrome,firefox:"+Browser.chrome+Browser.firefox);
+
+        //alert("IE11"+isIE());
+
+        if (!Browser.chrome && !Browser.firefox && !isIE()) {
+            $('.viewer3d').removeClass('viewer3d').removeAttr('href').text('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요. ');
+        }
+
+        var reqUrl = "/design/DetailRightContents";
+        Ajax.SyncGetPartialView(reqUrl, { authorNo: "@Model.MemberNo" }, "profileArea");
+
+        //$(".wrap").addClass("bgW");
+
+        //$("#goComment").load('@Url.Action("reply", "article", new { no = Model.No })');
+        var replyUrl = "/design/reply?no=" + "@Model.No";
+        if ("@ViewBag.GoReply" == "Y") { replyUrl += "&goReply=Y"; }
+        $("#goComment").load(replyUrl);
+        $("#otherArticle").load('@Url.Action("MemberOtherArticle", "Article", new { no = ViewBag.No })');
+
+        //if ($('.tagText a').length == 0) {
+        //    $('.tagZone').hide();
+        //};
+
+       
+
+        //수정 버튼
+        $("#editBtn").click(function () {
+            var articleno = $(this).data("val");
+            $(location).attr("href", "/design/Edit?no=" + articleno);
+        });
+
+        // 리포트열기
+        $('.repoartBtn,.reportText .closeReport').on('click', function (e) {
+            e.preventDefault();
+            var topPx = $('.repoartBtn').offset().top + 37;
+            $("#txtReport").val("");
+            //$('.reportArea').css('top', topPx)
+            $('.reportArea').toggleClass('on');
+            $('.repoartComplete').hide();
+            $(".collectArea").removeClass("on");
+        });
+
+        // 리포트닫기
+        $('.repoartComplete .closeReport').on('click', function (e) {
+            e.preventDefault();
+            $("#txtReport").val();
+            $('.reportArea').toggleClass('on');
+            $('.reportText').show();
+        });
+
+
+
+
+        //리스트 열기
+        $(".collect").click(function () {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+
+                $(".collectArea").addClass("on");
+            }
+        });
+
+        //리스트 닫기
+        $(".closeNewList").click(function () {
+            $(".addNewList").css("display", "none");
+            $(".saveToList").css("display", "block");
+            $(".collectArea").removeClass("on");
+        });
+
+        $(".NewList").click(function () {
+            //$(".selPrint").css("display","none");
+            //$(".NewList").css("display","none");
+            //$(".addNewList").css("display","block");
+            $(".saveToList").css("display", "none");
+            $(".addNewList").css("display", "block");
+        });
+
+        //새로운 리스트 생성
+        $(".saveListName").click(function () {
+            var listName = $("#newListName").val();
+
+            if (listName.trim() == "") {
+                $(".addNewList").css("display", "none");
+                $(".saveToList").css("display", "block");
+            }
+            else {
+                var data = {
+                    listName: listName
+                }
+                var onSuccess = function (result) {
+                    //$(".valuePrint li:eq(0)").before("<li class='listName'> <input type='radio' name='lv1' value='" + result.Result + "' /><label onclick='listName(this)'>" + listName + "</label></li>");
+                    if ($("#chkList").val() != undefined) {
+                        $(".valuePrint").append("<li class='listName'> <input type='radio' name='lv1' value='" + result.Result + "' /><label onclick='listName(this)'>" + listName + "</label></li>");
+                        $("#chkList").remove();
+                    }
+                    else {
+                        $(".valuePrint li:eq(0)").before("<li class='listName'> <input type='radio' name='lv1' value='" + result.Result + "' /><label onclick='listName(this)'>" + listName + "</label></li>");
+                    }
+                    $(".addNewList").css("display", "none");
+                    $(".saveToList").css("display", "block");
+                    $("#newListName").val("");
+                }
+                Ajax.AjaxResponseModelService(this, "/design/AddNewList", data, onSuccess);
+            }
+        });
+
+        $(".selPrint p").click(function () {
+            if ($(".valuePrint li").length > 0) {
+                $(".selPrint .sub").slideToggle("fast");
+            }
+            else {
+                alert("새 리스트를 만들어 주세요");
+            }
+        });
+
+        //리스트에 저장
+        $(".saveList").click(function (result) {
+            if ("@Model.Visibility" == "Y") {
+                var listNo = $("#listNo").val();
+                if (listNo == 0) {
+                    alert("리스트를 선택해 주세요");
+                }
+                else {
+                    var data = {
+                        listNo: listNo,
+                        articleNo: "@Model.No"
+                    }
+                    var onSuccess = function (result) {
+                        if (result.Success) {
+                            $(".collectArea").removeClass("on");
+                            $(".collect").find("span").text(parseInt($(".collect").find("span").text(), 10) + 1);
+                        }
+                        else {
+                            alert("이미 등록되어있습니다.");
+                        }
+                    }
+                    Ajax.AjaxResponseModelService(this, "/design/AddToList", data, onSuccess);
+                }
+            }
+            else {
+                alert("비공개 처리된 게시물 입니다");
+            }
+        });
+
+        //$(".listName label").click(function(){
+        //    $(".valPrint").text($(this).text());
+        //    $("#listNo").val($(this).parent().find('input').val());
+        //    //$(this).parent().find('input').attr("checked",true);
+        //    $(".selPrint .sub").hide();
+        //    console.log($("#listNo").val());
+        //    //console.log($(":radio [name='lv1'] :checked").val());
+        //});
+
+        //우측 댓글 클릭
+        $(".comment").click(function () {
+            $('html,body').animate({ scrollTop: $('#addComment').offset().top - 200 }); // 스크롤 이동
+            $("#addComment").focus();
+        })
+
+        //신고하기
+        $("#btnSendReport").click(function () {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+                if (check_msg("txtReport", "내용을 입력해 주세요", "required:report") == false) return false;
+                var reportComment = $("#txtReport").val();
+                var articleNo = "@Model.No";
+                var data = {
+                    articleNo: articleNo,
+                    reportComment: reportComment
+                }
+
+                var onSuccess = function (result) {
+                    alert(result.Message);
+                    if (result.Success == true) {
+                        $('.repoartComplete .closeReport').click();
+                        //location.reload(true);
+                    }
+                }
+
+                Ajax.AjaxResponseModelService(this, "/design/SendReport", data, onSuccess);
+
+            }
+        });
+    })
+    </script>
+}

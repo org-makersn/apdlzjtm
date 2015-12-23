@@ -1,0 +1,12 @@
+﻿@model IList<Makersn.Models.BannerT>
+
+<ul>
+    @foreach (Makersn.Models.BannerT banner in Model)
+    {
+        <li style="background: url(@ViewBag.AdminImgUrl@banner.Image) top center no-repeat #fff; background-size: cover; cursor:pointer" onclick="index.GoBannerPage('@banner.Link', '@banner.OpenerYn');">
+            <div class="container">
+                <p class="txt1">@*@banner.Title*@</p>
+            </div>
+        </li>
+    }
+</ul>

@@ -1,0 +1,157 @@
+﻿@model Makersn.Models.BannerT
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="contents_zone">
+
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <input type="hidden" id="bannerNo" name="bannerNo" value="@Model.No">
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="200x" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+            <tbody>
+                <tr>
+                    <th>관리용 제목</th>
+                    <td>
+                        <input type="text" id="title" name="title" class="input_text" style="width: 75%;" value="@Model.Title"/></td>
+                </tr>
+                <tr>
+                    <th>이미지</th>
+                    <td>
+                        @Html.TextBoxFor(model => model.Image, new { type = "file", id = "image", @class = "input_text", style = "width: 75%;" })
+                        @Html.ValidationMessageFor(model => model.Image)
+                        @if (!String.IsNullOrEmpty(Model.Image))
+                        {
+                            <p>
+                                <img src="@Url.Content(ViewBag.BannerUrl+"thumb/" + Model.Image)" width="100" height="36">
+                                <input type="checkbox" id="up_image_del" name="up_image_del" value="y" /><label for="up_web_del">파일삭제</label>
+                            </p>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>링크주소</th>
+                    <td>
+                        <input type="text" id="Link" name="Link" class="input_text" style="width: 300px;" value="@Model.Link"/>
+                        <input type="radio" name="opener" value="y" />
+                        새창 &nbsp; 
+					<input type="radio" name="opener" value="n" />
+                        기존창&nbsp; 
+					<p style="color: blue">* http:// 필수 입력</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>노출여부</th>
+                    <td>
+                        <input type="radio" name="publish" value="y" />
+                        사용 &nbsp; 
+					<input type="radio" name="publish" value="n" />
+                        미사용&nbsp; 
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="priority">우선순위</label></th>
+                    <td>
+                        <select id="priority" name="priority" class="input_text" style="width: 120px;">
+                            <option value="0">없음</option>
+                            @for (var i = 25; i > 0; i--)
+                            {
+                                if (i == @Model.Priority)
+                                {
+                                <option value="@i" selected="selected">@i</option>
+                                }
+                                else
+                                {
+                                <option value="@i">@i</option>
+                                }
+                            }
+                        </select>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="bannerType" value="@ViewBag.BannerType" />
+    </form>
+
+    <!-- btn -->
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="Update" class="_btn_reg">수정</a></span>
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="GoList" class="_btn_list" onclick="$(location).attr('href','/Banner');">목록</a></span>
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="Delete" class="_btn_list">삭제</a></span>
+
+    </div>
+
+    <!-- // btn -->
+    <br />
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function Edit() { }
+
+        Edit.Init = function () {
+
+        }
+        $("#Update").click(function () {
+            var action_url = '/Banner/BannerUpdate';
+
+            $("#insert_form").attr('action', action_url);
+            $("#insert_form").submit();
+            //var no = $("#banner_no").val();
+            //var title = $("#title").val();
+            //var img = ""; // 이미지 제외하고 함
+            //var link = $("#url").val();
+            //var opener = $(":input:radio[name='opener']:checked").val()
+            //var publish = $(":input:radio[name='publish']:checked").val()
+            //var priority = $("#priority").val();
+            //var image = $("#img").val();
+
+            //var data = {
+            //    bannerNo: no,
+            //    title: title,
+            //    publish: publish,
+            //    opener: opener,
+            //    link: link,
+            //    priority: priority,
+            //    image: image
+            //}
+            //var onSuccess = function (result) {
+            //    console.log(result);
+            //    location.replace("/Banner");
+            //}
+            //Ajax.AjaxResponseModelService(this, "/Banner/BannerUpdate", data, onSuccess);
+
+        });
+
+        $("#Delete").click(function () {
+            if(!confirm("배너 삭제 하시겠습니까?")) return false;
+            var no = $("#bannerNo").val();
+            var data = {
+                bannerNo: no
+            }
+            console.log(data);
+            var onSuccess = function (result) {
+                location.replace("/Banner");
+            }
+            Ajax.AjaxResponseModelService(this, "/Banner/BannerDelete", data, onSuccess);
+        })
+
+        $(document).ready(function () {
+            $('input:radio[name="opener"]').filter('[value="@Model.OpenerYn"]').attr('checked', true);
+            $('input:radio[name="publish"]').filter('[value="@Model.PublishYn"]').attr('checked', true);
+
+            Edit.Init();
+        });
+    </script>
+}

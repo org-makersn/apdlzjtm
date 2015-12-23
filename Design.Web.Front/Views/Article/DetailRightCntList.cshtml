@@ -1,0 +1,19 @@
+﻿@model Makersn.Models.ArticleT
+@{
+    string className = Model.chkLikes > 0 ? "class=on" : "";
+}
+
+<li class="show"><span>@Model.ViewCnt</span></li>
+@*<li class="heart"><a href="javascript:detail.LikeArticle(@Model.No)" onclick="return !count++"><span @className id="likeChk">@Model.LikeCnt</span></a></li>*@
+<li class="heart"><a href="javascript:SetLikes('@Model.No','@ViewBag.LogOnChk')" onclick="return !count++"><span @className id="likeChk_@Model.No">@Model.LikeCnt</span></a></li>
+
+<li class="collect"><span>0</span></li>
+<li class="comment bdR_no"><span>@Model.CommentCnt</span></li>
+
+
+
+@*<li class="show"><span>@Model.ViewCnt</span></li>
+<li class="heart"><a href="javascript:SetLikes('@Model.No','@ViewBag.LogOnChk')" onclick="return !count++"><span @className id="likeChk_@Model.No">@Model.LikeCnt</span></a></li>
+
+<li class="collect"><span>0</span></li>
+<li class="comment bdR_no"><span>@Model.CommentCnt</span></li>*@

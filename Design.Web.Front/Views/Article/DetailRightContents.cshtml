@@ -1,0 +1,20 @@
+﻿@model ArticleT
+@{
+    
+    string followClass = ViewBag.CheckFollow == 0 ? "" : "on";
+    //string No = Design.Web.Front.Helper.Base64Helper.Base64Encode((string));
+
+    //string pageUrl = Request.Url.ToString();
+    //string pageTitle = Server.UrlEncode(Model.Title);
+    //string facebookUrl = "http://www.facebook.com/sharer.php?u=" + pageUrl + "&t=" + pageTitle;
+}
+
+
+<li>
+    @*<a href="javascript:GoShop()"><img src="/content/images/common/btn/btn_shop.png" alt="shop" /></a>*@
+    @*<a href="javascript:GoShop()" class="shop" title="프린팅"></a>*@
+</li>
+@if (!ViewBag.chkSelf)
+{
+    <li><a href="javascript:SetFollowUser('@ViewBag.AuthorNo')" class="follow @followClass" id="userFollow" title="팔로우">팔로우 하세요.</a></li>
+}

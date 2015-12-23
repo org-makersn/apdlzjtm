@@ -1,0 +1,374 @@
+﻿@model PagedList.IPagedList<Makersn.Models.ArticleCommentT>
+@using PagedList.Mvc;
+@{
+    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+    Design.Web.Front.Filter.ContentFilter filter = new Design.Web.Front.Filter.ContentFilter();
+}
+
+<div class="repleZone" id="repleZone">
+    <div class="textInput">
+        <input id="item_no" type="hidden" value="" name="item_no">
+        <input id="memb_no" type="hidden" value="" name="memb_no">
+        <p class="userImg">
+            @{if (profile.UserProfilePic == "")
+              {
+                  profile.UserProfilePic = "/Content/images/common/profile_photo2.png";
+              }
+              else
+              {
+                  profile.UserProfilePic = ViewBag.ProfileImgUrl + profile.UserProfilePic;
+              }
+              switch ((int)ViewBag.LogOnChk)
+              {
+                  case 0:
+                <img src="@Url.Content("~/content/images/common/bgDefaultProfile.png")" alt="Login" id="topProfileImg"/>
+                      break;
+
+                  default:
+                <img src="@profile.UserProfilePic" style="width:100%;height:100%" alt="Login" id="topProfileImg"/>
+                      break;
+              }
+            }
+        </p>
+        <div class="textAreaZone">
+            @{if (ViewBag.LogOnChk == 0)
+              {
+                <a href="#" onclick="loginPop(0)">
+                    <textarea id="addComment" name="memo" disabled="disabled" placeholder="로그인 후 이용 가능합니다"></textarea></a>
+              }
+              else
+              {
+                <textarea id="addComment" name="memo"></textarea>
+              }
+            }
+            <p class="upText">
+                <button class="" id="btnAddComment" title="게시" onclick="detail.CommentAdd()"></button>
+            </p>
+        </div>
+    </div>
+
+    <div id="comment_area">
+        <ul class="repleListZone">
+
+            @foreach (Makersn.Models.ArticleCommentT articleComment in Model)
+            {
+                if (articleComment.ProfilePic == "")
+                {
+                    articleComment.ProfilePic = "/Content/images/common/profile_photo2.png";
+                }
+                else
+                {
+                    articleComment.ProfilePic = ViewBag.ProfileImgUrl + articleComment.ProfilePic;
+                }
+
+                string visitorProfilePic = string.Empty;
+
+
+                if (ViewBag.VisitorPic == "")
+                {
+                    visitorProfilePic = "/Content/images/common/profile_photo2.png";
+                }
+                else
+                {
+                    visitorProfilePic = ViewBag.ProfileImgUrl + ViewBag.VisitorPic;
+                }
+
+
+                string No = Base64Helper.Base64Encode(@articleComment.No.ToString());
+                string memberNo = Base64Helper.Base64Encode(articleComment.MemberNo.ToString());
+                <li id="">
+                    <p class="userImg">
+                        <a href="/Profile?no=@memberNo">
+                            <img src="@articleComment.ProfilePic" alt="기본프로필" /></a>
+                    </p>
+                    <div class="textZone">
+                        <div class="nameZone">
+                            <a href="/Profile?no=@memberNo" class="name">@articleComment.MemberName</a>
+                            <p class="date">@articleComment.Regdt.ToString("yyyy.MM.dd tt hh:mm")</p>
+
+                            <p class="edit before">
+                                @if (ViewBag.MemberNo == articleComment.MemberNo)
+                                {
+                                    <a class="" id="btnGetEdit" rel="" href="#" onclick="detail.ShowEditComment('@articleComment.No', this)">수정</a>
+                                    <img alt="구분" src="/content/images/common/bull_edit.png">
+                                }
+                                @if (ViewBag.MemberNo == articleComment.MemberNo || ViewBag.MemberNo == articleComment.MemberNoRef || profile.UserLevel > 50)
+                                {
+                                    <a onclick="" id="btnCommentDel" href="javascript:detail.CommentDel('@No')">삭제</a>
+                                }
+                            </p>
+
+                            @if (ViewBag.MemberNo == articleComment.MemberNo || ViewBag.MemberNo == articleComment.MemberNoRef || profile.UserLevel > 50)
+                            {
+                                <p class="edit after" style="display: none">
+
+                                    <a class="" rel="" href="#" onclick="detail.CommentUpd('@articleComment.No')">수정</a>
+                                    <img alt="구분" src="/content/images/common/bull_edit.png">
+                                    <a onclick="detail.HideEditComment(@articleComment.No, this)" href="#">취소</a>
+                                </p>
+                            }
+
+                            <a href="#" onclick="ReplyInReply(this, '@articleComment.MemberNo')" class="reply show">답글</a>
+                            <a href="#" onclick="CancleReplyInReply(this, '@articleComment.MemberNo')" style="display:none" class="reply cancel hide">답글 취소</a>
+                        </div>
+                        <div id="comment_view_@articleComment.No" class="editArea">
+                            <div class="userText _memo">@Html.Raw(filter.HtmlEncode(articleComment.Content))</div>
+                            @*<div class="editBtnBox">
+                                @if (ViewBag.MemberNo == articleComment.MemberNo)
+                                {
+                                    <a class="" id="btnGetEdit" rel="" href="javascript:detail.ShowEditComment(@articleComment.No)">수정</a>
+                                    <img alt="구분" src="/content/images/common/bull_edit.png">
+                                }
+                                @if (ViewBag.MemberNo == articleComment.MemberNo || ViewBag.MemberNo == articleComment.MemberNoRef || profile.UserLevel > 50)
+                                {
+                                    <a onclick="" id="btnCommentDel" href="javascript:detail.CommentDel('@No')">삭제</a>
+                                }
+                            </div>*@
+
+                        </div>
+                        @if (ViewBag.MemberNo == articleComment.MemberNo || ViewBag.MemberNo == articleComment.MemberNoRef || profile.UserLevel > 50)
+                        {
+                            <div id="comment_edit_@articleComment.No" class="editArea dbNo">
+                                <form id="" name="">
+                                    <input type="hidden" value="@articleComment.No" name="com_no">
+                                    <div class="userText">
+                                        <textarea name="memo" id="content_@articleComment.No">@articleComment.Content</textarea>
+                                    </div>
+                                    @*<div class="editBtnBox">
+
+                                        <a class="" rel="" href="#" onclick="detail.CommentUpd(this)">수정</a>
+                                        <img alt="구분" src="/content/images/common/bull_edit.png">
+                                        <a onclick="" href="javascript:detail.HideEditComment(@articleComment.No)">취소</a>
+                                    </div>*@
+                                </form>
+                            </div>
+                        }
+
+
+                        <!-- 답글 -->
+                        @foreach (ArticleCommentT inReply in articleComment.replyList)
+                        {
+                            if (inReply.ProfilePic == "")
+                            {
+                                inReply.ProfilePic = "/Content/images/common/profile_photo2.png";
+                            }
+                            else
+                            {
+                                inReply.ProfilePic = ViewBag.ProfileImgUrl + inReply.ProfilePic;
+                            }
+                            string inMemberNo = Base64Helper.Base64Encode(inReply.MemberNo.ToString());
+                            string inNo = Base64Helper.Base64Encode(inReply.No.ToString());
+
+                            int contentIdx = 0;
+                            contentIdx = inReply.Content.Contains("#user#") == true ? inReply.Content.LastIndexOf("#user#") + 6 : 0;
+
+                            string userNm = string.Empty;
+                            userNm = inReply.Content.Contains("#user#") == true ? inReply.Content.Substring(0, inReply.Content.IndexOf("#")) : "";
+
+                            string placeHolder = string.Empty;
+                           
+                            
+                            <div class="userText_reply">
+                                <p class="reply_bar"></p>
+                                <p class="userImg">
+                                    <a href="/Profile?no=@inMemberNo">
+                                        <img src="@inReply.ProfilePic" alt="기본프로필"></a>
+                                </p>
+
+
+                                @*이름 들어갈곳*@
+                                <p class="name">@inReply.MemberName</p>
+                                @if (userNm != "")
+                                {
+                                    placeHolder = userNm + "님께 답글 쓰기"; 
+                                    <input type="hidden" name="hfEditToName" value="@userNm" />
+                                }
+
+                                <div class="editInArea">
+                                    <div class="userText_text"><strong>@userNm</strong> @inReply.Content.Substring(contentIdx)</div>
+
+                                    <p class="edit">
+                                        @if (ViewBag.MemberNo == inReply.MemberNo)
+                                        {
+                                            <a class="" rel="" href="#" onclick="ShowEditInComment(this)">수정</a>
+                                            <img alt="구분" src="/content/images/common/bull_edit.png">
+                                        }
+                                        @if (ViewBag.MemberNo == inReply.MemberNo || ViewBag.MemberNo == inReply.MemberNoRef || profile.UserLevel > 50)
+                                        {
+                                            <a onclick="" href="javascript:detail.CommentDel('@inNo')">삭제</a>
+                                        }
+                                    </p>
+                                </div>
+
+                                @if (ViewBag.MemberNo == inReply.MemberNo || ViewBag.MemberNo == inReply.MemberNoRef || profile.UserLevel > 50)
+                                {
+                                    <div class="EditInReply" style="display: none">
+                                        <textarea name="reply" style="width: 225px" placeholder="@placeHolder" class="textInReply">@inReply.Content.Substring(contentIdx)</textarea>
+                                        <a href="#" onclick="EditInReply('@inReply.No', this,'@inReply.ArticleNo')">수정</a>
+                                        <a href="#" onclick="HideEditInComment(this)">취소</a>
+                                    </div>
+                                }
+                                <a href="#" onclick="ReplyInReply(this, '@inReply.MemberNo', '@inReply.MemberName')" class="reply show">답글</a>
+                                <a href="#" onclick="CancleReplyInReply(this, '@inReply.MemberNo')" style="display:none" class="reply cancel hide">답글 취소</a>
+
+                                <p class="date">@inReply.Regdt.ToString("yyyy.MM.dd tt hh:mm")</p>
+                            </div>
+
+
+                        }
+                        <!-- 답글 -->
+
+                        <div class="InReply" style="display: none">
+                            <div class="userText_reply">
+                                <p class="reply_bar"></p>
+                                <p class="userImg">
+                                    <a href="user_profile.html">
+                                        <img src="@visitorProfilePic" alt="기본프로필"></a>
+                                </p>
+                                <textarea name="reply" class="textInReply"></textarea>
+                                <a href="#" onclick="AddInRePly('@articleComment.No', this, '@articleComment.ArticleNo')" class="btn_reply">답글 게시</a>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </li>
+            }
+
+        </ul>
+    </div>
+
+    <input type="hidden" id="hfReplyToNo" value="0" />
+    <input type="hidden" id="chkReply" value="0" />
+
+    @*@Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("Reply", new { no = ViewBag.No, page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.TwitterBootstrapPager,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "repleZone"
+            })
+        )*@
+    @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("Reply", new { no = ViewBag.No, page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "repleZone"
+            })
+        )
+</div>
+
+<script type="text/javascript">
+    if ("@ViewBag.GoReply" == "Y") {
+        $("#addComment").focus();
+    }
+
+    function ReplyInReply(val, no, name) {
+        if (!loginPop("@ViewBag.LogOnChk")) {
+            if ($("#hfReplyToNo").val() != 0) {
+                $(".reply").each(function () {
+                    if ($(this).hasClass("hide")) {
+                        $(this).hide();
+                    }
+                    else {
+                        $(this).show();
+                    }
+                    $(".textInReply").val("");
+                    $(".InReply").hide();
+                })
+                $("#hfReplyToNo").val(0);
+            }
+
+            //$(val).text("답글 취소");
+            //$(val).addClass("cancel");
+            $(val).hide();
+            $(val).next().show();
+
+            $("#hfReplyToNo").val(no);
+
+            //$(val).attr("onclick", "CancleReplyInReply(this, "+no+")");
+            $(val).parents('.textZone').find(".InReply").show();
+
+            if (name != null) {
+                $(val).parents('.textZone').find(".textInReply").attr("placeholder", name + "님께 답글쓰기");
+                $("#chkReply").val(1);
+            }
+            else {
+                $(val).parents('.textZone').find(".textInReply").removeAttr("placeholder");
+                $("#chkReply").val(0);
+            }
+        }
+    }
+
+    function CancleReplyInReply(val) {
+        //$(val).text("답글");
+        //$(val).removeClass("cancel");
+        ////$(val).attr("onclick", "ReplyInReply(this)");
+        //$(val).parents('.textZone').find(".InReply").hide();
+        $(val).prev().show();
+        $(val).hide();
+
+        $("#hfReplyToNo").val(0);
+        $(val).parents('.textZone').find(".InReply").hide();
+        $(val).parents('.textZone').find(".textInReply").val("");
+    }
+
+    function AddInRePly(no, val, articleNo) {
+        var data = {
+            No: no,
+            content: $(val).parents(".InReply").find(".textInReply").val(),
+            articleNo: articleNo,
+            memberNoRef: $("#hfReplyToNo").val(),
+            chkReply: $("#chkReply").val()
+        }
+
+
+        var onSuccess = function (result) {
+            if (result.Success) {
+                Ajax.SyncGetPartialView("/design/reply", { no: articleNo }, "goComment");
+                $("#replyCnt").text(parseInt($("#replyCnt").text(), 10) + 1);
+            }
+        }
+
+        Ajax.AjaxResponseModelService(this, "/design/AddInReply", data, onSuccess);
+    }
+
+    function ShowEditInComment(val) {
+        $(val).parents(".userText_reply").find('.editInArea').hide();
+        $(val).parents('.userText_reply').find(".EditInReply").show();
+    }
+
+    function HideEditInComment(val) {
+        $(val).parents(".userText_reply").find('.editInArea').show();
+        $(val).parents('.userText_reply').find(".EditInReply").hide();
+    }
+
+    function EditInReply(no, val, articleNo) {
+        var nameChk = "";
+        var hfName = $(val).parents('.userText_reply').find("input[name='hfEditToName']").val();
+        if (hfName != null) {
+            nameChk = hfName + "#user#";
+        }
+        var content = nameChk + $(val).parents('.EditInReply').find('.textInReply').val();
+        var data = {
+            commentNo: no,
+            content: content
+        }
+
+        var onSuccess = function (result) {
+            if (result.Success == true) {
+                Ajax.SyncGetPartialView("/design/reply", { no: articleNo }, "goComment");
+            }
+        }
+        Ajax.AjaxResponseModelService(this, "/design/CommentUpd", data, onSuccess);
+    }
+
+</script>
+
+

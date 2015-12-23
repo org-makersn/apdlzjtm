@@ -1,0 +1,107 @@
+﻿@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Lists";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    int index = 1;
+    IList<ListArticleT> ItemList = ViewBag.ItemList;
+    IList<ListT> ListNameList = ViewBag.ListNameList;
+}
+
+<!-- BaseList -->
+<div class="baseList">
+    <ul class="item_area">
+
+        @foreach (ListT ListName in ListNameList)
+        {
+            int ListIndex = 1;
+            var liClassNm = "";
+            if (index % 4 == 0) { liClassNm = "mgR0"; };
+            <li class="@liClassNm">
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg_collect">
+                        @foreach (ListArticleT item in ItemList)
+                        {
+                            if (item.ListNo == ListName.No)
+                            {
+                                var classNm = "list" + ListIndex;
+                            @*<a href="javascript:GoListDetail('@ListName.No');" class="@classNm">*@
+                            <a href="javascript:GetDetail('@ListName.No')" class="@classNm">
+                                <img src="@ViewBag.ArticleImgUrl@item.ImgName" alt="list_image" width="117px" height="88px"/></a>
+                                if (ListIndex == 4) { break; }
+                                ListIndex++;
+                            }
+                        }
+                        @if (ListIndex < 4)
+                        {
+                            for (int i = ListIndex; i < 5; i++)
+                            {
+                                var classNm = "list" + i;
+                            @*<a href="javascript:GoListDetail('@ListName.No');" class="@classNm">*@
+                                <a href="javascript:GetDetail('@ListName.No')" class="@classNm">
+                                <img src="/Content/images/common/img_collect.png" alt="list_image" width="117px" height="88px" /></a>
+                            }
+                        }
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="javascript:GoListDetail('@ListName.No');">@ListName.ListName</a>
+                            @*<a href="javascript:GetDetail('@ListName.No')">*@
+                        </div>
+                        <div class="by">
+                            @*<p>by <span class="name"><a href="#">@ViewBag.UserNm</a></span></p>*@
+                            <span class="quantity">@ItemList.Where(w => w.ListNo == ListName.No).Count() 개 디자인</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- //ProductBox -->
+            </li>   
+                        index++;
+        }
+
+    </ul>
+
+    @if (ListNameList.Count == 0)
+    {
+        <div class="default">
+            @if ((int)ViewBag.CheckSelf == 1)
+            {
+                <span class="my">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_2.png")" />
+                </span>
+            }
+            else
+            {
+                <span class="other">
+                    <img src="@Url.Content("~/Content/images/common/profil_default_other_2.png")" />
+                </span>
+            }
+        </div>
+    }
+
+</div>
+<!-- //BaseList -->
+<script type="text/javascript">
+    @*var GoListDetail = function (listNo) {
+        var data = {
+            no: "@ViewBag.No",
+            listNo: listNo
+        };
+
+        var url = "/Profile/CollectionDetail";
+
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }*@
+    $(function () {
+        $("img.lazy-load").lazyload({ effect: "fadeIn" });
+    });
+
+    function GetDetail(val){
+        $("#gubun").val("CD");
+        $("#listNo").val(val);
+        $("#profileForm").submit();
+    }
+
+</script>

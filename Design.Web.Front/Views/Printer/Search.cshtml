@@ -1,0 +1,89 @@
+﻿@model PagedList.IPagedList<Makersn.Models.ArticleT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int index = 1;
+}
+
+<div class="searchResult">
+    <p class="searchText"><span class="orangeF boldF">"@ViewBag.Text"</span>에 대한 검색결과</p>
+
+    @if (Model.Count == 0)
+    {
+        <p class="searchImg">
+            <img src="/content/images/search_txt1.gif" alt="앗...검색결과가 없네요! 다른 검색어로 입력해주세요.">
+        </p>
+    }
+    else
+    {
+        <!-- BaseList -->
+        <div class="baseList">
+            <ul class="item_area">
+                @foreach (Makersn.Models.ArticleT a in Model)
+                {
+                    string className = index % 4 == 0 ? "class=mgR0" : "";
+                    string likeChk = a.chkLikes == 1 ? "class=on" : "";
+
+                    string No = Base64Helper.Base64Encode(@a.MemberNo.ToString());
+            
+                    <li @className>
+                        <!-- ProductBox -->
+                        <div class="productBox">
+                            <div class="productImg">
+                                <a href="/design/Detail?no=@a.No">
+                                    <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.Title" /></a>
+                            </div>
+                            <div class="detailBox">
+                                <div class="productText">
+                                    <a href="/design/Detail?no=@a.No">@a.Title</a>
+                                </div>
+                                <div class="by">
+                                    <p>by <span class="name"><a href="/Profile?no=@No">@a.MemberName</a></span></p>
+                                </div>
+                                <ul class="countBox">
+                                    <li class="show"><a href="javascript:void(0);"><span>@a.ViewCnt</span></a></li>
+
+                                    <li class="heart"><a href="javascript:search.SetLikes(@a.No)" onclick="return !count++">
+                                        <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>
+                                    <li class="comment"><a href="javascript:void(0);"><span>@a.CommentCnt</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    index++;
+
+                }
+            </ul>
+        </div>
+    }
+
+
+</div>
+
+@Html.PagedListPager(Model, page => Url.Action("/search", new { page, text = ViewBag.text }))
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        function search() { };
+        var count = 0;
+        search.SetLikes = function (val) {
+            var onSuccess = function (result) {
+                if (result.Result == 0) {
+
+                    $("#likeChk_" + val).text(parseInt($("#likeChk_" + val).text()) - 1);
+                    $("#likeChk_" + val).removeClass("on");
+                }
+                else {
+                    $("#likeChk_" + val).text(parseInt($("#likeChk_" + val).text()) + 1);
+                    $("#likeChk_" + val).addClass("on");
+                }
+                count = 0;
+            }
+            Ajax.AjaxResponseModelService(this, "/design/SetLikes", { articleNo: val }, onSuccess);
+        }
+
+    </script>
+}

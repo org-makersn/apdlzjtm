@@ -1,0 +1,84 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+/*
+	date: 2011-11-07
+	corder: Kim In Kyung
+	use: 공통스타일
+*/
+@import url(/Content/layout.css);
+@import url(/Content/pagecon.css);
+@import url(/Content/board.css);
+@import url(/Content/btn.css);
+@import url(/Content/PagedList.css);
+@import url(/Content/pagecon.css);
+
+
+html, body{
+	font-family:"돋움","verdana", sans-serif; color:#767676; font-size:12px; line-height: 1.2;
+	margin: 0;
+	padding:0;
+	scrollbar-face-color:#DEDEDE;
+	scrollbar-highlight-color:#ffffff;
+	scrollbar-3dlight-color:#DFDFDF;
+	scrollbar-shadow-color:#CFCFCF;
+	scrollbar-darkshadow-color:#BFBFBF;
+	scrollbar-track-color:EFEFEF;
+	scrollbar-arrow-color:7F7F7F;
+}
+* {margin:0; padding:0;}
+img { vertical-align:middle; border:0px;}
+table{border-collapse: collapse;}
+table th{font-size:12px !important}
+p , form{margin:0px; padding:0px;}
+ul , dl {margin:0px; list-style:none; padding:0px;}
+dl dt{margin:0px; padding:0px;} 
+ul li{margin:0px; list-style:none; padding:0px;}
+ol li{margin:0px; list-style:none; padding:0px;}
+h1 , h2 , h3 , h4 , h5 , h6 {margin:0px; padding:0px;}
+
+textarea{font-size:12px}
+fieldset{border:none;}
+fieldset legend { display: none;}
+table caption { display: none;}
+hr{display:none;}
+
+a:link { color:#767676; text-decoration:none;}
+a:visited { color:#767676; text-decoration:none;}
+a:hover { color:#d1d1d1 ; text-decoration:none;}
+
+
+
+select{border:1px solid #7f9db9; color:#767676; vertical-align:middle; font-size:12px;}
+textarea{border:1px solid #d4d4d4; color:#767676; width:96%; padding:5px !important}
+input[type="text"]{color:#666; width:96%; vertical-align:middle; border:1px solid #d4d4d4; font-size:12px; padding:2px 2px 2px 2px;}
+input[type="password"]{color:#666; width:96%; vertical-align:middle; border:1px solid #d4d4d4; font-size:12px; padding:2px}
+input[type="file"]{height:20px; border:1px solid #d8d8d8; font-size:11px; color:#767676; height:19px;}
+.inputImage{vertical-align:middle}
+input[type="radio"]{height:14px; vertical-align:middle}
+input[type="checkbox"]{vertical-align:middle;}
+.boardTextarea{width:95%; padding:0 10px;}
+h1 , h2 , h3 , h4 {display:none;}
+
+ul li.borderNone{background:none;}
+h3.leftTitle{display:block;}
+
+.ellipsis {
+	overflow:hidden;  /* "overflow" value must be different from "visible" */
+	white-space:nowrap;
+	/*text-overflow:ellipsis;*/  /* IE, Safari */
+	/*-o-text-overflow:ellipsis;*/ /* Opera under 10.7 */
+	/*-moz-binding: url('/common/css/ellipsis.xml#ellipsis');*/
+}
+
+td.align_left{text-align:left !important; padding:5px 5px 5px 10px !important;}
+.background_none{background:none !important;}
+span.sm_text_red{color:red}
+
+/* 마스크 박스  개발자 추가 사항 */
+#maskbox { z-index: 10; position:absolute; top:0;  left:0; background:#fff;filter:alpha(opacity=70); opacity:0.7; -moz-opacity:0.7; text-align:center;}
+#mask_body {z-index: 1; position:absolute; top:0; left:0;}
+
+/*개발자 추가사항*/
+.bannerCate { padding-bottom: 50px; font-size: large; font-weight: bolder; }
+.bannerCate a { cursor: pointer; margin: 0px 5px 0px 5px; }

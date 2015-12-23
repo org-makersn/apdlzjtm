@@ -1,0 +1,50 @@
+﻿@model IList<Makersn.Models.ArticleFileT>
+@{
+    int index = 0;
+    int setNum = 0;
+}
+<div class="detailSlide">
+    <div class="mainBigImg">
+        <ul class="bxslider">
+            @foreach (Makersn.Models.ArticleFileT file in Model)
+            {
+                file.ImgName = file.ImgName != null ? file.ImgName : file.Rename;
+                string path = "/Content/images" + file.Path + file.ImgName;
+                string jsUrl = "/FileUpload/Article/article_js/" + file.Rename + ".js";
+                <li>
+                    <img src="@path" />
+
+                    @if (file.FileType.ToLower() == "stl")
+                    {
+                        if (setNum == 0)
+                        {
+                        <div id="viewer">
+                            @*<iframe src="#" id="viewer_frame" width="630" height="470" border="0" frameborder="0" scrolling="no"></iframe>*@
+                        </div>
+                        }
+                        <a href="#none" class="viewer3d" data-js="@jsUrl" data-file="@file.Rename">3D View</a>
+                        setNum++;
+                    }
+                </li>
+            }
+        </ul>
+        <div class="thumb3dImg">
+            <img src="/Content/images/common/loading_bar.gif" alt="로딩중" />
+        </div>
+    </div>
+        <input type="hidden" id="sildeNum" value="@(setNum-1)" />
+
+    <div class="thumbArea">
+        <div id="bx-pager">
+            @foreach (Makersn.Models.ArticleFileT file in Model)
+            {
+                string path = "/Content/images" + file.Path + file.ImgName;
+                <a data-slide-index="@index" href="javascript:void(0);">
+                    <img src="@path" /></a>
+                index++;
+            }
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,61 @@
+﻿@model Makersn.Models.ArticleT
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="contents_zone">
+
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <input type="hidden" id="bannerNo" name="bannerNo" value="@Model.No">
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="200x" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+            <tbody>
+                <tr>
+                    <th>관리용 제목</th>
+                    <td>
+                        <input type="text" id="title" name="title" class="input_text" style="width: 75%;" value="@Model.Title"/></td>
+                </tr>
+               
+         
+                <tr>
+                    <th scope="row">
+                        <label for="priority">우선순위</label></th>
+                    <td>
+                        <select id="priority" name="priority" class="input_text" style="width: 120px;">
+                            @*<option value="0">없음</option>*@
+                            @for (var i = 25; i >= 0; i--)
+                            {
+                                if (i == Model.RecommendPriority)
+                                {
+                                <option value="@i" selected="selected">@i</option>
+                                }
+                                else
+                                {
+                                <option value="@i">@i</option>
+                                }
+                            }
+                        </select>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="bannerType" value="@ViewBag.BannerType" />
+    </form> 
+
+    <!-- btn -->
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="javascript:ArticleRecommendRequest.RecommendListUpdatePriority(@Model.No)" id="Update" class="_btn_reg">저장</a></span>
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="GoList" class="_btn_list" onclick="$(location).attr('href','../ArticleRecommendRequest/Design');">목록</a></span>
+    </div>
+
+    <!-- // btn -->
+    <br />
+</div>

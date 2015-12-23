@@ -1,0 +1,84 @@
+﻿@model IList<Makersn.Models.MessageT>
+@using Design.Web.Front.Filter
+@{
+    string date = "";
+
+    string profilePic = string.Empty;
+
+    int index = 0;
+    int count = Model.Count;
+}
+<p class="tit"><span class="boldF">@ViewBag.Name</span>님과의 메세지</p>
+<ul class="msgWrap">
+    <!-- message 1day -->
+    <li>
+
+        @foreach (Makersn.Models.MessageT message in Model)
+        {
+            if (string.IsNullOrEmpty(message.ProfilePic))
+            {
+                profilePic = "/Content/images/common/profile_photo2.png";
+            }
+            else
+            {
+                profilePic = ViewBag.ProfileImgUrl + message.ProfilePic;
+            }
+
+            if (date != message.RegDt.ToString("yyyy-MM-dd"))
+            {
+            <p class="date">@message.RegDt.ToString("yyyy년 MM월 dd일")</p>
+                date = message.RegDt.ToString("yyyy-MM-dd");
+            }
+            <ul>
+
+
+                <li class="messageBoxR">
+                    <p class="photo">
+                        <a href="/Profile?no=@Base64Helper.Base64Encode(message.MemberNo.ToString())">
+                            <img alt="프로필사진" src="@profilePic" ></a>
+                    </p>
+                    <div class="flL">
+                        <p class="name" style="display: inline">
+                            <a href="/Profile?no=@Base64Helper.Base64Encode(message.MemberNo.ToString())" class="boldF">@message.MemberName</a>
+                        </p>
+
+                        @if (index + 1 < count)
+                        {
+                            if (Model[index].RegDt.ToString("yyyy-MM-dd tt hh:mm") != Model[index + 1].RegDt.ToString("yyyy-MM-dd tt hh:mm"))
+                            {
+                            <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy-MM-dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
+                            }
+                        }
+                        else
+                        {
+                            <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy-MM-dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
+                        }
+
+                        @if (message.MsgGubun == "MSG")
+                        {
+                            <p class="txt" style="word-break: break-all;">@Html.Raw(new ContentFilter().HtmlEncode(message.Comment))</p>
+                        }
+                        else
+                        {
+                            <p class="txt" style="word-break: break-all;">
+                                <img src="@ViewBag.MsgImgThumb@message.Comment" onclick="javascript:imgPopup('@message.Comment')" />
+                            </p>
+                        }
+                    </div>
+                </li>
+
+            </ul>
+                        index++;
+        }
+    </li>
+
+</ul>
+
+
+<script type="text/javascript">
+    $(".msgWrap").scrollTop($(".msgWrap")[0].scrollHeight);
+
+    function imgPopup(imgName) {
+        window.open("@ViewBag.MsgImgOri" + imgName);
+    }
+</script>
