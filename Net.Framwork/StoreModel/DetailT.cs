@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Net.Framework.Models
+namespace Net.Framework.StoreModel
 {
     [Table("Detail")]
     public class DetailT

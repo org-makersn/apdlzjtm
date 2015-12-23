@@ -1,4 +1,4 @@
-﻿using Net.Framework.Models;
+﻿using Net.Framework.StoreModel;
 using System;
 using System.Configuration;
 using System.Data.Entity;

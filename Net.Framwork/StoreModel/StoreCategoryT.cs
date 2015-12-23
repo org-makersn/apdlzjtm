@@ -2,10 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Net.Framwork.Models
+namespace Net.Framework.StoreModel
 {
     [Table("Member")]
-    public class StorePrintingCompanyPrinterT
+    public class StoreCategoryT
     {
     }
 }
