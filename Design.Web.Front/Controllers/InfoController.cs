@@ -1,15 +1,14 @@
-﻿using Makersn.BizDac;
+﻿using Design.Web.Front.Models;
+using Makersn.BizDac;
 using Makersn.Models;
-using Design.Web.Front.Helper;
-using Design.Web.Front.Models;
+using Makersn.Util;
+using Net.Common.Helper;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
-using PagedList;
-using Makersn.Util;
 
 namespace Design.Web.Front.Controllers
 {

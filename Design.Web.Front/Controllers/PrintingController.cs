@@ -12,6 +12,7 @@ using System.Web;
 using System.IO;
 using Makersn.Util;
 using System.EnterpriseServices;
+using Net.Common.Helper;
 
 namespace Design.Web.Front.Controllers
 {
