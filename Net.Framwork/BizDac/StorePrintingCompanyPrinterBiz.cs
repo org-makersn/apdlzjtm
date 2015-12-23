@@ -7,21 +7,23 @@ using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
-    class StorePrinterBiz
+    class StorePrintingCompanyPrinterBiz
     {
-        public List<StorePrinterT> getAllStorePrinter() {
-            return new StorePrinterDac().SelectAllStorePirnter();
-        }
-        public StorePrinterT getStorePrinterById (int no){
-            return new StorePrinterDac().SelectStorePrinterTById(no);
-        }
-        public int add(StorePrinterT storePrinter)
+        public List<StorePrintingCompanyPrinterT> getAllStorePrinter()
         {
-            return new StorePrinterDac().InsertStorePrinter(storePrinter);
+            return new StorePrintingCompanyPrinterDac().SelectAllStorePrintingCompanyPrinter();
         }
-        public int upd(StorePrinterT storePrinter)
+        public StorePrintingCompanyPrinterT getStorePrinterById(int no)
         {
-            return new StorePrinterDac().UpdateStorePrinter(storePrinter);
+            return new StorePrintingCompanyPrinterDac().SelectStorePrintingCompanyPrinterTById(no);
+        }
+        public int add(StorePrintingCompanyPrinterT storePrinter)
+        {
+            return new StorePrintingCompanyPrinterDac().InsertStorePrintingCompanyPrinter(storePrinter);
+        }
+        public int upd(StorePrintingCompanyPrinterT storePrinter)
+        {
+            return new StorePrintingCompanyPrinterDac().UpdateStorePrintingCompanyPrinter(storePrinter);
         }
 
     }

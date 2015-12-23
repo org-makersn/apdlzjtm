@@ -10,7 +10,7 @@ namespace Net.Framwork.BizDac
     class StorePrinterBiz
     {
         public List<StorePrinterT> getAllStorePrinter() {
-            return new StorePrinterDac().SelectAllStorePirnter();
+            return new StorePrinterDac().SelectAllStorePrinter();
         }
         public StorePrinterT getStorePrinterById (int no){
             return new StorePrinterDac().SelectStorePrinterTById(no);

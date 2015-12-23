@@ -17,7 +17,7 @@ namespace Net.Framwork.BizDac
         /// select multi data
         /// </summary>
         /// <returns></returns>
-        internal List<StorePrinterT> SelectAllStorePirnter()
+        internal List<StorePrinterT> SelectAllStorePrinter()
         { 
             
             List<StorePrinterT> printers = null;
@@ -27,6 +27,12 @@ namespace Net.Framwork.BizDac
             }
             return printers;
         }
+
+        /// <summary>
+        /// select one StorePrinter By Id
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
         internal StorePrinterT SelectStorePrinterTById(int no)
         {
             StorePrinterT printer = null;
@@ -39,6 +45,11 @@ namespace Net.Framwork.BizDac
             return printer;
         }
 
+        /// <summary>
+        /// Insert StorePrinter
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         internal int InsertStorePrinter(StorePrinterT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
@@ -51,6 +62,11 @@ namespace Net.Framwork.BizDac
             return ret;
         }
 
+        /// <summary>
+        /// Update StorePrinter
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         internal int UpdateStorePrinter(StorePrinterT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
@@ -58,14 +74,14 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                var originalData = dbContext.StorePrinterT.SingleOrDefault(m => m.No == data.No);
-                if (originalData != null)
+                
+                if (dbContext.StorePrinterT.SingleOrDefault(m => m.No == data.No) != null)
                 {
                     try
                     {
-                        //dbContext.StorePrinterT.Attach(data);
-                        //dbContext.Entry<StorePrinterT>(data).State = System.Data.Entity.EntityState.Modified;
-                        //dbContext.SaveChangesAsync();
+                        dbContext.StorePrinterT.Attach(data);
+                        dbContext.Entry<StorePrinterT>(data).State = System.Data.Entity.EntityState.Modified;
+                        dbContext.SaveChangesAsync();
                     }
                     catch (Exception)
                     {
