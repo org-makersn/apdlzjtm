@@ -23,20 +23,18 @@ namespace Net.Framwork.BizDac
             {
                 members = dbContext.MemberT.ToList();
 
-                var data = (from m in dbContext.MemberT
-                            join d in dbContext.DetailT
-                            on m.MemberId equals d.MemberId into md
-                            from x in md.DefaultIfEmpty()
-                            select new
-                            {
-                                MemberId = m.MemberId,
-                                MemberNm = m.MemberNm,
-                                AppId = m.AppId,
-                                RegDt = m.RegDt,
-                                PhoneNumber = x.PhoneNumber
-                            }).ToList();
-
-                //List<CustomMemberT> facebooks = new JavaScriptSerializer().Deserialize<List<CustomMemberT>>(data);
+                //List<CustomMemberT> data = (from m in dbContext.MemberT
+                //            join d in dbContext.DetailT
+                //            on m.MemberId equals d.MemberId into md
+                //            from x in md.DefaultIfEmpty()
+                //            select new CustomMemberT
+                //            {
+                //                MemberId = m.MemberId,
+                //                MemberNm = m.MemberNm,
+                //                AppId = m.AppId,
+                //                RegDt = m.RegDt,
+                //                PhoneNumber = x.PhoneNumber
+                //            }).AsEnumerable<CustomMemberT>().ToList();
 
                 //members = dbContext.MemberT
                 //    .Join(dbContext.DetailT, m => m.MemberId, d => d.MemberId, (m, d) => new { m, d })
