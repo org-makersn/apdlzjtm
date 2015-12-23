@@ -1,0 +1,651 @@
+﻿@model PagedList.IPagedList<Makersn.Models.OrderT>
+@using PagedList.Mvc;
+@{
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    IList<OrderT> newOrderList = ViewBag.NewOrderList;
+    IList<OrderT> onGoingOrderList = ViewBag.onGoingOrderList;
+    DateTime now = DateTime.Now;
+    DateTime timeBefore12hours = now.AddHours(-12);
+    string nowStr = now.ToString("yyyy-MM-dd");
+    string lastWeekStr = now.AddDays(-7).ToString("yyyy-MM-dd");
+    string lastMonthStr = now.AddMonths(-1).ToString("yyyy-MM-dd");
+}
+
+@*<div class="gnbArea">
+				<div class="gnbBox">
+					<ul class="nav2">
+						<li class="on"><a href="S-01-OrderManage.html">주문관리</a></li>          
+       			       <li><a href="">스팟 관리</a></li>
+					</ul>	
+				</div>
+			</div>*@
+<!-- Header -->
+
+
+
+
+
+
+<div class="wrap">
+
+    <div class="contWrap">
+        <div class="header">
+
+
+            <div class="gnbArea">
+                <div class="gnbBox">
+                    <ul class="nav2">
+                        <li class="on"><a href="/order/mnghome">주문관리</a></li>
+                        <li><a href="/PrintingProfile">스팟 관리</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--숫자로보는 주문현황-->
+
+        <div class="OrderNum">
+            <div class="ratingOrder">
+                <div class="countBox">
+                    <p class="star">
+                    </p>
+                    <div class="rating"><span style="width: @(ViewBag.PrtMember.ReviewScore * 10)%">@(ViewBag.PrtMember.ReviewScore)</span></div>
+                    <span class="average">@Math.Round(ViewBag.PrtMember.ReviewScore, 1)</span>
+                    <p></p>
+                </div>
+                <div class="orderTitle">평점</div>
+
+            </div>
+            <div class="ongoingOrder">
+                <div class="orderNumSm">@ViewBag.OnGoingOrderCnt</div>
+                <div class="orderTitle">진행중인 주문</div>
+            </div>
+            <div class="OrderDone">
+                <div class="orderNumSm">@ViewBag.FinishedOrderCnt</div>
+                <div class="orderTitle">완료된 주문</div>
+            </div>
+
+        </div>
+        @*<div class="OrderNum">
+
+                    <a href="printing_order_manage.html" class="ongoingOrder">
+                        <div class="orderNumSm">@ViewBag.OnGoingOrderCnt</div>
+                        <div class="orderTitle">진행중인 주문</div>
+                    </a>
+                    <a href="printing_order_manage.html" class="OrderDone">
+                        <div class="orderNumSm">@ViewBag.FinishedOrderCnt</div>
+                        <div class="orderTitle">완료된 주문</div>
+                    </a>
+                    <div class="VisitorOrder">
+                        <div class="orderNumSm">@ViewBag.PrtMember.ViewCnt</div>
+                        <div class="orderTitle">방문자수</div>
+                    </div>
+                    <div class="ratingOrder">
+
+                        <p class="star">
+                        </p>
+                        <div class="rating mgL20"><span style="width: 64%">6점</span></div>
+                        <span class="average">8.9</span>
+                        <div class="countBox">
+                            @ViewBag.PrtMember.ReviewScore
+                            <p class="star">
+                                <img src="/content/images/common/ico/ico_star_md_On.png" alt="star" />
+                                <img src="/content/images/common/ico/ico_star_md_On.png" alt="star" />
+                                <img src="/content/images/common/ico/ico_star_md_On.png" alt="star" />
+                                <img src="/content/images/common/ico/ico_star_md_half.png" alt="star" />
+                                <img src="/content/images/common/ico/ico_star_md.png" alt="star" />
+                            </p>
+                        </div>
+                        <div class="orderTitle">평점</div>
+                    </div>
+                </div>*@
+    </div>
+    <!--//숫자로보는주문현황-->
+
+
+    <!--새로받은 주문-->
+    <div class="printerMng">
+        <dl class="orderNew">
+            <dd class="cnt">새로 받은 주문</dd>
+            <dt>@(newOrderList != null ? newOrderList.Count : 0)</dt>
+        </dl>
+
+        <table class="tblType2 manage mgT55 orange" summary="새 주문 리스트">
+            <caption>새로받은 주문</caption>
+            <colgroup>
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 12%;">
+                <col style="width: 32%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 13%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">주문 번호</th>
+                    <th scope="col">주문 날짜</th>
+                    <th scope="col">주문자</th>
+                    <th scope="col">주문 내용</th>
+                    <th scope="col">매출</th>
+                    <th scope="col">관리</th>
+                    <th scope="col">주문 경과 시간</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (OrderT order in newOrderList)
+                { 
+                    <tr>
+
+                        <td><span class="cnt">@order.OrderNo</span></td>
+                        <td><span class="cnt">@string.Format("{0:yyyy-MM-dd}", order.PayDt)<br>
+                            @string.Format("{0:T}", order.PayDt)</span></td>
+                        <td>@order.OrderMemberName</td>
+                        <td>
+                            <ul class="prd">
+                                @if (order.orderDetailList.Count != 0)
+                                {
+                                    <li>
+                                        <img src="@(ViewBag.ArticleImgUrl)@order.orderDetailList[0].FileImgRename" /></li>
+                                    <li>
+                                        <div style="width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@(order.orderDetailList[0].FileName)</div>
+                                        @if (order.orderDetailList.Count > 1)
+                                        {
+                                            <div>외 @(order.orderDetailList.Count - 1)개파일</div>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+
+                        <td><span class="cnt">@string.Format("{0:N0}", order.TotalPrice)</span>원</td>
+                        <td>
+                            <input type="hidden" value="@order.No"/>
+                            <input type="hidden" value="@order.OrderStatus" />
+                            <a href="#" class="btnG type5" onclick="javascript:goOrderDetail(this)">상세보기</a>
+
+                        </td>
+
+                        <td>
+                            <input type="hidden" value="@(((DateTime)order.PayDt - timeBefore12hours).TotalSeconds)"/><span class="cnt timeView">  </span></td>
+                        @*<td>
+
+                                <input type="hidden" value="@order.No"/>
+                                <button onclick="javascript:acceptOrd(this)">수락</button>
+                                <button onclick="javascript:rejectOrd(this)">거절</button></td>*@
+                    </tr>
+                   
+                }
+
+            </tbody>
+        </table>
+
+
+
+    </div>
+    <!--//새로받은 주문-->
+    <!--진행완료된 주문-->
+    <div class="storeMng">
+        <dl class="orderNew">
+            <dd class="cnt">진행 및 완료된 주문</dd>
+            <dt>@(ViewBag.OngoingOrderCnt + ViewBag.FinishedOrderCnt)</dt>
+            <div class="line"></div>
+        </dl>
+        <div class="orderSch mgT80 visible">
+            <!-- 주문 상태 -->
+
+            <div class="ordState">
+                <p class="tit1">주문 상태</p>
+                <p class="value">전체</p>
+                <input type="hidden" id="ordState" name="ordState" value="0" />
+                <ul class="valueLi" style="display: none">
+                    <li id="ordState_1">
+                        <input type="radio" id="selState" name="ordState" value="0" /><label for="ordState">전체</label></li>
+                    @foreach (Makersn.Util.MakersnEnumTypes.OrderState statEnum in Enum.GetValues(typeof(Makersn.Util.MakersnEnumTypes.OrderState)))
+                    {
+                        if ((int)statEnum >= (int)Makersn.Util.MakersnEnumTypes.OrderState.출력중 && (int)statEnum <= (int)Makersn.Util.MakersnEnumTypes.OrderState.거래완료)
+                        {
+                        <li>
+                            <input type="radio" name="selState" value="@((int)statEnum)" /><label for="ordState">@(Makersn.Util.EnumHelper.GetEnumTitle(statEnum, null))</label></li>
+                        }
+
+                    }
+                </ul>
+            </div>
+            <!-- //주문 상태-->
+
+            <!-- 주문 기간 -->
+            <div class="ordPd">
+                <p class="tit1">주문 기간</p>
+                <p class="value2">전체</p>
+                <input type="hidden" id="dateFlag" name="dateFlag" value="1" />
+                <ul class="valueLi2" style="display: none">
+                    <li class="dateSelect" id="ordPd_1">
+                        <input type="radio" id="selPd_1" name="selPd" value="1" /><label for="selPd_1">전체</label></li>
+                    <li class="dateSelect" id="ordPd_2">
+                        <input type="radio" id="selPd_2" name="selPd" value="@nowStr" /><label for="selPd_2">오늘</label></li>
+                    <li class="dateSelect" id="ordPd_3">
+                        <input type="radio" id="selPd_3" name="selPd" value="@lastWeekStr" /><label for="selPd_3">일주일</label></li>
+                    <li class="dateSelect" id="ordPd_4">
+                        <input type="radio" id="selPd_4" name="selPd" value="@lastMonthStr" /><label for="selPd_4">한 달</label></li>
+                    <li class="dateSelect" id="ordPd_5">
+                        <input type="radio" id="selPd_5" name="selPd" /><label for="selPd_4">기간 선택</label></li>
+                </ul>
+            </div>
+            <p class="valCal">
+                @*<input type="text" id="sdate" name="sdate" class="inputCal" style="width: 106px; margin-right: 5px" readonly="readonly" value="@(ViewBag.StartDt==""? DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd"):ViewBag.StartDt)" />*@
+                <input type="text" id="sdate" name="sdate" class="inputCal" style="width: 106px; margin-right: 5px" readonly="readonly" value="@(ViewBag.StartDt)" />
+            </p>
+            <p class="valCalFrom">~</p>
+
+            <p class="valCal2">
+                @*<input type="text" id="edate" name="edate" class="inputCal" style="width: 106px; margin-right: 5px" readonly="readonly" value="@(ViewBag.EndDt==null? DateTime.Now.ToString("yyyy-MM-dd"):ViewBag.EndDt)" />*@
+                <input type="text" id="edate" name="edate" class="inputCal" style="width: 106px; margin-right: 5px" readonly="readonly" value="@(ViewBag.EndDt)" />
+            </p>
+
+            <!-- //주문 기간 -->
+
+            <!-- 검색어 입력 -->
+            <div class="searchKey">
+                <p class="tit1">검색어 입력</p>
+                <p class="value3">주문자명</p>
+                <input type="hidden" value="ordMemNm" id="srchTxtType" />
+                <ul class="valueLi3" style="display: none">
+                    <li id="searchKey_1">
+                        <input type="radio" id="selKey_1" name="selKey" value="ordMemNm" /><label for="selKey_1">주문자명</label></li>
+                    <li id="searchKey_2">
+                        <input type="radio" id="selKey_2" name="selKey" value="ordNo" /><label for="selKey_2">주문번호</label></li>
+                    <li id="searchKey_4">
+                        <input type="radio" id="selKey_4" name="selKey" value="postMemNm" /><label for="selKey_4">수취인명</label></li>
+                </ul>
+            </div>
+            <p class="valkey">
+                <input id="text" name="text" class="inputKey" type="text" value="">
+            </p>
+            <!-- //검색어 입력 -->
+
+            <p class="btn"><a class="btnG type16" onclick="javascript:searchOrd()">검색</a></p>
+
+        </div>
+
+
+        <table class="tblType2 manage mgT100" summary="주문관리 리스트">
+            <caption>주문관리</caption>
+            <colgroup>
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 12%;">
+                <col style="width: 32%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+                <col style="width: 10%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">주문 번호</th>
+                    <th scope="col">주문 날짜</th>
+                    <th scope="col">주문자</th>
+                    <th scope="col">주문 내용</th>
+                    <th scope="col">매출</th>
+                    <th scope="col">관리</th>
+                    <th scope="col">진행 상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (OrderT order in onGoingOrderList)
+                {
+                    <tr>
+                        <td><span class="cnt">@order.OrderNo</span></td>
+                        <td><span class="cnt">@string.Format("{0:yyyy-MM-dd}", order.PayDt)<br>
+                            @string.Format("{0:T}", order.PayDt)</span></td>
+                        <td>@order.OrderMemberName</td>
+                        <td>
+                            <ul class="prd">
+                                @if (order.orderDetailList.Count != 0)
+                                {
+                                    <li>
+                                        <img src="@(ViewBag.ArticleImgUrl)@order.orderDetailList[0].FileImgRename" /></li>
+                                        
+                                    <li>
+                                        <div style="width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@(order.orderDetailList[0].FileName)</div>
+                                        @if (order.orderDetailList.Count > 1)
+                                        {
+                                            <div>외 @(order.orderDetailList.Count - 1)개파일</div>
+                                        }
+                                    </li>
+
+                                }
+
+                            </ul>
+                        </td>
+
+                        <td><span class="cnt">@string.Format("{0:N0}", order.TotalPrice)</span>원</td>
+                        <td>
+                            <input type="hidden" value="@order.No"/>
+                            <input type="hidden" value="@order.OrderStatus" />
+                            <a href="#" class="btnG type5" onclick="javascript:goOrderDetail(this)">상세보기</a></td>
+
+
+                        
+                            @if (order.PostMode == (int)Makersn.Util.MakersnEnumTypes.PostType.픽업 && order.OrderStatus == (int)Makersn.Util.MakersnEnumTypes.OrderState.배송요청 ){
+                                <td>픽업요청</td>
+                                }
+                             else if(order.PostMode == (int)Makersn.Util.MakersnEnumTypes.PostType.픽업 && order.OrderStatus == (int)Makersn.Util.MakersnEnumTypes.OrderState.배송완료){
+                                <td>픽업완료</td>
+                             }
+                            else{
+                                <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.OrderState), order.OrderStatus)</td>
+                            }
+                    </tr>
+                }
+                <tr>
+        </table>
+
+
+        <!-- 페이징 -->
+        <div class="page_navi">@Html.PagedListPager(Model, page => Url.Action("/MngHome", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)</div>
+        <!-- //페이징 -->
+
+    </div>
+    <!--//진행완료된 주문-->
+
+
+
+</div>
+
+
+
+<!-- //Wrap -->
+@*<script src="/bundles/jquery?v=gkWyJthHPtwkFjvHuNinBjchIfwLwc_KbE-H26J2kAI1"></script>
+
+<script src="/Scripts/AjaxModel.js"></script>
+
+<script src="/Content/KindEditor/kindeditor-all.js"></script>*@
+
+<script src="@Url.Content("~/Scripts/calendar/ui.datepicker-ko.js")"></script>
+
+<script src="/Scripts/jquery-ui-1.11.4.min.js"></script>
+<link href="~/Scripts/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
+@*<link href="~/Content/themes/base/datepicker.css" rel="stylesheet" />*@
+
+@section Scripts{
+    @*    <style>
+        .ui-datepicker {
+            background-color:white;
+        }
+        /*.ui-datepicker { font:12px dotum; }
+.ui-datepicker select.ui-datepicker-month, 
+.ui-datepicker select.ui-datepicker-year { width: 70px;}
+.ui-datepicker-trigger { margin:0 0 -5px 2px; }*/
+    </style>*@
+
+
+    <script type="text/javascript">
+
+        // 셀렉트박스 UI
+        $(function () {
+
+            //$('#code_all').addClass('selected');
+            //$('#li_1').addClass('selected');
+
+            function uiSelect(obj, valLst, val, check_id) {
+                var set = {
+                    ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                    container: $(obj),
+                    value: $(val),
+                    list: $(valLst),
+                    firstVal: $(valLst + "> li:first-child > label").html(),
+                    li: $(valLst + "> li"),
+                    label: $(valLst + "> li > label")
+                }
+
+                set.list.hide();
+                if (check_id == '') {
+                    set.value.append(set.firstVal);
+                    $("#category_no").val('전체');
+                }
+                else {
+                    set.value.append($("#" + check_id).next().html());
+                    $("#category_no").val(check_id);
+                }
+
+
+                set.value.click(function () {
+                    var list = $(this).parent(obj).find(valLst);
+                    list.show();
+
+                    list.focusin(function () {
+
+                        list.show();
+                    });
+                    if (set.ie6) {
+                        set.label.hover(
+                            function () { $(this).parents().addClass("selected"); },
+                            function () { $(this).parents().removeClass("selected"); }
+                        );
+                    }
+                    function listHide() {
+                        setTimeout(function () {
+                            list.hide();
+                        }, 300);
+                    }
+                    $(this).parents(obj).eq(0).mouseleave(listHide);
+
+                    list.find("li").find("label").click(function () {
+
+                        $(this).parents(obj).find(val).empty().append($(this).html());
+
+                        $(this).parents(obj).find(valLst).hide();
+                        if (obj == ".ordState" || obj == ".searchKey" || obj == ".ordPd") {
+                            var temp = $(this).parents("li").eq(0).find("input").val();
+                            $(this).parents(obj).eq(0).find("input").eq(0).attr("value", temp);
+
+                        }
+                        if (obj == ".ordPd") {
+                            var temp = $(this).parents("li").eq(0).find("input").val();
+                            if (temp != 1) {
+                                $(".valPd").find("input").eq(0).attr("value", temp);
+                                $(".valPd").find("input").eq(1).attr("value", "@nowStr");
+                            }
+
+
+                        }
+
+                    }
+                    );
+                }
+				);
+            }
+            event_timer();
+            uiSelect(".ordState", ".valueLi", ".value", "전체");
+            uiSelect(".ordPd", ".valueLi2", ".value2", "전체");
+            uiSelect(".searchKey", ".valueLi3", ".value3", "주문자명");
+
+            var selNum = $('.tblType2 tr').length
+            for (i = 1 ; i < selNum ; i++) {
+                uiSelect("#tbordSta" + i, "#tbordValueLi" + i, "#tbordValue" + i, "주문접수");
+            }
+
+            $('.valueLi li').on('click', function () {
+                $('.valueLi li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+            $('.valueLi2 li').on('click', function () {
+                $('.valueLi2 li').removeClass("selected");
+                $(this).addClass("selected");
+                var startDate = $(this).find("input").attr("value");
+                var endDate = "@DateTime.Now.ToString("yyyy-MM-dd")";
+                if ($(this).find("input").attr("value") != "1") {
+                    $("#sdate").attr("value", startDate);
+                    $("#edate").attr("value", endDate);
+                } else {
+                    $("#sdate").attr("value", "");
+                    $("#edate").attr("value", "");
+
+                }
+            });
+
+            $('.valueLi3 li').on('click', function () {
+                $('.valueLi3 li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+
+            $('.valueLi li').mouseenter(function () {
+                $('.valueLi li').removeClass('selected');
+            })
+
+
+            $('.valueLi2 li').mouseenter(function () {
+                $('.valueLi2 li').removeClass('selected');
+            })
+
+            $('.valueLi3 li').mouseenter(function () {
+                $('.valueLi3 li').removeClass('selected');
+            })
+
+            $("#sdate,#edate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showOn: 'focus',
+                //buttonImage: '/Content/images/admin/icon_calender.png',
+                //buttonImageOnly: true,
+                dateFormat: 'yy-mm-dd'
+            });
+
+
+            // date select for previous Job
+            var dateSelection = $(".dateSelect");
+            $(".value2").click();
+            if (("@ViewBag.StartDt" == null && "@ViewBag.EndDt" == null) || ("@ViewBag.StartDt" == "" && "@ViewBag.EndDt" == "")) {
+                $(dateSelection[0]).find("label").click();
+            } else {
+                var clickFlag = "false";
+                for (var i = 1; i < dateSelection.length; i++) {
+                    if ($(dateSelection[i]).find("input").attr("value") == "@ViewBag.StartDt" && "@ViewBag.EndDt" == "@nowStr") {
+                        $(dateSelection[i]).find("label").click();
+                        clickFlag = "true";
+                        break;
+                    }
+                }
+                if (clickFlag == "false") {
+                    $(dateSelection[dateSelection.length - 1]).find("label").click();
+                }
+            }
+
+
+
+
+
+        });
+
+
+        function searchOrd() {
+            var ordStat = $("#ordState").val();
+            var dateFlag = $("#dateFlag").val();
+            var dateStart = $("#sdate").val();
+            var dateEnd = $("#edate").val();
+            //if (dateFlag == 1) {
+            //    dateStart = "";
+            //    dateEnd = "";
+            //}
+            var searchType = $("#srchTxtType").val();
+            var text = $("#text").val();
+            var action = "/Order/MngHome?searchType=" + searchType + "&status=" + ordStat + "&dtStart=" + dateStart + "&dtEnd=" + dateEnd + "&text=" + text;
+            //location.href(action);
+            $(location).attr('href', action);
+        }
+
+        function acceptOrd(val) {
+            var input = $(val).parents("td").eq(0).find("input").val();
+            $.post("/Order/ChangeStat", { orderNo: input, status: "출력중" }, function () { location.reload("/Order/MngHome"); }, "text");
+        }
+        function rejectOrd(val) {
+            var input = $(val).parents("td").eq(0).find("input").val();
+            $.post("/Order/ChangeStat", { orderNo: input, status: "요청거부" }, function () { location.reload("/Order/MngHome"); }, "text");
+        }
+        function goOrderDetail(val) {
+            var orderNo = $(val).parents("td").find("input").eq(0).val();
+            var status = $(val).parents("td").find("input").eq(1).val();
+            var action = "";
+            switch (status) {
+                case "@((int)Makersn.Util.MakersnEnumTypes.OrderState.결제완료)":
+                    action = "/Order/MngDetailNew?orderNo=" + orderNo;
+                    break;
+                case "@((int)Makersn.Util.MakersnEnumTypes.OrderState.출력중)":
+                    action = "/Order/MngDetailPrtPre?orderNo=" + orderNo;
+                    break;
+                case "@((int)Makersn.Util.MakersnEnumTypes.OrderState.출력완료)":
+                    action = "/Order/MngDetailPrtDone?orderNo=" + orderNo;
+                    break;
+                case "@((int)Makersn.Util.MakersnEnumTypes.OrderState.배송요청)":
+                    action = "/Order/MngDetailPostPre?orderNo=" + orderNo;
+                    break;
+                case "@((int)Makersn.Util.MakersnEnumTypes.OrderState.배송중)":
+                    action = "/Order/MngDetailPostPre?orderNo=" + orderNo;
+                    break;
+                case "@((int)Makersn.Util.MakersnEnumTypes.OrderState.배송완료)":
+                    action = "/Order/MngDetailPostDone?orderNo=" + orderNo;
+                    break;
+                case "@((int)Makersn.Util.MakersnEnumTypes.OrderState.거래완료)":
+                    action = "/Order/MngDetailPostDone?orderNo=" + orderNo;
+                    break;
+
+            }
+
+            $(location).attr('href', action);
+        }
+    </script>
+
+}
+
+
+
+<script type="text/javascript">
+    //开始计时
+    function event_timer() {
+        //由页面提交的时间与服务器时间一般都有2~4秒的差值
+        var timeNum = $(".timeView").length;
+        for (i = 0 ; i < timeNum ; i++) {
+            var time = $(".timeView").eq(i);
+            $(time).attr("id", "spantime_" + i);
+            var time_remain = $(time).parents("td").find("input").attr("value");
+            rt = parseInt(time_remain) + 4;
+            if (rt == 0) {
+                alert("timeover");
+                window.location.reload();
+            } else {
+                //$(time).innerHTML = "" + time_format(rt);
+                //time.innerHTML = "<span>" + time_format(rt)+"</span>";
+                $(time).text(time_format(rt));
+                time_remain = time_remain - 1;
+                $(time).parents("td").find("input").attr("value", time_remain);
+            }
+        }
+
+        setTimeout("event_timer()", 1000);
+    }
+
+    // 以hh:mm:ss格式化时间，可以根据需要 定义格式 
+    function time_format(s) {
+        var t;
+        if (s > -1) {
+            hour = Math.floor(s / 3600);
+            min = Math.floor(s / 60) % 60;
+            sec = s % 60;
+            day = parseInt(hour / 24);
+            //if (day > 0) {
+            //    hour = hour - 24 * day;
+            //    t = day + "天," + hour + ":";
+            //}
+            t = hour + ":";
+
+            if (min < 10) { t += "0"; }
+            t += min + ":";
+            if (sec < 10) { t += "0"; }
+            t += sec;
+        }
+        else { t = "0:00:0x"; }
+        return t;
+    }
+</script>

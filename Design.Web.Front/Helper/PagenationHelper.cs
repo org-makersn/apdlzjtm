@@ -15,6 +15,7 @@ namespace Design.Web.Front.Helper
             //Uri requestUrl = HttpContext.Current.Request.Url;
             string code = HttpContext.Current.Request.QueryString["codeNo"];
             string gbn = HttpContext.Current.Request.QueryString["pageGubun"];
+            string globleType = HttpContext.Current.Request.QueryString["gl"];
 
             var redirectTo = HttpContext.Current.Request.Url.AbsolutePath + "?";
 
@@ -34,6 +35,11 @@ namespace Design.Web.Front.Helper
             if (!string.IsNullOrEmpty(gbn))
             {
                 segment += "&pageGubun=" + gbn;
+            }
+
+            if (!string.IsNullOrEmpty(globleType))
+            {
+                segment += "&globleType=" + globleType;
             }
 
             pageSize = pageSize == 0 ? 3 : pageSize;

@@ -1,0 +1,150 @@
+﻿@model IList<OrderDetailT>
+@{
+    Layout = null;
+
+    OrderT order = ViewBag.Order;
+    PrinterT printer = ViewBag.Printer;
+}
+
+
+<div class="pop_wrap4 hAuto">
+    <!--창 크기 357(w)x315(h)-->
+    <div class="pop_txt mgB12 mgT-20 left">
+        주문내역 상세보기
+    </div>
+    <div class="pop_Table v2">
+        <div class="Line">
+            <div class="pop_RowL">주문자</div>
+            <div class="pop_RowR">@order.OrderMemberName</div>
+        </div>
+        <div class="Line">
+            <div class="pop_RowL">주문날짜</div>
+            <div class="pop_RowR">@(((DateTime)order.OrderDt).ToString("yyyy-MM-dd"))</div>
+        </div>
+        <div class="Line">
+            <div class="pop_RowL">주문번호</div>
+            <div class="pop_RowR">@order.OrderNo</div>
+        </div>
+        <div class="Line">
+            <div class="pop_RowL">주문내용</div>
+            <div class="pop_RowR">
+
+                @foreach (OrderDetailT detail in Model)
+                {
+                    order.TotalPrice += detail.UnitPrice * detail.OrderCount;
+                    <div class="file">
+                        <span class="fileImg">
+                            <img src="@ViewBag.ArticleImgUrl@detail.FileImgRename" class="prdImg1"></span>
+                        <span class="fileName" style="width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">@detail.FileName</span>
+                        <span class="fileDetail">@detail.MaterialName, @Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), detail.ColorNo), @detail.OrderCount 개</span>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="Line">
+            <div class="pop_RowL">주문스팟</div>
+            <div class="pop_RowR">@order.PrinterMemberName</div>
+        </div>
+        <div class="Line">
+            <div class="pop_RowL last">수령방법</div>
+            <div class="pop_RowR last">@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.PostType), order.PostMode) @(printer.PostMode == (int)Makersn.Util.MakersnEnumTypes.PrinterPostType.수신자_부담 ?  "(착불)" : "")</div>
+        </div>
+        @if (order.PostMode != (int)Makersn.Util.MakersnEnumTypes.PostType.픽업)
+        {
+            <div class="Line">
+                <div class="pop_RowL last">배송지</div>
+                <div class="pop_RowR last">@order.PostAddress @order.PostAddressDetail &nbsp;</div>
+            </div>
+        }
+    </div>
+
+
+    <div class="pop_txt mgB12 mgT10 left">
+        결제 상세보기
+    </div>
+    <div class="pop_Table v2">
+        <div class="Line">
+            <div class="pop_RowL">결제 금액</div>
+            <div class="pop_RowR">₩@(string.Format("{0:N0}", order.TotalPrice + order.PostPrice))</div>
+        </div>
+        <div class="Line">
+            <div class="pop_RowL">결제 방식</div>
+            <div class="pop_RowR">@Makersn.Util.EnumHelper.GetEnumTitle((Makersn.Util.MakersnEnumTypes.PayType)(order.PayType)) &nbsp;@*카드결제 / 일시불 / 632746234*****@</div>
+        </div>
+        <div class="Line">
+            <div class="pop_RowL last">승인 일시</div>
+            <div class="pop_RowR last">@order.PayDt &nbsp;</div>
+        </div>
+    </div>
+
+
+    <a href="javascript:closePop()" class="pop_close">창 닫기</a>
+</div>
+
+
+
+@*<table>
+    <tr>
+        <td>
+            <p>주문자</p>
+        </td>
+        <td colspan="3">
+            @order.OrderMemberName
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>주문날짜</p>
+        </td>
+        <td>
+            @order.OrderDt
+        </td>
+        <td>
+            <p>주문번호</p>
+        </td>
+        <td>
+            @order.OrderNo
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>주문내용</p>
+        </td>
+        <td colspan="3">
+            @foreach (OrderDetailT detail in Model)
+            {
+                <img src="@ViewBag.ArticleImgUrl@detail.FileImgRename" width="48px" height="32px" />
+                <p>@detail.OrderCount 개</p>
+                <p>@detail.FileName</p>
+                <p>@detail.MaterialNo</p>
+                <p>@detail.ColorNo</p>
+                <br />
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>주문스팟</p>
+        </td>
+        <td colspan="3">
+            @order.PrinterMemberName
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>수령방법</p>
+        </td>
+        <td colspan="3">
+            @order.PostMode
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>배송지</p>
+        </td>
+        <td colspan="3">
+            @order.PostAddress
+        </td>
+    </tr>
+</table>*@

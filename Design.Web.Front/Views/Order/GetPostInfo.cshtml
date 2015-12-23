@@ -1,0 +1,13 @@
+﻿@model OrderT
+@{
+    Layout = null;
+    
+}
+
+  <div class="pop_wrap4 hAuto">
+    <div class="pop_txt_b"><strong>@Model.PrinterMemberName</strong>에서 @Model.DeliveryCompany 택배로 <br>주문을 배송하였습니다.
+    <div class="pop_num">송장번호 : @Model.DeliveryNum</div>
+    </div>
+    <a href="javascript:takePost(@Model.No)" class="pop_btn2">택배를 받았습니다</a>
+    <a href="javascript:closePop()" class="pop_close">창 닫기</a>
+  </div>

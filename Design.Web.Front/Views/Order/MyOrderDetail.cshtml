@@ -1,0 +1,475 @@
+﻿@model IList<OrderDetailT>
+@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+
+    OrderT od = ViewBag.Order;
+    IList<PrinterT> printerList = ViewBag.PrinterList;
+
+    Makersn.Util.MakersnEnumTypes.MaterialColor enumColor = new Makersn.Util.MakersnEnumTypes.MaterialColor();
+
+    int count = Model.Count;
+    int index = 1;
+
+    string MatNm = "";
+    string printerNm = "";
+    foreach (PrinterT p in ViewBag.PrinterList)
+    {
+        if (p.No == od.PrinterNo)
+        {
+            printerNm = p.Brand + p.Model;
+            break;
+        }
+    }
+}
+
+<div class="subtitle3">
+    <h2>내 주문</h2>
+</div>
+
+<form id="insertOrderForm" method="post" enctype="multipart/form-data" action="/order/RequestPrint">
+
+    <div id="dataList" style="display: none">
+        <input type="hidden" name="oNo" value="@od.No" />
+    </div>
+
+    <!--표-->
+    <div class="cartWrap">
+
+        <div class="myorderMng">
+            <table class="tblType" summary="내 주문리스트">
+                <caption>내 주문 리스트</caption>
+                <colgroup>
+                    <col style="width: 39%;" />
+                    <col style="width: 13%;" />
+                    <col style="width: 12%;" />
+                    <col style="width: 13%;" />
+                    <col style="width: 12%;" />
+                    <col style="width: 11%;" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">요청한 파일 정보</th>
+                        <th scope="col">프린터 기종</th>
+                        <th scope="col">재질 및 색상</th>
+                        <th scope="col">수량</th>
+                        <th scope="col">주문금액</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (OrderDetailT order in Model)
+                    {
+                        var oriPrice = order.UnitPrice * order.OrderCount;
+                        var chgPrice = string.Format("{0:N0}", oriPrice);
+                        <tr>
+                            <td rowspan="2">
+                                <input type="hidden" name="odNo" value="@order.No" />
+                                <ul class="prd">
+                                    <li>
+                                        <img src="@ViewBag.PrintImgUrl@order.FileImgRename" class="prdImg1" alt="주문한 상품" /></li>
+                                    <li>
+                                        <p class="prdTxt1">@order.FileName</p>
+                                        <p class="prdTxt2">
+                                            총부피 : 
+                                            <span class="prdTxt2_vol">@(order.Volume / 1000) ㎤</span>
+                                            <input type="hidden" class="oriVol" value="@(order.Volume / 1000)" />
+                                        </p>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td rowspan="2">
+                                <div class="tbordSta zIdx199" id="divModel_@index">
+                                    <p class="tbordValue" id="pModel_@index">@printerNm</p>
+                                    <ul class="tbordValueLi" id="ulModel_@index">
+                                        @foreach (PrinterT printer in printerList)
+                                        {
+                                            string prtClass = printer.No == od.PrinterNo ? "class=selected" : "";
+                                            <li @prtClass>
+                                                <input type="radio" name="rdModel" value="@printer.No" /><label for="selSta_1">@printer.Brand@printer.Model</label>
+
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                            <td class="rownone">
+                                <div class="tbordSta tbordSta55 zIdx199" id="divMat_@index">
+                                    @{
+                                        foreach (MaterialT mat in ViewBag.MaterialList)
+                                        {
+                                            if (order.MaterialNo == mat.No)
+                                            {
+                                                MatNm = mat.Name;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    <p class="tbordValue" id="pMat_@index">@MatNm</p>
+                                    <ul class="tbordValueLi" id="ulMat_@index">
+                                        @foreach (MaterialT material in ViewBag.MaterialList)
+                                        {
+                                            string matClass = material.No == order.MaterialNo ? "class=selected" : "";
+                                            <li @matClass>
+                                                <input type="radio" name="rdMat" value="@material.No" /><label for="mat">@material.Name</label>
+                                                <input type="hidden" class="unitPrice" value="@material.UnitPrice" />
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+
+                            <td rowspan="2">
+                                <ul class="ord">
+                                    <li>
+                                        <p class="num">@order.OrderCount</p>
+                                        <input type="hidden" name="odCnt" value="@order.OrderCount"/>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <img src="/content/images/common/btn/btn_cntUp.gif" class="" alt="주문 수량 증가" onclick="incNum(this)" />
+                                        </p>
+                                        <p>
+                                            <img src="/content/images/common/btn/btn_cntDown.gif" class="" alt="주문 수량 감소" onclick="decNum(this)" />
+                                        </p>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td rowspan="2" class="price">@chgPrice 원</td>
+                            <td rowspan="2">
+                                <p class="mgT6"><a href="#" class="btnG type2 mgTB10">다시 계산하기</a></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="tbordSta tbordSta66 zIdx198" id="divColor_@index">
+                                    <p class="tbordValue" id="pColor_@index">
+                                        @foreach (int colorNo in Enum.GetValues(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor)))
+                                        {
+                                            if (order.ColorNo == colorNo)
+                                            {
+                                            @Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), colorNo)
+                                            }
+                                        }
+                                    </p>
+                                    <ul class="tbordValueLi" id="ulColor_@index">
+                                        @foreach (PrinterColorT color in ViewBag.ColorList)
+                                        {
+                                            string colorClass = order.ColorNo == color.ColorNo ? "class=selected" : "";
+                                            <li @colorClass>
+                                                <input type="radio" name="rdColor" value="@color.ColorNo" /><label for="selSta_1">@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), color.ColorNo)</label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                                        index++;
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="cartTot">
+            <p>합계 금액 <span class="mn">81,000</span>원 + 배송비 <span class="mn">0</span>원 = 총 합계 <span class="tot"></span>원 </p>
+        </div>
+    </div>
+    <!--//표-->
+
+
+    @if (od.OrderStatus != 30)
+    {
+
+        <div class="printText before">
+            <p class="txt2">
+                전화번호를 입력해주세요.<br>
+                출력요청이 '프린터소유자 id'에게 보내집니다.
+            </p>
+            <p class="txt3 mgT30">전화번호</p>
+            <div class="phonenum">
+                <div class="box">
+                    <input type="text" id="" name="fPhone" value="" />
+                </div>
+                <div class="txtDot">- </div>
+                <div class="box">
+                    <input type="text" id="" name="sPhone" value="" />
+                </div>
+                <div class="txtDot">- </div>
+                <div class="box">
+                    <input type="text" id="" name="tPhone" value="" />
+                </div>
+            </div>
+            <p class="txt3 mgT30">전하고 싶은 말</p>
+            <div class="message">
+                <textarea id="item_message" name="item_message"></textarea>
+            </div>
+            <div class="btnS">
+                <a href="javascript:PrintReq()" class="mgL345 btnO type5">출력 요청 하기</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="cartWrap">
+
+            <div class="printText2">
+                <p class="txt5">
+                    ‘@od.PrinterMemberName’님이 ‘@ViewBag.UserNm’님의 출력 요청을 거절하셨습니다.<br>
+                    다른 프린터를 찾아 출력해주세요.<br>
+                </p>
+            </div>
+            <!-- btZone -->
+            <div class="ordBtn2 mgT10">
+                <a href="/order/myorder" class="btnG type11">취소</a>
+                <a href="#" class="btnO type3">다른 프린터 찾기</a>
+            </div>
+            <!-- //btZone -->
+
+        </div>
+    }
+
+</form>
+
+
+<div class="printText after" style="display: none">
+    <form id="print" name="print">
+        <p class="txt2">
+        </p>
+        <div class="timeLeft mgT30">12:00:00</div>
+
+        <div class="btnS">
+            <a href="printing.html" class="mgL395 btnG type8">출력 요청 취소하기</a>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+
+        $(function () {
+            uiselectlnit();
+
+            //RecalculateTotal();
+        });        function RecalculateTotal() {
+            var unitPrice = $(".unitPrice").val();
+            console.log(unitPrice);
+            $(".tot").text();
+        }        // 셀렉트박스 UI
+        function uiSelect(obj, valLst, val, check_id) {
+            var set = {
+                ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                container: $(obj),
+                value: $(val),
+                list: $(valLst),
+                firstVal: $(valLst + "> li:first-child > label").html(),
+                li: $(valLst + "> li"),
+                label: $(valLst + "> li > label")
+            }
+
+            set.list.hide();
+            if (check_id == '') {
+                set.value.append(set.firstVal);
+                $("#category_no").val('전체');
+            }
+            else {
+                set.value.append($("#" + check_id).next().html());
+                $("#category_no").val(check_id);
+            }
+            set.value.click(function () {
+
+                set.list.show();
+                set.list.focusin(function () {
+                    set.list.show();
+                }
+                );
+                if (set.ie6) {
+                    set.label.hover(
+                        function () { $(this).parent().addClass("selected"); },
+                        function () { $(this).parent().removeClass("selected"); }
+                    );
+                }
+                function listHide() {
+                    setTimeout(function () { set.list.hide(); }, 300);
+                }
+                set.container.mouseleave(listHide);
+                set.label.click(function () {
+                    set.value.empty().append($(this).html());
+                    $("#category_no").val($(this).text());
+
+                    set.list.hide();
+                }
+                );
+            }
+            );
+        }        function uiselectlnit() {
+            var count = parseInt("@count", 10);
+            for (var i = 1; i <= count; i++) {
+
+                uiSelect("#divMat_" + i, "#ulMat_" + i, "#pMat_" + i, "재료");
+                uiSelect("#divModel_" + i, "#ulModel_" + i, "#pModel_" + i, "기종");
+                uiSelect("#divColor_" + i, "#ulColor_" + i, "#pColor_" + i, "색상");
+
+
+                $('#ulMat_' + i + ' li').on('click', function () {
+                    //$('#ulMat_' + i + ' li').removeClass("selected");
+                    //$(this).addClass("selected");
+                    RecalculateByChgMat(this);
+                });
+
+                $('#ulModel_' + i + ' li').on('click', function () {
+                    //$('#ulModel_' + i + ' li').removeClass("selected");
+                    //$(this).addClass("selected");
+                    //GetMaterialAndColor($(this).find('input').val(), i);
+                    GetMaterialAndColor(this);
+                    //Recalculate(this);
+                });
+
+                $('#ulColor_' + i + ' li').on('click', function () {
+                    chgColor(this);
+                    //$('#ulColor_' + i + ' li').removeClass("selected");
+                    //$(this).addClass("selected");
+                });
+
+
+                $('#ulMat_' + i + ' li').mouseenter(function () {
+                    $('#ulMat_' + i + ' li').removeClass('selected');
+                })
+
+
+                $('#ulModel_' + i + ' li').mouseenter(function () {
+                    $('#ulModel_' + i + ' li').removeClass('selected');
+                })
+
+                $('#ulColor_' + i + ' li').mouseenter(function () {
+                    $('#ulColor_' + i + ' li').removeClass('selected');
+                })
+            }
+        }        function decNum(val) {
+            var num = $(val).parents('ul').find('li:eq(0) P');
+            if (parseInt(num.text(), 10) > 0) {
+                num.text(parseInt(num.text(), 10) - 1);
+                $(val).parents('ul').find('li:eq(0) input').val(num.text());
+                RecalculateByCnt(val);
+            }
+        }        function incNum(val) {
+            var num = $(val).parents('ul').find('li:eq(0) P');
+            num.text(parseInt(num.text(), 10) + 1);
+            $(val).parents('ul').find('li:eq(0) input').val(num.text());
+            RecalculateByCnt(val);
+        }        function chgColor(val) {
+            var id = $(val).parents('ul').attr('id');
+            id = id.substring(id.indexOf('_') + 1);
+            $('#ulColor_' + id + ' li').removeClass("selected");
+            $(val).addClass("selected");
+        }        function RecalculateByChgMat(val) {
+            var id = $(val).parents('ul').attr('id');
+            id = id.substring(id.indexOf('_') + 1);
+            $('#ulMat_' + id + ' li').removeClass("selected");
+            $(val).addClass("selected");
+
+            var Mat = $(val).find('.unitPrice').val(); // 재질 가격
+            var Cnt = $(val).parents('tr').find('.num').text(); // 현재 갯수
+            var Vol = $(val).parents('tr').find('.oriVol').val() // 볼륨
+            var Price = Math.ceil((Mat * Cnt * Vol) / 10) * 10;
+
+            GetColor(val);
+
+            $(val).parents('tr').find('.price').text(Price + " 원");
+
+        }        function RecalculateByCnt(val) {
+            var Mat = $(val).parents('tr').find('.unitPrice').val(); // 재질 가격
+            var Cnt = $(val).parents('tr').find('.num').text(); // 현재 갯수
+            var Vol = $(val).parents('tr').find('.oriVol').val() // 볼륨
+            var Price = Math.ceil((Mat * Cnt * Vol) / 10) * 10;
+
+            $(val).parents('tr').find('.price').text(Price + " 원");
+
+            TotalPrice();
+        }        function GetColor(val) {
+            var no = $(val).parents('tr').find('.selected input[name="rdModel"]').val();
+            var id = $(val).parents('ul').attr('id');
+            id = id.substring(id.indexOf('_') + 1);
+            var matNo = $(val).find(':radio').val();
+            $("#pColor_" + id).text("색상");
+            Ajax.SyncGetPartialView("/order/GetColorList", { printerNo: no, matNo: matNo }, "ulColor_" + id);            uiselectlnit();        }        function GetMaterialAndColor(val) {
+            var no = $(val).find('input').val();
+            var id = $(val).parents('ul').attr('id');
+            id = id.substring(id.indexOf('_') + 1);
+            //Ajax.SyncGetPartialView("/order/GetColorList", { printerNo: no }, "ulColor_" + id);            Ajax.SyncGetPartialView("/order/GetMaterialList", { printerNo: no }, "ulMat_" + id);            uiselectlnit();            $("#pMat_" + id).text("재질");
+            $("#pColor_" + id).text("색상");
+            $(val).parents('tr').find('.price').text("0 원");
+            $('#ulModel_' + id + ' li').removeClass("selected");
+            $(val).addClass("selected");
+
+            TotalPrice();
+        }        function PrintReq() {
+
+            $(".tblType tr td ul li.selected input").each(function () {
+                //console.log(this);
+                $(this).attr("type", "hidden");
+                //$("#dataList").append(this);
+            });            //console.log($("#dataList"));            var $form_data = $("#insertOrderForm").serialize();
+            var action = "/order/RequestPrint";
+
+            var options = {
+                beforeSend: function () {
+
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        $(".before").css("display", "none");
+                        $(".after").css("display", "inline");
+                        $(".after .txt2").html(" 출력 요청이 '" + response.Result + "'님에게 전달되었습니다.<br>'" + response.Result + "'님이 요청을 수락하면 SMS와 이메일로 알려드립니다.<br>만약 '" + response.Result + "'님이 12시간 이내에 수락하지 않으면 다른 프린터를 선택하실 수 있습니다.");
+                        setInterval('timer()', 1000);
+                    }
+                    else {
+                        alert(response.Message);
+
+                    }
+                },
+                complete: function (response) {
+
+                },
+                error: function (error) {
+                    console.log(error);
+
+                }
+            };
+
+            $('#insertOrderForm').attr("action", action).ajaxForm(options).submit();
+        }        var seconds = 43199;        function timer() {
+            //$(".timeLeft .mgT30").text();            var hours = Math.floor(seconds / 3600);
+            var minutes = Math.round(((seconds - hours * 3600) - 30) / 60);
+            var remainingSeconds = seconds % 60;
+
+            if (remainingSeconds < 10) {
+                remainingSeconds = "0" + remainingSeconds;
+            }
+            if (minutes == -0) {
+                minutes = "00";
+            }
+            $('.timeLeft.mgT30').text(hours + ":" + minutes + ":" + remainingSeconds);
+            if (seconds == 0) {
+                clearInterval(countdownTimer);
+                //$('.timeLeft.mgT30').innerHTML = "Buzz Buzz";
+            } else {
+                seconds--;
+            }
+        }        function TotalPrice() {
+            var test = $(".price");
+        }
+        //function colorLiClick(val) {
+        //    var id = $(val).parents('ul').attr('id');
+        //    id = id.substring(id.indexOf('_') + 1);
+        //    $('#ulColor_' + id+ ' li').removeClass("selected");
+        //    $(val).addClass("selected");
+        //}
+
+    </script>
+}

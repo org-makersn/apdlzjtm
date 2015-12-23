@@ -1,0 +1,193 @@
+﻿@model PagedList.IPagedList<PrinterMemberT>
+@using PagedList.Mvc;
+@{
+    Layout = null;
+
+    IList<MaterialT> matList = ViewBag.MatList;
+}
+
+@if (ViewBag.NoSearch != null)
+{
+    <div class='mgT25' style='font-size: medium'>앗... 검색 조건에 맞는게 없네요.<br />
+        평점이 높은 스팟 5개를 추천해드릴게요 :)</div>
+}
+
+<table class="tblType3 mgT20" summary="프린트 요청 리스트">
+    <caption>프린트 요청</caption>
+    <colgroup>
+        <col style="width: 20%;" />
+        <col style="width: 20%;" />
+        <col style="width: 10%;" />
+        <col style="width: 20%;" />
+        <col style="width: 10%;" />
+        <col style="width: 10%;" />
+        <col style="width: 10%;" />
+        @*<col style="width: 13%;" />*@
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col">프린터 스팟</th>
+            <th scope="col">보유 프린터</th>
+            <th scope="col">재료</th>
+            <th scope="col">색상</th>
+            <th scope="col">품질</th>
+            <th scope="col">수령방법</th>
+            <th scope="col">가격</th>
+            @*<th scope="col">금액</th>*@
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (PrinterMemberT printerMember in Model)
+        {
+            if (printerMember.printerList.Count != 0)
+            {
+                List<string> chkBrandDis = new List<string>();
+                List<int> chkMatDis = new List<int>();
+                List<int> chkColorDis = new List<int>();
+                List<int> qualityList = new List<int>();
+                List<int> postList = new List<int>();
+                float score = 0;
+                int count = 0;
+                int matIdx = 1;
+                int colorIdx = 1;
+
+                string rePrice = printerMember.MinPrice == printerMember.MaxPrice ? "\\" + string.Format("{0:N0}", printerMember.MaxPrice) : "\\" + string.Format("{0:N0}", printerMember.MinPrice) + "~\\" + string.Format("{0:N0}", printerMember.MaxPrice);
+            
+            <!-- 리스트 1set : 1-->
+            <tr onclick="GetSpotPrinter('@printerMember.MemberNo',this)" class="trSpotList" onmouseover="addTrClass(this)">
+                <td>
+                    <p class="txt1">@printerMember.SpotName</p>
+                    <p class="txt2">@printerMember.SpotAddress</p>
+                    @foreach (ReviewT review in printerMember.reviewList)
+                    {
+                        score += review.Score;
+                        count++;
+                    }
+
+                    <div class="rating_td"><span style="width:@((count == 0 ? 0 : score / count) * 10)%">@((count == 0 ? 0 : score / count))점</span></div>
+                    @*<span class="average">@(Math.Round((count == 0 ? 0 : score / count),1))</span>*@
+                    <span class="average">@string.Format("{0:N1}", count == 0 ? 0 : score / count)</span>
+                </td>
+                <td>
+                    @foreach (PrinterT printer in printerMember.printerList)
+                    {
+                        if (!chkBrandDis.Contains(printer.Brand))
+                        {
+                            chkBrandDis.Add(printer.Brand);
+                        <p class="txt2">@printer.Brand </p>
+                            if (!qualityList.Contains(printer.Quality))
+                            {
+                                qualityList.Add(printer.Quality);
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    @{printerMember.matList = printerMember.matList.GroupBy(g => g.MaterialNo).Select(s => s.First()).ToList<PrinterMaterialT>();}
+                    @foreach (PrinterMaterialT mat in printerMember.matList)
+                    {
+                        //string matText = Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.Material), mat.MaterialNo);
+                        string matText = matList.First(f => f.No == mat.MaterialNo).Name;
+                        if (matIdx < printerMember.matList.Count) { matText += ","; };
+                        if (!chkMatDis.Contains(mat.MaterialNo))
+                        {
+                            chkMatDis.Add(mat.MaterialNo);
+                        <p class="txt2" style="display: inline">@matText</p>
+                        }
+                        matIdx++;
+                    }
+                </td>
+                <td>@{printerMember.colorList = printerMember.colorList.GroupBy(g => g.ColorNo).Select(s => s.First()).ToList<PrinterColorT>();}
+                    @foreach (PrinterColorT color in printerMember.colorList)
+                    {
+                        string colorText = Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), color.ColorNo);
+                        if (colorIdx < printerMember.colorList.Count) { colorText += ","; }
+                        if (!chkColorDis.Contains(color.ColorNo))
+                        {
+                            chkColorDis.Add(color.ColorNo);
+                        <p class="txt2" style="display: inline">@colorText</p>
+                        }
+                        colorIdx++;
+                    }
+                </td>
+                <td>
+                    @foreach (int quality in qualityList)
+                    {
+                        <p class="txt2">@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.QualityType), quality)</p>
+                    }
+                </td>
+                <td>
+                    <p class="txt2">
+                        @Makersn.Util.EnumHelper.GetEnumTitle((Makersn.Util.MakersnEnumTypes.PostType)(printerMember.PostMode))
+                    </p>
+                </td>
+                <td>@rePrice</td>
+            </tr>
+            <!-- // 리스트 1set -->
+            }
+        }
+
+    </tbody>
+</table>
+
+<div class="paging pdB35 mgB0">
+    @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("SpotList", new
+            {
+                page,
+                location = ViewBag.Location,
+                locX = ViewBag.LocX,
+                locY = ViewBag.LocY,
+                material = ViewBag.Mat,
+                quality = ViewBag.Qual
+            }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "divSpotList"
+            })
+        )
+</div>
+
+<script type="text/javascript">
+    function GetSpotPrinter(no, val) {
+        //console.log(val);
+        //var data = {
+        //    no:val
+        //}
+        //var onSuccess = function (result) {
+        //    console.log(result);
+        //    $("#divSelSpot").html(result);
+        //}
+        //Ajax.AjaxResponseModelService(this, "/order/getSpotPrinter", data, onSuccess);
+        //console.log(val);
+        $(val).parents('tbody').find('tr').removeClass('on');
+        $(val).addClass('on');
+
+        //색상, 가격 초기화
+        $(".price").each(function () {
+            //$(this).val(0);
+            $(this).text("\\ 0");
+        })
+        $(".selPrice").val("");
+        //$("#divSelSpot").removeClass("SelPrinter");
+        //$("#divSelSpot").addClass("SelPrinter_show");
+        Ajax.SyncGetPartialView("/order/getSpotPrinter", { no: no }, "divSelSpot");
+        $("#divChgClass").removeClass("pdB140");
+        $("#divChgClass").addClass("pdB25");
+        $("#divRemove").remove();
+
+        $('html, body').animate({ scrollTop: $('#divSelSpot').offset().top - 100 }, 500);
+    }
+
+    function addTrClass(val) {
+        $(val).addClass("hover");
+    }
+
+    $(".trSpotList").mouseleave(function () {
+        $(".trSpotList").removeClass("hover");
+    })
+</script>

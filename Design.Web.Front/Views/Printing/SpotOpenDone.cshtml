@@ -1,0 +1,17 @@
+﻿@model PrinterMemberT
+@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+}
+
+
+<div class="printMng h700">
+
+    <p class="txt1">@(Model.Name)스팟이 개설되었습니다.</p>
+    <p class="txt2">
+        메이커스앤에 당신만의 프린팅 스팟이 오픈되었어요.<br>
+        지금 부터 3D 프린팅 주문 요청을 받을 수 있어요.<br />
+        우측 상단의 &nbsp;<img style="vertical-align: middle" src="/content/images/common/ico/ico_printingSpot.png" />&nbsp; 버튼을 이용해 보세요
+    </p>
+    <a href="/printingprofile" class="btnO type3 mgT60 mgL383">나의 스팟 가기</a>
+</div>

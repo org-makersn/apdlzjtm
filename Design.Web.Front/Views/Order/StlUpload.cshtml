@@ -1,0 +1,193 @@
+﻿@model OrderDetailT
+@{
+    Layout = null;
+    int uiIndex = ViewBag.uiIndex;
+
+    string zindex = "zIdx" + (201 - uiIndex).ToString();
+}
+
+@*<li>
+
+    <a href="javascript:void(0);" class="showThum" id="stl_@uiIndex" data-val="@Model.No" title="썸네일이미지보기" data-file="@Url.Content("~/FileUpload/Article/Article_3d/"+ Model.FileReName)" data-js="@Url.Content("~/FileUpload/Article/article_js/" + Model.FileReName + ".js")" data-idx="@uiIndex">
+        <img id="img_@uiIndex" src="@Url.Content("~/Content/images/common/img_collect.png")"" class="reqImg" alt="요청한 상품" />
+    </a>
+
+
+    <div class="txtG">
+        <p class="txt1">@Model.FileName</p>
+        <p class="txt2">크기 : @(Model.SizeX * 0.1)cm x @(Model.SizeY * 0.1)cm x @(Model.SizeZ * 0.1)cm 
+            <span class="mgL15">출력 부피 : @(Model.Volume * 0.001)cm³</span>
+            <span class="mgL15">예상가격: ₩<span class="price">0</span></span>
+        </p>
+    </div>
+
+
+    <div class="tbordSta_color tbordSta55 zIdx199" id="divColor_@uiIndex">
+        <p class="tbordValue_color" id="pColor_@uiIndex" class="pColor" onclick="chkSetColor(this)">색상</p>
+        <ul class="tbordValueLi_color" id="ulColor_@uiIndex">
+        </ul>
+    </div>
+
+
+    <div class="req">
+        <p class="close">
+            <input type="hidden" id="no" name="no" value="@Model.No" />
+            <input type="hidden" class="volume" value="@(Model.Volume*0.001)" />
+            <input type="hidden" class="selPrice" />
+            <input type="hidden" name="orderCount" value="1" />
+            <input type="hidden" name="color" />
+
+            <img src="content/images/common/btn/btn_close2.gif" onclick="delFile(this)" class="" alt="삭제" />
+        </p>
+        <p class="num">1</p>
+        <div class="btnS">
+            <p>
+                <img src="content/images/common/btn/btn_cntUp.gif" onclick="incNum(this)" class="" alt="주문 수량 증가" />
+            </p>
+            <p>           
+                <img src="content/images/common/btn/btn_cntDown.gif" onclick="decNum(this)" class="" alt="주문 수량 감소 " />
+            </p>
+        </div>
+    </div>
+</li>*@
+
+
+<li>
+    <a href="javascript:void(0);" class="showThum" id="stl_@uiIndex" data-val="@Model.No" title="이미지 새로고침" data-file="@Url.Content("~/FileUpload/Article/Article_3d/" + Model.FileReName)" data-js="@Url.Content("~/FileUpload/Article/article_js/" + Model.FileReName + ".js")" data-idx="@uiIndex">
+        <img id="img_@uiIndex" src="@Url.Content("~/Content/images/common/img_collect.png")"" class="reqImg" alt="요청한 상품">
+    </a>
+
+    <div class="txtG">
+        <p class="txt1">@Model.FileName</p>
+    </div>
+    <div class="txt2">@(Math.Round(Model.SizeX) * 0.1)cm x @(Math.Round(Model.SizeY) * 0.1)cm x @(Math.Round(Model.SizeZ) * 0.1)cm <span>
+        <br>
+        @(Math.Round((Model.Volume * 0.001)/0.1)*0.1)cm³/ @Model.PrintVolume cm³</span>
+    </div>
+    <div class="req">
+
+        <input type="text" class="num" value="1" onkeydown="return IsNum(event)" onchange="PriceRecalculate(this)"/>
+        <div class="btnS">
+            <p>
+                <img src="/content/images/common/btn/btn_cntUp.gif" onclick="incNum(this)" class="" alt="주문 수량 증가">
+            </p>
+            <p>
+                <img src="/content/images/common/btn/btn_cntDown.gif" onclick="decNum(this)" class="" alt="주문 수량 감소 ">
+            </p>
+        </div>
+    </div>
+
+    <div class="tbordSta_color tbordSta55 @zindex" id="divColor_@uiIndex">
+        <p class="tbordValue_color" id="pColor_@uiIndex" onclick="chkSetColor(this)">색상</p>
+        <ul class="tbordValueLi_color" id="ulColor_@uiIndex">
+        </ul>
+    </div>
+
+    <div class="price">₩0</div>
+    <div class="close">
+        <input type="hidden" id="no" name="no" value="@Model.No" />
+        <input type="hidden" class="volume" value="@Model.PrintVolume" />
+        <input type="hidden" class="selPrice" />
+        <input type="hidden" name="orderCount" value="1" />
+        <input type="hidden" name="color" />
+        <img src="/content/images/common/btn/btn_close2.gif" onclick="delFile(this)" class="" alt="삭제">
+    </div>
+</li>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function uiSelect(obj, valLst, val, check_id) {
+            var set = {
+                ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                container: $(obj),
+                value: $(val),
+                list: $(valLst),
+                firstVal: $(valLst + "> li:first-child > label").html(),
+                li: $(valLst + "> li"),
+                label: $(valLst + "> li > label")
+            }
+
+            set.list.hide();
+
+            set.value.click(function () {
+                set.list.show();
+                set.list.focusin(function () {
+                    set.list.show();
+                }
+                );
+                if (set.ie6) {
+                    set.label.hover(
+                        function () { $(this).parent().addClass("selected"); },
+                        function () { $(this).parent().removeClass("selected"); }
+                    );
+                }
+                function listHide() {
+                    setTimeout(function () { set.list.hide(); }, 300);
+                }
+                set.container.mouseleave(listHide);
+                set.label.click(function () {
+                    set.value.empty().append($(this).html());
+                    //$("#category_no").val($(this).text());
+
+                    set.list.hide();
+                }
+                );
+                set.li.click(function () {
+                    set.value.empty().append($(this).find('label').html());
+                    //$("#category_no").val($(this).text());
+
+                    set.list.hide();
+                });
+            }
+            );
+        }
+
+        if ("@ViewBag.prtMatNo" != "") {
+
+            var index = "@uiIndex";
+            console.log(index);
+
+            for (var i = 0; i <= index; i++) {
+                Ajax.SyncGetPartialView("/order/GetColorList", { printerMatNo: "@ViewBag.prtMatNo" }, "ulColor_" + i);
+            }
+
+            for (var i = 0; i <= index; i++) {
+                uiSelect("#divColor_" + i, "#ulColor_" + i, "#pColor_" + i);
+                
+
+                $('#ulColor_' + i + ' li').on('click', function () { // 색상 선택
+                    console.log(this);
+                    //$('#ulColor_' + i + ' li').removeClass("selected");
+                    $(this).parents('ul').find('li').removeClass("selected");
+                    $(this).addClass("selected");
+                    $(this).parents('li').find('[name="color"]').val($(this).find(':radio').val());
+
+                    var unitPrice = $(this).find(".unitPrice").val();
+                    var vol = parseFloat($(this).parents('li').find('.volume').val());
+                    var count = parseFloat($(this).parents('li').find('.num').val(), 10);
+                    //var rePrice = (Math.floor((count * unitPrice * vol * 0.2 + 9) / 10) * 10).format();
+                    var rePrice = (Math.floor(count * unitPrice * vol)).format();
+                    //var rePrice = (parseFloat($(this).parents('li').find('.num').text(), 10) * unitPrice * vol * 0.2).format();
+                    if (vol * unitPrice < 100) { rePrice = 100 * count; }
+                    $(this).parents('li').find('.price').text("\\" + rePrice);// this.text = 카운트 갯수
+
+                    var totalPrice = 0;
+                    $('.price').each(function () {
+                        //totalPrice += parseInt($(this).text().replace("\\", "").replace(",", ""), 10);
+                        totalPrice += parseInt($(this).text().replace(/\\/gi, "").replace(/,/gi, ""));
+                    })
+                    $("#hfTotalPrice").val(totalPrice);
+
+                    $(this).parents('li').find('.selPrice').val(unitPrice);
+                });
+
+                $('#ulColor_' + i + ' li').mouseenter(function () {
+                    $('#ulColor_' + i + ' li').removeClass('selected');
+                });
+            }
+        }
+
+        setTimeout("StlTrigger(" + "@uiIndex" + ")", 100);
+    });
+</script>

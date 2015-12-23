@@ -15,12 +15,12 @@
             <!-- ProductBox -->
             <div class="productBox">
                 <div class="productImg">
-                    <a href="/design/Detail?no=@a.No">
+                    <a href="/design/Detail/@a.No">
                         <img src="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.MainImage" /></a>
                 </div>
                 <div class="detailBox">
                     <div class="productText">
-                        <a href="/design/Detail?no=@a.No">@a.Title</a>
+                        <a href="/design/Detail/@a.No">@a.Title</a>
                     </div>
                     <div class="by">
                         <p>by <span class="name"><a href="/Profile?no=@No">@a.MemberName</a></span></p>

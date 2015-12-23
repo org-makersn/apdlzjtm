@@ -1,0 +1,363 @@
+﻿@{
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    double reviewScore = ViewBag.PrinterMember.ReviewScore;
+
+    //string profilePic = string.Empty;
+    //if (string.IsNullOrEmpty(Model.ProfilePic))
+    //{
+    //    profilePic = "/Content/images/common/profile_photo2.png";
+    //}
+    //else
+    //{
+    //    profilePic = ViewBag.ProfileImgUrl + ViewBag.PrinterMember.ProfilePic;
+    //}
+    PrinterMemberT printerMember = ViewBag.PrinterMember;
+    
+}
+
+@section printerMian{
+    
+         @if (ViewBag.SelfFlag == true)
+         {
+     <div class="header">
+
+            <div class="gnbArea">
+                <div class="gnbBox">
+                    <ul class="nav2">
+                        <li ><a href="/Order/MngHome">주문관리</a></li>
+                        <li class="on"><a href="/PrintingProfile">스팟 관리</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+         }
+
+    <!-- topVisual -->
+    <div class="topVisu mgB0">
+        
+    <form id ="cover_form" method="post" enctype="multipart/form-data">
+      <div class="profile_img"><img src="@(printerMember.PrinterCoverPic != null ? ViewBag.ProfileImgUrl + printerMember.PrinterCoverPic : "/content/images/top_img_default.png")" alt="배경 이미지" />
+      	
+          @if (@ViewBag.SelfFlag == true)
+          {
+                  <div class="btnCoverGo">
+       		        <a href="javascript:editCover()" class="editCover";><img src="/Content/images/common/btn/btn_cover_edit.png" alt="커버편집"></a>
+                    <div class="pf_photoUpZone" style="display: none;">
+                         <!--[D]마우스 클릭했을 때 아래 클래스 photoup 토글되도록-->
+					        <div class="photoUp">
+						        <button class="file_input_button" title="파일추가"></button>
+						        <input type="file"  class="file_input_hidden" title="커버사진 업로드" id="cover_pic" name="cover_pic">
+                                <input type="hidden" id="PrtMemNo" name="PrtMemNo" value="@printerMember.MemberNo" />
+					        </div>
+						        <button title="삭제" class="btnPhotoDel" id="cover_pic_del"></button>
+			        </div>
+               </div>
+          }
+      </div>
+        
+    </form>      
+    </div>
+		
+    <!-- //topVisual -->   
+
+
+    
+    	<div class="profInfo">
+      	<div class="infoWrap">
+        
+        	
+          
+        	<p class="tit11"> @printerMember.SpotName</p>
+        	<p class="txt1">@printerMember.PrinterProfileMsg</p>
+       	</div>
+      </div>
+      
+      <div class="myGroup">
+      	<div class="groupWrap2">
+          <ul class="tits2">
+          	<li class="address"><span class="title">주소</span>&nbsp; @printerMember.SpotAddress &nbsp; @printerMember.SpotAddressDetail
+           </li> 
+         	<li  class="address"><span class="title">전화</span>&nbsp; @printerMember.HomePhone
+           </li>  
+           <li class="address"><span class="title">세금계산서</span>&nbsp; @(printerMember.TaxbillFlag == "Y" ? "발행 가능" : "발행 불가")
+           </li>                         
+          </ul>
+
+
+              <ul class="bts">
+            <!--li class="noti">
+            	<a href="printing_profile_my_notice.html" title="알림"></a>
+              <img class="new" alt="NEW" src="content/images/common/ico/ico_new.png">
+            </li--> 
+                  @if (@ViewBag.SelfFlag == true)
+                  {
+                    <li class="Mng">
+            	        <a  href="/Printing/PrtMng"  title="프린터 관리"></a>
+                      <!--img class="new" alt="NEW" src="content/images/common/ico/ico_new.png"-->
+                    </li> 
+                    <li class="set">
+            	        <a href="javascript:SpotEdit()" title="설정"></a>
+                    </li>       
+                  }   
+          </ul>
+         
+          
+        </div>       
+      </div>
+
+}
+
+	<!-- Wrap -->
+	<div class="wrap">
+    
+    <!-- MemberArea -->						
+    <!-- 로그인 후 마이페지 -->
+   @* <div class="topMypage">
+      <ul>
+        <li><a href="my_profile.html">My page</a></li>
+        <li>
+          <a href="my_profile_notice.html">Notice</a>
+          <img src="content/images/common/notice_left.gif" alt="Notice" /><span style="font-size: 11px; background-color:#fe7900; line-height: 22px; padding: 5px 3px 3px 2px;">14</span><img src="content/images/common/notice_right.gif" alt="Notice" />
+        </li>
+        <li><a href="my_profile_setting.html">Setting</a></li>
+        <li><a href="javascript:void(0);" onClick=" mypageOut();">Log out</a></li>
+      </ul>
+    </div>*@
+    <!-- //로그인 후 마이페지 -->
+  	<!-- //MemberArea -->
+
+       
+    <!-- contWrap -->
+		<div class="contWrap w100" >
+    
+
+
+        <!-- notice --> 
+      <div class="profCont" id="partial-part">
+      	<div class="message">
+        	<div class="messageP"> 
+          	<p class="tit">보유 프린터@*<a href="/Printing/PrtUpload" class="btnGO type3">프린터 등록</a>*@</p> 
+            <ul>
+                @foreach (PrinterT printer in ViewBag.PrinterList)
+                {
+                    double score = printer.Score;
+              <!-- printer 1set -->
+              <li class="messageBox" >
+                  <a href="/Printing/Detail?no=@printer.No">
+                      @*@ViewBag.PrintImgUrl@printer.PrinterFileList[System.Convert.ToInt32(printer.MainImg)-1].Rename*@
+                <p class="printer_photo">
+                    <img alt="프린터사진" src="@ViewBag.PrintImgUrl@printer.PrinterFileList[System.Convert.ToInt32(printer.MainImg) - 1].Rename" width="150px">
+                    @if (printer.TestCompleteFlag == "Y")
+                    {
+                    <span class="certified">
+
+                          </span>
+                    }
+                </p>
+                <div class="printer_desc">
+                	<p><span class="name boldF">@(printerMember.SpotName)_</span><span class="address">@printerMember.SpotAddress</span></p>
+                  <p class="txt">@printer.Brand @printer.Model</p>
+                    @if (printer.MaxPrice == printer.MinPrice)
+                    {
+                  <p class="price">₩@string.Format("{0:N0}", printer.MaxPrice)/cm³</p>
+                    }
+                    else
+                    {
+                        
+                  <p class="price">₩@string.Format("{0:N0}", printer.MinPrice) ~  @string.Format("{0:N0}", printer.MaxPrice)/cm³</p>
+                    }
+                    
+                  <div class="detailWrap">
+                    <div class="userInfoArea myprofile">
+                  <p class="star">
+                     </p><div class="rating"><span style="width:@(score * 10)%">@(Math.Round(score, 1))점</span></div>
+                      @*<span class="average">@score</span></p>*@
+
+                    </div>
+
+                  </div>
+
+                    <span class="average">@(Math.Round(score, 1))</span><p></p><p class="p_status">@(printer.Status == 1 ? "바로 출력 가능" : "쉬는 중")</p>  
+
+                </div>  
+                  </a>                     
+              </li>
+                    
+                    
+                    
+                    
+                }
+              <!--//printer 1set --> 
+              
+            </ul>
+          </div>  
+        	<div id="ReviewSub">
+          	
+          </div>
+         
+        </div>
+        
+      </div>
+      <!-- //notice -->  
+             
+       
+    </div>        </div>
+<div id="RecommendEdit">
+</div>
+
+@section Scripts{
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
+    <script type="text/javascript">
+
+
+
+        function PrinterRecommendRequest() { };
+        $(document).ready(function () {
+
+
+
+
+
+            switch ("@ViewBag.Gubun") {
+                case "S":
+                    GetSetting();
+                    $(".myGroup").find(".on").removeClass("on");
+                    $("#set").addClass("on");
+                    break;
+                case "N":
+                    GetNotice();
+                    $(".myGroup").find(".on").removeClass("on");
+                    $("#noti").addClass("on");
+                    break;
+                case "M":
+                    GetMessage();
+                    $(".myGroup").find(".on").removeClass("on");
+                    $("#msg").addClass("on");
+                    break;
+                default:
+                    GetPrinter();//default Page gubun = "D" means Default
+                    break;
+            }
+
+        });
+
+        function GetPrinter() {
+            var recListUrl = "/PrintingProfile/ReviewSub";
+            var memberNo = "@printerMember.MemberNo"
+            Ajax.SyncGetPartialView(recListUrl, { "MemberNo": memberNo }, "ReviewSub");
+        }
+
+       @* function GetNotice() {
+            var data = {
+                memberNo: "@printerMember.MemberNo"
+            };
+
+            var url = "/PrintingProfile/UserMessageRoom";
+
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+
+        function GetSetting() {
+        }
+
+        function GetMessage() {
+            var data = {
+                val1: "@ViewBag.No"
+            };
+
+            var url = "/Profile/UserMessageRoom";
+
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }*@
+
+
+        //cover Img 
+
+        var Upload = Upload || {};
+
+        function SpotEdit() {
+            var data = {};
+
+            var url = "/Profile/SpotOpen";
+            //var url = "/Printing/PrtUpload";
+            $("#partial-part").attr("class", "");
+
+            Ajax.SyncGetPartialView(url, data, "partial-part");
+        }
+
+
+        function editCover() {
+            $("#cover_pic").click();
+        }
+
+
+
+        $("#cover_pic").on("change", function (e) {
+            e.preventDefault();
+            var fileobj = $("#cover_pic");
+            if (Upload.ValidExtension("img", fileobj) === false) {
+                return false;
+            }
+
+            Upload.File("/PrintingProfile/CoverImgUpload");
+        });
+
+
+
+        Upload.File = function (action) {
+            var options = {
+                success: function (response) {
+                    console.log(response);
+                    if (response.Success) {
+                        location.reload(true);
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert("error");
+                }
+            };
+
+            $('#cover_form').attr("action", action).ajaxForm(options).submit();
+        }
+
+        Upload.ValidExtension = function (type, fileobj) {
+            var regex;
+
+            //if (fileobj[0].files[0].size > 100 * 1024 * 1024) {
+            //    alert('쵀대 사이즈를 초과하였습니다.');
+            //    return false;
+            //}
+
+            if (type == "img") {
+
+                regex = /(.jpg|.jpeg|.gif|.png)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('gif, jpg, png 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else if (type == "3d") {
+                regex = /(.stl|.obj)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('stl, obj 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else {
+                alert('파일 타입을 확인해주세요.');
+                return false;
+            }
+        }
+        //end cover Img
+
+
+    </script>
+      
+ }

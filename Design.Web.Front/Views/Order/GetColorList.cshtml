@@ -1,0 +1,15 @@
+﻿@model IList<PrinterColorT>
+@{
+    List<int> chkColor = new List<int>();
+}
+@foreach (PrinterColorT color in Model)
+{
+    if (!chkColor.Contains(color.ColorNo))
+    {
+        chkColor.Add(color.ColorNo);
+    <li>
+        <input type="radio" name="rdColor" value="@color.No" /><label for="selSta_1">@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), color.ColorNo)</label>
+        <input type="hidden"class="unitPrice" value="@color.UnitPrice" />
+    </li>
+    }
+}

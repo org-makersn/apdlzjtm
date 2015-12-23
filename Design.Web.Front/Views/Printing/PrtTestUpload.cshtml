@@ -1,0 +1,485 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+}
+
+<!-- Wrap -->
+<div class="wrap bgW">
+
+
+    <!-- MemberArea -->
+    <!-- 로그인 후 마이페지 -->
+    <div class="topMypage">
+        <ul>
+            <li><a href="my_profile.html">My page</a></li>
+            <li>
+                <a href="my_profile_notice.html">Notice</a>
+                <img src="content/images/common/notice_left.gif" alt="Notice" /><span style="font-size: 11px; background-color: #fe7900; line-height: 22px; padding: 5px 3px 3px 2px;">14</span><img src="content/images/common/notice_right.gif" alt="Notice" />
+            </li>
+            <li><a href="my_profile_setting.html">Setting</a></li>
+            <li><a href="javascript:void(0);" onclick=" mypageOut();">Log out</a></li>
+        </ul>
+    </div>
+    <!-- //로그인 후 마이페지 -->
+    <!-- //MemberArea -->
+
+
+    <!-- contWrap -->
+
+
+    <div class="contWrap w100">  
+     <div class="printMng">
+        <div class="mainTitle mgT-20 mgB40">
+      	  <span class="smTit">프린터 인증받기</span>        
+       </div>
+        
+            				
+      <div class="storeMng w900"> 
+        <div class="status_wrap none">
+            <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="temp" name="temp" value="@ViewBag.Temp" />
+                    <input type="hidden" id="main_img" name="main_img" value="" />
+                    <input type="hidden" name="mode" value="write">
+                    <input type="hidden" id="printerNo" name="printerNo" value="@ViewBag.PrinterNo" />
+                    <input type="hidden" id="fileGubun" name="fileGubun" value="prt_test_temp" />
+                    <input type="hidden" id="del_no" name="del_no" />
+                    <input type="hidden" id="uploadCnt" name="uploadCnt" value="4" />
+                <input type="hidden" id="ImgNameInfo" name="ImgNameInfo" />
+                <input type="hidden" id="ImgRenameInfo" name="ImgRenameInfo" />
+        
+          <div class="status_txt test">
+            출력이 완료되면 인증샷을 올려주세요.
+              <div class="status_send proof">
+               <div class="line">
+                 <span class="pShot">파일 추가</span>
+                   <input type="file" class="file_input_hidden" name="imgupload" id="imgupload" />
+                             
+                   <span class="proof_title"> <span class="txt">  타입 : gif, jpg, png / 최대 사이즈 : 개당 100mb / 권장 해상도 640*470px </span></span> 
+                
+               </div>
+               <div class="pictures selectImg" id="ajax_upload">
+                 <ul>
+                 <li class="proof_upload">1</li><li class="proof_upload">2</li><li class="proof_upload">3</li><li class="proof_upload">4</li>
+                 </ul>
+               </div>
+               
+            </div>
+          </div>
+                </form>
+<!-- btZone -->
+        <div class="ordBtn2 Spot">
+            <a href="" class="btnO type2 w220 mgL62" onclick="javascript:prtTestUpload()">프린터 인증 신청하기</a>
+          </div>
+        <!--//btnZone -->
+        </div>
+                   
+        </div>
+      
+    
+          
+          
+       
+    
+				
+        
+          
+
+          
+          <!-- 업로드 가이드 팝업 -->
+          <div class="popupArea upGuide">
+            <div class="bgArea" style="opacity: 0.52; height: 1381px;">
+            </div>
+            <div class="popBox">
+              <div class="txtZone">
+                <p class="tit1">업로드 대상</p>
+                <ol>
+                	<li>1. 본인이 직접 디자인한 파일</li>
+                  <li>2. 저작권이 없는 디자인 파일</li>
+                  <li>3. 수정을 허가한 디자인 파일 (원저작자 명시)</li>
+                </ol> 
+                <p class="tit2">업로드 불가</p>
+                <ol>
+                	<li>1. 저작권이 있거나 원저작자의 이용 허가 범위를 벗어나는 디자인 파일</li>
+                  <li>2. 실제 동작하는 무기류 또는 음란물 디자인 파일</li>
+                  <li>3. 기타 makersN의 이용 약관과 라이선스 정책을 벗어난 디자인 파일</li>
+                </ol> 
+                <p class="bt_close">
+                  <a href="javascript:void(0);" onclick="popupClose();"><img src="content/images/common/btn/btn_close.gif" alt="닫기"></a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- // 업로드 가이드 팝업 -->
+      
+          
+					
+				
+        
+       </div>
+        
+      </div>
+
+
+</div>
+@*style="display:block;*@
+<div class="popupArea loginBox alert" ">
+		<div class="bgArea"></div>
+		<div class="popPrintArea">
+    
+    	<p class="txt1 mgT50">makersN 관리자에게 프리터 인증사진을 보냈습니다. <br/> 인증이 수락되면 프린터사진에 인증마크가 나타납니다. </p>
+      <!--p class="txt2">내용을 확인 후 주문 승인 또는 거절 버튼을 눌러주세요. </p-->
+      <div class="btnS mgT50"> 
+        <a href="/Printing/PrtMng" onClick=" popupClose();" class="btnO type2">확인</a>
+      </div>
+
+			
+		</div>
+	</div>
+
+   @* <div class="contWrap">
+
+        <div class="subtitle2">
+            <h2>프린팅 테스트</h2>
+        </div>
+
+        <!-- printTest -->
+        <div class="printTest">
+
+            <!-- uploadWrap -->
+            <div class="uploadWrap">
+                <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="temp" name="temp" value="@ViewBag.Temp" />
+                    <input type="hidden" id="main_img" name="main_img" value="" />
+                    <input type="hidden" name="mode" value="write">
+                    <input type="hidden" id="printerNo" name="printerNo" value="@ViewBag.PrinterNo" />
+                    <input type="hidden" id="fileGubun" name="fileGubun" value="prt_test_temp" />
+                    <input type="hidden" id="del_no" name="del_no" />
+                    <input type="hidden" id="uploadCnt" name="uploadCnt" value="4" />
+                    <!-- File Upload -->
+                    <div class="uploadFile">
+
+                        <!-- 이미지 파일 -->
+                        <div class="modelFile">
+                            <div class="upBtnZone">
+                                <p class="title">출력완료 인증샷</p>
+                                <div class="btnAdd">
+                                    <button class="file_input_button" title="파일추가"></button>
+                                    <input type="file" class="file_input_hidden" name="imgupload" id="imgupload" />
+                                </div>
+                            </div>
+                            <p class="txt">타입 : gif, jpg, png / 최대 사이즈 : 개당 100mb / 권장 해상도 640*470px</p>
+                        </div>
+                        <!-- //이미지 파일 -->
+
+                    </div>
+                     <div class="selectImg" id="ajax_upload">
+                    <ul class="">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li class="mgR0">4</li>
+                    </ul>
+                </div>
+                    <!-- //File Upload -->
+                </form>
+            </div>
+
+            <div class="selectImg" id="ajax_upload">
+            
+            </div>
+        </div>
+
+        <div class="printText">
+            <form id="print" name="print">
+                <!--p class="txt1">위의 주문을 승인하시겠습니까?</p-->
+                <p class="txt2">이미지는 최소 두개이상 업로드 하셔야 합니다. </p>
+                
+                 <p class="txt3 mgT30">메시지</p>
+                <div class="message">
+                    <textarea id="item_message" name="item_message"></textarea>
+                </div>
+                <div class="btnS">
+                    <a href="#" class="mgL345 btnO type5" onclick="javascript:prtTestUpload()">메이커스앤 관리자에게 출력 완료 알림 보내기</a>
+                </div>
+                <div class="btnS">
+                    <a href="#" class="mgL345 btnO type5">취소</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <!-- //contWrap -->
+
+
+
+</div>*@
+<!-- //Wrap -->
+<style>
+    .wrap {
+        background: #fff !important;
+    }
+    .selectImg ul li .delImg { display:block; position:absolute; left:0; top:0; width:24px; height:24px; background:url('../images/common/btn/btnDelImg.png') no-repeat center; }  
+</style>
+@section Scripts{
+
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery-ui.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+    <script type="text/javascript">
+        var uploadCnt;
+
+        var Upload = Upload || {};
+
+        var uploadFileCnt = 0;
+        Upload.Init = function () {
+            // 3d이미지,파일 draggable &  droppable 
+            $(".selectImg ul li div").draggable({
+                helper: 'clone',
+                revert: 'invalid', start: function (event, ui) {
+                    var drag_img = $(this).clone();
+                    idxImg = $(this);
+                }
+            });
+
+            $('.selectImg ul li div').droppable({
+                drop: function (event, ui) {
+
+                    var beforeSeq = $(ui.helper).find("#seq").val();
+                    var afterSeq = $(this).find("#seq").val();
+                    $(ui.helper).find("#seq").val(afterSeq);
+                    $(this).find("#seq").val(beforeSeq);
+
+                    var beforeCh = $(ui.helper).html();
+                    var afterCh = $(this).html();
+                    $(this).html(beforeCh);
+                    idxImg.html(afterCh);
+
+                    $(".delImg").on('click', function (e) {
+                        $(this).hide();
+                        Upload.Remove(this);
+                    });
+
+                    $('.delImg').hide();
+                    $('.showThum').hide();
+                }
+            });
+
+            // 이미지 삭제 버튼 보이기
+            $('.selectImg ul li').hover(function () {
+                $(this).find('.delImg').show();
+                $(this).find('.showThum').show();
+            }, function () {
+                $(this).find('.delImg').hide();
+                $(this).find('.showThum').hide();
+            });
+
+            $(".delImg").on('click', function (e) {
+                $(this).hide();
+                Upload.Remove(this);
+            }
+            );
+            uploadCnt = $("#uploadCnt").val();
+        }
+        $(function () {
+            Upload.Init();
+            //$(".popupArea.upGuide").show();
+            //$(".popupArea.thumnailPop").show();
+            //$(".popupArea.loginBox.alert").show();
+            $(".pShot").click(function () {
+                $("#imgupload").click();
+            });
+        });
+        $("#imgupload").on("change", function (e) {
+            e.preventDefault();
+            var fileobj = $("#imgupload");
+            if (Upload.ValidExtension("img", fileobj) === false) {
+                return false;
+            }
+
+            Upload.File("/Printing/ImgUpload");
+        });
+
+        Upload.File = function (action) {
+            var options = {
+                success: function (response) {
+                    console.log(response);
+                    if (response.Success) {
+                        uploadFileCnt++;
+                        Upload.Draw(response.Name, response.Rename, response.Size);
+                    }
+                    else {
+                        alert(response.Message);
+                        alert("success and response false");
+                    }
+                },
+                complete: function (response) {
+                    //alert("complate");
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert("error");
+                }
+            };
+
+            $('#insert_form').attr("action", action).ajaxForm(options).submit();
+        }
+        Upload.ValidExtension = function (type, fileobj) {
+            var regex;
+
+            if (fileobj[0].files[0].size > 100 * 1024 * 1024) {
+                alert('쵀대 사이즈를 초과하였습니다.');
+                return false;
+            }
+
+            if (type == "img") {
+
+                regex = /(.jpg|.jpeg|.gif|.png)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('gif, jpg, png 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else if (type == "3d") {
+                regex = /(.stl|.obj)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('stl, obj 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else {
+                alert('파일 타입을 확인해주세요.');
+                return false;
+            }
+        }
+
+        Upload.Draw = function (name, rename, size) {
+            var uploadImgCol = $("#ajax_upload");
+            var li = uploadImgCol.find("li").eq(uploadFileCnt - 1);
+            $(li).find("").remove();
+            $(li).empty();
+            var div = $('<div />', {
+                "class": "imgBox ui-draggable ui-draggable-handle ui-droppable",
+            }).appendTo(li);
+
+            $('<a />', {
+                title: "삭제",
+                "class": "delImg",
+                href: "javascript:void(0)",
+                style:"display:none;"
+            }).appendTo(div);
+
+            $('<input />', {
+                type: "hidden",
+                val: name,
+                "class": "ImgName",
+                name: "ImgName"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: rename,
+                "class": "ImgRename",
+                name: "ImgRename"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: uploadFileCnt,
+                id: "seq",
+                name: "seq"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: size,
+                id: "size",
+                name: "size"
+            }).appendTo(div);
+
+            $('<img />', {
+                src: "/FileUpload/Printer/printer_img/" + rename,
+                alt: "thumbnail",
+                width: "123px",
+                height: "101px"
+            }).appendTo(div);
+            Upload.Init();
+        }
+
+        Upload.Remove = function (val) {
+            console.log("" + $(val).parents("li").find("#seq").val());
+            if ($(val).parents("li").length > 0) {
+                uploadFileCnt--;
+            } else {
+                return;
+            }
+
+            var li = $(val).parents("li");
+            var seq = $(li).find("#seq").val();
+            $(li).find("").remove();
+            $(li).empty();
+
+
+            var uploadImgCol = $("#ajax_upload");
+            for (var i = seq ; i <= uploadFileCnt + 1; i++) {
+                var min = --i;
+                i++;
+                if (i <= uploadFileCnt) {
+                    $(uploadImgCol).find("li").eq(min).append($(uploadImgCol).find("li").eq(i).find("div"));
+                    $(uploadImgCol).find("li").eq(min).find("#seq").val(i);
+                }
+                if (i > uploadFileCnt) {
+                    $(uploadImgCol).find("li").eq(min).text(i);
+                }
+            }
+        }
+
+
+        function prtTestUpload(val) {
+
+            if (uploadFileCnt < 2) {
+                alert("인증샷은 2장이상 되어야 합니다.");
+                return false;
+            }
+
+
+            var ImgNameInfo = "";
+            var ImgRenameInfo = "";
+            var length = $(".ImgName").length;
+            for (var i = 0; i < length; i++) {
+                ImgNameInfo = ImgNameInfo + $(".ImgName").eq(i).attr("value") + ";";
+                ImgRenameInfo = ImgRenameInfo + $(".ImgRename").eq(i).attr("value") + ";";
+            }
+            $("#ImgNameInfo").attr("value", ImgNameInfo);
+            $("#ImgRenameInfo").attr("value", ImgRenameInfo);
+
+            var options = {
+                beforeSend: function () {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        $(".popupArea.loginBox.alert").show();
+                        //var action = "/Order/MngDetailPrtDone?OrderNo=" + response.Result;
+                        //$(location).attr("href", action);
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    var exception = null;
+                    if (error != null && typeof (error.responseText) != 'undefined') {
+                        try {
+                            exception = $.parseJSON(error.responseText);
+                            if (typeof (exception.ExceptionMessage) != "undefined" && $.trim(exception.ExceptionMessage) != '') {
+                                alert(exception.ExceptionMessage);
+                            }
+                        } catch (ex) {
+                            //alert(ex.name); 
+                        }
+                    }
+                }
+            };
+
+            $('#insert_form').attr("action", "/Printing/PrtTestUpload").ajaxForm(options).submit();
+        }
+    </script>
+
+}

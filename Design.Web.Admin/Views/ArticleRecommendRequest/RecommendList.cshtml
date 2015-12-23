@@ -6,7 +6,7 @@
 
 
     <!-- list_search_zone -->
-    @*<form id="search" name="search">*@
+    <form id="search" name="search">
         <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
             <colgroup>
                 <col width="100px" />
@@ -28,7 +28,7 @@
 
             </tbody>
         </table>
-    @*</form>*@
+    </form>
    
 
     <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
@@ -89,10 +89,5 @@
 
 </div>
 <script type="text/javascript">
-    $("#query").keypress(function (event) {
-        if (event.keyCode == 13) {
-            ArticleRecommendRequest.SearchList();
-        }
-    });
-
+    
 </script>

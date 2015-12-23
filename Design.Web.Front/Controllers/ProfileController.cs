@@ -20,14 +20,15 @@ namespace Design.Web.Front.Controllers
 {
     public class ProfileController : BaseController
     {
-        MemberDac memberDac = new MemberDac();
-        ArticleDac articleDac = new ArticleDac();
-        LikesDac likesDac = new LikesDac();
-        NoticesDac noticesDac = new NoticesDac();
-        FollowerDac followerDac = new FollowerDac();
-        MessageDac messageDac = new MessageDac();
-        ListDac listDac = new ListDac();
-
+        MemberDac _memberDac = new MemberDac();
+        ArticleDac _articleDac = new ArticleDac();
+        LikesDac _likesDac = new LikesDac();
+        NoticesDac _noticesDac = new NoticesDac();
+        FollowerDac _followerDac = new FollowerDac();
+        MessageDac _messageDac = new MessageDac();
+        ListDac _listDac = new ListDac();
+        PrinterMemberDac _printerMemberDac = new PrinterMemberDac();
+        TranslationDetailDac _translationDetailDac = new TranslationDetailDac();
         private static int _receiveMemberNo;
         private static string _val1;
         private static string _val2;
@@ -51,14 +52,14 @@ namespace Design.Web.Front.Controllers
 
             if (url != "")
             {
-                member = memberDac.GetMemberNoByBlogUrl2(url);
+                member = _memberDac.GetMemberNoByBlogUrl2(url);
                 if (member == null) { return Content("<script type='text/javascript'>alert('잘못된 주소입니다.'); location.href='/'</script>"); }
                 no = Base64Helper.Base64Encode(member.No.ToString());
                 memberNo = member.No;
             }
             else
             {
-                member = memberDac.GetMemberProfile(memberNo);
+                member = _memberDac.GetMemberProfile(memberNo);
             }
 
 
@@ -69,8 +70,8 @@ namespace Design.Web.Front.Controllers
 
             ViewBag.No = no;
             ViewBag.VisitorNo = visitorNo;
-            ViewBag.CheckFollow = followerDac.CheckFollow(memberNo, visitorNo);
-            ViewBag.CntList = memberDac.GetCntList(memberNo);
+            ViewBag.CheckFollow = _followerDac.CheckFollow(memberNo, visitorNo);
+            ViewBag.CntList = _memberDac.GetCntList(memberNo);
             ViewBag.CheckSelf = memberNo == visitorNo ? 1 : 0;
 
             ViewBag.Gubun = gubun;
@@ -78,11 +79,14 @@ namespace Design.Web.Front.Controllers
             ViewBag.ListNo = listNo;
 
             ViewBag.ContClass = "w100";
+            ViewBag.Url = url;
 
-            if (member.ProfileMsg != null) {
+            if (member.ProfileMsg != null)
+            {
                 member.ProfileMsg = new ContentFilter().HtmlEncode(member.ProfileMsg);
                 member.ProfileMsg = CreateATag(member.ProfileMsg);
             };
+            ViewBag.PrinterMember = _printerMemberDac.CheckSpotOpen(memberNo);
             return View(member);
         }
 
@@ -96,6 +100,19 @@ namespace Design.Web.Front.Controllers
         /// <returns></returns>
         public PartialViewResult Lists(int page, string no, string gubun)
         {
+            string langFlag = string.Empty;
+
+            if (Request.Cookies.AllKeys.Contains("GlobalFlag"))
+            {
+                langFlag = Request.Cookies["GlobalFlag"].Value;
+            }
+            else
+            {
+                langFlag = ViewBag.LangFlag;
+            }
+
+            if (langFlag == "ALL")
+                langFlag = "";
 
             if (no == "") { no = Base64Helper.Base64Encode(Profile.UserNo.ToString()); }
             ViewBag.No = no;
@@ -104,12 +121,24 @@ namespace Design.Web.Front.Controllers
 
             int visitorNo = Profile.UserNo;
 
-            IList<ArticleT> list = articleDac.GetMemberArticleByNo(no, gubun, visitorNo);
+            IList<ArticleT> before = _articleDac.GetMemberArticleByNo(no, gubun, visitorNo);
+
+            IList<ArticleT> list = new List<ArticleT>();
+            foreach (ArticleT article in before)
+            {
+                TranslationDetailT trans = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(article.No, langFlag);
+                if (trans != null)
+                {
+                    article.Title = trans.Title;
+                }
+                list.Add(article);
+            }
+
             ViewBag.Gubun = gubun;
             ViewBag.VisitorNo = visitorNo;
             ViewBag.CheckSelf = int.Parse(no) == visitorNo ? 1 : 0;
 
-            return PartialView(list.ToPagedList(page, 20));
+            return PartialView(list.ToPagedList(page, 40));
         }
         //public ActionResult Lists(int page = 1, string no = "", string gubun = "", string url = "")
         //{
@@ -157,7 +186,7 @@ namespace Design.Web.Front.Controllers
 
             int visitorNo = Profile.UserNo;
 
-            IList<ArticleT> list = articleDac.GetMemberArticleByNo(memberNo, gubun, visitorNo);
+            IList<ArticleT> list = _articleDac.GetMemberArticleByNo(memberNo, gubun, visitorNo);
             ViewBag.Gubun = gubun;
             ViewBag.VisitorNo = visitorNo;
 
@@ -171,12 +200,12 @@ namespace Design.Web.Front.Controllers
             int memberNo = int.Parse(Base64Helper.Base64Decode(no));
             ViewBag.No = no;
             ViewBag.VisitorNo = visitorNo;
-            ViewBag.CheckFollow = followerDac.CheckFollow(memberNo, visitorNo);
+            ViewBag.CheckFollow = _followerDac.CheckFollow(memberNo, visitorNo);
 
 
-            ViewBag.CntList = memberDac.GetCntList(memberNo);
+            ViewBag.CntList = _memberDac.GetCntList(memberNo);
 
-            MemberT member = memberDac.GetMemberProfile(memberNo);
+            MemberT member = _memberDac.GetMemberProfile(memberNo);
 
             if (member.ProfileMsg != null) { member.ProfileMsg = new ContentFilter().HtmlEncode(member.ProfileMsg); };
             return PartialView(member);
@@ -190,9 +219,18 @@ namespace Design.Web.Front.Controllers
             ViewBag.NoticeCnt = 0;
             int no = Profile.UserNo;
             ViewBag.No = Base64Helper.Base64Encode(no.ToString());
+            
+            IList<NoticeT> list = _noticesDac.GetNoticeList(no);
 
-            IList<NoticeT> list = noticesDac.GetNoticeList(no);
-            noticesDac.UpdateNoticeIsNew(no);
+            //IList<NoticeT> outputImage = new List<NoticeT>();
+
+            //outputImage = list.Where(w => w.Type == "outputImage").ToList<NoticeT>();
+            //list = list.Where(w => w.Type != "outputImage").ToList<NoticeT>();
+
+            //list = _noticesDac.GetPrinterOutputImage(outputImage, list);
+
+
+            _noticesDac.UpdateNoticeIsNew(no);
 
             return PartialView(list.OrderByDescending(o => o.RegDt).ToPagedList(page, 20));
         }
@@ -223,10 +261,10 @@ namespace Design.Web.Front.Controllers
             switch (gubun)
             {
                 case "ing":
-                    list = followerDac.GetFollowingList(int.Parse(no), Profile.UserNo);
+                    list = _followerDac.GetFollowingList(int.Parse(no), Profile.UserNo);
                     break;
                 case "wer":
-                    list = followerDac.GetFollowerLIst(int.Parse(no), Profile.UserNo);
+                    list = _followerDac.GetFollowerLIst(int.Parse(no), Profile.UserNo);
                     break;
             }
             ViewBag.CheckSelf = int.Parse(no) == Profile.UserNo ? 1 : 0;
@@ -279,7 +317,7 @@ namespace Design.Web.Front.Controllers
             NoticeT notice = new NoticeT();
             //notice.
 
-            int result = followerDac.SetFollow(follow);
+            int result = _followerDac.SetFollow(follow);
             return Json(new { Result = result });
         }
         #endregion
@@ -290,7 +328,7 @@ namespace Design.Web.Front.Controllers
         {
             string memberNo = Base64Helper.Base64Encode(Profile.UserNo.ToString());
             ViewBag.No = memberNo;
-            MemberT member = memberDac.GetMemberProfile(Profile.UserNo);
+            MemberT member = _memberDac.GetMemberProfile(Profile.UserNo);
             if (member.ProfileMsg != null) { member.ProfileMsg = new ContentFilter().HtmlDecode(member.ProfileMsg); };
             return PartialView(member);
         }
@@ -307,8 +345,8 @@ namespace Design.Web.Front.Controllers
         #region
         public JsonResult GetNoticeCnt()
         {
-            int noticeCnt = noticesDac.GetNoticesCntByMemberNo(Profile.UserNo);
-            int MessageCnt = messageDac.GetNewMessageCount(Profile.UserNo);
+            int noticeCnt = _noticesDac.GetNoticesCntByMemberNo(Profile.UserNo);
+            int MessageCnt = _messageDac.GetNewMessageCount(Profile.UserNo);
             //ViewBag.NoticeCnt = result;
             return Json(new { notice = noticeCnt, message = MessageCnt });
         }
@@ -333,7 +371,7 @@ namespace Design.Web.Front.Controllers
             }
 
             int reChkBlog = 0;
-            if (blog.Trim() != "") { reChkBlog = memberDac.CheckBlogUrl(blog, memberNo); }
+            if (blog.Trim() != "") { reChkBlog = _memberDac.CheckBlogUrl(blog, memberNo); }
 
             if (reChkBlog > 0) { return Json(new { Success = false, Result = 3 }); }
             else { { member.BlogUrl = blog; } }
@@ -364,7 +402,7 @@ namespace Design.Web.Front.Controllers
             member.UpdId = Profile.UserId;
             member.UpdDt = DateTime.Now;
 
-            int result = memberDac.UpdateMember(member);
+            int result = _memberDac.UpdateMember(member);
             //이메일 변경 보류
             //if (result == 7)
             //{
@@ -392,7 +430,7 @@ namespace Design.Web.Front.Controllers
         [Authorize]
         public JsonResult DropMember(string dropComment)
         {
-            memberDac.DeleteMember(Profile.UserNo, dropComment);
+            _memberDac.DeleteMember(Profile.UserNo, dropComment);
             return Json(new { Success = true });
         }
         #endregion
@@ -422,7 +460,7 @@ namespace Design.Web.Front.Controllers
             }
 
             int memberNo = int.Parse(Base64Helper.Base64Decode(no));
-            int result = memberDac.CheckBlogUrl(blog, memberNo);
+            int result = _memberDac.CheckBlogUrl(blog, memberNo);
             return Json(new { Result = result });
         }
         #endregion
@@ -447,8 +485,8 @@ namespace Design.Web.Front.Controllers
             ViewBag.No = base64MemberNo;
             int memberNo = Profile.UserNo;
 
-            IList<MessageT> message = messageDac.GetMessageList(memberNo);
-            messageDac.UpdateMessageIsNew(memberNo);
+            IList<MessageT> message = _messageDac.GetMessageList(memberNo);
+            _messageDac.UpdateMessageIsNew(memberNo);
 
             return PartialView(message);
         }
@@ -493,9 +531,9 @@ namespace Design.Web.Front.Controllers
             if (sendMemberNo == memberNo) { _receiveMemberNo = receiveMemberNo; }
             else { _receiveMemberNo = sendMemberNo; }
 
-            IList<MessageT> message = messageDac.GetMessageByRoomName(memberNo, sendMemberNo, receiveMemberNo);
+            IList<MessageT> message = _messageDac.GetMessageByRoomName(memberNo, sendMemberNo, receiveMemberNo);
             ViewBag.MemberNo = memberNo;
-            ViewBag.Name = memberDac.GetMemberProfile(_receiveMemberNo).Name;
+            ViewBag.Name = _memberDac.GetMemberProfile(_receiveMemberNo).Name;
             ViewBag.MsgImgThumb = System.Configuration.ConfigurationManager.AppSettings["msgImgThumb"];
             ViewBag.MsgImgOri = System.Configuration.ConfigurationManager.AppSettings["msgImgOri"];
             return PartialView(message);
@@ -540,8 +578,9 @@ namespace Design.Web.Front.Controllers
 
                 message.MsgGubun = "MSG";
 
-                messageDac.AddMessage(message);
+                _messageDac.AddMessage(message);
             }
+
 
             return Json(new { Result = 1 });
         }
@@ -611,7 +650,7 @@ namespace Design.Web.Front.Controllers
                     if (extType.Contains(extension))
                     {
                         //update
-                        MemberT memberT = memberDac.GetMemberProfile(Profile.UserNo);
+                        MemberT memberT = _memberDac.GetMemberProfile(Profile.UserNo);
                         //save img,
                         fileName = FileUpload.UploadFile(membPic, new ImageSize().GetProfileResize(), "Profile", memberT.ProfilePic);
 
@@ -619,7 +658,7 @@ namespace Design.Web.Front.Controllers
                         memberT.UpdDt = DateTime.Now;
                         memberT.UpdId = Profile.UserId;
 
-                        int memberNo = memberDac.UpdateProfilePic(memberT);
+                        int memberNo = _memberDac.UpdateProfilePic(memberT);
                         if (memberNo > 0)
                         {
                             response.Success = true;
@@ -655,7 +694,7 @@ namespace Design.Web.Front.Controllers
             int no = 0;
             if (Profile.UserLevel < 50) { no = Profile.UserNo; }
             else { no = int.Parse(Base64Helper.Base64Decode(memberNo)); }
-            bool result = memberDac.DeleteProfilePic(no);
+            bool result = _memberDac.DeleteProfilePic(no);
 
             if (Profile.UserLevel < 50)
             {
@@ -713,7 +752,7 @@ namespace Design.Web.Front.Controllers
 
                         message.MsgGubun = "IMG";
 
-                        messageDac.AddMessage(message);
+                        _messageDac.AddMessage(message);
 
                         if (text != null)
                         {
@@ -737,8 +776,8 @@ namespace Design.Web.Front.Controllers
         public ActionResult Collection(string no, string userNm)
         {
             int memberNo = int.Parse(Base64Helper.Base64Decode(no));
-            ViewBag.ItemList = listDac.GetListItem(memberNo);
-            ViewBag.ListNameList = listDac.GetListNames(memberNo);
+            ViewBag.ItemList = _listDac.GetListItem(memberNo);
+            ViewBag.ListNameList = _listDac.GetListNames(memberNo);
             ViewBag.No = no;
             ViewBag.UserNm = userNm;
             ViewBag.CheckSelf = memberNo == Profile.UserNo ? 1 : 0;
@@ -753,8 +792,8 @@ namespace Design.Web.Front.Controllers
             no = Base64Helper.Base64Decode(no);
 
             int visitorNo = Profile.UserNo;
-            IList<ArticleT> list = listDac.GetMemberListItems(no, visitorNo, listNo);
-            ViewBag.List = listDac.GetSingleListbyListNo(listNo);
+            IList<ArticleT> list = _listDac.GetMemberListItems(no, visitorNo, listNo);
+            ViewBag.List = _listDac.GetSingleListbyListNo(listNo);
             ViewBag.VisitorNo = visitorNo;
             ViewBag.ListNo = listNo;
             ViewBag.ChangeAble = (int.Parse(no) == visitorNo) || (Profile.UserLevel > 50);
@@ -768,7 +807,7 @@ namespace Design.Web.Front.Controllers
             list.MemberNo = Profile.UserNo;
             list.ArticleNo = articleNo;
             list.ListNo = listNo;
-            bool result = listDac.DeleteArticleInList(list);
+            bool result = _listDac.DeleteArticleInList(list);
             return Json(new { Success = result });
         }
 
@@ -793,9 +832,9 @@ namespace Design.Web.Front.Controllers
 
             _receiveMemberNo = sendMemberNo;
 
-            IList<MessageT> message = messageDac.GetMessageByRoomName(memberNo, sendMemberNo, receiveMemberNo);
+            IList<MessageT> message = _messageDac.GetMessageByRoomName(memberNo, sendMemberNo, receiveMemberNo);
             ViewBag.MemberNo = memberNo;
-            ViewBag.Name = memberDac.GetMemberProfile(_receiveMemberNo).Name;
+            ViewBag.Name = _memberDac.GetMemberProfile(_receiveMemberNo).Name;
             ViewBag.MsgImgThumb = System.Configuration.ConfigurationManager.AppSettings["msgImgThumb"];
             ViewBag.MsgImgOri = System.Configuration.ConfigurationManager.AppSettings["msgImgOri"];
             return PartialView(message);
@@ -809,7 +848,7 @@ namespace Design.Web.Front.Controllers
             list.ListName = listName;
             list.No = no;
             list.MemberNo = Profile.UserNo;
-            bool result = listDac.UpdateListName(list);
+            bool result = _listDac.UpdateListName(list);
             return Json(new { Success = result });
         }
         #endregion
@@ -820,10 +859,96 @@ namespace Design.Web.Front.Controllers
             ListT list = new ListT();
             list.No = no;
             list.MemberNo = Profile.UserNo;
-            bool result = listDac.DeleteList(list);
+            bool result = _listDac.DeleteList(list);
             return Json(new { Success = result });
         }
         #endregion
+
+
+        #region 스팟 오픈
+        public PartialViewResult SpotOpen()
+        {
+            int memberNo = Profile.UserNo;
+            PrinterMemberT printerMember = _printerMemberDac.GetPrinterMemberByNo(memberNo);
+            if (printerMember == null) {
+                printerMember = new PrinterMemberT();
+                printerMember.MemberNo = memberNo;
+                printerMember.SpotAddress = "";
+                printerMember.Bank = "";
+                printerMember.PostMode = 2;
+                printerMember.SpotName = "";
+                printerMember.PrinterProfileMsg = "";
+                printerMember.TaxbillFlag = "Y";
+                printerMember.HomePhone = "";
+                printerMember.CellPhone = "";
+                printerMember.ViewCnt = 0;
+                printerMember.BankName = "";
+            }
+            return PartialView(printerMember);
+        }
+        #endregion
+        #region 스팟 오픈 정보 업데이트
+        public JsonResult SpotInfoUpd(FormCollection collection)
+        {
+            bool success = false;
+            
+            PrinterMemberT printerMember = null;
+
+            printerMember = _printerMemberDac.GetPrinterMemberByNo(Profile.UserNo);
+            if(printerMember == null){
+                printerMember= new PrinterMemberT();
+            }
+
+            printerMember.MemberNo = Profile.UserNo;
+            printerMember.SpotName = collection["name"];
+            printerMember.SpotUrl = collection["url"];
+            printerMember.PrinterProfileMsg = collection["comment"];
+            printerMember.HomePhone = collection["home_tel1"] + "-" + collection["home_tel2"] + "-" + collection["home_tel3"];
+            printerMember.CellPhone = collection["cell_tel1"] + "-" + collection["cell_tel2"] + "-" + collection["cell_tel3"];
+            printerMember.SpotAddress = collection["address"];
+            //printerMember.LocX = System.Convert.ToDouble(collection["locationX"]);
+            //printerMember.LocY = System.Convert.ToDouble(collection["locationY"]);
+            printerMember.LocX = 0;
+            printerMember.LocY = 0;
+            printerMember.AccountNo = collection["accountNum"];
+            printerMember.Bank = collection["bank"];
+            printerMember.BankName = collection["bankName"];
+            printerMember.PostMode = System.Convert.ToInt32(collection["post"]) * 2 + System.Convert.ToInt32(collection["pickUp"]);
+
+            if (printerMember.PostMode == (int)MakersnEnumTypes.PostType.택배 || printerMember.PostMode == (int)MakersnEnumTypes.PostType.픽업택배)
+            {
+                printerMember.PostType = System.Convert.ToInt32(collection["postType"]);
+
+                if (printerMember.PostType == (int)MakersnEnumTypes.PrinterPostType.고정배송비)
+                {
+                    printerMember.PostPrice = System.Convert.ToInt32(collection["postPrice"]);
+                }
+            }
+
+            printerMember.TaxbillFlag = collection["taxBillFlag"];
+
+            printerMember.PrinterProfilePic = Profile.UserProfilePic;
+            //printerMember.SaveFlag = collection["saveFlag"];
+
+            printerMember.RegDt = System.DateTime.Now;
+            printerMember.RegId = Profile.UserId;
+
+            _printerMemberDac.InsertPrinterMember(printerMember);
+
+            success = true;
+            //if (printerMember.SaveFlag == "Y"){
+            //    success = true;
+            //}
+
+            return Json(new { Success = success });
+
+        }
+        #endregion
+
+
+        public PartialViewResult SpotDone() {
+            return PartialView();
+        }
 
         #region A태그 변환
         private string CreateATag(string contents)
@@ -839,7 +964,7 @@ namespace Design.Web.Front.Controllers
             Regex rgxDomain = new Regex(ptProtocol + domain + adds, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             Match matchDomain = rgxDomain.Match(contents);
 
-            Regex rgxDomainNonProt = new Regex("www."+ domain + adds, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            Regex rgxDomainNonProt = new Regex("www." + domain + adds, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             Match matchDomainNonProt = rgxDomainNonProt.Match(contents);
 
             Regex rgxEmail = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", RegexOptions.IgnoreCase | RegexOptions.Compiled);

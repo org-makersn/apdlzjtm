@@ -19,7 +19,8 @@ namespace Makersn.Util
     public class FileUpload
     {
         public static char DirSeparator = Path.DirectorySeparatorChar;
-        public static string FilesPath = AppDomain.CurrentDomain.BaseDirectory + "../Design.Web.Front/FileUpload/";
+        public static string FilesPath = AppDomain.CurrentDomain.BaseDirectory + "/FileUpload/";
+        //public static string FilesPath =  "/FileUpload/";
 
         public static string UploadFile(HttpPostedFileBase file, IList<ResizeImg> list, string folder, string fileNm)
         {

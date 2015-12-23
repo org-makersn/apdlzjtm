@@ -1,0 +1,136 @@
+﻿@model IList<PrinterOutputImageT>
+@{
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    int index = 0;
+}
+
+
+<div class="subtitle2">
+    <h2>인증샷 보기</h2>
+</div>
+
+<div class="detailSlide mgT25 proof">
+    <div class="mainBigImg">
+        <ul class="bxslider">
+            @foreach (PrinterOutputImageT file in Model)
+            {
+                <li>
+                    <img class="lazy-load" src="@ViewBag.PrintImgUrl@file.ImageReName" />
+                </li>
+               
+            }
+        </ul>
+        <div class="thumb3dImg">
+            <img src="content/images/common/loading_bar.gif" alt="로딩중"></div>
+    </div>
+
+
+
+    <div class="thumbArea">
+        <div id="bx-pager">
+            @foreach (PrinterOutputImageT file in Model)
+            {
+                string ThumbImgPath = ViewBag.PrintImgUrl + file.ImageReName;
+                <a data-slide-index="@index" href="javascript:void(0);">
+                    <img class="lazy-load" data-original="@ThumbImgPath" /></a>
+                index++;
+            }
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="printText">
+    <form id="print" name="print">
+        <p class="txt2">
+            @ViewBag.Comment
+        </p>
+        <div class="btV  mgL-51">
+            @{if (ViewBag.PostMode == 1)
+              {
+                <a href="javascript:PostRequest('@Model[0].OrderNo')" class="btnO type2 mgB40 w190">방문 수령 요청 하기</a>
+              }
+              else
+              {
+                <a href="javascript:PostRequest('@Model[0].OrderNo')" class="btnO type2 mgB40 w190">택배 요청 하기</a>
+              }
+            }
+            @*<a href="/PrintingProfile?memberNo=@ViewBag.PrtMemberNo" class="btnGO type1 mgB40">스팟 문의하기</a>*@
+            <a href="/Profile?gubun=QnA&no=@Base64Helper.Base64Encode(ViewBag.PrtMemberNo)" class="btnGO type1 mgB40 w190">스팟 문의하기</a>
+        </div>
+    </form>
+</div>
+
+@*<h2>출력 인증샷</h2>
+
+
+<div class="detailSlide">
+    <div class="mainBigImg">
+        <ul class="bxslider">
+            @foreach (PrinterOutputImageT file in Model)
+            {
+                <li>
+                    <img class="lazy-load" src="@ViewBag.PrintImgUrl@file.ImageReName" />
+                </li>
+               
+            }
+        </ul>
+        <div class="thumb3dImg">
+            <img src="/Content/images/common/loading_bar.gif" alt="로딩중" />
+        </div>
+    </div>
+
+    <div class="thumbArea">
+        <div id="bx-pager">
+            @foreach (PrinterOutputImageT file in Model)
+            {
+                string ThumbImgPath = ViewBag.PrintImgUrl + file.ImageReName;
+                <a data-slide-index="@index" href="javascript:void(0);">
+                    <img class="lazy-load" data-original="@ThumbImgPath" /></a>
+                index++;
+            }
+
+        </div>
+    </div>
+
+</div>
+
+<a href="javascript:PostRequest('@Model[0].OrderNo')" class="btnG type13">배송 요청 하기</a>
+<a href="#" class="btnG type13">스팟 문의 하기</a>*@
+
+
+@section Scripts{
+    <script src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+
+    <script type="text/javascript">
+        var slideNumber = 0;
+        $(function () {
+            $('.mainBigImg .bxslider').bxSlider({
+                mode: 'fade',
+                pagerCustom: '#bx-pager',
+                speed: 1,
+                startSlide: slideNumber   // 초기 슬라이드 지정번호
+            });
+
+            $('.thumbArea #bx-pager').bxSlider({
+                slideWidth: 80,
+                minSlides: 2,
+                maxSlides: 6,
+                slideMargin: 11,
+                infiniteLoop: !1
+            });
+        })
+
+        function PostRequest(val) {
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    alert(result.Message);
+                    location.href = "/order/myorder";
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/order/PostRequest", { no: val }, onSuccess);
+        }
+    </script>
+}

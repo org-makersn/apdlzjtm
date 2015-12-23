@@ -1,0 +1,347 @@
+﻿@{
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    OrderT order = ViewBag.Order;
+    PrinterT printer = ViewBag.Printer;
+    MemberT orderMember = ViewBag.OrderMember;
+    DateTime now = DateTime.Now;
+    DateTime timeBefore12hours = now.AddHours(-12);
+}
+<div class="wrap">
+
+    <!-- contWrap -->
+    <div class="contWrap">
+        <div class="storeMng">
+            <div class="subtitle3">
+                <h2>12345678 주문관리</h2>
+            </div>
+
+
+
+            <div class="cartWrap">
+
+                <div class="myorderMng">
+                    <table class="tblType bdcolor" summary="내 주문리스트">
+                        <caption>내 주문 리스트</caption>
+                        <colgroup>
+                            <col style="width: 47%;">
+                            <col style="width: 3%;">
+                            <col style="width: 17%;">
+                            <col style="width: 16%;">
+                            <col style="width: 17%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">요청한 파일 정보</th>
+                                <th scope="col"></th>
+                                <th scope="col">재질 및 색상</th>
+                                <th scope="col">프린터 기종</th>
+                                <th scope="col">매출</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (order.orderDetailList != null)
+                            {
+                                foreach (OrderDetailT orderDetail in order.orderDetailList)
+                                {
+
+                                    string filePath = ViewBag.Article3DUrl + orderDetail.FileReName;
+                                    string jsUrl = ViewBag.ArticleJsUrl + orderDetail.FileReName + ".js";
+                                <tr>
+                                    <td>
+                                        <ul class="prd">
+                                            <li>
+                                                <img src="@ViewBag.ArticleImgUrl@orderDetail.FileImgRename" class="prdImg1" alt="주문한 상품" /></li>
+                                            <li>
+                                                <p class="prdTxt1" style="width: 210px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@orderDetail.FileName</p>
+                                                <p class="prdTxt2">
+                                                    크&nbsp;&nbsp;&nbsp;기&nbsp;:&nbsp; <span class="prdTxt2_vol">@(orderDetail.SizeX/10)cm X @(orderDetail.SizeY/10)cm X @(orderDetail.SizeZ/10)cm</span>
+                                                    <br />
+                                                    총부피&nbsp;:&nbsp; <span class="prdTxt2_vol">@(Math.Round(orderDetail.Volume/1000,2))cm³</span>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                    <td>
+                                        <div id="viewer"></div>
+                                        <a href="#none" class="viewer3d btnO type1" data-file="@filePath" data-js="@jsUrl" data-ext="@orderDetail.FileType">3D View</a></td>
+                                    @* <td>@orderDetail.MaterialName @(Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), orderDetail.ColorNo))</td>*@
+
+
+                                    <td class="mat">@orderDetail.MaterialName ,@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), orderDetail.ColorNo)</td>
+                                    <td class="mat">@(printer.Brand + " " + printer.Model)</td>
+                                    <td>@string.Format("{0:N0}", orderDetail.UnitPrice * orderDetail.OrderCount)원</td>
+                                    @*<td>
+                                        <p class="mgT6"><a href="" class="btnG type14 mgTB10">취소</a></p>
+                                    </td>*@
+                                </tr>
+                                }
+                            }
+
+@*<tr>
+                                <td>
+                                    <input type="hidden" value="@((order.RegDt - timeBefore12hours).TotalSeconds)"/><span class="cnt timeView">  </span></td>
+                                <td>
+                                    <input type="hidden" value="@order.No"/>
+                                    <button onclick="javascript:acceptOrd(this)">수락</button>
+                                    <button onclick="javascript:rejectOrd(this)">거절</button></td>
+                            </tr>*@
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cartTot manage">
+                    <p>
+                        주문 경과 시간
+                        <br>
+                        <input type="hidden" value="@(((DateTime)order.PayDt - timeBefore12hours).TotalSeconds)"/><span class="cnt timeView time">  </span>
+                        <br>
+                        <span class="txtB">주문 경과시간이 12시간이 넘으면 자동 거절됩니다.<br>
+                            @(order.OrderMemberName)님의 주문을 승인하시겠습니까?</span>
+                    </p>
+                    <div class="ordBtn2 pdL0">
+
+                        <input type="hidden" value="@order.No"/>
+                        <a href="" onclick="javascript:rejectOrd(this)" class="btnGOG type1 mgL40">거절</a>
+                        <a href="" onclick="javascript:acceptOrd(this)" class="btnO type2">수락</a>
+
+                    </div>
+                </div>
+                <div class="cartTot">
+                    <p>합계 금액 <span class="mn">@string.Format("{0:N0}", order.TotalPrice)</span>원 + 배송비 <span class="mn">@string.Format("{0:N0}", order.PostPrice)</span>원 = 총 합계 <span class="tot">@string.Format("{0:N0}", order.TotalPrice + order.PostPrice)</span> 원 </p>
+                </div>
+
+                <!--//printing information-->
+
+            </div>
+
+            <div class="cartWrap">
+
+                <p class="cartTxt3 mgT45">주문자 정보</p>
+
+                <dl class="ordInfo noBox">
+                    <dt class="pdT15">주문자명</dt>
+                    <dd>@orderMember.Name</dd>
+                    <dt class="clear pdT15">연락처</dt>
+                    <dd>@orderMember.CellPhone</dd>
+                    <dt class="clear pdT15">배송방법</dt>
+                    <dd>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.PostType), order.PostMode)</dd>
+                    @if (order.PostMode == (int)Makersn.Util.MakersnEnumTypes.PostType.택배)
+                    {
+                        <dt class="clear pdT15">배송지</dt>
+                        <dd>@order.PostAddress @order.PostAddressDetail</dd>
+                    }
+                    <dt class="clear pdT15">요청사항</dt>
+                    <dd>@order.RequireComment</dd>
+                </dl>
+
+                <div class="mgB100">
+                    <!--// 기타정보 -->
+                    <div class="ordBtn2 mgL80">
+                        <a href="/Order/MngHome" class="btnO type2 mgL40">목록 보기</a>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<!-- 썸네일팝업 -->
+<form id="img_form" name="img_form" method="post">
+    <div class="popupArea thumnailPop">
+        <div class="bgArea bgThumOutput">
+        </div>
+        <div class="popBox">
+
+            <!-- thumnailWrap -->
+            <div class="thumnailWrap">
+                <div class="imgDefualt">
+                    <img src="@Url.Content("~/Content/images/common/default3d.png")" class="dfImg" alt="디폴트 이미지" /><img src="@Url.Content("~/Content/images/common/loading_bar.gif")" alt="" class="imgDefualtImg" />
+                </div>
+
+                <div id="viewerThum">
+                    <iframe src="#" id="viewer_frame" width="630" height="470" border="0" frameborder="0" scrolling="no"></iframe>
+                </div>
+                <a href="javascript:void(0);" class="close" id="save_id">닫기</a>
+            </div>
+            <!-- // thumnailWrap -->
+
+        </div>
+    </div>
+</form>
+<!-- //썸네일팝업 -->
+
+@section Scripts{
+    <script src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
+    @Scripts.Render("~/bundles/viewer")
+
+    <script src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            event_timer();
+            var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
+            var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+            var heightSafari = 0;
+            if ((is_chrome) && (is_safari)) { is_safari = false; }
+
+            var Browser = {
+                chk: navigator.userAgent.toLowerCase()
+            }
+
+            Browser = {
+                ie: Browser.chk.indexOf('msie') != -1,
+                ie6: Browser.chk.indexOf('msie 6') != -1,
+                ie7: Browser.chk.indexOf('msie 7') != -1,
+                ie8: Browser.chk.indexOf('msie 8') != -1,
+                ie9: Browser.chk.indexOf('msie 9') != -1,
+                ie10: Browser.chk.indexOf('msie 10') != -1,
+                opera: !!window.opera,
+                safari: Browser.chk.indexOf('safari') != -1,
+                safari3: Browser.chk.indexOf('applewebkir/5') != -1,
+                mac: Browser.chk.indexOf('mac') != -1,
+                chrome: Browser.chk.indexOf('chrome') != -1,
+                firefox: Browser.chk.indexOf('firefox') != -1
+            }
+
+
+
+
+            if ((Browser.ie8) || (Browser.ie9) || (Browser.ie10)) {
+                $('.viewer3d').removeClass('viewer3d').removeAttr('href').text('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요. ');
+            }
+
+            if (!Browser.chrome && !Browser.firefox && !isIE()) {
+                $('.viewer3d').removeClass('viewer3d').removeAttr('href').text('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요. ');
+            }
+            $('.thumbArea #bx-pager a').on('click', function () {
+                $('#viewer').hide();
+                $('.viewer3d').siblings('img').show();
+                //$('#viewer div').fadeOut();
+            });
+        });
+
+
+        function acceptOrd(val) {
+            var r = confirm("주문을 정말로 수락하시겠습니까?");
+            if (r == true) {
+
+                var input = $(val).parents("div").eq(0).find("input").val();
+                $.post("/Order/ChangeStat", { orderNo: input, status: "출력중" }, function () { $(location).attr("href", "/Order/MngHome") }, "text");
+            }
+        }
+        function rejectOrd(val) {
+            var r = confirm("주문을 정말로 거절하시겠습니까?");
+            if (r == true) {
+                var input = $(val).parents("div").eq(0).find("input").val();
+                $.post("/Order/ChangeStat", { orderNo: input, status: "요청거부" }, function () { $(location).attr("href", "/Order/MngHome") }, "text");
+            }
+            //else {
+            //    document.write("You pressed Cancel!")
+            //}
+        }
+
+        //3dviewer 보이기
+        $('.viewer3d').on('click', function (e) {
+
+            $('.popupArea.thumnailPop').show();
+            $('.imgDefualt').show();
+            $('.popupArea .bgArea').css('height', $(document).height());
+
+            var js = $(this).attr('data-js');
+
+            jQuery('html, body').animate({ scrollTop: 0 }, 300);
+
+            var ThreeJsonLoader = new THREE.JSONLoader(true);
+            ThreeJsonLoader.statusDomElement.style.left = "0px";
+            ThreeJsonLoader.statusDomElement.style.width = "auto";
+
+            document.body.appendChild(ThreeJsonLoader.statusDomElement);
+            ThreeLoadCallback = function (geometry, materials) {
+                thingiview.addModel(geometry);
+                document.body.removeChild(ThreeJsonLoader.statusDomElement);
+                $('.imgDefualt').hide();
+            };
+
+            thingiview = new Thingiview('viewerThum');
+
+            thingiview.resize(478, 360);
+            ThreeJsonLoader.load(js, ThreeLoadCallback);
+
+            var thingiviewanimate = function () {
+                if (thingiview != undefined) {
+                    requestAnimationFrame(thingiviewanimate);
+                    thingiview.render();
+                }
+            }
+
+            thingiviewanimate();
+
+        });
+
+        $('#save_id,.bgThumOutput').on('click', function () {
+            //$(".viewerThum").html("");
+            $('.popupArea.thumnailPop').hide();
+        });
+
+        function isIE() { //ie?  
+            if (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject)
+                return true;
+            else
+                return false;
+        };
+        //开始计时
+        function event_timer() {
+            //由页面提交的时间与服务器时间一般都有2~4秒的差值
+            var timeNum = $(".timeView").length;
+            for (i = 0 ; i < timeNum ; i++) {
+                var time = $(".timeView").eq(i);
+                $(time).attr("id", "spantime_" + i);
+                var time_remain = $(time).parents("p").find("input").attr("value");
+                rt = parseInt(time_remain) + 4;
+                if (rt == 0) {
+                    alert("timeover");
+                    window.location.reload();
+                } else {
+                    //$(time).innerHTML = "" + time_format(rt);
+                    //time.innerHTML = "<span>" + time_format(rt)+"</span>";
+                    $(time).text(time_format(rt));
+                    time_remain = time_remain - 1;
+                    $(time).parents("p").find("input").attr("value", time_remain);
+                }
+            }
+
+            setTimeout("event_timer()", 1000);
+        }
+
+        // 以hh:mm:ss格式化时间，可以根据需要 定义格式 
+        function time_format(s) {
+            var t;
+            if (s > -1) {
+                hour = Math.floor(s / 3600);
+                min = Math.floor(s / 60) % 60;
+                sec = s % 60;
+                day = parseInt(hour / 24);
+                //if (day > 0) {
+                //    hour = hour - 24 * day;
+                //    t = day + "天," + hour + ":";
+                //}
+                t = hour + ':';
+
+                if (min < 10) { t += "0"; }
+                t += min + ':';
+                if (sec < 10) { t += "0"; }
+                t += sec;
+            }
+            else { t = "0:00:0x"; }
+            return t;
+        }
+    </script>
+}

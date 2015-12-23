@@ -1,0 +1,150 @@
+﻿@model DefaultAddressT
+@{
+    Layout = null;
+
+}
+
+@{
+    string firstCell = string.Empty;
+    string secondCell = string.Empty;
+    string thirdCell = string.Empty;
+    string firstAdd = string.Empty;
+    string secondAdd = string.Empty;
+    string thirdAdd = string.Empty;
+    //string firstPostNum = string.Empty;
+    //string secondPostNum = string.Empty;
+
+
+    if (Model.CellPhone != null)
+    {
+        int firstIndex = Model.CellPhone.IndexOf("-");
+        int lastIndex = Model.CellPhone.LastIndexOf("-");
+        string phone = Model.CellPhone;
+        firstCell = phone.Substring(0, firstIndex);
+        secondCell = phone.Substring(firstIndex + 1, lastIndex - firstIndex - 1);
+        thirdCell = phone.Substring(lastIndex + 1);
+    }
+    //if (Model.PostNum != null)
+    //{
+    //    firstPostNum = Model.PostNum.Substring(0, Model.PostNum.IndexOf("-"));
+    //    secondPostNum = Model.PostNum.Substring(Model.PostNum.IndexOf("-") + 1);
+    //}
+    if (Model.AddPhone != null)
+    {
+        int firstIndex = Model.AddPhone.IndexOf("-");
+        int lastIndex = Model.AddPhone.LastIndexOf("-");
+        string phone = Model.AddPhone;
+        firstAdd = phone.Substring(0, firstIndex);
+        secondAdd = phone.Substring(firstIndex + 1, lastIndex - firstIndex - 1);
+        thirdAdd = phone.Substring(lastIndex + 1);
+    }
+            
+    <dt class="mgT20">수령인명</dt>
+    <dd>
+        <input id="sendName" class="ordInput w115" type="text" name="sendName" value="@Model.PostMemberName" /></dd>
+    <dt class="clear mgT20">휴대폰</dt>
+    <dd>
+        <input id="sendHp1" class="ordInput w55" type="text" maxlength="3" onkeydown="return IsNum(event)" name="sendHp" value="@firstCell" />
+        -
+              <input id="sendHp2" class="ordInput w70" type="text" maxlength="4" onkeydown="return IsNum(event)" name="sendHp" value="@secondCell" />
+        -
+              <input id="sendHp3" class="ordInput w70" type="text" maxlength="4" onkeydown="return IsNum(event)" name="sendHp" value="@thirdCell" />
+    </dd>
+    <dt class="mgL70 mgT20">추가번호 (선택)</dt>
+    <dd>
+        <input id="" class="ordInput w55" type="text" maxlength="3" onkeydown="return IsNum(event)" name="sendHp2" value="@firstAdd" />
+        -
+              <input id="" class="ordInput w70" type="text" maxlength="4" onkeydown="return IsNum(event)" name="sendHp2" value="@secondAdd" />
+        -
+              <input id="" class="ordInput w70" type="text" maxlength="4" onkeydown="return IsNum(event)" name="sendHp2" value="@thirdAdd" />
+    </dd>
+    <dt class="clear mgT20">주소</dt>
+    <dd>
+        <p>
+            <input id="sendPost1" class="ordInput w55 flL postcodify_postcode6_1" type="text" name="sendPost" readonly="readonly" value="@Model.PostNum" />
+            <a href="#" class="btnPost" id="postcodify_search_button" onclick="sample6_execDaumPostcode()">우편번호 찾기</a>
+        </p>
+        <p class="clear pdT10">
+            <input id="sendAddr1" class="ordInput w351 flL mgR7 postcodify_address" type="text" name="sendAddr" readonly="readonly" value="@Model.Address" />
+            <input id="sendAddr2" class="ordInput w351 flL postcodify_details" type="text" name="sendAddr2" value="@Model.AddressDetail" />
+        </p>
+    </dd>
+    <dt class="clear mgT20">요청사항</dt>
+    <dd>
+        <p>
+            <input id="" class="ordInput w710 flL" type="text" name="sendNoti" value="" />
+        </p>
+        <p class="clear txt2">
+            <input type="checkbox" name="cartCheck" />
+            주소록에 기본 배송지로 지정
+        </p>
+        <p class="txt3">※ 정확한 주소 및 통화 가능한 연락처 필수 기입. 배송지 불분명 및 수신불가 연락처 기입으로 반송되는 왕복 택배 비용은 구매자 부담입니다.</p>
+    </dd>
+}
+
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+
+<script type="text/javascript">
+
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var fullAddr = ''; // 최종 주소 변수
+                var extraAddr = ''; // 조합형 주소 변수
+
+                // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    fullAddr = data.roadAddress;
+
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    fullAddr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+                if (data.userSelectedType === 'R') {
+                    //법정동명이 있을 경우 추가한다.
+                    if (data.bname !== '') {
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있을 경우 추가한다.
+                    if (data.buildingName !== '') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+                    fullAddr += (extraAddr !== '' ? ' (' + extraAddr + ')' : '');
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('sendPost1').value = data.zonecode; //5자리 새우편번호 사용
+                document.getElementById('sendAddr1').value = fullAddr;
+
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById('sendAddr2').focus();
+            }
+        }).open();
+    }
+
+    // 셀렉트박스 UI
+    $(function () {
+
+        //$("#postcodify_search_button").postcodifyPopUp(); //우편번호 찾기 클릭
+
+    });
+    function IsNum(e) {
+        var k = window.event ? e.keyCode : e.which;
+        if (((k >= 48) && (k <= 57)) || k == 0 || k == 8 || k == 127 || ((k >= 37) && (k <= 40)) || ((k >= 96) && (k <= 105)) || k == 9) {
+        } else {
+            if (window.event) {
+                window.event.returnValue = false;
+            }
+            else {
+                e.preventDefault(); //for firefox 
+            }
+        }
+    }
+
+</script>

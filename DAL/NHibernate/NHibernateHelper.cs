@@ -22,7 +22,8 @@ namespace Makersn.Models
         private static readonly string _UserNm = "_UserNm";
         private static readonly string _Password = "_Password";
         private static readonly string _Database = "_Database";
-
+        
+        
         private static ISessionFactory GetSessionFactory<T>() where T : ICurrentSessionContext
         {
             if (sessionFactory == null)
@@ -110,35 +111,5 @@ namespace Makersn.Models
                 throw;
             }
         }
-
-    //    public static void executeUpdate(String hql, String... params) {
-
-    //    Session session = openSession();
-    //    Transaction tx = null;
-
-    //    try {
-    //        tx = session.beginTransaction();
-    //        Query query = session.createQuery(hql);
-
-    //        if (params != null && params.length > 0) {
-    //            for (int i = 0; i < params.length; i++) {
-    //                query.setParameter(i, params[i]);
-    //                // System.out.println("query influenced: "+params[i]);
-    //            }
-    //        }
-    //        System.out.println("query influenced: " + query.getQueryString());
-    //        int n = query.executeUpdate();
-    //        System.out.println("query influence: " + n);
-    //        tx.commit();
-    //    } catch (Exception e) {
-    //        if (tx != null)
-    //            tx.rollback();
-    //        throw new RuntimeException(e.getMessage());
-    //    } finally {
-    //        if (session != null && session.isOpen()) {
-    //            session.close();
-    //        }
-    //    }
-    //}
     }
 }

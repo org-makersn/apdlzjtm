@@ -1,0 +1,125 @@
+﻿@model IList<Makersn.Models.TranslationStateT>
+@{
+    ViewBag.Title = "DaliyState";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int index = 1;
+}
+
+
+<h2 class="contents_title">번역 현황 - 일간</h2>
+<!-- contents_zone -->
+<div class="contents_zone">
+
+    <form id="search" name="search">
+        <input type="hidden" id="date" name="date">
+        <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="17%" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">구분</th>
+                    <td>
+                        <span class="btnWrap medium">@Html.ActionLink("전체", "Index", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("일간", "DailyState", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("월간", "MonthState", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("년간", "YearState", "translation")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">기간선택</th>
+                    <td>
+                        @Html.DropDownList("year")
+
+                        @Html.DropDownList("Month")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+
+
+    <form id="insert_form" name="insert_form" method="post" action="/admin/items/multi_del//">
+
+         <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <caption>리스트 게시판</caption>
+            <colgroup>
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th rowspan="2">구분</th>
+                    <th rowspan="2">전체</th>
+                    <th rowspan="2">직접 번역</th>
+                    <th rowspan="2">요청 번역</th>
+                    <th rowspan="2">요청</th>
+                    <th colspan="6">언어별 직접 및 요청 번역</th>
+                </tr>
+                <tr>
+                    <th>영 → 국</th>
+                    <th>국 → 영</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var state in Model){
+                <tr>
+                    <td>@index 일</td>
+                    <td>@state.AllCnt</td>
+                    <td>@state.DirectCnt</td>
+                    <td>@state.CompleteCnt</td>
+                    <td>@state.RequestCnt</td>
+                    <td>@state.EnForKrCnt</td>
+                    <td>@state.KrForEnCnt</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                    index++;
+                }
+            </tbody>
+        </table>
+    </form>
+    <!-- // page_navi -->
+</div>
+<br />
+<br />
+<br />
+
+<!-- // contents_zone -->
+
+<!-- //============ 컨텐츠부분 끝 ==================== -->
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#year").change(function () {
+                var returnUrl = "/translation/DailyState?year=" + $(this).val() + "&Month=" + $("#Month").val();
+                $(location).attr("href", returnUrl);
+            });
+            $("#Month").change(function () {
+                var returnUrl = "/translation/DailyState?year=" + $("#year").val() + "&month=" + $(this).val();
+                $(location).attr("href", returnUrl);
+            });
+        });
+    </script>
+}

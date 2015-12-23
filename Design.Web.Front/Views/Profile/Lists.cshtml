@@ -22,18 +22,18 @@
                 <!-- ProductBox -->
                 <div class="productBox">
                     <div class="productImg">
-                        <a href="/design/Detail?no=@a.No">
+                        <a href="/design/Detail/@a.No">
                             <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.MainImage" /></a>
                     </div>
                     <div class="detailBox">
                         <div class="productText">
-                            <a href="/design/Detail?no=@a.No">@a.Title</a>
+                            <a href="/design/Detail/@a.No">@a.Title</a>
                         </div>
                         <div class="by">
                             <p>by <span class="name"><a href="javascript:GoPage('@No')">@a.MemberName</a></span></p>
                         </div>
                         <ul class="countBox">
-                            <li class="show" title="조회수"><a href="/design/Detail?no=@a.No"><span>@a.ViewCnt</span></a></li>
+                            <li class="show" title="조회수"><a href="/design/Detail/@a.No"><span>@a.ViewCnt</span></a></li>
 
                             <li class="heart" title="좋아요"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
                                 <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>

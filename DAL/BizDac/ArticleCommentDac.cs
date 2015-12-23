@@ -12,7 +12,7 @@ namespace Makersn.BizDac
     {
         public IList<ArticleCommentT> GetArticleCommentListByNo(int articleNo)
         {
-//            string query = @"SELECT M.PROFILE_PIC, M.NAME , AC.CONTENT, AC.REG_DT, AC.NO, M.NO AS MEMBER_NO, AC.MEMBER_NO_REF
+//            string query = @"SELECT M.PROFILE_PIC, M.NAME , AC.CONTENT, AC.REG_DT, AC.NO, M.NO AS MEMBER_NO, AC.MEMBER_NO_REF, AC.ARTICLE_NO
 //                                FROM ARTICLE_COMMENT AC WITH(NOLOCK) INNER JOIN MEMBER M WITH(NOLOCK)
 //						                                ON AC.MEMBER_NO = M.NO
 //                                WHERE ARTICLE_NO = " + articleNo + " ORDER BY REG_DT DESC";
@@ -30,6 +30,7 @@ namespace Makersn.BizDac
 //                    a.No = (long)row[4];
 //                    a.MemberNo = (int)row[5];
 //                    a.MemberNoRef = (int)row[6];
+//                    a.ArticleNo = (int)row[7];
 //                    list.Add(a);
 //                }
 
@@ -128,6 +129,13 @@ namespace Makersn.BizDac
         }
         #endregion
 
+        //public int GetArticleCommentCntByArticleNo(int no)
+        //{
+        //    using (ISession session = NHibernateHelper.OpenSession())
+        //    {
+        //        return session.QueryOver<ArticleCommentT>().Where(w => w.ArticleNo == no).RowCount();
+        //    }
+        //}
 
         #region 답글의 부모 댓글 가져오기
         public ArticleCommentT GetRefCommentByRefNo(int refNo)
@@ -138,13 +146,5 @@ namespace Makersn.BizDac
             }
         }
         #endregion
-
-        //public int GetArticleCommentCntByArticleNo(int no)
-        //{
-        //    using (ISession session = NHibernateHelper.OpenSession())
-        //    {
-        //        return session.QueryOver<ArticleCommentT>().Where(w => w.ArticleNo == no).RowCount();
-        //    }
-        //}
     }
 }

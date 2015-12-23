@@ -33,6 +33,8 @@ namespace Makersn.Util
             };
         }
 
+
+
         public IList<ResizeImg> GetMsgFIleResize()
         {
             return new List<ResizeImg>()
@@ -61,7 +63,14 @@ namespace Makersn.Util
         {
             return new List<ResizeImg>()
             {
-                new ResizeImg(){width = 1000, height = 240, foldName = "Profile/cover"}
+                new ResizeImg(){width = 1000, height = 400, foldName = "Profile/thumb"}
+            };
+        }
+
+        public IList<ResizeImg> GetPrinterResize() { 
+            return new List<ResizeImg>(){
+                new ResizeImg(){width = 630,height=470,foldName="Printer/printer_img"},
+                new ResizeImg(){width = 160,height=120,foldName="Printer/printer_img/thumb"}
             };
         }
     }

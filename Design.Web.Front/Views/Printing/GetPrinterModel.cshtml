@@ -1,0 +1,12 @@
+﻿@model IList<PrinterModelT>
+@{
+}
+<li id="code_all">
+</li>
+@foreach (PrinterModelT printer in Model)
+{
+   
+ <li id="code_16">
+        <input type="radio" name="rdColor" value="@printer.No" /><label>@printer.Model</label>
+    </li>
+}

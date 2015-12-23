@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -23,5 +24,20 @@ namespace Design.Web.Admin.Helper
             return ip;
         }
         #endregion
+
+        public static string GetClientIP()
+        {
+            string GetIP = string.Empty;
+            IPHostEntry host;
+            host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily.ToString() == "InterNetwork")
+                {
+                    GetIP = ip.ToString();
+                }
+            }
+            return GetIP;
+        }
     }
 }

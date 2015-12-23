@@ -340,7 +340,7 @@ THREE.OBJLoader.prototype = {
 			object = objects[ i ];
 			geometry = object.geometry;
 
-			console.log(geometry.normals);
+			//console.log(geometry.normals);
 			var buffergeometry = new THREE.BufferGeometry();
 
 			buffergeometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array( geometry.vertices ), 3 ) );
@@ -365,7 +365,7 @@ THREE.OBJLoader.prototype = {
 
 
 
-		console.timeEnd( 'OBJLoader' );
+		//console.timeEnd( 'OBJLoader' );
 		return buffergeometry;
 
 	}

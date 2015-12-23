@@ -1,0 +1,109 @@
+﻿@{
+    OrderT order = ViewBag.OrderEntity;
+    MemberT OrderMember = ViewBag.OrderMember;
+}
+
+
+<div class="cartWrap">
+        <!--printing information-->
+        <p class="cartTxt3">프린팅 정보</p>  
+        <div class="myorderMng">
+         <table class="tblType bdcolor" summary="내 주문리스트">
+            <caption>내 주문 리스트</caption>
+            <colgroup>
+              <col style="width:36%;">
+              <col style="width:14%;">
+              <col style="width:17%;">
+              <col style="width:16%;">
+              <col style="width:17%;">
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">요청한 파일 정보</th>
+                <th scope="col"></th>
+                <th scope="col">재질 및 색상</th>
+                <th scope="col">프린터 기종</th>
+                <th scope="col">매출</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach(OrderDetailT detail in order.orderDetailList){
+
+              <tr>
+                <td>
+                	<ul class="prd">
+                  	<li><img src="@ViewBag.ArticleImgUrl@detail.FileImgRename" class="prdImg1" alt="주문한 상품"></li>
+                  	<li>
+                    	<p class="prdTxt1">@detail.FileName</p>
+                      <p class="prdTxt2">
+                                                    크&nbsp;&nbsp;&nbsp;기&nbsp;:&nbsp; <span class="prdTxt2_vol">@(detail.SizeX/10)cm X @(detail.SizeY/10)cm X @(detail.SizeZ/10)cm</span> <br />
+                                                    총부피&nbsp;:&nbsp; <span class="prdTxt2_vol">@(Math.Round(detail.Volume/1000,2))cm³</span> </p>
+                                            </li>
+                	</ul>
+                </td>
+                <td><a href="@ViewBag.Article3DUrl@detail.FileReName" class="btnO type1">다운로드</a></td>
+                <td>@detail.MaterialName, @detail.ColorNo</td>
+                <td>@order.PrinterName</td>
+                
+                <td>@(order.TotalPrice)원</td>
+              </tr>                  
+              }
+   
+            </tbody>
+          </table> 
+          </div>
+        
+
+        <!--//printing information-->
+        
+        <!-- 주문자 정보 -->
+          <p class="cartTxt3 mgT45">주문자 정보</p>
+          <dl class="ordInfo noBox">
+          	<dt class="pdT15">주문자명</dt>
+            <dd> @OrderMember.Name</dd> 
+            <dt class="mgL103 pdT15">이메일</dt>
+            <dd>@order.Email</dd>           
+            <dt class="clear pdT15">휴대폰</dt>
+            <dd>@(order.CellPhone!="--" && order.CellPhone!=null? order.CellPhone:"")</dd> 
+           <dt class="mgL103 pdT15">추가번호</dt>
+            <dd>@(order.AddPhone!="--" && order.AddPhone!=null? order.AddPhone:"")</dd>
+           
+            <dt class="clear pdT15">우편번호</dt>
+ 			 <dd>@(order.PostNum!="-" && order.PostNum!=null? order.PostNum:"")</dd>  
+            <dt class="clear pdT15">주소</dt>
+            <dd>@(order.PostAddress) @(order.PostAddressDetail)</dd>  
+          </dl>
+          <!--// 주문자정보 -->
+          <!-- 수취인 정보 -->
+          <p class="cartTxt3 mgT45">수취인 정보</p>
+          <dl class="ordInfo  noBox">
+          	<dt class="pdT15">수취인명</dt>
+            <dd><input id="" class="ordInput w115" type="text" name="ordName" value="홍길동"></dd> 
+            <dt class="mgL103 pdT15">휴대폰</dt>
+            <dd><input id="" class="ordInput w170" type="text" name="ordName" value="010-1111-2222"></dd> 
+           <dt class="clear pdT15">전화번호</dt>
+            <dd><input id="" class="ordInput w115" type="text" name="ordEmail" value="02-2222-3333"></dd> 
+           <dt class="clear pdT15">우편번호</dt>
+ 			 <dd><input id="" class="ordInput w115" type="text" name="ordName" value="010-111-2323"></dd>  
+            <dt class="clear pdT15">주소</dt>
+            <dd><input id="" class="ordInput w351" type="text" name="ordName" value="서울시 서초구 양재동 99-1번지 2층"></dd>  
+          </dl>
+          <!--// 수취인정보 -->
+          <!-- 기타 정보 -->
+          <p class="cartTxt3 mgT45">기타 정보</p>
+          <dl class="ordInfo">
+          	<dt class="pdT20">요청 사항</dt>
+            <dd class="textarea border"> 깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요.깔끔하게 부탁드려요</dd> 
+		  
+          </dl>
+           <div class="mgB100">
+          <!--// 기타정보 -->
+          <div class="ordBtn2 mgL80">
+            <a href="S-01-OrderManage.html" class="btnO type2 mgL40">목록 보기</a>
+            @*<a href="" class="btnG type3 mgL260">인쇄하기</a>*@
+          </div>
+          
+       </div>
+       
+
+     </div>

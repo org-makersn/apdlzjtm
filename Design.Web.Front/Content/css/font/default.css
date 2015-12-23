@@ -1,0 +1,112 @@
+@charset "utf-8";
+
+/**
+* =================================================================================
+* INFORMATION
+* ---------------------------------------------------------------------------------
+* @Author : Lee, Seung, Hee (lv0821@naver.com)
+* @File Name : default.css
+* @Description : Style Sheet
+* @Version : 1.0
+* @Create Date : 2015.04.13
+* @Update Date : N/A
+* @History : N/A
+===================================================================================
+*/
+
+.clear { clear: both !important }
+.dbNo { display: none !important }
+.png24 { tmp:expression(setPng24(this)); }
+
+/* bg */
+.bgW { background: #fff !important; }
+.bgG { background: #f2f2f2 !important; }
+
+/* layer */
+.zIdx200 { z-index: 200 !important; }
+.zIdx199 { z-index: 199 !important; }
+.zIdx198 { z-index: 198 !important; }
+.zIdx197 { z-index: 197 !important; }
+.zIdx196 { z-index: 196 !important; }
+.zIdx195 { z-index: 195 !important; }
+.zIdx194 { z-index: 194 !important; }
+.zIdx193 { z-index: 193 !important; }
+.zIdx192 { z-index: 192 !important; }
+.zIdx191 { z-index: 191 !important; }
+.zIdx190 { z-index: 190 !important; }
+
+/* width & height */
+.w100 { width:100% !important; }
+.w55 { width:55px !important; }
+.w70 { width:70px !important; }
+.w115 { width:115px !important; }
+.w220 { width:220px !important; }
+.w351 { width:351px !important; }
+.w710 { width:710px !important; }
+.w1000 { width:1000px !important; }
+.h700 { height:700px !important; }
+
+/* line */
+.bdR_no { border-right: none !important; }
+.bdB_no { border-bottom: none !important; }
+.bdA { border: 1px solid #ccc !important; }
+.bdB { border-bottom: 1px solid #eaeaea !important; }
+.bdA_no { border: none; !important; }
+
+/* align */
+.txtL { text-align: left !important; }
+.txtC { text-align: center !important; }
+.txtR { text-align: right !important; }
+.flL	{ float: left !important; }
+.flR	{ float: right !important; }
+.flNo { float: none !important; }
+
+/* margin */
+.mgT0 { margin-top: 0px !important; }
+.mgT4 { margin-top: 4px !important; }
+.mgT6 { margin-top: 6px !important; }
+.mgT10 { margin-top: 10px !important; }
+.mgT15 { margin-top: 15px !important; }
+.mgT17 { margin-top: 17px !important; }
+.mgT20 { margin-top: 20px !important; }
+.mgT25 { margin-top: 25px !important; }
+.mgT30 { margin-top: 30px !important; }
+.mgT35 { margin-top: 35px !important; }
+.mgT40 { margin-top: 40px !important; }
+.mgT45 { margin-top: 45px !important; }
+.mgT50 { margin-top: 50px !important; }
+.mgT70 { margin-top: 70px !important; }
+.mgT80 { margin-top: 80px !important; }
+.mgT100 { margin-top: 100px !important; }
+.mgR0 { margin-right: 0px !important; }
+.mgR7 { margin-right: 7px !important; }
+.mgR80 { margin-right: 80px !important; }
+.mgB0 { margin-bottom: 0px !important; }
+.mgB40 { margin-bottom: 40px !important; }
+.mgB100 { margin-bottom: 100px !important; }
+.mgL10 { margin-left: 10px !important; }
+.mgL12 { margin-left: 12px !important; }
+.mgL15 { margin-left: 15px !important; }
+.mgL25 { margin-left: 25px !important; }
+.mgL70 { margin-left: 70px !important; }
+.mgL330 { margin-left: 330px !important; }
+.mgL345 { margin-left: 345px !important; }
+.pdT10 { padding-top: 10px !important; }
+.pdL15 { padding-left: 15px !important; }
+.pdB0 { padding-bottom: 0px !important; }
+.pdB35 { padding-bottom: 35px !important; }
+
+/* font */
+.orangeF { color: #ff7900 !important; }
+.whiteF { color: #fff !important; }
+.boldF { font-weight:bold !important; }
+.dfn { font-style:normal !important; }
+.nbg { font-family: 'Nanum Barun Gothic' !important; }
+.rbc { font-family: 'Roboco' !important; }
+.font12P { font-size: 12px !important; }
+.font13P { font-size: 13px !important; }
+.font14P { font-size: 14px !important; }
+.font15P { font-size: 15px !important; }
+.font16P { font-size: 16px !important; }
+.font17P { font-size: 17px !important; }
+.font18P { font-size: 18px !important; }

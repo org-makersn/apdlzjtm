@@ -1,0 +1,16 @@
+﻿@model IList<MaterialT>
+@{
+    List<int> matList = new List<int>();
+}
+@foreach (MaterialT material in Model)
+{
+    if (!matList.Contains(material.No))
+    {
+    <li>
+        <input type="radio" name="rdMat" value="@material.No" /><label for="selSta_1">@material.Name</label>
+        <input type="hidden" name="minPrice" value="@material.MinPrice" />
+        <input type="hidden" name="maxPrice" value="@material.MaxPrice" />
+    </li>
+        matList.Add(material.No);
+    }
+}

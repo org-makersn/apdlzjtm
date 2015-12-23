@@ -6,6 +6,7 @@ using Makersn.Util;
 using Design.Web.Front.Models;
 using Newtonsoft.Json;
 using Makersn.BizDac;
+using System.Web;
 
 namespace Design.Web.Front.Controllers
 {
@@ -14,6 +15,7 @@ namespace Design.Web.Front.Controllers
         //private static readonly MemberT anonymous = new MemberT();
         private ProfileModel profileModel;
 
+        PrinterMemberDac _printerMemberDac = new PrinterMemberDac();
         NoticesDac _noticesDac = new NoticesDac();
         MessageDac _messageDac = new MessageDac();
 
@@ -21,20 +23,26 @@ namespace Design.Web.Front.Controllers
         {
             ViewBag.LogOnMemner = Profile;
             ViewBag.LogOnChk = Profile.UserNo == 0 ? 0 : 1;
+            ViewBag.SpotChk = _printerMemberDac.GetPrinterMemberByNo(Profile.UserNo);
             ViewBag.MenuList = GetArticleList();
-            
+
             //클릭시 가져오는걸로
-            //ViewBag.NoticeCnt = _noticesDac.GetNoticesCntByMemberNo(Profile.UserNo);
-            //ViewBag.MessageCnt = _messageDac.GetNewMessageCount(Profile.UserNo);
+            ViewBag.NoticeCnt = _noticesDac.GetNoticesCntByMemberNo(Profile.UserNo);
+            ViewBag.MessageCnt = _messageDac.GetNewMessageCount(Profile.UserNo);
 
             ViewBag.ProfileImgUrl = System.Configuration.ConfigurationManager.AppSettings["ProfileImgUrl"];
             ViewBag.ArticleImgUrl = System.Configuration.ConfigurationManager.AppSettings["ArticleImgUrl"];
             ViewBag.Article3DUrl = System.Configuration.ConfigurationManager.AppSettings["Article3DUrl"];
             ViewBag.AdminImgUrl = System.Configuration.ConfigurationManager.AppSettings["AdminImgUrl"];
             ViewBag.ArticleJsUrl = System.Configuration.ConfigurationManager.AppSettings["Article3DJsUrl"];
-            ViewBag.PrinterUrl = System.Configuration.ConfigurationManager.AppSettings["PrinterImgUrl"];
+            ViewBag.PrintImgUrl = System.Configuration.ConfigurationManager.AppSettings["PrinterImgUrl"];
+            ViewBag.CurrentDomain = System.Configuration.ConfigurationManager.AppSettings["CurrentDomain"];
+            ViewBag.TargetDomain = System.Configuration.ConfigurationManager.AppSettings["TargetDomain"];
+            ViewBag.LangFlag = System.Configuration.ConfigurationManager.AppSettings["LangFlag"];
+            ViewBag.LangFlagName = ViewBag.LangFlag == "KR" ? "한국어" : ViewBag.LangFlag == "EN" ? "English" : "";
 
             ViewBag.IsMain = "N";
+
         }
 
         public ProfileModel Profile
@@ -87,11 +95,11 @@ namespace Design.Web.Front.Controllers
                 model.MenuCodeNo = menu.Key;
                 if (menu.Key > 0)
                 {
-                    model.MenuUrl = "/design?codeNo=" + menu.Key;
+                    model.MenuUrl = "/cate/" + Enum.GetName(typeof(MakersnEnumTypes.CateNameToUrl), menu.Key);
                 }
                 else
                 {
-                    model.MenuUrl = "/design";
+                    model.MenuUrl = "/cate";
                 }
                 list.Add(model);
             }

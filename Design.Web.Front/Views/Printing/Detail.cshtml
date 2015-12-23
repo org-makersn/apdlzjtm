@@ -1,0 +1,368 @@
+﻿@model PrinterT
+@{
+    ViewBag.Title = "makersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+
+    IList<MaterialT> matList = ViewBag.MatList;
+    List<int> chkMatList = new List<int>();
+    IList<PrinterColorT> colorList = ViewBag.ColorList;
+    PrinterMemberT spot = ViewBag.Spot;
+    int index = 0;
+    int slideNum = 0;
+
+    int matIndex = 1;
+    int colorIndex = 1;
+
+    string profilePic = string.Empty;
+    if (Model.MemberProfilePic == "")
+    {
+        profilePic = "/Content/images/common/profile_photo2.png";
+    }
+    else
+    {
+        profilePic = ViewBag.ProfileImgUrl + Model.MemberProfilePic;
+    }
+}
+
+@section head{
+
+}
+
+<!-- DetailWrap -->
+<div class="detailWrap">
+
+    <!-- LeftCont -->
+    <div class="leftCont">
+
+        <!-- DetailSlide -->
+        <div class="detailSlide">
+            <div class="mainBigImg">
+                <ul class="bxslider">
+                    @foreach (PrinterFileT file in ViewBag.PrinterFileList)
+                    {
+                        <li style="display: none;">
+                            <img src="@ViewBag.PrintImgUrl@file.Rename">
+                        </li>
+                        if (file.Seq == Model.MainImg)
+                        {
+                            slideNum = file.Seq - 1;
+                        }
+                    }
+
+                </ul>
+                <div class="thumb3dImg">
+                    <img src="/content/images/common/loading_bar.gif" alt="로딩중" />
+                </div>
+            </div>
+
+            <div class="thumbArea">
+                <div id="bx-pager">
+                    @foreach (PrinterFileT file in ViewBag.PrinterFileList)
+                    {
+                        <a data-slide-index="@index" href="javascript:void(0);">
+                            <img src="@ViewBag.PrintImgUrl@file.Rename" /></a>
+                        index++;
+                    }
+
+                </div>
+            </div>
+
+        </div>
+        <!-- //DetailSlide -->
+
+        <!-- About -->
+        <div class="aboutZone">
+
+            <p class="title2 pdL15">프린터 소개</p>
+            <div class="txt">
+                <p>
+                    @Model.Comment
+                </p>
+            </div>
+
+        </div>
+        <!-- //About -->
+
+
+        @*<!-- Comment -->
+
+            <div id="goComment" class="commentZone">
+            </div>
+            <!-- //Comment -->*@
+
+
+    </div>
+    <!-- //LeftCont -->
+
+
+    <!-- RightCont -->
+
+
+    <div class="rightCont">
+
+        <!-- userInfoArea -->
+        <div class="userInfoArea">
+            <p class="title">@Model.Brand @Model.Model</p>
+            <p class="star">
+            </p>
+            <div class="rating mgL20"><span style="width: @(Model.Score * 10)%">@(Model.Score)점</span></div>
+            <span class="average">@Model.Score</span>
+            <p></p>
+            <div class="printWrap">
+                <dl class="dlSel con">
+                    <dt>해상도</dt>
+                    <dd>
+                        <div class="tbord_con">@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.QualityType), Model.Quality)</div>
+                    </dd>
+                    <dt>상태</dt>
+                    <dd>
+                        <div class="tbord_con">@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.PrinterStatus), Model.Status) </div>
+                    </dd>
+                    <dt>배송</dt>
+                    <dd>
+                        @switch (spot.PostMode)
+                        {
+                            case (int)Makersn.Util.MakersnEnumTypes.PostType.픽업택배:
+                            <div class="tbord_con">
+                                픽업, 택배
+                            </div>
+                                break;
+
+                            default:
+                            <div class="tbord_con">
+                                @Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.PostType), spot.PostMode)
+                            </div>
+                                    
+                                break;
+                        }
+
+                    </dd>
+                    <dt>재료</dt>
+                    <dd>
+                        <div class="tbord_con">
+                            @{matList = matList.GroupBy(g => g.Name).Select(s => s.First()).ToList<MaterialT>();}
+                            @foreach (MaterialT material in matList)
+                            {
+                                string matText = material.Name;
+                                if (matIndex < matList.Count) { matText += ","; }
+                                if (!chkMatList.Contains(material.No))
+                                {
+                                <span>@matText</span>
+                                    chkMatList.Add(material.No);
+                                }
+                                matIndex++;
+                            }
+                        </div>
+                    </dd>
+                    <dt>색상</dt>
+                    <dd>
+                        <div class="tbord_con">
+                            @{colorList = colorList.GroupBy(g => g.ColorNo).Select(s => s.First()).ToList<PrinterColorT>();}
+                            @foreach (PrinterColorT color in colorList)
+                            {
+                                string colorText = Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), color.ColorNo);
+                                if(colorIndex < colorList.Count){colorText +=",";}
+                                <span>@colorText</span>
+                                colorIndex++;
+                            }
+                        </div>
+                    </dd>
+                    <dt>가격</dt>
+                    <dd>
+                        @{
+                            string priceText = Model.MinPrice + "~" + Model.MaxPrice;
+                            if (Model.MinPrice == Model.MaxPrice) { priceText = Model.MinPrice.ToString(); }
+                            <div class="tbord_con">₩@(priceText)/cm³</div>
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="btnSet mgT10">
+                <p><a href="javascript:PrintRequest(@Model.Status)" onclick="" class="print" title="프린트 요청">프린트 요청</a></p>
+
+                <!--p><a href="javascript:void(0);" onClick="" class="delivery" title="업체 배송 안내">업체 배송 안내</a></p-->
+            </div>
+
+            <ul class="line">
+            </ul>
+
+            <div class="profileZone">
+                <div class="user">
+                    <div class="photo">
+                        <a href="user_profile.html">
+                            <img src="@profilePic" alt="기본프로필" /></a>
+                    </div>
+                    <p class="userId"><span>by <a href="/PrintingProfile?memberNo=@Model.MemberNo">@Model.MemberName</a></span></p>
+                </div>
+                <ul class="profileBtn">
+                    <li><a href="/PrintingProfile?memberNo=@Model.MemberNo" class="shop" title="printing spot"></a></li>
+                    @*<li><a href="javascript:SetFollowUser('@ViewBag.AuthorNo')" class="follow" title="follow"></a></li>*@
+                </ul>
+            </div>
+
+        </div>
+        <!-- //userInfoArea -->
+
+        <div class="userOtherFile">
+            <div class="title">
+                <p class="tit"><span class="boldF">@Model.MemberName</span> 님의 다른 프린터</p>
+                <a href="/PrintingProfile?memberNo=@Model.MemberNo">더보기 +</a>
+            </div>
+
+            <div id="otherPrint"></div>
+        </div>
+
+
+    </div>
+
+
+    @*<div class="rightCont">
+
+            <!-- userInfoArea -->
+            <div class="userInfoArea">
+                <p class="title">@Model.Brand @Model.Model</p>
+                <div class="printWrap">
+                    <dl class="dlSel">
+                        <dt>재료</dt>
+                        <dd>
+                            <div class="tbordSta zIdx200" id="divMat">
+                                <p class="tbordValue" id="pMat">선택해주세요</p>
+                                <ul class="tbordValueLi" id="ulMat">
+                                    @foreach (MaterialT material in matList)
+                                    {
+                                        if (!chkMatList.Contains(material.No))
+                                        {
+                                        <li>
+                                            <input type="radio" name="rdMat" value="@material.No" /><label for="selSta_1">@material.Name</label>
+                                            <input type="hidden" name="minPrice" value="@material.MinPrice" />
+                                            <input type="hidden" name="maxPrice" value="@material.MaxPrice" />
+                                        </li>
+                                            chkMatList.Add(material.No);
+                                        }
+                                    }
+
+                                </ul>
+                            </div>
+                        </dd>
+                        <dt class="mgB0">색상</dt>
+                        <dd class="mgB0">
+                            <div class="tbordSta zIdx199" id="divColor">
+                                <p class="tbordValue" id="pColor">선택해주세요@</p>
+                                <ul class="tbordValueLi" id="ulColor">
+                                 
+                                </ul>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="btnSet mgT10">
+                    <p class="txt2">₩<span class="num">0</span>/cm</p>
+                    <p><a href="/order?printerNo=@Model.MemberNo" onclick="" class="print" title="프린트 요청">프린트 요청</a></p>
+                    <ul class="socialArea2">
+                        <li><a href="" target="_blank" title="페이스북" class="facebook"></a>
+                            <li><a href="" target="_blank" title="트위터" class="twit"></a>
+                                <li><a href="" target="_blank" title="P" class="p"></a>
+                    </ul>
+                    <p><a href="javascript:void(0);" onclick="" class="delivery" title="업체 배송 안내">업체 배송 안내</a></p>
+                </div>
+
+
+                <ul class="countBox">
+                    <li class="show"><span>55</span></li>
+                    <li class="heart"><a href="javascript:void(0);"><span class="">2</span></a></li>
+                    <li class="collect"><span>0</span></li>
+                    <li class="comment bdR_no"><span id="replyCnt" style="cursor: pointer">0</span></li>
+                </ul>
+
+                <div class="profileZone">
+                    <div class="user">
+                        <div class="photo">
+                            <a href="user_profile.html">
+                                <img src="content/images/profile_photo.jpg" alt="기본프로필" /></a>
+                        </div>
+                        <p class="userId"><span>by <a href="">@Model.MemberName</a></span></p>
+                    </div>
+                    <ul class="profileBtn">
+                        <li><a href="printing_profile_others.html" class="shop" title="printing spot"></a></li>
+                        <li><a href="javascript:void(0)" class="follow" title="follow"></a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <!-- //userInfoArea -->
+
+
+            <div class="userOtherFile">
+                <div class="title">
+                    <p class="tit"><span class="boldF">@Model.MemberName</span> 님의 다른 프린터</p>
+                    <a href="#">더보기 +</a>
+                </div>
+
+                <div id="otherPrint"></div>
+            </div>
+
+
+
+        </div>*@
+    <!-- //RightCont -->
+
+</div>
+<!-- //DetailWrap -->
+
+
+
+@section Scripts{
+    <script src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+
+    <script type="text/javascript">
+
+
+        slideNumber = "@slideNum";
+        //디테일 슬라이드
+        $(function () {
+
+            $('.mainBigImg .bxslider').bxSlider({
+                mode: 'fade',
+                pagerCustom: '#bx-pager',
+                speed: 1,
+                startSlide: slideNumber   // 초기 슬라이드 지정번호
+            });
+
+            $('.thumbArea #bx-pager').bxSlider({
+                slideWidth: 80,
+                minSlides: 2,
+                maxSlides: 6,
+                slideMargin: 11,
+                infiniteLoop: !1
+            });
+
+            $('.thumbArea #bx-pager a').on('click', function () {
+                $('#viewer').hide();
+                $('.viewer3d').siblings('img').show();
+                //$('#viewer div').fadeOut();
+            });
+
+
+            $('#bx-pager a').on('click', function () {
+                thingiview = null;
+
+            })
+
+            $("#otherPrint").load("/printing/MemberOtherPrinter?no=" + "@Model.No");
+
+        })
+
+        function PrintRequest(status) {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+                if (status == 2) {
+                    alert("이 프린터는 쉬는중입니다.");
+                }
+                else {
+                    location.href = '/order?printerNo=' + '@Model.No';
+                }
+            }
+        }
+
+    </script>
+
+}

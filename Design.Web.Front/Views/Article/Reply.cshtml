@@ -166,7 +166,10 @@
                             userNm = inReply.Content.Contains("#user#") == true ? inReply.Content.Substring(0, inReply.Content.IndexOf("#")) : "";
 
                             string placeHolder = string.Empty;
-                           
+                            if (userNm != "") { 
+                                placeHolder = userNm + "님께 답글 쓰기"; 
+                                <input type="hidden" name="hfEditToName" value="@userNm" />
+                            }
                             
                             <div class="userText_reply">
                                 <p class="reply_bar"></p>
@@ -178,11 +181,6 @@
 
                                 @*이름 들어갈곳*@
                                 <p class="name">@inReply.MemberName</p>
-                                @if (userNm != "")
-                                {
-                                    placeHolder = userNm + "님께 답글 쓰기"; 
-                                    <input type="hidden" name="hfEditToName" value="@userNm" />
-                                }
 
                                 <div class="editInArea">
                                     <div class="userText_text"><strong>@userNm</strong> @inReply.Content.Substring(contentIdx)</div>

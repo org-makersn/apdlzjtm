@@ -30,7 +30,7 @@
                     <p class="title">3D 모델링 파일</p>
                     <div class="btnAdd">
                         <button class="file_input_button" title="파일추가"></button>
-                        <input type="file" class="file_input_hidden" name="stlupload" id="stlupload" />
+                        <input type="file" class="file_input_hidden" name="stluploads" id="stluploads" multiple/>
                         <div class="btnLoading" style="display: none;">
                             @*<img src="@Url.Content("~/Content/images/common/loadingBg.gif")" alt="업로드중입니다." title="업로드중입니다." />*@
                             <div id="progressbar" style="margin: 0px 0px 16px 0px;"><span style="position: absolute; text-align: center; font-size:large; width: 269px; margin: 7px 0 0 0;">My %</span></div>
@@ -41,13 +41,14 @@
             </div>
             <!-- //3D 모델링 파일 -->
 
+
             <!-- 이미지 파일 -->
             <div class="imgFile">
                 <div class="upBtnZone">
                     <p class="title">이미지 파일</p>
                     <div class="btnAdd">
                         <button class="file_input_button" title="파일추가"></button>
-                        <input type="file" class="file_input_hidden" name="imgupload" id="imgupload" />
+                        <input type="file" class="file_input_hidden" name="imguploads" id="imguploads" multiple/>
                     </div>
                 </div>
                 <p class="txt">타입 : gif, jpg, png / 최대 사이즈 : 개당 100mb / 권장 해상도 630*470px</p>
@@ -106,8 +107,8 @@
                         <ul class="lst_value">
                             <li id="code_all" style="display: none">
                                 <input type="radio" id="lv1" name="lv1" value="" /><label for="lv1">카테고리를 선택해 주세요</label></li>
-                            @*<li id="code_1007">
-                                <input type="radio" id="lv1_10203" name="lv1" value="10203" /><label for="lv1_10203">컨테스트</label></li>*@
+                            <li id="code_1007">
+                                <input type="radio" id="lv1_1007" name="lv1" value="10203" /><label for="lv1_1007">컨테스트</label></li>
                             <li id="code_1001">
                                 <input type="radio" id="lv1_1001" name="lv1" value="1001" /><label for="lv1_1001">아트&데코</label></li>
                             <li id="code_1002">
@@ -224,7 +225,7 @@
                     </div>
                     <img id="img_save" />
                     <div id="viewerThum">
-                        <iframe src="#" id="viewer_frame" width="630" height="470" border="0" frameborder="0" scrolling="no"></iframe>
+                        @*<iframe src="#" id="viewer_frame" width="630" height="470" border="0" frameborder="0" scrolling="no"></iframe>*@
                     </div>
                     <a href="javascript:void(0);" class="close" style="display: none;" id="save_id">닫기</a>
                 </div>
@@ -352,12 +353,28 @@
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery-ui.js")"></script>
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
 
-    @*<script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Thingiview2.js")"></script>
-    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
-    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Detector.js")"></script>
-    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/NormalControls.js")"></script>*@
-    <script src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
-    @Scripts.Render("~/bundles/viewer")
+
+    @*<script src="@Url.VersionedContent("~/Scripts/Thingiview/Three.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/Thingiview/plane.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/Thingiview/thingiview.js")"></script>*@
+    
+    @*<script src="@Url.VersionedContent("~/Scripts/three.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/plane.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/thingiview2.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/STLLoader.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/OBJLoader.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/NormalControls.js")"></script>*@
+
+    
+    <script src="@Url.VersionedContent("/Scripts/makersnView/three.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/STLLoader.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/OBJLoader.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/NormalControls.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/TrackballControls.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/viewer.js")"></script>
+    
+@*    <script src="@Url.VersionedContent("~/Scripts/three.js")"></script>
+    @Scripts.Render("~/bundles/viewer")*@
 
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Article/Upload.js")"></script>
 
@@ -387,65 +404,108 @@
             //    //console.log(iframe.readyState);
             //    $('.imgDefualt').hide();
             //});
-            var volume = "";
+            
             var js = $(this).attr('data-js');
-            jQuery('html, body').animate({ scrollTop: 0 }, 300);
+            ///////////////////////////////
+            var loader = "";
+            if (js.toLowerCase().indexOf(".stl") > -1) {
+                var fileNm = $(this).attr('data-file');
+                js = fileNm;
+                loader = new THREE.STLLoader();
+            }
+            else if (js.toLowerCase().indexOf(".obj") > -1) {
+                loader = new THREE.JSONLoader();
+            }
+            else if (js.toLowerCase().indexOf(".js") > -1) {
+                loader = new THREE.JSONLoader();
+            }
+            //
+            $("#viewerThum").show();
+            init("viewerThum", 478, 360);
 
-            var ThreeJsonLoader = new THREE.JSONLoader(true);
-            ThreeJsonLoader.statusDomElement.style.left = "0px";
-            ThreeJsonLoader.statusDomElement.style.width = "auto";
+            loader.load(js, function (geometry) {
+                var material = new THREE.MeshLambertMaterial({ color: 0xC97B27 }); //color 재질 색상
+                //var material = new THREE.MeshNormalMaterial({ color: 0xC97B27 }); //color 재질 색상
 
-            document.body.appendChild(ThreeJsonLoader.statusDomElement);
-            ThreeLoadCallback = function (geometry, materials) {
-                volume = thingiview.addModel(geometry);
-                console.log(volume);
-                document.body.removeChild(ThreeJsonLoader.statusDomElement);
+                mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(0, 0, 0);
+                scene.add(mesh);
                 $('.imgDefualt').hide();
-
                 $("#save_id").show();
-            };
+                render();
+            });
+            /////////////////////////////////
 
-            thingiview = new Thingiview('viewerThum');
 
-            thingiview.resize(478, 360);
-            ThreeJsonLoader.load(js, ThreeLoadCallback);
-            //여기까지
+            //jQuery('html, body').animate({ scrollTop: 0 }, 300);
 
-            ////stl load형식으로 바꾼 추가부분
-            //var filePath = $(this).attr('data-file');
-            //var fileExt = $(this).attr('data-ext');
+            //var ThreeJsonLoader = new THREE.JSONLoader(true);
+            //ThreeJsonLoader.statusDomElement.style.left = "0px";
+            //ThreeJsonLoader.statusDomElement.style.width = "auto";
+
+            //document.body.appendChild(ThreeJsonLoader.statusDomElement);
+            //ThreeLoadCallback = function (geometry, materials) {
+            //    thingiview.addModel(geometry);
+            //    document.body.removeChild(ThreeJsonLoader.statusDomElement);
+            //    $('.imgDefualt').hide();
+
+            //    $("#save_id").show();
+            //};
 
             //thingiview = new Thingiview('viewerThum');
 
             //thingiview.resize(478, 360);
-
-            //switch (fileExt) {
-            //    case "stl":
-            //        var stlLoader = new THREE.STLLoader();
-            //        stlLoader.load(filePath, function (geometry) {
-            //            thingiview.addModel(geometry);
-            //            $('.imgDefualt').hide();
-            //        });
-            //        break;
-            //    case "obj":
-            //        var objTest = new THREE.OBJLoader();
-            //        objTest.load(filePath, function (geometry) {
-            //            console.log(geometry);
-            //            thingiview.addModel(geometry);
-            //            $('.imgDefualt').hide();
-            //        });
-            //        break;
-            //}
+            //ThreeJsonLoader.load(js, ThreeLoadCallback);
             ////여기까지
 
-            var thingiviewanimate = function () {
-                if (thingiview != undefined) {
-                    requestAnimationFrame(thingiviewanimate);
-                    thingiview.render();
-                }
-            }
+            //////stl load형식으로 바꾼 추가부분
+            ////var filePath = $(this).attr('data-file');
+            ////var fileExt = $(this).attr('data-ext');
 
-            thingiviewanimate();
+            ////thingiview = new Thingiview('viewerThum');
+
+            ////thingiview.resize(478, 360);
+
+            ////switch (fileExt) {
+            ////    case "stl":
+            ////        var stlLoader = new THREE.STLLoader();
+            ////        stlLoader.load(filePath, function (geometry) {
+            ////            thingiview.addModel(geometry);
+            ////            $('.imgDefualt').hide();
+            ////            $("#save_id").show();
+            ////        });
+            ////        break;
+            ////    case "obj":
+            ////        var objLoader = new THREE.OBJLoader();
+            ////        objLoader.load(filePath, function (geometry) {
+
+
+            ////            thingiview.addModel(geometry);
+            ////            $('.imgDefualt').hide();
+            ////            $("#save_id").show();
+            ////        });
+            ////        break;
+            ////}
+            //////여기까지
+
+            //var thingiviewanimate = function () {
+            //    if (thingiview != undefined) {
+            //        requestAnimationFrame(thingiviewanimate);
+            //        thingiview.render();
+            //    }
+            //}
+
+            //thingiviewanimate();
+
+
+            //////뷰어 개선 테스트
+            ////var path = $(this).attr("data-file");
+            ////var renderer = null; // thingiview 안에 있는 변수 꺼내옴
+            ////thingiurlbase = "../Scripts/Thingiview";
+            ////thingiview = new Thingiview("viewerThum");
+            ////thingiview.initScene();
+            ////thingiview.setObjectColor('#0xcacaca');
+            ////thingiview.loadSTL(path);
         });
 
         function closet() {

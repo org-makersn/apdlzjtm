@@ -1,0 +1,514 @@
+﻿@model PagedList.IPagedList<Makersn.Models.OrderT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+
+    DateTime nowDt = DateTime.Now;
+
+    int timerIdx = 0;
+}
+
+
+<!-- contWrap -->
+<div class="contWrap">
+
+    <div class="subtitle3">
+        <h2>내 주문</h2>
+    </div>
+
+    @* <div class="storeMng">
+        <div class="mgL20 orderSch mgTm20">
+
+            <!-- 주문기간 -->
+
+            <div class=" searchKey">
+                <p class="tit1">주문 기간</p>
+                <p class="value3">전체</p>
+                <ul class="valueLi3">
+                    <li id="searchKey_1">
+                        <input type="radio" id="selKey_1" name="selKey" value="1" /><label for="selKey_1">전체</label></li>
+                    <li id="searchKey_2">
+                        <input type="radio" id="selKey_2" name="selKey" value="2" /><label for="selKey_2">일주일</label></li>
+                    <li id="searchKey_3">
+                        <input type="radio" id="selKey_3" name="selKey" value="3" /><label for="selKey_3">한달</label></li>
+                    <li id="searchKey_4">
+                        <input type="radio" id="selKey_4" name="selKey" value="4" /><label for="selKey_4">일년</label></li>
+                </ul>
+            </div>
+            <p class="valkey">
+                <input name="" class="inputKey" type="text" value="">
+            </p>
+            <!-- //주문기간 -->
+
+            <p class="btn"><a href="" class="btnG type6">검색</a></p>
+
+        </div>
+    </div>*@
+
+    <!--표-->
+    <div class="cartWrap">
+
+        <div class="myorderMng mgT10">
+            <table class="tblType2" summary="내 주문리스트">
+                <caption>내 주문 리스트</caption>
+                <colgroup>
+                    <col style="width: 12%;" />
+                    <col style="width: 16%;" />
+                    <col style="width: 36%;" />
+                    <col style="width: 13%;" />
+                    <col style="width: 12%;" />
+                    <col style="width: 11%;" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">주문 번호</th>
+                        <th scope="col">주문 일시</th>
+                        <th scope="col">주문 파일</th>
+                        <th scope="col">주문 스팟</th>
+                        <th scope="col">결제 금액</th>
+                        <th scope="col">주문 상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (OrderT order in Model)
+                    {
+                        string orderDt = order.OrderDt == null ? "" : ((DateTime)order.OrderDt).ToString("yyyy-MM-dd");
+                        string orderTime = order.OrderDt == null ? "" : ((DateTime)order.OrderDt).ToString("HH:mm:ss");
+                        var chgPrice = string.Format("{0:N0}", order.TotalPrice + order.PostPrice);
+                        DateTime orderDate = (DateTime)order.OrderDt;
+                        <tr>
+                            <td>
+                                @order.OrderNo
+                                <br />
+                                <a class="btnG type12" onclick="javascript:GetDetail(@order.No)">자세히</a>
+                            </td>
+                            <td>
+                                @orderDt<br />
+                                @orderTime
+                                @*@(((DateTime)order.OrderDt).ToString("yyyy-MM-dd"))
+                                 <br /> 
+                                @(((DateTime)order.OrderDt).ToString("hh:mm:ss"))*@</td>
+                            @**@
+                            <td>
+                                <ul class="prd">
+                                    <li>
+                                        <img src="@ViewBag.ArticleImgUrl@order.fileImgName" class="prdImg1" alt="주문한 상품" /></li>
+                                    <li>
+                                        <p class="prdTxt1" style="width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                            @order.fileName
+                                        </p>
+                                        @if (order.DetailCount > 1)
+                                        {
+                                            <p style="float: left">외 @(order.DetailCount - 1)개 파일</p>
+                                        }
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>
+                                <p>@order.PrinterMemberName</p>
+                                @*<a href="/printingProfile?memberNo=@order.PrinterMemberNo" class="btnG type13">문의하기</a>*@
+                                <a href="/profile?gubun=QnA&no=@Base64Helper.Base64Encode(order.PrinterMemberNo.ToString())" class="btnG type13">문의하기</a>
+                            </td>
+                            <td>@(chgPrice)원</td>
+
+                            <td>
+                                @*@{string href = "#";
+                                  if (order.OrderStatus < (int)Makersn.Util.MakersnEnumTypes.OrderState.결제완료)
+                                  {
+                                      href = "/order/payment?orderNo=" + order.No;
+                                    <a href="@href" class="btnG type12">결제하기</a>
+                                  }
+                                }*@
+                                @{
+                                        if (order.PostMode == (int)Makersn.Util.MakersnEnumTypes.PostType.픽업 && order.OrderStatus == (int)Makersn.Util.MakersnEnumTypes.OrderState.배송요청)
+                                        {
+                                            <span>픽업요청</span>
+                                        }
+                                        else
+                                        {
+                                           <span>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.OrderState), order.OrderStatus)</span> 
+                                        }
+                                }
+
+                                @switch (order.OrderStatus)
+                                {
+                                    case (int)Makersn.Util.MakersnEnumTypes.OrderState.결제완료:
+                                    <a href="#" onclick="showCancle(this,'@order.No')" class="btnG type13 cancelClass">주문 취소</a>
+                                    <input type="hidden" class="hfCancelClass" value="@((nowDt - orderDate).TotalSeconds)" id="spantime_@timerIdx" />
+                                        break;
+
+                                    case (int)Makersn.Util.MakersnEnumTypes.OrderState.결제대기:
+                                    <a href="#" onclick="showAccountNum('@(order.TotalPrice + order.PostPrice)', '@order.PrinterMemberName')" class="btnG type12 cancelClass">계좌번호 보기</a>
+                                    <a href="#" onclick="showCancle(this,'@order.No')" class="btnG type13 cancelClass mgT10">주문 취소</a>
+                                    <input type="hidden" class="hfCancelClass" value="@((nowDt - orderDate).TotalSeconds)" id="spantime_@timerIdx" />    
+                                        break;
+
+                                    case (int)Makersn.Util.MakersnEnumTypes.OrderState.주문요청:
+                                    <a href="/order/payment?orderNo=@order.No" class="btnG type13 cancelClass">결제하기</a>
+                                    <a href="#" onclick="showCancle(this,'@order.No')" class="btnG type13 cancelClass mgT10">주문 취소</a>
+                                    <input type="hidden" class="hfCancelClass" value="@((nowDt - orderDate).TotalSeconds)" id="spantime_@timerIdx" />    
+                                        break;
+
+
+
+                                    //case 140:
+                                    case (int)Makersn.Util.MakersnEnumTypes.OrderState.출력완료:
+                                    <a href="javascript:ShowOutputImage('@order.No')" class="btnG type13">인증샷 보기</a>
+                                        break;
+
+                                    //case 210:
+                                    case (int)Makersn.Util.MakersnEnumTypes.OrderState.요청거부:
+                                    <a href="javascript:FindOterPrinter('@order.No')" class="btnG type12">다른 스팟 찾기</a>
+                                    <a href="#" onclick="showCancle(this,'@order.No')" class="btnG type13 cancelClass mgT10">주문 취소</a>
+                                        break;
+
+                                    case (int)Makersn.Util.MakersnEnumTypes.OrderState.시간초과:
+                                    <a href="javascript:FindOterPrinter('@order.No')" class="btnG type12">다른 스팟 찾기</a>
+                                    <a href="#" onclick="showCancle(this,'@order.No')" class="btnG type13 cancelClass mgT10">주문 취소</a>
+                                        break;
+
+                                    case (int)Makersn.Util.MakersnEnumTypes.OrderState.배송중:
+                                    <a href="javascript:GetPostInfo('@order.No')" class="btnG type12">배송정보 보기</a>
+                                        break;
+
+                                    //case 200:
+                                    case (int)Makersn.Util.MakersnEnumTypes.OrderState.배송완료:
+                                    <a href="javascript:GoReview('@order.No')" class="btnG type13">평가하기</a>
+                                        break;
+                                }
+
+                            </td>
+                        </tr>
+                                timerIdx++;
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <!--//표-->
+    <!-- 페이징 -->
+    <div class="paging pdB35 mgT40">
+        @*<a href="#" class="first_page">처음 페이지</a>
+            <a href="#" class="prev_page">이전 페이지</a>
+            <span>    
+            <!--[D]현재 페이지는 클래스 on 추가-->    	
+              <a href="#" class="paging_no on">1</a>
+              <a href="#" class="paging_no">2</a>
+              <a href="#" class="paging_no">3</a>
+              <a href="#" class="paging_no">4</a>          
+            </span>
+            <a href="#" class="next_page">다음 페이지</a>
+            <a href="#" class="last_page">마지막 페이지</a>*@
+
+    </div>
+
+    @Html.PagedListPager((PagedList.IPagedList)Model,
+    page => ("/order/Myorder?page=" + page), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    <!-- //페이징 -->
+
+</div>
+<!-- //contWrap -->
+
+<!-- 자세히 보기 팝업 -->
+<div class="popupArea detail">
+    <div class="bgArea">
+    </div>
+    <div class="popBox5 mgT-350" id="detailPop">
+    </div>
+    @* <div class="popBox">
+
+        <div >
+        </div>
+
+
+    </div>*@
+</div>
+<!-- // 자세히 보기 팝업 -->
+
+<!-- 배송정보 보기 팝업 -->
+<div class="popupArea postInfo">
+    <div class="bgArea">
+    </div>
+    <div class="popBox5" id="popPostInfo">
+    </div>
+</div>
+<!-- // 배송정보  보기 팝업 -->
+
+<!--  취소 팝업 -->
+<div class="popupArea cancelPop">
+    <div class="bgArea" style="opacity: 0.52; height: 100%;">
+    </div>
+    <div class="popBox5">
+        <div class="pop_wrap4 hAuto">
+            <div class="pop_txt_b">
+                주문을 한지 <strong id="countTime"></strong>가 경과되었습니다.<br>
+                정말 프린팅 주문을 취소하시겠습니까?
+            </div>
+            <div class="pop_txt_s">결제 금액의 환불 시간은 카드사마다 다를 수 있습니다.</div>
+            <a href="javascript:closePop()" class="pop_btn3 mgR15">아니요</a>
+            <a href="javascript:CancelOrder()" class="pop_btn2">네, 취소합니다</a>
+            <a href="javascript:closePop()" class="pop_close">창 닫기</a>
+            <input type="hidden" id="hfCloseOrderNo" />
+        </div>
+    </div>
+</div>
+<!-- // 취소 팝업 -->
+
+
+<!-- 계좌번호 보기 팝업-->
+<div class="popupArea accountNo">
+    <div class="bgArea" style="opacity: 0.52; height: 100%;">
+    </div>
+    <div class="popBox5">
+        <div class="pop_wrap4 hAuto">
+            <div class="pop_txt_b">
+                <span class="orange"><strong>주문이 완료되었습니다.</strong></span><p>
+                </p>
+                <div class="smTxt">
+                    출력 요청금액 <strong id="popPrice"></strong>을 아래의 계좌로 입금해주세요.<br>
+                    <span class="orange">국민은행, 예금주 메이커스, 1232-232123-123123123</span><br>
+                    <br>
+                    입금이 확인된 이후 주문이 <strong class="popSpotName"></strong>스팟에 전달됩니다.<br>
+                    입금 확인 후 <strong class="popSpotName"></strong>스팟님에게 주문이 전달되며,
+                    <br>
+                    스팟에서 12시간 이내에 요청을 수락하지 않을 경우 결제는
+                    <br>
+                    자동 취소되며 100% 환불됩니다.
+                </div>
+
+            </div>
+            <a href="javascript:closePop()" class="pop_close">창 닫기</a>
+        </div>
+    </div>
+</div>
+<!-- //계좌번호 보기 팝업-->
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var interval = null;
+
+        // 셀렉트박스 UI
+        $(function () {
+            event_timer();
+            //$('#code_all').addClass('selected');
+            //$('#li_1').addClass('selected');
+
+            function uiSelect(obj, valLst, val, check_id) {
+                var set = {
+                    ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                    container: $(obj),
+                    value: $(val),
+                    list: $(valLst),
+                    firstVal: $(valLst + "> li:first-child > label").html(),
+                    li: $(valLst + "> li"),
+                    label: $(valLst + "> li > label")
+                }
+
+                set.list.hide();
+                if (check_id == '') {
+                    set.value.append(set.firstVal);
+                    $("#category_no").val('전체');
+                }
+                else {
+                    set.value.append($("#" + check_id).next().html());
+                    $("#category_no").val(check_id);
+                }
+                set.value.click(function () {
+
+                    set.list.show();
+                    set.list.focusin(function () {
+                        set.list.show();
+                    }
+                    );
+                    if (set.ie6) {
+                        set.label.hover(
+                            function () { $(this).parent().addClass("selected"); },
+                            function () { $(this).parent().removeClass("selected"); }
+                        );
+                    }
+                    function listHide() {
+                        setTimeout(function () { set.list.hide(); }, 300);
+                    }
+                    set.container.mouseleave(listHide);
+                    set.label.click(function () {
+                        set.value.empty().append($(this).html());
+                        $("#category_no").val($(this).text());
+
+                        set.list.hide();
+                    }
+                    );
+                }
+				);
+            }
+
+            //uiSelect(".ordState", ".valueLi", ".value", "전체");
+            //uiSelect(".ordPd", ".valueLi2", ".value2", "전체");
+            uiSelect(".searchKey", ".valueLi3", ".value3", "주문자명");
+
+            //var selNum = $('.tblType2 tr').length
+            //for (i = 1 ; i < selNum ; i++) {
+            //    uiSelect("#tbordSta" + i, "#tbordValueLi" + i, "#tbordValue" + i, "주문접수");
+            //}
+
+            $('.valueLi li').on('click', function () {
+                $('.valueLi li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+            //$('.valueLi2 li').on('click', function () {
+            //    $('.valueLi2 li').removeClass("selected");
+            //    $(this).addClass("selected");
+            //});
+
+            //$('.valueLi3 li').on('click', function () {
+            //    $('.valueLi3 li').removeClass("selected");
+            //    $(this).addClass("selected");
+            //});
+
+
+            //$('.valueLi li').mouseenter(function () {
+            //    $('.valueLi li').removeClass('selected');
+            //})
+
+
+            //$('.valueLi2 li').mouseenter(function () {
+            //    $('.valueLi2 li').removeClass('selected');
+            //})
+
+            $('.valueLi3 li').mouseenter(function () {
+                $('.valueLi3 li').removeClass('selected');
+            })
+
+
+        });        function GoReview(no) {
+            location.href = "/order/MyOrderReview?orderNo=" + no;
+        }        function GetDetail(val) {
+            $(".popupArea.detail").show();            Ajax.SyncGetPartialView("/order/OrderDetailPop", { orderNo: val }, "detailPop");
+        }        function FindOterPrinter(no) {
+            if (confirm("다른 스팟 찾기 이동시 현재 요청서는 삭제됩니다")) {
+                location.href = "/order?orderNo=" + no;
+            }
+        }        function ShowOutputImage(val) {
+            location.href = '/order/ShowOutputImage?orderNo=' + val;
+        }        function GetPostInfo(val) {
+            $(".popupArea.postInfo").show();
+
+            Ajax.SyncGetPartialView("/order/GetPostInfo", { orderNo: val }, "popPostInfo");
+        }
+        function showCancle(val, no) {
+            $("#countTime").text("");
+            clearInterval(interval);
+
+            time = $(val).parents('td').find('input').val();
+
+            time_format(time, no);
+
+            interval = setInterval(function () {
+                time_format(time, no);
+                time++;
+            }, 1000);
+
+            $('.popupArea.cancelPop').show();
+            console.log(no);
+            $("#hfCloseOrderNo").val(no);
+        }
+
+        function CancelOrder() {
+            var no = $("#hfCloseOrderNo").val();
+            //interval = setInterval(function () {
+            //    time_format(time);
+            //    time++;
+            //}, 1000);
+
+
+            //if (confirm("주문을 한지 시간이 경과되었습니다.\n정말 프린팅 주문을 취소하시겠습니까?")) {
+            var onSuccess = function (result) {
+                alert(result.Message);
+                if (result.Success) {
+                    location.reload(true);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/order/CancelOrder", { no: no }, onSuccess);
+            //}
+        }
+
+
+        function event_timer() {
+            var timeNum = $(".cancelClass").length;
+            for (i = 0 ; i < timeNum ; i++) {
+                var time = $(".cancelClass").eq(i);
+                $(time).attr("id", "spantime_" + i);
+                var time_remain = $(time).parents("td").find("input").attr("value");
+                rt = parseInt(time_remain);
+                if (rt == 43200) {
+                    alert("시간이 초과되었습니다.");
+                    window.location.reload();
+                } else {
+                    time_remain = parseInt(time_remain) + 1;
+                    $(time).parents("td").find("input").attr("value", time_remain);
+                }
+            }
+
+            setTimeout("event_timer()", 1000);
+        }
+
+        function time_format(s, no) {
+            var t = "";
+            if (s > -1) {
+                hour = Math.floor(s / 3600);
+                min = Math.floor(s / 60) % 60;
+                sec = s % 60;
+                day = parseInt(hour / 24);
+                if (day > 0) {
+                    hour = hour - 24 * day;
+                    t = day + "일";
+                }
+
+                t += hour + "시간";
+
+                if (min < 10) { t += "0"; }
+                t += min + "분";
+                if (sec < 10) { t += "0"; }
+                t += sec + "초";
+            }
+            else { t = "0:00:0x"; }
+
+            $("#countTime").text(t);
+
+            return no;
+        }
+
+
+        function closePop() {
+            clearInterval(interval);
+
+            $(".popupArea").hide();
+        }
+
+        function takePost(val) {
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    //location.reload(true);
+                    location.href = "/order/MyOrderReview?orderNo=" + val;
+                }
+                else {
+                    alert("잘못된 접근입니다.");
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/order/TakePost", { orderNo: val }, onSuccess);
+        }
+
+        function showAccountNum(price, spotName) {
+            $("#popPrice").text(price + "원");
+            $(".popSpotName").text(spotName);
+            $(".popupArea.accountNo").show();
+        }
+    </script>
+}

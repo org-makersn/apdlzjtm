@@ -1,0 +1,536 @@
+﻿@model Makersn.Models.ArticleT
+@{
+    ViewBag.Title = "디자인 업로드";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int uploadCnt = ViewBag.UploadCnt;
+
+    IList<ArticleFileT> fileList = ViewBag.FileList;
+}
+
+@section editBtnzone{
+    @*<li><a href="javascript:void(0);"><img src="@Url.Content("~/Content/images/common/btn/btn_language.gif")" /></a></li>*@
+    <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">편집
+            @*<img src="@Url.Content("~/Content/images/common/btn/btn_edit.gif")" />*@</a></li>
+}
+
+<div class="subtitle">
+    <h2>번역</h2>
+
+</div>
+
+<!-- uploadWrap -->
+<div class="uploadWrap">
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @Html.HiddenFor(model => model.No)
+        <input type="hidden" id="temp" name="temp" value="@Model.Temp" />
+        <input type="hidden" id="main_img" name="main_img" value="@Model.MainImage" />
+        <input type="hidden" id="mode" name="mode" value="edit">
+        <input type="hidden" id="del_no" name="del_no" value="">
+        <input type="hidden" id="uploadCnt" name="uploadCnt" value="@ViewBag.UploadCnt">
+        <input type="hidden" id="insertVideoSource" name="insertVideoSource" value="@Model.VideoUrl"/>
+        <input type="hidden" id="transFlag" name="transFlag" value="@ViewBag.transFlag" />
+
+
+
+        <div class="dragImg mgT20">
+            <div class="mainBoxDrag">
+                <div class="imgMain">
+                    <img src="@ViewBag.ArticleImgUrl@Model.ImageName" alt="3d파일이미지">
+                </div>
+            </div>
+
+            <div class="selectImg" id="ajax_upload">
+
+
+                <ul>
+                    @for (int i = 0; i < uploadCnt; i++)
+                    {
+                        int index = i + 1;
+                        string strClass = index % 5 == 0 ? "class=mgR0" : "";
+                        if (fileList.Count() > i)
+                        {
+                        <li @strClass>
+                            <div class="imgBox ui-draggable ui-draggable-handle ui-droppable">
+                                <a title="삭제" class="delImg" href="javascript:void(0);" data-val="@fileList[i].No"></a>
+                                <input name="multi[]" class="_multi" type="hidden" value="@fileList[i].No">
+                                @if (fileList[i].FileType == "img")
+                                {
+                                    <img src="@Url.Content(ViewBag.ArticleImgUrl + fileList[i].Rename + "?" + DateTime.Now)" alt="thumnail" title="@fileList[i].Name" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content(ViewBag.ArticleImgUrl + fileList[i].ImgName + "?" + DateTime.Now)" alt="3d파일이미지" title="@fileList[i].Name">
+                                }
+                            </div>
+                        </li>
+                        }
+                        else
+                        {
+                        <li @strClass>@index</li>
+                        }
+                    }
+                </ul>
+
+            </div>
+
+            <div class="btnMores">
+            </div>
+        </div>
+        <!-- //DragImg -->
+
+        <!-- inputUpload -->
+        <div class="inputUpload">
+            <!-- Left -->
+            <div class="left">
+
+                <div class="boxNo1">
+                    <p class="headerInput">한국어</p>
+                    <div>
+                        <input id="article_title" class="inputTit" type="text" readonly="readonly" name="article_title" placeholder="제목" value="@Model.Title" />
+                    </div>
+                    <div class="textArea">
+                        @*<textarea id="article_contents" name="article_contents">@Model.Contents</textarea>*@
+                        <textarea class="input_content" id="article_contents" readonly="readonly" name="article_contents" placeholder="내용을 입력하세요.">@Model.Contents</textarea>
+                        <textarea class="input_tag" id="article_tags" readonly="readonly" name="article_tags" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분).">@Model.Tag</textarea>
+
+                        <div class="btSet">
+                        @*    <a href="#" class="aMovie" title="동영상 첨부"></a>*@
+                        </div>
+                    </div>
+                    @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
+                </div>
+
+            </div>
+            <!-- //Left -->
+
+            <!-- Right -->
+            <div class="right">
+
+                <div class="boxNo1 eng lang">
+                    <p class="headerInput eng">영어</p>
+                    <div class="lang_select">
+                        <a href="javascript:TransFor('EN')" class="en on"></a>
+                        <!--a href="" class="en"></a-->
+                        @*<a href="javascript:TransFor('CN')" class="cn"></a>
+                        <a href="javascript:TransFor('JP')" class="jp"></a>*@
+                    </div>
+
+                    <div>
+                        <input id="trans_title" class="inputTit eng" type="text" name="trans_title" value="" placeholder="Title(제목)" />
+                    </div>
+                    <div class="textArea eng">
+                        <textarea class="input_content eng" id="trans_contents" name="trans_contents" placeholder="Description(내용)"></textarea>
+                        <textarea class="input_tag eng" id="trans_tags" name="trans_tags" placeholder='Tags (Put comma between tags) &#13;&#10;태그 (태그와 태그 사이는 쉼표로 구분)'></textarea>
+
+                        <div class="btSet">
+                            <a href="#" class="aMovie" title="동영상 첨부"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="chkLang" name="chkLang" value="EN" />
+
+
+                <div class="boxNo1 eng">
+                    <p class="headerInput eng">CATEGORY</p>
+                    <div class="selected">
+                        @Makersn.Util.EnumHelper.GetEnumTitle((Makersn.Util.MakersnEnumTypes.EnCateName)(Model.CodeNo))
+                    </div>
+                </div>
+
+                <div class="boxNo2 mgT-13">
+                    <p class="headerInput eng">
+                        LICENSE  <a href="info/license.html" target="_blank">
+                            <img src="@Url.Content("~/Content/images/common/ico/ico_q.gif")" alt="라이센스"></a>
+                    </p>
+                    <div class="selected2">
+                        @{switch (Model.Copyright)
+                          {
+                              case 1:
+
+                            <span class="titLicense01">Attribution</span>
+                         
+                                  break;
+                              case 2:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense02">Nonprofit</span>
+                            
+                                  break;
+                              case 3:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense04">Changed ban</span>
+                           
+                                  break;
+                              case 4:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense03">Alike</span>
+                          
+                                  break;
+                              case 5:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense02">Nonprofit</span>
+
+                            <span class="titLicense03">Alike</span>
+                        
+                                  break;
+                              case 6:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense02">Nonprofit</span>
+
+                            <span class="titLicense04">Changed ban</span>
+                          
+                                  break;
+                          }
+ }
+                    </div>
+                </div>
+            </div>
+            <!-- //Right -->
+
+        </div>
+        <!-- //inputUpload -->
+    </form>
+
+    <!-- btnZone -->
+    <div class="btnZone2">
+        @*<button title="임시 저장" class="btnThumbSave _btn_save" onclick="Upload.TempUpload();"></button>*@
+        <button title="업로드" class="btnUpFile _btn_reg" onclick="SetTranslation();"></button>
+        @*<button title="삭제" class="btnTextDel _btn_del"  data-val="@Model.No" onclick="Upload.ArticleDelete()">삭제</button>*@
+        <button title="취소" class="btnUpCancel" onclick="return history.back();">취소</button>
+    </div>
+    <!-- //btnZone -->
+
+    <!-- 업로드 가이드 팝업 -->
+    <div class="popupArea upGuide">
+        <div class="bgArea">
+        </div>
+        <div class="popBox">
+            <div class="txtZone">
+                <p class="tit1">업로드 대상</p>
+                <ol>
+                    <li>1. 본인이 직접 디자인한 파일</li>
+                    <li>2. 저작권이 없는 디자인 파일</li>
+                    <li>3. 수정을 허가한 디자인 파일 (원저작자 명시)</li>
+                </ol>
+                <p class="tit2">업로드 불가</p>
+                <ol>
+                    <li>1. 저작권이 있거나 원저작자의 이용 허가 범위를 벗어나는 디자인 파일</li>
+                    <li>2. 실제 동작하는 무기류 또는 음란물 디자인 파일</li>
+                    <li>3. 기타 makersN의 이용 약관과 라이선스 정책을 벗어난 디자인 파일</li>
+                </ol>
+                <p class="bt_close">
+                    <a href="javascript:void(0);" onclick="popupClose();">
+                        <img src="@Url.Content("~/Content/images/common/btn/btn_close.gif")" alt="닫기" /></a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- // 업로드 가이드 팝업 -->
+
+    <!-- 썸네일팝업 -->
+    <form id="img_form" name="img_form" method="post">
+        <input type="hidden" id="stl_val" name="stl_val">
+        <input type="hidden" id="stl_img_no" name="stl_img_no">
+
+        <div class="popupArea thumnailPop">
+            <div class="bgArea bgThumOutput">
+            </div>
+            <div class="popBox">
+
+                <!-- thumnailWrap -->
+                <div class="thumnailWrap">
+                    <div class="imgDefualt">
+                        <img src="@Url.Content("~/Content/images/common/default3d.png")" class="dfImg" alt="디폴트 이미지" /><img src="@Url.Content("~/Content/images/common/loading_bar.gif")" alt="" class="imgDefualtImg" />
+                    </div>
+                    <img id="img_save" />
+                    <div id="viewerThum">
+                        <iframe src="#" id="viewer_frame" width="630" height="470" border="0" frameborder="0" scrolling="no"></iframe>
+                    </div>
+                    <a href="javascript:void(0);" class="close" id="save_id">닫기</a>
+                </div>
+                <!-- // thumnailWrap -->
+
+            </div>
+        </div>
+    </form>
+    <!-- //썸네일팝업 -->
+
+</div>
+<!-- //upUpload -->
+
+
+<!--  임시저장확인 팝업 -->
+<div class="popupArea thumbPop">
+    <div class="bgArea">
+    </div>
+    <div class="popBox">
+        <div class="contactZone">
+            <p class="titleContact">임시저장되었습니다!</p>
+            <p class="bt_st1">
+                <button type="button" onclick="Upload.GoArticle()" title="저장된 페이지로 이동하기">저장된 페이지로 이동하기</button>
+            </p>
+            <p class="bt_st2">
+                <button type="button" onclick="Upload.GoMain()" title="메인 페이지로 이동하기">메인 페이지로 이동하기</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- // 임시저장확인 팝업 -->
+
+
+<!--  게시버튼확인 팝업 -->
+<div class="popupArea uploadEnd">
+    <div class="bgArea">
+    </div>
+    <div class="popBox">
+        <div class="contactZone">
+            <p class="titleContact">게시되었습니다!</p>
+            <p class="bt_st1">
+                <button type="button" onclick="Upload.GoArticle()" title="게시된 페이지로 이동하기">게시된 페이지로 이동하기</button>
+            </p>
+            <p class="bt_st2">
+                <button type="button" onclick="Upload.GoMain()" title="메인 페이지로 이동하기">메인 페이지로 이동하기</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- // 게시버튼확인 팝업 -->
+
+
+<!--동영상 소스삽입 팝업 -->
+<div class="popupArea videoSource">
+    <div class="bgArea" style="opacity: 0.52; height: 100%;">
+    </div>
+    <div class="popBox3">
+        <div class="pop_wrap3">
+            <!--창 크기 440(w)x363(h)-->
+            <div class="pop_tap_title">
+                <!--[D]현재 메뉴에 클래스 on추가-->
+                <a href="javascript:videoInsertPop()" class="on">동영삽 삽입</a>
+                <a href="javascript:videoLinkPop()">동영상 링크</a>
+            </div>
+            <div class="pop_txt">
+                <textarea placeholder="소스코드" id="videoSource"></textarea>
+                <div class="pop_desc">
+                    설명 영역에 동영상이 바로 보이도록 삽입하기 원하시면, YouTube, vimeo<br>
+                    등의 동영상 서비스에서 제공하는 소스코드를 복사 후 붙여 넣으세요.
+
+                </div>
+            </div>
+            <a href="#" id="videoPreView" class="pop_btn_left">미리보기</a>
+            <a href="#" id="addVideoSource" class="pop_btn">저장하기</a>
+            <a href="#" class="pop_close">창 닫기</a>
+        </div>
+        <div class="movie_view" style="display: none;">
+        </div>
+    </div>
+</div>
+<!--// 동영상 소스삽입 팝업 -->
+
+<!-- 동영상 링크 삽입 팝업 -->
+<div class="popupArea videoLink">
+    <div class="bgArea" style="opacity: 0.52; height: 100%;">
+    </div>
+    <div class="popBox3">
+        <div class="pop_wrap3">
+            <!--창 크기 440(w)x363(h)-->
+            <div class="pop_tap_title">
+                <!--[D]현재 메뉴에 클래스 on추가-->
+                <a href="javascript:videoInsertPop()">동영삽 삽입</a>
+                <a href="javascript:videoLinkPop()" class="on">동영상 링크</a>
+            </div>
+            <div class="pop_txt">
+                <input type="text" id="videoLink" placeholder="URL 입력" />
+                <div class="pop_desc">
+                    설명 영역에 동영상 링크를 걸기 원하시면, YouTube, vimeo 등의
+                    <br>
+                    동영상 서비스에서 해당 동영상의 URL을 복사 후 붙여 넣으세요.
+                </div>
+            </div>
+            <a href="#" id="addVideoLink" class="pop_btn">저장하기</a>
+            <a href="#" class="pop_close">창 닫기</a>
+        </div>
+
+    </div>
+</div>
+<!--// 동영상 링크 삽입 팝업 -->
+
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="@Url.VersionedContent("~/Content/css/jquery-ui-1.8.18.custom.css")" />
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.easing.1.3.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery-ui.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+
+    <script src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
+    @Scripts.Render("~/bundles/viewer")
+
+    @*<script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Article/Upload.js")"></script>*@
+    <script type="text/javascript">
+        $(function () {
+
+            $(".popupArea").hide();
+            $('input:radio[name="lv1"][value="@Model.CodeNo"]').prop('checked', true);
+            $('input:radio[name="copyright"][value="@Model.Copyright"]').prop('checked', true);
+
+
+
+            //수정 버튼
+            $("#editBtn").click(function () {
+                var articleno = $(this).data("val");
+                $(location).attr("href", "/design/Edit?no=" + articleno);
+            });
+
+            //$(".aMovie").click(function () {
+            //    videoInsertPop();
+            //});
+
+            //$("#addVideoSource").click(function () {
+            //    var text = $("#videoSource").val();
+            //    var char = "";
+            //    var fristIndex = text.indexOf("http");
+            //    char = text.substring(fristIndex - 1, fristIndex);
+            //    text = text.substring(fristIndex);
+            //    fristIndex = text.indexOf(char);
+            //    text = text.substring(0, fristIndex);
+
+            //    $("#insertVideoSource").val(text);
+            //    videoPopupHide();
+            //});
+
+            //$("#addVideoLink").click(function () {
+            //    var text = $("#videoLink").val();
+            //    if (text.indexOf("<") == -1) {
+            //        $("#article_contents").val($("#article_contents").val() + "\r\n" + text + "\r\n");
+            //        $("#videoLink").val("");
+            //        videoPopupHide();
+            //    }
+            //    else {
+            //        alert("잘못된 주소입니다");
+            //    }
+            //});
+
+            //$("#videoPreView").click(function () {
+            //    $(".pop_wrap3 .pop_close").hide();
+            //    $(".movie_view").find('a').remove();
+            //    $(".movie_view").find('iframe').remove();
+            //    $(".movie_view").removeAttr("style");
+
+            //    var text = $("#videoSource").val();
+            //    var char = "";
+            //    var fristIndex = text.indexOf("http");
+            //    char = text.substring(fristIndex - 1, fristIndex);
+            //    text = text.substring(fristIndex);
+            //    fristIndex = text.indexOf(char);
+            //    text = text.substring(0, fristIndex);
+            //    var iframe = '<iframe width="630" height="450" src="' + text + '" frameborder="0" allowfullscreen></iframe> <div class="pop_wrap_view"><a href="javascript:closeVideo()" class="pop_close">창 닫기</a></div>';
+            //    $(".movie_view").append(iframe);
+            //});
+
+            $(".pop_close").click(function () {
+                videoPopupHide();
+            });
+
+        });
+
+        function closet() {
+            window.onbeforeunload = function (e) {
+                e = e || window.event;
+                // For IE<8 and Firefox prior to version 4
+                if (e) {
+                    e.returnValue = '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
+                }
+
+                // For Chrome, Safari, IE8+ and Opera 12+
+                return '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
+            };
+        }
+
+        function uncloset() {
+            window.onbeforeunload = null;
+        }
+
+        //function closeVideo() {
+        //    $(".movie_view").find('a').remove();
+        //    $(".movie_view").find('iframe').remove();
+        //    $(".movie_view").hide();
+        //    $(".pop_wrap3 .pop_close").show();
+        //}
+
+        //function videoPopupHide() {
+        //    $(".movie_view").css("display", "none");
+        //    $(".movie_view").find('iframe').remove();
+        //    $(".popupArea").hide();
+        //}
+
+        //function videoInsertPop() {
+        //    videoPopupHide();
+        //    $(".popupArea.videoSource").show();
+        //}
+        //function videoLinkPop() {
+        //    videoPopupHide();
+        //    $(".popupArea.videoLink").show();
+        //    $(".pop_wrap3 .pop_close").show();
+        //}
+
+        function SetTranslation() {
+
+            uncloset();//페이지 새로고침 끄기
+
+            $("#mode").val("upload");
+
+            if (check_msg('trans_title', '제목을 입력해 주세요.', 'required:articleTitle') == false) return false;
+            if (check_msg('trans_contents', '내용을 입력해 주세요.', 'required:contents') == false) return false;
+
+
+            //var $form_data = $("#insert_form").serialize();
+            var options = {
+                beforeSend: function () {
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        alert(response.Message);
+                        location.href = "http://betaen.makersn.com/design/Detail/" + "@ViewBag.ArticleNo";
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    var exception = null;
+                    if (error != null && typeof (error.responseText) != 'undefined') {
+                        try {
+                            exception = $.parseJSON(error.responseText);
+                            if (typeof (exception.ExceptionMessage) != "undefined" && $.trim(exception.ExceptionMessage) != '') {
+                                alert(exception.ExceptionMessage);
+                            }
+                        } catch (ex) {
+                            //alert(ex.name); 
+                        }
+                    }
+                }
+            };
+
+            $('#insert_form').attr("action", "/article/SetTranslation").ajaxForm(options).submit();
+        }
+
+        function TransFor(lang) {
+            $("#chkLang").val(lang);
+        }
+    </script>
+}

@@ -104,7 +104,7 @@
                     <td><span style="color: blue;">@member.BlogUrl</span></td>
                     <td>@member.SnsType</td>
                     <td>@member.Email</td>
-                    <td>@member.RegDt.ToString("yyyy-MM-dd")</td>
+                    <td>@member.MemberRegDt.ToString("yyyy-MM-dd")</td>
                     <td>@member.OpenDate.ToString("yyyy-MM-dd")</td>
                     
                     <td>@member.PrintertCnt</td>
@@ -171,7 +171,7 @@
         }
         memberList.GoProfile = function (val) {
             window.open(
-                'http://localhost:7784/profile?no=' + val,
+                '@(ViewBag.TargetDomain)/PrintingProfile?memberNo=' + val,
                 ''
                 );
         }

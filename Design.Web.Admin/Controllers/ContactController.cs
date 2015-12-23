@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using PagedList;
 using Design.Web.Admin.Models;
 using Makersn.Util;
-using Design.Web.Admin.Filter;
 
 namespace Design.Web.Admin.Controllers
 {
@@ -91,15 +90,20 @@ namespace Design.Web.Admin.Controllers
             return Json(new AjaxResponseModel { Success = true, Message = "수정되었습니다." });
         }
 
-        public JsonResult sendAnswer(string email, string title, string comment, string answer)
+        public JsonResult sendAnswer(int no, string answer)
         {
+            ContactT contact = cd.GetContactListByNo(no);
+
+            string email = contact.Email;
+            string title = contact.Title;
+            string comment = contact.Comment;
+
             string Subject = "MakersN 문의사항 답변 메일입니다.";
 
             SendMailModels oMail = new SendMailModels();
             oMail.SendMail("QnA", email, new String[] { Subject, title, comment, answer });
             return Json(new AjaxResponseModel { Success = true, Message = "발송되었습니다." });
         }
-
 
         public ActionResult Reply(int no)
         {
@@ -135,12 +139,11 @@ namespace Design.Web.Admin.Controllers
                 string email = contact.Email;
                 string title = contact.Title;
                 string comment = contact.Comment;
-                string htmlReply = new ContentFilter().HtmlEncode(reply);
 
                 string Subject = "MakersN 문의사항 답변 메일입니다.";
 
                 SendMailModels oMail = new SendMailModels();
-                oMail.SendMail("QnA", email, new String[] { Subject, title, comment, htmlReply });
+                oMail.SendMail("QnA", email, new String[] { Subject, title, comment, reply });
                 success = true;
             }
             else

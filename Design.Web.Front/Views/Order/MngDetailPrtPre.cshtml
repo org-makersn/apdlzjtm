@@ -1,0 +1,513 @@
+﻿@{
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    OrderT order = ViewBag.OrderEntity;
+    MemberT OrderMember = ViewBag.OrderMember;
+    PrinterT printer = ViewBag.Printer;
+}
+<div class="wrap">
+
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="uploadCnt" name="uploadCnt" value="4" />
+        <input type="hidden" id="ImgNameInfo" name="ImgNameInfo" />
+        <input type="hidden" id="ImgRenameInfo" name="ImgRenameInfo" />
+        <input type="hidden" id="OrderNo" name ="OrderNo" value ="@order.No" />
+        <input type="hidden" id="OrderMemNo" name ="OrderMemNo" value ="@order.MemberNo" />
+        <!-- contWrap -->
+        <div class="contWrap">
+
+            @*<div class="printTest">
+                <input type="hidden" id="uploadCnt" name="uploadCnt" value="4" />
+                <input type="hidden" id="ImgNameInfo" name="ImgNameInfo" /> 
+                <input type="hidden" id="ImgRenameInfo" name="ImgRenameInfo" />
+                <input type="hidden" id="OrderNo" name ="OrderNo" value ="@ViewBag.OrderNo" />
+                <input type="hidden" id="OrderMemNo" name ="OrderMemNo" value ="@ViewBag.OrderMemNo" />
+                <div class="uploadWrap">
+                    <!-- File Upload -->
+                    <div class="uploadFile">
+
+                        <!-- 이미지 파일 -->
+                        <div class="modelFile">
+                            <div class="upBtnZone">
+                                <p class="title">출력완료 인증샷</p>
+                                <div class="btnAdd">
+                                    <button class="file_input_button" title="파일추가"></button>
+                                    <input type="file" class="file_input_hidden" name="imgupload" id="imgupload" />
+                                </div>
+                            </div>
+                                 </div>
+                        <!-- //이미지 파일 -->
+
+                    </div>
+                    <!-- //File Upload -->
+                </div>
+             
+        </div>*@
+            <div class="storeMng">
+                <div class="subtitle3">
+                    <h2>@order.OrderNo 주문관리</h2>
+                </div>
+                <div class="status">
+                    <!--D 현재 상태 표시를 위해 클래스 staus_order 옆에 클래스 on 추가-->
+                    <li class="status_order on">3D 모델링 출력<span class="status_arrow"></span>
+                    </li>
+                    <li class="status_order">주문자 확인<span class="status_arrow"></span>
+                    </li>
+                    <li class="status_order">배송<span class="status_arrow"></span>
+                    </li>
+                    <li class="status_order">배송 및 구매완료<span class="status_arrow"></span>
+                    </li>
+
+                </div>
+
+
+                <div class="status_wrap">
+
+                    <div class="status_txt">
+                        출력이 완료되면 @OrderMember.Name 님에게 인증샷을 보내주세요.
+              <div class="status_send proof">
+                  <div class="line">
+                      <span class="pShot">파일 추가</span>
+                      <input type="file" class="file_input_hidden" name="imgupload" id="imgupload" />
+                      <span class="proof_title"><span class="txt">타입 : gif, jpg, png / 최대 사이즈 : 개당 100mb / 권장 해상도 640*470px </span></span>
+
+                  </div>
+                  <div class="pictures">
+                      <ul>
+                          <li class="proof_upload">1</li>
+                          <li class="proof_upload">2</li>
+                          <li class="proof_upload">3</li>
+                          <li class="proof_upload">4</li>
+                      </ul>
+                  </div>
+                  <div class="button">
+                      <span class="message">메시지 입력</span>
+                      <input id="" class="ordInput w250" style="color: black" type="text" name="Message" maxlength="500" placeholder="요청하신 주문에 대한 출력이 완료되었습니다." onfocus="javascript:removeText(this)">
+                      <a href="" class="btnO type6" onclick="javascript:submitImg()">보내기</a>
+
+                  </div>
+              </div>
+                    </div>
+
+                </div>
+
+                <div class="cartWrap">
+
+
+                    <p class="cartTxt3 mgT45">주문된 프린터</p>
+                    <dl class="ordInfo noBox">
+                        <dt class="pdT15">프린터 이름</dt>
+                        <a href="/Printing/Detail?no=@printer.No">
+                            <dd>
+                                <input class="ordInput" readonly="readonly" value="@printer.Brand @printer.Model" ></dd>
+                        </a>
+                    </dl>
+                    <!--printing information-->
+                    <p class="cartTxt3">주문된 모델링 파일</p>
+                    <div class="myorderMng">
+                        <table class="tblType bdcolor" summary="내 주문리스트">
+                            <caption>내 주문 리스트</caption>
+                            <colgroup>
+                            <col style="width: 47%;">
+                            <col style="width: 3%;">
+                            <col style="width: 17%;">
+                            <col style="width: 16%;">
+                            <col style="width: 17%;">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">요청한 파일 정보</th>
+                                    <th scope="col"></th>
+                                    <th scope="col">재질 및 색상</th>
+                                    <th scope="col">@*프린터 기종*@주문수량</th>
+                                    <th scope="col">매출</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (OrderDetailT detail in order.orderDetailList)
+                                {
+                                    <tr>
+                                        <td>
+                                            <ul class="prd">
+                                                <li>
+                                                    <img src="@ViewBag.ArticleImgUrl@detail.FileImgRename" class="prdImg1" alt="주문한 상품"></li>
+                                                <li>
+                                                    <p class="prdTxt1" style="width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@detail.FileName</p>
+                                                     <p class="prdTxt2">
+                                                    크&nbsp;&nbsp;&nbsp;기&nbsp;:&nbsp; <span class="prdTxt2_vol">@(detail.SizeX/10)cm X @(detail.SizeY/10)cm X @(detail.SizeZ/10)cm</span> <br />
+                                                    총부피&nbsp;:&nbsp; <span class="prdTxt2_vol">@(Math.Round(detail.Volume/1000,2))cm³</span> </p>
+                                            </li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            @*<a href="javascript:fileDownload('@ViewBag.Article3DUrl@detail.FileReName','@detail.FileName')" class="btnO type1">다운로드</a>*@
+                                            @Html.ActionLink("다운로드", "FileDownload", new { filePath = "/FileUpload/article/article_3D/" + detail.FileReName, fileName = detail.FileName }, new { @class = "btnO type1" })
+                                        </td>
+                                        <td class="mat">@detail.MaterialName, @Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), detail.ColorNo)</td>
+                                        <td>
+                                            @*@order.PrinterName*@
+                                            @detail.OrderCount 개
+                                        </td>
+
+                                        <td>@string.Format("{0:N0}", detail.OrderCount * detail.UnitPrice)원</td>
+                                    </tr>                  
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!--//printing information-->
+
+
+                    <!-- 주문자 정보 -->
+
+                    <!--// 주문자정보 -->
+
+
+                    <!-- 주문자 정보 -->
+                    <p class="cartTxt3 mgT45">주문자 정보</p>
+                    <dl class="ordInfo noBox">
+                        <dt class="pdT15">주문자명</dt>
+                        <dd>
+                            <input class="ordInput w115" readonly="readonly" value="@OrderMember.Name"></dd>
+                        <dt class="mgL103 pdT15">이메일</dt>
+                        <dd>
+                            <input id="" class="ordInput w170"  readonly="readonly" value="@OrderMember.Email"></dd>
+                        <dt class="clear pdT15">휴대폰</dt>
+                        <dd>
+                            <input class="ordInput w115" readonly="readonly" value="@(OrderMember.CellPhone != "--" && OrderMember.CellPhone != null ? OrderMember.CellPhone : "")"></dd>
+                        @*<dt class="mgL103 pdT15">휴대폰</dt>
+            <dd><input id="" class="ordInput w170"  readonly="readonly" value="@(order.AddPhone!="--" && order.AddPhone!=null? order.AddPhone:"")"></dd>*@
+
+                        @*<dt class="clear pdT15">우편번호</dt>
+ 			 <dd><input class="ordInput w115" readonly="readonly" value="@(order.PostNum!="-" && order.PostNum!=null? order.PostNum:"")"></dd>  
+            <dt class="clear pdT15">주소</dt>
+            <dd><input class="ordInput w115" readonly="readonly" value="@(order.PostAddress) @(order.PostAddressDetail)"></dd>  *@
+                    </dl>
+                    <!--// 주문자정보 -->
+
+                    @if (order.PostMode == (int)Makersn.Util.MakersnEnumTypes.PostType.택배)
+                    {
+                        <!-- 수취인 정보 -->
+
+                        <p class="cartTxt3 mgT45">수취인 정보</p>
+                        <dl class="ordInfo  noBox">
+                            <dt class="pdT15">수취인명</dt>
+                            <dd>
+                                <input id="" class="ordInput w115" type="text" name="ordName" value="@order.PostMemberName"></dd>
+                            <dt class="mgL103 pdT15">추가번호</dt>
+                            <dd>
+                                <input id="" class="ordInput w170" type="text" name="ordName" value="@(order.AddPhone != "--" && order.AddPhone != null ? order.AddPhone : "")"></dd>
+                            <dt class="clear pdT15">휴대폰</dt>
+                            <dd>
+                                <input id="" class="ordInput w115" type="text" name="ordEmail" value="@(order.CellPhone != "--" && order.CellPhone != null ? order.CellPhone : "")"></dd>
+                            <dt class="clear pdT15">우편번호</dt>
+                            <dd>
+                                <input class="ordInput w115" readonly="readonly" value="@(order.PostNum != "-" && order.PostNum != null ? order.PostNum : "")"></dd>
+                            <dt class="clear pdT15">주소</dt>
+                            <dd>
+                                <input class="ordInput w351" readonly="readonly" value="@(order.PostAddress) @(order.PostAddressDetail)"></dd>
+                        </dl>
+                        <!--// 수취인정보 -->
+                    }
+                    <!-- 기타 정보 -->
+                    <p class="cartTxt3 mgT45">기타 정보</p>
+                    <dl class="ordInfo">
+                        <dt class="pdT20">요청 사항</dt>
+                        <dd class="textarea border">@order.RequireComment</dd>
+
+                    </dl>
+                    <div class="mgB100">
+                        <!--// 기타정보 -->
+                        <div class="ordBtn2 mgL80">
+                            <a href="/Order/MngHome" class="btnO type2 mgL40">목록 보기</a>
+                            @*<a href="" class="btnG type3 mgL260" onclick="window.print();">인쇄하기</a>*@
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </form>
+</div>
+@section Scripts{
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery-ui.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+    <script type="text/javascript">
+        var uploadCnt;
+
+        var Upload = Upload || {};
+
+        var uploadFileCnt = 0;
+        Upload.Init = function () {
+            // 3d이미지,파일 draggable &  droppable 
+            $(".pictures ul li div").draggable({
+                helper: 'clone',
+                revert: 'invalid', start: function (event, ui) {
+                    var drag_img = $(this).clone();
+                    idxImg = $(this);
+                }
+            });
+
+            $('.pictures ul li div').droppable({
+                drop: function (event, ui) {
+
+                    var beforeSeq = $(ui.helper).find("#seq").val();
+                    var afterSeq = $(this).find("#seq").val();
+                    $(ui.helper).find("#seq").val(afterSeq);
+                    $(this).find("#seq").val(beforeSeq);
+
+                    var beforeCh = $(ui.helper).html();
+                    var afterCh = $(this).html();
+                    $(this).html(beforeCh);
+                    idxImg.html(afterCh);
+
+                    $(".delImg").on('click', function (e) {
+                        $(this).hide();
+                        Upload.Remove(this);
+                    });
+
+                    $('.delImg').hide();
+                    $('.showThum').hide();
+                }
+            });
+
+            // 이미지 삭제 버튼 보이기
+            $('.pictures ul li').hover(function () {
+                $(this).find('.delImg').show();
+                $(this).find('.showThum').show();
+            }, function () {
+                $(this).find('.delImg').hide();
+                $(this).find('.showThum').hide();
+            });
+
+            $(".delImg").on('click', function (e) {
+                $(this).hide();
+                Upload.Remove(this);
+            }
+            );
+            uploadCnt = $("#uploadCnt").val();
+        }
+        $(function () {
+            Upload.Init();
+
+            $(".pShot").click(function () {
+                $("#imgupload").click();
+            });
+
+        });
+        $("#imgupload").on("change", function (e) {
+            e.preventDefault();
+            var fileobj = $("#imgupload");
+            if (Upload.ValidExtension("img", fileobj) === false) {
+                return false;
+            }
+
+            Upload.File("/Order/ImgUpload");
+        });
+
+        Upload.File = function (action) {
+            var options = {
+                success: function (response) {
+                    console.log(response);
+                    if (response.Success) {
+                        uploadFileCnt++;
+                        Upload.Draw(response.Name, response.Rename, response.Size);
+                    }
+                    else {
+                        alert(response.Message);
+                        alert("success and response false");
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert("error");
+                }
+            };
+
+            $('#insert_form').attr("action", action).ajaxForm(options).submit();
+        }
+        Upload.ValidExtension = function (type, fileobj) {
+            var regex;
+
+            if (fileobj[0].files[0].size > 100 * 1024 * 1024) {
+                alert('쵀대 사이즈를 초과하였습니다.');
+                return false;
+            }
+
+            if (type == "img") {
+
+                regex = /(.jpg|.jpeg|.gif|.png)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('gif, jpg, png 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else if (type == "3d") {
+                regex = /(.stl|.obj)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('stl, obj 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else {
+                alert('파일 타입을 확인해주세요.');
+                return false;
+            }
+        }
+
+        Upload.More = function () {
+            var addUploadCnt = parseInt(uploadCnt) + 5;
+            $("#uploadCnt").val(addUploadCnt);
+            uploadCnt = $("#uploadCnt").val();
+            Upload.GetPrinterFiles();
+        }
+
+        Upload.Draw = function (name, rename, size) {
+            var uploadImgCol = $(".pictures");
+            var li = uploadImgCol.find("li").eq(uploadFileCnt - 1);
+            $(li).find("").remove();
+            $(li).empty();
+            var div = $('<div />', {
+                "class": "imgBox ui-draggable ui-draggable-handle ui-droppable",
+            }).appendTo(li);
+
+            $('<a />', {
+                title: "삭제",
+                "class": "delImg",
+                href: "javascript:void(0)",
+                style: "display:none;"
+            }).appendTo(div);
+
+            $('<input />', {
+                type: "hidden",
+                val: name,
+                "class": "ImgName",
+                name: "ImgName"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: rename,
+                "class": "ImgRename",
+                name: "ImgRename"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: uploadFileCnt,
+                id: "seq",
+                name: "seq"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: size,
+                id: "size",
+                name: "size"
+            }).appendTo(div);
+
+            $('<img />', {
+                src: "/FileUpload/Printer/printer_img/" + rename,
+                alt: "thumbnail",
+                width: "123px",
+                height: "101px"
+            }).appendTo(div);
+            Upload.Init();
+        }
+
+        Upload.Remove = function (val) {
+            console.log("" + $(val).parents("li").find("#seq").val());
+            if ($(val).parents("li").length > 0) {
+                uploadFileCnt--;
+            } else {
+                return;
+            }
+
+            var li = $(val).parents("li");
+            var seq = $(li).find("#seq").val();
+            $(li).find("").remove();
+            $(li).empty();
+
+
+            var uploadImgCol = $(".pictures");
+            for (var i = seq ; i <= uploadFileCnt + 1; i++) {
+                var min = --i;
+                i++;
+                if (i <= uploadFileCnt) {
+                    $(uploadImgCol).find("li").eq(min).append($(uploadImgCol).find("li").eq(i).find("div"));
+                    $(uploadImgCol).find("li").eq(min).find("#seq").val(i);
+                }
+                if (i > uploadFileCnt) {
+                    $(uploadImgCol).find("li").eq(min).text(i);
+                }
+            }
+        }
+        function removeText(val) {
+            if ($(val).val() == "0" || $(val).val() == "요청하신 주문에 대한 출력이 완료되었습니다.") {
+                $(val).val("");
+            }
+        }
+
+
+        function submitImg(val) {
+
+            if (uploadFileCnt < 2) {
+                alert("인증샷은 2장이상 되어야 합니다.");
+                return false;
+            }
+
+            var ImgNameInfo = "";
+            var ImgRenameInfo = "";
+            var length = $(".ImgName").length;
+            for (var i = 0; i < length; i++) {
+                ImgNameInfo = ImgNameInfo + $(".ImgName").eq(i).attr("value") + ";";
+                ImgRenameInfo = ImgRenameInfo + $(".ImgRename").eq(i).attr("value") + ";";
+            }
+            $("#ImgNameInfo").attr("value", ImgNameInfo);
+            $("#ImgRenameInfo").attr("value", ImgRenameInfo);
+
+            var options = {
+                beforeSend: function () {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        var action = "/Order/MngDetailPrtDone?OrderNo=" + response.Result;
+                        $(location).attr("href", action);
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    var exception = null;
+                    if (error != null && typeof (error.responseText) != 'undefined') {
+                        try {
+                            exception = $.parseJSON(error.responseText);
+                            if (typeof (exception.ExceptionMessage) != "undefined" && $.trim(exception.ExceptionMessage) != '') {
+                                alert(exception.ExceptionMessage);
+                            }
+                        } catch (ex) {
+                            //alert(ex.name); 
+                        }
+                    }
+                }
+            };
+
+            $('#insert_form').attr("action", "/Order/MngDetailPrtDone").ajaxForm(options).submit();
+        }
+
+        function fileDownload(path, name) {
+
+        }
+
+    </script>
+}

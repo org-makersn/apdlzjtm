@@ -30,7 +30,6 @@ namespace Design.Web.Admin.Controllers
 
         public ActionResult Index()
         {
-
             ViewData["Group"] = MenuModel(0);
             //IList<CodeT> list = new CodeDac().GetCodeLstByGbn("ARTICLE");
             int i = 18287644;
@@ -56,7 +55,6 @@ namespace Design.Web.Admin.Controllers
 
         public ActionResult SendMail()
         {
-
             ViewData["Group"] = MenuModel(0);
 
             return View();
@@ -71,7 +69,6 @@ namespace Design.Web.Admin.Controllers
         [HttpPost]
         public ActionResult SendMail(string Subject, string Body)
         {
-
             SendMailModels oMail = new SendMailModels();
             oMail.SendMail("Email", "chasy@makersi.com", new String[] { Subject, Body });
 

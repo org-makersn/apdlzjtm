@@ -20,12 +20,14 @@
     string followClass = ViewBag.CheckFollow == 0 ? "flw" : "flwing";
 
     ProfileT cntList = ViewBag.CntList;
+
+    string formUrl = ViewBag.Url == "" ? "/profile" : ViewBag.Url;
 }
 
 <div class="profInfo">
     <div class="infoWrap">
 
-        <a name="uploaded"></a>
+        @*<a name="uploaded"></a>*@
         <div class="profileBox">
             <div id="_memb_pic" class="profileImg">
                 <img alt="기본프로필" id="defPhoto" class="defPhoto" src="@profilePic">
@@ -196,7 +198,22 @@
 <div class="profCont" id="partial-part">
 </div>
 
-<form id="profileForm" action="/profile" method="post">
+<div class="popupArea thumb">
+    <div class="bgArea" style="opacity: 0.52; height: 100%;">
+    </div>
+    <div class="popBox4">
+        <div class="pop_wrap">
+	        <div class="pop_thumnail">
+    	        <a href="" class="thum_left"></a><a href="" class="thum_right"></a> 
+            </div>
+            <div class="btnS mgT30"> 
+                <a href="javascript:void(0);" onClick=" popupClose();" class="btnO type2">닫기</a>
+            </div>
+        </div>
+     </div>
+ </div>
+
+<form id="profileForm" action="@formUrl" method="post">
     <input type="hidden" id="no" name="no" />
     <input type="hidden" id="gubun" name="gubun" />
     <input type="hidden" id="page" name="page" />
@@ -308,6 +325,14 @@
                     $("#collection").addClass("on");
                     GoListDetail();
                     break;
+                case "QnA":
+                    GetOtherMessage();
+                    $("#sendMessage").addClass("on");
+                    break;
+                case "UserMessage":
+                    GetOtherMessage();
+                    $("#sendMessage").addClass("on");
+                    break;
                 default:
                     GetArticle("U");
                     $("#upload").addClass("on");
@@ -331,7 +356,7 @@
 
                 $("#gubun").val("D");
                 $("#profileForm").submit();
-                
+
                 //location.href = "/profile?gubun=D&no=" + "@ViewBag.No" + "&page=" + "@ViewBag.Page";
             });
 
@@ -342,7 +367,7 @@
 
                 $("#gubun").val("L");
                 $("#profileForm").submit();
-                
+
                 //location.href = "/profile?gubun=L&no=" + "@ViewBag.No" + "&page=" + "@ViewBag.Page";
             });
 
@@ -412,14 +437,7 @@
             $("#sendMessage").on("click", function (e) {
 
                 if (!loginPop("@ViewBag.LogOnChk")) {
-                    @*var data = {
-                        no: "@ViewBag.No"
-                    };
-
-                    var url = "/Profile/Message";
-
-                    Ajax.SyncGetPartialView(url, data, "partial-part");*@
-                    var data = {
+                @*var data = {
                         val1: "@ViewBag.No"
                     };
 
@@ -430,7 +448,9 @@
                     $(".myGroup").find(".on").removeClass("on");
                     $(this).addClass("on");
 
-                    location.hash = "#message";
+                    location.hash = "#message";*@
+                    $("#gubun").val("UserMessage");
+                    $("#profileForm").submit();
                 }
             });
 
@@ -440,10 +460,10 @@
 
 
             $("#profileMsgZone a").mouseover(function () {
-                $(this).css("text-decoration","underline");
+                $(this).css("text-decoration", "underline");
             })
             $("#profileMsgZone a").mouseleave(function () {
-                $(this).css("text-decoration","none");
+                $(this).css("text-decoration", "none");
             })
 
         })
@@ -471,25 +491,33 @@
             var data = {
                 no: "@ViewBag.No"
             };
-            var url = "/Profile/Message";
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+        var url = "/Profile/Message";
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }
 
-        function GetArticle(gubun) {
-            var data = {
-                no: "@ViewBag.No",
-                gubun: gubun,
-                page: "@ViewBag.Page"
-            };
+    function GetOtherMessage() {
+        var data = {
+            val1: "@ViewBag.No"
+        };
+    var url = "/Profile/UserMessageRoom";
+    Ajax.SyncGetPartialView(url, data, "partial-part");
+}
 
-            var url = "/Profile/Lists";
+function GetArticle(gubun) {
+    var data = {
+        no: "@ViewBag.No",
+        gubun: gubun,
+        page: "@ViewBag.Page"
+    };
 
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+        var url = "/Profile/Lists";
 
-        function GetFollow(gubun) {
-            var data = {
-                no: "@ViewBag.No",
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }
+
+    function GetFollow(gubun) {
+        var data = {
+            no: "@ViewBag.No",
                 gubun: gubun
             };
 
@@ -506,37 +534,38 @@
         var url = "/Profile/notice";
 
         Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+    }
 
-        function GetList() {
-            var data = {
-                no: "@ViewBag.No",
-                userNm: "@Model.Name"
-            };
+    function GetList() {
+        var data = {
+            no: "@ViewBag.No",
+            userNm: "@Model.Name"
+        };
 
-            var url = "/Profile/Collection";
+        var url = "/Profile/Collection";
 
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
-        
-        var GoListDetail = function () {
-            var data = {
-                no: "@ViewBag.No",
-                listNo: "@ViewBag.ListNo"
-            };
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }
 
-            var url = "/Profile/CollectionDetail";
+    var GoListDetail = function () {
+        var data = {
+            no: "@ViewBag.No",
+            listNo: "@ViewBag.ListNo"
+        };
 
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+        var url = "/Profile/CollectionDetail";
 
-        function GetSetting() {
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }
 
-            var url = "/Profile/Setting";
+    function GetSetting() {
 
-            Ajax.SyncGetPartialView(url, {}, "partial-part");
-        }
+        var url = "/Profile/Setting";
+
+        Ajax.SyncGetPartialView(url, {}, "partial-part");
+    }
 
 
     </script>
+
 }

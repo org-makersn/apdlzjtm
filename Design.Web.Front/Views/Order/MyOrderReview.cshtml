@@ -1,0 +1,199 @@
+﻿@model IList<OrderDetailT>
+@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+
+    int totalPrice = 0;
+
+    OrderT order = ViewBag.Order;
+    ReviewT review = ViewBag.Review;
+    PrinterT printer = ViewBag.Printer;
+    int score = review != null ? review.Score : 5;    
+}
+<div class="subtitle3">
+    <h2>내 주문</h2>
+</div>
+
+<!--표-->
+<div class="cartWrap">
+
+    <div class="myorderMng">
+        <table class="tblType" summary="내 주문리스트">
+            <caption>내 주문 리스트</caption>
+            <colgroup>
+                <col style="width: 39%;" />
+                <col style="width: 13%;" />
+                <col style="width: 12%;" />
+                <col style="width: 13%;" />
+                <col style="width: 12%;" />
+                <col style="width: 11%;" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">요청한 파일 정보</th>
+                    <th scope="col">재질 및 색상</th>
+                    <th scope="col">프린터 기종</th>
+                    <th scope="col">수량</th>
+                    <th scope="col">주문금액</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (OrderDetailT orderDetail in Model)
+                {
+                    var oriPrice = orderDetail.UnitPrice * orderDetail.OrderCount;
+                    var chgPrice = string.Format("{0:N0}", oriPrice);
+                    totalPrice += oriPrice;
+                    <tr>
+                        <td>
+                            <ul class="prd">
+                                <li>
+                                    <img src="@ViewBag.ArticleImgUrl@orderDetail.FileImgRename" class="prdImg1" alt="주문한 상품" /></li>
+                                <li>
+                                    <p class="prdTxt1">@orderDetail.FileName</p>
+                                    <p class="prdTxt2">총부피 : <span class="prdTxt2_vol">@(orderDetail.Volume / 1000)㎤</span> </p>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.Material), orderDetail.MaterialNo) , @Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), orderDetail.ColorNo)</td>
+                        <td>@printer.Brand @printer.Model</td>
+                        <td>@orderDetail.OrderCount</td>
+                        <td>@(chgPrice)원</td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="cartTot">
+        <p>합계 금액 <span class="mn">@string.Format("{0:N0}", totalPrice)</span>원 + 배송비 <span class="mn">@order.PostPrice</span>원 = 총 합계 <span class="tot">@string.Format("{0:N0}", totalPrice + order.PostPrice)</span> 원 </p>
+    </div>
+</div>
+<!--//표-->
+
+
+<div class="cartWrap">
+
+    <!-- 평점 매기기 -->
+    <div class="input_netizen ">
+
+
+
+        <form id="pointWriteArea">
+            <fieldset>
+
+                <!-- 모바일 기기로 접근 시 : 클래스 t_layer_view 추가 -->
+                <ul class="t_layer_view">
+                    <li class="drag_star">
+                        <div class="lft">
+                            <div class="star_score">
+
+                                <!-- [D] st_off 영역에 마우스 오버시 : 클래스 st_over 추가
+												 [D] 버튼 선택시 : 선택된 버튼 클래스 'on' 추가, 대체텍스트 '선택됨' 추가, 짝수 점수 버튼에 클래스 st_r 추가, 디폴트는 화면에 보이지 않는 0점 버튼 -->
+                                <div class="st_off" id="pointStarRating">
+
+                                    @for (int i = 0; i <= 10; i++)
+                                    {
+                                        string classNm = "_pointStarRatingList btn_star";
+                                        if (i != 0 && i % 2 == 0) { classNm += " st_r"; }
+                                        if (i == score) { classNm += " on"; }
+                                        <button type="button" title="@i" class="@classNm">@(i)점</button>
+                                    }
+
+                                    @*<button type="button" title="0" class="_pointStarRatingList btn_star">0점 선택됨</button>
+                                    <button type="button" title="1" class="_pointStarRatingList btn_star">1점</button>
+                                    <button type="button" title="2" class="_pointStarRatingList btn_star st_r">2점</button>
+                                    <button type="button" title="3" class="_pointStarRatingList btn_star">3점</button>
+                                    <button type="button" title="4" class="_pointStarRatingList btn_star st_r">4점</button>
+                                    <button type="button" title="5" class="_pointStarRatingList btn_star on">5점</button>
+                                    <button type="button" title="6" class="_pointStarRatingList btn_star st_r">6점</button>
+                                    <button type="button" title="7" class="_pointStarRatingList btn_star">7점</button>
+                                    <button type="button" title="8" class="_pointStarRatingList btn_star st_r">8점</button>
+                                    <button type="button" title="9" class="_pointStarRatingList btn_star">9점</button>
+                                    <button type="button" title="10" class="_pointStarRatingList btn_star st_r">10점</button>*@
+                                </div>
+                                <span class="star_count"><em id="pointStarRatingValue">@(review != null ? review.Score : 5)</em><em>/<span class="blind"> 총 </span>10<span class="blind">점</span></em></span>
+
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div id="pointStarRatingLayer" class="t_layer_score" style="display: none">
+                    <strong class="blind">별점을 선택하세요</strong>
+                    <ul class="t_list_score">
+                        <li><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 10" onclick="return false;"><span class="star"><span class="on"></span></span><em>10</em></a></li>
+                        <li><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 9" onclick="return false;"><span class="star"><span class="on"></span></span><em>9</em></a></li>
+                        <li><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 8" onclick="return false;"><span class="star"><span class="on"></span></span><em>8</em></a></li>
+                        <li><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 7" onclick="return false;"><span class="star"><span class="on"></span></span><em>7</em></a></li>
+                        <li class="b_none"><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 6" onclick="return false;"><span class="star"><span class="on"></span></span><em>6</em></a></li>
+                        <li class="col_right"><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 5" onclick="return false;"><span class="star"><span class="on"></span></span><em>5</em></a></li>
+                        <li class="col_right"><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 4" onclick="return false;"><span class="star"><span class="on"></span></span><em>4</em></a></li>
+                        <li class="col_right"><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 3" onclick="return false;"><span class="star"><span class="on"></span></span><em>3</em></a></li>
+                        <li class="col_right"><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 2" onclick="return false;"><span class="star"><span class="on"></span></span><em>2</em></a></li>
+                        <li class="b_none col_right"><a href="#" class="_pointStarRatingLayer _pointStarRatingLayerList 1" onclick="return false;"><span class="star"><span class="on"></span></span><em>1</em></a></li>
+                    </ul>
+                </div>
+            </fieldset>
+        </form>
+        <div class="printText2">
+            <p class="txt6">다음 고객이 참고할 수 있게 @(ViewBag.SpotName)스팟에 대한 별점과 의견을 입력해 주세요.</p>
+            <p class="txt7">(1점 ~ 10점)</p>
+        </div>
+        <div class="printText3">
+            <div class="message">
+                <textarea style="" id="item_title" name="item_title" maxlength="1000" placeholder="의견을 작성해 주세요.">@(review != null ? review.Comment : "")</textarea>
+            </div>
+        </div>
+
+    </div>
+    <!--//평점 매기기 -->
+
+    <!-- btZone -->
+    <div class="ordBtn2 mgT0 mgL103 ">
+        <a href="javascript:setReview()" class="btnO type3">확인</a>
+    </div>
+    <!-- //btZone -->
+
+</div>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $("._pointStarRatingList.btn_star").mouseover(function (e) {
+            $("._pointStarRatingList.btn_star").removeClass("st_over");
+            $(this).addClass("st_over");
+        })
+
+        $("._pointStarRatingList.btn_star").click(function (e) {
+            $("._pointStarRatingList.btn_star").removeClass("on");
+            $(this).addClass("on");
+            $("#pointStarRatingValue").text($(this).attr("title"));
+        })
+
+        function setReview() {
+            var text = $("#item_title").val();
+            var score = $("._pointStarRatingList.btn_star.on").attr("title");
+            var data = {
+                text: text,
+                score: score,
+                no: "@printer.No",
+                odNo: "@order.No"
+            }
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    location.href = "/order/myorder";
+                }
+                else {
+                    alert(result.Message);
+                    location.href = "/order/myorder";
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/order/setReview", data, onSuccess);
+        }
+
+
+    </script>
+}

@@ -17,6 +17,7 @@ namespace Makersn.Models
         public virtual string Password { get; set; }
         public virtual string Name { get; set; }
         public virtual string Email { get; set; }
+        public virtual string CellPhone { get; set; }
         public virtual string Url { get; set; }
         public virtual string SnsType { get; set; }
         public virtual string SnsId { get; set; }

@@ -1,0 +1,71 @@
+﻿@model PagedList.IPagedList<Makersn.Models.ReviewT>
+@using PagedList.Mvc;
+@{
+    double reviewScore = ViewBag.PrinterMember.ReviewScore;
+}
+
+<div class="messageR">
+    <p class="tit">사용자 리뷰</p>
+    <ul class="msgWrapC">
+        @foreach (ReviewT review in Model)
+        {
+            double score = review.Score;
+            <!-- customer comment 1set -->
+            <li class="messageC_wrap">
+                <ul>
+                    <li class="messageBoxC">
+                        <p class="customers">@review.Comment</p>
+                        <p class="dateTime">@review.RegDt  |  @review.MemberName |  @review.PrinterName</p>
+
+                        <div class="star_c">
+                        <div class="detailWrap">
+                        <div class="userInfoArea myprofile">
+                          <p class="star">
+                            </p><div class="rating"><span style="width:@(score*10)%">@(Math.Round(score,1))점</span></div>
+                          <p></p>
+                        </div>
+                       </div>
+                       <span class="average">@(Math.Round(score,1))</span><p></p>
+                    </div>
+                       
+                    </li>
+                </ul>
+            </li> 
+    }
+    </ul>
+
+    <div>
+        <div class="total">
+                <span class="txt">총 @(ViewBag.PrinterMember.ReviewCnt)개 리뷰 </span>
+                <span class="star_c">
+                        <div class="detailWrap">
+                            <div class="userInfoArea myprofile">
+                               <p class="star">
+                                </p><div class="rating"><span style="width:@(ViewBag.PrinterMember.ReviewScore * 10)%">@(Math.Round(ViewBag.PrinterMember.ReviewScore * 100) / 100)점</span></div>
+                              <p></p>
+                            </div>
+                         </div>
+                         <span class="average">@(Math.Round(ViewBag.PrinterMember.ReviewScore * 100) / 100)</span>
+                     </span>
+
+
+        </div>
+
+        <!-- 페이징 -->
+        <div class="paging mgT40">
+        @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("ReviewSub", new { page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "ReviewSub"
+            })
+        )
+    </div>
+        </div>
+        <!-- //페이징 -->
+
+    </div>
+

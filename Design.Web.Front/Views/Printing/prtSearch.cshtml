@@ -1,0 +1,97 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    int index = 1;
+    IList<int> printerNoList = new List<int>();
+}
+
+
+<div class="searchResult">
+    @if (ViewBag.SearchText != "")
+    {
+        <p class="searchText"><span class="orangeF boldF">"@ViewBag.SearchText"</span> 에 대한 검색결과</p>
+    }
+    else
+    {
+        <p class="searchText">무설정 검색결과</p>
+    }
+    @if (ViewBag.NoResult == "Y")
+    {  
+        <div class="mainTitle">
+            <h2 style="float: none; text-align: center">앗... 검색 조건에 맞는게 없네요.</h2>
+            <br />
+            <h2 style="float: none; text-align: center">추천 프린터를 보여드릴게요</h2>
+        </div>
+        <br />
+    }
+
+</div>
+
+
+@if (Model.Count == 0)
+{
+    
+    <div class="searchResult">
+        <p class="searchImg">
+            <img src="/content/images/search_txt1.gif" alt="앗...검색결과가 없네요! 다른 검색어로 입력해주세요.">
+        </p>
+    </div>
+}
+else
+{
+    <!-- BaseList -->
+    <div class="baseList spot">
+        <ul class="item_area">
+
+            @foreach (PrinterT printer in Model)
+            {
+                if (!printerNoList.Contains(printer.No))
+                {
+                    printerNoList.Add(printer.No);
+                    string className = index % 4 == 0 ? "class=mgR0" : "";
+                    int scoreQuo = (int)printer.Score / 1;
+                    int scoreRema = (int)printer.Score * 10 % 10;
+                    string priceText = printer.MinPrice + "~" + printer.MaxPrice;
+                    if (printer.MinPrice == printer.MaxPrice) { priceText = printer.MinPrice.ToString(); }
+            
+                <li @className>
+                    <!-- ProductBox -->
+                    <div class="productBox">
+                        <div class="productImg">
+                            <a href="/printing/Detail?no=@printer.No">
+                                <img src="@Url.Content(ViewBag.PrintImgUrl + printer.ImageName)" class="lazy-load" data-original="@ViewBag.PrinterImgUrl@printer.ImageName" alt="@printer.Brand" /></a>
+                            @*<img src="@string.Format("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAACzCAIAAAABnLdcAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkZCMjcyNzMwMTA4MTFFNTlDRkZFRDI1MzM1ODI5RTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkZCMjcyNzQwMTA4MTFFNTlDRkZFRDI1MzM1ODI5RTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2RkIyNzI3MTAxMDgxMUU1OUNGRkVEMjUzMzU4MjlFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2RkIyNzI3MjAxMDgxMUU1OUNGRkVEMjUzMzU4MjlFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpGBoMwAAATASURBVHja7N1bTyJZGIZRQWw8QZT///e4UyQKKCI6b9gTYmyksURAWOtiYtPUvqg8Vn91gKl1u90j+P3qdgFSBimDlEHKSBmkDFIGKSNlkDJIGaQMUkbKK6jVanYu+5Dy29ubnYsBA6SMlEHKIGWQMkgZKYOUQcogZaQMUl7Ms3LsScqelcOAAVJGyiBlkDJIGSmDlEHKIGWQ8ld4aETKe8JDI1IGKYOUkTJIGaQMUgYp80tUuD8lZXZRhftTUsaAAVLmcEZYKbMnI6yUQcpIGaQMWz5rlDJ7ctYoZQwYIGWQMkgZKYOUQcogZaQMUgYpg5RBykh5Cd8Uz56k7Jvi2ZaGXfAT8is9Ho+fn58nk8l0Oi2/4fkn6/j4+OTk5M+fP81m079gUt5pr6+vw+Hw8fHx73+g8srLTP42HZ+dnV1cXNTrTlekvHvS6MPDQ4m40Wicnp7mAJwjcek1lecInUP109NTgh6NRnl/q9VK03bdGs7Tut2uvbCWieL+/j6N5ufke3l5mUFiyfszeAwGg2Sdn1N8u902b0h5Jzru9/uly0S5+lE2R+X8ApT6r66u1LxDVzAOU3JMxwmx0+l8aVrIm7NJNszmpWmkvM35uMwV19fXy4eKhbJJNswPWSRL2Z9S3tr1ipznlbmiQsfzmrN5fshSWdBelfIWDIfDDMqZdL95FSKbZ5EslQXtVSlv4WyvjASXl5cf4l5x89FoND8Ml0UWXpBGyj9rPB4nu0ajMR8tEuJgMLi5uUmj/9z29vY2E8X8MJxFslS5TWjfSnmj5leF56+UrMsAnaAXRjmZTHq9Xr/fn06nx8fHmSvmf1WWKsvyVe72VZcoj2aXhN+fwHU6naenpxybU2p6zSutVqsctvNKXi+XO2q1WiaKjMjvryWXpcqyhyz7pMKUJeXqkmb+myPrh9dzcG02m5kxMjyUY3D+mLfNp47z8/OFT1+UpcqyB34S4qi8hT2+8HmgHFcSaw66qTkFzyeNNJ2D9N/1/z/tzZZy2mfA2L0TkXo94eYYnLn5aHYP5f00gtO+HRrpjmZ3SZa/Lcfg8s5/3kMpS3kSQ8qbtvbR9rPhGyn/rHKUXfHa2SoTcFmq8g1wKVNRGXzLxbUVp5Hl5o8727dS3qjy+byXl5e1XAnOIlkqC2ZZ+1bKmz7tK08RDQaD769WFvlw0wQpb8jFxUV5cP6bjxpn8/Lwfha0V6W8jd03u3J8NPsgSeUxIxuWj5BkKR/AlvLWZCQojwHd3d19VvPVzGcdZ8Oj2e1uH72W8pa12+3y4Hyv11s4aXz2HS55czYpD++XD5JQ/dTFJ67XwpcHSHmvfOkrXco1kMpf6VLtSUgps6olX7T1IURftCXl3zFv+PrDDfOQ588cIWq10xm7whUMkDJSBimDlEHKIGWkDFIGKYOUkTJIGaQMUkbKIGWQMkgZpIyUQcogZZAyUgYpg5RByiBlpAy/KWXfAcyepOx/EYABA6QMUkbKIGWQMkiZ/bGW2xd1O4itW8vti7odhAHDIRwpO4QjZZAyUgYpg5RBykgZpAxSBimDlJEySBmkDFJGyiBlkDJIGSmDlEHKIGWQMlJmlx34FyxJeX8c+BcsSRkpwy75T4ABACgVIwG5pn/2AAAAAElFTkSuQmCC")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.MainImgName" alt="@a.Title" /></a>*@
+
+                        </div>
+                        <div class="detailBox">
+                            <div class="productText">
+                                <a href="/printing/Detail?no=@printer.No">@printer.PrinterMemberName <span class="sloc">@printer.locName</span></a>
+
+                                <p class="name">@printer.Brand @printer.Model</p>
+                            </div>
+                            <div class="by">
+                                <p class="price"><span class="nbg">₩</span>@priceText<span class="unit">/cm³</span></p>
+                            </div>
+                            <div class="countBox">
+                                <p class="star">
+                                    <div class="rating"><span style="width:@(printer.Score * 10)%">@(printer.Score)점</span></div>
+                                    <span class="count_num">@string.Format("{0:N1}", printer.Score)</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                    index++;
+                }
+            }
+        </ul>
+    </div>
+}
+
+
+<!-- //페이징 -->
+<div class="pagination-container">
+    @Html.PagedListPager(Model, page => Url.Action("/search", new { page, text = ViewBag.text }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+</div>

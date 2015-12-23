@@ -62,10 +62,10 @@ namespace Makersn.BizDac
                 //                        .List();
 
                 IQuery queryObj = session.CreateSQLQuery(searchQuery).AddEntity(typeof(BannerT));
-                queryObj.SetParameter("type",type);
+                queryObj.SetParameter("type", type);
                 for (int i = 0; i < queryLst.Length; i++)
                 {
-                    queryObj.SetParameter(i, "%"+queryLst[i]+"%");
+                    queryObj.SetParameter(i, "%" + queryLst[i] + "%");
                 }
                 IList<BannerT> banners = (IList<BannerT>)queryObj.List<BannerT>();
                 session.Flush();

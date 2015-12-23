@@ -86,7 +86,8 @@
                 var title = $("#title").val();
                 data = {
                     title: title,
-                    content:eventContent
+                    content: eventContent,
+                    flag:"@ViewBag.Flag "
                 }
                 var onSuccess = function (result) {
                     if (result.Success == true) {

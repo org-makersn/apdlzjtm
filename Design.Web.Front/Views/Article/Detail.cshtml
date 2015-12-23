@@ -24,7 +24,7 @@
     int index = 0;
     int setNum = 0;
     int sildeNum = 0;
-    
+
     IList<ArticleFileT> fileList = ViewBag.Files;
     
 
@@ -52,10 +52,15 @@
         {
 @*<li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">
                 <img src="@Url.Content("~/Content/images/common/btn/btn_edit.gif")" /></a></li>*@
+            <li><a href="javascript:ShowDivTrans()">번역</a></li>
             <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">편집</a></li>
         }
     </ul>
 }
+
+
+
+
 <!-- contWrap -->
 <div class="contWrap">
     <!-- DetailWrap -->
@@ -112,8 +117,9 @@
                         {
                             string ThumbImgPath = ViewBag.ArticleImgUrl + file.ImgName;
                             <a data-slide-index="@index" href="javascript:void(0);">
-                                @*<img class="lazy-load" data-original="@ThumbImgPath" /></a>*@
-                                <img src="@ThumbImgPath" /></a>
+                                @*<img class="lazy-load" data-original="@ThumbImgPath" />*@
+                                <img src="@ThumbImgPath" />
+                                </a>
                             index++;
                         }
 
@@ -180,7 +186,7 @@
                                 downloadUrl = Html.Encode(downloadUrl);
                                 float m = float.Parse(file.Size) / (float)1024;
                                 float size = float.Parse(m.ToString("F1"));
-                                float size2 = float.Parse((size/1024).ToString("F1"));
+                                float size2 = float.Parse((size / 1024).ToString("F1"));
                                 string resize = size > 1000 ? size2 + "MB" : size + "KB";
                             <li>
                                 <div class="downBox">
@@ -216,22 +222,48 @@
         </div>
         <!-- //LeftCont -->
 
-
         <!-- RightCont -->
         <div class="rightCont">
+
+            <div id="divTrans" style="display:none">
+            <div class="trans_arrow"><img src="/content/images/common/arrow_trans.png"></div>
+            <div class="transPop">
+                <div class="line"></div>
+                <div class="arrow"></div>
+                <div class="self">
+                    <span class="tit">직접번역</span><br>선택한 언어로 직접 번역
+                <div class="selLang"> 
+                <a href="javascript:DirectTranslation('EN')" class="en">English</a>
+                    <!--a class="en">English</a-->
+                    @*<a class="cn">Chinese</a>
+                    <a class="jp">Japanese</a>*@
+                </div>  
+                </div>
+                <div class="request">
+                <span class="tit">번역요청</span><br>메이커스앤에 선택한 언어로 번역 요청
+				<div class="selLang"> 
+                <a href="javascript:RequestTranslation('EN')" class="en">English</a>
+                    <!--a class="en">English</a-->
+                   @* <a class="cn">Chinese</a>
+                    <a class="jp">Japanese</a>*@
+                </div>  
+                </div>
+                <div class="close"><a href="javascript:CloseDivTrans()" alt="창닫기"><img src="/content/images/common/btn/btnReportClose.png"></a></div>
+            </div>
+                </div>
 
             <!-- userInfoArea -->
             <div class="userInfoArea">
 
                 <p class="title">@Model.Title</p>
-                <p class="date">@Model.RegDt.ToString("yyyy-MM-dd")</p>
+                <p class="date">@Model.RegDt.ToString("yyyy.MM.dd")</p>
                 <div class="btnSet">
                     @*<p class="download">
                         <a href="javascript:void(0);" onclick="goDownFile();">
                             <img src="/content/images/common/btn/btn_download.jpg" alt="다운로드" /></a>
                     </p>*@
                     <p><a href="javascript:void(0);" onclick="goDownFile();" class="download" title="다운로드">다운로드</a></p>
-                    @*<p><a href="#" onclick="goPrint();" class="print" title="프린트">프린트</a></p>*@
+                    <p><a href="/Order?articleNo=@Model.No" class="print" title="프린트">프린트</a></p>
                     @*   <ul class="socialArea">
                         <li>
                             <a href="javascript:pstFaceBook()" title="페이스북">
@@ -259,53 +291,53 @@
                           {
                               case 1:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="이용 권한" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="저작자표시" /></a>
                                   break;
                               case 2:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="이용 권한" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="저작자표시" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                                <img src="/content/images/common/btn/btn_licen3.png" title="비영리" /></a>
                                   break;
                               case 3:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="이용 권한" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="저작자표시" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/ic_nd.png" alt="변경금지" /></a>
+                                <img src="/content/images/common/btn/ic_nd.png" title="변경금지" /></a>
                                   break;
                               case 4:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="이용 권한" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="저작자표시" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen4.png" alt="동일조건변경허락" /></a>
+                                <img src="/content/images/common/btn/btn_licen4.png" title="동일조건변경허락" /></a>
                                   break;
                               case 5:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="이용 권한" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="저작자표시" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                                <img src="/content/images/common/btn/btn_licen3.png" title="비영리" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen4.png" alt="동일조건변경허락" /></a>
+                                <img src="/content/images/common/btn/btn_licen4.png" title="동일조건변경허락" /></a>
                                   break;
                               case 6:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="이용 권한" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="저작자표시" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                                <img src="/content/images/common/btn/btn_licen3.png" title="비영리" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/ic_nd.png" alt="변경금지" /></a>
+                                <img src="/content/images/common/btn/ic_nd.png" title="변경금지" /></a>
                                   break;
                           }
                         }
@@ -444,11 +476,28 @@
 </div>
 <!-- //contWrap -->
 
+<form id="translationForm" method="post" >
+    <input type="hidden" name="articleNo" value="@Model.No" />
+    <input type="hidden" name="langFrom" value="KR" />
+    <input type="hidden" id="langTo" name="langTo" value="EN" />
+
+</form>
+
 
 
 @section Scripts{
-    <script src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
-    @Scripts.Render("~/bundles/viewer")
+    @*<script src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
+    @Scripts.Render("~/bundles/viewer")*@
+
+    
+    <script src="@Url.VersionedContent("/Scripts/makersnView/three.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/STLLoader.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/OBJLoader.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/NormalControls.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/TrackballControls.js")"></script>
+    <script src="@Url.VersionedContent("/Scripts/makersnView/viewer.js")"></script>
+
+
     @* <script src="@Url.VersionedContent("~/Scripts/three.71.js")"></script>
     <script src="@Url.VersionedContent("~/Scripts/Thingiview2.js")"></script>
     <script src="@Url.VersionedContent("~/Scripts/NormalControls.js")"></script>
@@ -526,14 +575,18 @@
     }
 
     //댓글수정 보이기 가리기
-    detail.ShowEditComment = function (val) {
-        $("#comment_view_" + val).addClass("dbNo");
-        $("#comment_edit_" + val).removeClass("dbNo");
+    detail.ShowEditComment = function (no, val) {
+        $("#comment_view_" + no).addClass("dbNo");
+        $("#comment_edit_" + no).removeClass("dbNo");
+        $(val).parents('.nameZone').find('.before').hide();
+        $(val).parents('.nameZone').find('.after').show();
     }
 
-    detail.HideEditComment = function (val) {
-        $("#comment_view_" + val).removeClass("dbNo");
-        $("#comment_edit_" + val).addClass("dbNo");
+    detail.HideEditComment = function (no, val) {
+        $("#comment_view_" + no).removeClass("dbNo");
+        $("#comment_edit_" + no).addClass("dbNo");
+        $(val).parents('.nameZone').find('.before').show();
+        $(val).parents('.nameZone').find('.after').hide();
     }
 
     //파일 다운로드
@@ -638,67 +691,105 @@
         var thingiview = null;
 
         $('.thumb3dImg').show();
-        console.log($('.thumb3dImg'));
+        //console.log($('.thumb3dImg'));
         var view = $('#viewer');
-        view.find('canvas').empty();
+        view.find('canvas').remove();
         $(this).siblings('img').hide();
         $(this).parent('li').append(view);
         $(this).siblings('#viewer').show();
 
         //js파일 이용
         var js = $(this).attr('data-js');
-        jQuery('html, body').animate({ scrollTop: 0 }, 300);
 
-        var ThreeJsonLoader = new THREE.JSONLoader(true);
-        ThreeJsonLoader.statusDomElement.style.left = "0px";
-        ThreeJsonLoader.statusDomElement.style.width = "auto";
+        ///////////////////////////////
+        var loader = "";
+        if (js.toLowerCase().indexOf(".stl") > -1) {
+            var fileNm = $(this).attr('data-file');
+            js = fileNm;
+            loader = new THREE.STLLoader();
+        }
+        else if (js.toLowerCase().indexOf(".obj") > -1) {
+            loader = new THREE.JSONLoader();
+        }
+        else if (js.toLowerCase().indexOf(".js") > -1) {
+            loader = new THREE.JSONLoader();
+        }
+        //
+        $('.thumb3dImg').hide();
+        $("#viewer").show();
+        init("viewer",630,473)
 
-        document.body.appendChild(ThreeJsonLoader.statusDomElement);
-        ThreeLoadCallback = function (geometry, materials) {
-            thingiview.addModel(geometry);
-            document.body.removeChild(ThreeJsonLoader.statusDomElement);
-            $('.thumb3dImg').hide();
-        };
+        loader.load(js, function (geometry) {
+            var material = new THREE.MeshLambertMaterial({ color: 0xC97B27 }); //color 재질 색상
+            //0xCC6600 //노란색
+            //0xCC6633 //살색
+            //0x828282 //회색
+            //0xE0FFFF //파스텔 파랑(거의 회색임)
 
-        thingiview = new Thingiview('viewer');
-        thingiview.resize(630, 472);
-        ThreeJsonLoader.load(js, ThreeLoadCallback);
-        //여기까지
+            //var material = new THREE.MeshNormalMaterial({ color: 0xC97B27 }); //color 재질 색상
+
+            mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(0, 0, 0);
+            scene.add(mesh);
+            render();
+
+        });
+        /////////////////////////////////
 
 
-        ////stl파일 이용
-        //var filePath = $(this).attr('data-file');
-        //var fileExt = $(this).attr('data-ext');
+        //jQuery('html, body').animate({ scrollTop: 0 }, 300);
+
+        //var ThreeJsonLoader = new THREE.JSONLoader(true);
+        //ThreeJsonLoader.statusDomElement.style.left = "0px";
+        //ThreeJsonLoader.statusDomElement.style.width = "auto";
+
+        //document.body.appendChild(ThreeJsonLoader.statusDomElement);
+        //ThreeLoadCallback = function (geometry, materials) {
+
+        //    thingiview.addModel(geometry);
+        //    document.body.removeChild(ThreeJsonLoader.statusDomElement);
+        //    $('.thumb3dImg').hide();
+        //};
 
         //thingiview = new Thingiview('viewer');
-
         //thingiview.resize(630, 472);
+        //ThreeJsonLoader.load(js, ThreeLoadCallback);
+        ////여기까지
 
-        //switch (fileExt) {
-        //    case "stl":
-        //        var stlLoader = new THREE.STLLoader();
-        //        stlLoader.load(filePath, function (geometry) {
-        //            thingiview.addModel(geometry);
-        //            $('.thumb3dImg').hide();
-        //        });
-        //        break;
-        //    case "obj":
-        //        var objTest = new THREE.OBJLoader();
-        //        objTest.load(filePath, function (geometry) {
-        //            console.log(geometry);
-        //            thingiview.addModel(geometry);
-        //            $('.thumb3dImg').hide();
-        //        });
-        //        break;
+
+        //////stl파일 이용
+        ////var filePath = $(this).attr('data-file');
+        ////var fileExt = $(this).attr('data-ext');
+
+        ////thingiview = new Thingiview('viewer');
+
+        ////thingiview.resize(630, 472);
+
+        ////switch (fileExt) {
+        ////    case "stl":
+        ////        var stlLoader = new THREE.STLLoader();
+        ////        stlLoader.load(filePath, function (geometry) {
+        ////            thingiview.addModel(geometry);
+        ////            $('.thumb3dImg').hide();
+        ////        });
+        ////        break;
+        ////    case "obj":
+        ////        var objTest = new THREE.OBJLoader();
+        ////        objTest.load(filePath, function (geometry) {
+        ////            console.log(geometry);
+        ////            thingiview.addModel(geometry);
+        ////            $('.thumb3dImg').hide();
+        ////        });
+        ////        break;
+        ////}
+
+        //var thingiviewanimate = function () {
+        //    if (thingiview != undefined) {
+        //        requestAnimationFrame(thingiviewanimate);
+        //        thingiview.render();
+        //    }
         //}
-
-        var thingiviewanimate = function () {
-            if (thingiview != undefined) {
-                requestAnimationFrame(thingiviewanimate);
-                thingiview.render();
-            }
-        }
-        thingiviewanimate();
+        //thingiviewanimate();
 
     });
 
@@ -735,7 +826,9 @@
             mode: 'fade',
             pagerCustom: '#bx-pager',
             speed: 1,
-            startSlide: slideNumber   // 초기 슬라이드 지정번호
+            startSlide: slideNumber,   // 초기 슬라이드 지정번호
+
+            touchEnabled: false
         });
 
         $('.thumbArea #bx-pager').bxSlider({
@@ -835,7 +928,7 @@
         //    $('.tagZone').hide();
         //};
 
-       
+
 
         //수정 버튼
         $("#editBtn").click(function () {
@@ -994,5 +1087,80 @@
             }
         });
     })
+
+        function RequestTranslation(langTo) {
+            if (confirm("번역 요청시 기존의 직접 번역은 삭제됩니다.")) {
+                $("#langTo").val(langTo);
+
+                var action = "/article/requestTranslation";
+
+                var options = {
+                    beforeSend: function () {
+                    },
+                    uploadProgress: function (event, position, total, percentComplete) {
+                    },
+                    success: function (response) {
+                        if (response.Success) {
+                            alert(response.Message);
+                            CloseDivTrans();
+                        }
+                        else {
+                            alert(response.Message);
+                        }
+                    },
+                    complete: function (response) {
+
+                    },
+                    error: function (error) {
+
+                    }
+                };
+
+                $('#translationForm').attr("action", action).ajaxForm(options).submit();
+            }
+
+    }
+
+    function DirectTranslation(langTo) {
+        if (confirm("직접 번역시 기존의 요청 번역은 삭제됩니다.")) {
+            $("#langTo").val(langTo);
+
+            var action = "/article/directTranslation";
+
+            var options = {
+                beforeSend: function () {
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        location.href = "/design/Translation?no=" + "@Model.No" + "&transFlag=2";
+                    }
+                    else {
+                        //alert(response.Message);
+                        if (confirm(response.Message + "\n편집 페이지로 이동하시겠습니까?")) {
+                            location.href = "http://betaen.makersn.com/design/edit?no="+"@Model.No";
+                        }
+                    }
+                },
+                complete: function (response) {
+
+                },
+                error: function (error) {
+
+                }
+            };
+
+            $('#translationForm').attr("action", action).ajaxForm(options).submit();
+        }
+    }
+
+        function ShowDivTrans() {
+            $("#divTrans").show();
+        }
+
+        function CloseDivTrans() {
+            $("#divTrans").hide();
+        }
     </script>
 }

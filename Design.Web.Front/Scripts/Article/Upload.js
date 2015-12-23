@@ -4,16 +4,16 @@ var Upload = Upload || {};
 var uploadFileCnt = 0;
 
 Upload.Init = function () {
-    console.log(uploadFileCnt);
+    //console.log(uploadFileCnt);
     uploadCnt = $("#uploadCnt").val();
     //브라우저 체크
     Upload.BrowserRecognition();
 
     Upload.GetArticleFiles();
 
-    $("#imgupload").on("change", function (e) {
+    $("#imguploads").on("change", function (e) {
         e.preventDefault();
-        var fileobj = $("#imgupload");
+        var fileobj = $("#imguploads");
         if (Upload.ValidExtension("img", fileobj) === false) {
             return false;
         }
@@ -21,9 +21,9 @@ Upload.Init = function () {
         Upload.File("/design/ImgUpload", fileobj);
     });
 
-    $("#stlupload").on("change", function (e) {
+    $("#stluploads").on("change", function (e) {
         e.preventDefault();
-        var fileobj = $("#stlupload");
+        var fileobj = $("#stluploads");
         if (Upload.ValidExtension("3d", fileobj) === false) {
             return false;
         }
@@ -57,15 +57,17 @@ Upload.Init = function () {
     $('#save_id').on('click', function () {
         //var ifm = $("#viewer_frame").contents().find("canvas");
         //$('#stl_val').val(ifm[0].toDataURL());
-        $('#stl_val').val(thingiview.renderer.domElement.toDataURL());
+        $('#stl_val').val(renderer.domElement.toDataURL());
+        $("#viewerThum").children().remove();
         $("#save_id").hide();
 
         var $form_data = $("#img_form").serialize();
 
         var showIdx = parseInt($("#showIndex").val(), 10) + 1;
-        console.log(showIdx);
+        //console.log(showIdx);
 
-        thingiview = null;
+        //thingiview = null;
+        viewerReset();
 
         $.ajax({
             type: 'POST',
@@ -106,19 +108,28 @@ Upload.File = function (action, element) {
         },
         success: function (response) {
             //console.log(response);
+
             if (response.Success) {
                 $(".imgDefualt").show();
-                uploadFileCnt++;
-                if (uploadFileCnt >= uploadCnt) {
-                    Upload.More();
-                }
-                //Upload.GetArticleFiles(response.Result);
-                Upload.AppendFile(response.Result, uploadFileCnt);
-                setTimeout("Upload.StlTrigger(" + response.Result + ")", 500);
 
-                if ($(element).attr('id') == "imgupload") {
+                //Upload.GetArticleFiles(response.Result);
+
+                for (var i = 0; i < response.Count; i++) {
+                    uploadFileCnt++;
+                    if (uploadFileCnt >= uploadCnt) {
+                        Upload.More();
+                    }
+                    Upload.AppendFile(response.Result[i], uploadFileCnt);
+                }
+
+
+                //setTimeout("Upload.StlTrigger(" + response.Result + ")", 500);
+
+                if ($(element).attr('id') == "imguploads") {//이미지만 열리게 해둠
                     $(".popupArea.uploadMask").hide();
                 }
+                $(".popupArea.uploadMask").hide();//stl도 그냥 닫히게 열어둠
+
                 //$('.btnLoading').hide();
             }
             else {
@@ -169,7 +180,7 @@ Upload.ArticleUpload = function () {
     if (check_msg('article_contents', '내용을 입력해 주세요.', 'required:contents') == false) return false;
 
 
-
+    
 
     if (!$("input:radio[name=lv1]").is(":checked")) {
         alert("카테고리를 선택해주세요.");
@@ -305,7 +316,7 @@ Upload.GetArticleFiles = function (no) {
 }
 
 Upload.AppendFile = function (no, idx) {
-    console.log(idx - 1);
+    //console.log(idx - 1);
     $.ajax({
         type: 'POST',
         url: "/article/appendFile",

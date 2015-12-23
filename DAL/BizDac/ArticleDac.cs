@@ -8,17 +8,11 @@ using NHibernate;
 using Makersn.Models;
 using NHibernate.Criterion.Lambda;
 using Makersn.Util;
-using System.Data;
-using System.Data.SqlClient;
-using System.Configuration;
 
 namespace Makersn.BizDac
 {
     public class ArticleDac : BizDacHelper
     {
-
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
-
         /// <summary>
         /// 
         /// </summary>
@@ -27,17 +21,15 @@ namespace Makersn.BizDac
         /// <param name="option"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public IList<ArticleT> GetArticleListByAdminPage(int codeNo, string RecommendYn, string text)
+        public IList<ArticleT> GetArticleListByAdminPage(int codeNo, string RecommendYn, string visilibity,string text)
         {
-
-
-
             int downloadScore = 40;
             int commentScore = 20;
             int likeScore = 10;
             int viewScore = 5;
 
-            string query = @"SELECT A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, A.TITLE, C.NAME AS CATEGORY, M.NAME AS MEMBER_NAME , A.REG_DT, A.VISIBILITY, AF.PATH, A.VIEWCNT,
+            string query = @"SELECT A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, TD.TITLE
+                            , C.NAME AS CATEGORY, M.NAME AS MEMBER_NAME , A.REG_DT, A.VISIBILITY, AF.PATH, A.VIEWCNT,
 
                              				(
 						        --(A.VIEWCNT * " + viewScore + @") + 
@@ -62,29 +54,37 @@ namespace Makersn.BizDac
 					                            ON A.CODE_NO = C.NO
 					                            LEFT JOIN MEMBER AS M WITH(NOLOCK)
 					                            ON A.MEMBER_NO = M.NO
+												INNER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK)
+												ON TD.ARTICLE_NO = A.NO AND TD.NO = (SELECT MIN(NO) FROM TRANSLATION_DETAIL TD2 WITH(NOLOCK) WHERE TD2.ARTICLE_NO = A.NO )
                                                 WHERE (M.DEL_FLAG != 'Y' OR M.DEL_FLAG IS NULL)";
 
             if (codeNo != 0) { query += " AND C.NO = :codeNo"; };
             if (RecommendYn != "") { query += " AND A.RECOMMEND_YN = :RecommendYn"; };
+            if (visilibity != "") { query += " AND A.VISIBILITY = :visilibity"; };
             //if (option != "") { query += " AND A.TITLE = " + option; };
-            if (text != "") { query += " AND A.TITLE LIKE :text"; };
+            if (text != "") { query += " AND TD.TITLE LIKE :text"; };
 
             IQuery queryObj = Session.CreateSQLQuery(query);
-            if (query.Contains("codeNo"))
+            if (query.Contains(":codeNo"))
             {
                 queryObj.SetParameter("codeNo", codeNo);
             }
-            if (query.Contains("RecommendYn"))
+            if (query.Contains(":RecommendYn"))
             {
                 queryObj.SetParameter("RecommendYn", RecommendYn);
             }
-            if (query.Contains("text"))
+            if (query.Contains(":visilibity"))
+            {
+                queryObj.SetParameter("visilibity", visilibity);
+            }
+            if (query.Contains(":text"))
             {
                 queryObj.SetParameter("text", "%" + text + "%");
             }
 
             IList<object[]> results = queryObj.List<object[]>();
             Session.Flush();
+
 
             IList<ArticleT> list = new List<ArticleT>();
             foreach (object[] row in results)
@@ -117,66 +117,6 @@ namespace Makersn.BizDac
             }
 
             return list;
-
-
-
-
-
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "GET_ARTICLELIST_BY_ADMINPAGE_ADMIN";
-            //cmd.Parameters.Add("@CODE_NO", SqlDbType.Int).Value = codeNo;
-            //cmd.Parameters.Add("@RECOMMEND_YN", SqlDbType.Char, 1).Value = RecommendYn;
-            //cmd.Parameters.Add("@TEXT", SqlDbType.Char, 200).Value = text;
-            //cmd.Connection = con;
-            //IList<ArticleT> list = new List<ArticleT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        ArticleT article = new ArticleT();
-
-            //        article.No = (int)sr["NO"];
-            //        article.ImageName = sr["MAIN_IMAGE"].ToString();
-            //        article.Title = sr["TITLE"].ToString();
-            //        article.Category = sr["CATEGORY"].ToString();
-            //        article.MemberName = sr["MEMBER_NAME"].ToString();
-            //        article.RegDt = (DateTime)sr["REG_DT"];
-            //        article.Visibility = sr["VISIBILITY"].ToString();
-            //        article.Path = sr["PATH"].ToString();
-            //        article.ViewCnt = (int)sr["VIEWCNT"];
-            //        article.CommentCnt = (int)sr["COMMENT_CNT"];
-            //        article.LikeCnt = (int)sr["LIKE_CNT"];
-            //        article.MemberNo = (int)sr["MEMBER_NO"];
-            //        article.Copyright = (int)sr["COPYRIGHT"];
-            //        article.RecommendYn = sr["RECOMMEND_YN"].ToString();
-            //        article.RecommendVisibility = sr["RECOMMEND_VISIBILITY"].ToString();
-            //        article.RecommendPriority = !sr.IsDBNull(sr.GetOrdinal("RECOMMEND_PRIORITY")) ? (int)sr["RECOMMEND_PRIORITY"] : 0;
-            //        article.RecommendDt = !sr.IsDBNull(sr.GetOrdinal("RECOMMEND_DT")) ? (DateTime)sr["RECOMMEND_DT"] : (DateTime?)null;
-            //        article.DownloadCnt = (int)sr["DOWNLOAD"];
-            //        list.Add(article);
-
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
         }
 
         /// <summary>
@@ -239,10 +179,6 @@ namespace Makersn.BizDac
 
         public int UpdateRecommend(string no, string recommend)
         {
-           
-            //}
-
-
             string query = "";
             if (recommend == "Y") { query = "UPDATE ARTICLE SET RECOMMEND_PRIORITY=(select max(RECOMMEND_PRIORITY) from article), RECOMMEND_DT = GETDATE(), RECOMMEND_YN = :recommend WHERE "; }
             else { query = "UPDATE ARTICLE SET RECOMMEND_PRIORITY=0,RECOMMEND_DT = null, RECOMMEND_YN = :recommend WHERE "; }
@@ -269,38 +205,16 @@ namespace Makersn.BizDac
 
                     IQuery queryObj = session.CreateSQLQuery(query);
                     for (int i = 0; i < noList.Length; i++)
-                    {   
+                    {
                         queryObj.SetParameter(i, noList[i]);
                     }
-                    queryObj.SetParameter("recommend",recommend);
+                    queryObj.SetParameter("recommend", recommend);
                     queryObj.ExecuteUpdate();
                     transaction.Commit();
                     session.Flush();
                     return 1;
                 }
             } 
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "UPDATE_RECOMMEND_ADMIN";
-            //cmd.Parameters.Add("@NO", SqlDbType.VarChar, 60).Value = no;
-            //cmd.Parameters.Add("@RECOMMEND", SqlDbType.Char).Value = recommend;
-            //cmd.Connection = con;
-            //con.Open();
-            //try
-            //{
-            //    cmd.ExecuteNonQuery();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-            //    return 1;
-            //}
-            //catch
-            //{
-
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-            //    return 0;
-
         }
 
 
@@ -506,10 +420,6 @@ namespace Makersn.BizDac
         /// <returns></returns>
         public IList<ArticleStateT> SearchArticleStateTargetDaily(string start, string end)
         {
-           
-
-
-
             string query = @"select
 	                            Gbn,
 								ISNULL([public], 0) as PublicCnt,
@@ -580,7 +490,7 @@ namespace Makersn.BizDac
                                 union all                                
                                 select convert(date, REG_DT) as Gbn,'printing' as fortype, COUNT(1) as Total
 	                            from ORDER_REQ with(nolock)
-	                            where ORDER_PATH = 'M' and ORDER_STATUS = "+(int)(MakersnEnumTypes.OrderState.구매완료)+@" and REG_DT < :end 
+	                            where ORDER_PATH = 'M' and ORDER_STATUS = " + (int)(MakersnEnumTypes.OrderState.거래완료) + @" and REG_DT < :end 
 	                            group by convert(date, REG_DT)
                             ) as tb
                             PIVOT
@@ -593,68 +503,17 @@ namespace Makersn.BizDac
             {
 
                 IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(ArticleStateT));
-               
+
                 queryObj.SetParameter("start", start);
- 
-              
-                queryObj.SetParameter("end",end);
-  
+
+
+                queryObj.SetParameter("end", end);
+
 
                 IList<ArticleStateT> result = (IList<ArticleStateT>)queryObj.List<ArticleStateT>();
 
                 return result;
             }
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "SEARCH_ARTICLESTATE_TARGET_DAILY";
-            //cmd.Parameters.Add("@START", SqlDbType.VarChar,20).Value = start;
-            //cmd.Parameters.Add("@END", SqlDbType.VarChar,20).Value = end;
-            //cmd.Parameters.Add("@ORDER_STATUS", SqlDbType.Int).Value = (int)(MakersnEnumTypes.OrderState.구매완료);
-            //cmd.Connection = con;
-
-
-            //IList<ArticleStateT> list = new List<ArticleStateT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        ArticleStateT articleState = new ArticleStateT();
-
-            //        articleState.Gbn = sr["Gbn"].ToString();
-            //        articleState.PublicCnt = (int)sr["PublicCnt"];
-            //        articleState.SavedCnt = (int)sr["SavedCnt"];
-            //        articleState.DownloadCnt = (int)sr["DownloadCnt"];
-            //        articleState.PrintingCnt = (int)sr["PrintingCnt"];
-            //        articleState.CodeNo1001 = (int)sr["CodeNo1001"];
-            //        articleState.CodeNo1002 = (int)sr["CodeNo1002"];
-            //        articleState.CodeNo1003 = (int)sr["CodeNo1003"];
-            //        articleState.CodeNo1004 = (int)sr["CodeNo1004"];
-            //        articleState.CodeNo1005 = (int)sr["CodeNo1005"];
-            //        articleState.CodeNo1006 = (int)sr["CodeNo1006"];
-
-            //        list.Add(articleState);
-
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
         }
 
         /// <summary>
@@ -663,7 +522,7 @@ namespace Makersn.BizDac
         /// <returns></returns>
         public IList<ArticleStateT> SearchArticleStateTargetMonth(string start, string end)
         {
-            string query = @"select
+             string query = @"select
 	                            Gbn,
 								ISNULL([public], 0) as PublicCnt,
 								ISNULL([Saved], 0) as SavedCnt,
@@ -733,7 +592,7 @@ namespace Makersn.BizDac
                                 union all                                
                                 select month(REG_DT) as Gbn,'printing' as fortype, COUNT(1) as Total
 	                            from ORDER_REQ with(nolock)
-	                            where ORDER_PATH = 'M' and ORDER_STATUS = "+(int)(MakersnEnumTypes.OrderState.구매완료)+@" and REG_DT >= :start and REG_DT < :end 
+	                            where ORDER_PATH = 'M' and ORDER_STATUS = "+(int)(MakersnEnumTypes.OrderState.거래완료)+@" and REG_DT >= :start and REG_DT < :end 
 	                            group by month(REG_DT)
                             ) as tb
                             PIVOT
@@ -757,6 +616,7 @@ namespace Makersn.BizDac
                 return result;
             }
         }
+        
 
         /// <summary>
         /// get article state - year
@@ -842,7 +702,7 @@ namespace Makersn.BizDac
                             (
                                 SUM(Total)
                                 for fortype IN ([public],[saved],[1001],[1002],[1003],[1004],[1005],[1006],[download],[printing])
-                            ) as pvt", (int)(MakersnEnumTypes.OrderState.구매완료));
+                            ) as pvt", (int)(MakersnEnumTypes.OrderState.거래완료));
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -922,7 +782,7 @@ namespace Makersn.BizDac
                                 select 
 		                            '전체' as Gbn,'printing' as fortype, COUNT(1) as Total
 	                            from ORDER_REQ with(nolock)
-                                where ORDER_PATH = 'M' and ORDER_STATUS = " + (int)(MakersnEnumTypes.OrderState.구매완료) + @" 
+                                where ORDER_PATH = 'M' and ORDER_STATUS = " + (int)(MakersnEnumTypes.OrderState.거래완료) + @" 
                             ) as tb
                             PIVOT
                             (
@@ -1035,7 +895,7 @@ namespace Makersn.BizDac
                             (
                                 SUM(Total)
                                 for fortype IN ([public],[saved],[1001],[1002],[1003],[1004],[1005],[1006],[download],[printing])
-                            ) as pvt", gbn, add_where, (int)(MakersnEnumTypes.OrderState.구매완료));
+                            ) as pvt", gbn, add_where, (int)(MakersnEnumTypes.OrderState.거래완료));
             }
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -1062,9 +922,9 @@ namespace Makersn.BizDac
         /// <returns></returns>
         public IList<ArticleT> GetMemberArticleByNo(string memberNo, string gubun, int visitorNo)
         {
-
-
-            string query = @"SELECT A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, A.TITLE, C.NAME AS CATEGORY, M.NAME AS MEMBER_NAME , A.REG_DT, A.VISIBILITY, AF.PATH, A.VIEWCNT,
+            string query = @"SELECT A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, 
+							(SELECT TOP 1 TD.TITLE FROM TRANSLATION_DETAIL TD WITH(NOLOCK) WHERE TD.ARTICLE_NO = A.NO ORDER BY NO ASC ) AS TITLE, 
+                            C.NAME AS CATEGORY, M.NAME AS MEMBER_NAME , A.REG_DT, A.VISIBILITY, AF.PATH, A.VIEWCNT,
                             (SELECT count(0) 
                                        FROM   ARTICLE_COMMENT B 
                                        WHERE  A.NO = B.ARTICLE_NO) AS COMMENT_CNT,
@@ -1075,7 +935,7 @@ namespace Makersn.BizDac
                             (SELECT count(0) 
                                     FROM   LIKES B 
                                     WHERE   
-                                        A.NO = B.ARTICLE_NO AND B.MEMBER_NO = :visitorNo ) AS CHK_LIKES
+                                        A.NO = B.ARTICLE_NO AND B.MEMBER_NO = " + visitorNo + @" ) AS CHK_LIKES
 
                             FROM ARTICLE A WITH(NOLOCK) INNER JOIN ARTICLE_FILE AS AF WITH(NOLOCK)
 					                            ON A.MAIN_IMAGE = AF.NO
@@ -1094,26 +954,22 @@ namespace Makersn.BizDac
                     query += @"INNER JOIN LIKES AS L WITH(NOLOCK)
 												ON A.NO = L.ARTICLE_NO
                                                 WHERE (M.DEL_FLAG != 'Y' OR M.DEL_FLAG IS NULL)
-                                                AND A.VISIBILITY = 'Y' AND L.MEMBER_NO = :memberNo ORDER BY L.REG_DT DESC";
+                                                AND A.VISIBILITY = 'Y' AND L.MEMBER_NO = " + memberNo + " ORDER BY L.REG_DT DESC";
                     break;
                 case "D":
                     query += @" WHERE (M.DEL_FLAG != 'Y' OR M.DEL_FLAG IS NULL)
-                                                AND A.VISIBILITY = 'N'  AND A.MEMBER_NO = :memberNo  ORDER BY A.REG_DT DESC";
+                                                AND A.VISIBILITY = 'N'  AND A.MEMBER_NO = " + memberNo + " ORDER BY A.REG_DT DESC";
                     break;
                 default:
                     query += @" WHERE (M.DEL_FLAG != 'Y' OR M.DEL_FLAG IS NULL)
-                                                AND A.VISIBILITY = 'Y'  AND A.MEMBER_NO = :memberNo ORDER BY A.REG_DT DESC";
+                                                AND A.VISIBILITY = 'Y'  AND A.MEMBER_NO = " + memberNo + " ORDER BY A.REG_DT DESC";
                     break;
             }
 
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                IQuery queryObj = session.CreateSQLQuery(query);
-                queryObj.SetParameter("memberNo",memberNo);
-                queryObj.SetParameter("visitorNo",visitorNo);
-
-                IList<object[]> results = queryObj.List<object[]>();
+                IList<object[]> results = session.CreateSQLQuery(query).List<object[]>();
                 session.Flush();
 
                 IList<ArticleT> list = new List<ArticleT>();
@@ -1138,62 +994,6 @@ namespace Makersn.BizDac
 
                 return list;
             }
-
-
-
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "GET_MEMBER_ARTICLE_BY_NO_FRONT";
-            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
-            //cmd.Parameters.Add("@GUBUN", SqlDbType.Char).Value = gubun;
-            //cmd.Parameters.Add("@VISITOR_NO", SqlDbType.Int).Value = visitorNo;
-            //cmd.Connection = con;
-
-            //IList<ArticleT> list = new List<ArticleT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        ArticleT article = new ArticleT();
-
-
-
-            //        article.No = (int)sr["NO"];
-            //        article.ImageName = sr["MAIN_IMAGE"].ToString();
-            //        article.Title = sr["TITLE"].ToString();
-            //        article.Category = sr["CATEGORY"].ToString();
-            //        article.MemberName = sr["MEMBER_NAME"].ToString();
-            //        article.RegDt = (DateTime)sr["REG_DT"];
-            //        article.Visibility = sr["VISIBILITY"].ToString();
-            //        article.Path = sr["PATH"].ToString();
-            //        article.ViewCnt = (int)sr["VIEWCNT"];
-            //        article.CommentCnt = (int)sr["COMMENT_CNT"];
-            //        article.LikeCnt = (int)sr["LIKE_CNT"];
-            //        article.MemberNo = (int)sr["MEMBER_NO"];
-            //        article.chkLikes = (int)sr["CHK_LIKES"];
-            //        list.Add(article);
-
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
         }
 
         /// <summary>
@@ -1223,58 +1023,9 @@ namespace Makersn.BizDac
         }
 
         #region 검색결과
-        public IList<ArticleT> GetSearchList(string text, int memberNo, string tag)
+        public IList<ArticleT> GetSearchList(string text, int memberNo, string tag, string globalType)
         {
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "SEARCH_DESIGN_FRONT";
-            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
-            //cmd.Parameters.Add("@TEXT", SqlDbType.Text).Value = text;
-            //cmd.Parameters.Add("@TAG", SqlDbType.Char, 1).Value = tag;
-            //cmd.Connection = con;
-
-            //IList<ArticleT> list = new List<ArticleT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        ArticleT article = new ArticleT();
-            //        article.No = (int)sr.GetValue(0);
-            //        article.ImageName = (string)sr.GetValue(1);
-            //        article.Title = (string)sr.GetValue(2);
-            //        article.MemberName = (string)sr.GetValue(3);
-            //        article.Path = (string)sr.GetValue(4) + article.ImageName;
-            //        article.MemberNo = (int)sr.GetValue(5);
-            //        article.ViewCnt = (int)sr.GetValue(6);
-            //        article.CommentCnt = (int)sr.GetValue(7);
-            //        article.LikeCnt = (int)sr.GetValue(8);
-            //        article.chkLikes = (int)sr.GetValue(9);
-            //        article.CodeNo = (int)sr.GetValue(10);
-            //        list.Add(article);
-
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
-
-            string query = @"SELECT A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, A.TITLE, M.NAME AS MEMBER_NAME , AF.PATH, A.MEMBER_NO, A.VIEWCNT,
+            string query = @"SELECT A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, TD.TITLE, M.NAME AS MEMBER_NAME , AF.PATH, A.MEMBER_NO, A.VIEWCNT,
             
                                         (   SELECT count(0) 
                                                    FROM   ARTICLE_COMMENT B 
@@ -1295,21 +1046,27 @@ namespace Makersn.BizDac
             					                            ON A.CODE_NO = C.NO
             					                            LEFT JOIN MEMBER AS M WITH(NOLOCK)
             					                            ON A.MEMBER_NO = M.NO
+                                                            INNER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK)
+                                                            ON A.NO = TD.ARTICLE_NO
                                                             WHERE (M.DEL_FLAG != 'Y' OR M.DEL_FLAG IS NULL) AND A.VISIBILITY = 'Y'";
 
-            if (text != "" && tag != "Y") { query += " AND (A.TITLE LIKE :text OR A.TAG LIKE :text OR A.CONTENTS LIKE :text OR M.NAME LIKE :text)"; };
-            if (text != "" && tag == "Y") { query += " AND A.TAG LIKE :text"; };
+            if (text != "" && tag != "Y") { query += " AND (TD.TITLE LIKE :text OR TD.TAG LIKE :text OR TD.CONTENTS LIKE :text OR M.NAME LIKE :text)"; };
+            if (text != "" && tag == "Y") { query += " AND TD.TAG LIKE :text"; };
+            if (globalType != "") { query += "AND TD.LANG_FLAG = :globalType "; }
+            else { query += " AND TD.NO IN (select MIN(TDL.NO) FROM TRANSLATION_DETAIL TDL WITH(NOLOCK) group by TDL.ARTICLE_NO)"; }
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query);
                 queryObj.SetParameter("text", "%" + text + "%");
                 queryObj.SetParameter("memberNo", memberNo);
-                
+                queryObj.SetParameter("globalType", globalType);
+
+
                 IList<object[]> results = queryObj.List<object[]>();
 
                 //IList<object[]> results = session.CreateSQLQuery(query).List<object[]>();
-                
+
 
                 session.Flush();
 
@@ -1364,80 +1121,26 @@ namespace Makersn.BizDac
 
         public ArticleDetailT GetArticleDetailByArticleNo(int articleNo, int visiteNo)
         {
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "GET_ARTICLEDETAIL_BY_ARTICLENO_FRONT";
-            //cmd.Parameters.Add("@ARTICLE_NO", SqlDbType.Int).Value = articleNo;
-            //cmd.Parameters.Add("@VISITE_NO", SqlDbType.Int).Value = visiteNo;
-            //cmd.Connection = con;
-
-            //ArticleDetailT detailT = new ArticleDetailT();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        detailT.No = (int)sr["NO"];
-            //        detailT.MemberNo = (int)sr["MEMBER_NO"];
-            //        detailT.MainImage = (int)sr["MAIN_IMAGE"];
-            //        detailT.CodeNo = (int)sr["CODE_NO"];
-            //        detailT.Title = sr["TITLE"].ToString();
-            //        detailT.Contents = sr["CONTENTS"].ToString();
-            //        detailT.Tag = sr["TAG"].ToString();
-            //        detailT.Copyright = (int)sr["COPYRIGHT"];
-            //        detailT.Visibility = sr["VISIBILITY"].ToString();
-            //        detailT.ViewCnt = (int)sr["VIEWCNT"];
-            //        detailT.Temp = sr["TEMP"].ToString();
-            //        detailT.RegIp = sr["REG_IP"].ToString();
-            //        detailT.RegDt = (DateTime)sr["REG_DT"];
-            //        detailT.RegId = sr["REG_ID"].ToString();
-            //        detailT.RecommendYn = sr["RECOMMEND_YN"].ToString();
-            //        detailT.RecommendDt = !sr.IsDBNull(sr.GetOrdinal("RECOMMEND_DT")) ? (DateTime)sr["RECOMMEND_DT"] : (DateTime?)null;
-            //        detailT.MemberName = sr["MEMBER_NAME"].ToString();
-            //        detailT.MemberProfilePic = sr["MEMBER_PROFILE_PIC"].ToString();
-            //        detailT.MainImgName = sr["MAINIMGNAME"].ToString();
-            //        detailT.LikeCnt = (int)sr["LIKE_CNT"];
-            //        detailT.CommentCnt = (int)sr["COMMENT_CNT"];
-            //        detailT.IsLikes = (int)(sr["IS_LIKES"]);
-            //        detailT.UploadCnt = (int)(sr["UPLOAD_CNT"]);
-            //        detailT.DraftCnt = (int)sr["DRAFT_CNT"];
-            //        detailT.VideoUrl = sr["VIDEO_URL"].ToString();
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return detailT;
             string query = @"select 
-            	                                        A.[NO], A.MEMBER_NO, A.MAIN_IMAGE,  A.CODE_NO, A.TITLE, A.CONTENTS, A.TAG, A.COPYRIGHT, A.VISIBILITY, A.VIEWCNT, A.TEMP, A.REG_IP,
-            	                                        A.REG_DT, A.REG_ID, A.RECOMMEND_YN, A.RECOMMEND_DT, M.NAME as MEMBER_NAME, M.PROFILE_PIC as MEMBER_PROFILE_PIC, 
-            											case F.FILE_TYPE when 'img' then F.RENAME else F.IMG_NAME end as MAINIMGNAME, 
-            	                                        (SELECT COUNT(0) FROM LIKES WHERE ARTICLE_NO = A.[NO]) AS LIKE_CNT,
-            	                                        (SELECT COUNT(0) FROM ARTICLE_COMMENT WHERE ARTICLE_NO = A.[NO]) AS COMMENT_CNT,
-            	                                        (SELECT COUNT(0) FROM LIKES WHERE ARTICLE_NO = A.[NO] AND MEMBER_NO = :visiteNo) AS IS_LIKES, '0' as UPLOAD_CNT, '0' as DRAFT_CNT,
-                                                        A.VIDEO_URL 
-                                                    from ARTICLE A with(nolock)
-                                                    inner join MEMBER M with(nolock) on M.[NO] = A.MEMBER_NO
-                                                    inner join ARTICLE_FILE F with(nolock) on F.[NO] = A.MAIN_IMAGE
-                                                    where A.[NO] = :articleNo";
+	                                        A.[NO], A.MEMBER_NO, A.MAIN_IMAGE,  A.CODE_NO,
+											(SELECT TOP 1 TD.TITLE FROM TRANSLATION_DETAIL TD WITH(NOLOCK) WHERE TD.ARTICLE_NO = A.NO ORDER BY NO ASC ) AS TITLE, 
+											(SELECT TOP 1 TD.CONTENTS FROM TRANSLATION_DETAIL TD WITH(NOLOCK) WHERE TD.ARTICLE_NO = A.NO ORDER BY NO ASC ) AS CONTENTS,
+											(SELECT TOP 1 TD.TAG FROM TRANSLATION_DETAIL TD WITH(NOLOCK) WHERE TD.ARTICLE_NO = A.NO ORDER BY NO ASC ) AS TAG,
+                                            A.COPYRIGHT, A.VISIBILITY, A.VIEWCNT, A.TEMP, A.REG_IP,
+	                                        A.REG_DT, A.REG_ID, A.RECOMMEND_YN, A.RECOMMEND_DT, M.NAME as MEMBER_NAME, M.PROFILE_PIC as MEMBER_PROFILE_PIC, 
+											case F.FILE_TYPE when 'img' then F.RENAME else F.IMG_NAME end as MAINIMGNAME, 
+	                                        (SELECT COUNT(0) FROM LIKES WHERE ARTICLE_NO = A.[NO]) AS LIKE_CNT,
+	                                        (SELECT COUNT(0) FROM ARTICLE_COMMENT WHERE ARTICLE_NO = A.[NO]) AS COMMENT_CNT,
+	                                        (SELECT COUNT(0) FROM LIKES WHERE ARTICLE_NO = A.[NO] AND MEMBER_NO = :visiteNo) AS IS_LIKES, '0' as UPLOAD_CNT, '0' as DRAFT_CNT,
+                                            A.VIDEO_URL 
+                                        from ARTICLE A with(nolock)
+                                        inner join MEMBER M with(nolock) on M.[NO] = A.MEMBER_NO
+                                        inner join ARTICLE_FILE F with(nolock) on F.[NO] = A.MAIN_IMAGE
+                                        where A.[NO] = :articleNo";
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(ArticleDetailT));
-                queryObj.SetParameter("articleNo",articleNo);
+                queryObj.SetParameter("articleNo", articleNo);
                 queryObj.SetParameter("visiteNo", visiteNo);
 
                 ArticleDetailT detailT = queryObj.UniqueResult<ArticleDetailT>();
@@ -1467,13 +1170,12 @@ namespace Makersn.BizDac
         /// <returns></returns>
         public IList<ArticleT> GetMemberArticleTop4(int no)
         {
-
             using (ISession session = NHibernateHelper.OpenSession())
             {
-
                 ArticleT a = session.QueryOver<ArticleT>().Where(w => w.No == no).SingleOrDefault<ArticleT>();
-                string query = @"SELECT TOP 4 A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, A.TITLE, C.NAME AS CATEGORY, M.NAME AS MEMBER_NAME ,A.MEMBER_NO, A.CODE_NO, AF.PATH
-
+                string query = @"SELECT TOP 4 A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, 
+											(SELECT TOP 1 TD.TITLE FROM TRANSLATION_DETAIL TD WITH(NOLOCK) WHERE TD.ARTICLE_NO = A.NO ORDER BY NO ASC ) AS TITLE, 
+                                            C.NAME AS CATEGORY, M.NAME AS MEMBER_NAME ,A.MEMBER_NO, A.CODE_NO, AF.PATH
                             FROM ARTICLE A WITH(NOLOCK) INNER JOIN ARTICLE_FILE AS AF WITH(NOLOCK)
 					                            ON A.MAIN_IMAGE = AF.NO
 					                            LEFT JOIN CODE AS C WITH(NOLOCK)
@@ -1484,7 +1186,7 @@ namespace Makersn.BizDac
                                                 AND A.VISIBILITY = 'Y'  AND A.MEMBER_NO = :MemberNo AND A.NO != :no  ORDER BY A.REG_DT DESC";
 
                 IQuery queryObj = session.CreateSQLQuery(query);
-                queryObj.SetParameter("no",no);
+                queryObj.SetParameter("no", no);
                 queryObj.SetParameter("MemberNo", a.MemberNo);
 
                 IList<object[]> results = queryObj.List<object[]>();
@@ -1515,63 +1217,6 @@ namespace Makersn.BizDac
 
                 return list;
 
-
-                //SqlConnection con = new SqlConnection(conStr);
-                //SqlCommand cmd = new SqlCommand();
-                //cmd.CommandType = CommandType.StoredProcedure;
-                //cmd.CommandText = "GET_MEMBER_ARTICLE_TOP4_FRONT";
-                //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = a.MemberNo;
-                //cmd.Parameters.Add("@ARTICLE_NO", SqlDbType.Int).Value = no;
-                //cmd.Connection = con;
-
-                //IList<ArticleT> list = new List<ArticleT>();
-
-                //try
-                //{
-                //    con.Open();
-                //    SqlDataReader sr = cmd.ExecuteReader();
-                //    while (sr.Read())
-                //    {   
-                //        ArticleT article = new ArticleT();
-                //        article.No = (int)sr["NO"];
-                //        article.ImageName = sr["MAIN_IMAGE"].ToString();
-                //        article.Title = sr["TITLE"].ToString();
-                //        article.Category = sr["CATEGORY"].ToString();
-                //        article.MemberName = sr["MEMBER_NAME"].ToString();
-                //        article.Path = sr["PATH"].ToString();
-                //        article.MemberNo = (int)sr["MEMBER_NO"];
-                //        article.CodeNo= (int)sr["CODE_NO"];
-
-                //        list.Add(article);
-                //    }
-                //    sr.Close();
-                //    cmd.Connection.Close();
-                //    cmd.Dispose();
-
-                //}
-                //catch (Exception ex)
-                //{
-                //    throw ex;
-                //}
-                //finally
-                //{
-                //    con.Close();
-                //    con.Dispose();
-                //}
-
-                //if (list.Count == 0)
-                //{
-                //    ArticleT article = new ArticleT();
-                //    MemberT member = session.QueryOver<MemberT>().Where(w => w.No == a.MemberNo).SingleOrDefault<MemberT>();
-                //    article.MemberName = member.Name;
-                //    article.MemberNo = member.No;
-                //    list.Add(article);
-                //}
-
-                //return list;
-
-
-                
             }
         }
         #endregion
@@ -1651,9 +1296,8 @@ namespace Makersn.BizDac
         /// <param name="fromPage"></param>
         /// <param name="toPage"></param>
         /// <returns></returns>
-        public IList<ArticleDetailT> GetListByOption(int memberNo, int codeNo, string gubun, int fromPage, int toPage)
+        public IList<ArticleDetailT> GetListByOption(int memberNo, int codeNo, string gubun, string globleType, int fromPage, int toPage)
         {
-            IList<ArticleT> list = new List<ArticleT>();
 
             int downloadScore = 40;
             int commentScore = 20;
@@ -1687,6 +1331,9 @@ namespace Makersn.BizDac
                     rowNumQuery = ", ROW_NUMBER() OVER(ORDER BY REG_DT DESC) AS ROW_NUM ";
                     break;
             }
+            string addJoinQuere = string.Empty;
+            if (globleType != "") { whereQuery += "AND TD.LANG_FLAG = :globleType "; }
+            else { addJoinQuere = " AND TD.NO IN (select MIN(TDL.NO) FROM TRANSLATION_DETAIL TDL WITH(NOLOCK) group by TDL.ARTICLE_NO)"; }
 
             string addQuery = string.Empty;
             if (gubun == "R")
@@ -1694,10 +1341,14 @@ namespace Makersn.BizDac
                 addQuery += " AND A.RECOMMEND_VISIBILITY='Y' ";
             }
 
-            targetOptQuery = @"SELECT OutQ.* , '' as CONTENTS, '' as TAG, '0' as COPYRIGHT, '' as VISIBILITY, '' as OPT, '0' as VIEWCNT, '' as TEMP, '' as REG_IP, '' as REG_ID, OutQ.REG_DT, '' as RECOMMEND_YN, OutQ.REG_DT as RECOMMEND_DT, '0' as UPLOAD_CNT, '0' as DRAFT_CNT, '' as MEMBER_PROFILE_PIC FROM 
-                            (SELECT InQ.NO, InQ.MAINIMGNAME, InQ.MAIN_IMAGE, InQ.TITLE, InQ.MEMBER_NAME, InQ.MEMBER_NO, InQ.CODE_NO, InQ.VIEWCNT, InQ.COMMENT_CNT, InQ.LIKE_CNT, InQ.IS_LIKES, InQ.REG_DT ,InQ.VIDEO_URL" + rowNumQuery + @" FROM 
-						    (SELECT  A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAINIMGNAME, A.MAIN_IMAGE, A.TITLE, M.NAME AS MEMBER_NAME,  A.MEMBER_NO, A.CODE_NO, A.VIEWCNT,
-	                        (SELECT count(0) FROM ARTICLE_COMMENT B WITH(NOLOCK) WHERE A.NO = B.ARTICLE_NO) AS COMMENT_CNT,
+            targetOptQuery = @"SELECT OutQ.* , '0' as COPYRIGHT, '' as VISIBILITY, '' as OPT, '0' as VIEWCNT, '' as TEMP, '' as REG_IP, '' as REG_ID, OutQ.REG_DT, '' as RECOMMEND_YN, OutQ.REG_DT as RECOMMEND_DT, '0' as UPLOAD_CNT, '0' as DRAFT_CNT, '' as MEMBER_PROFILE_PIC FROM 
+                            (SELECT InQ.NO, InQ.MAINIMGNAME, InQ.MAIN_IMAGE, InQ.TITLE, InQ.CONTENTS, InQ.TAG, InQ.MEMBER_NAME, InQ.MEMBER_NO, InQ.CODE_NO, InQ.VIEWCNT, InQ.COMMENT_CNT, InQ.LIKE_CNT, InQ.IS_LIKES, InQ.REG_DT ,InQ.VIDEO_URL" + rowNumQuery + @" FROM 
+
+						    (SELECT  A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAINIMGNAME, A.MAIN_IMAGE, 
+							TD.TITLE,
+                            TD.TAG,
+                            TD.CONTENTS,
+                            M.NAME AS MEMBER_NAME,  A.MEMBER_NO, A.CODE_NO, A.VIEWCNT, (SELECT count(0) FROM ARTICLE_COMMENT B WITH(NOLOCK) WHERE A.NO = B.ARTICLE_NO) AS COMMENT_CNT,
 	                        (SELECT count(0) FROM LIKES B WITH(NOLOCK) WHERE A.NO = B.ARTICLE_NO) AS LIKE_CNT,
 	                        (SELECT count(0) FROM LIKES B WITH(NOLOCK) WHERE A.NO = B.ARTICLE_NO AND B.MEMBER_NO = :memberNo ) AS IS_LIKES,
 	                        (
@@ -1707,6 +1358,7 @@ namespace Makersn.BizDac
 		                        ((SELECT count(0) FROM LIKES B WITH(NOLOCK) WHERE A.NO = B.ARTICLE_NO AND B.REG_DT <= DATEADD(D, -7, GETDATE())) * " + likeScore + @" )
 	                        ) AS POP, A.RECOMMEND_DT, A.REG_DT, A.VIDEO_URL, A.RECOMMEND_PRIORITY
                         FROM ARTICLE A WITH(NOLOCK) 
+                        INNER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK) ON A.NO = TD.ARTICLE_NO"+ addJoinQuere + @"
                         INNER JOIN ARTICLE_FILE AF WITH(NOLOCK) ON AF.NO = A.MAIN_IMAGE 
                         --INNER JOIN CODE C WITH(NOLOCK) ON C.NO = A.CODE_NO  
                         LEFT OUTER JOIN MEMBER M WITH(NOLOCK) ON M.NO = A.MEMBER_NO  
@@ -1722,90 +1374,21 @@ namespace Makersn.BizDac
                 }
                 if (targetOptQuery.Contains(":codeLikeNo"))
                 {
-                    queryObj.SetParameter("codeLikeNo", "%"+ (codeNo % 100)); 
+                    queryObj.SetParameter("codeLikeNo", "%" + (codeNo % 100));
                 }
-                queryObj.SetParameter("memberNo",memberNo);
+                queryObj.SetParameter("memberNo", memberNo);
                 //queryObj.SetParameter("gubun",gubun);
-                queryObj.SetParameter("fromPage",fromPage);
-                queryObj.SetParameter("toPage",toPage);
-      
+                queryObj.SetParameter("fromPage", fromPage);
+                queryObj.SetParameter("toPage", toPage);
+                if (targetOptQuery.Contains(":globleType"))
+                {
+                    queryObj.SetParameter("globleType", globleType);
+                }
+
 
                 IList<ArticleDetailT> results = (IList<ArticleDetailT>)queryObj.List<ArticleDetailT>();
                 return results;
             }
-
-
-
-
-
-            
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "GET_LIST_BY_OPTION_FRONT";
-            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
-            //cmd.Parameters.Add("@CODE_NO", SqlDbType.Int).Value = codeNo;
-            //cmd.Parameters.Add("@GUBUN", SqlDbType.Char, 1).Value = gubun;
-            //cmd.Parameters.Add("@FROM_PAGE", SqlDbType.Int).Value = fromPage;
-            //cmd.Parameters.Add("@TO_PAGE", SqlDbType.Int).Value = toPage;
-            //cmd.Connection = con;
-
-            //IList<ArticleDetailT> list = new List<ArticleDetailT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        ArticleDetailT article = new ArticleDetailT();
-                    
-            //        article.No = (int)sr["NO"];
-            //        article.MainImgName = sr["MAINIMGNAME"].ToString();
-            //        article.MainImage = (int)sr["MAIN_IMAGE"];
-            //        article.Title = sr["TITLE"].ToString();
-            //        article.MemberName = sr["MEMBER_NAME"].ToString();
-            //        article.MemberNo = (int)sr["MEMBER_NO"];
-            //        article.CodeNo = (int)sr["CODE_NO"];
-            //        article.ViewCnt = (int)sr["VIEWCNT"];
-            //        article.CommentCnt = (int)sr["COMMENT_CNT"];
-            //        article.LikeCnt = (int)sr["LIKE_CNT"];
-            //        article.IsLikes = (int)(sr["IS_LIKES"]);
-            //        article.RegDt = (DateTime)sr["REG_DT"];
-            //        article.VideoUrl = sr["VIDEO_URL"].ToString();
-            //        //row num 따로 저장하는 컬럼도 없고 저장할 필요도 없음 
-            //        //article.Contents = sr["CONTENTS"].ToString();
-            //        //article.Tag = sr["TAG"].ToString();
-            //        //article.Copyright = (int)sr["COPYRIGHT"];
-            //        //article.Visibility = sr["VISIBILITY"].ToString();
-            //        //article.Temp = sr["TEMP"].ToString();
-            //        //article.RegIp = sr["REG_IP"].ToString();
-            //        //article.RegId = sr["REG_ID"].ToString();
-            //        article.RegDt = (DateTime)sr["REG_DT"];
-            //        //article.RecommendYn = sr["RECOMMEND_YN"].ToString();
-            //        //article.RecommendDt = !sr.IsDBNull(sr.GetOrdinal("RECOMMEND_DT")) ? (DateTime)sr["RECOMMEND_DT"] : (DateTime?)null;
-            //        //article.UploadCnt = (int)(sr["UPLOAD_CNT"]);
-            //        //article.DraftCnt = (int)sr["DRAFT_CNT"];
-            //        //article.MemberProfilePic = sr["MEMBER_PROFILE_PIC"].ToString();
-            //        list.Add(article);
-
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
         }
         #endregion
 
@@ -1818,10 +1401,8 @@ namespace Makersn.BizDac
         /// <param name="isMain"></param>
         /// <param name="gubun"></param>
         /// <returns></returns>
-        public int GetTotalCountByOption(int memberNo, int codeNo, string isMain, string gubun)
+        public int GetTotalCountByOption(int memberNo, int codeNo, string isMain, string gubun, string globalType)
         {
-
-
             string targetCntQuery = string.Empty;
             string whereQuery = string.Empty;
             string addQuery = string.Empty;
@@ -1834,13 +1415,23 @@ namespace Makersn.BizDac
             {
                 whereQuery += " AND A.CODE_NO = :codeNo ";
             }
+
+            if (globalType != "")
+            {
+                whereQuery += string.Format(" AND TD.LANG_FLAG = '{0}'", globalType);
+            }
+            else
+            {
+                whereQuery += "  AND TD.NO IN (select MIN(TDL.NO) FROM TRANSLATION_DETAIL TDL WITH(NOLOCK) group by TDL.ARTICLE_NO)";
+            }
+
             if (isMain != "Y")
             {
                 targetCntQuery += @"SELECT COUNT(1) 
                                     FROM ARTICLE A WITH(NOLOCK)  
                                     LEFT OUTER JOIN MEMBER M WITH(NOLOCK) ON M.NO = A.MEMBER_NO  
+                                    INNER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK) ON A.NO = TD.ARTICLE_NO
                                     WHERE (M.DEL_FLAG != 'Y' OR M.DEL_FLAG IS NULL) " + whereQuery + addQuery + @" AND A.VISIBILITY = 'Y' ";
-
             }
 
             using (ISession session = NHibernateHelper.OpenSession())
@@ -1856,89 +1447,12 @@ namespace Makersn.BizDac
 
                 return rowCnt;
             }
-            
-        //    SqlConnection con = new SqlConnection(conStr);
-        //    SqlCommand cmd = new SqlCommand();
-        //    cmd.CommandType = CommandType.StoredProcedure;
-        //    cmd.CommandText = "GET_TOTALCOUNT_BY_OPTION_FRONT";
-        //    cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
-        //    cmd.Parameters.Add("@CODE_NO", SqlDbType.Int).Value = codeNo;
-        //    cmd.Parameters.Add("@GUBUN", SqlDbType.Char, 1).Value = gubun;
-        //    cmd.Connection = con;
-
-        //    int result = 0;
-
-        //    try
-        //    {
-        //        con.Open();
-        //        SqlDataReader sr = cmd.ExecuteReader();
-        //        while (sr.Read())
-        //        {
-        //            result = (int)sr.GetValue(0);
-        //        }
-        //        sr.Close();
-        //        cmd.Connection.Close();
-        //        cmd.Dispose();
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    finally
-        //    {
-        //        con.Close();
-        //        con.Dispose();
-        //    }
-
-        //    return result;
         }
         #endregion
 
         #region detail cntList
         public ArticleT GetDetailPageCntList(int articleNo, int visitorNo)
         {
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "SEARCH_DESIGN_FRONT";
-            //cmd.Parameters.Add("@ARTICLE_NO", SqlDbType.Int).Value = articleNo;
-            //cmd.Parameters.Add("@VISITOR_NO", SqlDbType.Text).Value = visitorNo;
-            //cmd.Connection = con;
-
-            //ArticleT article = new ArticleT();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        article.ViewCnt = (int)sr["VIEWCNT"];
-
-            //        article.LikeCnt = (int)sr["LIKESCNT"];
-
-            //        article.CommentCnt = (int)sr["COMMENTCNT"];
-
-            //        article.chkLikes = (int)sr["CHKLIKES"];
-
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-            //return article;
-
             string query = string.Format(@"SELECT 
 		                        (SELECT VIEWCNT FROM ARTICLE WHERE NO = :articleNo) AS VIEWCNT,
 		                        (SELECT COUNT(0) FROM LIKES WHERE ARTICLE_NO = :articleNo) AS LIKESCNT,
@@ -1947,8 +1461,8 @@ namespace Makersn.BizDac
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query);
-                queryObj.SetParameter("articleNo",articleNo);
-                queryObj.SetParameter("visitorNo",visitorNo);
+                queryObj.SetParameter("articleNo", articleNo);
+                queryObj.SetParameter("visitorNo", visitorNo);
                 IList<object[]> result = queryObj.List<object[]>();
                 ArticleT article = new ArticleT();
                 foreach (object[] row in result)
@@ -2010,7 +1524,7 @@ namespace Makersn.BizDac
                             IQuery queryObj = session.CreateSQLQuery(delfileQuery);
                             for (int i = 0; i < delNoL.Length; i++)
                             {
-                                queryObj.SetParameter(i * 2, delNoL[i]);
+                                queryObj.SetParameter(i*2,delNoL[i]);
                                 queryObj.SetParameter((i * 2) + 1, data.Temp);
                             }
 
@@ -2023,26 +1537,11 @@ namespace Makersn.BizDac
                         string updfileQuery = @"UPDATE ARTICLE_FILE set FILE_GUBUN='article', ARTICLE_NO = :articleNo , UPD_DT = GETDATE(), UPD_ID = :RegId  where FILE_GUBUN='temp' and TEMP= :Temp";
 
                         IQuery queryObj2 = session.CreateSQLQuery(updfileQuery);
-                        queryObj2.SetParameter("articleNo", articleNo);
-                        queryObj2.SetParameter("RegId", data.RegId);
-                        queryObj2.SetParameter("Temp", data.Temp);
+                        queryObj2.SetParameter("articleNo",articleNo);
+                        queryObj2.SetParameter("RegId",data.RegId);
+                        queryObj2.SetParameter("Temp",data.Temp);
 
                         queryObj2.ExecuteUpdate();
-
-                        //SqlConnection con = new SqlConnection(conStr);
-                        //SqlCommand cmd = new SqlCommand();
-                        //cmd.CommandType = CommandType.StoredProcedure;
-                        //cmd.CommandText = "UPDATE_ARTICLE_FILE";
-                        //cmd.Parameters.Add("@ARTICLE_NO_LIST", SqlDbType.VarChar, 60).Value = delno;
-                        //cmd.Parameters.Add("@ARTICLE_NO", SqlDbType.VarChar, 60).Value = articleNo;
-                        //cmd.Parameters.Add("@TEMP", SqlDbType.VarChar, 60).Value = data.Temp;
-                        //cmd.Parameters.Add("@UPD_ID", SqlDbType.VarChar, 60).Value = data.RegId;
-                        //cmd.Connection = con;
-                        //con.Open();
-                        //cmd.ExecuteNonQuery();
-                        
-                        //con.Close();
-
                     }
                     catch (Exception ex)
                     {
@@ -2064,23 +1563,6 @@ namespace Makersn.BizDac
         /// <param name="articleNo"></param>
         public void DeleteArticle(int articleNo)
         {
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "DELETE_ARTICLE_WITH_ARTICLEFILE_FRONT";
-            //cmd.Parameters.Add("@ARTICLE_NO", SqlDbType.Int).Value = articleNo;
-            //cmd.Connection = con;
-            //con.Open();
-            //try
-            //{
-            //    cmd.ExecuteNonQuery();
-            //}
-            //catch
-            //{
-
-            //}
-            //cmd.Connection.Close();
-            //cmd.Dispose();
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
@@ -2094,8 +1576,8 @@ namespace Makersn.BizDac
                     //{
                     string deletFileQuery = "UPDATE ARTICLE_FILE SET FILE_GUBUN='DELETE' WHERE ARTICLE_NO = :articleNo";
                     //session.CreateSQLQuery(deletFileQuery).SetParameter("NO", articleNo).ExecuteUpdate();
-                    IQuery queryObj = session.CreateSQLQuery(deleteQuery+deletFileQuery);
-                    queryObj.SetParameter("articleNo",articleNo);
+                    IQuery queryObj = session.CreateSQLQuery(deleteQuery + deletFileQuery);
+                    queryObj.SetParameter("articleNo", articleNo);
                     queryObj.ExecuteUpdate();
                     //}
 
@@ -2111,23 +1593,6 @@ namespace Makersn.BizDac
         /// <param name="p"></param>
         public void CheckTempFile(string temp)
         {
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "UPDATE_ARTICLEFILE_BY_TEMP_FRONT";
-            //cmd.Parameters.Add("@TEMP", SqlDbType.VarChar, 60).Value = temp;
-            //cmd.Connection = con;
-            //con.Open();
-            //try
-            //{
-            //    cmd.ExecuteNonQuery();
-            //}
-            //catch
-            //{
-
-            //}
-            //cmd.Connection.Close();
-            //cmd.Dispose();
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
@@ -2155,9 +1620,9 @@ namespace Makersn.BizDac
         }
 
 
+        #region 공모전 관련
         public IList<ArticleDetailT> GetCompetitionList(int memberNo, int fromPage, int toPage, string competitionName)
         {
-            // 현재까지 안쓰는 기능임...  사용하게 될때 다시 보기로~~~  (국써이~~) * 프로시저는 이미 만들어 놓음 
             //IList<ArticleT> list = new List<ArticleT>();
 
             int downloadScore = 40;
@@ -2171,11 +1636,11 @@ namespace Makersn.BizDac
 
             string whereQuery = string.Empty;
 
+            //if (codeNo != 0) { whereQuery += " AND A.CODE_NO = " + codeNo; };
             rowNumQuery = ", ROW_NUMBER() OVER(ORDER BY REG_DT DESC) AS ROW_NUM ";
 
             string addQuery = string.Empty;
-
-            addQuery += string.Format(" AND A.TITLE LIKE '%{0}%'", competitionName);
+            addQuery += string.Format(" AND TD.TITLE LIKE '%{0}%'", competitionName);
 
             targetOptQuery = @"SELECT OutQ.* , '' as CONTENTS, '' as TAG, '0' as COPYRIGHT, '' as VISIBILITY, '' as OPT, '0' as VIEWCNT, '' as TEMP, '' as REG_IP, '' as REG_ID, OutQ.REG_DT, '' as RECOMMEND_YN, OutQ.REG_DT as RECOMMEND_DT, '0' as UPLOAD_CNT, '0' as DRAFT_CNT, '' as MEMBER_PROFILE_PIC FROM 
                             (SELECT InQ.NO, InQ.MAINIMGNAME, InQ.MAIN_IMAGE, InQ.TITLE, InQ.MEMBER_NAME, InQ.MEMBER_NO, InQ.CODE_NO, InQ.VIEWCNT, InQ.COMMENT_CNT, InQ.LIKE_CNT, InQ.IS_LIKES, InQ.REG_DT ,InQ.VIDEO_URL" + rowNumQuery + @" FROM 
@@ -2193,6 +1658,7 @@ namespace Makersn.BizDac
                         INNER JOIN ARTICLE_FILE AF WITH(NOLOCK) ON AF.NO = A.MAIN_IMAGE 
                         --INNER JOIN CODE C WITH(NOLOCK) ON C.NO = A.CODE_NO  
                         LEFT OUTER JOIN MEMBER M WITH(NOLOCK) ON M.NO = A.MEMBER_NO  
+                        INNER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK) ON TD.ARTICLE_NO = A.NO
                         WHERE (M.DEL_FLAG != 'Y' OR M.DEL_FLAG IS NULL) " + addQuery + @" AND A.VISIBILITY = 'Y' " + whereQuery + " ) InQ ) OutQ";
             targetOptQuery += @" WHERE ROW_NUM BETWEEN " + fromPage + @" AND " + toPage;
 
@@ -2206,15 +1672,13 @@ namespace Makersn.BizDac
         public int GetCompetitionListCount(string competitionName)
         {
             int result = 0;
-            string query = "SELECT COUNT(0) FROM ARTICLE A WITH(NOLOCK) WHERE A.TITLE LIKE :competitionName";
+            string query = string.Format(@"SELECT COUNT(0) FROM TRANSLATION_DETAIL TD WITH(NOLOCK) WHERE TD.TITLE LIKE '%{0}%'", competitionName);
             using (ISession session = NHibernateHelper.OpenSession())
-            
             {
-                IQuery queryObj = session.CreateSQLQuery(query);
-                queryObj.SetParameter("competitionName","%"+competitionName+"%");
-                result = (int)queryObj.UniqueResult();
+                result = (int)session.CreateSQLQuery(query).UniqueResult();
             }
             return result;
         }
+        #endregion
     }
 }

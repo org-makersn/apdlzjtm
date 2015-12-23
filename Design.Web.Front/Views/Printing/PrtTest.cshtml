@@ -1,0 +1,117 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+}
+<div class="wrap bgW">
+    <!-- MemberArea -->
+    <!-- 로그인 후 마이페지 -->
+    <input type="hidden" id="printerNo" name="printerNo" value="@ViewBag.PrinterNo"/>
+    <div class="topMypage">
+        <ul>
+            <li><a href="my_profile.html">My page</a></li>
+            <li>
+                <a href="my_profile_notice.html">Notice</a>
+                <img src="content/images/common/notice_left.gif" alt="Notice" /><span style="font-size: 11px; background-color: #fe7900; line-height: 22px; padding: 5px 3px 3px 2px;">14</span><img src="content/images/common/notice_right.gif" alt="Notice" />
+            </li>
+            <li><a href="my_profile_setting.html">Setting</a></li>
+            <li><a href="javascript:void(0);" onclick=" mypageOut();">Log out</a></li>
+        </ul>
+    </div>
+    <!-- //로그인 후 마이페지 -->
+    <!-- //MemberArea -->
+
+
+    <!-- contWrap -->
+    @*<div class="contWrap">
+
+        <div class="subtitle2">
+            <h2>프린팅 테스트</h2>
+        </div>
+
+        <!-- printTest -->
+        <div class="printTest">
+            <div class="printInfo">
+                <p class="txt1">
+                    프린팅 테스트를 받으면, 당신의 스팟에 ‘테스트 완료’ 마크가 노출되어
+                    <br>
+                    신뢰를 주기 때문에 고객의 주문을 받을 가능성이 더 높아져요.
+            </div>
+            <div class="selectImg">
+                <div align="center">
+                    <img src="/content/images/img_test_process.png">
+                </div>
+            </div>
+        </div>
+
+        <div class="printText">
+            <form id="print" name="print">
+                <!--p class="txt1">테스트 시작</p-->
+                <div class="btnVS">
+                    <a href="@ViewBag.Article3DUrl@ViewBag.FileName" class="mgL435 btnO type2">테스트 파일 다운로드</a>
+                </div>
+                <div class="btnVS">
+                    <a href="~/Printing/PrtTestUpload?printerNo=@ViewBag.PrinterNo" class="mgL435 btnO type2">테스트 시작</a>
+                </div>
+            </form>
+        </div>
+
+    </div>*@
+
+    <div class="contWrap w100">
+        <div class="printMng">
+            <div class="mainTitle mgT-20 mgB40">
+                <span class="smTit">프린터 인증받기</span>
+            </div>
+
+
+            <!-- printTest -->
+            <div class="printTest">
+                <div class="printInfo mgT-30">
+                    <p class="txt1">
+
+                        프린터를 인증받으면 당신의 프린터에 "인증" 마크가 노출되어 신뢰를 주기 
+                        <br>
+                        때문에 고객의 주문을 받을 가능성이 더 높아져요.
+                        <br>
+                        @*프린팅 테스트를 받으면, 당신의 스팟에 ‘테스트 완료’ 마크가 노출되어
+                        신뢰를 주기 때문에 고객의 주문을 받을 가능성이 더 높아져요.*@
+                </div>
+                <div class="selectImg">
+                    <div align="center">
+                        <img src="/content/images/img_test_process.png">
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- btZone -->
+            <div class="ordBtn2 Spot">
+                <a href="@ViewBag.Article3DUrl@ViewBag.FileName" class="btnGO type1 mgL35">테스트 모델 다운</a>
+                <a href="~/Printing/PrtTestUpload?printerNo=@ViewBag.PrinterNo" class="btnO type2 ">인증샷 등록하기</a>
+            </div>
+            <!--//btnZone -->
+   
+				
+        
+          
+
+          
+          
+
+        </div>
+        <!-- //inputZone -->
+
+
+
+    </div>
+
+</div>
+<!-- //Wrap -->
+<style>
+    .wrap {
+        background: #fff !important;
+    }
+</style>
+
+
+
+

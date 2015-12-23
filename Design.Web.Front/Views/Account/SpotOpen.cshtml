@@ -1,0 +1,446 @@
+﻿@{
+    
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+}
+<form id="insertOrderForm" method="post">
+    <div class="topVisu mgB0">
+
+        <div class="profile_img">
+            <img src="/content/images/top_img_default.png" alt="배경 이미지" />
+            <div class="btnCoverGo">
+                <a href="javascript:void(0)" class="editCover">
+                    <img src="/content/images/common/btn/btn_cover_edit.png" alt="커버편집"></a>
+                <div class="pf_photoUpZone" style="display: none;">
+                    <!--[D]마우스 클릭했을 때 아래 클래스 photoup 토글되도록-->
+                    <div class="photoUp">
+                        <button class="file_input_button" title="파일추가"></button>
+                        <input type="file" class="file_input_hidden" title="커버사진 업로드" id="cover_pic" name="cover_pic">
+                    </div>
+                    <button title="삭제" class="btnPhotoDel" id="cover_pic_del"></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- //topVisual -->
+
+    <!-- contWrap -->
+    <div class="contWrap w100">
+
+        <div class="profInfo">
+            <div class="infoWrap">
+
+
+
+                <p class="tit11">Printing Spot</p>
+                <!--p class="tit2">www.makers.com</p-->
+                <p class="txt1">스팟 소개를 입력하세요.</p>
+            </div>
+        </div>
+
+        <div class="myGroup">
+            <div class="groupWrap2">
+                <ul class="tits2">
+                    <li class="address"><span class="title">주소</span>
+                    </li>
+                    <li class="address"><span class="title">전화</span>
+
+                    </li>
+                    <li class="address"><span class="title">세금계산서</span>
+                    </li>
+                </ul>
+                <!--[D]프린팅스팟 개설 전에는처음 li에 클래스 inactive를 추가하여 버튼을 흐리게 보이게 하고 링크되지 않도록함.-->
+                <ul class="bts">
+                    <li class="noti inactive">
+                        <a title="알림"></a>
+
+                    </li>
+                    <li class="msg inactive">
+                        <a title="메시지"></a>
+
+                    </li>
+                    <li class="set inactive">
+                        <a title="설정"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="printMng">
+
+            <!-- inputArea -->
+            <div class="inputArea">
+                <form name="insert_form" id="insert_form" enctype="multipart/form-data" method="post">
+                    <input name="mode" type="hidden" value="edit">
+                    <input name="id" id="id" type="hidden" value="253">
+                    <!-- line1 -->
+                    <div class="line">
+                        <div class="box">
+                            <div class="headerInput">
+                                <p class="tit">스팟 이름</p>
+                                <div class="countBox" id="countBox1">
+                                    <span class="countNumber" id="_countNum1">6</span>/<span class="maxNumber" id="_max1">20</span>
+                                </div>
+                            </div>
+                            <div class="inputZone">
+                                <input name="name" id="name" type="text" value="">
+                            </div>
+                        </div>
+                        <input name="old_bl_id" type="hidden" value="">
+
+                        <div class="box flR">
+                            <div class="headerInput">
+                                <p class="tit">스팟 웹사이트(URL)</p>
+                                <p class="flR">
+                                    <!--a class="btnUseCheck" id="id_check" href="javascript:void(0);"><img alt="중복확인" src="content/images/common/btn/btn_checkdup.gif"></a-->
+                                </p>
+                            </div>
+                            <div class="inputZone"><span class="url">www.makersn.com/makers/</span><input name="bl_id" class="inputUrl" id="Url" type="text"></div>
+                        </div>
+                    </div>
+                    <!-- //line1 -->
+                    <!-- line2 -->
+                    <div class="line">
+                        <div class="box">
+                            <div class="headerInput">
+                                <p class="tit">스팟소개</p>
+                                <div class="countBox" id="countBox2">
+                                    <input id="comment" type="hidden" value="150">
+                                    <span class="countNumber" id="_countNum2">0</span>/<span class="maxNumber" id="_max2">150</span>
+                                </div>
+                            </div>
+                            <textarea name="profile_msg" id="profile_msg"></textarea>
+                        </div>
+                        <div class="box flR">
+                            <div class="telZone">
+                                <p class="title">전화번호</p>
+                                <div class="telInput">
+                                    <span class="input1">
+                                        <input name="home_Tel1" id="home_Tel1" type="text" maxlength="2" onkeydown="return IsNum(event)"></span> - <span class="input2">
+                                            <input name="home_Tel2" id="home_Tel2" type="text" maxlength="4" onkeydown="return IsNum(event)"></span> - <span class="input2">
+                                                <input name="home_Tel3" id="home_Tel3" type="text" maxlength="4" onkeydown="return IsNum(event)"></span>
+                                </div>
+                                <p class="title mgT15">핸드폰 번호</p>
+                                <div class="telInput">
+                                    <span class="input1">
+                                        <input name="cell_Tel1" id="cell_Tel1" type="text" maxlength="3" onkeydown="return IsNum(event)"></span> - <span class="input2">
+                                            <input name="cell_Tel2" id="cell_Tel2" type="text" maxlength="4" onkeydown="return IsNum(event)"></span> - <span class="input2">
+                                                <input name="cell_Tel3" id="cell_Tel3" type="text" maxlength="4" onkeydown="return IsNum(event)"></span>
+                                </div>
+                            </div>
+                            <p class="noti">*주문 관련 중요한 내용을 문자로 보내드립니다.</p>
+                        </div>
+
+                    </div>
+                    <!-- //line2 -->
+
+                    <!-- line3 -->
+                    <div class="line">
+                        <div class="box">
+                            <p class="title">스팟주소</p>
+                            <div class="inputZone">
+                                <input name="address" id="address" type="text" value="">
+                                <input type="hidden" name="locationX" id="locationX" />
+                                <input type="hidden" name="locationY" id="locationY" />
+                            </div>
+                        </div>
+                        <div class="box flR">
+                            <div class="flL">
+                                <p class="title mgT10">배송방법</p>
+                                <ul class="resol" id="">
+                                    <li><a onclick="javascript:CheckBtnCheck(this)" class="checkBtn on" title="선택버튼"></a><span class="chk">직접 픽업</span><input name="pickUp" type="hidden" value="1" /></li>
+                                    <li><a onclick="javascript:CheckBtnCheck(this)" class="checkBtn" title="선택버튼"></a><span class="chk">택배</span><input name="post" type="hidden" value="0" /></li>
+                                </ul>
+                            </div>
+                            <div class="flL mgL70">
+                                <p class="title mgT10">세금계산서 발행 여부</p>
+                                <input id="taxBillFlag" name="taxBillFlag" value="0" type="hidden" />
+                                <ul class="resol mgT10" id="taxbill_radio">
+                                    <li><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn on" title="선택버튼">
+                                        <input type="hidden" value="1"></a><span>가능</span></li>
+                                    <li><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn " title="선택버튼">
+                                        <input type="hidden" value="0"></a><span>불가능</span></li>
+                                    @*<li><a href="#" class="radioBtn" title="선택버튼"></a><span>가능</span></li>
+                    <li><a href="#" class="radioBtn on" title="선택버튼"></a><span>불가능</span></li>*@
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //line3 -->
+
+                    <!-- line4 -->
+                    <div class="line">
+                        <div class="box">
+                            <p class="title">입금 계좌 등록</p>
+                            <div class="bankZone">
+                                <div class="optBank">
+                                    <p class="value">은행명</p>
+                                    <input id="bank" name="bank" type="hidden" />
+                                    <ul class="valueLi" id="bank_sel">
+
+                                        <li id="optBank_1">
+                                            <input type="radio" id="selBank_1" name="optBank" value="1" /><label for="optBank_1">국민</label></li>
+                                        <li id="optBank_2">
+                                            <input type="radio" id="selBank_2" name="optBank" value="2" /><label for="optBank_2">신한</label></li>
+                                        <li id="optBank_3">
+                                            <input type="radio" id="selBank_3" name="optBank" value="3" /><label for="optBank_3">우리</label></li>
+                                    </ul>
+                                </div>
+                                <div class="selMn">
+                                    <p>
+                                        <input name="" id="accountNum" class="inputLoca" type="text" value="계좌번호('-' 없이 번호만 입력해 주세요)" onkeydown="return IsNum(event)" onfocus="javascript:removeText(this)">
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="noti">*고객이 지급한 출력 비용을 이 계좌를 통해 입금받습니다.</p>
+                        </div>
+                    </div>
+                    <!-- //line3 -->
+
+
+                </form>
+            </div>
+            <!-- //inputZone -->
+
+            <!-- btZone -->
+            <div class="btnZone">
+                <a href="" class="flL mgL330 btnG type10">임시 저장</a>
+                <a href="javascript:SpotOpen();" class="flL mgL25 btnO type2">스팟 오픈 완료</a>
+            </div>
+            <!--//btnZone -->
+
+        </div>
+
+
+    </div>
+    <!-- //contWrap -->
+</form>
+
+@section scripts{
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+    <script type="text/javascript">
+
+        // 셀렉트박스 ui
+
+
+        function initialize() {
+            autocomplete = new google.maps.places.Autocomplete(
+                (document.getElementById('address')),
+                { types: ['geocode'] }); //범위 인듯
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                if (autocomplete.getPlace().geometry != null) {
+                    $("#locationX").val(autocomplete.getPlace().geometry.location.G);
+                    $("#locationY").val(autocomplete.getPlace().geometry.location.K);
+                } else {
+                    alert("주소입력이 잘못 되었습니다. 다시 입력하여 수시길 바랍니다.");
+                    $("#locationX").val("");
+                    $("#locationY").val("");
+                    $("#address").val("");
+                    initialize();
+
+                }
+            });
+        }
+
+        @*function SerachPrinter() {
+            var loc = $("#prtLocation").val();
+            var quality = $(":radio[name='selQua']:checked").val();
+            var material = $(":radio[name='selMat']:checked").val();
+            var locX = $("#locationX").val();
+            var locY = $("#locationY").val();
+
+            //location.href = "/printing/prtSearch?location=" + loc + "&quality=" + quality + "&material=" + material + "&locX=" + locX + "&locY=" + locY;
+            location.href = "/printing/prtSearch?location=" + loc + "&quality=" + quality + "&material=" + material;
+        }*@
+
+        $(function () {
+
+            //$('#code_all').addClass('selected');
+            //$('#li_1').addClass('selected');
+            initialize();
+            function uiSelect(obj, valLst, val, check_id) {
+                var set = {
+                    ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                    container: $(obj),
+                    value: $(val),
+                    list: $(valLst),
+                    firstVal: $(valLst + "> li:first-child > label").html(),
+                    li: $(valLst + "> li"),
+                    label: $(valLst + "> li > label")
+                }
+
+                set.list.hide();
+                if (check_id == '') {
+                    set.value.append(set.firstVal);
+                    $("#category_no").val('전체');
+                }
+                else {
+                    set.value.append($("#" + check_id).next().html());
+                    $("#category_no").val(check_id);
+                }
+                set.value.click(function () {
+
+                    set.list.show();
+                    set.list.focusin(function () {
+                        set.list.show();
+                    }
+					);
+                    if (set.ie6) {
+                        set.label.hover(
+							function () { $(this).parent().addClass("selected"); },
+							function () { $(this).parent().removeClass("selected"); }
+						);
+                    }
+                    function listHide() {
+                        setTimeout(function () { set.list.hide(); }, 300);
+                    }
+                    set.container.mouseleave(listHide);
+                    set.label.click(function () {
+                        set.value.empty().append($(this).html());
+                        $("#category_no").val($(this).text());
+
+                        set.list.hide();
+                    }
+					);
+                }
+                );
+            }
+            uiSelect(".optBank", ".valueLi", ".value", "은행명");
+
+            $('.valueLi li').on('click', function () {
+                $('.valueLi li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+            $('.valueLi li').mouseenter(function () {
+                $('.valueLi li').removeClass('selected');
+            })
+
+
+            //$(".resol.mgT10 li a").click(function () {
+            //    $(this).parents("ul").find("a").removeClass("on");
+            //    $(this).addClass("on");
+            //})
+
+        });
+
+        function SpotOpen() {
+
+            var loc = $("#address").val();
+            var locX = $("#locationX").val();
+            var locY = $("#locationY").val();
+            $("#bank").val($("#bank_sel li.selected input").val());
+
+
+            $("#taxBillFlag").val($("#taxbill_radio li a.on input").val());
+            console.log($("#taxBillFlag").val());
+            if ($("#name").val() == "") {
+                alert("스팟 이름을 입력하여 주세요");
+                $("#name").focus();
+                return;
+            }
+
+            if ($("#Url").val() == "") {
+                alert("스팟 웹사이트를 입력하여 주세요");
+                $("#Url").focus();
+                return;
+            }
+
+            if ($("#address").val() == "") {
+                alert("주소를 입력하여 주세요");
+                $("#address").focus();
+                return;
+            }
+            if ($("#bank").val() == "") {
+                alert("사용 은행을 선택하여 주세요");
+                $("#address").focus();
+                return;
+            }
+            if ($("#accountNum").val() == "" || $("#accountNum").val() == "계좌번호('-' 없이 번호만 입력해 주세요)") {
+                alert("계좌번호를 입력하여 주세요");
+                $("#accountNum").focus();
+                return;
+            }
+            if ($("#home_Tel1").val() == "" && $("#home_Tel2").val() == "" && $("#home_Tel3").val() == "") {
+                alert("전화번호를 입력하여 주세요");
+                $("#home_Tel1").focus();
+                return;
+            }
+
+
+            if ($("#cell_Tel1").val() == "" && $("#cell_Tel2").val() == "" && $("#cell_Tel3").val() == "") {
+                alert("핸드폰번호를 입력하여 주세요");
+                $("#cell_Tel1").focus();
+                return;
+            }
+
+            var action = "/Account/SpotInfoUpd";
+
+            var options = {
+                beforeSend: function () {
+
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+
+                },
+                success: function (response) {
+
+                },
+                complete: function (response) {
+
+                },
+                error: function (error) {
+                    console.log(error);
+
+                }
+            };
+
+            $('#insertOrderForm').attr("action", action).ajaxForm(options).submit();
+        }
+
+
+        function RadioBtnCheck(val) {
+            $(val).parents("ul").find("a").removeClass("on");
+
+            console.log(val);
+            $(val).addClass("on");
+
+        }
+
+        function CheckBtnCheck(val) {
+            $(val).attr("id", "test");
+            if ($(val).attr("class") != "checkBtn on") {
+                $(val).addClass("on");
+                $(val).parents("li").find("input").attr("value", "1");
+            }
+            else {
+                $(val).parents("li").find("input").attr("value", "0");
+                $(val).removeClass("on");
+            }
+
+            console.log($(val).parents("li").find("input").attr("value"));
+        }
+        function IsNum(e) {
+
+            var k = window.event ? e.keyCode : e.which;
+            if (((k >= 48) && (k <= 57)) || k == 0 || k == 8 || k == 127 || ((k >= 37) && (k <= 40)) || ((k >= 96) && (k <= 105)) || k == 9) {
+            } else {
+                if (window.event) {
+                    window.event.returnValue = false;
+                }
+                else {
+                    e.preventDefault(); //for firefox 
+                }
+            }
+        }
+        function removeText(val) {
+            if ($(val).val() == "계좌번호('-' 없이 번호만 입력해 주세요)") {
+                $(val).val("");
+            }
+        }
+    </script>
+}

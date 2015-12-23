@@ -1,0 +1,767 @@
+﻿@model IList<OrderDetailT>
+@{
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    //double totalVolume = 0;
+
+    PrinterT selPrinter = ViewBag.SelPrinter;
+    int uiIndex = 0;
+
+    int preOrderNo = 0;
+    if (Model.Count != 0)
+    {
+        preOrderNo = Model[0].OrderNo;
+    }
+
+    IList<MaterialT> matList = ViewBag.MatList;
+}
+<!-- ContWrap -->
+
+
+
+<div class="printWrap">
+
+    <div class="printerMng pdB0">
+
+        @*<div class="mainTitle">
+            <span class="smTit">출력 스팟 검색
+            <label style="font-size: small; color: gray">
+                (선택된 스팟이 있으면 다시 검색하지 않으셔도 됩니다.)
+            </label>
+            </span>
+        </div>*@
+        <dl class="orderNew">
+            <dd class="cnt">출력 스팟 검색</dd>
+            <div class="line top mgT4"></div>
+            <div class="smDesc top">선택된 스팟이 있으면 다시 검색하지 않으셔도 됩니다.</div>
+        </dl>
+
+
+        <div class="selSearch top">
+            <!-- 위치 -->
+            <div class="selLoca">
+                <p class="valLoca">
+                    <input type="text" class="inputLoca" name="location" placeholder="위치를 입력해 주세요" id="prtLocation" />
+                    <input type="hidden" id="locationX" />
+                    <input type="hidden" id="locationY" />
+                </p>
+            </div>
+            <!-- //위치 -->
+
+            <!-- 품질 -->
+            <div class="selQual w220">
+                <p class="value w220 pdL0">품질을 선택해 주세요</p>
+                <ul class="valueLi" style="display: none">
+                    <li id="selQual_top">
+                        <input type="radio" id="selQua_top" name="selQua" value="9" /><label for="selQua_top">최상</label></li>
+                    <li id="selQual_1">
+                        <input type="radio" id="selQua_1" name="selQua" value="10" /><label for="selQua_1">상</label></li>
+                    <li id="selQual_2">
+                        <input type="radio" id="selQua_2" name="selQua" value="20" /><label for="selQua_2">중</label></li>
+                    <li id="selQual_3">
+                        <input type="radio" id="selQua_3" name="selQua" value="30" /><label for="selQua_3">하</label></li>
+                </ul>
+            </div>
+            <!-- //품질 -->
+
+            <!-- 재료-->
+            <div class="selMate w220">
+                <p class="value2 w220 pdL0">재료를 선택해 주세요</p>
+                <ul class="valueLi2" style="display: none">
+
+                    @foreach (MaterialT mat in matList)
+                    {
+                        <li id="selMate_top">
+                            <input type="radio" name="selMat" value="@mat.No" /><label for="selMat_top">@mat.Name</label></li>
+                    }
+
+                </ul>
+            </div>
+            <!-- //재료 -->
+
+
+            <div class="flR">
+                <a class="printer_search" href="javascript:SearchPrt()">검색</a>
+            </div>
+        </div>
+
+
+        <div id="divSpotList">
+            <div class="paging pdB35 mgB0">
+            </div>
+        </div>
+        @if (selPrinter != null)
+        {
+            <input type="hidden" id="selNo" value="@selPrinter.No" />
+            <input type="hidden" id="selColor" value="@selPrinter.colorNo" />
+            <input type="hidden" id="selMat" value="@selPrinter.materialNo" />
+        }
+    </div>
+
+
+
+    @*    <div class="storeMng pdB25">
+        <dl class="orderNew">
+            <dd class="cnt">선택된 스팟 & 프린터 선택</dd>
+            <div class="line top mgT4"></div>
+        </dl>
+        <div id="divSelSpot">
+            <div class="mgT52">
+                <p style="font-size: medium; float: left; color: gray;">출력 스팟을 검색한 후 하나의 프린터를 선택해 주세요</p>
+            </div>
+        </div>
+    </div>*@
+
+    <!--스팟 선택하기 전-->
+    <div class="storeMng pdB140" id="divChgClass">
+        <dl class="orderNew">
+            <dd class="cnt">선택된 스팟 & 프린터 선택</dd>
+            <div class="line top mgT4"></div>
+            <div class="smDesc top" id="divRemove">출력 스팟을 검색해 한 곳을 선택해 주세요.</div>
+        </dl>
+        <div id="divSelSpot"></div>
+    </div>
+    <!--//스팟 선택하기 전-->
+
+    <div class="storeMng">
+        @*<div class="mainTitle mgT50">
+        <!--[D]비활성화일경우 클래스 inactive추가-->
+        <span class="smTit">3D 모델링 파일 업로드</span>
+    </div>*@
+        <div class="mainTitle mgT6">
+            @*<span class="Order_btn">주문하기</span>*@
+            <!--[D]비활성화일경우 클래스 inactive추가-->
+            <span class="smTit">3D 모델링 파일 선택</span>
+        </div>
+
+
+        <div class="uploadWrap">
+
+            <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="temp" name="temp" value="@ViewBag.Temp" />
+                <input type="hidden" id="main_img" name="main_img" value="" />
+                <input type="hidden" name="mode" value="temp" />
+                <input type="hidden" id="uiIndex" name="uiIndex" />
+                <input type="hidden" id="prtMatNo" name="prtMatNo" />
+
+                <!-- File Upload -->
+                <div class="uploadFile">
+
+                    <!-- 이미지 파일 -->
+                    <div class="modelFile">
+                        <div class="upBtnZone flL">
+                            <div class="btnAdd2">
+                                <button class="file_input_button" title="파일추가">파일 추가</button>
+                                <input type="file" class="file_input_hidden" name="stlupload" id="stlupload" />
+                            </div>
+                        </div>
+                        <p class="txt2">
+                            <span class="smDesc" style="float: left">출력할 모델링 파일을 업로드 해주세요.</span><br>
+                            파일타입 : stl, obj / 최대 사이즈 : 개당 100mb
+                        </p>
+                    </div>
+                    <!-- //이미지 파일 -->
+
+                </div>
+                <!-- //File Upload -->
+            </form>
+        </div>
+
+        <form id="OrderRequest" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="temp" value="@ViewBag.Temp" />
+            <input type="hidden" name="prtNo" />
+            <input type="hidden" name="postMode" />
+            <input type="hidden" name="hfMatNo" id="hfMatNo" />
+            <input type="hidden" name="PreOrderNo" value="@preOrderNo" />
+            <input type="hidden" name="hfTotalPrice" id="hfTotalPrice" value="0" />
+
+
+            <div class="printWrap order">
+                <ul class="printReq">
+                    <li>
+                        <span class="col1"></span>
+                        <span class="col2">파일명</span>
+                        <span class="col3">크기/부피</span>
+                        <span class="col4">수량</span>
+                        <span class="col5">색상</span>
+                        <span class="col6">예상가격</span>
+                        <span class="col7">삭제</span>
+                    </li>
+
+                    @foreach (OrderDetailT orderDetail in Model)
+                    {
+@*<li>
+                    <img src="@ViewBag.ArticleImgUrl@orderDetail.FileImgRename" class="reqImg" alt="요청한 상품" />
+
+                    <div class="txtG">
+                        <p class="txt1">@orderDetail.FileName</p>
+                        <p class="txt2">
+                            크기 : @(orderDetail.SizeX * 0.1)cm x @(orderDetail.SizeY * 0.1)cm x @(orderDetail.SizeZ * 0.1)cm
+                             <span class="mgL15">출력 부피 : @(orderDetail.Volume * 0.001)cm³</span>
+                            <span class="mgL15">예상가격: ₩<span class="price">0</span></span>
+                        </p>
+                    </div>
+
+
+                    <div class="tbordSta_color tbordSta55 zIdx199" id="divColor_@uiIndex">
+                        <p class="tbordValue_color" id="pColor_@uiIndex">색상</p>
+                        <ul class="tbordValueLi_color" id="ulColor_@uiIndex">
+                        </ul>
+                    </div>
+
+                    <div class="req">
+                        <p class="close">
+                            <input type="hidden" id="no" name="no" value="@orderDetail.No" />
+                            <input type="hidden" class="volume" value="@(orderDetail.Volume * 0.001)" />
+                            <input type="hidden" class="selPrice" />
+                            <input type="hidden" name="orderCount" value="1" />
+                            <input type="hidden" name="color" />
+                            <img src="content/images/common/btn/btn_close2.gif" onclick="delFile(this)" class="" alt="삭제">
+                        </p>
+                        <p class="num">1</p>
+                        <div class="btnS">
+                            <p>
+                                <img src="content/images/common/btn/btn_cntUp.gif" onclick="incNum(this)" class="" alt="주문 수량 증가">
+                            </p>
+                            <p>
+                                <img src="content/images/common/btn/btn_cntDown.gif" onclick="decNum(this)" class="" alt="주문 수량 감소 ">
+                            </p>
+                        </div>
+                    </div>
+                </li>*@
+                
+                
+                        string zindex = "zIdx" + (201 - uiIndex).ToString();
+                
+                        <li>
+                            @*<a href="javascript:void(0);" class="showThum" id="stl_@uiIndex" data-val="@orderDetail.No" title="이미지 새로고침" data-file="@Url.Content("~/FileUpload/Article/Article_3d/" + orderDetail.FileReName)" data-js="@Url.Content("~/FileUpload/Article/article_js/" + orderDetail.FileReName + ".js")" data-idx="@uiIndex">*@
+                            <img src="@ViewBag.ArticleImgUrl@orderDetail.FileImgRename" class="reqImg" alt="요청한 상품">
+                            @*</a>*@
+                            <div class="txtG">
+                                <p class="txt1">@orderDetail.FileName</p>
+                            </div>
+                            <div class="txt2">@(Math.Round(orderDetail.SizeX) * 0.1)cm x @(Math.Round(orderDetail.SizeY) * 0.1)cm x @(Math.Round(orderDetail.SizeZ) * 0.1)cm <span>
+                                <br>
+                                @(Math.Round((orderDetail.Volume * 0.001) / 0.1) * 0.1)cm³/ @orderDetail.PrintVolume cm³</span>
+                            </div>
+                            <div class="req">
+
+                                @*<p class="num">1</p>*@
+                                <input type="text" class="num" value="1" onkeydown="return IsNum(event)" onchange="PriceRecalculate(this)" />
+                                <div class="btnS">
+                                    <p>
+                                        <img src="content/images/common/btn/btn_cntUp.gif" onclick="incNum(this)" class="" alt="주문 수량 증가">
+                                    </p>
+                                    <p>
+                                        <img src="content/images/common/btn/btn_cntDown.gif" onclick="decNum(this)" class="" alt="주문 수량 감소 ">
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="tbordSta_color tbordSta55 @zindex" id="divColor_@uiIndex">
+                                <p class="tbordValue_color" id="pColor_@uiIndex" onclick="chkSetColor(this)">색상</p>
+                                <ul class="tbordValueLi_color" id="ulColor_@uiIndex">
+                                </ul>
+                            </div>
+
+                            <div class="price">₩0</div>
+                            <div class="close">
+                                <input type="hidden" id="no" name="no" value="@orderDetail.No" />
+                                <input type="hidden" class="volume" value="@orderDetail.PrintVolume" />
+                                <input type="hidden" class="selPrice" />
+                                <input type="hidden" name="orderCount" value="1" />
+                                <input type="hidden" name="color" />
+                                <img src="content/images/common/btn/btn_close2.gif" onclick="delFile(this)" class="" alt="삭제">
+                            </div>
+                        </li>
+                
+                        uiIndex++;
+                    }
+
+
+
+                </ul>
+            </div>
+
+            <div class="process" style="display: none">
+                <p class="bar" style="width: 0%"></p>
+                <div class="txtG">
+                    <p class="txt1" id="processBar">Processing 0%</p>
+                    <p class="txt2" id="uploadStlName"></p>
+                </div>
+            </div>
+
+            <div id="processNext">
+                <input type="hidden" id="hfProcessIdx" value="0" />
+            </div>
+
+        </form>
+
+        <span class="Order_btn mgT50" onclick="orderRequest()">주문하기</span>
+    </div>
+</div>
+<!-- //printWrap -->
+
+
+<!-- 썸네일팝업 -->
+<form id="img_form" name="img_form" method="post">
+    <input type="hidden" id="stl_val" name="stl_val">
+    <input type="hidden" id="stl_img_no" name="stl_img_no">
+    <input type="hidden" id="img_idx" name="img_idx" />
+
+    <div class="popupArea thumnailPop">
+        <div class="bgArea bgThumOutput">
+        </div>
+        <div class="popBox">
+
+            <!-- thumnailWrap -->
+            <div class="thumnailWrap">
+                <div class="imgDefualt">
+                    <img src="@Url.Content("~/Content/images/common/default3d.png")" class="dfImg" alt="디폴트 이미지" /><img src="@Url.Content("~/Content/images/common/loading_bar.gif")" alt="" class="imgDefualtImg" />
+                </div>
+                <img id="img_save" />
+                <div id="viewerThum">
+                    <iframe src="#" id="viewer_frame" width="630" height="470" border="0" frameborder="0" scrolling="no"></iframe>
+                </div>
+                <a href="javascript:void(0);" class="close" id="save_id">닫기</a>
+            </div>
+            <!-- // thumnailWrap -->
+
+        </div>
+    </div>
+</form>
+<!-- //썸네일팝업 -->
+
+
+<!-- //contWrap -->
+
+@section Scripts{
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
+    <script src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
+    @*    <script src="@Url.VersionedContent("~/Scripts/Thingiview2.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/NormalControls.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/OBJLoader.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/STLLoader.js")"></script>*@
+    @Scripts.Render("~/bundles/viewer")
+    <script type="text/javascript">
+
+        Number.prototype.format = function (n, x) {
+            var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+            return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+        };
+
+        var autocomplete;
+        function initialize() {
+
+            autocomplete = new google.maps.places.Autocomplete(
+                (document.getElementById('prtLocation')),
+                { types: ['geocode'] }); //범위 인듯
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                $("#locationX").val(autocomplete.getPlace().geometry.location.H);
+                $("#locationY").val(autocomplete.getPlace().geometry.location.L);
+            });
+
+        }
+
+
+        $(document).on("click", ".showThum", function () {
+
+            $('#stl_val').val('');
+            $('#stl_img_no').val('');
+            $('#stl_img_no').val($(this).data('val'));
+            $("#img_idx").val($(this).attr('data-idx'));
+
+            //$('.popupArea.thumnailPop').show();
+            //$('.imgDefualt').show();
+
+            var volume = "";
+            var js = $(this).attr('data-js');
+
+            var ThreeJsonLoader = new THREE.JSONLoader(true);
+            ThreeJsonLoader.statusDomElement.style.left = "0px";
+            ThreeJsonLoader.statusDomElement.style.width = "auto";
+
+            document.body.appendChild(ThreeJsonLoader.statusDomElement);
+            ThreeLoadCallback = function (geometry, materials) {
+                thingiview.addModel(geometry);
+                document.body.removeChild(ThreeJsonLoader.statusDomElement);
+                $('.imgDefualt').hide();
+
+                setTimeout(function () { $('#save_id').click() }, 500);
+                //$('html, body').animate({ scrollTop: document.body.scrollHeight });
+
+            };
+
+            thingiview = new Thingiview('viewerThum');
+
+            thingiview.resize(478, 360);
+            ThreeJsonLoader.load(js, ThreeLoadCallback);
+
+            var thingiviewanimate = function () {
+                if (thingiview != undefined) {
+                    requestAnimationFrame(thingiviewanimate);
+                    thingiview.render();
+                }
+            }
+
+            thingiviewanimate();
+
+        });
+
+
+
+        //slideNumber = 0;
+        //디테일 슬라이드
+        $(function () {
+            function uiSelect(obj, valLst, val, check_id) {
+                var set = {
+                    ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                    container: $(obj),
+                    value: $(val),
+                    list: $(valLst),
+                    firstVal: $(valLst + "> li:first-child > label").html(),
+                    li: $(valLst + "> li"),
+                    label: $(valLst + "> li > label")
+                }
+
+                set.list.hide();
+
+                set.value.click(function () {
+
+                    set.list.show();
+                    set.list.focusin(function () {
+                        set.list.show();
+                    }
+					);
+                    if (set.ie6) {
+                        set.label.hover(
+							function () { $(this).parent().addClass("selected"); },
+							function () { $(this).parent().removeClass("selected"); }
+						);
+                    }
+                    function listHide() {
+                        setTimeout(function () { set.list.hide(); }, 300);
+                    }
+                    set.container.mouseleave(listHide);
+                    set.label.click(function () {
+                        set.value.empty().append($(this).html());
+                        $("#category_no").val($(this).text());
+
+                        set.list.hide();
+                    }
+					);
+                    set.li.click(function () {
+                        set.value.empty().append($(this).find('label').html());
+                        //$("#category_no").val($(this).text());
+
+                        set.list.hide();
+                    });
+                }
+                );
+            }
+
+            uiSelect(".selQual", ".valueLi", ".value", "품질");
+            uiSelect(".selMate", ".valueLi2", ".value2", "재료");
+
+            var selNum = $('.tblType3 tr').length
+            var selCount = parseInt((selNum - 1) / 2)
+            for (i = 1 ; i <= selCount ; i++) {
+                uiSelect("#tbordSta" + i, "#tbordValueLi" + i, "#tbordValue" + i, "");
+                uiSelect("#tbordCol" + i, "#tbordValLi" + i, "#tbordVal" + i, "");
+            }
+            //alert (selCount);
+
+            $('.selQual li').on('click', function () {
+                $('.valueLi li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+            $('.selMate li').on('click', function () {
+                $('.valueLi2 li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+            $('.valueLi li').mouseenter(function () {
+                $('.valueLi li').removeClass('selected');
+            })
+
+            $('.valueLi2 li').mouseenter(function () {
+                $('.valueLi2 li').removeClass('selected');
+            })
+
+            $("#stlupload").change(function (e) {
+                e.preventDefault();
+                var file = $("#stlupload");
+                if (FileValidExtension("3d", file) == false) {
+                    return false;
+                }
+                var fileNm = file.val();
+                var index = fileNm.lastIndexOf('\\');
+                fileNm = fileNm.substring(index + 1);
+                FileUpload("/order/stlUpload", fileNm);
+            })
+
+
+            initialize();//google map 자동완성
+            $("#uiIndex").val("@uiIndex"); //article에서 넘어왔을 경우떄문에 index값 추가
+            //GetSpotList(); //spotlist test
+
+            if ("@ViewBag.SelPrinter".length != 0) {
+                //$("#divSelSpot").removeClass("SelPrinter");
+                //$("#divSelSpot").addClass("SelPrinter_show");
+                var data = {
+                    printerNo: $("#selNo").val(),
+                    color: $("#selColor").val(),
+                    material: $("#selMat").val()
+                }
+                Ajax.SyncGetPartialView("/order/getSpotPrinter", data, "divSelSpot");
+                $("#divChgClass").removeClass("pdB140");
+                $("#divChgClass").addClass("pdB25");
+                $("#divRemove").remove();
+                $('html, body').animate({ scrollTop: $('#divSelSpot').offset().top - 100 });
+            }
+
+
+            // 캡쳐
+            $('#save_id,.bgThumOutput').on('click', function () {
+                //var ifm = $("#viewer_frame").contents().find("canvas");
+                //$('#stl_val').val(ifm[0].toDataURL());
+
+                $('#stl_val').val(thingiview.renderer.domElement.toDataURL());
+
+                var $form_data = $("#img_form").serialize();
+                //console.log($form_data);
+                thingiview = null;
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Order/ImgCapture',
+                    data: $form_data,
+                    dataType: 'json',
+                    beforeSend: function () {
+                        popupClose();
+
+                    },
+                    success: function (data) {
+                        d = new Date();
+                        $("#img_" + data.Index).attr("src", "@ViewBag.ArticleImgUrl" + data.Result + "?" + d.getTime());
+                    }, error: function (e) {
+                        console.log(e);
+                    }
+                });
+            });
+
+        });
+
+        var FileValidExtension = function (type, fileobj) {
+            var regex;
+
+            if (fileobj[0].files[0].size > 100 * 1024 * 1024) {
+                alert('쵀대 사이즈를 초과하였습니다.');
+                return false;
+            }
+
+            if (type == "3d") {
+                regex = /(.stl|.obj)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('stl, obj 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else {
+                alert('파일 타입을 확인해주세요.');
+                return false;
+            }
+        }
+
+        var StlTrigger = function (no) {
+            $("#stl_" + no).trigger('click');
+        }
+
+        var FileUpload = function (action, fileNm) {
+
+            var $form_data = $("#insert_form").serialize();
+
+            $("#hfProcessIdx").val(parseInt($("#hfProcessIdx").val(), 10) + 1);
+            $("#uiIndex").val(parseInt($("#uiIndex").val(), 10) + 1);
+
+            var index = $("#hfProcessIdx").val();
+
+            var options = {
+                beforeSend: function () {
+                    //$(".process").css("display", "block");
+
+                    $("#processNext").before("<div class='process' id='process_" + index + "'> <p class='bar' id='bar_" + index + "' style='width: 0%'></p> <div class='txtG'> <p class='txt1' id='processBar_" + index + "'>Processing 0%</p> <p class='txt2' id='uploadStlName_" + index + "'></p> </div> </div>");
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    //$(".bar").css("width", percentComplete + "%");
+                    //$("#processBar").text("Processing" + percentComplete + "%");
+                    //$("#uploadStlName").text(fileNm);
+                    $("#bar_" + index).css("width", percentComplete + "%");
+                    $("#processBar_" + index).text("Processing" + percentComplete + "%");
+                    $("#uploadStlName_" + index).text(fileNm);
+                },
+                success: function (response) {
+                    $(".printReq").append(response);
+                    //$(".process").hide();
+                    $("#process_" + index).remove();
+
+                    $("#stlupload").val("");
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            };
+
+            $('#insert_form').attr("action", action).ajaxForm(options).submit();
+        }
+
+        function IsNum(e) {
+            var k = window.event ? e.keyCode : e.which;
+            if (((k >= 48) && (k <= 57)) || k == 0 || k == 8 || k == 127 || ((k >= 37) && (k <= 40)) || ((k >= 96) && (k <= 105)) || k == 9) {
+            } else {
+                if (window.event) {
+                    window.event.returnValue = false;
+                }
+                else {
+                    e.preventDefault(); //for firefox 
+                }
+            }
+        }
+
+        function decNum(val) {
+            var num = $(val).parents('.req').find('.num');
+            if (parseInt(num.val(), 10) > 1) {
+                num.val(parseInt(num.val(), 10) - 1);
+                //$(val).parents('li').find('[name="orderCount"]').val(parseInt($(val).parents('li').find('[name="orderCount"]').val(), 10) - 1);
+
+                //var vol = Math.ceil($(val).parents('.req').find('.volume').val());
+                //var beforePrice = $(val).parents('li').find('.price').val();
+                //var rePrice = $("#hfPrice").val() * num.text() * vol;
+                //$(val).parents('li').find('.price').val(rePrice);
+
+                PriceRecalculate(val);
+                //RecalculateByCnt(-1);
+            }
+        }        function incNum(val) {
+            var num = $(val).parents('.req').find('.num');
+            num.val(parseInt(num.val(), 10) + 1);
+
+            //$(val).parents('li').find('[name="orderCount"]').val(parseInt($(val).parents('li').find('[name="orderCount"]').val(), 10) + 1);
+
+            //var vol = Math.ceil($(val).parents('.req').find('.volume').val());
+            //var beforePrice = $(val).parents('li').find('.price').val();
+            //var rePrice = $("#hfPrice").val() * num.text() * vol;
+            ////var rePrice = beforePrice / (parseInt(num.text(), 10) - 1) * num.text();
+            //$(val).parents('li').find('.price').val(rePrice);
+
+            PriceRecalculate(val);
+            //RecalculateByCnt(1);
+        }
+
+        function PriceRecalculate(val) {
+            //var num = $(val).parents('li').find('.num');
+            var vol = parseFloat($(val).parents('li').find('.volume').val());
+            var unitPrice = $(val).parents('li').find('.selPrice').val();
+            var count = $(val).parents('li').find('.num').val();
+            $(val).parents('li').find('[name="orderCount"]').val(count);
+            if (unitPrice != "") {
+
+                //var rePrice = (Math.floor((count * unitPrice * vol * 0.2 + 9) / 10) * 10).format();
+                var rePrice = (Math.floor(count * unitPrice * vol)).format();
+                if (vol * unitPrice < 100) { rePrice = 100 * count; }
+                $(val).parents('li').find('.price').text("\\" + rePrice);
+
+                var totalPrice = 0;
+                $('.price').each(function () {
+                    //totalPrice += parseInt($(this).text().replace("\\", "").replace(",", ""), 10);
+                    totalPrice += parseInt($(this).text().replace(/\\/gi, "").replace(/,/gi, ""));
+                })
+                //console.log(totalPrice);
+                $("#hfTotalPrice").val(totalPrice);
+            }
+        }
+
+        //function RecalculateByCnt(val) {
+        //    $("#totalCnt").text(parseInt($("#totalCnt").text(), 10) + val);
+        //}
+
+        function delFile(val) {
+            var no = $(val).parent('.close').find('input').val();
+            var onSuccess = function (result) {
+                $(val).parents('li').remove();
+
+                var totalPrice = 0;
+                $('.price').each(function () {
+                    //totalPrice += parseInt($(this).text().replace("\\", "").replace(",", ""), 10);
+                    totalPrice += parseInt($(this).text().replace(/\\/gi, "").replace(/,/gi, ""));
+                })
+                $("#hfTotalPrice").val(totalPrice);
+
+            }
+            Ajax.AjaxResponseModelService(this, "/order/DeleteFile", { no: no }, onSuccess);
+        }
+
+        function GetSpotList() {
+            Ajax.SyncGetPartialView("/order/SpotList", {}, "divSpotList");
+        }
+
+        function SearchPrt() {
+            var mat = $(".valueLi2 li.selected").find(':radio').val();
+            var qual = $(".valueLi li.selected").find(':radio').val();
+            var location = $("#prtLocation").val();
+            var locX = $("#locationX").val();
+            var locY = $("#locationY").val();
+
+            var data = {
+                material: mat,
+                quality: qual,
+                location: location,
+                locX: locX,
+                locY: locY
+            }
+            Ajax.SyncGetPartialView("/order/SpotList", data, "divSpotList");
+        }
+
+        function orderRequest() {
+            //번호, 갯수, 색상 detail
+            //프린터 번호 재료, 템프 번호
+            //$(".printReq")      //아이템 리스트
+            //$("#trSelPrint")        // 선택된 프린터 로우
+            //var detailNo = $(".printReq").find("#no").val();
+
+            var $form_data = $("#OrderRequest").serialize();
+
+            var options = {
+                beforeSend: function () {
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        location.href = "/order/payment?orderNo=" + response.Result;
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                }
+            };
+
+            $('#OrderRequest').attr("action", "/order/AddOrder").ajaxForm(options).submit();
+
+        }
+
+        function chkSetColor(val) {
+            if ($(val).next().find('li').length == 0) {
+                alert("프린터와 재질을 선택해 주세요");
+            }
+        }
+
+    </script>
+}

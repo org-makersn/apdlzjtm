@@ -1,0 +1,350 @@
+﻿@model PrinterMemberT
+@{
+    Layout = null;
+    List<string> qualityList = new List<string>();
+
+    float score = 0;
+    float count = 0;
+
+    foreach (ReviewT review in Model.reviewList)
+    {
+        score += review.Score;
+        count++;
+    }
+    count = count == 0 ? 0 : score / count;
+}
+<div class="SelPrinter_show mgT52">
+    <table class="tblType4" summary="선택된 프린트">
+        <caption>프린트 요청</caption>
+        <colgroup>
+            <col style="width: 24%;">
+            <col style="width: 24%;">
+            <col style="width: 12%;">
+            <col style="width: 11%;">
+            <col style="width: 11%;">
+            <col style="width: 17%;">
+        </colgroup>
+        <tbody>
+            <tr class="SelectTit">
+                <td>프린팅 스팟
+                </td>
+                <td>보유 프린터               
+                </td>
+                <td>출력 재료        
+                </td>
+                <td>출력 품질</td>
+                <td>배송 방법
+                </td>
+                <td>주문 단가</td>
+            </tr>
+            <tr class="on">
+                <td>
+                    <p class="txt1">@Model.SpotName</p>
+                    <p class="txt2">@Model.SpotAddress</p>
+                    <p class="star">
+                    </p>
+                    <div class="rating_td">
+
+                        <span style="width: @(count * 10)%"></span>
+                    </div>
+                    @*<span class="average">@(Math.Round(count,1))</span>*@
+                    <span class="average">@string.Format("{0:N1}",count)</span>
+                    <p></p>
+                </td>
+                <td>
+                    @* <div class="tbordSta_printer tbordSta55 zIdx199" id="tbordSta2">
+                    <p class="tbordValue_printer" id="tbordValue2">프린터 선택</p>
+                    <ul class="tbordValueLi_printer" id="tbordValueLi2" style="display: none">
+                        <li id="tbordSta_1">
+                            <input type="radio" id="selSta_1" name="selSta" value="1"><label for="selSta_1">Makerbot Replicator</label></li>
+                        <li id="tbordSta_1">
+                            <input type="radio" id="selSta_1" name="selSta" value="1"><label for="selSta_1">Laiopdineler</label></li>
+
+                    </ul>
+                </div>*@
+
+                    <div class="tbordSta_printer tbordSta55 zIdx199" id="divPrt">
+                        <p class="tbordValue_printer" id="pPrt">프린터 선택</p>
+                        <ul class="tbordValueLi_printer" id="ulPrt">
+                            @foreach (PrinterT printer in Model.printerList)
+                            {
+                                <li>
+                                    <input type="radio" name="selPrt" value="@printer.No" />
+                                    <label>@printer.Brand@printer.Model</label>
+                                    <input type="hidden" id="hfQuality" name="quality" value="@printer.Quality" />
+                                    <input type="hidden" id="hfQualityNm" name="qualityNm" value="@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.QualityType), printer.Quality)" />
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+
+                </td>
+                <td>
+                    <div class="tbordSta_printer tbordStaMg zIdx199" id="divMat">
+                        <p class="tbordValue_printer tborValuePd2 tborValueWid" id="pMat">재료 선택</p>
+                        <ul class="tbordValueLi_printer tborValueLiWid" id="ulMat" style="display: none">
+                            @*<li id="tbordSta_1">
+                            <input type="radio" id="selSta_1" name="selSta" value="1"><label for="selSta_1">ABS</label></li>
+                        <li id="tbordSta_1">
+                            <input type="radio" id="selSta_1" name="selSta" value="1"><label for="selSta_1">PLA</label></li>*@
+
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <p id="quality"></p>
+                </td>
+                <td>
+                    <div class="tbordSta_printer tbordStaMg zIdx199" id="divPost">
+                        <p class="tbordValue_printer tborValuePd tborValueWid2" id="pPost">배송방법 선택</p>
+                        <ul class="tbordValueLi_printer tborValueLiWid2" id="ulPost" style="display: none">
+                            @switch (Model.PostMode)
+                            {
+                                case (int)Makersn.Util.MakersnEnumTypes.PostType.픽업:
+                                <li>
+                                    <input type="radio" name="post" value="1" />
+                                    <label>픽업</label>
+                                </li>
+                                    break;
+                                case (int)Makersn.Util.MakersnEnumTypes.PostType.택배:
+                                <li>
+                                    <input type="radio" name="post" value="2" />
+                                    <label>택배</label>
+                                </li>
+                                    break;
+                                default:
+                                <li>
+                                    <input type="radio" name="post" value="1" />
+                                    <label>픽업</label>
+                                </li>
+                                <li>
+                                    <input type="radio" name="post" value="2" />
+                                    <label>택배</label>
+                                </li>
+                                    break;
+                            }
+
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <p class="txt2" id="price">0원/1cm³</p>
+                    <input type="hidden" id="hfPrice" />
+                </td>
+
+            </tr>
+            <tr>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        function uiSelect(obj, valLst, val, check_id) {
+            var set = {
+                ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                container: $(obj),
+                value: $(val),
+                list: $(valLst),
+                firstVal: $(valLst + "> li:first-child > label").html(),
+                li: $(valLst + "> li"),
+                label: $(valLst + "> li > label")
+            }
+
+            set.list.hide();
+
+            set.value.click(function () {
+                set.list.show();
+                set.list.focusin(function () {
+                    set.list.show();
+                }
+                );
+                if (set.ie6) {
+                    set.label.hover(
+                        function () { $(this).parent().addClass("selected"); },
+                        function () { $(this).parent().removeClass("selected"); }
+                    );
+                }
+                function listHide() {
+                    setTimeout(function () { set.list.hide(); }, 300);
+                }
+                set.container.mouseleave(listHide);
+                set.li.click(function () {
+                    set.value.empty().append($(this).find('label').html());
+                    //$("#category_no").val($(this).text());
+
+                    set.list.hide();
+                });
+            }
+            );
+        }
+
+        uiSelect("#divPrt", "#ulPrt", "#pPrt", "프린터");
+        uiSelect("#divPost", "#ulPost", "#pPost", "수령방법");
+
+        $("#divPost li").on('click', function () {
+            $("#divPost li").removeClass("selected");
+            $(this).addClass("selected");
+            $("[name='postMode']").val($(this).find(':radio').val());
+        });
+
+        $('#divPrt li').on('click', function () { //프린터 선택
+            $('#ulPrt li').removeClass("selected");
+            $(this).addClass("selected");
+
+            $("[name='prtNo']").val($(this).find('[name="selPrt"]').val()); //form 프린터 번호 
+
+
+            //재료 초기화
+            $("#pMat").text("재료 선택");
+            $(".tbordValueLi_printer tborValueLiWid").find('li').remove();
+            $("#hfMatNo").val("");
+
+            //$("#pColor").text("색상");
+            //$("#price").text("0원/1cm³");
+
+            //색상, 가격 초기화
+            $(".price").each(function () {
+                //$(this).val(0);
+                $(this).text("\\ 0");
+            })
+            $(".selPrice").val("");
+
+            $(".tbordValue_color").text("색상");
+            //console.log(this);
+            $(".tbordValueLi_color").find('li').remove();
+            $("[name='color']").each(function () {
+                $(this).val("");
+            });
+
+            GetMaterial($(this).find(':radio').val());
+            uiSelect("#divMat", "#ulMat", "#pMat");
+
+            $("#quality").text($(this).find("#hfQualityNm").val());
+
+            $("#ulMat li").on('click', function () { //재료 선택
+                //var unitPrice = $(this).find(".unitPrice").val();
+                var index = 0;
+
+                $(".printReq li .num").each(function () { //재료 선택시 아이템 란의 가격
+                    //var vol = Math.ceil($(this).parents('li').find('.volume').val());
+                    //$(this).parents('li').find('.price').val(parseInt($(this).text(), 10) * unitPrice * vol);
+                    index++;
+                })
+
+                $(".price").each(function () {
+                    //$(this).val(0);
+                    $(this).text("\\ 0"); //가격 초기화
+                })
+                $(".selPrice").val("");
+
+                //$("#hfPrice").val(unitPrice); //hfPrice 무슨 용돈지 기억이 안남
+                $("#prtMatNo").val($(this).find(':radio').val());
+                $("#hfMatNo").val($(this).find(':radio').val());
+                //console.log($("#hfMatNo").val());
+
+                $(".tbordValue_color").text("색상");
+                $("[name='color']").each(function () {
+                    $(this).val("");
+                });
+
+                $('.ulvalue li').removeClass("selected");
+                $(this).addClass("selected");
+
+                GetColorList($(this).find(':radio').val(), index);
+
+                //uiSelect("#divColor", "#ulColor", "#pColor");
+
+                $(".tbordValueLi_color").each(function () {
+                    //console.log(this);
+                    var i = $(this).attr("id").substring(7);
+                })
+
+                for (var i = 0; i <= index; i++) {
+                    uiSelect("#divColor_" + i, "#ulColor_" + i, "#pColor_" + i);
+                    $('#ulColor_' + i + ' li').on('click', function () { // design쪽에서 넘어왔을때 색상 선택 초기화
+                        //$('#ulColor_' + i + ' li').removeClass("selected");
+                        $(this).parents('ul').find('li').removeClass("selected");
+                        $(this).addClass("selected");
+                        $(this).parents('li').find('[name="color"]').val($(this).find(':radio').val());
+
+                        var unitPrice = $(this).find(".unitPrice").val();
+                        var vol = parseFloat($(this).parents('li').find('.volume').val());
+                        var count = parseFloat($(this).parents('li').find('.num').val(), 10)
+                        //var rePrice = (Math.floor((count * unitPrice * vol * 0.2 + 9) / 10) * 10).format();
+                        var rePrice = (Math.floor(count * unitPrice * vol)).format();
+                        if (vol * unitPrice < 100) { rePrice = 100 * count; }
+                        //console.log(rePrice);
+                        $(this).parents('li').find('.price').text("\\" + rePrice);// this.text = 카운트 갯수
+
+                        var totalPrice = 0;
+                        $('.price').each(function () {
+                            //totalPrice += parseInt($(this).text().replace("\\", "").replace(",", ""), 10);
+                            totalPrice += parseInt($(this).text().replace(/\\/gi, "").replace(/,/gi, ""));
+                        })
+                        $("#hfTotalPrice").val(totalPrice);
+
+                        $(this).parents('li').find('.selPrice').val(unitPrice);
+
+                    });
+
+                    $('#ulColor_' + i + ' li').mouseenter(function () {
+                        $('#ulColor_' + i + ' li').removeClass('selected');
+                    });
+                }
+
+                var minPrice = parseInt($(this).find("[name='minPrice']").val());
+                var maxPrice = parseInt($(this).find("[name='maxPrice']").val());
+                var priceText = minPrice.format() + "~" + maxPrice.format();
+                if (minPrice == maxPrice) { priceText = minPrice; }
+                $("#price").text(priceText + "원/1cm³"); //가격란에 보이는 값
+
+                //$("#ulColor li").on('click', function () { // 색상 선택
+                //    $('#ulColor li').removeClass("selected");
+                //    $(this).addClass("selected");
+                //});
+                //$('#ulColor li').mouseenter(function () {
+                //    $('#ulColor li').removeClass('selected');
+                //});
+
+            });
+            $('#ulMat li').mouseenter(function () {
+                $('#ulMat li').removeClass('selected');
+            });
+        });
+
+        $('#pPrt li').mouseenter(function () {
+            $('#pPrt li').removeClass('selected');
+        });
+
+        if ("@ViewBag.PrinterNo" != 0) {
+            $("input[name=selPrt]").each(function () {
+                if ("@ViewBag.PrinterNo" == $(this).val()) {
+                    $(this).parents('li').click();
+                    $("#pPrt").text($(this).parents('li').find('label').text());
+                }
+            });
+        }
+
+        $(".tbordValue_color").text("색상");
+        $(".tbordValueLi_color").find('li').remove();
+
+    });
+
+    function GetMaterial(val) {
+        Ajax.SyncGetPartialView("/order/GetMaterialList", { printerNo: val }, "ulMat");
+    }
+
+    function GetColorList(val, index) {
+        for (var i = 0; i <= index; i++) {
+            Ajax.SyncGetPartialView("/order/GetColorList", { printerMatNo: val }, "ulColor_" + i);
+        }
+    }
+
+</script>

@@ -1,0 +1,236 @@
+﻿@model PagerQuery<PagerInfo, IList<Makersn.Models.PrinterT>>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    int index = 1;
+
+    string class1 = "";
+    string class2 = "";
+    string class3 = "";
+    switch ((string)ViewBag.Gubun)
+    {
+        case "R":
+            class1 = "class=on";
+            break;
+
+        case "P":
+            class2 = "class=on";
+            break;
+
+        case "N":
+            class3 = "class=on";
+            break;
+    }
+}
+
+<!-- 추천 디자인 -->
+<div class="mainTitle">
+    <h2>@ViewBag.PageTitle</h2>
+
+    <!-- 추천 디자인 -->
+    <ul class="sMenu">
+        <li @class1><a href="/Printing/List?pageGubun=R">추천</a></li>
+        <li @class2><a href="/Printing/List?pageGubun=P">인기</a></li>
+        <li @class3><a href="/Printing/List?pageGubun=N">신규</a></li>
+    </ul>
+
+</div>
+
+<!-- BaseList -->
+<div class="baseList spot">
+    <ul class="item_area">
+
+        @foreach (PrinterT p in Model.EntityList)
+        {
+            string className = index % 4 == 0 ? "class=mgR0" : "";
+            double score = p.Score;
+            string priceText = p.MinPrice + "~" + p.MaxPrice;
+            if (p.MinPrice == p.MaxPrice) { priceText = p.MinPrice.ToString(); }
+            
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/printing/Detail?no=@p.No">
+                            <img src="@Url.Content(ViewBag.PrintImgUrl + p.ImageName)" class="lazy-load" data-original="@ViewBag.PrinterImgUrl@p.ImageName" alt="@p.Brand" /></a>
+                        @*<img src="@string.Format("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAACzCAIAAAABnLdcAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkZCMjcyNzMwMTA4MTFFNTlDRkZFRDI1MzM1ODI5RTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkZCMjcyNzQwMTA4MTFFNTlDRkZFRDI1MzM1ODI5RTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2RkIyNzI3MTAxMDgxMUU1OUNGRkVEMjUzMzU4MjlFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2RkIyNzI3MjAxMDgxMUU1OUNGRkVEMjUzMzU4MjlFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpGBoMwAAATASURBVHja7N1bTyJZGIZRQWw8QZT///e4UyQKKCI6b9gTYmyksURAWOtiYtPUvqg8Vn91gKl1u90j+P3qdgFSBimDlEHKSBmkDFIGKSNlkDJIGaQMUkbKK6jVanYu+5Dy29ubnYsBA6SMlEHKIGWQMkgZKYOUQcogZaQMUl7Ms3LsScqelcOAAVJGyiBlkDJIGSmDlEHKIGWQ8ld4aETKe8JDI1IGKYOUkTJIGaQMUgYp80tUuD8lZXZRhftTUsaAAVLmcEZYKbMnI6yUQcpIGaQMWz5rlDJ7ctYoZQwYIGWQMkgZKYOUQcogZaQMUgYpg5RBykh5Cd8Uz56k7Jvi2ZaGXfAT8is9Ho+fn58nk8l0Oi2/4fkn6/j4+OTk5M+fP81m079gUt5pr6+vw+Hw8fHx73+g8srLTP42HZ+dnV1cXNTrTlekvHvS6MPDQ4m40Wicnp7mAJwjcek1lecInUP109NTgh6NRnl/q9VK03bdGs7Tut2uvbCWieL+/j6N5ufke3l5mUFiyfszeAwGg2Sdn1N8u902b0h5Jzru9/uly0S5+lE2R+X8ApT6r66u1LxDVzAOU3JMxwmx0+l8aVrIm7NJNszmpWmkvM35uMwV19fXy4eKhbJJNswPWSRL2Z9S3tr1ipznlbmiQsfzmrN5fshSWdBelfIWDIfDDMqZdL95FSKbZ5EslQXtVSlv4WyvjASXl5cf4l5x89FoND8Ml0UWXpBGyj9rPB4nu0ajMR8tEuJgMLi5uUmj/9z29vY2E8X8MJxFslS5TWjfSnmj5leF56+UrMsAnaAXRjmZTHq9Xr/fn06nx8fHmSvmf1WWKsvyVe72VZcoj2aXhN+fwHU6naenpxybU2p6zSutVqsctvNKXi+XO2q1WiaKjMjvryWXpcqyhyz7pMKUJeXqkmb+myPrh9dzcG02m5kxMjyUY3D+mLfNp47z8/OFT1+UpcqyB34S4qi8hT2+8HmgHFcSaw66qTkFzyeNNJ2D9N/1/z/tzZZy2mfA2L0TkXo94eYYnLn5aHYP5f00gtO+HRrpjmZ3SZa/Lcfg8s5/3kMpS3kSQ8qbtvbR9rPhGyn/rHKUXfHa2SoTcFmq8g1wKVNRGXzLxbUVp5Hl5o8727dS3qjy+byXl5e1XAnOIlkqC2ZZ+1bKmz7tK08RDQaD769WFvlw0wQpb8jFxUV5cP6bjxpn8/Lwfha0V6W8jd03u3J8NPsgSeUxIxuWj5BkKR/AlvLWZCQojwHd3d19VvPVzGcdZ8Oj2e1uH72W8pa12+3y4Hyv11s4aXz2HS55czYpD++XD5JQ/dTFJ67XwpcHSHmvfOkrXco1kMpf6VLtSUgps6olX7T1IURftCXl3zFv+PrDDfOQ588cIWq10xm7whUMkDJSBimDlEHKIGWkDFIGKYOUkTJIGaQMUkbKIGWQMkgZpIyUQcogZZAyUgYpg5RByiBlpAy/KWXfAcyepOx/EYABA6QMUkbKIGWQMkiZ/bGW2xd1O4itW8vti7odhAHDIRwpO4QjZZAyUgYpg5RBykgZpAxSBimDlJEySBmkDFJGyiBlkDJIGSmDlEHKIGWQMlJmlx34FyxJeX8c+BcsSRkpwy75T4ABACgVIwG5pn/2AAAAAElFTkSuQmCC")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.MainImgName" alt="@a.Title" /></a>*@
+
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/printing/detail?no=@p.No">@p.PrinterMemberName<span class="sloc">@p.locName</span></a>
+                            <p class="name">@p.Brand@p.Model</p>
+                        </div>
+                        <div class="by">
+                            <p class="price"><span class="nbg">₩</span>@priceText<span class="unit">/cm³</span></p>
+                        </div>
+                        <div class="countBox">
+                            <p class="star">
+                                <div class="rating"><span style="width:@(p.Score * 10)%">@(p.Score)점</span></div>
+                                @if (p.Score > 0)
+                                {
+                                    <span class="count_num">@string.Format("{0:N1}",p.Score)</span>
+                                }
+                            </p>
+
+                        </div>
+                    </div>
+                    @if (p.TestCompleteFlag == "Y")
+                    {
+                        <span class="certified"></span>
+                    }
+                </div>
+            </li>
+                    index++;
+        }
+    </ul>
+</div>
+
+@* 
+
+<div class="contWrap"> 
+
+      <div class="mainTitle">
+      	<h2>추천 프린터</h2>
+        <ul class="sMenu">
+        	<li class="on"><a href="printing_more.html">추천</a></li>
+          <li><a href="printing_more.html">인기</a></li>
+          <li><a href="printing_more.html">신규</a></li>
+        </ul>  
+      </div>
+      
+    <div class="baseList">
+				<ul id="item_area">
+					<li>
+            <!-- ProductBox -->
+            <div class="productBox">
+              <div class="productImg">
+                <a href="printing_sub.html"><img src="content/images/common/list_thum.jpg" alt="Main_image" /></a>
+              </div>
+              <div class="detailBox">
+                <div class="productText">
+                  <a href="printing_sub.html">메이커 팩토리 <span class="sloc">_서울 강남</span></a> 
+                  <p class="name">Makerbot Replicator2</p>                 
+                </div>
+                
+                <div class="countBox">
+                	<p class="star">
+                  	<img src="content/images/common/ico/ico_starOn.png" alt="star" />
+                    <img src="content/images/common/ico/ico_starOn.png" alt="star" />
+                    <img src="content/images/common/ico/ico_starOn.png" alt="star" />
+                    <img src="content/images/common/ico/ico_star_half.png" alt="star" />
+                    <img src="content/images/common/ico/ico_star.png" alt="star" /> 
+                    <span>374</span>    
+                  </p>                   
+                </div>
+              </div>
+            </div>
+                        </div></div>
+
+*@
+
+<!-- //페이징 -->
+<div class="pagination-container">
+    @Html.PageNavigate(Model.Pager.CurrentPageIndex, Model.Pager.PageSize, Model.Pager.RecordCount)
+</div>
+
+@*
+<!-- 추천 디자인 -->
+<div class="mainTitle">
+    <h2>@ViewBag.PageTitle 디자인</h2>
+    <!-- 추천 디자인 -->
+    <ul class="sMenu">
+        <li @class1><a href="/Article?pageGubun=R">추천</a></li>
+        <li @class2><a href="/Article?pageGubun=P">인기</a></li>
+        <li @class3><a href="/Article?pageGubun=N">신규</a></li>
+    </ul>
+
+</div>
+
+<!-- BaseList -->
+<div class="baseList">
+    <ul class="item_area">
+
+        @foreach (ArticleDetailT a in Model.EntityList)
+        {
+            string className = index % 4 == 0 ? "class=mgR0" : "";
+            string likeChk = a.IsLikes == 1 ? "class=on" : "";
+            string No = Base64Helper.Base64Encode(@a.MemberNo.ToString());
+            
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/Article/Detail?no=@a.No">
+                            <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.MainImgName" alt="@a.Title" /></a>
+                            @*<img src="@string.Format("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAACzCAIAAAABnLdcAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkZCMjcyNzMwMTA4MTFFNTlDRkZFRDI1MzM1ODI5RTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkZCMjcyNzQwMTA4MTFFNTlDRkZFRDI1MzM1ODI5RTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2RkIyNzI3MTAxMDgxMUU1OUNGRkVEMjUzMzU4MjlFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2RkIyNzI3MjAxMDgxMUU1OUNGRkVEMjUzMzU4MjlFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpGBoMwAAATASURBVHja7N1bTyJZGIZRQWw8QZT///e4UyQKKCI6b9gTYmyksURAWOtiYtPUvqg8Vn91gKl1u90j+P3qdgFSBimDlEHKSBmkDFIGKSNlkDJIGaQMUkbKK6jVanYu+5Dy29ubnYsBA6SMlEHKIGWQMkgZKYOUQcogZaQMUl7Ms3LsScqelcOAAVJGyiBlkDJIGSmDlEHKIGWQ8ld4aETKe8JDI1IGKYOUkTJIGaQMUgYp80tUuD8lZXZRhftTUsaAAVLmcEZYKbMnI6yUQcpIGaQMWz5rlDJ7ctYoZQwYIGWQMkgZKYOUQcogZaQMUgYpg5RBykh5Cd8Uz56k7Jvi2ZaGXfAT8is9Ho+fn58nk8l0Oi2/4fkn6/j4+OTk5M+fP81m079gUt5pr6+vw+Hw8fHx73+g8srLTP42HZ+dnV1cXNTrTlekvHvS6MPDQ4m40Wicnp7mAJwjcek1lecInUP109NTgh6NRnl/q9VK03bdGs7Tut2uvbCWieL+/j6N5ufke3l5mUFiyfszeAwGg2Sdn1N8u902b0h5Jzru9/uly0S5+lE2R+X8ApT6r66u1LxDVzAOU3JMxwmx0+l8aVrIm7NJNszmpWmkvM35uMwV19fXy4eKhbJJNswPWSRL2Z9S3tr1ipznlbmiQsfzmrN5fshSWdBelfIWDIfDDMqZdL95FSKbZ5EslQXtVSlv4WyvjASXl5cf4l5x89FoND8Ml0UWXpBGyj9rPB4nu0ajMR8tEuJgMLi5uUmj/9z29vY2E8X8MJxFslS5TWjfSnmj5leF56+UrMsAnaAXRjmZTHq9Xr/fn06nx8fHmSvmf1WWKsvyVe72VZcoj2aXhN+fwHU6naenpxybU2p6zSutVqsctvNKXi+XO2q1WiaKjMjvryWXpcqyhyz7pMKUJeXqkmb+myPrh9dzcG02m5kxMjyUY3D+mLfNp47z8/OFT1+UpcqyB34S4qi8hT2+8HmgHFcSaw66qTkFzyeNNJ2D9N/1/z/tzZZy2mfA2L0TkXo94eYYnLn5aHYP5f00gtO+HRrpjmZ3SZa/Lcfg8s5/3kMpS3kSQ8qbtvbR9rPhGyn/rHKUXfHa2SoTcFmq8g1wKVNRGXzLxbUVp5Hl5o8727dS3qjy+byXl5e1XAnOIlkqC2ZZ+1bKmz7tK08RDQaD769WFvlw0wQpb8jFxUV5cP6bjxpn8/Lwfha0V6W8jd03u3J8NPsgSeUxIxuWj5BkKR/AlvLWZCQojwHd3d19VvPVzGcdZ8Oj2e1uH72W8pa12+3y4Hyv11s4aXz2HS55czYpD++XD5JQ/dTFJ67XwpcHSHmvfOkrXco1kMpf6VLtSUgps6olX7T1IURftCXl3zFv+PrDDfOQ588cIWq10xm7whUMkDJSBimDlEHKIGWkDFIGKYOUkTJIGaQMUkbKIGWQMkgZpIyUQcogZZAyUgYpg5RByiBlpAy/KWXfAcyepOx/EYABA6QMUkbKIGWQMkiZ/bGW2xd1O4itW8vti7odhAHDIRwpO4QjZZAyUgYpg5RBykgZpAxSBimDlJEySBmkDFJGyiBlkDJIGSmDlEHKIGWQMlJmlx34FyxJeX8c+BcsSRkpwy75T4ABACgVIwG5pn/2AAAAAElFTkSuQmCC")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.MainImgName" alt="@a.Title" /></a>*
+                        
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/Article/Detail?no=@a.No">@a.Title</a>
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="/Profile?no=@No">@a.MemberName</a></span></p>
+                            @*<h5>@a.Copyright</h5>*
+                        </div>
+                        <ul class="countBox">
+                            <li class="show"><a href="javascript:void(0);"><span>@a.ViewCnt</span></a></li>
+
+                            <li class="heart"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                                <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>
+                            <li class="comment"><a href="javascript:void(0);"><span>@a.CommentCnt</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            index++;
+        }
+    </ul>
+</div>
+<!-- //BaseList -->
+<!-- //추천 디자인 -->
+
+<!-- 페이징 -->
+@*<div class="paging">
+                <a href="#">
+                    <img src="content/images/common/btn/btn_first.gif" alt="처음 페이지" /></a>
+                <a href="#">
+                    <img src="content/images/common/btn/btn_prev.gif" alt="이전 페이지" /></a>
+                <span class="number">
+                    <a href="#" class="on">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                </span>
+                <a href="#">
+                    <img src="content/images/common/btn/btn_next.gif" alt="다음 페이지" /></a>
+                <a href="#">
+                    <img src="content/images/common/btn/btn_last.gif" alt="마지막 페이지" /></a>
+            </div>*
+
+
+<!-- //페이징 -->
+<div class="pagination-container">
+    @Html.PageNavigate(Model.Pager.CurrentPageIndex, Model.Pager.PageSize, Model.Pager.RecordCount)
+</div>
+
+@section Scripts{
+    <style>
+        .ulClass
+        {
+            list-style-type: none;
+        }
+
+        .liClass
+        {
+            display: inline;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //TODO
+        });
+    </script>
+}*@

@@ -12,9 +12,6 @@ namespace Makersn.BizDac
     {
         public IList<PopularStateT> SelectPopular()
         {
-
-
-
             using (ISession session = NHibernateHelper.OpenSession())
             {
 
@@ -38,87 +35,8 @@ namespace Makersn.BizDac
 
                 IList<PopularStateT> list = (List<PopularStateT>)queryObj.List<PopularStateT>();
 
-
                 return list;
-
             }
-
-
-            //            IList<PopularT> list = new List<PopularT>();
-            //            string query = "";
-            //            using (ISession session = NHibernateHelper.OpenSession())
-            //            {
-            //                for (int i = 0; i < 7; i++)
-            //                {
-            //                    query = @"
-            //                        SELECT WORD, SUM(CNT) AS CNT
-            //                        FROM POPULAR
-            //                        ";
-            //                    switch (i)
-            //                    {
-            //                        case 1:
-            //                            query += " WHERE datediff(day,REG_DT-1,getdate())=0";
-            //                            break;
-            //                        case 2:
-            //                            query += " WHERE datediff(day,REG_DT-1,getdate())=1";
-            //                            break;
-            //                        case 3:
-            //                            query += " WHERE datediff(week,REG_DT-1,getdate())=0";
-            //                            break;
-            //                        case 4:
-            //                            query += " WHERE datediff(week,REG_DT-1,getdate())=1";
-            //                            break;
-            //                        case 5:
-            //                            query += " WHERE datediff(month,REG_DT,getdate())=0";
-            //                            break;
-            //                        case 6:
-            //                            query += " WHERE datediff(month,REG_DT,getdate())=1";
-            //                            break;
-            //                    }
-            //                    query += " GROUP BY WORD ORDER BY SUM(CNT) DESC";
-
-            //                    IList<object[]> results = session.CreateSQLQuery(query).List<object[]>();
-            //                    session.Flush();
-
-            //                    foreach (object[] row in results)
-            //                    {
-            //                        PopularT p = new PopularT();
-            //                        p.Word = (string)row[0];
-            //                        p.Cnt = (int)row[1];
-            //                        list.Add(p);
-            //                    }
-
-
-            //                }
-            //            }
-            //            return list;
-
-
-
-
-
-
-            //string query = "SELECT WORD FROM POPULAR GROUP BY WORD";
-            //using (ISession session = NHibernateHelper.OpenSession())
-            //{
-            //    IList<object[]> results = session.CreateSQLQuery(query).List<object[]>();
-            //    session.Flush();
-            //    IList<PopularT> list = new List<PopularT>();
-            //    List<string> wordList = new List<string>();
-            //    foreach (object[] row in results)
-            //    {
-            //        PopularT p = new PopularT();
-            //        p.Word = (string)row[0];
-            //        wordList.Add((string)row[0]);
-            //        list.Add(p);
-            //    }
-
-            //    query = "SELECT SUM(CNT) FROM POPULAR";
-            //    IList<PopularT> result = session.QueryOver<PopularT>().Where(p => wordList.All(s => p.Word == s)).OrderBy(o => o.Cnt).Asc.List();
-
-
-            //    return result;
-            //}
         }
 
         public void AddSearchText(PopularT pop)

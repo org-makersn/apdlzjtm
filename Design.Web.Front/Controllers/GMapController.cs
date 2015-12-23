@@ -18,5 +18,10 @@ namespace Design.Web.Front.Controllers
         {
             return View();
         }
+
+        public ActionResult test()
+        {
+            return View();
+        }
 	}
 }

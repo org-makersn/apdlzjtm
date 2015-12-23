@@ -43,4 +43,12 @@ namespace Design.Web.Front.Models
             this.Z = z;
         }
     }
+
+    public class StlSize
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+        public double Volume { get; set; }
+    }
 }

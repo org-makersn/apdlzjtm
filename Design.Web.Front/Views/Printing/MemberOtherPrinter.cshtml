@@ -1,0 +1,35 @@
+﻿﻿@model IList<PrinterT>
+@{
+    
+    int index = 1;
+    Layout = null;
+}
+
+
+<ul class="ortherList">
+
+    @{if (Model.Count != 0)
+      {
+          foreach (Makersn.Models.PrinterT printer in Model)
+          {
+              string className = index % 2 == 0 ? "class=mgR0" : "";
+        <li @className>
+            <p class="img">
+                <a href="/Printing/Detail?no=@printer.No">
+                    <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.PrintImgUrl@printer.ImageName" /></a>
+            </p>
+            <p class="txt"><a href="/Printing/Detail?no=@printer.No">@printer.Brand@printer.Model</a></p>
+        </li>
+              index++;
+          }
+      }
+    }
+</ul>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $("img.lazy-load").lazyload({ effect: "fadeIn" });
+    });
+</script>

@@ -1,0 +1,80 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<Makersn.Models.NoticeT>
+@{
+    ViewBag.Title = "전체알림";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2 class="contents_title">최근 알림</h2>
+
+<!-- contents_zone -->
+<div class="contents_zone">
+
+
+    <div class="right_float_wrap">
+        <div class="left"><strong>0</strong>개의 알림</div>
+    </div>
+
+
+        <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <caption>리스트 게시판</caption>
+            <colgroup>
+                <col width="20%" />
+                <col width="60%" />
+                <col width="20%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <!-- <th><input type="checkbox" name="chkAll" onclick="checkedAll();"></th> -->
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (Makersn.Models.NoticeT notice in Model)
+                {
+                    notice.Comment = new Design.Web.Admin.Filter.ContentFilter().HtmlEncode(notice.Comment);
+                    <tr>
+                        <td>
+                            @Html.Raw(notice.Comment.Substring(3, notice.Comment.IndexOf("내용:") - 3))
+                        </td>
+                        <td>
+                            @Html.Raw(notice.Comment.Substring(notice.Comment.IndexOf("내용:") + 3))
+                        </td>
+                        <td>
+                            @notice.RegDt
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    <!-- // faq_wrap -->
+
+    <!-- page_navi -->
+    <div class="page_navi" style="padding-bottom: 0;">
+    </div>
+    <!-- // page_navi -->
+    <!-- btn -->
+    <div class="btn_right">
+        <span class="btnWrap medium"><a href="/member/SendNotice" class="_btn_write">등록</a></span>
+    </div>
+    <!-- // btn -->
+</div>
+
+
+@Html.PagedListPager((PagedList.IPagedList)Model,
+    page => ("/member/AllNotice?page=" + page),
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+    new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "partial-part",
+        OnSuccess = "$('.back-to-top').trigger('click');"
+    })
+)
+

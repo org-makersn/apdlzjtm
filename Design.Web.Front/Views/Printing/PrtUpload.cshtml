@@ -1,0 +1,1412 @@
+﻿@model PrinterT
+@{ 
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    IList<PrinterModelT> BrandList = ViewBag.PrinterBrandlList;
+
+
+    IList<string> bList = new List<string>();
+
+
+
+    PrinterT printer = Model == null ? new PrinterT() : Model;
+
+    IList<PrinterMaterialT> prtMaterial = null;
+    string matColStr = "";
+    if (Model != null)
+    {
+        prtMaterial = Model.PrinterMaterialList;
+        if (prtMaterial != null)
+        {
+
+            for (int i = 0; i < prtMaterial.Count; i++)
+            {
+                IList<PrinterColorT> prtColor = prtMaterial[i].MaterialColorList;
+                if (prtColor != null)
+                {
+                    for (int j = 0; j < prtColor.Count; j++)
+                    {
+                        matColStr += prtMaterial[i].MaterialName + "," + prtColor[j].ColorNo + "," + prtColor[j].UnitPrice + ";";
+                    }
+                }
+            }
+        }
+    }
+
+
+    IList<PrinterFileT> prtImg = null;
+    string imgStr = "";
+    if (Model != null)
+    {
+        prtImg = Model.PrinterFileList;
+        if (prtImg != null)
+        {
+            for (int i = 0; i < prtImg.Count; i++)
+            {
+                imgStr += prtImg[i].Name + "," + prtImg[i].Rename + "," + prtImg[i].Size + ";";
+            }
+        }
+    }
+
+
+    PrinterFileT mainImg = new PrinterFileT();
+    if (printer.MainImg != null)
+    {
+        mainImg = printer.PrinterFileList[System.Convert.ToInt32(printer.MainImg) - 1];
+    }    
+}
+
+
+<!-- MemberArea -->
+<!-- 로그인 후 마이페지 -->
+<div class="topMypage">
+    <ul>
+        <li><a href="my_profile.html">My page</a></li>
+        <li>
+            <a href="my_profile_notice.html">Notice</a>
+            <img src="/content/images/common/notice_left.gif" alt="Notice" /><span style="font-size: 11px; background-color: #fe7900; line-height: 22px; padding: 5px 3px 3px 2px;">14</span><img src="/content/images/common/notice_right.gif" alt="Notice" />
+        </li>
+        <li><a href="my_profile_setting.html">Setting</a></li>
+        <li><a href="javascript:void(0);" onclick=" mypageOut();">Log out</a></li>
+    </ul>
+</div>
+<!-- //로그인 후 마이페지 -->
+<!-- //MemberArea -->
+
+<!-- contWrap -->
+<div class="contWrap w100">
+    <div class="printMng">
+
+        @if(ViewBag.Flag == "on"){
+        <div class="subtitle3 mgT-20">
+            <h2>3D 프린팅 스팟 개설하기</h2>
+        </div>
+        <div class="status Spot">
+            <!--D 현재 상태 표시를 위해 클래스 staus_order 옆에 클래스 on 추가-->
+            <li class="status_order"><a href="#">약관 동의</a><span class="status_arrow"></span>
+            </li>
+            <li class="status_order"><a href="#">스팟 정보 입력</a><span class="status_arrow"></span>
+            </li>
+            <li class="status_order on"><a href="#">프린터 등록</a><span class="status_arrow"></span>
+            </li>
+
+        </div>
+        }
+        else{
+        <div class="mainTitle mgT-20 mgB40">
+            <span class="smTit">3D 프린터 추가하기</span>
+        </div>
+        }
+
+        <!--//현재 위치-->
+
+        <!-- uploadWrap -->
+        <div class="uploadWrap Spot">
+            <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="fileGubun" name="fileGubun" value="temp" />
+                <input type="hidden" id="main_img" name="main_img" value="@printer.MainImg" />
+                <input type="hidden" id="uploadCnt" name="uploadCnt" value="10" />
+                <input type="hidden" id="del_no" name="del_no" />
+                <input type="hidden" id="saveFlag" name="saveFlag" />
+                <input type="hidden" id="printerNo" name="printerNo"  value ="@printer.No"/>
+                <input type="hidden" id="ImgNameInfo" name="ImgNameInfo" />
+                <input type="hidden" id="ImgRenameInfo" name="ImgRenameInfo" />
+                <input type="hidden" id="ImgSizeInfo" name="ImgSizeInfo" />
+
+                <!-- File Upload -->
+                <div class="uploadFile">
+
+                    <!-- 이미지 파일 -->
+                    <div class="modelFile">
+                        <div class="upBtnZone">
+                            <p class="title">3D프린터 이미지 파일</p>
+                            <div class="btnAdd">
+                                <button class="file_input_button" title="파일추가"></button>
+                                <input type="file" class="file_input_hidden" name="imgupload" id="imgupload" />
+                            </div>
+                        </div>
+                        <p class="txt">타입 : gif, jpg, png / 최대 사이즈 : 개당 100mb / 권장 해상도 640*470px</p>
+                    </div>
+                    <!-- //이미지 파일 -->
+
+
+                </div>
+                <!-- //File Upload -->
+
+                <div class="dragImg">
+                    <div class="mainBoxDrag">
+                        <div class="imgMain">
+                            @if (printer != null && printer.MainImg != null)
+                            {
+                                <div class="imgBox ui-draggable ui-draggable-handle ui-droppable ui-draggable-dragging">
+                                    <input type="hidden" value="@mainImg.Name" class="ImgName" name="ImgName">
+                                    <input type="hidden" value="@mainImg.Rename" class="ImgRename" name="ImgRename">
+                                    <input type="hidden" value="@Model.MainImg" id="seq" name="seq">
+                                    <input type="hidden" value="@mainImg.Size" class="ImgSize" name="ImgSize">
+                                    <img src="@ViewBag.PrintImgUrl@mainImg.Rename" alt="thumbnail">
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="selectImg" id="ajax_upload">
+                        <ul class="">
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                            <li class="mgR0">5</li>
+                            <li>6</li>
+                            <li>7</li>
+                            <li>8</li>
+                            <li>9</li>
+                            <li class="mgR0">10</li>
+                        </ul>
+                    </div>
+
+                    <div class="btnMores">
+                        <a href="javascript:void(0);" onclick="Upload.DeleteMore();">삭제 -</a>
+
+                        <a href="#" onclick="javascript:Upload.More()">추가 +</a>
+                    </div>
+                </div>
+
+                <!-- //DragImg -->
+
+
+                <!-- inputUpload -->
+
+                <div class="inputUpload">
+                    <!-- Left -->
+                    <div class="left">
+
+                        <div class="boxNo1">
+                            <p class="headerInput printer">프린터 기종</p>
+                            <a href="javascript:ShowAddPrinter()" class="btnG type17">프린터 목록 추가 요청</a>
+                            <div class="selPrint mgT-17 zIdx200">
+                                <p class="valPrint w460">회사를 선택하세요</p>
+                                @*<input type="hidden" id="printerModelNo" name="printerModelNo" />*@
+                                <ul class="valuePrint">
+                                    @foreach (PrinterModelT printerModel in BrandList)
+                                    {
+                                        if (!bList.Contains(printerModel.Brand))
+                                        {
+                                        <li id="code_all">
+                                            <input type="radio" name="lv1" value="@printerModel.No" /><label for="lv1">@printerModel.Brand</label></li>
+                                            bList.Add(printerModel.Brand);
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            @*<div class="selPrint mgT10" id="divModel">
+                                <p class="valPrint w460">모델을 선택하세요</p>
+                                <ul class="" id="ulModel"></ul>
+                                <!--ul class="valuePrint">
+										<li id="code_all"><input type="radio" id="lv1" name="lv1" value="" /><label for="lv1" >Makerbot</label></li>
+                	              </ul-->
+                                <input type="hidden" id="category_no" value="전체" />
+                            </div>*@
+                            <div class="selPrint mgT10" id="divModel">
+                                <p class="valPrint w460" id="pModel">모델을 선택하세요</p>
+                                <input type="hidden" id="printerModelNo" name="printerModelNo" />
+                                <ul class="valuePrint" id="ulModel">
+                                </ul>
+
+                            </div>
+                        </div>
+                        <!-- 프린터 해상도 -->
+                        <div>
+                            <p class="headerInput printer mgT35">프린터 해상도</p>
+                            <a href="javascript:ShowQualityGuide()" class="btnG type17">해상도 가이드라인</a>
+                            <input type="hidden" name="quality" value="9" />
+                            <ul class="resol" id="qualityType">
+                                <li id="9"><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn on" title="선택버튼"></a><span>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.QualityType), 9)</span><input type="hidden" value="9" /></li>
+                                <li id="10"><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn" title="선택버튼"></a><span>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.QualityType), 10)</span><input type="hidden" value="10" /></li>
+                                <li id="20"><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn" title="선택버튼"></a><span>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.QualityType), 20)</span><input type="hidden" value="20" /></li>
+                                <li id="30"><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn" title="선택버튼"></a><span>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.QualityType), 30)</span><input type="hidden" value="30" /></li>
+                            </ul>
+                        </div>
+                        <!--// 프린터 해상도 -->
+                        <!-- 프린터 상태 -->
+                        <div class="mgT40">
+                            <p class="headerInput">프린터 상태</p>
+                            <input type="hidden" id="status" name="status" value="1" />
+                            <ul class="resol" id="printingType">
+                                <li><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn on" title="선택버튼"></a><span>지금 출력 가능</span><input type="hidden" value="1" /></li>
+                                <li><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn" title="선택버튼"></a><span>쉬는 중</span><input type="hidden" value="2" /></li>
+                            </ul>
+                        </div>
+                        <!--// 프린터 상태 -->
+
+
+
+
+                    </div>
+                    <!-- //Left -->
+
+                    <!-- Right -->
+                    <div class="right">
+
+                        <div class="boxNo1 mgB0">
+                            <p class="headerInput">프린터 설명</p>
+                            <div class="textArea2">
+                                <textarea style="" id="item_title" name="item_title" maxlength="4000" onfocus="javascript:removeText(this)">@(Model != null ? "" + Model.Comment : "내용을 입력하세요.")</textarea>
+
+                            </div>
+                        </div>
+
+
+@*                        <div class="boxNo2 mgT30">
+                            <p class="headerInput">배송정책</p>
+                            <div class="sendLoc">
+                                <p class="value2">배송 정책 선택</p>
+                                <input type="hidden" name="postMode" id="postMode" value="-1" />
+                                <ul class="valueLi2">
+                                    
+                                    <li id="li_2">
+                                        <input type="radio" id="sendLoc2" name="sendLoc" value="0" />
+                                        <label for="sendLoc2"><span class='titLicense01'>@(Makersn.Util.EnumHelper.GetEnumTitle(Makersn.Util.MakersnEnumTypes.PrinterPostType.무료배송, null))</span></label>
+                                    </li>
+                                    <li id="li_1">
+                                        <input type="radio" id="sendLoc1" name="sendLoc" value="1" />
+                                        <label for="sendLoc1"><span class='titLicense01'>@(Makersn.Util.EnumHelper.GetEnumTitle(Makersn.Util.MakersnEnumTypes.PrinterPostType.고정배송비, null))</span></label>
+                                    </li>
+                                    <li id="li_4">
+                                        <input type="radio" id="sendLoc4" name="sendLoc" value="2" />
+                                        <label for="sendLoc4"><span class='titLicense01'>@(Makersn.Util.EnumHelper.GetEnumTitle(Makersn.Util.MakersnEnumTypes.PrinterPostType.수신자_부담, null))</span></label>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                        <div class="boxNo2 mgT30" id="PostFeeTagDiv">
+                            <p class="headerInput" id="priceTxt">고정 배송비 책정</p>
+                            <p class="valMnPrice">
+                                <input id="postPrice" name="postPrice" class="inputMn" type="text" value="0" onkeydown="return IsNum(event)" style="color:black" onfocus="javascript:removeText(this) " placeholder="고정 배송비 선택시 이용 할 배송비를 입력해주세요"> 원
+                            </p>
+                        </div>*@
+                    </div>
+                    <!-- //Right -->
+
+                </div>
+                <!-- //inputUpload -->
+
+
+                <div class="option">
+                    <p class="txt1">재료 및 색상 <span class="txt2">( 단위 부피당 책정 가격은 내부를 20% 채웠을 때를 가정합니다.)</span>
+                        @*<span class="txt2">※ 옵션을 설정하면 고객들이 재료 및 색상을 선택할 수 있습니다.</span>*@</p>
+                    <input type="hidden" id="matInfo" name="matInfo" />
+                    <div class="opt">
+
+                        <!-- 재료 선택-->
+                        <div class="selMate">
+                            <p class="value3">재료 선택</p>
+                            <input type="hidden" class="matNo" />
+                            <ul class="valueLi3">
+                                @foreach (MaterialT material in ViewBag.MaterialList)
+                                {
+                            
+                                    <li>
+                                        <input type="radio" name="selMat" value="@material.No" /><label for="selMat_top">@material.Name</label></li>
+                                }
+                            </ul>
+                        </div>
+                        <!-- //재료 선택-->
+
+                        <!-- 색상 선택 -->
+                        <div class="optColor">
+                            <p class="value4">색상 선택</p>
+                            <input type="hidden" class="matColor" />
+                            <ul class="valueLi4">
+                                @foreach (Makersn.Util.MakersnEnumTypes.MaterialColor colorEnum in Enum.GetValues(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor)))
+                                {
+                            
+                                    <li>
+                                        <input type="radio" name="optColor" value="@((int)colorEnum)" /><label for="optColor">@(Makersn.Util.EnumHelper.GetEnumTitle(colorEnum, null))</label></li>
+                                }
+
+                            </ul>
+                        </div>
+                        <!-- //품질 -->
+
+                        <!-- 위치 -->
+                        <div class="optMn">
+                            <p class="valMn">
+                                <input name="" class="inputMn matPrice" type="text" value="0" onkeydown="return IsNum(event)" onfocus="javascript:removeText(this)">
+                                원/cm³
+                            </p>
+                        </div>
+                        <!-- //위치 -->
+
+                    </div>
+                </div>
+
+
+
+            </form>
+            <div class="btnMores">
+                <a href="javascript:void(0);" onclick="javascript:removeMat()">삭제 -</a>
+                <a href="#" onclick="javascript:addMat()">추가 +</a>
+            </div>
+
+            <!-- 업로드 가이드 팝업 -->
+            <div class="popupArea upGuide">
+                <div class="bgArea">
+                </div>
+                <div class="popBox">
+                    <div class="txtZone">
+                        <p class="tit1">업로드 대상</p>
+                        <ol>
+                            <li>1. 본인이 직접 디자인한 파일</li>
+                            <li>2. 저작권이 없는 디자인 파일</li>
+                            <li>3. 수정을 허가한 디자인 파일 (원저작자 명시)</li>
+                        </ol>
+                        <p class="tit2">업로드 불가</p>
+                        <ol>
+                            <li>1. 저작권이 있거나 원저작자의 이용 허가 범위를 벗어나는 디자인 파일</li>
+                            <li>2. 실제 동작하는 무기류 또는 음란물 디자인 파일</li>
+                            <li>3. 기타 makersN의 이용 약관과 라이선스 정책을 벗어난 디자인 파일</li>
+                        </ol>
+                        <p class="bt_close">
+                            <a href="javascript:void(0);" onclick="popupClose();">
+                                <img src="/content/images/common/btn/btn_close.gif" alt="닫기" /></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- // 업로드 가이드 팝업 -->
+            <div class="ordBtn2 Spot">
+                <a href="" class="btnGO type1 mgL20" onclick="cancleUpload();">취소</a>
+                <a href="" class="btnO type2 " onclick="uploadPrt('N')">완료</a>
+            </div>
+
+
+
+        </div>
+        <!-- //upUpload -->
+    </div>
+    <!-- //UploadWrap -->
+
+
+    <!--  임시저장확인 팝업 -->
+    <div class="popupArea thumbPop">
+        <div class="bgArea">
+        </div>
+        <div class="popBox">
+            <div class="contactZone">
+                <p class="titleContact">임시저장되었습니다!</p>
+                <p class="bt_st1">
+                    <button type="button" onclick="javascript:goPrinterDetail()" title="저장된 페이지로 이동하기">저장된 페이지로 이동하기</button>
+                </p>
+                <p class="bt_st2">
+                    <button type="button" onclick="javascript:goHome();" title="메인 페이지로 이동하기">메인 페이지로 이동하기</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- // 임시저장확인 팝업 -->
+
+
+    <!--  게시버튼확인 팝업 -->
+    <div class="popupArea uploadEnd">
+        <div class="bgArea">
+        </div>
+        <div class="popBox">
+            <div class="contactZone">
+                <p class="titleContact">게시되었습니다!</p>
+                <p class="bt_st1">
+                    <button type="button" onclick="javascript:goPrinterDetail()" title="게시된 페이지로 이동하기">게시된 페이지로 이동하기</button>
+                </p>
+
+                <p class="bt_st2">
+                    @if (printer.TestCompleteFlag != "Y")
+                    {
+                        <button type="button" onclick="javascript:goPrinterTest();" title="메인 페이지로 이동하기">프린터 테스트 하기</button>
+                    }
+                    else
+                    {
+                        <button type="button" onclick="javascript:goPrinterMng();" title="메인 페이지로 이동하기">프린터 관리페이지로 이동하기</button>
+                    }
+
+                </p>
+
+
+            </div>
+        </div>
+    </div>
+    <!-- // 게시버튼확인 팝업 -->
+
+
+
+    <!-- //contWrap -->
+
+
+    <!-- //Wrap -->
+
+    <!-- 프린터 등록 완료 -->
+    <div class="popupArea join">
+        <div class="bgArea"></div>
+        <div class="popBox">
+            <!-- Login Wrap -->
+            <div class="joinWrap bg1">
+
+                <div class="bgArea2"></div>
+                <div class="registHeader">
+                    <p class="txt1">축하드려요!</p>
+                    <p class="txt2">
+                        메이커스앤에 당신의 프린터가 등록되었어요.<br>
+                        프린팅 테스트를 받으면 고객의 주문을 받을 확률이 높아져요.
+                    </p>
+                </div>
+                <div class="btnS">
+                    <a href="" class="btnW">내 스팟으로 이동</a>
+                    <a href="" class="btnO">프린팅 테스트 진행</a>
+                </div>
+
+            </div>
+            <!-- // Login Wrap -->
+
+        </div>
+    </div>
+    <!-- // 프린터 등록 완료 -->
+    <!-- 프린터 목록 추가 요청 -->
+    <div class="popupArea addRequestPop">
+        <div class="bgArea" style="opacity: 0.52; height: 100%;">
+        </div>
+        <div class="popBox5">
+            <div class="pop_wrap4">
+                <!--창 크기 357(w)x315(h)-->
+                <div class="pop_txt mgB40">
+                    프린터 목록 추가 요청
+                </div>
+
+                <form id="addPrinterRequest" action="/printing/RequestAddPrinterModel" method="post">
+                    <div class="pop_smTxt"><span class="tit">회사명</span><input name="brand" placeholder=""></div>
+                    <div class="pop_smTxt"><span class="tit">모델명</span><input name="model" placeholder=""></div>
+                    <a href="javascript:RequestAddPrinter()" class="pop_btn2">보내기</a>
+                    <a href="javascript:closePop()" class="pop_close">창 닫기</a>
+                </form>
+
+
+
+            </div>
+        </div>
+    </div>
+    <!-- //프린터 목록 추가 요청 -->
+
+    <!-- 해상도 가이드 라인 -->
+    <div class="popupArea guidePop">
+        <div class="bgArea" style="opacity: 0.52; height: 100%;">
+        </div>
+        <div class="popBox5">
+            <div class="pop_wrap4 hAuto">
+                <!--창 크기 357(w)x315(h)-->
+                <div class="pop_txt mgB40">
+                    해상도 가이드 라인
+                </div>
+                <div class="pop_Table">
+                    <div class="Line">
+                        <div class="pop_RowL">최상</div>
+                        <div class="pop_RowR">10-50 microns</div>
+                    </div>
+                    <div class="Line">
+                        <div class="pop_RowL">상</div>
+                        <div class="pop_RowR">50-100 microns</div>
+                    </div>
+                    <div class="Line">
+                        <div class="pop_RowL">중</div>
+                        <div class="pop_RowR">100-250 microns</div>
+                    </div>
+                    <div class="Line">
+                        <div class="pop_RowL last">하</div>
+                        <div class="pop_RowR last">250-400 microns</div>
+                    </div>
+                </div>
+                <a href="javascript:closePop()" class="pop_close">창 닫기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- //해상도 가이드 라인 -->
+
+<script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+<script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery-ui.js")"></script>
+<script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+
+
+@section Scripts{
+   @* <style>
+        .wrap {
+            background: #fff !important;
+        }
+    </style>*@
+    <script type="text/javascript">
+
+        // 셀렉트박스 UI
+
+
+        $(function () {
+
+            $("#priceTxt").hide();
+            $(".valMnPrice").hide();
+
+            $('.valuePrint li').on('click', function () { //브랜드 선택
+                $('.valuePrint li').removeClass("selected");
+                $(this).addClass("selected");
+
+                //var temp = $(this).eq(0).find("input").val();
+                //$(this).parents('div').eq(0).find("input").eq(0).attr("value", temp);
+                var val = chgVal(this);
+
+
+                $("#pModel").text("프린터 모델 선택");
+
+                GetModel(val);
+
+                uiSelect("#divModel", "#ulModel", "#pModel", "모델");
+
+                $('#ulModel li').on('click', function () {
+                    $('#ulModel li').removeClass("selected");
+                    $(this).addClass("selected");
+                    chgVal(this);
+                });
+            });
+
+
+            function uiSelect(obj, valLst, val, check_id) {
+                var set = {
+                    ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                    container: $(obj),
+                    value: $(val),
+                    list: $(valLst),
+                    firstVal: $(valLst + "> li:first-child > label").html(),
+                    li: $(valLst + "> li"),
+                    label: $(valLst + "> li > label")
+                }
+                set.list.hide();
+                //if (check_id == '') {
+                //    set.value.append(set.firstVal);
+                //    //$("#category_no").val('전체');
+                //}
+                //else {
+                //    set.value.append($("#" + check_id).next().html());
+                //    //$("#category_no").val(check_id);
+                //}
+                set.value.click(function () {
+                    var list = $(this).parent(obj).find(valLst);
+                    list.show();
+
+                    list.focusin(function () {
+
+                        list.show();
+                    });
+                    if (set.ie6) {
+                        set.label.hover(
+                            function () { $(this).parents().addClass("selected"); },
+                            function () { $(this).parents().removeClass("selected"); }
+                        );
+                    }
+                    function listHide() {
+                        setTimeout(function () {
+                            list.hide();
+                        }, 300);
+                    }
+
+                    $(this).parents(obj).eq(0).mouseleave(listHide); //마우스 떠나기 이벤트
+
+                    list.find("li").find("label").click(function () { // li클릭 이벤트 통합
+
+                        //console.log(obj);
+
+                        $(this).parents(obj).find(val).empty().append($(this).html());
+
+                        $(this).parents(obj).find(valLst).hide();
+                        //if (obj == ".sendLoc") {
+                        //    var temp = $(this).parents("li").eq(0).find("input").val();
+                        //    if (temp == "0" || temp == "2") {
+                        //        $("#priceTxt").hide();
+                        //        $(".valMnPrice").hide();
+                        //        $("#postPrice").attr("value", "0");
+                        //        $("#postPrice").val("0");
+                        //    }
+                        //    else {
+
+                        //        $("#priceTxt").show();
+                        //        $(".valMnPrice").show();
+                        //    }
+                        //}
+                        //if (obj == ".selMate" || obj == ".optColor" || obj == ".selPrint" || obj == ".sendLoc") {
+                        if (obj == ".selMate" || obj == ".optColor" || obj == ".sendLoc" || obj == "#divModel") {
+                            var temp = $(this).parents("li").eq(0).find("input").val();
+                            $(this).parents(obj).eq(0).find("input").eq(0).attr("value", temp);
+                            if (obj == ".selPrint") {
+                                //GetModel(temp);
+                            }
+                        }
+
+                        if (obj == ".selMat") {
+                            set.value.empty().append($(this).html());
+
+                            set.list.hide();
+                        }
+                        if (obj == ".selPrint") {
+                            $(this).parents("li").eq(0).click();
+                        }
+
+                    }
+                    );
+
+                    //set.label.click(function () {
+                    //    set.value.empty().append($(this).html());
+                    //    //$("#category_no").val($(this).text());
+
+                    //    set.list.hide();
+                    //});
+
+                });
+
+                // for the data Setting at First
+                if ("@Model.No" != "0") {
+                    @*if (obj == ".sendLoc") {
+                        if ("@Model.PostMode" != "") {
+                            set.value.click();
+                            set.label[parseInt("@Model.PostMode")].click();
+                            $("#postPrice").val("@Model.PostPrice");
+                            $("#postPrice").attr("value", "@Model.PostPrice");
+                        }
+                    }*@
+                    if (obj == ".selPrint") {
+                        if ("@Model.Brand" != "") {
+                            set.value.click();
+                            var labelCnt = set.label.length;
+                            for (var i = 0; i < labelCnt; i++) {
+                                if ($(set.label[i]).text() == "@Model.Brand") {
+                                    set.label[i].click();
+                                }
+                            }
+                        }
+                    }
+
+                    if (obj == "#divModel") {
+                        if ("@Model.Model" != "") {
+                            set.value.click();
+                            var labelCnt = set.label.length;
+                            for (var i = 0; i < labelCnt; i++) {
+                                if ($(set.label[i]).text() == "@Model.Model") {
+                                    set.label[i].click();
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            uiSelect(".selPrint", ".valuePrint", ".valPrint", "");
+            uiSelect(".select", ".lst_value", ".value", ""); 
+            uiSelect(".selMate", ".valueLi3", ".value3", "재료 선택");
+            uiSelect(".optColor", ".valueLi4", ".value4", "색상 선택");
+
+
+
+
+            //없는듯
+            //$('.lst_value li').on('click', function () {
+            //    $('.lst_value li').removeClass("selected");
+            //    $(this).addClass("selected");
+            //    chgVal(this);
+            //});
+
+            //$('.valueLi2 li').on('click', function () {
+            //    $('.valueLi2 li').removeClass("selected");
+            //    $(this).addClass("selected");
+            //    chgVal(this);
+            //});
+
+            //$('.valueLi3 li').on('click', function () {
+            //    $('.valueLi3 li').removeClass("selected");
+            //    $(this).addClass("selected");
+            //    chgVal(this);
+            //});
+
+
+            $('.valuePrint li').mouseenter(function () {
+                $('.valuePrint li').removeClass('selected');
+                chgVal(this);
+            })
+
+            //없는듯
+            //$('.lst_value li').mouseenter(function () {
+            //    $('.lst_value li').removeClass('selected');
+            //    chgVal(this);
+            //})
+
+
+            //$('.valueLi2 li').mouseenter(function () {
+            //    $('.valueLi2 li').removeClass('selected');
+            //    chgVal(this);
+            //})
+
+            //$('.valueLi3 li').mouseenter(function () {
+            //    $('.valueLi3 li').removeClass('selected');
+            //    chgVal(this);
+            //})
+
+            // for the data Setting at First (Material and Color)
+            var matColStr = "@matColStr";
+            if ((matColStr != "")) {
+                var matColList = matColStr.split(';');
+                for (var i = 0 ; i < matColList.length - 1; i++) {
+                    if (i == 0) {
+                        $(".option").append($(".opt").eq(0).clone(true));
+                        $(".opt").eq(0).hide();
+                    } else {
+                        addMat();
+                    }
+                    var matStr = matColList[i].split(',')[0];
+                    var colStr = matColList[i].split(',')[1];
+                    var price = matColList[i].split(',')[2];
+
+
+
+                    var matTag = $(".value3").last();
+                    var matValTag = $(matTag).parents("div").eq(0).find("label");
+                    for (var j = 0; j < matValTag.length; j++) {
+                        if ($(matValTag).eq(j).text() == matStr) {
+                            matTag.click();
+                            $(matValTag).eq(j).click();
+                        }
+                    }
+
+                    var colTag = $(".value4").last();
+                    var colValTag = $(colTag).parents("div").eq(0).find("li > input");
+                    for (var j = 0; j < colValTag.length; j++) {
+                        if ($(colValTag).eq(j).val() == colStr) {
+                            colTag.click();
+                            $(colValTag).eq(j).parents("li").find("label").click();
+                        }
+                    }
+
+                    $(".matPrice").last().attr("value", price);
+                }
+            } else {
+                $(".option").append($(".opt").eq(0).clone(true));
+                $(".opt").eq(0).hide();
+            }
+
+
+            if ("@Model" != "") {
+
+                var qualityLi = $("#qualityType").find("li");
+                for (var i = 0; i < qualityLi.length; i++) {
+                    if ("@Model.Quality" == qualityLi.eq(i).find("input").val()) {
+                        qualityLi.eq(i).find("a").click()
+                    }
+                }
+
+                var prtTypeLi = $("#printingType").find("li");
+                for (var i = 0; i < prtTypeLi.length; i++) {
+                    if ("@Model.Status" == prtTypeLi.eq(i).find("input").val()) {
+                        prtTypeLi.eq(i).find("a").click()
+                    }
+                }
+
+                if ("@imgStr" != "") {
+
+                    var imgList = "@imgStr".split(';');
+                    for (var i = 0 ; i < imgList.length - 1; i++) {
+                        var img = imgList[i].split(',');
+                        Upload.Draw(img[0], img[1], img[2]);
+                    }
+                }
+            }
+
+
+            Upload.Init();
+        });
+
+        //javascript for page Input
+        function RadioBtnCheck(val) {
+            var checkedValue = $(val).parents("li").find("input").val();
+            $(val).parents("ul").eq(0).find("a").removeClass("on");
+            $(val).addClass("on");
+            $(val).parents("div").eq(0).find("input").eq(0).attr("value", checkedValue);
+
+        }
+
+        function IsNum(e) {
+            var k = window.event ? e.keyCode : e.which;
+            if (((k >= 48) && (k <= 57)) || k == 0 || k == 8 || k == 127 || ((k >= 37) && (k <= 40)) || ((k >= 96) && (k <= 105)) || k == 9) {
+            } else {
+                if (window.event) {
+                    window.event.returnValue = false;
+                }
+                else {
+                    e.preventDefault(); //for firefox 
+                }
+            }
+        }
+        function removeText(val) {
+            if ($(val).val() == "0" || $(val).val() == "내용을 입력하세요.") {
+                $(val).val("");
+            }
+        }
+
+        function addMat() {
+            $(".option").append("<br/><br/><br/><br/>");
+            $(".opt").eq(0).show();
+            $(".option").append($(".opt").eq(0).clone(true));
+            $(".opt").eq(0).hide();
+
+        }
+        function removeMat() {
+            $(".option").find("br").last().remove();
+            $(".option").find("br").last().remove();
+            $(".option").find("br").last().remove();
+            $(".option").find("br").last().remove();
+            $(".opt").last().remove();
+        }
+        //upload Printer
+
+        function cancleUpload() {
+            window.history.go(-1);
+        }
+        function uploadPrt(val) {
+
+            $("#saveFlag").attr("value", val);
+
+            var matInfo = "";
+            if (val == "N") {
+                if (check_msg('main_img', '메인이미지를 선택해 주세요.', 'required') == false) return false;
+                if ($("#printerModelNo").val() == "") {
+                    alert("프린터 기종을 선택하여 주세요!");
+                    return false;
+                }
+                if ($("#item_title").val() == "") {
+                    alert("프린터 설명을 입력하여 주세요!");
+                    return false;
+                }
+                //if ($("#postMode").val() == "-1") {
+                //    alert("배송정책을 선택하여 주세요!");
+                //    return false;
+                //}
+
+                //if ($("#postMode").val() == "1" ) {
+                //    if (parseInt($("#postPrice").val()) <= 0) {
+                //        alert("배송비는 0 보다 커야 합니다.");
+                //        $("#postPrice").val("");
+                //        $("#postPrice").focus();
+                //        return false;
+                //    }
+                //}
+
+
+
+                //if (obj == ".sendLoc") {
+                //    var temp = $(this).parents("li").eq(0).find("input").val();
+                //    if (temp == "1" || temp == "3") {
+                //        $("#priceTxt").hide();
+                //        $(".valMnPrice").hide();
+                //        $("#postPrice").attr("value", "0");
+                //        $("#postPrice").val("0");
+                //    }
+                //    else {
+                //        $("#priceTxt").show();
+                //        $(".valMnPrice").show();
+                //    }
+                //}
+
+
+                //if ($("#item_title").val() == "" || $("#item_title").val() == "내용을 입력하세요.") {
+                //    alert("설명을 입력해 주세요.");
+                //    $("#item_title").focus();
+                //    return false;
+                //}
+
+                ////if (!$("input:radio[name=lv1]").is(":checked")) {
+                //if($("input:hidden[name=printerModelNo]").val()==""){
+                //    alert("프린터 기종을 선택해주세요.");
+                //    $("#item_title").focus();
+                //    return false;
+                //}
+
+
+
+                var noCount = 0;
+                var priceCount = 0;
+                var colorCount = 0;
+                var length = $(".matNo").length;
+                for (var i = 1; i < length; i++) {
+                    matInfo = matInfo + $(".matNo").eq(i).attr("value") + ",";
+                    matInfo = matInfo + $(".matPrice").eq(i).val() + ",";
+                    matInfo = matInfo + $(".matColor").eq(i).attr("value");
+
+                    if ($(".matNo").eq(i).attr("value") + "" != "undefined") { noCount++; }
+                    if (parseInt($(".matPrice").eq(i).val()) > 0 ) { priceCount++; }
+                    if ($(".matColor").eq(i).attr("value") + "" != 'undefined') { colorCount++; }
+                    matInfo += ";";
+                }
+
+                if (noCount < length - 1) {
+                    alert("재질을 모두 선택하여 주세요.");
+                    return false;
+                }
+                if (colorCount < length - 1) {
+                    alert("컬러를 모두 선택하여 주세요.")
+                    return false;
+                }
+                if (priceCount < length - 1) {
+                    alert("모든 가격은 0 보다 커야 합니다.");
+                    return false;
+                }
+                
+
+            } else {
+                var noCount = 0;
+                var priceCount = 0;
+                var colorCount = 0;
+                var length = $(".matNo").length;
+                for (var i = 1; i < length; i++) {
+                    matInfo = matInfo + $(".matNo").eq(i).attr("value") + ",";
+                    matInfo = matInfo + $(".matPrice").eq(i).val() + ",";
+                    matInfo = matInfo + $(".matColor").eq(i).attr("value");
+
+                    if ($(".matNo").eq(i).attr("value") + "" != "undefined") { noCount++; }
+                    if ($(".matPrice").eq(i).val() != "0") { priceCount++; }
+                    if ($(".matColor").eq(i).attr("value") + "" != 'undefined') { colorCount++; }
+
+                    matInfo += ";";
+                }
+
+                if (noCount < length - 1) {
+                    alert("재질을 모두 선택하여야 임시저장 됩니다.");
+                    return false;
+                }
+                if (colorCount < length - 1) {
+                    alert("컬러를 모두 선택하여야 임시저장 됩니다..")
+                    return false;
+                }
+            }
+
+            $("#matInfo").attr("value", matInfo);
+
+            //이미지 정보 모음!
+            var ImgNameInfo = "";
+            var ImgRenameInfo = "";
+            var ImgSizeInfo = ""
+            var length = $(".ImgName").length;
+            for (var i = 0; i < length; i++) {
+                ImgNameInfo = ImgNameInfo + $(".ImgName").eq(i).attr("value") + ";";
+                ImgRenameInfo = ImgRenameInfo + $(".ImgRename").eq(i).attr("value") + ";";
+                ImgSizeInfo = ImgSizeInfo + $(".ImgSize").eq(i).attr("value") + ";";
+            }
+
+
+            $("#ImgNameInfo").attr("value", ImgNameInfo);
+            $("#ImgRenameInfo").attr("value", ImgRenameInfo);
+            $("#ImgSizeInfo").attr("value", ImgSizeInfo);
+            // 이미지 정보 모음 
+
+            var $form_data = $("#insert_form").serialize();
+            var options = {
+                beforeSend: function () {
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+
+                        if ("@ViewBag.Flag" == "on") {
+                            location.href = "/printing/spotopendone";
+                        }
+                        else {
+                            popupClose();
+                            $('.popupArea.uploadEnd').show();
+                            $('.popupArea .bgArea').css('height', $(document).height());
+                            $("#printerNo").val(response.Result);
+                        }
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    var exception = null;
+                    if (error != null && typeof (error.responseText) != 'undefined') {
+                        try {
+                            exception = $.parseJSON(error.responseText);
+                            if (typeof (exception.ExceptionMessage) != "undefined" && $.trim(exception.ExceptionMessage) != '') {
+                                alert(exception.ExceptionMessage);
+                            }
+                        } catch (ex) {
+                            //alert(ex.name); 
+                        }
+                    }
+                }
+            };
+
+            $('#insert_form').attr("action", "/Printing/PrtUpload").ajaxForm(options).submit();
+        }
+
+        function goPrinterTest() {
+            location.href = "/Printing/PrtTest?printerNo=" + $("#printerNo").val();
+        }
+
+        function goPrinterDetail() {
+            var no = $("#printerNo").val();
+            location.href = "/printing/detail?no=" + no;
+        }
+
+        function goHome() {
+            location.href = "/printing/Printing";
+        }
+
+        function goPrinterMng() {
+            location.href = "/printing/PrtMng";
+        }
+
+        function GetModel(val) {
+            Ajax.SyncGetPartialView("/printing/GetPrinterModel", { no: val }, "ulModel");
+        }
+
+        function chgVal(val) {
+            var temp = $(val).eq(0).find("input").val();
+            $(val).parents('div').eq(0).find("input").eq(0).attr("value", temp);
+
+            return temp;
+        }
+
+        function RequestAddPrinter() {
+
+            var options = {
+                success: function (response) {
+                    alert(response.Message);
+                    closePop();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            };
+
+            $('#addPrinterRequest').ajaxForm(options).submit();
+        }
+
+        function ShowAddPrinter() {
+            $(".popupArea.addRequestPop").show();
+        }
+
+        function ShowQualityGuide() {
+
+            $(".popupArea.guidePop").show();
+        }
+
+        function closePop() {
+            $(".popupArea").hide();
+        }
+
+    </script>
+    @*file Upload*@
+    <script type="text/javascript">
+
+
+        var uploadCnt;
+
+        var Upload = Upload || {};
+
+        var uploadFileCnt = 0;
+        Upload.Init = function () {
+
+
+            // 3d이미지,파일 draggable &  droppable 
+            $(".selectImg ul li div").draggable({
+                helper: 'clone',
+                revert: 'invalid', start: function (event, ui) {
+                    var drag_img = $(this).clone();
+                    idxImg = $(this);
+
+                    //$('.imgMain').empty();
+                    //$('.imgMain').append($(ui.helper).clone());
+                    //$('#main_img').val($('.delImg').data('val'));
+                    //$('._multi:eq(0)').remove();
+                }
+            });
+
+
+            $('.mainBoxDrag').droppable({
+                drop: function (event, ui) {
+                    if ($(ui.helper).find('em').hasClass('fileName') == false) {
+                        $('.imgMain').empty();
+                        $('.imgMain').append($(ui.helper).clone());
+                        $('#main_img').val($(ui.helper).find("#seq").val());
+                        $('._multi:eq(0)').remove();
+                    }
+
+                    $(".delImg").on('click', function (e) {
+                        $(this).hide();
+                        Upload.Remove(this);
+                    });
+                    $('.delImg').hide();
+                    $('.showThum').hide();
+                }
+            });
+
+            $('.selectImg ul li div').droppable({
+                drop: function (event, ui) {
+                    var beforeSeq = $(ui.helper).find("#seq").val();
+                    var afterSeq = $(this).find("#seq").val();
+                    $(ui.helper).find("#seq").val(afterSeq);
+                    $(this).find("#seq").val(beforeSeq);
+
+                    if ($(ui.helper).find("img").eq(0).attr("src") == $('.mainBoxDrag img').attr('src')) {
+                        $('#main_img').val($(ui.helper).find("#seq").val());
+                    }
+                    if ($(this).find("img").eq(0).attr("src") == $('.mainBoxDrag img').attr('src')) {
+                        $('#main_img').val($(this).find("#seq").val());
+                    }
+
+                    var beforeCh = $(ui.helper).html();
+                    var afterCh = $(this).html();
+                    $(this).html(beforeCh);
+                    idxImg.html(afterCh);
+
+                    $(".delImg").on('click', function (e) {
+                        $(this).hide();
+                        Upload.Remove(this);
+                    });
+
+                    $('.delImg').hide();
+                    $('.showThum').hide();
+
+
+                    //$('.mainBoxDrag img').attr('src')
+                }
+            });
+
+            // 이미지 삭제 버튼 보이기
+            $('.selectImg ul li').hover(function () {
+                $(this).find('.delImg').show();
+                $(this).find('.showThum').show();
+            }, function () {
+                $(this).find('.delImg').hide();
+                $(this).find('.showThum').hide();
+            });
+
+            $(".delImg").on('click', function (e) {
+                $(this).hide();
+                Upload.Remove(this);
+            });
+            uploadCnt = $("#uploadCnt").val();
+        }
+        $("#imgupload").on("change", function (e) {
+            e.preventDefault();
+            var fileobj = $("#imgupload");
+            if (Upload.ValidExtension("img", fileobj) === false) {
+                return false;
+            }
+
+            Upload.File("/Printing/ImgUpload");
+        });
+
+        Upload.File = function (action) {
+            var options = {
+                success: function (response) {
+                    //console.log(response);
+                    if (response.Success) {
+
+                        Upload.Draw(response.Name, response.Rename, response.Size);
+                    }
+                    else {
+                        alert(response.Message);
+                        alert("success and response false");
+                    }
+                },
+                complete: function (response) {
+
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert("error");
+                }
+            };
+
+            $('#insert_form').attr("action", action).ajaxForm(options).submit();
+        }
+        Upload.ValidExtension = function (type, fileobj) {
+            var regex;
+
+            if (fileobj[0].files[0].size > 100 * 1024 * 1024) {
+                alert('쵀대 사이즈를 초과하였습니다.');
+                return false;
+            }
+
+            if (type == "img") {
+
+                regex = /(.jpg|.jpeg|.gif|.png)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('gif, jpg, png 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else if (type == "3d") {
+                regex = /(.stl|.obj)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('stl, obj 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else {
+                alert('파일 타입을 확인해주세요.');
+                return false;
+            }
+        }
+
+        Upload.More = function () {
+            var addUploadCnt = parseInt(uploadCnt) + 5;
+            $("#uploadCnt").val(addUploadCnt);
+            uploadCnt = $("#uploadCnt").val();
+
+            var uploadImgCol = $("#ajax_upload");
+            var ul = uploadImgCol.find("ul");
+            for (var i = uploadCnt - 4 ; i <= uploadCnt; i++) {
+                var li;
+                if (i != uploadCnt) {
+                    li = $('<li />', {}).appendTo(ul);
+                } else {
+                    li = $('<li />', {
+                        "class": "mgR0",
+                    }).appendTo(ul);
+                }
+                li.text(i);
+
+            }
+        }
+        Upload.DeleteMore = function () {
+            if (uploadCnt > 10) {
+                if (uploadFileCnt <= parseInt(uploadCnt) - 5) {
+                    var addUploadCnt = parseInt(uploadCnt) - 5;
+                    $("#uploadCnt").val(addUploadCnt);
+                    uploadCnt = $("#uploadCnt").val();
+                    for (var i = uploadCnt + 4; i >= uploadCnt; i--) {
+
+                        $("#ajax_upload").find("li").eq(i).remove();
+
+                    }
+                }
+                else {
+                    alert("파일이 추가되어 있어서 삭제 할 수 없습니다");
+                }
+            }
+            else {
+                alert("더 이상 삭제 할 수 없습니다");
+            }
+        }
+
+        Upload.Draw = function (name, rename, size) {
+            uploadFileCnt++;
+            if (uploadFileCnt >= uploadCnt) {
+                Upload.More();
+            }
+            var uploadImgCol = $("#ajax_upload");
+            var li = uploadImgCol.find("li").eq(uploadFileCnt - 1);
+            $(li).find("").remove();
+            $(li).empty();
+            var div = $('<div />', {
+                "class": "imgBox ui-draggable ui-draggable-handle ui-droppable",
+            }).appendTo(li);
+
+            $('<a />', {
+                title: "삭제",
+                "class": "delImg",
+                href: "javascript:void(0)"
+            }).appendTo(div);
+
+            $('<input />', {
+                type: "hidden",
+                val: name,
+                "class": "ImgName",
+                name: "ImgName"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: rename,
+                "class": "ImgRename",
+                name: "ImgRename"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: uploadFileCnt,
+                id: "seq",
+                name: "seq"
+            }).appendTo(div);
+            $('<input />', {
+                type: "hidden",
+                val: size,
+                "class": "ImgSize",
+                name: "ImgSize"
+            }).appendTo(div);
+            $('<img />', {
+                src: "@ViewBag.PrintImgUrl" + rename,
+                alt: "thumbnail"
+            }).appendTo(div);
+            Upload.Init();
+        }
+
+        Upload.Remove = function (val) {
+            //console.log("" + $(val).parents("li").find("#seq").val());
+
+
+            if ($(val).parents("li").length > 0) {
+                uploadFileCnt--;
+            } else {
+                return;
+            }
+
+            var li = $(val).parents("li");
+            var seq = $(li).find("#seq").val();
+            $(li).find("").remove();
+            $(li).empty();
+
+
+            var uploadImgCol = $("#ajax_upload");
+            for (var i = seq ; i <= uploadFileCnt + 1; i++) {
+                var min = --i;
+                i++;
+                if (i <= uploadFileCnt) {
+                    $(uploadImgCol).find("li").eq(min).append($(uploadImgCol).find("li").eq(i).find("div"));
+                    $(uploadImgCol).find("li").eq(min).find("#seq").val(i);
+                }
+                if (i > uploadFileCnt) {
+                    $(uploadImgCol).find("li").eq(min).text(i);
+                }
+            }
+            // change main Img Index
+            if ($('.mainBoxDrag').find("#seq").val() > seq) {
+                var mainSeq  = $('.mainBoxDrag').find("#seq").val();
+                mainSeq--;
+                $('.mainBoxDrag').find("#seq").val(mainSeq);
+
+                $('#main_img').val(mainSeq);
+            }
+
+
+            // change Main Img View
+            var imgSrc = $(val).siblings('img').attr('src');
+
+            if ($('.mainBoxDrag img').attr('src') == imgSrc) {
+                $('#main_img').val('');
+                $('.mainBoxDrag .imgMain').empty(); // 커버이미지삭제
+            }
+        }
+
+
+
+
+    </script>
+
+}
+
+
+
+

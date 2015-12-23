@@ -1,0 +1,398 @@
+﻿@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+
+    var recommendIndex = 1;
+    var newIndex = 1;
+    var popIndex = 1;
+
+    IList<MaterialT> matList = ViewBag.MatList;
+}
+
+<!-- topVisual -->
+
+@section printerMian{
+    <!-- MainSlide -->
+    <div class="unslider-carousel has-dots topVisu">
+        <ul>
+            <li style="background: url(content/images/common/top_img_print01.png) top center no-repeat #fff; background-size: cover;"><span class="top_txt_print01"></span>
+            </li>
+            <li style="background: url(content/images/common/top_img_print01.png) top center no-repeat #fff; background-size: cover;"><span class="top_txt_print02"></span>
+
+
+        </ul>
+        <a href="javascript:GoOrter()" class="top_btn_order">주문하기</a>
+        <a href="javascript:AddPrinter()" class="top_btn_register">프린터 등록하기</a>
+    </div>
+
+    <!-- //MainSlide -->
+
+}
+
+
+@*
+<div class="topVisu">
+    <div class="txtG">
+        <p class="txt1">
+            <img src="content/images/common/printvisu_txt1.png" alt="BUY NOW" />
+    </div>
+    <p class="img">
+        <img src="content/images/common/store_visu1.jpg" alt="배경 이미지" />
+    </p>
+</div>*@
+<!-- //topVisual -->
+
+
+<!-- ContWrap -->
+<div class="contWrap">
+
+    <div class="selSearch">
+        <!-- 위치 -->
+        <div class="selLoca">
+            <p class="valLoca">
+                <input name="" id="prtLocation" class="inputLoca" type="text" placeholder="위치">
+                <input type="hidden" id="locationX" />
+                <input type="hidden" id="locationY" />
+            </p>
+        </div>
+        <!-- //위치 -->
+
+        <!-- 품질 -->
+        <div class="selQual">
+            <p class="value">품질</p>
+            <ul class="valueLi" style="display:none">
+                <li id="selQual_top">
+                    <input type="radio" id="selQua_top" name="selQua" value="9" /><label for="selQua_top">최상</label></li>
+                <li id="selQual_1">
+                    <input type="radio" id="selQua_1" name="selQua" value="10" /><label for="selQua_1">상</label></li>
+                <li id="selQual_2">
+                    <input type="radio" id="selQua_2" name="selQua" value="20" /><label for="selQua_2">중</label></li>
+                <li id="selQual_3">
+                    <input type="radio" id="selQua_3" name="selQua" value="30" /><label for="selQua_3">하</label></li>
+            </ul>
+        </div>
+        <!-- //품질 -->
+
+        <!-- 재료-->
+        <div class="selMate">
+            <p class="value2">재료</p>
+            <ul class="valueLi2" style="display:none">
+                @foreach (MaterialT mat in matList)
+                {
+                    <li id="selMate_top">
+                        <input type="radio" id="selMat_top" name="selMat" value="@mat.No" /><label for="selMat_top">@mat.Name</label></li>
+                }
+
+            </ul>
+        </div>
+        <!-- //재료 -->
+
+        <div class="flR">
+            <a class="printer_search" href="javascript:SerachPrinter()">검색</a>
+        </div>
+    </div>
+
+    <!-- 신규 프린터 -->
+    <div class="mainTitle">
+        <h2>신규 프린터</h2>
+        <p><a href="/printing/list?pageGubun=N">더보기 +</a></p>
+    </div>
+
+    <!-- BaseList -->
+    <div class="baseList spot">
+        <ul class="item_area">
+            @foreach (PrinterT printer in ViewBag.NewList)
+            {
+                var classNm = newIndex == 4 ? "mgR0" : "";
+                newIndex++;
+                string priceText = printer.MinPrice + "~" + printer.MaxPrice;
+                if (printer.MinPrice == printer.MaxPrice) { priceText = printer.MinPrice.ToString(); }
+                <li class="@classNm">
+                    <!-- ProductBox -->
+                    <div class="productBox">
+                        <div class="productImg">
+                            <a href="/printing/detail?no=@printer.No">
+                                @*<img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.PrintImgUrl@printer.ImageName" alt="@printer.Brand@printer.Model" />*@
+                                <img src="@ViewBag.PrintImgUrl@printer.ImageName" alt="@printer.Brand@printer.Model" />
+
+                                @*<img src="@ViewBag.PrintImgUrl@printer.ImageName" alt="Main_image" />*@
+                            </a>
+                        </div>
+                        <div class="detailBox">
+                            <div class="productText">
+                                <a href="/printing/detail?no=@printer.No">@printer.PrinterMemberName<span class="sloc">@printer.locName</span></a>
+                                @*@printer.TestCompleteFlag*@
+                                <p class="name">@printer.Brand@printer.Model</p>
+                            </div>
+                            <div class="by">
+                                <p class="price"><span class="nbg">₩</span>@priceText<span class="unit">/cm³</span></p>
+                            </div>
+                            <div class="countBox">
+                                <p class="star">
+                                    <div class="rating"><span style="width:@(printer.Score * 10)%">@(printer.Score)점</span></div>
+                                    @if (printer.Score > 0)
+                                    {
+                                        <span class="count_num">@string.Format("{0:N1}",printer.Score)</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                        @if (printer.TestCompleteFlag == "Y")
+                        {
+                            <span class="certified"></span>
+                        }
+                    </div>
+                    <!-- //ProductBox -->
+                </li>
+            }
+
+        </ul>
+    </div>
+    <!-- //BaseList -->
+    <!-- //신규 프린터 -->
+
+    <!-- 추천 디자인 -->
+    <div class="mainTitle">
+        <h2>추천 프린터</h2>
+        <p><a href="/printing/list?pageGubun=R">더보기 +</a></p>
+    </div>
+
+    <div class="baseList spot">
+        <ul class="item_area">
+            @foreach (PrinterT printer in ViewBag.RecommendList)
+            {
+                var classNm = recommendIndex == 4 ? "mgR0" : "";
+                recommendIndex++;
+                string priceText = printer.MinPrice + "~" + printer.MaxPrice;
+                if (printer.MinPrice == printer.MaxPrice) { priceText = printer.MinPrice.ToString(); }
+                <li class="@classNm">
+                    <!-- ProductBox -->
+                    <div class="productBox">
+                        <div class="productImg">
+                            <a href="/printing/detail?no=@printer.No">
+                                @*<img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.PrintImgUrl@printer.ImageName" alt="@printer.Brand@printer.Model" />*@
+                                <img src="@ViewBag.PrintImgUrl@printer.ImageName" alt="@printer.Brand@printer.Model" />
+                            </a>
+                        </div>
+                        <div class="detailBox">
+                            <div class="productText">
+                                <a href="/printing/detail?no=@printer.No">@printer.PrinterMemberName<span class="sloc">@printer.locName</span></a>
+                                <p class="name">@printer.Brand@printer.Model</p>
+                            </div>
+                            <div class="by">
+                                <p class="price"><span class="nbg">₩</span>@priceText<span class="unit">/cm³</span></p>
+                            </div>
+                            <div class="countBox">
+                                <p class="star">
+                                    <div class="rating"><span style="width:@(printer.Score * 10)%">@(printer.Score)점</span></div>
+                                    @if (printer.Score > 0)
+                                    {
+                                        <span class="count_num">@string.Format("{0:N1}",printer.Score)</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                        @if (printer.TestCompleteFlag == "Y")
+                        {
+                            <span class="certified"></span>
+                        }
+                    </div>
+                    <!-- //ProductBox -->
+                </li>
+            }
+        </ul>
+    </div>
+    <!-- //BaseList -->
+    <!-- //추천 프린터 -->
+
+    <!-- 인기 프린터 -->
+    <div class="mainTitle">
+        <h2>인기 프린터</h2>
+        <p><a href="/printing/list?pageGubun=P">더보기 +</a></p>
+    </div>
+
+    <div class="baseList spot">
+        <ul class="item_area">
+            @foreach (PrinterT printer in ViewBag.PopList)
+            {
+                var classNm = popIndex == 4 ? "mgR0" : "";
+                popIndex++;
+                string priceText = printer.MinPrice + "~" + printer.MaxPrice;
+                if (printer.MinPrice == printer.MaxPrice) { priceText = printer.MinPrice.ToString(); }
+                <li class="@classNm">
+                    <!-- ProductBox -->
+                    <div class="productBox">
+                        <div class="productImg">
+                            <a href="/printing/detail?no=@printer.No">
+                                @*<img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.PrintImgUrl@printer.ImageName" alt="@printer.Brand@printer.Model" />*@
+                                <img src="@ViewBag.PrintImgUrl@printer.ImageName" alt="@printer.Brand@printer.Model" />
+                            </a>
+                        </div>
+                        <div class="detailBox">
+                            <div class="productText">
+                                <a href="/printing/detail?no=@printer.No">@printer.PrinterMemberName<span class="sloc">@printer.locName</span></a>
+                                <p class="name">@printer.Brand@printer.Model</p>
+                            </div>
+                            <div class="by">
+                                <p class="price"><span class="nbg">₩</span>@priceText<span class="unit">/cm³</span></p>
+                            </div>
+                            <div class="countBox">
+                                <p class="star">
+                                    <div class="rating"><span style="width:@(printer.Score * 10)%">@(printer.Score)점</span></div>
+                                    @if (printer.Score > 0)
+                                    {
+                                        <span class="count_num">@string.Format("{0:N1}",printer.Score)</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                        @if (printer.TestCompleteFlag == "Y")
+                        {
+                            <span class="certified"></span>
+                        }
+                    </div>
+                    <!-- //ProductBox -->
+                </li>
+            }
+
+        </ul>
+    </div>
+    <!-- //BaseList -->
+    <!-- //인기 프린터 -->
+
+    
+
+</div>
+<!-- //contWrap -->
+
+
+@section Scripts{
+    @*<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">*@
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+    <script src="@Url.VersionedContent("~/Scripts/shared.jquery.js")"></script>
+
+    <script type="text/javascript">
+
+        var autocomplete;
+
+        function initialize() {
+            autocomplete = new google.maps.places.Autocomplete(
+                (document.getElementById('prtLocation')),
+                { types: ['geocode'] }); //범위 인듯
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                if (autocomplete.getPlace().geometry != null) {
+                    $("#locationX").val(autocomplete.getPlace().geometry.location.H);
+                    $("#locationY").val(autocomplete.getPlace().geometry.location.L);
+                } else {
+                    //alert("주소입력이 잘못 되었습니다. 다시 입력하여 수시길 바랍니다.");
+                    //$("#locationX").val("");
+                    //$("#locationY").val("");
+                    //$("#prtLocation").val("");
+                    //initialize();
+
+                }
+            });
+        }
+
+        function SerachPrinter() {
+            var loc = $("#prtLocation").val();
+            var quality = $(":radio[name='selQua']:checked").val();
+            var material = $(":radio[name='selMat']:checked").val();
+            var locX = $("#locationX").val();
+            var locY = $("#locationY").val();
+
+            //location.href = "/printing/prtSearch?location=" + loc + "&quality=" + quality + "&material=" + material + "&locX=" + locX + "&locY=" + locY;
+            location.href = "/printing/prtSearch?location=" + loc + "&quality=" + quality + "&material=" + material;
+        }
+
+        $(function () {
+            initialize();//위치 자동 완성
+
+            // 셀렉트박스 UI
+            //$('#code_all').addClass('selected');
+            //$('#li_4').addClass('selected');
+
+            function uiSelect(obj, valLst, val, check_id) {
+                var set = {
+                    ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                    container: $(obj),
+                    value: $(val),
+                    list: $(valLst),
+                    firstVal: $(valLst + "> li:first-child > label").html(),
+                    li: $(valLst + "> li"),
+                    label: $(valLst + "> li > label")
+                }
+
+                set.list.hide();
+
+                set.value.click(function () {
+
+                    set.list.show();
+                    set.list.focusin(function () {
+                        set.list.show();
+                    }
+					);
+                    if (set.ie6) {
+                        set.label.hover(
+							function () { $(this).parent().addClass("selected"); },
+							function () { $(this).parent().removeClass("selected"); }
+						);
+                    }
+                    function listHide() {
+                        setTimeout(function () { set.list.hide(); }, 300);
+                    }
+                    set.container.mouseleave(listHide);
+                    set.label.click(function () {
+                        set.value.empty().append($(this).html());
+                        //$("#category_no").val($(this).text());
+
+                        set.list.hide();
+                    }
+					);
+                }
+                );
+            }
+
+            uiSelect(".selQual", ".valueLi", ".value", "품질");
+            uiSelect(".selMate", ".valueLi2", ".value2", "재료");
+            //	uiSelect(".select", ".lst_value", ".value","");
+
+
+            $('.selQual li').on('click', function () {
+                $('.valueLi li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+            $('.selMate li').on('click', function () {
+                $('.valueLi2 li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+
+            $('.valueLi li').mouseenter(function () {
+                $('.valueLi li').removeClass('selected');
+            })
+
+
+            $('.valueLi2 li').mouseenter(function () {
+                $('.valueLi2 li').removeClass('selected');
+            })
+
+            $("#prtLocation").keypress(function (event) {
+                if (event.keyCode == 13) {
+                    SerachPrinter();
+                }
+            });
+
+        });
+
+        function AddPrinter() {
+            if (loginPop("@ViewBag.LogOnChk")) return false;
+            location.href = "/printing/AcceptTermsOfUse";
+        }
+        function GoOrter() {
+            if (loginPop("@ViewBag.LogOnChk")) return false;
+            location.href = "/order";
+        }
+    </script>
+}

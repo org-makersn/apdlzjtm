@@ -1,0 +1,833 @@
+﻿
+<head>
+	<title>MakersN</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<link rel="stylesheet" type="text/css" href="/content/css/common.css"  media="all" />
+  <link rel="stylesheet" type="text/css" href="/content/css/jquery-ui-1.8.18.custom.css"/>
+  <script type="text/javascript" src="script/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="script/jquery.easing.1.3.js" ></script>
+  <script type="text/javascript" src="script/jquery.bxslider.min.js" ></script>  
+	<script type="text/javascript" src="script/common.js"></script>	
+	<script type="text/javascript">
+	
+	$(function(){
+	
+		// 셀렉트박스 UI
+		//$('#code_all').addClass('selected');
+		//$('#li_4').addClass('selected');
+		
+		function uiSelect(obj, valLst, val, check_id){
+			var set = {
+				ie6 : navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+				container : $(obj),
+				value : $(val),
+				list : $(valLst),
+				firstVal : $(valLst+"> li:first-child > label").html(),
+				li : $(valLst+"> li"),
+				label : $(valLst+"> li > label")
+			}
+			
+			set.list.hide();			
+			
+			set.value.click(function(){
+					
+					set.list.show();
+					set.list.focusin(function(){
+						set.list.show();
+						}
+					);
+					if(set.ie6){
+						set.label.hover(
+							function(){$(this).parent().addClass("selected");},
+							function(){$(this).parent().removeClass("selected");}
+						);
+					} 
+					function listHide(){
+						setTimeout(function(){set.list.hide();}, 300);
+					}
+					set.container.mouseleave(listHide);
+					set.label.click(function(){
+						set.value.empty().append($(this).html());
+						$("#category_no").val($(this).text());
+	
+						set.list.hide();
+						}
+					);
+				}
+			);
+		}
+		
+		uiSelect(".selQual", ".valueLi", ".value","품질");
+		uiSelect(".selMate", ".valueLi2", ".value2","재료");
+		
+		var selNum = $('.tblType3 tr').length		
+		var selCount = parseInt((selNum-1)/2)	
+		for (i = 1 ; i <= selCount ; i++){
+			uiSelect("#tbordSta"+i, "#tbordValueLi"+i, "#tbordValue"+i,"");	
+			uiSelect("#tbordCol"+i, "#tbordValLi"+i, "#tbordVal"+i,"");	
+		}
+	 //alert (selCount);
+	
+		$('.selQual li').on('click',function(){
+			$('.valueLi li').removeClass("selected");
+			$(this).addClass("selected");
+		});
+	
+		$('.selMate li').on('click',function(){
+			$('.valueLi2 li').removeClass("selected");
+			$(this).addClass("selected");
+		});
+		
+		$('.valueLi li').mouseenter(function(){
+			$('.valueLi li').removeClass('selected');
+		})
+		
+		$('.valueLi2 li').mouseenter(function(){
+			$('.valueLi2 li').removeClass('selected');
+		})
+
+	});
+</script>
+<script type="text/javascript">
+
+	slideNumber = 0;
+	//디테일 슬라이드
+	$(function(){
+		
+		
+			$('.mainBigImg2 .bxslider').bxSlider({
+				mode:'fade',
+				pagerCustom: '#bx-pager',
+				speed:1,
+				startSlide:slideNumber   // 초기 슬라이드 지정번호
+			});
+			
+		 $('.thumbArea #bx-pager').bxSlider({
+				slideWidth: 80,
+				minSlides: 2,
+				maxSlides: 6,
+				slideMargin: 11,
+			 infiniteLoop:!1
+			});	
+					
+			
+		$('.tblType3 tbody tr:odd').hide();
+		$('.tblType3 tbody tr:eq(1)').show();
+		 
+		$('.tblType3 tbody tr:even').on('click',function(){
+			$('.tblType3 tbody tr:even').removeClass("on");
+			$('.tblType3 tbody tr:odd').hide();
+			$(this).addClass("on").next().show();
+				
+		});
+		
+	});
+	
+	
+	</script>
+</head>
+<body>
+	
+	<!-- Wrap -->
+	<div class="wrap bgW">
+
+		<!-- Header -->
+		<div class="header">
+			
+			<!-- HeaderTop -->
+			<div class="headerTop">
+				<div class="headerBox">
+					<!-- H1 -->
+					<h1><a href="main.html"><img src="/content/images/common/h1_logo.gif" alt="MakersN Make & Share!" /></a></h1>
+					<!-- //H1 -->
+          
+          <!-- MainMenu --> 
+          <ul class="mainMenu">
+          	<li><a href="design.html">디자인</a></li>
+            <li><a href="printing.html" class="on">프린팅</a></li>
+          </ul>
+          <!-- //MainMenu -->
+          
+		<!-- rightZone -->
+		<div class="rightZone">						
+						
+			<!-- SearchArea -->
+            <div class="searchArea">
+              <form id="search" name="search">
+                <input type="hidden" id="sfl" name="sfl" value="sfl" />              
+                <input type="text" id="stx" name="stx" value="" />
+                <button title="검색" class="_search_btn"></button>                               
+              </form> 
+              <p class="line"></p>              
+            </div>
+            <!-- //SearchArea -->    
+            <!--printing spot button -->  
+            <a href="printing_order_manage.html" class="printing_btn"></a>
+             <!--member button -->                  
+            <a href="javascript:void(0)"; class="memberArea" onclick="loginGo();"></a>
+
+            <div class="en"><a href="#" target="_blank"><img src="/content/images/common/btn/btn_en.gif" alt="EN" /></a></div>
+	   </div>
+			<!-- rightZone -->
+          
+				</div>
+        <!-- //headerBox -->
+			</div>
+			<!-- //HeaderTop -->	
+			
+			<!-- GnbArea -->
+			<div class="gnbArea">
+				<div class="gnbBox">
+					<ul class="nav">
+                     <li><a href="printing.html">프린팅</a><li>
+                     <li><a href="printing_modeling.html">모델링</a><li>
+                  </ul>
+				
+					<ul class="saleArea">
+            <li><a href="printing_request.html"><button title="프린트 요청" class="btnR">프린트 요청</button></a></li>
+					</ul>
+				
+				</div>
+			</div>
+			<!-- //GnbArea -->
+
+		</div>
+		<!-- //Header -->
+    
+    <!-- MemberArea -->						
+    <!-- 로그인 후 마이페지 -->
+    <div class="topMypage">
+      <ul>
+        <li><a href="my_profile.html">My page</a></li>
+        <li>
+          <a href="my_profile_notice.html">Notice</a>
+          <img src="/content/images/common/notice_left.gif" alt="Notice" /><span style="font-size: 11px; background-color:#fe7900; line-height: 22px; padding: 5px 3px 3px 2px;">14</span><img src="/content/images/common/notice_right.gif" alt="Notice" />
+        </li>
+        <li><a href="my_profile_setting.html">Setting</a></li>
+        <li><a href="javascript:void(0);" onClick=" mypageOut();">Log out</a></li>
+      </ul>
+    </div>
+    <!-- //로그인 후 마이페지 -->
+  	<!-- //MemberArea -->
+        
+    <!-- ContWrap -->
+		<div class="contWrap"> 
+    
+    	<div class="mainTitle">
+      	<h2>프린트 요청</h2>
+      </div>
+      
+      <div class="printWrap">
+      
+        <ul class="printReq">
+          <li>
+            <img src="/content/images/common/list_thum.jpg" class="reqImg" alt="요청한 상품" />
+            <div class="txtG">
+              <p class="txt1">flatminis_dire_wolf_only.stl</p>
+              <p class="txt2">크기 : 1.2cm x 2.3cm x 4.7cm <span class="mgL15">출력 부피 : 3.5cm³</span></p>
+            </div> 
+            <div class="req">
+              <p class="close"><img src="/content/images/common/btn/btn_close2.gif" class="" alt="삭제" /></p>
+              <p class="num">1</p>
+              <div class="btnS">
+                <p><img src="/content/images/common/btn/btn_cntUp.gif" class="" alt="주문 수량 증가" /></p>
+                <p><img src="/content/images/common/btn/btn_cntDown.gif" class="" alt="주문 수량 감소 " /></p>
+              </div>
+            </div> 
+          </li>
+          <li>
+            <img src="/content/images/common/list_thum.jpg" class="reqImg" alt="요청한 상품" />
+            <div class="txtG">
+              <p class="txt1">flatminis_dire_wolf_only.stl</p>
+              <p class="txt2">크기 : 1.2cm x 2.3cm x 4.7cm<span class="mgL15">출력 부피 : 3.5cm³</span></p>
+            </div> 
+            <div class="req">
+              <p class="close"><img src="/content/images/common/btn/btn_close2.gif" class="" alt="삭제" /></p>
+              <p class="num">1</p>
+              <div class="btnS">
+                <p><img src="/content/images/common/btn/btn_cntUp.gif" class="" alt="주문 수량 증가" /></p>
+                <p><img src="/content/images/common/btn/btn_cntDown.gif" class="" alt="주문 수량 감소 " /></p>
+              </div>
+            </div> 
+          </li>
+        </ul>
+        <div class="process">	
+        	<!-- 개발 시 width 값 % 를 조정해주시면 됩니다. -->
+          <p class="bar" style="width: 80%"></p>
+          <div class="txtG">
+          	<p class="txt1">Processing 80%</p>
+            <p class="txt2">12_dgda_fjgh.stl</p>
+          </div>
+        </div> 
+        <div class="total">	
+          <dl>
+            <dl>
+              <dt>전체 출력 부피</dt>
+              <dt>&nbsp; </dt>
+              <dd>7cm³</dd>
+              <dt class="mgL10">전체 수량</dt>
+              <dt>&nbsp; </dt>
+              <dd>2</dd>
+            </dl>
+          </dl>
+        </div>        
+        <div class="uploadWrap mgT10">
+          <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data" >
+            <input type="hidden" id="temp" name="temp" value="" />
+            <input type="hidden" id="main_img" name="main_img" value="" />
+            <input type="hidden" name="mode" value="write">
+            
+            <!-- File Upload -->
+            <div class="uploadFile"> 
+               
+              <!-- 이미지 파일 -->				
+              <div class="modelFile">
+                <div class="upBtnZone flL">	
+                  <div class="btnAdd2">
+                    <button class="file_input_button" title="파일추가">파일 추가</button>
+                    <input type="file" class="file_input_hidden"  name="file" id="file" />
+                  </div>
+                </div>  
+                <p class="txt2">파일타입 : gif, jpg, png / 최대 사이즈 : 개당 100mb</p>               
+              </div>  
+              <!-- //이미지 파일 -->
+              
+            </div>
+            <!-- //File Upload --> 
+          </form>    
+        </div>
+            
+        <div class="selSearch mgT50">
+          <!-- 위치 -->
+          <div class="selLoca">  
+            <p class="valLoca"><input name="" class="inputLoca" type="text" value="위치"></p>
+          </div>
+          <!-- //위치 -->
+          
+          <!-- 품질 -->
+          <div class="selQual">
+            <p class="value">품질</p>
+            <ul class="valueLi">
+              <li id="selQual_top"><input type="radio" id="selQua_top" name="selQua" value="" /><label for="selQua_top" >최상</label></li>
+              <li id="selQual_1"><input type="radio" id="selQua_1" name="selQua" value="1"  /><label for="selQua_1">상</label></li>
+              <li id="selQual_2"><input type="radio" id="selQua_2" name="selQua" value="2"  /><label for="selQua_2">중</label></li>
+              <li id="selQual_3"><input type="radio" id="selQua_3" name="selQua" value="3"  /><label for="selQua_3">하</label></li>
+            </ul>
+          </div>
+          <!-- //품질 -->
+          
+          <!-- 재료-->
+          <div class="selMate">
+            <p class="value2">재료</p>
+            <ul class="valueLi2">
+              <li id="selMate_top"><input type="radio" id="selMat_top" name="selMat" value="" /><label for="selMat_top" >ABS</label></li>
+              <li id="selMate_1"><input type="radio" id="selMat_1" name="selMat" value="1"  /><label for="selMat_1">PLA</label></li>
+              <li id="selMate_2"><input type="radio" id="selMat_2" name="selMat" value="2"  /><label for="selMat_2">레진</label></li>
+              <li id="selMate_3"><input type="radio" id="selMat_3" name="selMat" value="3"  /><label for="selMat_3">샌드톤</label></li>
+              <li id="selMate_4"><input type="radio" id="selMat_4" name="selMat" value="4"  /><label for="selMat_4">ABS</label></li>
+            </ul>
+          </div>
+          <!-- //재료 -->
+          
+          <div class="flR"><a class="printer_search" href="#">검색</a>
+  </div>        
+        </div>        
+        
+        <table class="tblType3 mgT20" summary="프린트 요청 리스트">
+          <caption>프린트 요청</caption>
+          <colgroup>
+            <col style="width:20%;" />
+            <col style="width:15%;" />
+            <col style="width:13%;" />
+            <col style="width:9%;" />
+            <col style="width:9%;" />
+            <col style="width:11%;" />
+            <col style="width:10%;" />
+            <col style="width:13%;" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">프린팅 스팟 위치</th>
+              <th scope="col">브랜드 모델</th>
+              <th scope="col">평점</th>
+              <th scope="col">출력재료</th>
+              <th scope="col">출력품질</th>
+              <th scope="col">배송</th>
+              <th scope="col">출력 단가<br />최소 주문 금액</th>
+              <th scope="col">금액</th>
+            </tr>
+          </thead>
+          <tbody>
+          	<!-- 리스트 1set : 1-->
+            <tr class="on">
+              <td>
+                <p class="txt1">메이커스 팩토리</p>
+                <p class="txt2">3.4km 서울 논현동</p>
+              </td>
+              <td>Makerbot<br /> Replicator 2</td>
+              <td>
+                <p class="star">
+                  <img src="/content/images/common/ico/ico_starOn.png" alt="star" />
+                  <img src="/content/images/common/ico/ico_starOn.png" alt="star" />
+                  <img src="/content/images/common/ico/ico_starOn.png" alt="star" />
+                  <img src="/content/images/common/ico/ico_star_half.png" alt="star" />
+                  <img src="/content/images/common/ico/ico_star.png" alt="star" /> 
+                </p>
+                <p class="cnt">37</p>     
+              </td>
+              <td>ABS</td> 
+              <td>High</td>              
+              <td>Pick up</td>                
+              <td>₩272/cm³<br />
+                  ₩20,000</td>
+              <td>-</td>
+            </tr>
+            <tr>
+            	<td colspan="8">
+              	
+              	<div class="reqTr">
+                	<!-- reqLeft -->
+                	<div class="reqLeft">
+                  
+                    <!-- detailSlide2 -->
+                    <div class="detailSlide2">
+                      <div class="mainBigImg2">
+                        <ul class="bxslider">
+                          <li><img src="/content/images/printer_img1.jpg"></li>
+                          <li><img src="/content/images/printer_img2.jpg"></li>
+                          <li><img src="/content/images/printer_img3.jpg"></li>
+                          <li><img src="/content/images/prod_img4.jpg" /></li>
+                          <li><img src="/content/images/prod_img5.jpg" /></li>
+                          <li><img src="/content/images/prod_img6.jpg" /></li>
+                          <li><img src="/content/images/prod_img7.jpg" /></li>							
+                        </ul>
+                        <div class="thumb3dImg"><img src="/content/images/common/loading_bar.gif" alt="로딩중" /></div>
+                      </div>
+          
+                      <div class="thumbArea">
+                        <div id="bx-pager">
+                          <a data-slide-index="0" href="javascript:void(0);"><img src="/content/images/printer_img1.jpg"></a>
+                          <a data-slide-index="1" href="javascript:void(0);"><img src="/content/images/printer_img2.jpg"></a>
+                          <a data-slide-index="2" href="javascript:void(0);"><img src="/content/images/printer_img3.jpg"></a>
+                          <a data-slide-index="3" href="javascript:void(0);"><img src="/content/images/prod_img4.jpg" /></a>
+                          <a data-slide-index="4" href="javascript:void(0);"><img src="/content/images/prod_img5.jpg" /></a>
+                          <a data-slide-index="5" href="javascript:void(0);"><img src="/content/images/prod_img6.jpg" /></a>
+                          <a data-slide-index="6" href="javascript:void(0);"><img src="/content/images/prod_img7.jpg" /></a>
+                        </div>
+                      </div>
+          
+                    </div>
+                    <!-- //detailSlide2 -->
+                  
+                  </div>
+                  <!-- reqLeft -->
+                  
+                  <!-- reqRight -->
+                  <div class="reqRight">
+                  	<dl class="dlSel">
+                    	<dt>재료</dt>
+                      <dd>
+                      	<div class="tbordSta zIdx200" id="tbordSta1">
+                          <p class="tbordValue" id="tbordValue1">ABS</p>
+                          <ul class="tbordValueLi" id="tbordValueLi1">
+                            <li id="reqMat_1"><input type="radio" id="selreqMat_1" name="selreqMat" value="1" /><label for="selreqMat_1" >ABS</label></li>
+                            <li id="reqMat_2"><input type="radio" id="selreqMat_2" name="selreqMat" value="2" /><label for="selreqMat_2">cde</label></li>
+                            <li id="reqMat_3"><input type="radio" id="selreqMat_3" name="selreqMat" value="3" /><label for="selreqMat_3">fgh</label></li>
+                            <li id="reqMat_4"><input type="radio" id="selreqMat_4" name="selreqMat" value="4" /><label for="selreqMat_4">ijk</label></li>
+                          </ul>
+                        </div>
+                      </dd>
+                      <dt>색상</dt>
+                      <dd>
+                      	<div class="tbordSta zIdx199" id="tbordCol1">
+                          <p class="tbordValue" id="tbordVal1">파랑</p>
+                          <ul class="tbordValueLi" id="tbordValLi1">
+                            <li id="reqColor_1"><input type="radio" id="selColor_1" name="selColor" value="1" /><label for="selColor_1">블루</label></li>
+                            <li id="reqColor_2"><input type="radio" id="selColor_2" name="selColor" value="2" /><label for="selColor_2">그린</label></li>
+                            <li id="reqColor_3"><input type="radio" id="selColor_3" name="selColor" value="3" /><label for="selColor_3">레드</label></li>
+                            <li id="reqColor_4"><input type="radio" id="selColor_4" name="selColor" value="4" /><label for="selColor_4">블랙</label></li>
+                          </ul>
+                        </div>
+                      </dd>
+                  	</dl>
+                    <div class="btnS">
+                    	<ul>
+                      	<li class="mgT4"><a href="printing_myorder_1.html" class="btnO type4">프린트 주문</a></li>
+                        <li class="mgT15"><a href="printing_sub.html" class="btnG type9">자세히 보기</a></li>
+                        <li class="mgT15 mgL12"><a href="printing_profile_others_message.html" class="btnG type9">문의하기</a></li>
+                      </ul>  
+                    </div>
+                    <div class="profileZone">
+                      <div class="user">
+                        <div class="photo"><a href="user_profile.html"><img src="/content/images/profile_photo.jpg" alt="기본프로필" /></a></div>
+                        <p class="userId"><span>by <a href="">yoon83</a></span></p>
+                      </div>
+                      <ul class="profileBtn">
+                        <li><a href="printing_profile_others.html" class="shop" title="shop"></a></li>
+                        <li><a href="javascript:void(0)" class="follow" title="follow"></a></li>
+                      </ul>                      
+                    </div> 
+                    <dl class="dlInfo">
+                      <dt>전화번호</dt>
+                      <dd>02-303-3030</dd>
+                      <dt>주소</dt>
+                      <dd>서울시 강남구 논현동 16-40 금원빌딩 402호</dd>
+                      <dt>세금계산서 발행</dt>
+                      <dd>가능</dd>
+                    </dl> 
+                                 
+                  </div>
+                  <!-- //reqRight -->
+                  
+              	</div>    
+              </td>
+            </tr>
+            <!-- // 리스트 1set -->
+            
+            <!-- 리스트 1set : 2-->
+            <tr>
+              <td>
+                <p class="txt1">메이커스 팩토리</p>
+                <p class="txt2">3.4km 서울 논현동</p>
+              </td>
+              <td>Makerbot<br /> Replicator 2</td>
+              <td>
+                <p class="star">
+                  <img src="/content/images/common/ico/ico_starOn.png" alt="star" />
+                  <img src="/content/images/common/ico/ico_starOn.png" alt="star" />
+                  <img src="/content/images/common/ico/ico_starOn.png" alt="star" />
+                  <img src="/content/images/common/ico/ico_star_half.png" alt="star" />
+                  <img src="/content/images/common/ico/ico_star.png" alt="star" /> 
+                </p>
+                <p class="cnt">37</p>     
+              </td>
+              <td>ABS</td> 
+              <td>High</td>              
+              <td>Pick up</td>                
+              <td>₩272/cm³<br />
+                  ₩20,000</td>
+              <td>-</td>
+            </tr>
+            <tr>
+            	<td colspan="8">
+              	
+              	<div class="reqTr">
+                	<!-- reqLeft -->
+                	<div class="reqLeft">
+                  
+                    <!-- detailSlide2 -->
+                    <div class="detailSlide2">
+                      <div class="mainBigImg2">
+                        <ul class="bxslider">
+                          <li><img src="/content/images/printer_img1.jpg"></li>
+                          <li><img src="/content/images/printer_img2.jpg"></li>
+                          <li><img src="/content/images/printer_img3.jpg"></li>
+                          <li><img src="/content/images/prod_img4.jpg" /></li>
+                          <li><img src="/content/images/prod_img5.jpg" /></li>
+                          <li><img src="/content/images/prod_img6.jpg" /></li>
+                          <li><img src="/content/images/prod_img7.jpg" /></li>							
+                        </ul>
+                        <div class="thumb3dImg"><img src="/content/images/common/loading_bar.gif" alt="로딩중" /></div>
+                      </div>
+          
+                      <div class="thumbArea">
+                        <div id="bx-pager">
+                          <a data-slide-index="0" href="javascript:void(0);"><img src="/content/images/printer_img1.jpg"></a>
+                          <a data-slide-index="1" href="javascript:void(0);"><img src="/content/images/printer_img2.jpg"></a>
+                          <a data-slide-index="2" href="javascript:void(0);"><img src="/content/images/printer_img3.jpg"></a>
+                          <a data-slide-index="3" href="javascript:void(0);"><img src="/content/images/prod_img4.jpg" /></a>
+                          <a data-slide-index="4" href="javascript:void(0);"><img src="/content/images/prod_img5.jpg" /></a>
+                          <a data-slide-index="5" href="javascript:void(0);"><img src="/content/images/prod_img6.jpg" /></a>
+                          <a data-slide-index="6" href="javascript:void(0);"><img src="/content/images/prod_img7.jpg" /></a>
+                        </div>
+                      </div>
+          
+                    </div>
+                    <!-- //detailSlide2 -->
+                  
+                  </div>
+                  <!-- reqLeft -->
+                  
+                  <!-- reqRight -->
+                  <div class="reqRight">
+                  	<dl class="dlSel">
+                    	<dt>재료</dt>
+                      <dd>
+                      	<div class="tbordSta zIdx200" id="tbordSta2">
+                          <p class="tbordValue" id="tbordValue2">ABS</p>
+                          <ul class="tbordValueLi" id="tbordValueLi2">
+                            <li id="reqMat_1"><input type="radio" id="selreqMat_1" name="selreqMat" value="1" /><label for="selreqMat_1" >ABS</label></li>
+                            <li id="reqMat_2"><input type="radio" id="selreqMat_2" name="selreqMat" value="2" /><label for="selreqMat_2">cde</label></li>
+                            <li id="reqMat_3"><input type="radio" id="selreqMat_3" name="selreqMat" value="3" /><label for="selreqMat_3">fgh</label></li>
+                            <li id="reqMat_4"><input type="radio" id="selreqMat_4" name="selreqMat" value="4" /><label for="selreqMat_4">ijk</label></li>
+                          </ul>
+                        </div>
+                      </dd>
+                      <dt>색상</dt>
+                      <dd>
+                      	<div class="tbordSta zIdx199" id="tbordCol2">
+                          <p class="tbordValue" id="tbordVal2">파랑</p>
+                          <ul class="tbordValueLi" id="tbordValLi2">
+                            <li id="reqColor_1"><input type="radio" id="selColor_1" name="selColor" value="1" /><label for="selColor_1">블루</label></li>
+                            <li id="reqColor_2"><input type="radio" id="selColor_2" name="selColor" value="2" /><label for="selColor_2">그린</label></li>
+                            <li id="reqColor_3"><input type="radio" id="selColor_3" name="selColor" value="3" /><label for="selColor_3">레드</label></li>
+                            <li id="reqColor_4"><input type="radio" id="selColor_4" name="selColor" value="4" /><label for="selColor_4">블랙</label></li>
+                          </ul>
+                        </div>
+                      </dd>
+                  	</dl>
+                    <div class="btnS">
+                    	<ul>
+                      	<li class="mgT4"><a href="" class="btnO type4">프린트 주문</a></li>
+                        <li class="mgT15"><a href="" class="btnG type9">자세히 보기</a></li>
+                        <li class="mgT15 mgL12"><a href="" class="btnG type9">문의하기</a></li>
+                      </ul>  
+                    </div>
+                    <div class="profileZone">
+                      <div class="user">
+                        <div class="photo"><a href="user_profile.html"><img src="/content/images/profile_photo.jpg" alt="기본프로필" /></a></div>
+                        <p class="userId"><span>by <a href="">yoon83</a></span></p>
+                      </div>
+                      <ul class="profileBtn">
+                        <li><a href="javascript:void(0)" class="shop" title="shop"></a></li>
+                        <li><a href="javascript:void(0)" class="follow" title="follow"></a></li>
+                      </ul>                      
+                    </div> 
+                    <dl class="dlInfo">
+                      <dt>전화번호</dt>
+                      <dd>02-303-3030</dd>
+                      <dt>주소</dt>
+                      <dd>서울시 강남구 논현동 16-40 금원빌딩 402호</dd>
+                      <dt>세금계산서 발행</dt>
+                      <dd>가능</dd>
+                    </dl> 
+                                 
+                  </div>
+                  <!-- //reqRight -->
+                  
+              	</div>    
+              </td>
+            </tr>
+            <!-- //리스트 1set -->
+            
+                       
+          </tbody>
+        </table>  
+        
+    	</div>    
+      <!-- //printWrap -->      
+      
+		</div>
+		<!-- //contWrap -->
+	
+		<!-- Footer -->
+		<div class="footer">
+      <div class="footerList">
+        <ul class="footMenu">
+          <li><a href="info/about.html">소개</a></li>
+          <li><a href="info/blog.html">블로그</a></li>
+          <li><a href="info/customer.html">고객센터</a></li>
+          <li><a href="info/employment.html">채용정보</a></li>
+          <li><a href="info/license.html">라이센스</a></li>
+          <li><a href="info/terms.html">약관</a></li>
+          <li><a href="info/privacy.html">프라이버시</a></li>
+        </ul>
+        <ul class="footSns">
+        	<li><a href="javascript:void(0);"><img src="/content/images/common/foot_sns1.gif" alt="facebook" /></a></li>
+         <!-- <li><a href="javascript:void(0);"><img src="/content/images/common/foot_sns1.gif" alt="facebook" /></a></li>
+          <li><a href="javascript:void(0);"><img src="/content/images/common/foot_sns1.gif" alt="facebook" /></a></li>-->
+        </ul> 
+        <div class="copyRight">
+           <p class="copyPosition">© makers corp. All right reserved.</p> 
+        </div>
+    	</div>
+    </div>
+		<!-- //Footer -->
+
+	</div>
+	<!-- //Wrap -->
+  <!-- 로그인팝업 -->
+	<div class="popupArea loginBox">
+		<div class="bgArea">
+		</div>
+		<div class="popBox">
+    
+			<!-- Login Wrap -->
+			<div class="loginWrap bg3">
+				<div class="loginHeader">
+					<p class="headerLogo"><img src="/content/images/common/login_tit1.png" alt="로그인" /></p>
+					<p class="headerBtn"><a href="#" onclick="joinGo();"><img src="/content/images/common/btn/btn_join.png" alt="회원가입" /></a></p>
+				</div>
+				<div class="loginBox">
+					<div class="loinStep01">
+					<form  id="login_form"	name="login_form" method="post" >
+					<input type="hidden" name="backURL" value="">
+						<ul class="keyDown">
+							<li>
+								<span>이메일</span>
+								<div class="inputBox"><input type="text" name="m_id" placeholder="example@example.com" /></div>
+							</li>
+							<li>
+								<span>비밀번호</span>
+								<div class="inputBox"><input type="password" name="password" placeholder="최소 6자리 이상" /></div>
+							</li>
+						</ul>
+						<div class="loginGoing">
+							<span><input type="checkbox" title="로그인 유지" id="login" /><label for="login"> 로그인 상태 유지하기</label></span>
+							<button type="button" onclick="pwSearch();">비밀번호 찾기</button>
+						</div>
+						</form>
+						<p class="loginBtn">
+							<button type="button" class="settingBtn" title="로그인" id="login_submit" onclick="mypageGo();">로그인</button>
+						</p>
+						<p class="facebookJoin">
+							<button type="button" class="settingBtn facebook_login" title="페이스북 계정으로 로그인">페이스북 계정으로 로그인</button>
+						</p>
+					</div>
+					
+				</div>
+			</div>
+			<!-- // Login Wrap -->
+
+		</div>
+	</div>
+	<!-- // 로그인팝업 -->
+  
+	<!-- 비밀번호 찾기팝업 -->
+	<div class="popupArea pwSearch">
+		<div class="bgArea">
+		</div>
+		<div class="popBox">
+			<div class="pwWrap bg3">
+				<div class="loginBox">
+        	<p class="pwTit"><img src="/content/images/common/pwfind_tit.png" alt="비밀번호 찾기" /></p>
+					<p class="pwInfo">가입시 등록하신 이메일 주소를 입력하시면<br />임시 비밀번호를 보내드립니다.</p>
+					<div class="loinStep02">
+						<form id="find_form" name="find_form" method="post">	
+						<ul class="keyDown">
+							<li>
+								<span>이메일</span>
+								<div class="inputBox"><input type="text" name="m_id" placeholder="example@example.com" /></div>
+							</li>
+						</ul>
+						</form>
+						<p class="pwfSend">
+							<button type="button" onclick=" pwSend();" title="임시 비밀번호 발송" >임시 비밀번호 발송</button>
+						</p>
+						<div class="loginGo">
+							<button type="button" onclick="loginGo();" title="로그인 창으로 돌아가기" >로그인 창으로 돌아가기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- // 비밀번호 찾기팝업 --> 
+  
+	<!-- 비밀번호 전송팝업 -->
+	<div class="popupArea pwSend">
+		<div class="bgArea">
+		</div>
+		<div class="popBox">
+			<div class="pwWrap bg3">
+				<div class="loginBox">
+        	<p class="pwsImg"><img src="/content/images/common/pwsend_img1.png" alt="비밀번호 발송" /></p>
+					<p class="sendInfo">등록하신 이메일 주소로 <br />
+						임시 비밀번호가 발송되었습니다.<br />
+						임시 비밀번호로 로그인하신 후에<br />
+						반드시 새 비밀번호로 변경해주세요.</p>
+          <div class="loinStep03">
+            <div class="loginGo">
+              <button type="button" onclick="loginGo();" title="로그인 창으로 돌아가기" >로그인 창으로 돌아가기</button>
+            </div>
+          </div> 
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- // 비밀번호 전송팝업 -->  
+  
+  
+  <!-- 회원가입 팝업 -->
+	<div class="popupArea join">
+		<div class="bgArea">
+		</div>
+		<div class="popBox">
+    
+    	<!-- joinWrap -->
+			<div class="joinWrap bg1">
+      	<div class="loginHeader">
+					<p class="headerLogo"><img src="/content/images/common/login_logo.png" alt="makersN" /></p>
+					<p class="headerBtn"><a href="#" onclick="joinGo();"><img src="/content/images/common/btn/btn_join.png" alt="회원가입" /></a></p>
+				</div>
+        <div class="headerText">
+        	<p class="txt1">퇴근 후 아이와 함께 놀아줄 장난감을 프린팅했어요.</p>
+        	<p class="txt2">메이커스앤에서는 누구나 3D 디자인을 무료로 다운로드 할 수 있어요!</p>
+        </div>
+        <div class="joinStep01">          
+          <form  id="join_form"	name="join_form" method="post" >
+          <input type="hidden" name="backURL" value="">
+          <ul class="keyDown">
+            <li>
+              <span>사용자 이름</span>
+              <div class="inputBox"><input type="text" name="name" placeholder="이용 또는 닉네임" /></div>
+            </li>
+            <li>
+              <span>이메일</span>
+              <div class="inputBox"><input type="text" name="m_id" placeholder="example@example.com" /></div>
+            </li>
+            <li>
+              <span>비밀번호</span>
+              <div class="inputBox"><input type="password" name="password" placeholder="최소 6자 이상" /></div>
+            </li>
+            <li>
+              <span>비밀번호 확인</span>
+              <div class="inputBox"><input type="password" name="re_password" placeholder="최소 6자 이상" /></div>
+            </li>
+          </ul>
+          </form>
+          
+          <p class="joinBtn">
+          	<button type="button" title="회원가입"  id="join_submit">회원 가입</button>
+          </p>
+          <p class="facebookJoin">
+            <button type="button" class="facebook_login"  title="페이스북 계정으로 회원가입">페이스북 계정으로 회원가입</button>
+          </p>
+          <p class="agreeGo"><a href="info/terms.html">이용 약관 보기</a></p>
+        </div>      
+			</div>
+			<!-- // joinWrap -->  
+			
+		</div>
+	</div>
+	<!-- // 회원가입 팝업 -->
+  
+  <!-- 회원가입 완료 -->
+	<div class="popupArea joinComplete">
+		<div class="bgArea">
+		</div>
+		<div class="popBox">
+    
+    	<!-- joinWrap -->
+			<div class="joinWrap bg1">
+      	<p class="joinTxt1"><img src="/content/images/common/joinfinish_txt1.png" alt="회원가입이 성공적으로 완료되었습니다.  메이커스앤 회원이 되신 것을 축하합니다." /></p>
+        <div class="joinStep02">
+          <p class="homeBtn">
+            <button type="button" onClick="go_url('main.html');" title="홈으로 이동">홈으로 이동</button>
+          </p>
+          <p class="profileBtn">
+            <button type="button" onClick="go_url('my_profile.html');" title="내 프로필 페이지로 이동">내 프로필 페이지로 이동</button>
+          </p>
+        </div>      
+			</div>
+			<!-- // joinWrap -->  
+			
+		</div>
+	</div>
+	<!-- // 회원가입 완료 --> 
+  
+</body>
+</html>
+
+

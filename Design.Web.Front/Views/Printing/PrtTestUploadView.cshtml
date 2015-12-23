@@ -1,0 +1,94 @@
+﻿@model IList<Makersn.Models.PrinterFileT>
+@{
+    int uploadCnt = Int32.Parse(ViewBag.UploadCnt);
+}
+<ul>
+    @for (int i = 0; i < uploadCnt; i++)
+    {
+        int index = i + 1;
+        string strClass = index % 4 == 0 ? "class=mgR0" : "";
+        if (Model.Count() > i)
+        {
+        <li @strClass>
+            <div class="imgBox ui-draggable ui-draggable-handle ui-droppable">
+                <a title="삭제" class="delImg" href="javascript:void(0);" data-val="@Model[i].No"></a>
+                <input name="multi[]" class="_multi" type="hidden" value="@Model[i].No">
+                <img src="@(Url.Content("~/FileUpload/Printer/printer_img/" + Model[i].Path + Model[i].Rename + "?" + DateTime.Now))" alt="thumnail" />
+            </div>
+        </li>
+        }
+        else
+        {
+        <li @strClass>@index</li>
+        }
+    }
+</ul>
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $(".selectImg ul li div").draggable({
+            helper: 'clone',
+            revert: 'invalid', start: function (event, ui) {
+                var drag_img = $(this).clone();
+                idxImg = $(this);
+            }
+        });
+
+
+        $('.selectImg ul li div').droppable({
+            drop: function (event, ui) {
+                var beforeCh = $(ui.helper).html();
+                var afterCh = $(this).html();
+                $(this).html(beforeCh);
+                idxImg.html(afterCh);
+                $('.delImg').hide();
+                $('.showThum').hide();
+            }
+        });
+
+        // 이미지 삭제 버튼 보이기
+        $('.selectImg ul li').hover(function () {
+            $(this).find('.delImg').show();
+            $(this).find('.showThum').show();
+        }, function () {
+            $(this).find('.delImg').hide();
+            $(this).find('.showThum').hide();
+        })
+
+        $(".delImg").on('click', function (e) {
+
+            var $del_no = $(this).data('val');
+
+            var imgSrc = $(this).siblings('img').attr('src');
+
+            //del_val($del_no);
+            del_val($del_no);
+            function del_val(del_no) {
+                var del_input_vals = $("#del_no").val();
+                //alert(del_input_vals);
+                var vals = new Array();
+                if (del_input_vals != "") {
+                    vals = del_input_vals.split(',');
+                    vals.push(del_no);
+                }
+                else {
+                    del_input_vals = del_no;
+                }
+                
+                if (vals.length > 1) {
+                    del_input_vals = vals.join(',');
+                }
+                $("#del_no").val(del_input_vals);
+
+                var $form_data = $("#insert_form").serialize();
+
+                var reqUrl = "/Printing/PrtTestUploadView";
+                Ajax.SyncGetPartialView(reqUrl, $form_data, "ajax_upload");
+                Upload.minusCnt();
+            }
+        });
+    });
+</script>

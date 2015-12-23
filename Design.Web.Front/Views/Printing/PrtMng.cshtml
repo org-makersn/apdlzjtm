@@ -1,0 +1,163 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterT>
+@using PagedList.Mvc;
+@{
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    //IList<PrinterT> printerList = ViewBag.PrinterList;
+    
+}
+<div class="wrap">
+    <!-- contWrap -->
+    <div class="contWrap">
+    	 <div class="storeMng"> 
+
+        <div class="orderSch mgT4">
+        	<!-- 프린터 추가 버튼 -->
+          
+         <div class="ordBtn3 mgB20">
+            <span class="mng_title">프린터 관리</span><a href="/Printing/PrtUpload" class="btnO type2">프린터 추가</a>
+        </div>
+         	<!-- //프린터 추가 버튼 -->
+        
+        	<table class="tblType2 mgT80" summary="프린터 리스트">
+            <caption>프린터 관리</caption>
+            <colgroup>
+              <col style="width:25%;" />
+              <col style="width:75%;" />
+            </colgroup>
+
+            <tbody>
+                @foreach (PrinterT printer in Model)
+                        {
+                            string colorString = "";
+                            string matString = "";
+                            List<int> colorList = new List<int>();
+                            foreach (PrinterMaterialT material in printer.PrinterMaterialList)
+                            {
+                                foreach (PrinterColorT color in material.MaterialColorList)
+                                {
+                                    if (!colorList.Contains(color.ColorNo))
+                                    {
+                                        colorList.Add(color.ColorNo);
+                                    }
+                                }
+                                matString += material.MaterialName + ", ";
+                            }
+                            foreach (int i in colorList)
+                            {
+                                colorString += Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.MaterialColor), i) + ", ";
+                            }
+                            colorString = colorString.Substring(0, colorString.Length - 2);
+                            matString = matString.Substring(0, matString.Length - 2);
+              <tr>              
+                <td class="linec top">
+                    <div class="linec_photo">
+
+                        <img alt="프린터사진" src="@ViewBag.PrintImgUrl@printer.PrinterFileList[System.Convert.ToInt32(printer.MainImg)-1].Rename" width="150px">
+
+                    </div>
+                    @if(printer.TestCompleteFlag == "Y"){
+                    <span class="certified">
+
+                          </span>
+                    }
+                    <p class="comp">@printer.Brand @printer.Model</p> 
+                    <p class="star"></p>
+                   		<div class="rating PrintMg"><span style="width:@(printer.Score*10))%">@(Math.Round(printer.Score,1))점</span></div>
+   							<span class="average PrintMg">@(Math.Round(printer.Score,1))</span>
+                        <p class="comp_stat">@(printer.Status == (int)Makersn.Util.MakersnEnumTypes.PrinterStatus.출력가능 ? "지금 출력 가능" : "쉬는중")</p>
+
+                </td>
+                <td class="linec">
+                    <p class="comp_img">
+                         @foreach (PrinterFileT file in printer.PrinterFileList){<img src="~/FileUpload/Printer/printer_img/thumb/@file.Rename" width="75px">}
+                      
+                    </p><p class="comp_detail2">@printer.Comment</p>
+                <p class="comp_detail">
+                     <span class="p_detail">
+                         <strong>해상도 :</strong> 최상<br>
+                         <strong>가격 :</strong>  @(printer.MaxPrice != printer.MinPrice ? printer.MinPrice.ToString() + "~" + printer.MaxPrice.ToString() : printer.MinPrice.ToString()) 원/cm³<br>
+                         <strong>배송 :</strong>  @Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.PrinterPostType),printer.PostMode) <br>
+                         <strong>재료 :</strong> @matString<br>
+                         <strong>색상 :</strong> @colorString
+                     </span>           
+                  </p>
+                  <p class="btn_double">
+                       @if(printer.TestCompleteFlag != "Y"){
+                        <a href="/Printing/PrtTest?PrinterNo=@printer.No" class="btnG type7 w70">인증받기</a>
+                    }
+                      <a href="/Printing/PrtUpload?PrinterNo=@printer.No" class="btnG type7">수정</a>
+                      <a href="#" onclick="javascript:deletePrt(@printer.No)" class="btnG type7">삭제</a>
+                    
+                      </p>
+                  </td>               
+
+              </tr>
+                }
+                           
+                           
+                                  
+               
+            </tbody>
+          </table> 
+        
+    </div>           
+                <!-- 페이징 -->
+
+
+              <!-- 페이징 -->
+        <div class="paging mgT40">
+        @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("ReviewSub", new { page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "ReviewSub"
+            })
+        )
+    </div>
+         @* <div class="paging pdB25">
+            <a href="#" class="first_page">처음 페이지</a>
+            <a href="#" class="prev_page">이전 페이지</a>
+            <span>    
+            <!--[D]현재 페이지는 클래스 on 추가-->    	
+              <a href="#" class="paging_no on">1</a>
+              <a href="#" class="paging_no">2</a>
+              <a href="#" class="paging_no">3</a>
+              <a href="#" class="paging_no">4</a>          
+            </span>
+            <a href="#" class="next_page">다음 페이지</a>
+            <a href="#" class="last_page">마지막 페이지</a>
+          </div>
+                <!-- //페이징 -->*@
+                	
+      </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    $(function () {
+
+    });
+    
+
+    function deletePrt(val) {
+        var r = confirm("프린터를 삭제 하시겠습니까?")
+        var no = val;
+        if (r == true) {
+            var action = "/Printing/DeletePrt"
+            var onSuccess = function (result) {
+                if (!result.Success) {
+                    alert(result.Message);
+                } else {
+                    location.reload();
+                }
+            }
+            Ajax.AjaxResponseModelService(this, action, { printerNo: no }, onSuccess);
+        }
+
+    }
+
+</script>

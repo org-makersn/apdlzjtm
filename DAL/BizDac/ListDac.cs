@@ -5,15 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NHibernate;
-using System.Data.SqlClient;
-using System.Data;
-using System.Configuration;
 
 namespace Makersn.BizDac
 {
     public class ListDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
         public IList<ListT> GetListNames(int memberNo)
         {
             using (ISession session = NHibernateHelper.OpenSession())
@@ -44,46 +40,6 @@ namespace Makersn.BizDac
 
         public IList<ListArticleT> GetListItem(int memberNo)
         {
-
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "GET_LIST_ITEM_FRONT";
-            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
-            //cmd.Connection = con;
-
-            //IList<ListArticleT> list = new List<ListArticleT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        ListArticleT item = new ListArticleT();
-            //        item.ListNo = (int)sr["LIST_NO"];
-            //        item.ArticleNo = (int)sr["ARTICLE_NO"];
-            //        item.ImgName = (string)sr["IMG_NAME"];
-            //        list.Add(item);
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
-
-
             IList<ListArticleT> list = new List<ListArticleT>();
             string query = @"SELECT LA.LIST_NO, LA.ARTICLE_NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS IMG_NAME
                                     FROM LIST_ARTICLE LA INNER JOIN ARTICLE A
@@ -118,58 +74,11 @@ namespace Makersn.BizDac
 
         public IList<ArticleT> GetMemberListItems(string memberNo, int visitorNo, int listNo)
         {
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "GET_MEMBER_LIST_ITEMS_FRONT";
-            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
-            //cmd.Parameters.Add("@VISITOR_NO", SqlDbType.Int).Value = visitorNo;
-            //cmd.Parameters.Add("@LIST_NO", SqlDbType.Int).Value = listNo;
-            //cmd.Connection = con;
-
-            //IList<ArticleT> list = new List<ArticleT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        ArticleT article = new ArticleT();
-            //        article.No = (int)sr["NO"];
-            //        article.ImageName = (string)sr["MAIN_IMAGE"];
-            //        article.Title = (string)sr["TITLE"];
-            //        //article.Category = (string)sr["CATEGORY"];
-            //        article.MemberName = (string)sr["MEMBER_NAME"];
-            //        article.RegDt = (DateTime)sr["REG_DT"];
-            //        article.Visibility = (string)sr["VISIBILITY"];
-            //        article.Path = (string)sr["PATH"] + article.ImageName;
-            //        article.ViewCnt = (int)sr["VIEWCNT"];
-            //        article.CommentCnt = (int)sr["COMMENT_CNT"];
-            //        article.LikeCnt = (int)sr["LIKE_CNT"];
-            //        article.MemberNo = (int)sr["MEMBER_NO"];
-            //        article.chkLikes = (int)sr["CHK_LIKES"];
-            //        list.Add(article);
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
-
-
-            string query = @"SELECT A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, A.TITLE, C.NAME AS CATEGORY, M.NAME AS MEMBER_NAME , A.REG_DT, A.VISIBILITY, AF.PATH, A.VIEWCNT,
+            string query = @"SELECT A.NO, ISNULL(AF.IMG_NAME, AF.RENAME) AS MAIN_IMAGE, 
+							ISNULL((SELECT TD.TITLE FROM TRANSLATION_DETAIL TD WITH(NOLOCK) WHERE TD.ARTICLE_NO = A.NO AND TD.LANG_FLAG = 'KR'),
+							(SELECT TOP 1 TD.TITLE FROM TRANSLATION_DETAIL TD WITH(NOLOCK) WHERE TD.ARTICLE_NO = A.NO ORDER BY NO ASC)
+							) AS TITLE, 
+							C.NAME AS CATEGORY, M.NAME AS MEMBER_NAME , A.REG_DT, A.VISIBILITY, AF.PATH, A.VIEWCNT,
                             (SELECT count(0) 
                                        FROM   ARTICLE_COMMENT B 
                                        WHERE  A.NO = B.ARTICLE_NO) AS COMMENT_CNT,
@@ -204,8 +113,6 @@ namespace Makersn.BizDac
                 queryObj.SetParameter("listNo", listNo);
 
                 IList<object[]> results = queryObj.List<object[]>();
-
-
                 session.Flush();
 
                 IList<ArticleT> list = new List<ArticleT>();

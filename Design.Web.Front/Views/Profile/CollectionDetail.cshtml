@@ -33,12 +33,12 @@
                 <!-- ProductBox -->
                 <div class="productBox">
                     <div class="productImg">
-                        <a href="/design/Detail?no=@a.No">
+                        <a href="/design/Detail/@a.No">
                             <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.MainImage" /></a>
                     </div>
                     <div class="detailBox">
                         <div class="productText">
-                            <a href="/design/Detail?no=@a.No">@a.Title</a>
+                            <a href="/design/Detail/@a.No">@a.Title</a>
                         </div>
                         <div class="by">
                             <p>by <span class="name"><a href="/Profile?no=@No">@a.MemberName</a></span></p>
@@ -51,11 +51,11 @@
                             }
                         </div>
                         <ul class="countBox">
-                            <li class="show"><a href="javascript:void(0);"><span>@a.ViewCnt</span></a></li>
+                            <li class="show" title="조회수"><a href="/design/Detail/@a.No"><span>@a.ViewCnt</span></a></li>
 
-                            <li class="heart"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                            <li class="heart" title="좋아요"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
                                 <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>
-                            <li class="comment"><a href="javascript:void(0);"><span>@a.CommentCnt</span></a></li>
+                            <li class="comment" title="댓글"><a href="javascript:/design/Detail?no=@a.No&goReply=Y";"><span>@a.CommentCnt</span></a></li>
                         </ul>
                     </div>
                 </div>

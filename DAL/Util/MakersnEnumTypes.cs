@@ -225,41 +225,76 @@ namespace Makersn.Util
             [EnumTitle("cleanup")]
             cleanup = 7,
             [EnumTitle("admin")]
-            admin =8
+            admin = 8,
+            [EnumTitle("printing")]
+            printing = 9,
+            [EnumTitle("order")]
+            order = 10,
+            [EnumTitle("printingprofile")]
+            printingprofile = 11
         }
 
-        public enum OrderState {
-            [EnumTitle("주문신청")]
-            주문신청 = 10,
-            [EnumTitle("결제대기")]
-            결제대기 = 11,
-            [EnumTitle("결제완료")]
-            결제완료 = 12,
-            [EnumTitle("주문확인")]
-            주문확인 = 13,
-            [EnumTitle("배송중")]
-            배송중 = 14,
-            [EnumTitle("배송완료")]
-            배송완료 = 15,
-            [EnumTitle("취소")]
-            취소 = 16,
-            [EnumTitle("구매완료")]
-            구매완료 = 17,
+        public enum OrderState
+        {
 
-            [EnumTitle("반품신청")]
-            반품신청 = 20,
-            [EnumTitle("반품판매자확인")]
-            반품판매자확인 = 21,
-            [EnumTitle("반품거부")]
-            반품거부 = 22,
-            [EnumTitle("반품처리중")]
-            반품처리중 = 23,
-            [EnumTitle("반품완료")]
-            반품완료 = 24,
-            [EnumTitle("환불접수")]
-            환불접수 = 25,
-            [EnumTitle("요청거부")]
-            요청거부 = 30
+
+            [EnumTitle("주문요청")]
+            주문요청 = 100,
+            [EnumTitle("결제대기")]
+            결제대기 = 110,
+            [EnumTitle("결제완료")]
+            결제완료 = 120,
+            [EnumTitle("출력중")]
+            출력중 = 130,
+            [EnumTitle("출력완료")]
+            출력완료 = 140,
+            //[EnumTitle("사진 업로드 완료")]
+            //사진_업로드_완료 = 150,
+            [EnumTitle("배송요청")]
+            배송요청 = 160,
+            //[EnumTitle("배송전")]
+            //배송전 = 170,
+            [EnumTitle("배송중")]
+            배송중 = 180,
+            [EnumTitle("배송완료")]
+            배송완료 = 190,
+
+
+
+            [EnumTitle("거래완료")]
+            거래완료 = 200,
+            [EnumTitle("요청거부")] // 스팟이 직접 주문 취소
+            요청거부 = 210,
+            [EnumTitle("시간초과 요청거부")] //시간 초과되어 주문 취소
+            시간초과 = 215,
+            [EnumTitle("결제취소")]
+            결제취소 = 220,
+
+            [EnumTitle("테스트요청")]
+            테스트요청 = 300,
+            [EnumTitle("테스트성공")]
+            테스트성공 = 310,
+            [EnumTitle("테스트실패")]
+            테스트실패 = 320,
+
+            [EnumTitle("환불완료")]
+            환불완료 = 400
+
+            //[EnumTitle("반품신청")]
+            //반품신청 = 210,
+            //[EnumTitle("반품판매자확인")]
+            //반품판매자확인 = 220,
+            //[EnumTitle("반품거부")]
+            //반품거부 = 230,
+            //[EnumTitle("반품처리중")]
+            //반품처리중 = 240,
+            //[EnumTitle("반품완료")]
+            //반품완료 = 250,
+            //[EnumTitle("환불접수")]
+            //환불접수 = 260,
+
+
+
         }
 
         public enum PayType
@@ -269,10 +304,199 @@ namespace Makersn.Util
             [EnumTitle("무통장 입금")]
             MTP = 11,
             [EnumTitle("신용 카드")]
-            CCP =20,
+            CCP = 20,
             [EnumTitle("핸드폰 결제")]
             MPP = 30
         }
 
+        public enum Material
+        {
+            [EnumTitle("ABS")]
+            ABS = 1,
+            [EnumTitle("PLA")]
+            PLA = 2,
+            [EnumTitle("레진")]
+            레진 = 3,
+            [EnumTitle("샌드론")]
+            샌드론 = 4
+        }
+
+        public enum MaterialColor
+        {
+            [EnumTitle("빨강")]
+            빨강 = 1,
+            [EnumTitle("핑크")]
+            핑크 = 2,
+            [EnumTitle("주황")]
+            주황 = 3,
+            [EnumTitle("형광노랑")]
+            형광노랑 = 4,
+            [EnumTitle("연두")]
+            연두= 5,
+            [EnumTitle("초록")]
+            초록 = 6,
+            [EnumTitle("하늘")]
+            하늘 = 7,
+            [EnumTitle("파랑")]
+            파랑 = 8,
+            [EnumTitle("보라")]
+            보라 = 9,
+            [EnumTitle("갈색")]
+            갈색= 10,
+            [EnumTitle("베이지(Nature)")]
+            베이지=11,
+            [EnumTitle("흰색")]
+            흰색= 12,
+            [EnumTitle("검정")]
+            검정= 13
+        }
+
+        public enum PrinterStatus
+        {
+            [EnumTitle("지금 바로 출력 가능")]
+            출력가능 = 1,
+            [EnumTitle("쉬는 중")]
+            쉬는중 = 2
+        }
+
+        public enum BankType
+        {
+            [EnumTitle("국민은행")]
+            국민은행 = 1,
+            [EnumTitle("신한은행")]
+            신한은행 = 2,
+            [EnumTitle("우리은행")]
+            우리은행 = 3,
+            [EnumTitle("농협은행")]
+            농협은행 = 4,
+            [EnumTitle("하나은행")]
+            하나은행 = 5,
+            [EnumTitle("기업은행")]
+            기업은행 = 6,
+            [EnumTitle("외환은행")]
+            외환은행 = 7,
+            [EnumTitle("씨티은행")]
+            씨티은행 = 8,
+            [EnumTitle("우체국")]
+            우체국 = 9,
+            [EnumTitle("부산은행")]
+            부산은행 = 10,
+            [EnumTitle("SC은행")]
+            SC은행 = 11
+        }
+
+        public enum QualityType
+        {
+            [EnumTitle("최상")]
+            최상 = 9,
+            [EnumTitle("상")]
+            상 = 10,
+            [EnumTitle("중")]
+            중 = 20,
+            [EnumTitle("하")]
+            하 = 30
+        }
+
+        public enum PostType
+        {
+            [EnumTitle("픽업")]
+            픽업 = 1,
+            [EnumTitle("택배")]
+            택배 = 2,
+            [EnumTitle("픽업, 택배")]
+            픽업택배 = 3
+        }
+        public enum PrinterPostType
+        {
+            [EnumTitle("무료배송")]
+            무료배송 = 0,
+            [EnumTitle("고정 배송비")]
+            고정배송비 = 1,
+            //[EnumTitle("상품별 배송비")]
+            //상품별_배송비 = 2,
+            [EnumTitle("수신자 부담")]
+            수신자_부담 = 2
+        }
+        public enum PrinterNoticeType
+        {
+
+        }
+
+        public enum TranslationStatus
+        {
+            [EnumTitle("요청")]
+            요청 = 1,
+            [EnumTitle("완료")]
+            완료 = 2,
+            [EnumTitle("보류")]
+            보류 = 3
+        }
+        public enum TranslationFlag
+        {
+            [EnumTitle("번역요청")]
+            번역요청 = 1,
+            [EnumTitle("직접번역")]
+            직접번역 = 2
+        }
+
+        public enum LanguageType
+        {
+            [EnumTitle("한국어")]
+            KR = 1,
+            [EnumTitle("영어")]
+            EN = 2,
+            [EnumTitle("중국어")]
+            CN = 3,
+            [EnumTitle("일번어")]
+            JP = 4
+        }
+
+        public enum EnCateName
+        {
+            [EnumTitle("All")]
+            All = 0,
+            [EnumTitle("Art")]
+            Art = 1001,
+            [EnumTitle("Fashion & Accessories")]
+            패션악세사리 = 1002,
+            [EnumTitle("Figurine & Toy")]
+            캐릭터토이 = 1003,
+            [EnumTitle("Home & Living")]
+            생활용품 = 1004,
+            [EnumTitle("Tech & Tool")]
+            테크툴 = 1005,
+            [EnumTitle("Learning")]
+            교육학습도구 = 1006,
+            [EnumTitle("Contest")]
+            컨테스트 = 1007
+        }
+
+
+        public enum OrderAccountingStatus { 
+            [EnumTitle("미결제")]
+            미결제 = 1,
+            [EnumTitle("결제완료")]
+            결제완료 = 2
+        }
+
+        public enum CateNameToUrl
+        {
+            [EnumTitle("All")]
+            All = 0,
+            [EnumTitle("Art")]
+            Art = 1001,
+            [EnumTitle("Fashion_Accessories")]
+            Fashion_Accessories = 1002,
+            [EnumTitle("Toy_Figurine")]
+            Toy_Figurine = 1003,
+            [EnumTitle("Home_Living")]
+            Home_Living = 1004,
+            [EnumTitle("Tech_Tool")]
+            Tech_Tool = 1005,
+            [EnumTitle("Learning")]
+            Learning = 1006,
+            [EnumTitle("Contest")]
+            Contest = 1007
+        }
     }
 }

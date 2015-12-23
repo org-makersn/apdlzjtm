@@ -16,7 +16,7 @@ namespace Design.Web.Front.Controllers
 {
     public class AccountController : BaseController
     {
-        private MemberDac memberDac = new MemberDac();
+        private MemberDac _memberDac = new MemberDac();
         CryptFilter crypt = new CryptFilter();
 
         //[Authorize]
@@ -46,7 +46,7 @@ namespace Design.Web.Front.Controllers
             if (ModelState.IsValid)
             {
                 string ip = Design.Web.Front.Helper.IPAddressHelper.GetIP(this);
-                MemberT member = memberDac.GetMemberForMemberLogOn(model.UserId, model.Password, ip);
+                MemberT member = _memberDac.GetMemberForMemberLogOn(model.UserId, model.Password, ip);
                 if (member != null)
                 {
                     if (member.emailCertify == "N")
@@ -128,7 +128,7 @@ namespace Design.Web.Front.Controllers
                 member.emailCertify = "N";
 
 
-                if (memberDac.AddMember(member))
+                if (_memberDac.AddMember(member))
                 {
                     //원래 회원가입시 자동 로그인 기능으로 추가하였으나, 이메일 인증 추가로 인해 주석
                     //AccountModels.LogOnModel model = new AccountModels.LogOnModel();
@@ -147,7 +147,7 @@ namespace Design.Web.Front.Controllers
         }
         #endregion
 
-        #region
+        #region 이메일 인증 발송
         public void sendEmailCertify(int memberNo, string name, string email)
         {
             string no = Base64Helper.Base64Encode(memberNo.ToString());
@@ -159,12 +159,12 @@ namespace Design.Web.Front.Controllers
         }
         #endregion
 
-        #region
+        #region 이메일 인증
         public ActionResult EmailCertify(string chk)
         {
             int memberNo = int.Parse(Base64Helper.Base64Decode(chk));
 
-            bool result = memberDac.UpdateMemberEmailCertify(memberNo);
+            bool result = _memberDac.UpdateMemberEmailCertify(memberNo);
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
@@ -181,7 +181,7 @@ namespace Design.Web.Front.Controllers
         public ActionResult ChangeEmailCertify(string chk)
         {
             int memberNo = int.Parse(Base64Helper.Base64Decode(chk));
-            bool result = memberDac.UpdateEmailandId(memberNo);
+            bool result = _memberDac.UpdateEmailandId(memberNo);
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
@@ -198,7 +198,7 @@ namespace Design.Web.Front.Controllers
         public ActionResult CancleEmailCertify(string chk)
         {
             int memberNo = int.Parse(Base64Helper.Base64Decode(chk));
-            bool result = memberDac.UpdateEmailCancel(memberNo);
+            bool result = _memberDac.UpdateEmailCancel(memberNo);
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
@@ -218,7 +218,7 @@ namespace Design.Web.Front.Controllers
             string Subject = "makersn의 임시비밀번호가 발급되었습니다.";
             string Body = TemporaryPassword();
 
-            if (!memberDac.UpdateTemporaryPassword(email, Body))
+            if (!_memberDac.UpdateTemporaryPassword(email, Body))
             {
                 return Json(new { Success = false });
             }
@@ -262,7 +262,7 @@ namespace Design.Web.Front.Controllers
                 return RedirectToAction("ExternalLoginFailure");
             }
 
-            MemberT memberT = memberDac.IsMemberExistById(result.UserName, result.ProviderUserId);
+            MemberT memberT = _memberDac.IsMemberExistById(result.UserName, result.ProviderUserId);
             ProfileModel profile = new ProfileModel();
 
             if (memberT != null)
@@ -325,7 +325,7 @@ namespace Design.Web.Front.Controllers
                 memberT.RegId = result.UserName;
                 memberT.emailCertify = "Y";
 
-                if (memberDac.AddMember(memberT))
+                if (_memberDac.AddMember(memberT))
                 {
                     profile.UserNo = memberT.No;
                     profile.UserNm = memberT.Name;
@@ -443,5 +443,7 @@ namespace Design.Web.Front.Controllers
             }
         }
         #endregion
+
+        
     }
 }

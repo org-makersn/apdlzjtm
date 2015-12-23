@@ -1,0 +1,622 @@
+﻿@{
+    ViewBag.Title = "MakersN";
+    Layout = "~/Views/Shared/_Printing_Layout.cshtml";
+    PrinterMemberT printerMember = ViewBag.PrinterMember;
+    if (printerMember == null)
+    {
+        printerMember = new PrinterMemberT();
+    }
+}
+
+<form id="insertOrderForm" method="post">
+
+    <div class="printMng">
+        <div class="subtitle3 mgT-20">
+            <h2>3D 프린팅 스팟 개설하기</h2>
+        </div>
+        <!--현재 위치-->
+        <div class="status Spot">
+            <!--D 현재 상태 표시를 위해 클래스 staus_order 옆에 클래스 on 추가-->
+            <li class="status_order"><a href="#">약관 동의</a><span class="status_arrow"></span>
+            </li>
+            <li class="status_order on"><a href="#">스팟 정보 입력</a><span class="status_arrow"></span>
+            </li>
+            <li class="status_order"><a href="#">프린터 등록</a><span class="status_arrow"></span>
+            </li>
+
+        </div>
+        <!--//현재 위치-->
+
+        <!-- inputArea -->
+        <div class="inputArea">
+
+            <input name="mode" type="hidden" value="edit">
+            <input name="id" id="id" type="hidden" value="253">
+            <!-- line1 -->
+            <div class="line">
+                <div class="box">
+                    <div class="headerInput">
+                        <p class="tit">스팟 이름</p>
+                        <div class="countBox" id="countBox1">
+                            <span class="countNumber" id="_countNum1"></span>/<span class="maxNumber" id="_max1">20</span>
+                        </div>
+                    </div>
+                    <div class="inputZone">
+                        <input name="name" id="name" type="text" onkeydown="changeLenCnt(this)" onkeyup="changeLenCnt(this)" >
+                    </div>
+                </div>
+                <input name="old_bl_id" type="hidden" value="">
+
+                <div class="box flR">
+                    <div class="headerInput">
+                        <p class="tit">스팟 웹사이트(URL)</p>
+                        <p class="flR">
+                            <!--a class="btnUseCheck" id="id_check" href="javascript:void(0);"><img alt="중복확인" src="content/images/common/btn/btn_checkdup.gif"></a-->
+                        </p>
+                    </div>
+                    <div class="inputZone"><span class="url">www.makersn.com/spot/</span><input name="url" class="inputUrl" id="url" type="text" onchange="javascript:CheckUrl(this)" onkeydown=" return IsNumOrEng(event)"></div>
+                </div>
+            </div>
+            <!-- //line1 -->
+            <!-- line2 -->
+            <div class="line">
+                <div class="box">
+                    <div class="headerInput">
+                        <p class="tit">스팟소개</p>
+                        <div class="countBox" id="countBox2">
+                            <span class="countNumber" id="_countNum2"></span>/<span class="maxNumber" id="_max2">150</span>
+                        </div>
+                    </div>
+                    <textarea name="comment" id="comment" maxlength="150" onkeydown="changeLenCnt(this)" onkeyup="changeLenCnt(this)"></textarea>
+                </div>
+                <div class="box flR">
+                    <div class="telZone">
+                        <p class="title">전화번호</p>
+                        <div class="telInput">
+                            <span class="input1">
+                                <input name="home_Tel1" id="home_Tel1" type="text" maxlength="3" onkeydown="return IsNum(event)"></span> - <span class="input2">
+                                    <input name="home_Tel2" id="home_Tel2" type="text" maxlength="4" onkeydown="return IsNum(event)"></span> - <span class="input2">
+                                        <input name="home_Tel3" id="home_Tel3" type="text" maxlength="4" onkeydown="return IsNum(event)"></span>
+                        </div>
+                        <p class="title mgT15">핸드폰 번호</p>
+                        <div class="telInput">
+                            <span class="input1">
+                                <input name="cell_Tel1" id="cell_Tel1" type="text" maxlength="3" onkeydown="return IsNum(event)"></span> - <span class="input2">
+                                    <input name="cell_Tel2" id="cell_Tel2" type="text" maxlength="4" onkeydown="return IsNum(event)"></span> - <span class="input2">
+                                        <input name="cell_Tel3" id="cell_Tel3" type="text" maxlength="4" onkeydown="return IsNum(event)"></span>
+                        </div>
+                    </div>
+                    <p class="noti">*고객과 상담시 사용할 전화번호를 입력해 주세요.</p>
+                </div>
+
+            </div>
+            <!-- //line2 -->
+
+            <!-- line3 -->
+            <div class="line">
+                <div class="box">
+                    <p class="title">스팟주소</p>
+                    <div class="inputZone">
+                        <input name="address" id="address" type="text" value="">
+                        <input type="hidden" name="locationX" id="locationX" />
+                        <input type="hidden" name="locationY" id="locationY" />
+                    </div>
+                </div>
+                <div class="box flR">
+                    <div class="flL">
+                        <p class="title mgT10">배송방법</p>
+                        <ul class="resol" id="">
+                            <li><a onclick="javascript:CheckBtnCheck(this)" class="checkBtn" title="선택버튼"></a><span class="chk">직접 픽업</span><input name="pickUp" id ="pickUp" type="hidden" value="0" /></li>
+                            <li><a onclick="javascript:CheckBtnCheck(this)" class="checkBtn postCheck on" title="선택버튼"></a><span class="chk">택배</span><input name="post" id="post" type="hidden" value="1" /></li>
+                        </ul>
+                    </div>
+
+                    <div class="flL mgL70">
+                        <p class="title mgT10">세금계산서 발행 여부 </p>
+                        <input id="taxBillFlag" name="taxBillFlag" value="0" type="hidden" />
+                        <ul class="resol mgT10" id="taxbill_radio">
+                            <li><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn" title="선택버튼">
+                                <input type="hidden" value="Y"></a><span>가능</span></li>
+                            <li><a onclick="javascript:RadioBtnCheck(this)" class="radioBtn on" title="선택버튼">
+                                <input type="hidden" value="N"></a><span>불가능</span></li>
+                            @*<li><a href="#" class="radioBtn" title="선택버튼"></a><span>가능</span></li>
+                    <li><a href="#" class="radioBtn on" title="선택버튼"></a><span>불가능</span></li>*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- //line3 -->
+
+            <!-- line4 -->
+            <div class="line h170">
+                <div class="box">
+                    <p class="title">입금 계좌 등록</p>
+                    <div class="bankZone">
+                        <div class="optBank w95">
+
+                            <input id="bank" name="bank" type="hidden" />
+
+                            <p class="value">은행명 </p>
+                            <ul class="valueLi" id="bank_sel">
+
+
+
+                                @{int count = 0;}
+                                @foreach (Makersn.Util.MakersnEnumTypes.BankType statEnum in Enum.GetValues(typeof(Makersn.Util.MakersnEnumTypes.BankType)))
+                                {
+                                    count++;
+                                    <li id="optBank_@count">
+                                        <input type="radio" id="selBank_@count" name="optBank" value="@count" /><label for="optBank_1">@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.BankType), count)</label></li>
+                                }
+
+
+                            </ul>
+
+                        </div>
+                        <div class="selMn">
+                            <p>
+                                <input name="accountNum" id="accountNum" style="color:black" class="inputLoca" type="text" placeholder="계좌번호('-' 없이 번호만 입력해 주세요)" onkeydown="return IsNum(event)" onfocus="javascript:removeText(this)">
+                            </p>
+                        </div>
+                        <div class="selMn w105 mgL5">
+                            <p>
+                                <input name="bankName" id="bankName" style="color:black" class="inputLoca w90" type="text" placeholder="예금주">
+                            </p>
+                        </div>
+                    </div>
+                    <p class="noti">*고객이 지급한 출력 비용을 이 계좌를 통해 입금받습니다.</p>
+                </div>
+
+                <div class="box flR" id="postBlock">
+                    <p class="title">배송 정책</p>
+                    <div class="sendLoc">
+                        <p class="value2">배송 정책 선택</p>
+                        <input type="hidden" name="postType" id="postType" value="-1" />
+                        <ul class="valueLi2">
+                            <li id="li_1">
+                                <input type="radio" id="sendLoc1" name="sendLoc" value="0">
+                                <label for="sendLoc1"><span class="titLicense01">무료 배송</span></label>
+                            </li>
+                            <li id="li_2">
+                                <input type="radio" id="sendLoc2" name="sendLoc" value="1">
+                                <label for="sendLoc2"><span class="titLicense01">고정 배송비</span></label>
+                            </li>
+                            <li id="li_3">
+                                <input type="radio" id="sendLoc3" name="sendLoc" value="2">
+                                <label for="sendLoc3"><span class="titLicense01">수신자 부담</span></label>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="box flR mgT15" id="postPriceBlock" >
+                    <p class="title" id="priceTxt">고정 배송비 책정</p>
+                    <p class="valMnPrice">
+                        <input id="postPrice" name="postPrice" class="inputMn" style="width:410px" type="text" value="0" onkeydown="return IsNum(event)" style="color: black" onfocus="javascript:removeText(this) " placeholder="고정 배송비 선택시 이용 할 배송비를 입력해주세요">
+                        원
+                    </p>
+                </div>
+
+            </div>
+            <!-- //line4 -->
+
+
+      @*      <div class="line">
+
+                <div class="boxNo2 mgT30" id="postBlock">
+                    <p class="headerInput">배송정책</p>
+                    <div class="sendLoc">
+                        <p class="value2">배송 정책 선택</p>
+                        <input type="hidden" name="postType" id="postType" value="-1" />
+                        <ul class="valueLi2">
+
+                            <li id="li_2">
+                                <input type="radio" id="sendLoc2" name="sendLoc" value="0" />
+                                <label for="sendLoc2"><span class='titLicense01'>@(Makersn.Util.EnumHelper.GetEnumTitle(Makersn.Util.MakersnEnumTypes.PrinterPostType.무료배송, null))</span></label>
+                            </li>
+                            <li id="li_1">
+                                <input type="radio" id="sendLoc1" name="sendLoc" value="1" />
+                                <label for="sendLoc1"><span class='titLicense01'>@(Makersn.Util.EnumHelper.GetEnumTitle(Makersn.Util.MakersnEnumTypes.PrinterPostType.고정배송비, null))</span></label>
+                            </li>
+                            <li id="li_4">
+                                <input type="radio" id="sendLoc4" name="sendLoc" value="2" />
+                                <label for="sendLoc4"><span class='titLicense01'>@(Makersn.Util.EnumHelper.GetEnumTitle(Makersn.Util.MakersnEnumTypes.PrinterPostType.수신자_부담, null))</span></label>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+
+            </div>*@
+
+
+        </div>
+        <!-- //inputZone -->
+
+        <!-- btZone -->
+        <div class="ordBtn2">
+            <a href="javascript:SpotOpen('Y')" class="btnO type2 mgL395">다음</a>
+        </div>
+        <!--//btnZone -->
+
+    </div>
+    <!-- //contWrap -->
+</form>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+@*<script src="~/Scripts/google.maps.js"></script>*@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        initialize();
+        uiSelect(".optBank", ".valueLi", ".value", "은행명");
+        uiSelect2(".sendLoc", ".valueLi2", ".value2", "배송 정책 선택");
+        $('.valueLi li').on('click', function () {
+            $('.valueLi li').removeClass("selected");
+            $(this).addClass("selected");
+        });
+
+        $('.valueLi li').mouseenter(function () {
+            $('.valueLi li').removeClass('selected');
+        })
+
+
+        //$(".resol.mgT10 li a").click(function () {
+        //    $(this).parents("ul").find("a").removeClass("on");
+        //    $(this).addClass("on");
+        //})
+
+    });
+    // 셀렉트박스 ui
+
+
+    function initialize() {
+        autocomplete = new google.maps.places.Autocomplete(
+            (document.getElementById('address')),
+            { types: ['geocode'] }); //범위 인듯
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            if (autocomplete.getPlace().geometry != null) {
+                $("#locationX").val(autocomplete.getPlace().geometry.location.lat());
+                $("#locationY").val(autocomplete.getPlace().geometry.location.lng());
+            } else {
+                alert("주소입력이 잘못 되었습니다. 다시 입력하여 수시길 바랍니다.");
+                $("#locationX").val("");
+                $("#locationY").val("");
+                $("#address").val("");
+                initialize();
+
+            }
+        });
+
+
+        //$("#postBlock").hide();
+        $("#priceTxt").hide();
+        $(".valMnPrice").hide();
+    }
+    function uiSelect2(obj, valLst, val, check_id) {
+        var set = {
+            ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+            container: $(obj),
+            value: $(val),
+            list: $(valLst),
+            firstVal: $(valLst + "> li:first-child > label").html(),
+            li: $(valLst + "> li"),
+            label: $(valLst + "> li > label")
+        }
+        set.list.hide(); set.value.click(function () {
+            var list = $(this).parent(obj).find(valLst);
+            list.show();
+
+            list.focusin(function () {
+
+                list.show();
+            });
+            if (set.ie6) {
+                set.label.hover(
+                    function () { $(this).parents().addClass("selected"); },
+                    function () { $(this).parents().removeClass("selected"); }
+                );
+            }
+            function listHide() {
+                setTimeout(function () {
+                    list.hide();
+                }, 300);
+            }
+
+            $(this).parents(obj).eq(0).mouseleave(listHide); //마우스 떠나기 이벤트
+
+            list.find("li").find("label").click(function () { // li클릭 이벤트 통합
+
+                //console.log(obj);
+
+                $(this).parents(obj).find(val).empty().append($(this).html());
+
+                $(this).parents(obj).find(valLst).hide();
+                if (obj == ".sendLoc") {
+                    var temp = $(this).parents("li").eq(0).find("input").val();
+                    if (temp == "0" || temp == "2") {
+                        $("#priceTxt").hide();
+                        $(".valMnPrice").hide();
+                        $("#postPrice").attr("value", "0");
+                        $("#postPrice").val("0");
+                    }
+                    else {
+
+                        $("#priceTxt").show();
+                        $(".valMnPrice").show();
+                    }
+                }
+                if (obj == ".sendLoc") {
+                    var temp = $(this).parents("li").eq(0).find("input").val();
+                    $(this).parents(obj).eq(0).find("input").eq(0).attr("value", temp);
+                    if (obj == ".selPrint") {
+                        //GetModel(temp);
+                    }
+                }
+
+
+            }
+            );
+
+        });
+    }
+
+
+
+    function uiSelect(obj, valLst, val, check_id) {
+        var set = {
+            ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+            container: $(obj),
+            value: $(val),
+            list: $(valLst),
+            firstVal: $(valLst + "> li:first-child > label").html(),
+            li: $(valLst + "> li"),
+            label: $(valLst + "> li > label")
+        }
+        set.list.hide();
+
+        if (check_id == '') {
+            set.value.append(set.firstVal);
+            $("#category_no").val('전체');
+        }
+        else {
+            set.value.append($("#" + check_id).next().html());
+            $("#category_no").val(check_id);
+        }
+        set.value.click(function () {
+            uiSelectListShow(set);
+        });
+    }
+
+    function uiSelectListShow(set) {
+        set.list.show();
+        set.list.focusin(function () {
+            set.list.show();
+        }
+        );
+        if (set.ie6) {
+            set.label.hover(
+                function () { $(this).parent().addClass("selected"); },
+                function () { $(this).parent().removeClass("selected"); }
+            );
+        }
+        function listHide() {
+            setTimeout(function () { set.list.hide(); }, 300);
+        }
+        set.container.mouseleave(listHide);
+        set.label.click(function () {
+            set.value.empty().append($(this).html());
+            $("#category_no").val($(this).text());
+
+            set.list.hide();
+        }
+        );
+    }
+
+
+    function SpotOpen(val) {
+
+        var loc = $("#address").val();
+        var locX = $("#locationX").val();
+        var locY = $("#locationY").val();
+        $("#bank").val($("#bank_sel li.selected input").val());
+
+        //$("#saveFlag").val(val);
+
+        $("#taxBillFlag").val($("#taxbill_radio li a.on input").val());
+
+        if ($("#name").val() == "") {
+            alert("스팟 이름을 입력하여 주세요");
+            $("#name").focus();
+            return;
+        }
+
+        if ($("#url").val() == "") {
+            alert("스팟 웹사이트를 입력하여 주세요");
+            $("#url").focus();
+            return;
+        }
+
+        if ($("#address").val() == "") {
+            alert("주소를 입력하여 주세요");
+            $("#address").focus();
+            return;
+        }
+        if (locX == "" || locY == "") {
+            alert("주소인식이 잘 되지 못하였습니다. 주소를 다시 입력하여 주세요");
+            $("#address").val("");
+            $("#address").focus();
+            return;
+        }
+        if ($("#bank").val() == "") {
+            alert("사용 은행을 선택하여 주세요");
+            $("#address").focus();
+            return;
+        }
+        if ($("#accountNum").val() == "" || $("#accountNum").val() == "계좌번호('-' 없이 번호만 입력해 주세요)") {
+            alert("계좌번호를 입력하여 주세요");
+            $("#accountNum").focus();
+            return;
+        }
+        if ($("#home_Tel1").val() == "" || $("#home_Tel2").val() == "" || $("#home_Tel3").val() == "") {
+            alert("전화번호를 입력하여 주세요");
+            if ($("#home_Tel1").val() == "")
+                $("#home_Tel1").focus();
+            else if ($("#home_Tel2").val() == "")
+                $("#home_Tel2").focus();
+            else
+                $("#home_Tel3").focus();
+            return;
+        }
+
+
+        if ($("#cell_Tel1").val() == "" || $("#cell_Tel2").val() == "" || $("#cell_Tel3").val() == "") {
+            alert("핸드폰번호를 정확히 입력하여 주세요");
+            if ($("#cell_Tel1").val() == "")
+                $("#cell_Tel1").focus();
+            else if ($("#cell_Tel1").val() == "")
+                $("#cell_Tel1").focus();
+            else
+                $("#cell_Tel1").focus();
+            return;
+        }
+
+        if (parseInt($("#pickUp").attr("value")) + parseInt($("#post").attr("value")) <= 0) {
+            alert("배송방법은(직접픽업/택배) 1가지 이상은 선택하셔야 합니다.");
+            return;
+        }
+        
+
+        if ($("#bankName").val() == "") {
+            alert("예금주 이름을 입력하여 주세요");
+            $("#bankName").focus();
+            return;
+        }
+
+        if ($("#postType").val() == "-1" && $("#post").attr("value") == "1") {
+            alert("배송정책을 선택하여 주세요!");
+            return false;
+        }
+
+        if ($("#postType").val() == "1" && $("#post").attr("value") == "1") {
+            if (parseInt($("#postPrice").val()) <= 0 || $("#postPrice").val() == "") {
+                alert("배송비는 0 보다 커야 합니다.");
+                $("#postPrice").val("");
+                $("#postPrice").focus();
+                return false;
+            }
+        }
+        //$("#saveFlag").val(val);
+
+        var action = "/Profile/SpotInfoUpd";
+
+        var options = {
+            beforeSend: function () {
+
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+
+            },
+            success: function (response) {
+                if (response.Success == true) {
+                    //var recListUrl = "/printing/prtUpload";
+                    //Ajax.SyncGetPartialView(recListUrl, {}, "partial-part");
+                    location.href = "/printing/prtUpload?flag=on";
+                }
+            },
+            complete: function (response) {
+
+            },
+            error: function (error) {
+                console.log(error);
+
+            }
+        };
+        $('#insertOrderForm').attr("action", action).ajaxForm(options).submit();
+    }
+
+
+    function RadioBtnCheck(val) {
+        $(val).parents("ul").find("a").removeClass("on");
+        $(val).addClass("on");
+
+    }
+
+    function CheckBtnCheck(val) {
+        $(val).attr("id", "test");
+        if ($(val).attr("class") != "checkBtn on" && $(val).attr("class") != "checkBtn postCheck on") {
+            // gooksong
+            if ($(val).attr("class") == "checkBtn postCheck") {
+                $("#postBlock").show();
+                $("#postPriceBlock").show();
+            }
+            $(val).addClass("on");
+            $(val).parents("li").find("input").attr("value", "1");
+        }
+        else {
+            // gooksong
+            if ($(val).attr("class") == "checkBtn postCheck on") {
+                $("#postBlock").hide();
+                $("#postPriceBlock").hide();
+            }
+
+            $(val).parents("li").find("input").attr("value", "0");
+            $(val).removeClass("on");
+        }
+
+        console.log($(val).parents("li").find("input").attr("value"));
+    }
+
+    function changeLenCnt(val) {
+        var cntTag = $(val).parents(".box").find(".countNumber");
+        cntTag.text($(val).val().length);
+    }
+
+
+    function IsNum(e) {
+
+        var k = window.event ? e.keyCode : e.which;
+        if (((k >= 48) && (k <= 57)) || k == 0 || k == 8 || k == 127 || ((k >= 37) && (k <= 40)) || ((k >= 96) && (k <= 105)) || k == 9) {
+        } else {
+            if (window.event) {
+                window.event.returnValue = false;
+            }
+            else {
+                e.preventDefault(); //for firefox 
+            }
+        }
+    }
+
+
+    function IsNumOrEng(e) {
+
+        var k = window.event ? e.keyCode : e.which;
+        if (((k >= 48) && (k <= 57)) || k == 0 || k == 8 || k == 127 || ((k >= 37) && (k <= 40)) || ((k >= 96) && (k <= 105)) || k == 9 || ((k >= 65) && (k <= 90)) || ((k >= 97) && (k <= 122))) {
+        } else {
+            if (window.event) {
+                window.event.returnValue = false;
+            }
+            else {
+                e.preventDefault(); //for firefox 
+            }
+        }
+    }
+    function removeText(val) {
+        if ($(val).val() == "계좌번호('-' 없이 번호만 입력해 주세요)") {
+            $(val).val("");
+        }
+    }
+    function CheckUrl(val) {
+        var action = "/Printing/CheckSpotUrl";
+        var url = $(val).val();
+        $.post(action, { url: url }, function (response) {
+            if (response.Result == "Y") {
+                alert("다른 사용자가 이미 사용한 URL입니다. ");
+                $(val).val("");
+            }
+        });
+    }
+</script>

@@ -15,7 +15,7 @@ namespace Design.Web.Admin.Controllers
         public MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Admin";
-            menuModel.MainIndex = 5;
+            menuModel.MainIndex = 6;
             menuModel.SubIndex = subIndex;
 
             return menuModel;

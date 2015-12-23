@@ -1,0 +1,124 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterCommentT>
+@using PagedList.Mvc;
+@{
+    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+    Design.Web.Front.Filter.ContentFilter filter = new Design.Web.Front.Filter.ContentFilter();
+}
+
+<div class="repleZone" id="repleZone">
+    <div class="textInput">
+        <input id="item_no" type="hidden" value="" name="item_no">
+        <input id="memb_no" type="hidden" value="" name="memb_no">
+        <p class="userImg">
+            @{if (profile.UserProfilePic == "")
+                                  {
+                                      profile.UserProfilePic = "/Content/images/common/profile_photo2.png";
+                                  }
+                                  else
+                                  {
+                                      profile.UserProfilePic = ViewBag.ProfileImgUrl + profile.UserProfilePic;
+                                  }
+                                  switch ((int)ViewBag.LogOnChk)
+                                  {
+                                      case 0:
+                                    <img src="@Url.Content("~/Content/images/common/btn/btn_login.gif")" alt="Login" id="topProfileImg"/>
+                                          break;
+
+                                      default:
+                                    <img src="@profile.UserProfilePic" style="width:100%;height:100%" alt="Login" id="topProfileImg"/>
+                                          break;
+                                  }
+                                }
+        </p>
+        <div class="textAreaZone">
+            <textarea id="addComment" name="memo"></textarea>
+            <p class="upText">
+                <button class="" id="btnAddComment" title="게시" onclick="detail.CommentAdd()"></button>
+            </p>
+        </div>
+    </div>
+
+    <div id="comment_area">
+        <ul class="repleListZone">
+
+            @foreach (Makersn.Models.PrinterCommentT printerComment in Model)
+            {
+                if (printerComment.ProfilePic == "")
+                {
+                    printerComment.ProfilePic = "/Content/images/common/profile_photo2.png";
+                }
+                else
+                {
+                    printerComment.ProfilePic = ViewBag.ProfileImgUrl + printerComment.ProfilePic;
+                }
+
+                string No = Base64Helper.Base64Encode(printerComment.No.ToString());
+                string memberNo = Base64Helper.Base64Encode(printerComment.MemberNo.ToString());
+                <li id="">
+                    <p class="userImg">
+                        <a href="/Profile?no=@memberNo">
+                            <img src="@printerComment.ProfilePic" alt="기본프로필" /></a>
+                    </p>
+                    <div class="textZone">
+                        <div class="nameZone">
+                            <a href="/Profile?no=@memberNo" class="name">@printerComment.MemberName</a>
+                            <p class="date">@printerComment.Regdt</p>
+                        </div>
+                        <div id="comment_view_@printerComment.No" class="editArea">
+                            <div class="userText _memo">@Html.Raw(filter.HtmlEncode(printerComment.Content))</div>
+                            <div class="editBtnBox">
+                                @if (ViewBag.MemberNo == printerComment.MemberNo)
+                                {
+                                    <a class="" id="btnGetEdit" rel="" href="javascript:detail.ShowEditComment(@printerComment.No)">수정</a>
+                                    <img alt="구분" src="/content/images/common/bull_edit.png">
+                                }
+                                @if (ViewBag.MemberNo == printerComment.MemberNo || ViewBag.MemberNo == printerComment.MemberNoRef || profile.UserLevel > 50)
+                                {
+                                    <a onclick="" id="btnCommentDel" href="javascript:detail.CommentDel('@No')">삭제</a>
+                                }
+                            </div>
+
+                        </div>
+                        @if (ViewBag.MemberNo == printerComment.MemberNo || ViewBag.MemberNo == printerComment.MemberNoRef || profile.UserLevel > 50)
+                        {
+                            <div id="comment_edit_@printerComment.No" class="editArea dbNo">
+                                <form id="" name="">
+                                    <input type="hidden" value="@printerComment.No" name="com_no">
+                                    <div class="userText">
+                                        <textarea name="memo" id="content_@printerComment.No">@printerComment.Content</textarea>
+                                    </div>
+                                    <div class="editBtnBox">
+
+                                        <a class="" rel="" href="javascript:detail.CommentUpd('@printerComment.No')">수정</a>
+                                        <img alt="구분" src="/content/images/common/bull_edit.png">
+                                        <a onclick="" href="javascript:detail.HideEditComment(@printerComment.No)">취소</a>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </li>
+            }
+
+        </ul>
+    </div>
+
+    @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("Reply", new { no = ViewBag.No, page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "repleZone"
+            })
+        )
+</div>
+
+<script type="text/javascript">
+    if ("@ViewBag.GoReply" == "Y") {
+        $("#addComment").focus();
+    }
+</script>
+
+

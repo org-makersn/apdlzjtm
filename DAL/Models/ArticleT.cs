@@ -17,9 +17,6 @@ namespace Makersn.Models
         [IgnoreDataMember]
         public virtual string Category { get; set; }
         public virtual int MainImage { get; set; }
-        public virtual string Title { get; set; }
-        public virtual string Contents { get; set; }
-        public virtual string Tag { get; set; }
         public virtual int Copyright { get; set; }
         public virtual string Visibility { get; set; }
         public virtual int ViewCnt { get; set; }
@@ -63,5 +60,41 @@ namespace Makersn.Models
         public virtual int DraftCnt { get; set; }
         [IgnoreDataMember]
         public virtual int DownloadCnt { get; set; }
+
+        //for translation
+
+        [IgnoreDataMember]
+        public virtual int TransNo{ get; set; }
+        [IgnoreDataMember]
+        public virtual int TransFlag { get; set; }
+        [IgnoreDataMember]
+        public virtual int TransStatus { get; set; }
+        [IgnoreDataMember]
+        public virtual string TransLanFrom { get; set; }
+        [IgnoreDataMember]
+        public virtual string TransLanTo { get; set; }
+        [IgnoreDataMember]
+        public virtual string TransReqMemName { get; set; }
+        [IgnoreDataMember]
+        public virtual Nullable<DateTime> TransReqDt { get; set; }
+        [IgnoreDataMember]
+        public virtual string TransWorkMemName { get; set; }
+        [IgnoreDataMember]
+        public virtual Nullable<DateTime> TransWorkDt { get; set; }
+
+        //[IgnoreDataMember]
+        //public virtual string TempFlag { get; set; }
+        [IgnoreDataMember]
+        public virtual string TransRegID { get; set; }
+        [IgnoreDataMember]
+        public virtual DateTime TransRegDt { get; set; }
+
+        [IgnoreDataMember]
+        public virtual string Title { get; set; }
+        [IgnoreDataMember]
+        public virtual string Contents { get; set; }
+        [IgnoreDataMember]
+        public virtual string Tag { get; set; }
+
     }
 }

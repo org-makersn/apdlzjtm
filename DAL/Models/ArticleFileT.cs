@@ -37,6 +37,6 @@ namespace Makersn.Models
         public virtual double X { get; set; }
         public virtual double Y { get; set; }
         public virtual double Z { get; set; }
-        //public virtual double PrintVolume { get; set; }
+        public virtual double PrintVolume { get; set; }
     }
 }

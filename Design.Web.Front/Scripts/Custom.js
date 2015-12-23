@@ -56,6 +56,22 @@ $(function () {
         }
     });
 
+    //프린터 검색
+    $("#btnSearchPrt").click(function () {
+        var text = $("#searchPrt").val().trim();
+        if (check_msg("searchPrt", "검색어를 입력해주세요.", "required:search") == false) return false;
+        location.href = '/Printing/PrtSearch?text=' + encodeURI(text);
+
+        $('.searchArea').addClass('on');
+    });
+
+    //프린터 검색창 엔터 이벤트
+    $('#searchPrt').keypress(function (event) {
+        if (event.keyCode == 13) {
+            $("#btnSearchPrt").click();
+        }
+    });
+
     //로그인 엔터
     $("#Password").keypress(function (event) {
         if (event.keyCode == 13) {
@@ -89,9 +105,9 @@ $(function () {
     //회원가입 클릭
     $("#join_submit").click(function () {
 
-        //if (check_msg("JoinName", "이름을 입력해주세요.", "required:name") == false) return false;
-        //if (check_msg("JoinEmail", "이메일을 입력해주세요.", "required:email") == false) return false;
-        //if (check_msg("JoinPassword", "비밀번호를 입력해주세요.", "required:joinPassword") == false) return false;
+        if (check_msg("JoinName", "이름을 입력해주세요.", "required:name") == false) return false;
+        if (check_msg("JoinEmail", "이메일을 입력해주세요.", "required:email") == false) return false;
+        if (check_msg("JoinPassword", "비밀번호를 입력해주세요.", "required:joinPassword") == false) return false;
 
 
         if ($("#JoinPassword").val() != $("#JoinRePassword").val()) {
@@ -370,10 +386,10 @@ function check_msg(element_id, msg, patton) {
             if (patton_arr[i] == 'search' && val_is == true) {
                 var pw_error = false;
                 var error_msg = '';
-                if ($('#' + element_id).val().length > 50) {
-                    error_msg = '검색어는 50자 이하로 적어주세요.';
-                    pw_error = true;
-                }
+                //if ($('#' + element_id).val().length > 50) {
+                //    error_msg = '검색어는 50자 이하로 적어주세요.';
+                //    pw_error = true;
+                //}
                 if (pw_error == true) {
                     alert(error_msg);
                     //$('#' + element_id).val('');
@@ -545,6 +561,62 @@ function check_msg(element_id, msg, patton) {
                     return false;
                 }
             }
+
+            if (patton_arr[i] == 'phone3' && val_is == true) {
+                console.log($('#' + element_id).val().length);
+                if ($('#' + element_id).val().length < 3) {
+                    alert('전화번호를 확인해 주세요');
+                    $('#' + element_id).focus();
+                    return false;
+                }
+            }
+
+            if (patton_arr[i] == 'phone4' && val_is == true) {
+                if ($('#' + element_id).val().length < 4) {
+                    alert('전화번호를 확인해 주세요');
+                    $('#' + element_id).focus();
+                    return false;
+                }
+            }
+
+            if (patton_arr[i] == 'cashReceiptsCard4' && val_is == true) {
+                if ($('#' + element_id).val().length < 4) {
+                    alert('현금영수증 카드번호를 확인해 주세요');
+                    $('#' + element_id).focus();
+                    return false;
+                }
+            }
+
+            if (patton_arr[i] == 'cashReceiptsCard6' && val_is == true) {
+                if ($('#' + element_id).val().length < 6) {
+                    alert('현금영수증 카드번호를 확인해 주세요');
+                    $('#' + element_id).focus();
+                    return false;
+                }
+            }
+
+            if (patton_arr[i] == 'companyNum3' && val_is == true) {
+                if ($('#' + element_id).val().length < 3) {
+                    alert('사업자등록번호를 확인해 주세요');
+                    $('#' + element_id).focus();
+                    return false;
+                }
+            }
+            if (patton_arr[i] == 'companyNum2' && val_is == true) {
+                if ($('#' + element_id).val().length < 2) {
+                    alert('사업자등록번호를 확인해 주세요');
+                    $('#' + element_id).focus();
+                    return false;
+                }
+            }
+            if (patton_arr[i] == 'companyNum5' && val_is == true) {
+                if ($('#' + element_id).val().length < 5) {
+                    alert('사업자등록번호를 확인해 주세요');
+                    $('#' + element_id).focus();
+                    return false;
+                }
+            }
+
         }
     }
 }

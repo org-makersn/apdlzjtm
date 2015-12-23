@@ -77,7 +77,7 @@ Thingiview.prototype.init = function () {
         antialias: true
     });
     this.renderer.setSize(this.width, this.height);
-    this.renderer.setClearColor(0xcacaca, 1); // 하늘
+    this.renderer.setClearColor(0xcacaca, 1); // 배경색
     this.container.appendChild(this.renderer.domElement);
     this.initLights();
 }
@@ -128,7 +128,7 @@ Thingiview.prototype.centerCamera = function () {
             sceneBox.max.z = Math.max(sceneBox.max.z, object.geometry.boundingBox.max.z);
 
             //볼륨 추가
-            Thingiview.prototype.compute_vol(object.geometry);
+            //Thingiview.prototype.compute_vol(object.geometry);
 
             if (sceneCenter === undefined)
                 newCenter = objectCenter.clone();
@@ -181,7 +181,6 @@ Thingiview.prototype.addModel = function (geometry) {  // 모델빛
     this.plane.scale.x = this.plane.scale.y = this.plane.scale.z = this.scale;
     this.centerCamera();
 
-    return volume;
 }
 
 Thingiview.prototype.render = function () {
@@ -218,31 +217,31 @@ Thingiview.prototype.render = function () {
 }
 
 
-//볼륨 추가
-Thingiview.prototype.compute_vol = function (geo){
-    var x1, x2, x3, y1, y2, y3, z1, z2, z3, i;
-    var len = geo.faces.length;
-    var totalVolume = 0;
+////볼륨 추가
+//Thingiview.prototype.compute_vol = function (geo){
+//    var x1, x2, x3, y1, y2, y3, z1, z2, z3, i;
+//    var len = geo.faces.length;
+//    var totalVolume = 0;
 
-    for (i = 0; i < len; i++) {
-        x1 = geo.vertices[geo.faces[i].a].x;
-        y1 = geo.vertices[geo.faces[i].a].y;
-        z1 = geo.vertices[geo.faces[i].a].z;
-        x2 = geo.vertices[geo.faces[i].b].x;
-        y2 = geo.vertices[geo.faces[i].b].y;
-        z2 = geo.vertices[geo.faces[i].b].z;
-        x3 = geo.vertices[geo.faces[i].c].x;
-        y3 = geo.vertices[geo.faces[i].c].y;
-        z3 = geo.vertices[geo.faces[i].c].z;
+//    for (i = 0; i < len; i++) {
+//        x1 = geo.vertices[geo.faces[i].a].x;
+//        y1 = geo.vertices[geo.faces[i].a].y;
+//        z1 = geo.vertices[geo.faces[i].a].z;
+//        x2 = geo.vertices[geo.faces[i].b].x;
+//        y2 = geo.vertices[geo.faces[i].b].y;
+//        z2 = geo.vertices[geo.faces[i].b].z;
+//        x3 = geo.vertices[geo.faces[i].c].x;
+//        y3 = geo.vertices[geo.faces[i].c].y;
+//        z3 = geo.vertices[geo.faces[i].c].z;
 
-        totalVolume +=
-            (-x3 * y2 * z1 +
-            x2 * y3 * z1 +
-            x3 * y1 * z2 -
-            x1 * y3 * z2 -
-            x2 * y1 * z3 +
-            x1 * y2 * z3) / 6;
-    }
+//        totalVolume +=
+//            (-x3 * y2 * z1 +
+//            x2 * y3 * z1 +
+//            x3 * y1 * z2 -
+//            x1 * y3 * z2 -
+//            x2 * y1 * z3 +
+//            x1 * y2 * z3) / 6;
+//    }
 
-    volume = Math.abs(totalVolume);
-}
+//    volume = Math.abs(totalVolume);
+//}

@@ -26,7 +26,7 @@ namespace Design.Web.Admin.Controllers
             return menuModel;
         }
 
-        public ActionResult Index(string sfl = null, string query = null, int page = 1, int type = 1)
+        public ActionResult Index(string sfl = null, string query = null, int page = 1, int type = 0)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
