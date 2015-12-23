@@ -188,13 +188,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Areas\Common\CommonAreaRegistration.cs" />
-    <Compile Include="Areas\Common\Controllers\RequestController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CleanupController.cs" />
-    <Compile Include="Controllers\GMapController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -224,9 +221,6 @@
     <Compile Include="Security\RequireSslAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Configs\SpringNet.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\font.css" />
@@ -451,7 +445,6 @@
     <Content Include="Scripts\calendar\ui.datepicker-ko.js" />
     <Content Include="Scripts\GithubRender\3d-0111bb2d.js" />
     <Content Include="Scripts\GithubRender\3d-cec88640.css" />
-    <Content Include="Areas\Common\Views\web.config" />
     <None Include="Properties\PublishProfiles\dev 환경.pubxml" />
     <None Include="Properties\PublishProfiles\kimgs_dev.pubxml" />
     <None Include="Properties\PublishProfiles\MakersN_Main.pubxml" />
@@ -618,8 +611,6 @@
     <Content Include="Views\Main\GetMainBanner.cshtml" />
     <Content Include="Views\Account\ExternalJoins.cshtml" />
     <Content Include="Views\Article\test.cshtml" />
-    <Content Include="Views\GMap\Index.cshtml" />
-    <Content Include="Views\GMap\Places.cshtml" />
     <Content Include="Views\Profile\Collection.cshtml" />
     <Content Include="Views\Profile\CollectionDetail.cshtml" />
     <Content Include="Views\Profile\UserMessageRoom.cshtml" />
@@ -637,7 +628,6 @@
     <Content Include="Views\Order\Test.cshtml" />
     <Content Include="Views\Order\MyOrder.cshtml" />
     <Content Include="Views\Order\MyOrderReview.cshtml" />
-    <Content Include="Views\GMap\test.cshtml" />
     <Content Include="Views\PrintingProfile\Index.cshtml" />
     <Content Include="Views\PrintingProfile\ReviewSub.cshtml" />
     <Content Include="Views\Account\SpotOpen.cshtml" />
@@ -683,9 +673,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Common\Models\" />
-    <Folder Include="Areas\Common\Views\Request\" />
-    <Folder Include="Areas\Common\Views\Shared\" />
     <Folder Include="FileUpload\Article\article_3d\" />
     <Folder Include="FileUpload\Article\article_img\" />
     <Folder Include="FileUpload\Article\article_js\" />
