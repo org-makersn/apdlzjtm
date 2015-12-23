@@ -26,6 +26,8 @@ namespace Net.Framework
 
         public DbSet<MemberT> MemberT { get; set; }
         public DbSet<DetailT> DetailT { get; set; }
+        public DbSet<StorePrinterT> StorePrinterT { get; set; }
+        //public DbSet<DetailT> DetailT { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

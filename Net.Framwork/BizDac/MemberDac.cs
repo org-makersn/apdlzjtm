@@ -23,18 +23,18 @@ namespace Net.Framwork.BizDac
             {
                 members = dbContext.MemberT.ToList();
 
-                var data = (from m in dbContext.MemberT
-                            join d in dbContext.DetailT
-                            on m.MemberId equals d.MemberId into md
-                            from x in md.DefaultIfEmpty()
-                            select new
-                            {
-                                MemberId = m.MemberId,
-                                MemberNm = m.MemberNm,
-                                AppId = m.AppId,
-                                RegDt = m.RegDt,
-                                PhoneNumber = x.PhoneNumber
-                            }).ToList();
+                //var data = (from m in dbContext.MemberT
+                //            join d in dbContext.DetailT
+                //            on m.MemberId equals d.MemberId into md
+                //            from x in md.DefaultIfEmpty()
+                //            select new
+                //            {
+                //                MemberId = m.MemberId,
+                //                MemberNm = m.MemberNm,
+                //                AppId = m.AppId,
+                //                RegDt = m.RegDt,
+                //                PhoneNumber = x.PhoneNumber
+                //            }).ToList();
 
                 //List<CustomMemberT> facebooks = new JavaScriptSerializer().Deserialize<List<CustomMemberT>>(data);
 
@@ -90,7 +90,8 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-
+                dbContext.Entry(data);
+                dbContext.SaveChanges();
             }
             return ret;
         }

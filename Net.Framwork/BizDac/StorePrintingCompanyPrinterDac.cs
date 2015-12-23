@@ -27,13 +27,13 @@ namespace Net.Framwork.BizDac
             }
             return printers;
         }
-        internal StorePrinterT SelectStorePrinterTById(int no)
+        internal StorePrinterT SelectStorePrinterTById(int StorePirnterId)
         {
             StorePrinterT printer = null;
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StorePrinterT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StorePrinterT.Where(m => m.No == StorePirnterId).FirstOrDefault();
             }
 
             return printer;

@@ -53,6 +53,8 @@
     <Compile Include="BizDac\MemberDac.cs" />
     <Compile Include="BizDac\StorePrinterBiz.cs" />
     <Compile Include="BizDac\StorePrinterDac.cs" />
+    <Compile Include="BizDac\StorePrintingCompanyPrinterBiz.cs" />
+    <Compile Include="BizDac\StorePrintingCompanyPrinterDac.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\InterceptorLogging.cs" />
