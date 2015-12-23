@@ -1,5 +1,5 @@
 ﻿@model Makersn.Models.BoardT
-@using Design.Web.Admin.Filter
+
 @{
     ViewBag.Title = "공지사항";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -44,7 +44,7 @@
                         <label for="semi_content">내용</label></th>
                     <td>
                         @*@Html.TextArea("content", new { id = "content", style = "width:750px;height:350px" })*@
-                        <textarea id="content" style="width:750px;height:350px;">@(new ContentFilter().HtmlDecode(Model.SemiContent))</textarea>
+                        <textarea id="content" style="width:750px;height:350px;">@(new HtmlFilter().HtmlDecode(Model.SemiContent))</textarea>
                     </td>
                 </tr>
             </tbody>
@@ -78,7 +78,7 @@
                 fileManagerJson: '/KindEditor/FileManager',     //Browse file method 
                 uploadJson: '/KindEditor/UploadImage'           //Upload file method     
             });
-            @*editor.html('@Html.Raw((new ContentFilter().HtmlDecode(Model.SemiContent)))');*@
+            @*editor.html('@Html.Raw((new HtmlFilter().HtmlDecode(Model.SemiContent)))');*@
         });
 
 

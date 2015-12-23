@@ -1,6 +1,6 @@
 ﻿@model PagedList.IPagedList<Makersn.Models.BoardT>
 @using PagedList.Mvc;
-@using Design.Web.Admin.Filter;
+;
 @{
     ViewBag.Title = "공지사항";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -78,7 +78,7 @@ else
             <div class="a_low">
                 <div class="lowin">
 
-                    @Html.Raw(new ContentFilter().HtmlDecode(n.SemiContent))
+                    @Html.Raw(new HtmlFilter().HtmlDecode(n.SemiContent))
                 </div>
             </div>
         }

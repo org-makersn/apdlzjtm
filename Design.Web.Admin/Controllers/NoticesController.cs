@@ -68,7 +68,7 @@ namespace Design.Web.Admin.Controllers
         [HttpPost]
         public JsonResult AddNotices(string title, string content, string flag)
         {
-            //content = new ContentFilter().HtmlEncode(content);
+            //content = new HtmlFilter().HtmlEncode(content);
             BoardT n = new BoardT();
             n.Title = title;
             n.SemiContent = content;
@@ -103,7 +103,7 @@ namespace Design.Web.Admin.Controllers
 
         public JsonResult UpdateNotices(int no,string title, string content)
         {
-            //content = new ContentFilter().HtmlEncode(content);
+            //content = new HtmlFilter().HtmlEncode(content);
             BoardT n = new BoardT();
             n.No = no;
             n.Title = title;

@@ -56,7 +56,7 @@
 
                         @if (message.MsgGubun == "MSG")
                         {
-                            <p class="txt" style="word-break: break-all;">@Html.Raw(new ContentFilter().HtmlEncode(message.Comment))</p>
+                            <p class="txt" style="word-break: break-all;">@Html.Raw(new HtmlFilter().HtmlEncode(message.Comment))</p>
                         }
                         else
                         {
