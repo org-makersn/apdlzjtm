@@ -19,7 +19,7 @@
     string className = ViewBag.ShowLikes > 0 ? "class=on" : "";
     string pageUrl = Request.Url.ToString();
 
-    Design.Web.Front.Filter.ContentFilter filter = new Design.Web.Front.Filter.ContentFilter();
+    Design.Web.Front.Filter.ContentFilter filter = new HtmlFilter();
 
     int index = 0;
     int setNum = 0;

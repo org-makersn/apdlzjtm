@@ -1,5 +1,5 @@
 ﻿@model Makersn.Models.BoardT
-@using Design.Web.Admin.Filter
+
 @{
     ViewBag.Title = "공지사항";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -35,7 +35,7 @@
         </tbody>
     </table>
 
-    @*<div class="view_cont">@Html.Raw(new ContentFilter().HtmlDecode(Model.SemiContent))</div>*@
+    @*<div class="view_cont">@Html.Raw(new HtmlFilter().HtmlDecode(Model.SemiContent))</div>*@
     <div class="view_cont">@Html.Raw(Model.SemiContent)</div>
 
     <table cellpadding="0" cellspacing="0" class="tbl_style1">

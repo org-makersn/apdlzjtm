@@ -175,9 +175,9 @@
                         <p class="text" style="line-height: 20px">
                             <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName] </span></a>
                             <br />
-                            @Html.Raw(new Design.Web.Front.Filter.ContentFilter().HtmlEncode(n.Comment.Substring(0, n.Comment.IndexOf("내용:"))))
+                            @Html.Raw(new HtmlFilter().HtmlEncode(n.Comment.Substring(0, n.Comment.IndexOf("내용:"))))
                             <br />
-                            @Html.Raw(new Design.Web.Front.Filter.ContentFilter().HtmlEncode(n.Comment.Substring(n.Comment.IndexOf("내용:"))))
+                            @Html.Raw(new HtmlFilter().HtmlEncode(n.Comment.Substring(n.Comment.IndexOf("내용:"))))
                         </p>
                         <span class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</span>
                             break;

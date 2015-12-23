@@ -25,7 +25,7 @@
                     </div>
                     <div class="textBox">
                         <div class="textZone">
-                            @Html.Raw(new Design.Web.Front.Filter.ContentFilter().HtmlDecode(notice.SemiContent))
+                            @Html.Raw(new HtmlFilter().HtmlDecode(notice.SemiContent))
                         </div>
                     </div>
                 </li>
