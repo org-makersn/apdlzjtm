@@ -13,7 +13,7 @@ namespace Net.Framwork.BizDac
             return new StorePrinterDac().SelectAllStorePrinter();
         }
         public StorePrinterT getStorePrinterById (int no){
-            return new StorePrinterDac().SelectStorePrinterTById(no);
+            return new StorePrinterDac().SelectStorePrinterById(no);
         }
         public int add(StorePrinterT storePrinter)
         {

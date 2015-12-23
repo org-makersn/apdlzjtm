@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace Net.Framwork.StoreModel
+namespace Net.Framework.StoreModel
 {
     [Table("STORE_PRODUCT_DETAIL")]
     public class StoreProductDetailT

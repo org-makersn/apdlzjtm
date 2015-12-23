@@ -27,6 +27,11 @@ namespace Net.Framwork.BizDac
             }
             return printers;
         }
+        /// <summary>
+        /// select one StorePrintingCompanyPrinter By Id
+        /// </summary>
+        /// <param name="StorePirnterId"></param>
+        /// <returns></returns>
         internal StorePrintingCompanyPrinterT SelectStorePrintingCompanyPrinterTById(int StorePirnterId)
         {
             StorePrintingCompanyPrinterT printer = null;
@@ -38,7 +43,11 @@ namespace Net.Framwork.BizDac
 
             return printer;
         }
-
+        /// <summary>
+        /// insert StorePrintingCompanyPrinter
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         internal int InsertStorePrintingCompanyPrinter(StorePrintingCompanyPrinterT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
@@ -50,7 +59,11 @@ namespace Net.Framwork.BizDac
             }
             return ret;
         }
-
+        /// <summary>
+        /// update StorePrintingCompanyPrinter
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         internal int UpdateStorePrintingCompanyPrinter(StorePrintingCompanyPrinterT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
@@ -63,8 +76,8 @@ namespace Net.Framwork.BizDac
                 {
                     try
                     {
-                        //dbContext.StorePrinterT.Attach(data);
-                        //dbContext.Entry<StorePrinterT>(data).State = System.Data.Entity.EntityState.Modified;
+                        //dbContext.Printing Company PrinterT.Attach(data);
+                        //dbContext.Entry<Printing Company PrinterT>(data).State = System.Data.Entity.EntityState.Modified;
                         //dbContext.SaveChangesAsync();
                     }
                     catch (Exception)
