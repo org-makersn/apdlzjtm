@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
-    public class StorePrinterDac
+    public class StorePrintingCompanyPrinterDac
     {
 
         private static StoreContext dbContext;
@@ -17,71 +17,68 @@ namespace Net.Framwork.BizDac
         /// select multi data
         /// </summary>
         /// <returns></returns>
-        internal List<StorePrinterT> SelectAllStorePrinter()
-        { 
-            
-            List<StorePrinterT> printers = null;
+        internal List<StorePrintingCompanyPrinterT> SelectAllStorePrintingCompanyPrinter()
+        {
+
+            List<StorePrintingCompanyPrinterT> printers = null;
             using (dbContext = new StoreContext())
             {
-                printers = dbContext.StorePrinterT.ToList();
+                printers = dbContext.StorePrintingCompanyPrinterT.ToList();
             }
             return printers;
         }
-
         /// <summary>
-        /// select one StorePrinter By Id
+        /// select one StorePrintingCompanyPrinter By Id
         /// </summary>
-        /// <param name="no"></param>
+        /// <param name="StorePirnterId"></param>
         /// <returns></returns>
-        internal StorePrinterT SelectStorePrinterById(int no)
+        internal StorePrintingCompanyPrinterT SelectStorePrintingCompanyPrinterTById(int StorePirnterId)
         {
-            StorePrinterT printer = null;
+            StorePrintingCompanyPrinterT printer = null;
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StorePrinterT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StorePrintingCompanyPrinterT.Where(m => m.No == StorePirnterId).FirstOrDefault();
             }
 
             return printer;
         }
-
         /// <summary>
-        /// Insert StorePrinter
+        /// insert StorePrintingCompanyPrinter
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int InsertStorePrinter(StorePrinterT data)
+        internal int InsertStorePrintingCompanyPrinter(StorePrintingCompanyPrinterT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                dbContext.StorePrinterT.Add(data);
+                dbContext.StorePrintingCompanyPrinterT.Add(data);
                 dbContext.SaveChangesAsync();
             }
             return ret;
         }
-
         /// <summary>
-        /// Update StorePrinter
+        /// update StorePrintingCompanyPrinter
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int UpdateStorePrinter(StorePrinterT data)
+        internal int UpdateStorePrintingCompanyPrinter(StorePrintingCompanyPrinterT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                
-                if (dbContext.StorePrinterT.SingleOrDefault(m => m.No == data.No) != null)
+                var originalData = dbContext.StorePrintingCompanyPrinterT.SingleOrDefault(m => m.No == data.No);
+                if (originalData != null)
                 {
                     try
                     {
-                        dbContext.StorePrinterT.Attach(data);
-                        dbContext.Entry<StorePrinterT>(data).State = System.Data.Entity.EntityState.Modified;
-                        dbContext.SaveChangesAsync();
+                        //dbContext.Printing Company PrinterT.Attach(data);
+                        //dbContext.Entry<Printing Company PrinterT>(data).State = System.Data.Entity.EntityState.Modified;
+                        //dbContext.SaveChangesAsync();
                     }
                     catch (Exception)
                     {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
-    public class StorePrinterDac
+    public class StoreProductDac
     {
 
         private static StoreContext dbContext;
@@ -17,57 +17,57 @@ namespace Net.Framwork.BizDac
         /// select multi data
         /// </summary>
         /// <returns></returns>
-        internal List<StorePrinterT> SelectAllStorePrinter()
+        internal List<StoreProductT> SelectAllStoreProduct()
         { 
             
-            List<StorePrinterT> printers = null;
+            List<StoreProductT> printers = null;
             using (dbContext = new StoreContext())
             {
-                printers = dbContext.StorePrinterT.ToList();
+                printers = dbContext.StoreProductT.ToList();
             }
             return printers;
         }
 
         /// <summary>
-        /// select one StorePrinter By Id
+        /// select one StoreProduct By Id
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
-        internal StorePrinterT SelectStorePrinterById(int no)
+        internal StoreProductT SelectStoreProductTById(int no)
         {
-            StorePrinterT printer = null;
+            StoreProductT printer = null;
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StorePrinterT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StoreProductT.Where(m => m.No == no).FirstOrDefault();
             }
 
             return printer;
         }
 
         /// <summary>
-        /// Insert StorePrinter
+        /// Insert StoreProduct
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int InsertStorePrinter(StorePrinterT data)
+        internal int InsertStoreProduct(StoreProductT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                dbContext.StorePrinterT.Add(data);
+                dbContext.StoreProductT.Add(data);
                 dbContext.SaveChangesAsync();
             }
             return ret;
         }
 
         /// <summary>
-        /// Update StorePrinter
+        /// Update StoreProduct
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int UpdateStorePrinter(StorePrinterT data)
+        internal int UpdateStoreProduct(StoreProductT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
@@ -75,12 +75,12 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 
-                if (dbContext.StorePrinterT.SingleOrDefault(m => m.No == data.No) != null)
+                if (dbContext.StoreProductT.SingleOrDefault(m => m.No == data.No) != null)
                 {
                     try
                     {
-                        dbContext.StorePrinterT.Attach(data);
-                        dbContext.Entry<StorePrinterT>(data).State = System.Data.Entity.EntityState.Modified;
+                        dbContext.StoreProductT.Attach(data);
+                        dbContext.Entry<StoreProductT>(data).State = System.Data.Entity.EntityState.Modified;
                         dbContext.SaveChangesAsync();
                     }
                     catch (Exception)

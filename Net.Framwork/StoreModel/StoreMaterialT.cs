@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Net.Framework.StoreModel
 {
     [Table("STORE_MATERIAL")]
-    public class StroreMaterialT
+    public class StoreMaterialT
     {
         [Key]
         [Column("NO")]
