@@ -57,7 +57,7 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 dbContext.StorePrinterT.Add(data);
-                dbContext.SaveChangesAsync();
+                ret = dbContext.SaveChanges();
             }
             return ret;
         }
