@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
-    class StoreProductDetailBiz
+    public class StoreProductDetailBiz
     {
         public List<StoreProductDetailT> getAllStorePrinter() {
             return new StoreProductDetailDac().SelectAllStoreProductDetail();
