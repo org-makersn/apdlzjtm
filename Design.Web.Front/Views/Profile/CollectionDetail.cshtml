@@ -13,8 +13,8 @@
         <ul class="cMenu">
             @if (ViewBag.ChangeAble)
             {
-                <li><a href="javascript:showChgListName()">변경</a></li>
-                <li><a href="javascript:showDeleteList()">삭제</a></li>
+                <li><a href="javascript:showChgListName()">EDIT</a></li>
+                <li><a href="javascript:showDeleteList()">DELETE</a></li>
             }
         </ul>
     </div>
@@ -33,12 +33,12 @@
                 <!-- ProductBox -->
                 <div class="productBox">
                     <div class="productImg">
-                        <a href="/design/Detail?no=@a.No">
+                        <a href="/design/Detail/@a.No">
                             <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.MainImage" /></a>
                     </div>
                     <div class="detailBox">
                         <div class="productText">
-                            <a href="/design/Detail?no=@a.No">@a.Title</a>
+                            <a href="/design/Detail/@a.No">@a.Title</a>
                         </div>
                         <div class="by">
                             <p>by <span class="name"><a href="/Profile?no=@No">@a.MemberName</a></span></p>
@@ -51,11 +51,11 @@
                             }
                         </div>
                         <ul class="countBox">
-                            <li class="show"><a href="javascript:void(0);"><span>@a.ViewCnt</span></a></li>
+                            <li class="show" title="view"><a href="/design/Detail/@a.No"><span>@a.ViewCnt</span></a></li>
 
-                            <li class="heart"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                            <li class="heart" title="likes"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
                                 <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>
-                            <li class="comment"><a href="javascript:void(0);"><span>@a.CommentCnt</span></a></li>
+                            <li class="comment" title="comment"><a href="/design/Detail?no=@a.No&goReply=Y"><span>@a.CommentCnt</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -75,11 +75,11 @@
         <div class="pop_wrap2">
             <!--창 크기 357(w)x315(h)-->
             <div class="pop_txt">
-                새로운 리스트 이름을 입력하세요.
+                Please name your list.
        <input id="newListNm" placeholder=""></input>
             </div>
-            <a href="javascript:ChgListName()" class="pop_btn">저장하기</a>
-            <a href="#" class="pop_close">창 닫기</a>
+            <a href="javascript:ChgListName()" class="pop_btn">SAVE</a>
+            <a href="#" class="pop_close">CLOSE</a>
         </div>
     </div>
 </div>
@@ -90,11 +90,10 @@
         <div class="pop_wrap2">
             <!--창 크기 357(w)x315(h)-->
             <div class="pop_txt">
-                리스트와 이곳에 수집된<br>
-                모든 디자인을 삭제할까요? 
+                Delete list and all its contents?
             </div>
-            <a href="javascript:DeleteList()" class="pop_btn">삭제하기</a>
-            <a href="#" class="pop_close">창 닫기</a>
+            <a href="javascript:DeleteList()" class="pop_btn">DELETE</a>
+            <a href="#" class="pop_close">CLOSE</a>
         </div>
     </div>
 </div>
@@ -148,7 +147,7 @@
     }
 
     function DeleteArticle(articleNo) {
-        if (confirm("삭제하시겠습니까?")) {
+        if (confirm("Do you want to delete?")) {
             var data = {
                 articleNo: articleNo,
                 ListNo: "@ViewBag.ListNo"
@@ -159,7 +158,7 @@
                     //$("#collection").find(".cnt").text(parseInt($("#collection").find(".cnt").text(), 10) - 1);
                 }
                 else {
-                    alert("삭제에 실패하였습니다");
+                    alert("delete failed.");
                 }
             }
             Ajax.AjaxResponseModelService(this, "/profile/DeleteArticleInList", data, onSuccess);

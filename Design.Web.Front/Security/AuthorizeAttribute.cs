@@ -25,7 +25,7 @@ namespace Design.Web.Front
 
                 String url = System.Web.Security.FormsAuthentication.LoginUrl + "?returnUrl=" + returnUrl;
 
-                string sHtml = string.Format("<script type='text/javascript'>alert('로그인이 필요한 서비스 입니다.'); history.back();</script>", url);
+                string sHtml = string.Format("<script type='text/javascript'>alert('You need to sign in to use the service.'); history.back();</script>", url);
 
                 filterContext.Result = new ContentResult { Content = sHtml, ContentType = "text/html", ContentEncoding = System.Text.Encoding.UTF8 };
             }

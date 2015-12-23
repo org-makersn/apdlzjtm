@@ -1,30 +1,30 @@
 ﻿@model IList<Makersn.Models.ArticleT>
 @{
     string No = Base64Helper.Base64Encode(Model[0].MemberNo.ToString());
-
+    
     int index = 1;
     int recoIndex = 1;
 }
 
 <div class="userOtherFile">
     <div class="title">
-        <p class="tit"><span class="boldF">@Model[0].MemberName</span> 님의 다른 파일</p>
-        <a href="/Profile?no=@No">더보기 +</a>
+        <p class="tit"><span class="boldF">@Model[0].MemberName</span>'s Designs</p>
+        <a href="/Profile?no=@No">more +</a>
     </div>
 
     <ul class="ortherList">
 
-        @{if (Model.Count != 0 && Model[0].No != 0)
+        @{if (Model.Count != 0)
           {
               foreach (Makersn.Models.ArticleT a in Model)
               {
                   string className = index % 2 == 0 ? "class=mgR0" : "";
             <li @className>
                 <p class="img">
-                    <a href="/design/Detail?no=@a.No">
+                    <a href="/design/Detail/@a.No">
                         <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.Title" /></a>
                 </p>
-                <p class="txt"><a href="/design/Detail?no=@a.No">@a.Title</a></p>
+                <p class="txt"><a href="/design/Detail/@a.No">@a.Title</a></p>
             </li>
                   index++;
               }
@@ -36,8 +36,8 @@
 
 <div class="userOtherFile">
     <div class="title">
-        <p class="tit">추천 파일</p>
-        <a href="/design?pageGubun=R"">더보기 +</a>
+        <p class="tit">Featured</p>
+        <a href="/design?pageGubun=R"">more +</a>
     </div>
 
     <ul class="ortherList">
@@ -46,11 +46,11 @@
             string className = recoIndex % 2 == 0 ? "class=mgR0" : "";
             <li @className>
                 <p class="img">
-                    <a href="/design/Detail?no=@recommend.No">
+                    <a href="/design/Detail/@recommend.No">
                         <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@recommend.MainImgName" alt="@recommend.Title" /></a>
                         @*<img src="@ViewBag.ArticleImgUrl@recommend.MainImgName" alt="@recommend.Title" /></a>*@
                 </p>
-                <p class="txt"><a href="/design/Detail?no=@recommend.No">@recommend.Title</a></p>
+                <p class="txt"><a href="/design/Detail/@recommend.No">@recommend.Title</a></p>
             </li>
             recoIndex++;
         }

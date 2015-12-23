@@ -12,8 +12,8 @@
 
 <div class="message">
     <div class="messageL">
-        <p class="tit">메세지 보관함</p>
-        <ul>
+        <p class="tit">Indox</p>
+        <ul style="height:90%">
 
             @foreach (Makersn.Models.MessageT message in Model)
             {
@@ -44,7 +44,7 @@
 
                         <p class="txt" style="word-break:break-all;">@(message.MsgGubun == "MSG" ? message.Comment : "사진")</p>
                     </div>
-                    <p class="date">@message.RegDt.ToString("M")</p>
+                    <p class="date">@message.RegDt.ToString("MM.dd")</p>
                 </li>
                 <!--//message 1set --> 
             }

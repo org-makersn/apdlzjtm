@@ -11,7 +11,7 @@ namespace Makersn.Models
         public virtual int No { get; set; }
         public virtual int BoardSetNoSeq { get; set; }
         public virtual int BoardSetNo { get; set; }
-        //public virtual string CateNo { get; set; }
+        public virtual string LangFlag { get; set; }
         public virtual string Title { get; set; }
         public virtual string Writer { get; set; }
         //public virtual string Link { get; set; }

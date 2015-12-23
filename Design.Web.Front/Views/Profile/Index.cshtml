@@ -112,13 +112,32 @@
                 @*<a href="/Profile?no=@ViewBag.No" class="cnt" id="upload">*@
                 <a href="#" class="cnt" id="upload">
                     <span class="cnt">@cntList.DesignCnt</span><br />
-                    <span class="tit">디자인</span>
+                    <span class="tit">Design</span>
                 </a>
             </li>
             <li>
                 <a href="#" class="cnt" id="collection">
                     <span class="cnt">@cntList.ListCnt</span><br />
-                    <span class="tit">리스트</span>
+                    <span class="tit">List</span>
+                </a>
+            </li>
+            <li>
+                @*<a href="/Profile?no=@ViewBag.No&gubun=L" class="cnt" id="likes">*@
+                <a href="#" class="cnt" id="likes">
+                    <span class="cnt">@cntList.LikesCnt</span><br />
+                    <span class="tit">Likes</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="cnt" id="following">
+                    <span class="cnt">@cntList.FollowingCnt</span><br />
+                    <span class="tit">Following</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="cnt" id="follower">
+                    <span class="cnt">@cntList.FollowerCnt</span><br />
+                    <span class="tit">Follower</span>
                 </a>
             </li>
             @if (changeAble)
@@ -127,50 +146,31 @@
                     @*<a href="/Profile?no=@ViewBag.No&gubun=D" class="cnt" id="draft">*@
                     <a href="#" class="cnt" id="draft">
                         <span class="cnt">@cntList.DraftCnt</span><br />
-                        <span class="tit">임시저장</span>
+                        <span class="tit">Draft</span>
                     </a>
                 </li>
             }
-            <li>
-                @*<a href="/Profile?no=@ViewBag.No&gubun=L" class="cnt" id="likes">*@
-                <a href="#" class="cnt" id="likes">
-                    <span class="cnt">@cntList.LikesCnt</span><br />
-                    <span class="tit">좋아요</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="cnt" id="following">
-                    <span class="cnt">@cntList.FollowingCnt</span><br />
-                    <span class="tit">팔로잉</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="cnt" id="follower">
-                    <span class="cnt">@cntList.FollowerCnt</span><br />
-                    <span class="tit">팔로워</span>
-                </a>
-            </li>
         </ul>
 
         @if (Model.No == ViewBag.VisitorNo)
         {
             <ul class="bts">
                 <li class="noti">
-                    <a href="#notices" title="알림" id="notices"></a>
+                    <a href="#notices" title="notice" id="notices"></a>
                     @if (cntList.NoticeCnt > 0)
                     {
                         <img class="new" alt="NEW" src="/content/images/common/ico/ico_new.png">
                     }
                 </li>
                 <li class="msg">
-                    <a href="#message" title="메시지" id="message"></a>
+                    <a href="#message" title="message" id="message"></a>
                     @if (cntList.MessageCnt > 0)
                     {
                         <img class="new" alt="NEW" src="/content/images/common/ico/ico_new.png">
                     }
                 </li>
                 <li class="set">
-                    <a href="#setting" title="설정" id="setting"></a>
+                    <a href="#setting" title="setting" id="setting"></a>
                 </li>
             </ul>
         }
@@ -178,12 +178,12 @@
         {
             <ul class="bts">
                 <li class="@followClass" id="userFollow">
-                    <a href="javascript:SetFollowUser2('@memberNo');" title="팔로우"></a>
+                    <a href="javascript:SetFollowUser2('@memberNo');" title="follow"></a>
                     <!--img class="new" alt="NEW" src="content/images/common/ico/ico_new.png"-->
                 </li>
                 <li class="msg">
                     @*<a href="javascript:SendMessage('@memberNo')" id="sendMessage" title="메세지"></a>*@
-                    <a href="javascript:void(0);" id="sendMessage" title="메세지"></a>
+                    <a href="javascript:void(0);" id="sendMessage" title="message"></a>
 
                     <!--img class="new" alt="NEW" src="content/images/common/ico/ico_new.png"-->
                 </li>
@@ -308,6 +308,14 @@
                     $("#collection").addClass("on");
                     GoListDetail();
                     break;
+                case "QnA":
+                    GetOtherMessage();
+                    $("#sendMessage").addClass("on");
+                    break;
+                case "UserMessage":
+                    GetOtherMessage();
+                    $("#sendMessage").addClass("on");
+                    break;
                 default:
                     GetArticle("U");
                     $("#upload").addClass("on");
@@ -331,7 +339,7 @@
 
                 $("#gubun").val("D");
                 $("#profileForm").submit();
-                
+
                 //location.href = "/profile?gubun=D&no=" + "@ViewBag.No" + "&page=" + "@ViewBag.Page";
             });
 
@@ -342,7 +350,7 @@
 
                 $("#gubun").val("L");
                 $("#profileForm").submit();
-                
+
                 //location.href = "/profile?gubun=L&no=" + "@ViewBag.No" + "&page=" + "@ViewBag.Page";
             });
 
@@ -412,14 +420,7 @@
             $("#sendMessage").on("click", function (e) {
 
                 if (!loginPop("@ViewBag.LogOnChk")) {
-                    @*var data = {
-                        no: "@ViewBag.No"
-                    };
-
-                    var url = "/Profile/Message";
-
-                    Ajax.SyncGetPartialView(url, data, "partial-part");*@
-                    var data = {
+                @*var data = {
                         val1: "@ViewBag.No"
                     };
 
@@ -430,7 +431,9 @@
                     $(".myGroup").find(".on").removeClass("on");
                     $(this).addClass("on");
 
-                    location.hash = "#message";
+                    location.hash = "#message";*@
+                    $("#gubun").val("UserMessage");
+                    $("#profileForm").submit();
                 }
             });
 
@@ -440,10 +443,10 @@
 
 
             $("#profileMsgZone a").mouseover(function () {
-                $(this).css("text-decoration","underline");
+                $(this).css("text-decoration", "underline");
             })
             $("#profileMsgZone a").mouseleave(function () {
-                $(this).css("text-decoration","none");
+                $(this).css("text-decoration", "none");
             })
 
         })
@@ -471,71 +474,79 @@
             var data = {
                 no: "@ViewBag.No"
             };
-            var url = "/Profile/Message";
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+        var url = "/Profile/Message";
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }
 
-        function GetArticle(gubun) {
-            var data = {
-                no: "@ViewBag.No",
-                gubun: gubun,
-                page: "@ViewBag.Page"
-            };
+    function GetOtherMessage() {
+        var data = {
+            val1: "@ViewBag.No"
+        };
+    var url = "/Profile/UserMessageRoom";
+    Ajax.SyncGetPartialView(url, data, "partial-part");
+}
 
-            var url = "/Profile/Lists";
+function GetArticle(gubun) {
+    var data = {
+        no: "@ViewBag.No",
+        gubun: gubun,
+        page: "@ViewBag.Page"
+    };
 
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+    var url = "/Profile/Lists";
 
-        function GetFollow(gubun) {
-            var data = {
-                no: "@ViewBag.No",
-                gubun: gubun
-            };
+    Ajax.SyncGetPartialView(url, data, "partial-part");
+}
 
-            var url = "/Profile/follow";
+function GetFollow(gubun) {
+    var data = {
+        no: "@ViewBag.No",
+            gubun: gubun
+        };
 
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+        var url = "/Profile/follow";
 
-        function GetNotice() {
-            var data = {
-                page: "@ViewBag.Page"
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }
+
+    function GetNotice() {
+        var data = {
+            page: "@ViewBag.Page"
             };
 
         var url = "/Profile/notice";
 
         Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+    }
 
-        function GetList() {
-            var data = {
-                no: "@ViewBag.No",
-                userNm: "@Model.Name"
-            };
+    function GetList() {
+        var data = {
+            no: "@ViewBag.No",
+            userNm: "@Model.Name"
+        };
 
-            var url = "/Profile/Collection";
+        var url = "/Profile/Collection";
 
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
-        
-        var GoListDetail = function () {
-            var data = {
-                no: "@ViewBag.No",
-                listNo: "@ViewBag.ListNo"
-            };
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }
 
-            var url = "/Profile/CollectionDetail";
+    var GoListDetail = function () {
+        var data = {
+            no: "@ViewBag.No",
+            listNo: "@ViewBag.ListNo"
+        };
 
-            Ajax.SyncGetPartialView(url, data, "partial-part");
-        }
+        var url = "/Profile/CollectionDetail";
 
-        function GetSetting() {
+        Ajax.SyncGetPartialView(url, data, "partial-part");
+    }
 
-            var url = "/Profile/Setting";
+    function GetSetting() {
 
-            Ajax.SyncGetPartialView(url, {}, "partial-part");
-        }
+        var url = "/Profile/Setting";
+
+        Ajax.SyncGetPartialView(url, {}, "partial-part");
+    }
 
 
     </script>

@@ -22,6 +22,14 @@ namespace Design.Web.Front
             //    );
 
             routes.MapRoute(
+                name: "cate",
+                url: "cate/{cateNm}",
+                defaults: new { controller = "article", action = "index", cateNm = UrlParameter.Optional },
+                namespaces: new[] { "Design.Web.Front" }
+                );
+
+
+            routes.MapRoute(
                 name: "beforeArticle",
                 url: "items/detail/id/{no}",
                 defaults: new { controller = "article", action = "detail", no = UrlParameter.Optional },

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Web.Mvc;
 namespace Design.Web.Admin.Controllers
 {
-
     [Authorize]
     public class PrinterRecommendRequestController : BaseController
     {
@@ -47,7 +46,7 @@ namespace Design.Web.Admin.Controllers
         public PartialViewResult RecommendEdit(int page = 1, string orderby = "regdt", int cate = 0, string RecommendYn = "", string option = "", string text = "")
         {
             ViewData["Group"] = MenuModel(1);
-            IList<PrinterT> list = printerDac.GetSearchList(text, RecommendYn);
+            IList<PrinterT> list = printerDac.GetSearchList(text, RecommendYn,null,null,1,0);
             ViewData["cnt"] = list.Count;
             ViewData["RecommendYn"] = RecommendYn;
             ViewData["text"] = text;
@@ -70,7 +69,7 @@ namespace Design.Web.Admin.Controllers
             string RecommendYn = "Y";
             ViewData["Group"] = MenuModel(1);
 
-            IList<PrinterT> list = printerDac.GetSearchList(text, RecommendYn);
+            IList<PrinterT> list = printerDac.GetSearchList(text, RecommendYn,null,null,1,0);
             ViewData["cnt"] = list.Count;
             ViewData["text"] = text;
 
@@ -86,14 +85,13 @@ namespace Design.Web.Admin.Controllers
             //{
             //    return PartialView(list.OrderByDescending(o => o.Priority).ToPagedList(page, 20));
             //}
-            return PartialView(list.OrderByDescending(o => o.RecommendPriority).ThenByDescending(t=>t.RecommendDt).ToPagedList(page, 20));
+            return PartialView(list.OrderByDescending(o => o.RecommendPriority).ThenByDescending(w => w.RecommendDt).ToPagedList(page, 20));
         }
 
 
 
         public ActionResult RecommendListEdit(int no)
         {
-
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             ViewData["Group"] = MenuModel(1);
@@ -103,7 +101,6 @@ namespace Design.Web.Admin.Controllers
 
         public ActionResult RecommendListUpdatePriority(int no, int priority)
         {
-
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             printerDac.UpdatePriority(no, priority);
@@ -112,7 +109,6 @@ namespace Design.Web.Admin.Controllers
 
         public ActionResult RecommendListUpdateVisibility(int no, string visibility)
         {
-
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             printerDac.UpdateRecommendVisibility(no, visibility);

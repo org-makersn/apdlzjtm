@@ -1,0 +1,427 @@
+﻿@model ArticleT
+@{
+    ViewBag.Title = "디자인 업로드";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int uploadCnt = ViewBag.UploadCnt;
+
+    IList<ArticleFileT> fileList = ViewBag.FileList;
+}
+
+
+<div class="subtitle">
+    <h2>Translation</h2>
+</div>
+
+<!-- uploadWrap -->
+<div class="uploadWrap">
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="No" name="No" value="@ViewBag.ArticleNo" />
+        <input type="hidden" id="temp" name="temp" value="@ViewBag.Temp" />
+        <input type="hidden" id="main_img" name="main_img" value="@Model.MainImage" />
+        <input type="hidden" id="mode" name="mode" value="write">
+        <input type="hidden" id="del_no" name="del_no" value="">
+        <input type="hidden" id="uploadCnt" name="uploadCnt" value="@ViewBag.UploadCnt">
+        <input type="hidden" id="insertVideoSource" name="insertVideoSource" value="@Model.VideoUrl"/>
+        <input type="hidden" id="transFlag" name="transFlag" value="@ViewBag.transFlag" />
+
+
+        <div class="dragImg mgT20">
+            <div class="mainBoxDrag">
+                <div class="imgMain">
+                    <img src="@ViewBag.ArticleImgUrl@Model.ImageName" alt="3D File Image">
+                </div>
+            </div>
+
+            <div class="selectImg" id="ajax_upload">
+
+
+
+                <ul>
+                    @for (int i = 0; i < uploadCnt; i++)
+                    {
+                        int index = i + 1;
+                        string strClass = index % 5 == 0 ? "class=mgR0" : "";
+                        if (fileList.Count() > i)
+                        {
+                        <li @strClass>
+                            <div class="imgBox ui-draggable ui-draggable-handle ui-droppable">
+                                <a title="삭제" class="delImg" href="javascript:void(0);" data-val="@fileList[i].No"></a>
+                                <input name="multi[]" class="_multi" type="hidden" value="@fileList[i].No">
+                                @if (fileList[i].FileType == "img")
+                                {
+                                    <img src="@Url.Content(ViewBag.ArticleImgUrl + fileList[i].Rename + "?" + DateTime.Now)" alt="thumnail" title="@fileList[i].Name" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content(ViewBag.ArticleImgUrl + fileList[i].ImgName + "?" + DateTime.Now)" alt="3d파일이미지" title="@fileList[i].Name">
+                                }
+                            </div>
+                        </li>
+                        }
+                        else
+                        {
+                        <li @strClass>@index</li>
+                        }
+                    }
+                </ul>
+            </div>
+
+            <div class="btnMores">
+            </div>
+        </div>
+        <!-- //DragImg -->
+
+        <!-- inputUpload -->
+        <div class="inputUpload">
+            <!-- Left -->
+            <div class="left">
+
+                <div class="boxNo1">
+                    <p class="headerInput">
+                        English
+                    </p>
+                    <div>
+                        <input id="article_title" class="inputTit" type="text" readonly="readonly" name="article_title" value="@Model.Title" placeholder="Title" />
+                    </div>
+                    <div class="textArea">
+                        @*<textarea id="article_contents" name="article_contents" placeholder="내용을 입력하세요."></textarea>*@
+                        <textarea class="input_content" id="article_contents" readonly="readonly" name="article_contents" placeholder="Description">@Model.Contents</textarea>
+                        <textarea class="input_tag" id="article_tags" readonly="readonly" name="article_tags" placeholder="Tags (Put comma between tags)">@Model.Tag</textarea>
+
+                        <div class="btSet">
+                            @*<a href="#" id="aMovie" class="aMovie" title="동영상 첨부"></a>*@
+                        </div>
+                        @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
+                    </div>
+                </div>
+            </div>
+            <!-- //Left -->
+
+            <!-- Right -->
+            <div class="right">
+
+                <div class="boxNo1 eng lang">
+                    <p class="headerInput eng">
+                        Korean
+                    </p>
+
+                    <div class="lang_select">
+                        <a href="javascript:TransFor('KR')" class="ko"></a>
+                        <!--a href="" class="en"></a-->
+                        @*<a href="" class="cn"></a>
+                        <a href="" class="jp"></a>*@
+                    </div>
+
+                    <div>
+                        <input id="trans_title" class="inputTit eng" type="text" name="trans_title" placeholder="Title(제목)" />
+                    </div>
+                    <div class="textArea eng">
+                        <textarea class="input_content eng" id="trans_contents" name="trans_contents" placeholder="Description(내용)"></textarea>
+                        <textarea class="input_tag eng" id="trans_tags" name="trans_tags" placeholder="Tags (Put comma between tags) &#13;&#10;태그 (태그와 태그 사이는 쉼표로 구분)"></textarea>
+
+                        <div class="btSet">
+                            @*<a href="#" id="aMovie" class="aMovie" title="동영상 첨부"></a>*@
+                        </div>
+                        @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
+                    </div>
+                </div>
+
+                <input type="hidden" id="chkLang" name="chkLang" value="KR" />
+
+                <div class="boxNo1">
+                    <p class="headerInput">Category</p>
+                    <div class="select">
+                        <p class="value">
+                            @Makersn.Util.EnumHelper.GetEnumTitle((Makersn.Util.MakersnEnumTypes.CateName)(Model.CodeNo))
+                        </p>
+                    </div>
+                </div>
+
+                <div class="boxNo2 mgT-13">
+                    <p class="headerInput eng">
+                        LICENSE  <a href="info/license.html" target="_blank">
+                            <img src="@Url.Content("~/Content/images/common/ico/ico_q.gif")" alt="라이센스"></a>
+                    </p>
+                    <div class="selected2">
+                        @{switch (Model.Copyright)
+                          {
+                              case 1:
+
+                            <span class="titLicense01">Attribution</span>
+                         
+                                  break;
+                              case 2:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense02">Nonprofit</span>
+                            
+                                  break;
+                              case 3:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense04">Changed ban</span>
+                           
+                                  break;
+                              case 4:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense03">Alike</span>
+                          
+                                  break;
+                              case 5:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense02">Nonprofit</span>
+
+                            <span class="titLicense03">Alike</span>
+                        
+                                  break;
+                              case 6:
+
+                            <span class="titLicense01">Attribution</span>
+
+                            <span class="titLicense02">Nonprofit</span>
+
+                            <span class="titLicense04">Changed ban</span>
+                          
+                                  break;
+                          }
+                        }
+                    </div>
+                </div>
+                <!-- //Right -->
+            </div>
+            <!-- //inputUpload -->
+        </div>
+    </form>
+
+    <!-- btnZone -->
+    <div class="btnZone2">
+        @*<button title="임시 저장" class="btnThumbSave _btn_save" onclick="Upload.TempUpload();"></button>*@
+        <button title="업로드" class="btnUpFile _btn_reg" onclick="SetTranslation();"></button>
+        @*<button title="삭제" class="btnTextDel _btn_del" data-val="@Model.No" onclick="Upload.ArticleDelete()">Delete</button>*@
+        <button title="취소" class="btnUpCancel" onclick="Upload.UploadCancle();">CANCEL</button>
+    </div>
+    <!-- //btnZone -->
+
+
+</div>
+<!-- //upUpload -->
+
+<!-- //upUpload -->
+<!-- //UploadWrap -->
+
+
+<!--  게시버튼확인 팝업 -->
+<div class="popupArea uploadEnd">
+    <div class="bgArea">
+    </div>
+    <div class="popBox">
+        <div class="contactZone">
+            <p class="titleContact">Successfully posted!</p>
+            <p class="bt_st1">
+                <button type="button" onclick="Upload.GoArticle()" title="Go to post">Go to post</button>
+            </p>
+            <p class="bt_st2">
+                <button type="button" onclick="Upload.GoMain()" title="Go to main page">Go to main page</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- // 게시버튼확인 팝업 -->
+
+
+
+
+<div class="popupArea videoLink">
+    <div class="bgArea" style="opacity: 0.52; height: 100%;">
+    </div>
+    <div class="popBox3">
+        <div class="pop_wrap3">
+            <!--창 크기 660(w)x330(h)-->
+            <div class="pop_tap_title">
+                <!--[D]현재 메뉴에 클래스 on추가-->
+                <a href="javascript:videoInsertPop()">Embed a Video</a>
+                <a href="javascript:videoLinkPop()" class="on">Link a Video</a>
+            </div>
+            <div class="pop_txt">
+                <textarea placeholder="URL" id="videoLink"></textarea>
+                <div class="pop_desc">
+                    If you wish to insert a video link in the description box,
+                    <br>
+                    copy and paste the URL of the video file.
+
+                </div>
+            </div>
+            @*<a href="popup_upload_movie1_view.html" class="pop_btn_left">Preview</a>*@
+            <a href="#" id="addVideoLink" class="pop_btn">Save</a>
+            <a href="#" class="pop_close">Close</a>
+        </div>
+    </div>
+</div>
+
+<!--// 동영상 링크 삽입 팝업 -->
+
+
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="@Url.VersionedContent("~/Content/css/jquery-ui-1.8.18.custom.css")" />
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.easing.1.3.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery-ui.js")"></script>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+
+    <script src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
+    @Scripts.Render("~/bundles/viewer")
+
+    <script type="text/javascript">
+
+        function closet() {
+            window.onbeforeunload = function (e) {
+                e = e || window.event;
+                // For IE<8 and Firefox prior to version 4
+                if (e) {
+                    e.returnValue = 'If you leave this page, unsaved contents will be disappeared.';
+                }
+
+                // For Chrome, Safari, IE8+ and Opera 12+
+                return 'If you leave this page, unsaved contents will be disappeared.';
+            };
+        }
+
+        function uncloset() {
+            window.onbeforeunload = null;
+        }
+
+        $(function () {
+
+            //$(".aMovie").click(function () {
+            //    videoInsertPop();
+            //});
+
+            //$("#addVideoSource").click(function () {
+            //    var text = $("#videoSource").val();
+            //    var char = "";
+            //    var fristIndex = text.indexOf("http");
+            //    char = text.substring(fristIndex - 1, fristIndex);
+            //    text = text.substring(fristIndex);
+            //    fristIndex = text.indexOf(char);
+            //    text = text.substring(0, fristIndex);
+
+            //    $("#insertVideoSource").val(text);
+            //    videoPopupHide();
+            //});
+
+            //$("#addVideoLink").click(function () {
+            //    var text = $("#videoLink").val();
+            //    if (text.indexOf("<") == -1) {
+            //        $("#article_contents").val($("#article_contents").val() + "\r\n" + text + "\r\n");
+            //        $("#videoLink").val("");
+            //        videoPopupHide();
+            //    }
+            //    else {
+            //        alert("Wrong address");
+            //    }
+            //});
+
+
+            //$("#videoPreView").click(function () {
+            //    $(".pop_wrap3 .pop_close").hide();
+            //    $(".movie_view").find('a').remove();
+            //    $(".movie_view").find('iframe').remove();
+            //    $(".movie_view").removeAttr("style");
+            //    var text = $("#videoSource").val();
+            //    var char = "";
+            //    var fristIndex = text.indexOf("http");
+            //    char = text.substring(fristIndex - 1, fristIndex);
+            //    text = text.substring(fristIndex);
+            //    fristIndex = text.indexOf(char);
+            //    text = text.substring(0, fristIndex);
+            //    var iframe = '<iframe width="630" height="450" src="' + text + '" frameborder="0" allowfullscreen></iframe> <div class="pop_wrap_view"><a href="javascript:closeVideo()" class="pop_close">창 닫기</a></div>';
+            //    $(".movie_view").append(iframe);
+            //});
+
+            $(".pop_close").click(function (e) {
+                videoPopupHide();
+            });
+
+        });
+
+        //function closeVideo() {
+        //    $(".movie_view").find('a').remove();
+        //    $(".movie_view").find('iframe').remove();
+        //    $(".movie_view").hide();
+        //    $(".pop_wrap3 .pop_close").show();
+        //}
+
+        //function videoPopupHide() {
+        //    $(".movie_view").css("display", "none");
+        //    $(".movie_view").find('iframe').remove();
+        //    $(".popupArea").hide();
+        //};
+
+        //function videoInsertPop() {
+        //    videoPopupHide();
+        //    $(".popupArea.videoSource").show();
+        //};
+
+        //function videoLinkPop() {
+        //    videoPopupHide();
+        //    $(".popupArea.videoLink").show();
+        //    $(".pop_wrap3 .pop_close").show();
+        //};
+
+        function SetTranslation() {
+
+            uncloset();//페이지 새로고침 끄기
+
+            $("#mode").val("upload");
+
+            if (check_msg('trans_title', '', 'required:articleTitle') == false) return false;
+            if (check_msg('trans_contents', '', 'required:contents') == false) return false;
+
+
+            //var $form_data = $("#insert_form").serialize();
+            var options = {
+                beforeSend: function () {
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        alert(response.Message);
+                        location.href = "http://beta.makersn.com/design/Detail/" + "@ViewBag.ArticleNo";
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    var exception = null;
+                    if (error != null && typeof (error.responseText) != 'undefined') {
+                        try {
+                            exception = $.parseJSON(error.responseText);
+                            if (typeof (exception.ExceptionMessage) != "undefined" && $.trim(exception.ExceptionMessage) != '') {
+                                alert(exception.ExceptionMessage);
+                            }
+                        } catch (ex) {
+                            //alert(ex.name); 
+                        }
+                    }
+                }
+            };
+
+            $('#insert_form').attr("action", "/article/SetTranslation").ajaxForm(options).submit();
+        }
+
+        function TransFor(lang) {
+            $("#chkLang").val(lang);
+        }
+    </script>
+}

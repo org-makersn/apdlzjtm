@@ -223,7 +223,6 @@
     </Compile>
     <Compile Include="Helper\Base64Helper.cs" />
     <Compile Include="Helper\DateTimeHelper.cs" />
-    <Compile Include="Helper\InputCheckHelper.cs" />
     <Compile Include="Helper\IPAddressHelper.cs" />
     <Compile Include="Helper\IPScanner.cs" />
     <Compile Include="Helper\PagenationHelper.cs" />
@@ -244,10 +243,14 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\common_eng.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\font.css" />
+    <Content Include="Content\css\font\layout.css" />
+    <Content Include="Content\css\font_eng.css" />
     <Content Include="Content\css\jquery-ui-1.8.18.custom.css" />
     <Content Include="Content\css\layout.css" />
+    <Content Include="Content\css\layout_eng.css" />
     <Content Include="Content\css\nanumbarungothic.css" />
     <Content Include="Content\freeviewer\OrbitControls.js" />
     <Content Include="Content\freeviewer\parser.js" />
@@ -462,11 +465,19 @@
     <Content Include="Scripts\app\info.js" />
     <Content Include="Scripts\app\main.js" />
     <Content Include="Scripts\app\services.js" />
-    <Content Include="Scripts\Article\사본 - Upload.js" />
     <Content Include="Scripts\binaryReader.js" />
     <Content Include="Scripts\GithubRender\3d-0111bb2d.js" />
     <Content Include="Scripts\GithubRender\3d-cec88640.css" />
     <Content Include="Areas\Common\Views\web.config" />
+    <Content Include="Content\css\font\.DS_Store" />
+    <Content Include="Content\css\font\NanumBarunGothic.eot" />
+    <Content Include="Content\css\font\NanumBarunGothic.woff" />
+    <Content Include="Content\css\font\NanumBarunGothicBold.eot" />
+    <Content Include="Content\css\font\NanumBarunGothicBold.woff" />
+    <Content Include="Content\css\font\Roboto.woff" />
+    <None Include="Properties\PublishProfiles\dev 환경 테스트.pubxml" />
+    <None Include="Properties\PublishProfiles\eb dev 차승용.pubxml" />
+    <None Include="Properties\PublishProfiles\MakersN_EN.pubxml" />
     <None Include="Properties\PublishProfiles\디자인 프론트페이지.pubxml" />
     <Content Include="MailFormat.xml" />
     <Content Include="Scripts\ajaxfileupload.js" />
@@ -537,17 +548,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-3.3.0.debug.js" />
     <Content Include="Scripts\knockout-3.3.0.js" />
-    <Content Include="Scripts\makersnView\Detector.js" />
-    <Content Include="Scripts\makersnView\NormalControls.js" />
-    <Content Include="Scripts\makersnView\OBJLoader.js" />
-    <Content Include="Scripts\makersnView\STLLoader.js" />
-    <Content Include="Scripts\makersnView\STLLoader_bak.js" />
-    <Content Include="Scripts\makersnView\three.js" />
-    <Content Include="Scripts\makersnView\three.min.js" />
-    <Content Include="Scripts\makersnView\TrackballControls.js" />
-    <Content Include="Scripts\makersnView\UV_Grid_Sm.jpg" />
-    <Content Include="Scripts\makersnView\viewer - 복사본.js" />
-    <Content Include="Scripts\makersnView\viewer.js" />
     <Content Include="Scripts\markerclusterer.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\NormalControls.js" />
@@ -629,9 +629,8 @@
     <Content Include="Views\Printer\Index.cshtml" />
     <Content Include="Views\Printer\Search.cshtml" />
     <Content Include="Views\Main\ChgPw.cshtml" />
-    <Content Include="Views\Article\사본 - Upload.cshtml" />
     <Content Include="Views\Article\AppendFile.cshtml" />
-    <Content Include="Views\Article\Competition.cshtml" />
+    <Content Include="Views\Article\Translation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -652,10 +651,6 @@
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{4226cb43-c074-47ef-8bd8-a136b098bf3f}</Project>
       <Name>DAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Library.GoogleMap\Library.GoogleMap.csproj">
-      <Project>{da8860fa-6a21-4682-8d85-3509195c2bc8}</Project>
-      <Name>Library.GoogleMap</Name>
     </ProjectReference>
     <ProjectReference Include="..\Library.ObjParser\Library.ObjParser.csproj">
       <Project>{3105453e-3a4f-447d-9de0-798c28c68e65}</Project>
@@ -685,7 +680,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>27089</DevelopmentServerPort>
+          <DevelopmentServerPort>12891</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{4226CB43-C074-47EF-8BD8-A136B098BF3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Design.Web.Admin", "Design.Web.Admin\Design.Web.Admin.csproj", "{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Design.Web.Front", "Design.Web.Front\Design.Web.Front.csproj", "{A9333E21-6E50-43FE-AC14-C6DD45B1B3D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.ObjParser", "Library.ObjParser\Library.ObjParser.csproj", "{3105453E-3A4F-447D-9DE0-798C28C68E65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.StlParser", "Library.StlParser\Library.StlParser.csproj", "{F7EDD416-199A-4928-844F-2CD3237B7852}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.GoogleMap", "Library.GoogleMap\Library.GoogleMap.csproj", "{DA8860FA-6A21-4682-8D85-3509195C2BC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,17 +33,6 @@ Global
 		{4226CB43-C074-47EF-8BD8-A136B098BF3F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4226CB43-C074-47EF-8BD8-A136B098BF3F}.Release|x64.ActiveCfg = Release|Any CPU
 		{4226CB43-C074-47EF-8BD8-A136B098BF3F}.Release|x86.ActiveCfg = Release|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Release|x64.ActiveCfg = Release|Any CPU
-		{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}.Release|x86.ActiveCfg = Release|Any CPU
 		{A9333E21-6E50-43FE-AC14-C6DD45B1B3D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A9333E21-6E50-43FE-AC14-C6DD45B1B3D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9333E21-6E50-43FE-AC14-C6DD45B1B3D4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -84,18 +69,6 @@ Global
 		{F7EDD416-199A-4928-844F-2CD3237B7852}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F7EDD416-199A-4928-844F-2CD3237B7852}.Release|x64.ActiveCfg = Release|Any CPU
 		{F7EDD416-199A-4928-844F-2CD3237B7852}.Release|x86.ActiveCfg = Release|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Release|x64.ActiveCfg = Release|Any CPU
-		{DA8860FA-6A21-4682-8D85-3509195C2BC8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

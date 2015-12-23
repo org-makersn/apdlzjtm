@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{34C8448F-2E4E-42AA-A1CF-241F5B20BEC6}</ProjectGuid>
-    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Design.Web.Admin</RootNamespace>
@@ -177,6 +177,7 @@
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ArticleRecommendRequestController.cs" />
+    <Compile Include="Controllers\TranslationController.cs" />
     <Compile Include="Filter\ContentFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -879,6 +880,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="IP\Searchwry.dat" />
+    <None Include="Properties\PublishProfiles\makersn_admin.pubxml" />
     <None Include="Properties\PublishProfiles\디자인 관리페이지.pubxml" />
     <Content Include="log4net.xml" />
     <Content Include="MailFormat.xml" />
@@ -971,16 +973,40 @@
     <Content Include="Views\PrinterRecommendRequest\RecommendList.cshtml" />
     <Content Include="Views\PrinterRecommendRequest\RecommendListEdit.cshtml" />
     <Content Include="Views\PrinterRecommendRequest\RecommendEdit.cshtml" />
+    <Content Include="Views\Printing\AddPrinterModel.cshtml" />
+    <Content Include="Views\Printing\ApprPrinterTest.cshtml" />
+    <Content Include="Views\Printing\EditModel.cshtml" />
+    <Content Include="Views\Printing\ShowImage.cshtml" />
+    <Content Include="Views\Printing\MngApprPrinterTest.cshtml" />
+    <Content Include="Views\Translation\Index.cshtml" />
+    <Content Include="Views\Translation\TranslationReqState.cshtml" />
+    <Content Include="Views\Translation\TranslationReqList.cshtml" />
+    <Content Include="Views\Translation\YearState.cshtml" />
+    <Content Include="Views\Translation\MonthState.cshtml" />
+    <Content Include="Views\Translation\DailyState.cshtml" />
+    <Content Include="Views\Translation\DailyStateRequest.cshtml" />
+    <Content Include="Views\Translation\MonthStateRequest.cshtml" />
+    <Content Include="Views\Translation\YearStateRequest.cshtml" />
+    <Content Include="Views\Translation\TranslationDirectList.cshtml" />
+    <Content Include="Views\Translation\TranslationDirectState.cshtml" />
+    <Content Include="Views\Translation\DailyStateDirect.cshtml" />
+    <Content Include="Views\Printing\ApprPayment.cshtml" />
+    <Content Include="Views\Printing\ApprPaymentCancle.cshtml" />
+    <Content Include="Views\Printing\Accounting.cshtml" />
+    <Content Include="Views\Member\AllNotice.cshtml" />
+    <Content Include="Views\Member\SendNotice.cshtml" />
     <Content Include="Views\Contact\Reply.cshtml" />
+    <None Include="Views\Translation\MonthStateDirect.cshtml" />
+    <Content Include="Views\Translation\YearStateDirect.cshtml" />
+    <Content Include="Views\Translation\TranslationWork.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
-    <Folder Include="App_Data\" />
+    <Folder Include="Controllers\App_Data\" />
     <Folder Include="Data\" />
     <Folder Include="FileUpload\Banner\" />
     <Folder Include="FileUpload\KindEditor\attached\flash\" />
     <Folder Include="FileUpload\KindEditor\attached\image\" />
-    <Folder Include="Views\Printer\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

@@ -9,13 +9,15 @@ using PagedList;
 using Makersn.Util;
 using Design.Web.Admin.Helper;
 using Design.Web.Admin.Models;
+using Design.Web.Admin.Filter;
 
 namespace Design.Web.Admin.Controllers
 {
     [Authorize]
     public class MemberController : BaseController
     {
-        MemberDac memberDac = new MemberDac();
+        MemberDac _memberDac = new MemberDac();
+        NoticesDac _noticeDac = new NoticesDac();
 
         private MenuModel menuModel = new MenuModel();
 
@@ -27,7 +29,7 @@ namespace Design.Web.Admin.Controllers
             return menuModel;
         }
 
-        public ActionResult Index(string startDt = "", string endDt = "", int page = 1, string name = "", string id = "", string gubun ="")
+        public ActionResult Index(string startDt = "", string endDt = "", int page = 1, string name = "", string id = "", string gubun = "")
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
@@ -40,12 +42,13 @@ namespace Design.Web.Admin.Controllers
             //if (startDt == null) { startDt = ""; };
             //if (endDt == null) { endDt = ""; };
             //List<MemberT> list = md.SelectQuery(startDt, endDt);
-            IList<MemberT> list = memberDac.SelectQuery(startDt, endDt, name, id);
+            IList<MemberT> list = _memberDac.SelectQuery(startDt, endDt, name, id);
             ViewData["cnt"] = list.Count;
 
             ViewBag.Gubun = gubun;
-            if(gubun=="D"){
-                return View(list.OrderByDescending(o => o.DownloadCnt).ThenByDescending(t=>t.No).ToPagedList(page,20));
+            if (gubun == "D")
+            {
+                return View(list.OrderByDescending(o => o.DownloadCnt).ThenByDescending(t => t.No).ToPagedList(page, 20));
             }
             if (gubun == "U")
             {
@@ -67,7 +70,7 @@ namespace Design.Web.Admin.Controllers
             if (start == "") { start = DateTime.Now.ToString("yyyy-MM-dd"); }
             if (end == "") { end = DateTime.Now.ToString("yyyy-MM-dd"); }
 
-            IList<DashBoardStateT> returnlst = memberDac.SearchDashBoardStateTargetAll(start, end);
+            IList<DashBoardStateT> returnlst = _memberDac.SearchDashBoardStateTargetAll(start, end);
             ViewBag.Start = start;
             ViewBag.End = end;
 
@@ -96,8 +99,8 @@ namespace Design.Web.Admin.Controllers
             //IList<MemberStateT> returnlst = new List<MemberStateT>();
             //IList<MemberStateT> statelst = memberDac.SearchMemberStateTargetDaily(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
             IList<DashBoardStateT> returnlst = new List<DashBoardStateT>();
-            IList<DashBoardStateT> statelst = memberDac.GetMemberStateTargetDaily(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
-            
+            IList<DashBoardStateT> statelst = _memberDac.GetMemberStateTargetDaily(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
+
             for (int day = 1; day <= days; day++)
             {
                 string stringDt = firstDay.AddDays(day - 1).ToShortDateString();
@@ -123,7 +126,7 @@ namespace Design.Web.Admin.Controllers
             ViewData["Month"] = new SelectList(monthlst, "Value", "Key", makeDt.Month);
 
             //연도 셀렉트 아이템
-            IList<object> yearGroup = memberDac.GetMemberYearGroup();
+            IList<object> yearGroup = _memberDac.GetMemberYearGroup();
 
             Dictionary<string, string> YearList = new Dictionary<string, string>();
 
@@ -158,8 +161,8 @@ namespace Design.Web.Admin.Controllers
             //IList<MemberStateT> returnlst = new List<MemberStateT>();
             //IList<MemberStateT> statelst = memberDac.SearchMemberStateTargetMonth(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
             IList<DashBoardStateT> returnlst = new List<DashBoardStateT>();
-            IList<DashBoardStateT> statelst = memberDac.GetMemberStateTargetMonth(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
-            
+            IList<DashBoardStateT> statelst = _memberDac.GetMemberStateTargetMonth(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
+
             foreach (int item in Enum.GetValues(typeof(MakersnEnumTypes.MonthLst)))
             {
                 DashBoardStateT retState = statelst.SingleOrDefault(g => Convert.ToInt32(g.Gbn) == item);
@@ -172,9 +175,9 @@ namespace Design.Web.Admin.Controllers
                     returnlst.Add(new DashBoardStateT());
                 }
             }
-            
+
             //연도 셀렉트 아이템
-            IList<object> yearGroup = memberDac.GetMemberYearGroup();
+            IList<object> yearGroup = _memberDac.GetMemberYearGroup();
 
             Dictionary<string, string> YearList = new Dictionary<string, string>();
 
@@ -194,7 +197,7 @@ namespace Design.Web.Admin.Controllers
 
             ViewData["Group"] = MenuModel(0);
             //IList<MemberStateT> statelst = memberDac.SearchMemberStateTargetYear();
-            IList<DashBoardStateT> statelst = memberDac.GetMemberStateTargetYear();
+            IList<DashBoardStateT> statelst = _memberDac.GetMemberStateTargetYear();
             return View(statelst);
         }
 
@@ -208,7 +211,7 @@ namespace Design.Web.Admin.Controllers
             ViewData["option"] = "name";
             if (id != "") { ViewData["option"] = "id"; };
             ViewData["text"] = name + id;
-            IList<MemberT> list = memberDac.DropMemberSelectQuery(startDt, endDt, name, id);
+            IList<MemberT> list = _memberDac.DropMemberSelectQuery(startDt, endDt, name, id);
             ViewData["cnt"] = list.Count;
             ViewData["listCnt"] = listCnt;
 
@@ -224,7 +227,7 @@ namespace Design.Web.Admin.Controllers
             ViewData["option"] = "name";
             if (id != "") { ViewData["option"] = "id"; };
             ViewData["text"] = name + id;
-            IList<PrinterMemberT> list = memberDac.PrinterMemberSelectQuery(startDt, endDt, name, id);
+            IList<PrinterMemberT> list = _memberDac.PrinterMemberSelectQuery(startDt, endDt, name, id);
             ViewData["cnt"] = list.Count;
             ViewData["listCnt"] = listCnt;
             return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
@@ -235,6 +238,88 @@ namespace Design.Web.Admin.Controllers
         //{
         //    public short Key { get; set; }
         //    public string Value { get; set; }
+        //}
+
+        public ActionResult AllNotice(int page = 1)
+        {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+
+            ViewData["Group"] = MenuModel(4);
+
+            IList<NoticeT> before = _noticeDac.GetAllNoticeList();
+
+            IList<string> chkComment = new List<string>();
+            IList<NoticeT> list = new List<NoticeT>();
+
+            foreach(NoticeT n in before){
+                if (!chkComment.Contains(n.Comment))
+                {
+                    list.Add(n);
+                    chkComment.Add(n.Comment);
+                }
+            }
+
+            return View(list.OrderByDescending(o=>o.RegDt).ToPagedList(page,20));
+        }
+
+        public ActionResult SendNotice()
+        {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+
+            ViewData["Group"] = MenuModel(4);
+            return View();
+        }
+
+        public JsonResult AddAllNotice(string title, string content)
+        {
+            NoticeT notice = new NoticeT();
+            notice.IdxName = "n:0";
+            notice.ArticleNo = 0;
+            notice.MemberNo = Profile.UserNo;
+            notice.IsNew = "Y";
+            notice.RefNo = 0;
+            notice.Type = "AllNotice";
+            notice.Comment = "제목:" + title.Replace("'","''") + "내용:" + content.Replace("'","''");
+            notice.RegDt = DateTime.Now;
+            notice.RegId = Profile.UserId;
+            notice.RegIp = IPAddressHelper.GetClientIP();
+
+            IList<MemberT> memberList = _memberDac.GetMemberListForSendAllNotice();
+
+            //foreach (MemberT member in memberList)
+            //{
+            //    if (member.Email != "" && member.Email != "0")
+            //    {
+            //        try
+            //        {
+            //            sendNoticeEmail(member.Email, title, content);
+            //        }
+            //        catch
+            //        {
+
+            //        }
+            //    }
+            //}
+
+            //sendNoticeEmail("astio002@nate.com", title, content);
+            //sendNoticeEmail("astio022@naver.com", title, content);
+            //sendNoticeEmail("chasy@makersi.com", title, content);
+            //sendNoticeEmail("astio022@hanmail.net", title, content);
+            //sendNoticeEmail("ryan@makersi.com", title, content);
+            //강희주 위로 전송 실패 521
+
+            bool Success = _noticeDac.InsertAllNotice(notice, memberList);
+            //bool Success = true;
+
+            return Json(new { Success = Success });
+        }
+
+        //public JsonResult sendNoticeEmail(string email, string title, string content)
+        //{
+        //    SendMailModels oMail = new SendMailModels();
+        //    content = new ContentFilter().HtmlEncode(content);
+        //    oMail.SendMail("sendNotice", email, new String[] { title, content });
+        //    return Json(new AjaxResponseModel { Success = true, Message = "발송되었습니다." });
         //}
     }
 }

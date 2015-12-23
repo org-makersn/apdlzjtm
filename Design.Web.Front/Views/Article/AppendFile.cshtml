@@ -10,7 +10,7 @@
     <input name="chkType" value="@Model.FileType" type="hidden" />
     @if (Model.FileType == "img")
     {
-        <img src="@Url.Content("~/FileUpload/" + Model.Path + Model.Rename + "?" + DateTime.Now)" alt="thumnail" title="@Model.Name" />
+        <img src="@Url.Content(ViewBag.ArticleImgUrl + Model.Rename + "?" + DateTime.Now)" alt="thumnail" title="@Model.Name" />
     }
     else
     {
@@ -21,10 +21,10 @@
         }
         else
         {
-        <img src="@Url.Content("~/FileUpload/Article/article_img/" + Model.ImgName + "?" + DateTime.Now)" alt="3d파일이미지" title="@Model.Name">
+        <img src="@Url.Content(ViewBag.ArticleImgUrl + Model.ImgName + "?" + DateTime.Now)" alt="3d파일이미지" title="@Model.Name">
         }
         <a href="javascript:void(0);" onclick="delImg(this)" class="delImg" title="삭제" data-val="@Model.No"></a>
-        <a href="javascript:void(0);" class="showThum" id="stl_@Model.No" data-val="@Model.No" title="썸네일이미지보기" data-file="@Url.Content("~/FileUpload/Article/Article_3d/" + Model.Rename)" data-ext="@Model.Ext" data-js="@Url.Content("~/FileUpload/Article/article_js/" + Model.Rename + ".js")">
+        <a href="javascript:void(0);" class="showThum" id="stl_@Model.No" data-val="@Model.No" title="썸네일이미지보기" data-file="@Url.Content(ViewBag.ArticleImgUrl + Model.Rename)" data-ext="@Model.Ext" data-js="@Url.Content(ViewBag.ArticleJsUrl + Model.Rename + ".js")">
             <img src="@Url.Content("~/Content/images/common/btnThumnail.png")" alt="썸네일이미지보기"></a>
     }
 </div>

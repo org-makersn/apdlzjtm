@@ -58,7 +58,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Linq" />
@@ -92,6 +91,7 @@
     <Compile Include="BizDac\PrinterDac.cs" />
     <Compile Include="BizDac\ReportDac.cs" />
     <Compile Include="BizDac\PrinterFileDac.cs" />
+    <Compile Include="BizDac\TranslationDac.cs" />
     <Compile Include="Models\ArticleCommentT.cs" />
     <Compile Include="Models\ArticleCommentTMap.cs" />
     <Compile Include="Models\ArticleDetailT.cs" />
@@ -151,6 +151,11 @@
     <Compile Include="Models\ReportTMap.cs" />
     <Compile Include="Models\PrinterMemberStateTMap.cs" />
     <Compile Include="Models\PrinterFileT.cs" />
+    <Compile Include="BizDac\TranslationDetailDac.cs" />
+    <Compile Include="Models\TranslationDetailT.cs" />
+    <Compile Include="Models\TranslationDetailTMap.cs" />
+    <Compile Include="Models\TranslationT.cs" />
+    <Compile Include="Models\TranslationTMap.cs" />
     <Compile Include="NHibernate\NHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\CryptFilter.cs" />

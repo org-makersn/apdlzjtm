@@ -16,7 +16,7 @@ text-align:center; margin:25px 0 26px 0;line-height:13px
         .pagination > li:first-child > a {
             vertical-align: middle;
             border-radius: 0px;
-            display:inline-block;width:15px;height:15px;background:url(../images/common/sp_btn_paging.png) no-repeat;background-position:0 0;text-indent:-9999px;transition:none; 
+            display:inline-block;width:20px;height:15px;background:url(../images/common/sp_btn_paging.png) no-repeat;background-position:0 0;text-indent:-9999px;transition:none; 
         }
         .pagination > li:first-child > a:hover{background-position:0 -15px;transition:none}
 
@@ -38,7 +38,7 @@ text-align:center; margin:25px 0 26px 0;line-height:13px
             vertical-align: middle;
 
             border-radius: 0px;
-            margin-left:4px;display:inline-block;width:15px;height:15px;background:url(../images/common/sp_btn_paging.png) no-repeat;background-position:-40px 0;text-indent:-9999px;transition:none;
+            margin-left:9px;display:inline-block;width:15px;height:15px;background:url(../images/common/sp_btn_paging.png) no-repeat;background-position:-40px 0;text-indent:-9999px;transition:none;
         }
         .pagination > li:nth-last-child(2) > a:hover{background-position-y:-15px;transition:none}
 

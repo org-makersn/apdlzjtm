@@ -2,19 +2,14 @@
 using NHibernate;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data;
-using System.Data.SqlClient;
 
 namespace Makersn.BizDac
 {
     public class FollowerDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
-
         public int GetFollwerCnt(int memberNo)
         {
             using (ISession session = NHibernateHelper.OpenSession())
@@ -33,56 +28,6 @@ namespace Makersn.BizDac
 
         public IList<FollowerT> GetFollowingList(int memberNo, int visitorNo)
         {
-
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "GET_FOLLOWINGLIST_FRONT";
-            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
-            //cmd.Parameters.Add("@VISITOR_NO", SqlDbType.Int).Value = visitorNo;
-            //cmd.Connection = con;
-
-            //IList<FollowerT> list = new List<FollowerT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        FollowerT follower = new FollowerT();
-            //        follower.DesignCnt = (int)sr["DESIGN_CNT"];
-            //        follower.LikesCnt = (int)sr["LIKES_CNT"];
-            //        follower.FollowerCnt = (int)sr["FOLLOWER_CNT"];
-            //        follower.MemberName = sr["NAME"].ToString();
-            //        follower.ProfilePic = sr["PROFILE_PIC"].ToString(); ;
-            //        follower.MemberNo = (int)sr["NO"];
-            //        follower.MemberBlog = sr["BLOG_URL"].ToString();
-            //        follower.ChkFollow = (int)sr["CHK_FOLLOW"];
-
-            //        if ((int)sr["NO"] == visitorNo) { follower.ChkFollow = 2; };
-
-            //        list.Add(follower);
-
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
-
-
             string query = @"SELECT 
 	                            (SELECT COUNT(0) FROM ARTICLE A WHERE A.MEMBER_NO = F.MEMBER_NO_REF AND VISIBILITY='Y') AS DESIGN_CNT, 
 	                            (SELECT COUNT(0) FROM LIKES L WHERE L.MEMBER_NO = F.MEMBER_NO_REF) AS LIKES_CNT,
@@ -108,8 +53,6 @@ namespace Makersn.BizDac
                 queryObj.SetParameter("memberNo", memberNo);
 
                 IList<object[]> results = queryObj.List<object[]>();
-
-
                 IList<FollowerT> list = new List<FollowerT>();
                 foreach (object[] row in results)
                 {
@@ -134,72 +77,24 @@ namespace Makersn.BizDac
 
         public IList<FollowerT> GetFollowerLIst(int memberNo, int visitorNo)
         {
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "GET_FOLLOWERLIST_FRONT";
-            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
-            //cmd.Parameters.Add("@VISITOR_NO", SqlDbType.Int).Value = visitorNo;
-            //cmd.Connection = con;
-
-            //IList<FollowerT> list = new List<FollowerT>();
-
-            //try
-            //{
-            //    con.Open();
-            //    SqlDataReader sr = cmd.ExecuteReader();
-            //    while (sr.Read())
-            //    {
-            //        FollowerT follower = new FollowerT();
-            //        follower.DesignCnt = (int)sr["DESIGN_CNT"];
-            //        follower.LikesCnt = (int)sr["LIKES_CNT"];
-            //        follower.FollowerCnt = (int)sr["FOLLOWER_CNT"];
-            //        follower.MemberName = sr["NAME"].ToString();
-            //        follower.ProfilePic = sr["PROFILE_PIC"].ToString(); ;
-            //        follower.MemberNo = (int)sr["NO"];
-            //        follower.MemberBlog = sr["BLOG_URL"].ToString();
-            //        follower.ChkFollow = (int)sr["CHK_FOLLOW"];
-
-            //        if ((int)sr["NO"] == visitorNo) { follower.ChkFollow = 2; };
-
-            //        list.Add(follower);
-
-            //    }
-            //    sr.Close();
-            //    cmd.Connection.Close();
-            //    cmd.Dispose();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //return list;
-
             string query = @"SELECT 
-            	                 (SELECT COUNT(0) FROM ARTICLE A WHERE A.MEMBER_NO = F.MEMBER_NO AND VISIBILITY='Y') AS DESIGN_CNT, 
-            	                 (SELECT COUNT(0) FROM LIKES L WHERE L.MEMBER_NO = F.MEMBER_NO) AS LIKES_CNT,
-            	                 (SELECT COUNT(0) FROM FOLLOWER F2 INNER JOIN
-            	                     MEMBER M2 WITH(NOLOCK) ON F2.MEMBER_NO = M2.NO
-            	                     AND M2.DEL_FLAG='N' WHERE F2.MEMBER_NO_REF = F.MEMBER_NO) AS FOLLOWER_CNT,
-            	                 M.NAME,
-            	                 M.PROFILE_PIC,
-            	                 M.NO,
-            	                 M.BLOG_URL,
-                                 (SELECT COUNT(0) FROM FOLLOWER F3 WHERE F3.MEMBER_NO = :visitorNo AND F3.MEMBER_NO_REF = F.MEMBER_NO) AS CHK_FOLLOW
-            	             
-                             FROM FOLLOWER F INNER JOIN MEMBER M
-            			                     ON F.MEMBER_NO = M.NO
-                                             AND M.DEL_FLAG='N'
-                             
-                             WHERE F.MEMBER_NO_REF= :memberNo
-                             GROUP BY F.MEMBER_NO, M.NAME, M.PROFILE_PIC,M.NO, M.BLOG_URL";
+	                            (SELECT COUNT(0) FROM ARTICLE A WHERE A.MEMBER_NO = F.MEMBER_NO AND VISIBILITY='Y') AS DESIGN_CNT, 
+	                            (SELECT COUNT(0) FROM LIKES L WHERE L.MEMBER_NO = F.MEMBER_NO) AS LIKES_CNT,
+	                            (SELECT COUNT(0) FROM FOLLOWER F2 INNER JOIN
+	                                MEMBER M2 WITH(NOLOCK) ON F2.MEMBER_NO = M2.NO
+	                                AND M2.DEL_FLAG='N' WHERE F2.MEMBER_NO_REF = F.MEMBER_NO) AS FOLLOWER_CNT,
+	                            M.NAME,
+	                            M.PROFILE_PIC,
+	                            M.NO,
+	                            M.BLOG_URL,
+                                (SELECT COUNT(0) FROM FOLLOWER F3 WHERE F3.MEMBER_NO = :visitorNo AND F3.MEMBER_NO_REF = F.MEMBER_NO) AS CHK_FOLLOW
+	
+                            FROM FOLLOWER F INNER JOIN MEMBER M
+				                            ON F.MEMBER_NO = M.NO
+                                            AND M.DEL_FLAG='N'
+
+                            WHERE F.MEMBER_NO_REF= :memberNo
+                            GROUP BY F.MEMBER_NO, M.NAME, M.PROFILE_PIC,M.NO, M.BLOG_URL";
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query);

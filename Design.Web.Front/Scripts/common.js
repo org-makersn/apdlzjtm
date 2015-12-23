@@ -21,7 +21,7 @@ $(function () {
     //    //var $sfl = $('#sfl').val();
     //    //var $stx = $('#stx').val();
     //    //if ($('#stx').val().trim() == '') {
-    //    //    alert('검색어를 입력해 주세요.');
+    //    //    alert('Please enter a search word.');
     //    //    $('#stx').focus();
     //    //    return false;
     //    //}
@@ -82,7 +82,7 @@ $(function () {
     /* 마이페이지 영역 제외 클릭시 마이페이지 팝업 닫기 */
     $(".wrap").click(function (e) {
         if ($(".topMypage").css("display") == "block") {
-            if (e.target.id != "showTop") {
+            if (e.target.id != "showTop" && e.target.id != "showTopNew") {
                 mypageOut();
             }
         }
@@ -167,8 +167,11 @@ function loginGo() {
 
 /* 회원가입 */
 function joinGo() {
-    popupClose();
-    $('.popupArea.join').show();
+    alert("Authorized users only: it's a closed beta version");
+    return false;
+
+    //popupClose();
+    //$('.popupArea.join').show();
 }
 
 /* 회원가입완료 */

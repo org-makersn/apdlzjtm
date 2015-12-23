@@ -23,6 +23,7 @@ namespace Makersn.Models
         public virtual string RegIp { get; set; }
 
 
+
         [IgnoreDataMember]
         public virtual string ArticleTItle { get; set; }
         [IgnoreDataMember]

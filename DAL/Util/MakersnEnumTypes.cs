@@ -96,22 +96,20 @@ namespace Makersn.Util
         /// </summary>
         public enum CateName
         {
-            [EnumTitle("전체")]
-            전체 = 0,
-            [EnumTitle("아트&데코")]
-            아트데코 = 1001,
-            [EnumTitle("패션&악세사리")]
+            [EnumTitle("All")]
+            All = 0,
+            [EnumTitle("Art")]
+            Art = 1001,
+            [EnumTitle("Fashion & Accessories")]
             패션악세사리 = 1002,
-            [EnumTitle("캐릭터&토이")]
+            [EnumTitle("Toy & Figurine")]
             캐릭터토이 = 1003,
-            [EnumTitle("생활용품")]
+            [EnumTitle("Home & Living")]
             생활용품 = 1004,
-            [EnumTitle("테크&툴")]
+            [EnumTitle("Tech & Tool")]
             테크툴 = 1005,
-            [EnumTitle("교육&학습도구")]
-            교육학습도구 = 1006,
-            [EnumTitle("컨테스트")]
-            컨테스트 = 10203
+            [EnumTitle("Learning")]
+            교육학습도구 = 1006
         }
 
         /// <summary>
@@ -130,16 +128,26 @@ namespace Makersn.Util
         /// </summary>
         public enum ContactName
         {
-            [EnumTitle("불편/개선사항")]
-            불편개선사항 = 2001,
-            [EnumTitle("채용관련")]
-            채용관련 = 2002,
-            [EnumTitle("제휴 및 협력관련")]
-            제휴및협력관련 = 2003,
-            [EnumTitle("미디어관련")]
-            미디어관련 = 2004,
-            [EnumTitle("기타")]
-            기타 = 2005
+            //[EnumTitle("불편/개선사항")]
+            //불편개선사항 = 2001,
+            //[EnumTitle("채용관련")]
+            //채용관련 = 2002,
+            //[EnumTitle("제휴 및 협력관련")]
+            //제휴및협력관련 = 2003,
+            //[EnumTitle("미디어관련")]
+            //미디어관련 = 2004,
+            //[EnumTitle("기타")]
+            //기타 = 2005
+            [EnumTitle("Report")]
+            Report = 2001,
+            [EnumTitle("Career")]
+            Career = 2002,
+            [EnumTitle("Partnership")]
+            Partnership = 2003,
+            [EnumTitle("Media")]
+            Media = 2004,
+            [EnumTitle("Other")]
+            Other = 2005
         }
 
         /// <summary>
@@ -147,19 +155,19 @@ namespace Makersn.Util
         /// </summary>
         public enum InfoName
         {
-            [EnumTitle("소개")]
+            [EnumTitle("About")]
             about = 0,
             //[EnumTitle("블로그")]
             //blog = 1,
-            [EnumTitle("고객센터")]
+            [EnumTitle("Contact")]
             customer = 2,
-            [EnumTitle("공지사항")]
+            [EnumTitle("Notice")]
             notice = 3,
-            [EnumTitle("라이센스")]
+            [EnumTitle("License")]
             license = 4,
-            [EnumTitle("이용약관")]
+            [EnumTitle("Terms")]
             terms = 5,
-            [EnumTitle("개인정보취급방침")]
+            [EnumTitle("Privacy")]
             privacy = 6
         }
 
@@ -225,7 +233,13 @@ namespace Makersn.Util
             [EnumTitle("cleanup")]
             cleanup = 7,
             [EnumTitle("admin")]
-            admin =8
+            admin = 8,
+            [EnumTitle("printing")]
+            printing = 9,
+            [EnumTitle("order")]
+            order = 10,
+            [EnumTitle("printingprofile")]
+            printingprofile = 11
         }
 
         public enum OrderState {
@@ -274,5 +288,54 @@ namespace Makersn.Util
             MPP = 30
         }
 
+        public enum TranslationStatus
+        {
+            [EnumTitle("요청")]
+            요청 = 1,
+            [EnumTitle("완료")]
+            완료 = 2,
+            [EnumTitle("보류")]
+            보류 = 3
+        }
+
+        public enum TranslationFlag
+        {
+            [EnumTitle("번역요청")]
+            번역요청 = 1,
+            [EnumTitle("직접번역")]
+            직접번역 = 2
+        }
+
+        public enum LanguageType
+        {
+            [EnumTitle("한국어")]
+            KR = 1,
+            [EnumTitle("영어")]
+            EN = 2,
+            [EnumTitle("중국어")]
+            CN = 3,
+            [EnumTitle("일번어")]
+            JP = 4
+        }
+
+        public enum CateNameToUrl
+        {
+            [EnumTitle("All")]
+            All = 0,
+            [EnumTitle("Art")]
+            Art = 1001,
+            [EnumTitle("Fashion_Accessories")]
+            Fashion_Accessories = 1002,
+            [EnumTitle("Toy_Figurine")]
+            Toy_Figurine = 1003,
+            [EnumTitle("Home_Living")]
+            Home_Living = 1004,
+            [EnumTitle("Tech_Tool")]
+            Tech_Tool = 1005,
+            [EnumTitle("Learning")]
+            Learning = 1006,
+            [EnumTitle("Contest")]
+            Contest = 1007
+        }
     }
 }

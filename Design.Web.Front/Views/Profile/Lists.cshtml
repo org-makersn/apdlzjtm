@@ -27,17 +27,17 @@
                     </div>
                     <div class="detailBox">
                         <div class="productText">
-                            <a href="/design/Detail?no=@a.No">@a.Title</a>
+                            <a href="/design/Detail/@a.No">@a.Title</a>
                         </div>
                         <div class="by">
                             <p>by <span class="name"><a href="javascript:GoPage('@No')">@a.MemberName</a></span></p>
                         </div>
                         <ul class="countBox">
-                            <li class="show" title="조회수"><a href="/design/Detail?no=@a.No"><span>@a.ViewCnt</span></a></li>
+                            <li class="show" title="view"><a href="/design/Detail/@a.No"><span>@a.ViewCnt</span></a></li>
 
-                            <li class="heart" title="좋아요"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
+                            <li class="heart" title="likes"><a href="javascript:SetLikes('@a.No','@ViewBag.LogOnChk')" onclick="return !count++">
                                 <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>
-                            <li class="comment" title="댓글"><a href="/design/Detail?no=@a.No&goReply=Y"><span>@a.CommentCnt</span></a></li>
+                            <li class="comment" title="comment"><a href="/design/Detail?no=@a.No&goReply=Y"><span>@a.CommentCnt</span></a></li>
                         </ul>
                     </div>
                 </div>

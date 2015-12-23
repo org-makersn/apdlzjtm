@@ -55,11 +55,11 @@
                 e.preventDefault();
 
                 if ($("#UserId").val() == "") {
-                    alert('아이디를 입력해 주세요.');
+                    alert('Please enter User ID.');
                     $("#UserId").focus();
                     return true;
                 } else if ($("#Password").val() == "") {
-                    alert('패스워드를 입력해 주세요.');
+                    alert('Please enter password.');
                     $("#Password").focus();
                     return true;
                 }
@@ -75,7 +75,7 @@
                         if (response.Success) {
                             $(location).attr("href", response.Result);
                         }
-                        else { alert("아이디 혹은 비밀번호가 틀립니다."); $("#Password").val(""); }
+                        else { alert("The username or password is invalid."); $("#Password").val(""); }
                     },
                     complete: function (response) {
                     },

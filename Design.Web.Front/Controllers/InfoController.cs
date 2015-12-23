@@ -24,7 +24,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        
         public ActionResult About()
         {
             ViewBag.InfoList = GetInfoList();
@@ -45,7 +45,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public ActionResult License()
         {
             ViewBag.InfoList = GetInfoList();
@@ -56,7 +56,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public ActionResult Terms()
         {
             ViewBag.InfoList = GetInfoList();
@@ -67,7 +67,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public ActionResult Privacy()
         {
             ViewBag.InfoList = GetInfoList();
@@ -98,16 +98,12 @@ namespace Design.Web.Front.Controllers
         }
 
         //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
-        public ActionResult Notice(int page = 1, string competition="")
+        public ActionResult Notice(int page = 1)
         {
             ViewBag.InfoList = GetInfoList();
             NoticesDac noticesDac = new NoticesDac();
 
-            ViewBag.Competition = competition;
-
-            //IList<BoardT> list = noticesDac.GetNoticesByContent("", "");
-            IList<BoardT> list = noticesDac.GetNoticesList();
-            
+            IList<BoardT> list = noticesDac.GetNoticesByContent("", "", "EN");
             return View(list.OrderByDescending(o => o.No).ToPagedList(page, 10));
         }
 

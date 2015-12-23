@@ -1,11 +1,9 @@
 ﻿@{
-    ViewBag.Title = "메이커스앤";
+    ViewBag.Title = "MakersN";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int recommendIndex = 1;
     int popularIndex = 1;
     int newArticleIndex = 1;
-
-    int comIndex = 1;
 }
 
 @section head{
@@ -22,19 +20,8 @@
 
 @section designMian{
     <!-- MainSlide -->
-    <div class="unslider-carousel has-dots topVisu">
-        @*@Html.Action("GetMainBanner","Main", null)*@
-        <ul>
-            <li style="cursor: pointer; background: url(http://www.makersn.com/fileupload/banner/fullsize/main_background.png) top center no-repeat #fff; background-size: cover;" onclick="index.GoBannerPage('http://www.makersn.com/info/notice?competition=on', 'n')">
-                <span style="position:absolute;left:50%;margin-left:-420px;display:block;width:834px;height:100%;background:url(http://www.makersn.com/fileupload/banner/fullsize/main_contents.png) no-repeat"></span>
-            </li>
-            <li style="cursor: pointer; width: 50%; background: url(http://www.makersn.com//fileupload/banner/fullsize/9beeabc5-b425-49f0-a5b8-d631c5b13d76.jpg) 50% 0% / cover no-repeat rgb(255, 255, 255);" onclick="index.GoBannerPage('', 'n');">
-                <div class="container">
-                    <p class="txt1"></p>
-                </div>
-            </li>
-
-        </ul>
+    <div class="unslider-carousel has-dots">
+        @Html.Action("GetMainBanner","Main", null)
     </div>
     <!-- //MainSlide -->
 
@@ -42,58 +29,9 @@
 
 <!-- 추천 디자인 -->
 <div class="mainTitle">
-    <h2>컨테스트</h2>
+    <h2>Featured</h2>
     <p>
-        <a href="/design?codeNo=10203">더보기 +</a>
-    </p>
-</div>
-
-<!-- BaseList -->
-<div class="baseList">
-    <ul class="item_area">
-        @foreach (Makersn.Models.ArticleDetailT recommened in ViewBag.ComList)
-        {
-            string className = comIndex % 4 == 0 ? "class=mgR0" : "";
-            string likeChk = recommened.IsLikes == 1 ? "class=on" : "";
-            string No = Base64Helper.Base64Encode(recommened.MemberNo.ToString());
-            <li @className>
-                <!-- ProductBox -->
-                <div class="productBox">
-                    <div class="productImg">
-                        <a href="/design/Detail?no=@recommened.No">
-                            <img src="@ViewBag.ArticleImgUrl@recommened.MainImgName" alt="@recommened.Title" /></a>
-                    </div>
-                    <div class="detailBox">
-                        <div class="productText">
-                            <a href="/design/Detail?no=@recommened.No">@recommened.Title </a>
-                        </div>
-                        <div class="by">
-                            <p>by <span class="name"><a href="/Profile?no=@No">@recommened.MemberName</a></span></p>
-                        </div>
-                        <ul class="countBox">
-                            <li class="show" title="조회수"><a href="/design/Detail?no=@recommened.No"><span>@recommened.ViewCnt</span></a></li>
-
-                            <li class="heart" title="좋아요"><a href="javascript:SetLikes('@recommened.No','@ViewBag.LogOnChk')" onclick="return !count++">
-                                <span @likeChk id="likeChk_@recommened.No">@recommened.LikeCnt</span></a></li>
-                            <li class="comment" title="댓글"><a href="/design/Detail?no=@recommened.No&goReply=Y"><span>@recommened.CommentCnt</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- //ProductBox -->
-            </li>
-            comIndex++;
-        }
-    </ul>
-</div>
-<!-- //BaseList -->
-<!-- //추천 디자인 -->
-
-
-<!-- 추천 디자인 -->
-<div class="mainTitle">
-    <h2>추천 디자인</h2>
-    <p>
-        <a href="/design?pageGubun=R">더보기 +</a>
+        <a href="/design?pageGubun=R">more +</a>
     </p>
 </div>
 
@@ -109,18 +47,18 @@
                 <!-- ProductBox -->
                 <div class="productBox">
                     <div class="productImg">
-                        <a href="/design/Detail?no=@recommened.No">
+                        <a href="/design/Detail/@recommened.No">
                             <img src="@ViewBag.ArticleImgUrl@recommened.MainImgName" alt="@recommened.Title" /></a>
                     </div>
                     <div class="detailBox">
                         <div class="productText">
-                            <a href="/design/Detail?no=@recommened.No">@recommened.Title </a>
+                            <a href="/design/Detail/@recommened.No">@recommened.Title </a>
                         </div>
                         <div class="by">
                             <p>by <span class="name"><a href="/Profile?no=@No">@recommened.MemberName</a></span></p>
                         </div>
                         <ul class="countBox">
-                            <li class="show" title="조회수"><a href="/design/Detail?no=@recommened.No"><span>@recommened.ViewCnt</span></a></li>
+                            <li class="show" title="조회수"><a href="/design/Detail/@recommened.No"><span>@recommened.ViewCnt</span></a></li>
 
                             <li class="heart" title="좋아요"><a href="javascript:SetLikes('@recommened.No','@ViewBag.LogOnChk')" onclick="return !count++">
                                 <span @likeChk id="likeChk_@recommened.No">@recommened.LikeCnt</span></a></li>
@@ -139,9 +77,9 @@
 
 <!-- 인기 디자인 -->
 <div class="mainTitle">
-    <h2>인기 디자인</h2>
+    <h2>Popular</h2>
     <p>
-        <a href="/design?pageGubun=P">더보기 +</a>
+        <a href="/design?pageGubun=P">more +</a>
     </p>
 </div>
 
@@ -157,22 +95,22 @@
                 <!-- ProductBox -->
                 <div class="productBox">
                     <div class="productImg">
-                        <a href="/design/Detail?no=@popular.No">
+                        <a href="/design/Detail/@popular.No">
                             <img src="@ViewBag.ArticleImgUrl@popular.MainImgName" alt="@popular.Title" /></a>
                     </div>
                     <div class="detailBox">
                         <div class="productText">
-                            <a href="/design/Detail?no=@popular.No">@popular.Title </a>
+                            <a href="/design/Detail/@popular.No">@popular.Title </a>
                         </div>
                         <div class="by">
                             <p>by <span class="name"><a href="/Profile?no=@No">@popular.MemberName</a></span></p>
                         </div>
                         <ul class="countBox">
-                            <li class="show" title="조회수"><a href="/design/Detail?no=@popular.No"><span>@popular.ViewCnt</span></a></li>
+                            <li class="show" title="조회수"><a href="/design/Detail/@popular.No"><span>@popular.ViewCnt</span></a></li>
 
                             <li class="heart" title="좋아요"><a href="javascript:SetLikes('@popular.No','@ViewBag.LogOnChk')" onclick="return !count++">
                                 <span @likeChk id="likeChk_@popular.No">@popular.LikeCnt</span></a></li>
-                            <li class="comment" title="댓글"><a href="/design/Detail?no=@popular.No"><span>@popular.CommentCnt</span></a></li>
+                            <li class="comment" title="댓글"><a href="/design/Detail?no=@popular.No&goReply=Y"><span>@popular.CommentCnt</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -187,9 +125,9 @@
 
 <!-- 신규 디자인 -->
 <div class="mainTitle">
-    <h2>신규 디자인</h2>
+    <h2>New</h2>
     <p>
-        <a href="/design?pageGubun=N">더보기 +</a>
+        <a href="/design?pageGubun=N">more +</a>
     </p>
 </div>
 
@@ -205,22 +143,22 @@
                 <!-- ProductBox -->
                 <div class="productBox">
                     <div class="productImg">
-                        <a href="/design/Detail?no=@newArticle.No">
+                        <a href="/design/Detail/@newArticle.No">
                             <img src="@ViewBag.ArticleImgUrl@newArticle.MainImgName" alt="@newArticle.Title" /></a>
                     </div>
                     <div class="detailBox">
                         <div class="productText">
-                            <a href="/design/Detail?no=@newArticle.No">@newArticle.Title </a>
+                            <a href="/design/Detail/@newArticle.No">@newArticle.Title </a>
                         </div>
                         <div class="by">
                             <p>by <span class="name"><a href="/Profile?no=@No">@newArticle.MemberName</a></span></p>
                         </div>
                         <ul class="countBox">
-                            <li class="show" title="조회수"><a href="/design/Detail?no=@newArticle.No"><span>@newArticle.ViewCnt</span></a></li>
+                            <li class="show" title="조회수"><a href="/design/Detail/@newArticle.No"><span>@newArticle.ViewCnt</span></a></li>
 
                             <li class="heart" title="좋아요"><a href="javascript:SetLikes('@newArticle.No','@ViewBag.LogOnChk')" onclick="return !count++">
                                 <span @likeChk id="likeChk_@newArticle.No">@newArticle.LikeCnt</span></a></li>
-                            <li class="comment" title="댓글"><a href="/design/Detail?no=@newArticle.No"><span>@newArticle.CommentCnt</span></a></li>
+                            <li class="comment" title="댓글"><a href="/design/Detail?no=@newArticle.No&goReply=Y"><span>@newArticle.CommentCnt</span></a></li>
                         </ul>
                     </div>
                 </div>

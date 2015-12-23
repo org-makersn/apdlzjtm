@@ -2,9 +2,6 @@
 using NHibernate;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +10,6 @@ namespace Makersn.BizDac
 {
     public class ArticleFileDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
-
         #region 파일 리스트
         /// <summary>
         /// 파일 리스트
@@ -44,7 +39,7 @@ namespace Makersn.BizDac
                 int cnt = session.QueryOver<ArticleFileT>().Where(w => w.FileGubun == "article" && w.ArticleNo == articleNo).List<ArticleFileT>().Count();
                 return cnt;
             }
-        }
+        } 
         #endregion
 
         #region get article files by temp
@@ -57,7 +52,7 @@ namespace Makersn.BizDac
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                IList<ArticleFileT> files = session.QueryOver<ArticleFileT>().Where(w => w.FileGubun != "DELETE" && w.Temp == temp).OrderBy(o => o.Seq).Asc.ThenBy(o => o.RegDt).Asc.List<ArticleFileT>();
+                IList<ArticleFileT> files = session.QueryOver<ArticleFileT>().Where(w => w.FileGubun != "DELETE" && w.Temp == temp).OrderBy(o => o.Seq).Asc.ThenBy(o =>o.RegDt).Asc.List<ArticleFileT>();
                 return files;
             }
         }
@@ -130,28 +125,8 @@ namespace Makersn.BizDac
         /// <returns></returns>
         public bool UploadCancle(string temp)
         {
-            //bool result = false;
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "UPLOAD_CANCLE_FRONT";
-            //cmd.Parameters.Add("@TEMP", SqlDbType.VarChar, 60).Value = temp;
-            //cmd.Connection = con;
-            //con.Open();
-            //try
-            //{
-            //    cmd.ExecuteNonQuery();
-            //    result = true;
-            //}
-            //catch
-            //{
-
-            //}
-            //con.Close();
-            //return result;
-
             //string query = string.Format(@"DELETE FROM ARTICLE_FILE WHERE TEMP = '{0}'", temp);
-            string query = @"UPDATE ARTICLE_FILE SET FILE_GUBUN='DELETE' WHERE TEMP = :temp";
+            string query = @"UPDATE ARTICLE_FILE SET FILE_GUBUN='DELETE' WHERE TEMP = :temp ";
             bool result = false;
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -160,7 +135,6 @@ namespace Makersn.BizDac
                     IQuery queryObj = session.CreateSQLQuery(query);
                     queryObj.SetParameter("temp", temp);
                     queryObj.ExecuteUpdate();
-
                     transaction.Commit();
                     session.Flush();
                     result = true;
@@ -190,16 +164,6 @@ namespace Makersn.BizDac
         /// <param name="seqArray"></param>
         public void UpdateArticleFileSeq(string[] seqArray)
         {
-            //SqlConnection con = new SqlConnection(conStr);
-            //SqlCommand cmd = new SqlCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "UPDATE_ARTICLEFILE_SEQ_FRONT";
-            //cmd.Parameters.Add("@ARTICLE_FILE_NO_LIST", SqlDbType.VarChar, 5000).Value = noList;
-            //cmd.Connection = con;
-            //con.Open();
-            //cmd.ExecuteNonQuery();
-            //con.Close();
-
             string query = "";
             for (int i = 0; i < seqArray.Length; i++)
             {

@@ -34,9 +34,7 @@ namespace Makersn.BizDac
                                 ) as b
 								order by b.totalCnt desc";
 
-                IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(PopularStateT));
-
-                IList<PopularStateT> list = (List<PopularStateT>)queryObj.List<PopularStateT>();
+                IList<PopularStateT> list = (List<PopularStateT>)session.CreateSQLQuery(query).AddEntity(typeof(PopularStateT)).List<PopularStateT>();
 
 
                 return list;

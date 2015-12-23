@@ -4,7 +4,7 @@ var Upload = Upload || {};
 var uploadFileCnt = 0;
 
 Upload.Init = function () {
-    console.log(uploadFileCnt);
+    //console.log(uploadFileCnt);
     uploadCnt = $("#uploadCnt").val();
     //브라우저 체크
     Upload.BrowserRecognition();
@@ -31,7 +31,7 @@ Upload.Init = function () {
         Upload.File("/design/StlUpload", fileobj);
     });
 
-    $('#code_all').addClass('selected');
+    //$('#code_all').addClass('selected');
 
     $('#li_4').addClass('selected');
 
@@ -54,17 +54,15 @@ Upload.Init = function () {
     })
 
     // 캡쳐
-    $('#save_id').on('click', function () {
+    $('#save_id,.bgThumOutput').on('click', function () {
         //var ifm = $("#viewer_frame").contents().find("canvas");
         //$('#stl_val').val(ifm[0].toDataURL());
         $('#stl_val').val(thingiview.renderer.domElement.toDataURL());
-        $("#save_id").hide();
-
-        var $form_data = $("#img_form").serialize();
 
         var showIdx = parseInt($("#showIndex").val(), 10) + 1;
-        console.log(showIdx);
 
+        var $form_data = $("#img_form").serialize();
+        //console.log($form_data);
         thingiview = null;
 
         $.ajax({
@@ -149,11 +147,11 @@ Upload.StlTrigger = function (no) {
 Upload.ArticleUpload = function () {
     uncloset();//페이지 새로고침 끄기
 
-
-
     $("#mode").val("upload");
 
-    if (check_msg('main_img', '메인이미지를 선택해 주세요.', 'required') == false) return false;
+
+    if (check_msg('main_img', 'Please, Select Main Image.', 'required') == false) return false;
+
 
     var chkType = false;
 
@@ -163,25 +161,23 @@ Upload.ArticleUpload = function () {
         }
     });
 
-    if (!chkType) { alert("stl 혹은 obj 파일을 업로드 해주세요"); return false; }
+    if (!chkType) { alert("You must Upload at least one 3D modeling file."); return false; }
 
-    if (check_msg('article_title', '제목을 입력해 주세요.', 'required:articleTitle') == false) return false;
-    if (check_msg('article_contents', '내용을 입력해 주세요.', 'required:contents') == false) return false;
-
-
+    if (check_msg('article_title', 'Please, write the title.', 'required:articleTitle') == false) return false;
+    if (check_msg('article_contents', 'Please, write the Description Box.', 'required:contents') == false) return false;
 
 
     if (!$("input:radio[name=lv1]").is(":checked")) {
-        alert("카테고리를 선택해주세요.");
+        alert("Please select a category.");
         $("#article_title").focus();
         return false;
     }
     //if ($("#article_title").val().length > 30) {
-    //    alert("제목은 30자 내외로 적어주세요");
+    //    alert("Please write the title within 30 characters.");
     //    return false;
     //}
     //if ($("#article_contents").val().length > 2000) {
-    //    alert("내용은 2000자 내외로 적어주세요");
+    //    alert("Please write the description within 2000 characters.");
     //    return false;
     //}
 
@@ -233,7 +229,7 @@ Upload.TempUpload = function () {
     //if (check_msg('article_contents', '내용을 입력해 주세요.', 'required') == false) return false;
 
     //if (!$("input:radio[name=lv1]").is(":checked")) {
-    //    alert("카테고리를 선택해주세요.");
+    //    alert("Please select a category.");
     //    $("#article_title").focus();
     //    return false;
     //}
@@ -305,7 +301,7 @@ Upload.GetArticleFiles = function (no) {
 }
 
 Upload.AppendFile = function (no, idx) {
-    console.log(idx - 1);
+
     $.ajax({
         type: 'POST',
         url: "/article/appendFile",
@@ -344,6 +340,7 @@ Upload.UISelect = function (obj, valLst, val, check_id) {
         set.value.append($("#" + check_id).next().html());
     }
     set.value.click(function () {
+
         set.list.show();
         set.list.focusin(function () {
             set.list.show();
@@ -370,8 +367,8 @@ Upload.UISelect = function (obj, valLst, val, check_id) {
 Upload.ValidExtension = function (type, fileobj) {
     var regex;
 
-    if (fileobj[0].files[0].size > 100 * 1024 * 1024) {
-        alert('최대 사이즈를 초과하였습니다.');
+    if (fileobj[0].files[0].size > 200 * 1024 * 1024) {
+        alert('It has exceeded the maximum size.');
         return false;
     }
 
@@ -379,19 +376,19 @@ Upload.ValidExtension = function (type, fileobj) {
 
         regex = /(.jpg|.jpeg|.gif|.png)$/i;
         if (!regex.test(fileobj.val().toLowerCase())) {
-            alert('gif, jpg, png 형식 파일만 가능합니다.');
+            alert('Only gif, jpg, png format is allowed.');
             return false;
         }
     }
     else if (type == "3d") {
         regex = /(.stl|.obj)$/i;
         if (!regex.test(fileobj.val().toLowerCase())) {
-            alert('stl, obj 형식 파일만 가능합니다.');
+            alert('Only stl, obj format is allowed.');
             return false;
         }
     }
     else {
-        alert('파일 타입을 확인해주세요.');
+        alert('Please check the file type.');
         return false;
     }
 }
@@ -426,7 +423,7 @@ Upload.BrowserRecognition = function () {
 
         $('.showThum').on('click', function () {
 
-            alert('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요.')
+            alert('Please install Internet Explorer 11, Chrome, FireFox .')
             return false;
         })
         $('.showThum').removeAttr('onclick')
@@ -434,7 +431,7 @@ Upload.BrowserRecognition = function () {
 
     if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
         $('.showThum').on('click', function () {
-            alert('익스플로러11, 크롬, 파이어폭스를 설치 후 이용해 주세요.')
+            alert('Please install Internet Explorer 11, Chrome, FireFox .')
             return false;
         })
 
@@ -447,7 +444,7 @@ Upload.More = function () {
     $("#uploadCnt").val(addUploadCnt);
     uploadCnt = $("#uploadCnt").val();
     //Upload.GetArticleFiles();
-
+    
     for (var i = parseInt(uploadCnt) - 4 ; i <= parseInt(uploadCnt) ; i++) {
         if (i % 5 == 0) {
             $("#ajax_upload").find('ul').append('<li class="mgR0">' + i + '</li>');
@@ -474,11 +471,11 @@ Upload.DeleteMore = function () {
 
         }
         else {
-            alert("파일이 추가되어 있어서 삭제 할 수 없습니다");
+            alert("Please remove the files first.");
         }
     }
     else {
-        alert("더 이상 삭제 할 수 없습니다");
+        alert("Unable to delete anymore.");
     }
 }
 
@@ -488,7 +485,7 @@ Upload.minusCnt = function () {
 }
 
 Upload.ArticleDelete = function () {
-    if (confirm("삭제 하시겠습니까?") == true) {
+    if (confirm("Do you want to delete?") == true) {
         var articleNo = $("#No").val();
 
         var $form_data = $("#insert_form").serialize();

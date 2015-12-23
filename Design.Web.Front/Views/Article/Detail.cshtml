@@ -24,7 +24,7 @@
     int index = 0;
     int setNum = 0;
     int sildeNum = 0;
-    
+
     IList<ArticleFileT> fileList = ViewBag.Files;
     
 
@@ -45,17 +45,18 @@
 
 
 @section editBtnzone{
-    <ul class="btnSet">
-        @*<li><a href="javascript:Global()">
+    @*<li><a href="javascript:Global()">
             <img src="@Url.Content("~/Content/images/common/btn/btn_language.gif")" /></a></li>*@
-        @if (Model.MemberNo == ViewBag.VisitorNo || profile.UserLevel > 50)
-        {
+    @if (Model.MemberNo == ViewBag.VisitorNo || profile.UserLevel > 50)
+    {
 @*<li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">
                 <img src="@Url.Content("~/Content/images/common/btn/btn_edit.gif")" /></a></li>*@
-            <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">편집</a></li>
-        }
-    </ul>
+        <li><a class="w80" href="javascript:ShowDivTrans()">translate</a></li>
+        <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">Edit</a></li>
+    }
 }
+
+
 <!-- contWrap -->
 <div class="contWrap">
     <!-- DetailWrap -->
@@ -74,7 +75,7 @@
                             string ImgPath = ViewBag.ArticleImgUrl + file.ImgName;
                             string filePath = ViewBag.Article3DUrl + file.Rename;
                             string jsUrl = ViewBag.ArticleJsUrl + file.Rename + ".js";
-                            <li style="display:none">
+                            <li style="display: none">
                                 <img class="lazy-load" src="@ImgPath" />
 
                                 @{if (setNum == 0)
@@ -107,7 +108,7 @@
                 <input type="hidden" id="sildeNum" value="@(sildeNum - 1)" />
 
                 <div class="thumbArea">
-                    <div id="bx-pager" style="display:none">
+                    <div id="bx-pager" style="display: none">
                         @foreach (Makersn.Models.ArticleFileT file in ViewBag.Files)
                         {
                             string ThumbImgPath = ViewBag.ArticleImgUrl + file.ImgName;
@@ -125,8 +126,8 @@
             <!-- About -->
             <div class="aboutZone" id="aboutZone">
                 <ul class="title">
-                    <li id="infoTit" class="infoTit on"><a href="javascript:void(0);" onclick="goDesign()">디자인 소개</a></li>
-                    <li id="downTit" class="downTit"><a href="javascript:void(0);" onclick="goDownFile()">파일 다운로드</a></li>
+                    <li id="infoTit" class="infoTit on"><a href="javascript:void(0);" onclick="goDesign()">DESCRIPTION</a></li>
+                    <li id="downTit" class="downTit"><a href="javascript:void(0);" onclick="goDownFile()">FILE DOWNLOAD</a></li>
                 </ul>
                 <div class="txt">
                     <p style="word-break: break-all">
@@ -158,7 +159,8 @@
                                         <span class="fileNum"></span>
                                     </div>
                                     <div class="btnDown zip">
-                                        @Html.ActionLink("download", "AllDownloadForZip", new { articleNo = Model.No, zipName = Model.Title })
+                                        @*@Html.ActionLink("download", "http://dev.makersn.com/desing/AllDownloadForZip", new { articleNo = Model.No, zipName = Model.Title })*@
+                                        <a href="http://beta.makersn.com/design/AllDownloadForZip?articleNo=@Model.No&zipName=@Model.Title">DOWNLOAD</a>
                                     </div>
                                 </div>
                             </li>
@@ -180,7 +182,7 @@
                                 downloadUrl = Html.Encode(downloadUrl);
                                 float m = float.Parse(file.Size) / (float)1024;
                                 float size = float.Parse(m.ToString("F1"));
-                                float size2 = float.Parse((size/1024).ToString("F1"));
+                                float size2 = float.Parse((size / 1024).ToString("F1"));
                                 string resize = size > 1000 ? size2 + "MB" : size + "KB";
                             <li>
                                 <div class="downBox">
@@ -194,7 +196,8 @@
                                         <span class="fileNum">@resize</span>
                                     </div>
                                     <div class="btnDown">
-                                        @Html.ActionLink("download", "FileDownload", new { articleNo = Model.No, filePath = downloadUrl, fileName = file.Name })
+                                        @*@Html.ActionLink("download", "http://dev.makersn.com/desing/FileDownload", new { articleNo = Model.No, filePath = downloadUrl, fileName = file.Name })*@
+                                        <a href="http://beta.makersn.com/design/FileDownload?articleNo=@Model.No&filePath=@downloadUrl&fileName=@file.Name">DOWNLOAD</a>
                                     </div>
                                 </div>
                             </li>
@@ -220,92 +223,115 @@
         <!-- RightCont -->
         <div class="rightCont">
 
+            <div id="divTrans" style="display: none">
+                <div class="trans_arrow">
+                    <img src="/content/images/common/arrow_trans.png">
+                </div>
+                <div class="transPop">
+                    <div class="line"></div>
+                    <div class="arrow"></div>
+                    <div class="self">
+                        <span class="tit">User translation</span><br>
+                        Translate your own post
+                        <br>
+                        in the language selected below
+                <div class="selLang">
+                    <a href="javascript:DirectTranslation('KR')" class="ko">Korean</a>
+                    <!--a class="en">English</a-->
+                    @*<a class="cn">Chinese</a>
+                    <a class="jp">Japanese</a>*@
+                </div>
+                    </div>
+                    <div class="request">
+                        <span class="tit">Translation Request</span><br>
+                        Ask MakersN to translate your
+                        post in the language selected below
+				<div class="selLang">
+                    <a href="javascript:RequestTranslation('KR')" class="ko">Korean</a>
+                    <!--a class="en">English</a-->
+                    @* <a class="cn">Chinese</a>
+                    <a class="jp">Japanese</a>*@
+                </div>
+                    </div>
+                    <div class="close">
+                        <a href="javascript:CloseDivTrans()" alt="창닫기">
+                            <img src="/content/images/common/btn/btnReportClose.png"></a>
+                    </div>
+                </div>
+            </div>
+
             <!-- userInfoArea -->
             <div class="userInfoArea">
 
                 <p class="title">@Model.Title</p>
-                <p class="date">@Model.RegDt.ToString("yyyy-MM-dd")</p>
+                <p class="date">@Model.RegDt.ToString("yyyy.MM.dd")</p>
                 <div class="btnSet">
-                    @*<p class="download">
-                        <a href="javascript:void(0);" onclick="goDownFile();">
-                            <img src="/content/images/common/btn/btn_download.jpg" alt="다운로드" /></a>
-                    </p>*@
-                    <p><a href="javascript:void(0);" onclick="goDownFile();" class="download" title="다운로드">다운로드</a></p>
-                    @*<p><a href="#" onclick="goPrint();" class="print" title="프린트">프린트</a></p>*@
-                    @*   <ul class="socialArea">
-                        <li>
-                            <a href="javascript:pstFaceBook()" title="페이스북">
-                                <img src="/content/images/common/btn/btn_facebook.png" alt="페이스북" /></a>
-                        <li><a href="javascript:pstTwitter()" title="트위터">
-                            <img src="/content/images/common/btn/btn_twitter.png" alt="트위터" /></a>
-                        <li><a href="javascript:pstPinterest();" title="P">
-                            <img src="/content/images/common/btn/btn_p.png" alt="P" /></a>
-                    </ul>*@
+                    <p><a href="javascript:void(0);" onclick="goDownFile();" class="download" title="DOWNLOAD">DOWNLOAD</a></p>
                     <ul class="socialArea2">
                         @if (Model.Visibility == "Y")
                         {
-                            <li><a href="javascript:pstFaceBook()" target="_blank" title="페이스북" class="facebook"></a></li>
-                            <li><a href="javascript:pstTwitter()" target="_blank" title="트위터" class="twit"></a></li>
-                            <li><a href="javascript:pstPinterest();" target="_blank" title="P" class="p"></a></li>
+                            <li><a href="javascript:pstFaceBook()" target="_blank" title="facebook" class="facebook"></a></li>
+                            <li><a href="javascript:pstTwitter()" target="_blank" title="twitter" class="twit"></a></li>
+                            <li><a href="javascript:pstPinterest();" target="_blank" title="pinterest" class="p"></a></li>
                         }
                     </ul>
                 </div>
 
                 <div class="licenseZone">
-                    <p class="licenTit">이용 권한</p>
+                    <p class="licenTit">CCL</p>
                     <div class="iconZone">
                         @*@Model.Copyright*@
                         @{switch (Model.Copyright)
                           {
                               case 1:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="Creative Commons" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="Attribution" /></a>
                                   break;
                               case 2:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="Creative Commons" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="Attribution" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                                <img src="/content/images/common/btn/btn_licen3.png" title="Noncommercial" /></a>
                                   break;
                               case 3:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="Creative Commons" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="Attribution" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/ic_nd.png" alt="변경금지" /></a>
+                                <img src="/content/images/common/btn/ic_nd.png" title="No Derivative Works" /></a>
                                   break;
                               case 4:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="Creative Commons" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="Attribution" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen4.png" alt="동일조건변경허락" /></a>
+                                <img src="/content/images/common/btn/btn_licen4.png" title="Share Alike" /></a>
                                   break;
                               case 5:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="Creative Commons" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="Attribution" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                                <img src="/content/images/common/btn/btn_licen3.png" title="Noncommercial" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen4.png" alt="동일조건변경허락" /></a>
+                                <img src="/content/images/common/btn/btn_licen4.png" title="Share Alike" /></a>
                                   break;
                               case 6:
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen1.png" alt="이용 권한" /></a>
+                                <img src="/content/images/common/btn/btn_licen1.png" title="Creative Commons" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen2.png" alt="저작자표시" /></a>
+                                <img src="/content/images/common/btn/btn_licen2.png" title="Attribution" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/btn_licen3.png" alt="비영리" /></a>
+                                <img src="/content/images/common/btn/btn_licen3.png" title="Noncommercial" /></a>
                             <a href="/Info/license" target="_blank">
-                                <img src="/content/images/common/btn/ic_nd.png" alt="변경금지" /></a>
+                                <img src="/content/images/common/btn/ic_nd.png" title="No Derivative Works" /></a>
                                   break;
                           }
                         }
@@ -323,9 +349,9 @@
                     <div class="reportText">
                         <form id="report_form" name="report_form" method="post">
                             <input type="hidden" name="item_no" value="">
-                            <textarea id="txtReport" name="report" placeholder="이 게시물이 부적절하거나 관리자의 확인이 필요할 경우 이유를 적어주시면 검토 및 조치하겠습니다."></textarea>
+                            <textarea id="txtReport" name="report" placeholder="If this post is inappropriate or is in need of administrator's attention, please send us comments so we can review and take further actions."></textarea>
                         </form>
-                        <button title="보내기" id="btnSendReport">보내기</button>
+                        <button title="send" id="btnSendReport">send</button>
                         <a href="javascript:void(0);" class="closeReport">
                             <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
                     </div>
@@ -340,7 +366,7 @@
                 </div>
 
                 <div class="tagZone">
-                    <p class="tagTit">태그</p>
+                    <p class="tagTit">Tags</p>
 
                     @{
                         if (!string.IsNullOrEmpty(Model.Tag))
@@ -362,12 +388,12 @@
                         string likeclassName = Model.IsLikes > 0 ? "class=on" : "";
                     }
 
-                    <li class="show"><span title="조회수">@Model.ViewCnt</span></li>
+                    <li class="show"><span title="view">@Model.ViewCnt</span></li>
                     @*<li class="heart"><a href="javascript:detail.LikeArticle(@Model.No)" onclick="return !count++"><span @className id="likeChk">@Model.LikeCnt</span></a></li>*@
-                    <li class="heart"><a href="javascript:SetLikes('@Model.No','@ViewBag.LogOnChk')" onclick="return !count++"><span @likeclassName id="likeChk_@Model.No" title="좋아요">@Model.LikeCnt</span></a></li>
+                    <li class="heart"><a href="javascript:SetLikes('@Model.No','@ViewBag.LogOnChk')" onclick="return !count++"><span @likeclassName id="likeChk_@Model.No" title="likes">@Model.LikeCnt</span></a></li>
 
-                    <li class="collect"><span title="리스트">@ViewBag.ListCnt</span></li>
-                    <li class="comment bdR_no"><span id="replyCnt" style="cursor: pointer" title="댓글">@Model.CommentCnt</span></li>
+                    <li class="collect"><span title="lists">@ViewBag.ListCnt</span></li>
+                    <li class="comment bdR_no"><span id="replyCnt" style="cursor: pointer" title="comment">@Model.CommentCnt</span></li>
                 </ul>
 
                 <div class="collectArea list">
@@ -377,9 +403,9 @@
                     <div class="reportText">
 
                         <div class="addNewList">
-                            <input id="newListName" placeholder="새로운 리스트 이름을 입력하세요." />
+                            <input id="newListName" placeholder="Enter a new list name" />
                             <div class="collectbtns">
-                                <a class="saveListName" title="저장">저장</a>
+                                <a class="saveListName" title="save">Save</a>
                             </div>
                         </div>
 
@@ -391,7 +417,7 @@
                                 <input type="hidden" value="0" id="chkList" />
                             }
                             <div class="selPrint">
-                                <p class="valPrint">리스트를 선택해 주세요</p>
+                                <p class="valPrint">Please choose a list</p>
                                 <div class="sub">
                                     <ul class="valuePrint">
                                         @foreach (Makersn.Models.ListT list in ViewBag.ListList)
@@ -406,8 +432,8 @@
 
 
                             <div class="collectbtns">
-                                <a class="NewList" title="새 리스트">새 리스트</a>
-                                <a class="saveList" title="저장">저장</a>
+                                <a class="NewList" title="new list">NEW LIST</a>
+                                <a class="saveList" title="save">SAVE</a>
                             </div>
                         </div>
 
@@ -444,6 +470,13 @@
 </div>
 <!-- //contWrap -->
 
+<form id="translationForm" method="post">
+    <input type="hidden" name="articleNo" value="@Model.No" />
+    <input type="hidden" name="langFrom" value="EN" />
+    <input type="hidden" id="langTo" name="langTo" value="KR" />
+
+</form>
+
 
 
 @section Scripts{
@@ -471,7 +504,7 @@
 
         //댓글 삭제
         detail.CommentDel = function (val) {
-            if (confirm("삭제하시겠습니까?") == true) {
+            if (confirm("Do you want to delete?") == true) {
                 var onSuccess = function (result) {
                     if (result.Success == true) {
                         Ajax.SyncGetPartialView("/design/reply", { no: "@Model.No" }, "goComment");
@@ -521,20 +554,24 @@
             Ajax.AjaxResponseModelService(this, "/design/CommentAdd", data, onSuccess);
         }
         else {
-            alert("댓글은 200자 내외로 적어주세요");
+            alert("Please write the comment within 200 characters.");
         }
     }
 
-    //댓글수정 보이기 가리기
-    detail.ShowEditComment = function (val) {
-        $("#comment_view_" + val).addClass("dbNo");
-        $("#comment_edit_" + val).removeClass("dbNo");
-    }
+        //댓글수정 보이기 가리기
+        detail.ShowEditComment = function (no, val) {
+            $("#comment_view_" + no).addClass("dbNo");
+            $("#comment_edit_" + no).removeClass("dbNo");
+            $(val).parents('.nameZone').find('.before').hide();
+            $(val).parents('.nameZone').find('.after').show();
+        }
 
-    detail.HideEditComment = function (val) {
-        $("#comment_view_" + val).removeClass("dbNo");
-        $("#comment_edit_" + val).addClass("dbNo");
-    }
+        detail.HideEditComment = function (no, val) {
+            $("#comment_view_" + no).removeClass("dbNo");
+            $("#comment_edit_" + no).addClass("dbNo");
+            $(val).parents('.nameZone').find('.before').show();
+            $(val).parents('.nameZone').find('.after').hide();
+        }
 
     //파일 다운로드
     detail.FileDownload = function (filePath, fileName) {
@@ -610,7 +647,7 @@
     }
 
     function goPrint() {
-        alert("서비스 준비중입니다.");
+        alert("Service is in preparation.");
     }
 
     /* 디자인 소개 보이기*/
@@ -625,11 +662,11 @@
     }
 
     function Global() {
-        alert("서비스 준비중입니다.");
+        alert("Service is in preparation.");
     }
 
     function GoShop() {
-        alert("서비스 준비중입니다.");
+        alert("Service is in preparation.");
     }
 
     //3dviewer 보이기
@@ -835,7 +872,7 @@
         //    $('.tagZone').hide();
         //};
 
-       
+
 
         //수정 버튼
         $("#editBtn").click(function () {
@@ -846,7 +883,7 @@
         // 리포트열기
         $('.repoartBtn,.reportText .closeReport').on('click', function (e) {
             e.preventDefault();
-            var topPx = $('.repoartBtn').offset().top + 37;
+            //var topPx = $('.repoartBtn').offset().top + 37;
             $("#txtReport").val("");
             //$('.reportArea').css('top', topPx)
             $('.reportArea').toggleClass('on');
@@ -922,7 +959,7 @@
                 $(".selPrint .sub").slideToggle("fast");
             }
             else {
-                alert("새 리스트를 만들어 주세요");
+                alert("Please create a new list.");
             }
         });
 
@@ -931,7 +968,7 @@
             if ("@Model.Visibility" == "Y") {
                 var listNo = $("#listNo").val();
                 if (listNo == 0) {
-                    alert("리스트를 선택해 주세요");
+                    alert("Please select a list.");
                 }
                 else {
                     var data = {
@@ -944,14 +981,14 @@
                             $(".collect").find("span").text(parseInt($(".collect").find("span").text(), 10) + 1);
                         }
                         else {
-                            alert("이미 등록되어있습니다.");
+                            alert("This has been registered already.");
                         }
                     }
                     Ajax.AjaxResponseModelService(this, "/design/AddToList", data, onSuccess);
                 }
             }
             else {
-                alert("비공개 처리된 게시물 입니다");
+                alert("This is a private posting.");
             }
         });
 
@@ -994,5 +1031,81 @@
             }
         });
     })
+
+    function RequestTranslation(langTo) {
+        if (confirm("When makersN completes translating your posting upon request,any previous translation done by you will be deleted.")) {
+            $("#langTo").val(langTo);
+
+            var action = "/article/requestTranslation";
+
+            var options = {
+                beforeSend: function () {
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        alert(response.Message);
+                        CloseDivTrans()
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+
+                },
+                error: function (error) {
+
+                }
+            };
+
+            $('#translationForm').attr("action", action).ajaxForm(options).submit();
+        }
+
+    }
+
+    function DirectTranslation(langTo) {
+        if (confirm("If you directly translate your posting after makersN Translation Service has been provided, the previous translation done by makersN will be deleted.")) {
+            $("#langTo").val(langTo);
+
+            var action = "/article/directTranslation";
+
+            var options = {
+                beforeSend: function () {
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        location.href = "/design/Translation?no=" + "@Model.No" + "&transFlag=2";
+                    }
+                    else {
+                        //alert(response.Message);
+                        if (confirm(response.Message)) {
+                            location.href = "http://beta.makersn.com/design/edit?no=" + "@Model.No";
+                        }
+                    }
+                },
+                complete: function (response) {
+
+                },
+                error: function (error) {
+
+                }
+            };
+
+            $('#translationForm').attr("action", action).ajaxForm(options).submit();
+        }
+    }
+
+
+    function ShowDivTrans() {
+        $("#divTrans").show();
+    }
+
+    function CloseDivTrans() {
+        $("#divTrans").hide();
+    }
     </script>
 }

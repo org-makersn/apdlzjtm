@@ -3,60 +3,70 @@
     ViewBag.Title = "디자인 업로드";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 @section editBtnzone{
-    @*<li><a href="javascript:void(0);"><img src="@Url.Content("~/Content/images/common/btn/btn_language.gif")" /></a></li>*@
-    <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">편집
+        @*<li><a href="javascript:void(0);"><img src="@Url.Content("~/Content/images/common/btn/btn_language.gif")" /></a></li>*@
+        <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">Edit
             @*<img src="@Url.Content("~/Content/images/common/btn/btn_edit.gif")" />*@</a></li>
 }
 
+
 <div class="subtitle">
-    <h2>디자인 업로드</h2>
-    <a href="javascript:void(0);" onclick="upguidePop();">
-        <img src="@Url.Content("~/Content/images/common/btn/btn_upload_guide.gif")" alt="업로드 가이드" /></a>
+    <h2>Design Upload</h2>
+    @*<a href="javascript:void(0);" onclick="upguidePop();">
+        <img src="@Url.Content("~/Content/images/common/btn/btn_upload_guide.gif")" alt="업로드 가이드" /></a>*@
+    <a class="upload_guide" href="javascript:void(0);" onclick="upguidePop();">Upload Guide</a>
 </div>
 
 <!-- uploadWrap -->
 <div class="uploadWrap">
     <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
-        @Html.HiddenFor(model => model.No)
-        <input type="hidden" id="temp" name="temp" value="@Model.Temp" />
+        <input type="hidden" id="No" name="No" value="@Model.No"/>
+        <input type="hidden" id="temp" name="temp" value="@ViewBag.Temp" />
         <input type="hidden" id="main_img" name="main_img" value="@Model.MainImage" />
         <input type="hidden" id="mode" name="mode" value="edit">
         <input type="hidden" id="del_no" name="del_no" value="">
         <input type="hidden" id="uploadCnt" name="uploadCnt" value="@ViewBag.UploadCnt">
         <input type="hidden" id="insertVideoSource" name="insertVideoSource" value="@Model.VideoUrl"/>
-
         <!-- File Upload -->
         <div class="uploadFile">
 
             <!-- 3D 모델링 파일 -->
             <div class="modelFile">
                 <div class="upBtnZone">
-                    <p class="title">3D 모델링 파일</p>
+                    <p class="title">3D modeling files</p>
                     <div class="btnAdd">
-                        <button class="file_input_button" title="파일추가"></button>
+                        <button class="file_input_button" title="Add files"></button>
                         <input type="file" class="file_input_hidden" name="stlupload" id="stlupload" />
                         <div class="btnLoading" style="display: none;">
                             @*<img src="@Url.Content("~/Content/images/common/loadingBg.gif")" alt="업로드중입니다." title="업로드중입니다." />*@
-                            <div id="progressbar" style="margin: 0px 0px 16px 0px;"><span style="position: absolute; text-align: center; font-size:large; width: 269px; margin: 7px 0 0 0;">My %</span></div>
+                            <div id="progressbar" style="margin: 0px 0px 16px 0px;"><span style="position: absolute; text-align: center; width: 269px; margin: 7px 0 0 0;">My %</span></div>
                         </div>
                     </div>
                 </div>
-                <p class="txt">타입 : stl, obj / 최대 사이즈 : 개당 200mb</p>
+               <p class="txt">
+                    Type : stl, obj
+                    <br>
+                    Max file size : 100mb each
+                </p>
             </div>
             <!-- //3D 모델링 파일 -->
 
             <!-- 이미지 파일 -->
             <div class="imgFile">
                 <div class="upBtnZone">
-                    <p class="title">이미지 파일</p>
+                    <p class="title">
+                        Image files
+                    </p>
                     <div class="btnAdd">
-                        <button class="file_input_button" title="파일추가"></button>
+                        <button class="file_input_button" title="Add files"></button>
                         <input type="file" class="file_input_hidden" name="imgupload" id="imgupload" />
                     </div>
                 </div>
-                <p class="txt">타입 : gif, jpg, png / 최대 사이즈 : 개당 100mb / 권장 해상도 630*470px</p>
+                <p class="txt">
+                    Type : gif, jpg, png  
+                    <br>
+                    Max image size : 100mb each  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Recommended resolution : 630*470px
+                </p>
             </div>
             <!-- //이미지 파일 -->
         </div>
@@ -65,15 +75,17 @@
         <div class="dragImg">
             <div class="mainBoxDrag">
                 <div class="imgMain">
-                    <img src="@ViewBag.ArticleImgUrl@Model.ImageName" alt="3d파일이미지">
+                    <img src="@ViewBag.ArticleImgUrl@Model.ImageName" alt="3D File Image">
                 </div>
             </div>
 
             <div class="selectImg" id="ajax_upload"></div>
 
             <div class="btnMores">
-                <a href="javascript:void(0);" onclick="Upload.DeleteMore();">삭제 -</a>
-                <a href="javascript:void(0);" onclick="Upload.More();">추가 +</a>
+                @*<a href="javascript:void(0);" onclick="Upload.More();">
+                    <img src="@Url.Content("~/Content/images/common/btn/btn_more_s.gif")" alt="more" /></a>*@
+                <a href="javascript:void(0);" onclick="Upload.DeleteMore();">delete -</a>
+                <a href="javascript:void(0);" onclick="Upload.More();">add +</a>
             </div>
         </div>
         <!-- //DragImg -->
@@ -84,22 +96,23 @@
             <div class="left">
 
                 <div class="boxNo1">
-                    <p class="headerInput">제목 &amp; 설명</p>
+                    <p class="headerInput">
+                        Title & Description
+                    </p>
                     <div>
-                        <input id="article_title" class="inputTit" type="text" name="article_title" placeholder="제목을 입력하세요." value="@Model.Title" />
+                        <input id="article_title" class="inputTit" type="text" name="article_title" value="@Model.Title" placeholder="Title" />
                     </div>
                     <div class="textArea">
-                        @*<textarea id="article_contents" name="article_contents">@Model.Contents</textarea>*@
-                        <textarea class="input_content" id="article_contents" name="article_contents" placeholder="내용을 입력하세요.">@Model.Contents</textarea>
-                        <textarea class="input_tag" id="article_tags" name="article_tags" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분).">@Model.Tag</textarea>
+                        @*<textarea id="article_contents" name="article_contents" placeholder="내용을 입력하세요."></textarea>*@
+                        <textarea class="input_content" id="article_contents" name="article_contents" placeholder="Description">@Model.Contents</textarea>
+                        <textarea class="input_tag" id="article_tags" name="article_tags" placeholder="ags (Put comma(,) between tags)">@Model.Tag</textarea>
 
                         <div class="btSet">
-                            <a href="#" class="aMovie" title="동영상 첨부"></a>
+                            <a href="#" id="aMovie" class="aMovie" title="동영상 첨부"></a>
                         </div>
+                        @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
                     </div>
-                    @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
                 </div>
-
             </div>
             <!-- //Left -->
 
@@ -107,26 +120,24 @@
             <div class="right">
 
                 <div class="boxNo1">
-                    <p class="headerInput">카테고리</p>
+                    <p class="headerInput">Category</p>
                     <div class="select">
                         <p class="value pCate"></p>
                         <ul class="lst_value">
                             <li id="code_all" style="display: none">
-                                <input type="radio" id="lv1" name="lv1" value="" /><label for="lv1">카테고리를 선택해 주세요</label></li>
-                            @*<li id="code_1007">
-                                <input type="radio" id="lv1_10203" name="lv1" value="10203" /><label for="lv1_10203">컨테스트</label></li>*@
+                                <input type="radio" id="lv1" name="lv1" value="" /><label for="lv1">All</label></li>
                             <li id="code_1001">
-                                <input type="radio" id="lv1_1001" name="lv1" value="1001" /><label for="lv1_1001">아트&데코</label></li>
+                                <input type="radio" id="lv1_1001" name="lv1" value="1001" /><label for="lv1_1001">Art</label></li>
                             <li id="code_1002">
-                                <input type="radio" id="lv1_1002" name="lv1" value="1002" /><label for="lv1_1002">패션&악세사리</label></li>
+                                <input type="radio" id="lv1_1002" name="lv1" value="1002" /><label for="lv1_1002">Fashion & Accessories</label></li>
                             <li id="code_1003">
-                                <input type="radio" id="lv1_1003" name="lv1" value="1003" /><label for="lv1_1003">캐릭터&토이</label></li>
+                                <input type="radio" id="lv1_1003" name="lv1" value="1003" /><label for="lv1_1003">Toy & Figurine</label></li>
                             <li id="code_1004">
-                                <input type="radio" id="lv1_1004" name="lv1" value="1004" /><label for="lv1_1004">생활용품</label></li>
+                                <input type="radio" id="lv1_1004" name="lv1" value="1004" /><label for="lv1_1004">Home & Living</label></li>
                             <li id="code_1005">
-                                <input type="radio" id="lv1_1005" name="lv1" value="1005" /><label for="lv1_1005">테크&툴</label></li>
+                                <input type="radio" id="lv1_1005" name="lv1" value="1005" /><label for="lv1_1005">Tech & Tool</label></li>
                             <li id="code_1006">
-                                <input type="radio" id="lv1_1006" name="lv1" value="1006" /><label for="lv1_1006">교육&학습도구</label></li>
+                                <input type="radio" id="lv1_1006" name="lv1" value="1006" /><label for="lv1_1006">Learning</label></li>
                         </ul>
                         <input type="hidden" id="category_no" value="" />
                     </div>
@@ -134,12 +145,17 @@
 
                 <div class="boxNo2">
                     <p class="headerInput">
-                        저작권 표시 <a href="info/license.html" target="_blank">
-                            <img src="@Url.Content("~/Content/images/common/ico/ico_q.gif")" alt="라이센스"></a>
+                        License <a href="/info/license" target="_blank">
+                            <img src="@Url.Content("~/Content/images/common/ico/ico_q.gif")" alt="License"></a>
                     </p>
                     <div class="select2">
                         <p class="value2"></p>
                         <ul class="lst_value2">
+                            @*<li id="li_all" style="display: none">
+                                <input type="radio" id="copy1" name="lv1" value="" />
+                                <label for="copy_4"><span class='titLicense01'>저작자표시</span> <span class='titLicense03'>동일조건변경허락</span></label>
+
+                            </li>
                             <li id="li_1">
                                 <input type="radio" id="copy_1" name="copyright" value="1" />
                                 <label for="copy_1"><span class='titLicense01'>저작자표시</span></label>
@@ -153,7 +169,7 @@
                                 <label for="copy_3"><span class='titLicense01'>저작자표시</span> <span class='titLicense04'>변경금지</span></label>
                             </li>
                             <li id="li_4">
-                                <input type="radio" id="copy_4" name="copyright" value="4" />
+                                <input type="radio" id="copy_4" name="copyright" value="4" checked="checked" />
                                 <label for="copy_4"><span class='titLicense01'>저작자표시</span> <span class='titLicense03'>동일조건변경허락</span></label>
                             </li>
                             <li id="li_5">
@@ -163,6 +179,47 @@
                             <li id="li_6">
                                 <input type="radio" id="copy_6" name="copyright" value="6" />
                                 <label for="copy_6"><span class='titLicense01'>저작자표시</span> <span class='titLicense02'>비영리</span> <span class='titLicense04'>변경금지</span></label>
+                            </li>*@
+
+
+                            <li id="li_all" style="display: none">
+                                <input type="radio" id="copy1" name="lv1" value="" />
+                                <label for="copy_4"><span class='titLicense01'>Attribution</span> <span class='titLicense03'>Share Alike</span></label>
+
+                            </li>
+                            <li id="li_1">
+                                <input type="radio" id="copy_1" name="copyright" value="1" />
+                                <label for="copy_1"><span class='titLicense01'>Attribution</span></label>
+                            </li>
+                            <li id="li_2">
+                                <input type="radio" id="copy_2" name="copyright" value="2" />
+                                <label for="copy_2">
+                                    <span class='titLicense01'>Attribution</span> <span class='titLicense02'>Noncommercial
+                                    </span>
+                                </label>
+                            </li>
+                            <li id="li_3">
+                                <input type="radio" id="copy_3" name="copyright" value="3" />
+                                <label for="copy_3"><span class='titLicense01'>Attribution</span> <span class='titLicense04'>No Derivative Works</span></label>
+                            </li>
+                            <li id="li_4">
+                                <input type="radio" id="copy_4" name="copyright" value="4" checked="checked" />
+                                <label for="copy_4">
+                                    <span class='titLicense01'>Attribution</span> <span class='titLicense03'>Share Alike
+                                    </span>
+                                </label>
+                            </li>
+                            <li id="li_5">
+                                <input type="radio" id="copy_5" name="copyright" value="5" />
+                                <label for="copy_5">
+                                    <span class='titLicense01'>Attribution</span> <span class='titLicense02'>Noncommercial
+                                    </span><span class='titLicense03'>Share Alike</span></label>
+                            </li>
+                            <li id="li_6">
+                                <input type="radio" id="copy_6" name="copyright" value="6" />
+                                <label for="copy_6">
+                                    <span class='titLicense01'>Attribution</span> <span class='titLicense02'>Noncommercial
+                                    </span><span class='titLicense04'>No Derivative Works</span></label>
                             </li>
                         </ul>
                         <input type="hidden" id="copy_no" value="" />
@@ -170,7 +227,6 @@
                 </div>
             </div>
             <!-- //Right -->
-
         </div>
         <!-- //inputUpload -->
     </form>
@@ -179,8 +235,8 @@
     <div class="btnZone2">
         <button title="임시 저장" class="btnThumbSave _btn_save" onclick="Upload.TempUpload();"></button>
         <button title="업로드" class="btnUpFile _btn_reg" onclick="Upload.ArticleUpload();"></button>
-        <button title="삭제" class="btnTextDel _btn_del"  data-val="@Model.No" onclick="Upload.ArticleDelete()">삭제</button>
-        <button title="취소" class="btnUpCancel" onclick="return history.back();">취소</button>
+        <button title="삭제" class="btnTextDel _btn_del" data-val="@Model.No" onclick="Upload.ArticleDelete()">Delete</button>
+        <button title="취소" class="btnUpCancel" onclick="Upload.UploadCancle();">CANCEL</button>
     </div>
     <!-- //btnZone -->
 
@@ -190,21 +246,22 @@
         </div>
         <div class="popBox">
             <div class="txtZone">
-                <p class="tit1">업로드 대상</p>
+                <p class="tit1">Can Upload</p>
                 <ol>
-                    <li>1. 본인이 직접 디자인한 파일</li>
-                    <li>2. 저작권이 없는 디자인 파일</li>
-                    <li>3. 수정을 허가한 디자인 파일 (원저작자 명시)</li>
+                    <li>1. Your original designs</li>
+                    <li>2. Design files free from any copyright infringement</li>
+                    <li>3. Design files allowed to be modified by the creator <br>&nbsp;&nbsp;&nbsp;(cite the source) </li>
                 </ol>
-                <p class="tit2">업로드 불가</p>
-                <ol>
-                    <li>1. 저작권이 있거나 원저작자의 이용 허가 범위를 벗어나는 디자인 파일</li>
-                    <li>2. 실제 동작하는 무기류 또는 음란물 디자인 파일</li>
-                    <li>3. 기타 makersN의 이용 약관과 라이선스 정책을 벗어난 디자인 파일</li>
-                </ol>
+                <p class="tit2">Can Not Upload</p>
+                 <ol>
+                  <li>1. Design file with copyright</li>
+                  <li>2. Harmful or obscene materials (weapons, pornography, etc)</li>
+                  <li>3. Other design files that do not abide by the terms of use &nbsp;&nbsp;&nbsp;&nbsp;and/or licensing policy of makersN</li>
+                </ol> 
+
                 <p class="bt_close">
                     <a href="javascript:void(0);" onclick="popupClose();">
-                        <img src="@Url.Content("~/Content/images/common/btn/btn_close.gif")" alt="닫기" /></a>
+                        <img src="@Url.Content("~/Content/images/common/btn/btn_close.gif")" alt="Close" /></a>
                 </p>
             </div>
         </div>
@@ -217,20 +274,20 @@
         <input type="hidden" id="stl_img_no" name="stl_img_no">
 
         <div class="popupArea thumnailPop">
-            <div class="bgArea bgThumOutput dontClose">
+            <div class="bgArea bgThumOutput">
             </div>
             <div class="popBox">
 
                 <!-- thumnailWrap -->
                 <div class="thumnailWrap">
                     <div class="imgDefualt">
-                        <img src="@Url.Content("~/Content/images/common/default3d.png")" class="dfImg" alt="디폴트 이미지" /><img src="@Url.Content("~/Content/images/common/loading_bar.gif")" alt="" class="imgDefualtImg" />
+                        <img src="@Url.Content("~/Content/images/common/default3d.png")" class="dfImg" alt="Default image" /><img src="@Url.Content("~/Content/images/common/loading_bar.gif")" alt="" class="imgDefualtImg" />
                     </div>
                     <img id="img_save" />
                     <div id="viewerThum">
                         <iframe src="#" id="viewer_frame" width="630" height="470" border="0" frameborder="0" scrolling="no"></iframe>
                     </div>
-                    <a href="javascript:void(0);" class="close" style="display: none;" id="save_id">닫기</a>
+                    <a href="javascript:void(0);" class="close" id="save_id">Close</a>
                 </div>
                 <!-- // thumnailWrap -->
 
@@ -242,6 +299,8 @@
 </div>
 <!-- //upUpload -->
 
+<!-- //upUpload -->
+      <!-- //UploadWrap -->
 
 <!--  임시저장확인 팝업 -->
 <div class="popupArea thumbPop">
@@ -249,12 +308,12 @@
     </div>
     <div class="popBox">
         <div class="contactZone">
-            <p class="titleContact">임시저장되었습니다!</p>
+            <p class="titleContact">Saved as draft!</p>
             <p class="bt_st1">
-                <button type="button" onclick="Upload.GoArticle()" title="저장된 페이지로 이동하기">저장된 페이지로 이동하기</button>
+                <button type="button" onclick="Upload.GoArticle()" title="Go to saved page" id="btnGoArticle">Go to saved page</button>
             </p>
             <p class="bt_st2">
-                <button type="button" onclick="Upload.GoMain()" title="메인 페이지로 이동하기">메인 페이지로 이동하기</button>
+                <button type="button" onclick="Upload.GoMain()" title="Go to main page">Go to main page</button>
             </p>
         </div>
     </div>
@@ -268,12 +327,12 @@
     </div>
     <div class="popBox">
         <div class="contactZone">
-            <p class="titleContact">게시되었습니다!</p>
+            <p class="titleContact">Successfully posted!</p>
             <p class="bt_st1">
-                <button type="button" onclick="Upload.GoArticle()" title="게시된 페이지로 이동하기">게시된 페이지로 이동하기</button>
+                <button type="button" onclick="Upload.GoArticle()" title="Go to post">Go to post</button>
             </p>
             <p class="bt_st2">
-                <button type="button" onclick="Upload.GoMain()" title="메인 페이지로 이동하기">메인 페이지로 이동하기</button>
+                <button type="button" onclick="Upload.GoMain()" title="Go to main page">Go to main page</button>
             </p>
         </div>
     </div>
@@ -282,7 +341,7 @@
 
 
 <!--동영상 소스삽입 팝업 -->
-<div class="popupArea videoSource">
+@*<div class="popupArea videoSource">
     <div class="bgArea" style="opacity: 0.52; height: 100%;">
     </div>
     <div class="popBox3">
@@ -308,11 +367,44 @@
         <div class="movie_view" style="display: none;">
         </div>
     </div>
-</div>
+</div>*@
+
+
+<div class="popupArea videoSource">
+  <div class="bgArea" style="opacity: 0.52; height: 100%;">
+     </div>
+ <div class="popBox3">
+  <div class="pop_wrap3"><!--창 크기 660(w)x330(h)-->
+     <div class="pop_tap_title"><!--[D]현재 메뉴에 클래스 on추가-->
+          <a href="javascript:videoInsertPop()" class="on">Embed a Video</a>
+         <a href="javascript:videoLinkPop()">Link a Video</a>                  
+     </div>
+     <div class="pop_txt">      
+       <textarea placeholder="Source code" id="videoSource"></textarea>
+       <div class="pop_desc">If you wish to embed a video in the description box, copy and paste the "source code(not URL)".
+
+       </div>
+    </div>
+    <a href="#" id="videoPreView" class="pop_btn_left">Preview</a>
+    <a href="#" id="addVideoSource" class="pop_btn">Save</a>
+    @*<a href="#" class="pop_close">Close</a>*@
+
+  </div>
+     <div class="movie_view">
+    <iframe src=""></iframe>
+  </div>
+
+     <div class="pop_wrap_view">
+   <a href="#" class="pop_close">Close</a>
+   </div>
+
+@*        <div class="movie_view" style="display: none;">*@
+  </div>
+ </div>
 <!--// 동영상 소스삽입 팝업 -->
 
 <!-- 동영상 링크 삽입 팝업 -->
-<div class="popupArea videoLink">
+@*<div class="popupArea videoLink">
     <div class="bgArea" style="opacity: 0.52; height: 100%;">
     </div>
     <div class="popBox3">
@@ -336,9 +428,34 @@
         </div>
 
     </div>
-</div>
-<!--// 동영상 링크 삽입 팝업 -->
+</div>*@
 
+
+
+
+<div class="popupArea videoLink">
+  <div class="bgArea" style="opacity: 0.52; height: 100%;">
+   </div>
+ <div class="popBox3">
+  <div class="pop_wrap3"><!--창 크기 660(w)x330(h)-->
+     <div class="pop_tap_title"><!--[D]현재 메뉴에 클래스 on추가-->
+          <a href="javascript:videoInsertPop()">Embed a Video</a>
+         <a href="javascript:videoLinkPop()" class="on">Link a Video</a>                
+     </div>
+   <div class="pop_txt">      
+       <textarea placeholder="URL" id="videoLink"></textarea>
+       <div class="pop_desc">If you wish to insert a video link in the description box, <br>copy and paste the URL of the video file.
+
+       </div>
+    </div>
+    @*<a href="popup_upload_movie1_view.html" class="pop_btn_left">Preview</a>*@
+    <a href="#" id="addVideoLink" class="pop_btn">Save</a>
+    <a href="#" class="pop_close">Close</a>
+  </div>
+  </div>
+ </div>
+
+<!--// 동영상 링크 삽입 팝업 -->
 
 <!-- 업로드 배경 막기 -->
 <div class="popupArea uploadMask">
@@ -349,6 +466,7 @@
 
 <input type="hidden" id="showIndex" />
 
+
 @section Scripts{
     <link rel="stylesheet" type="text/css" href="@Url.VersionedContent("~/Content/css/jquery-ui-1.8.18.custom.css")" />
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.easing.1.3.js")"></script>
@@ -356,7 +474,7 @@
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery-ui.js")"></script>
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
 
-    @* <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Thingiview2.js")"></script>
+    @*<script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Thingiview2.js")"></script>
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/three.min.js")"></script>
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Detector.js")"></script>
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/NormalControls.js")"></script>*@
@@ -364,8 +482,120 @@
     @Scripts.Render("~/bundles/viewer")
 
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Article/Upload.js")"></script>
+
     <script type="text/javascript">
+        $(document).on("click", ".showThum", function () {
+
+
+            $('#stl_val').val('');
+            $('#stl_img_no').val('');
+            $('#stl_img_no').val($(this).data('val'));
+
+            $('.popupArea.thumnailPop').show();
+            $('.imgDefualt').show();
+            $('.popupArea .bgArea').css('height', $(document).height());
+
+            $("#showIndex").val($(".selectImg ul li").index($(this).parents('li')));
+
+
+            //여기서부터 아래까지가 기존
+            //var file = $(this).attr('data-file');
+            //var fram_url = "/design/Solid?fileNm=" + file;
+            ////viewer_frame
+            //iframe = document.getElementById("viewer_frame");
+            //$("#viewer_frame").attr("src", fram_url);
+
+            //$(iframe).load(function () {
+            //    //console.log(iframe.readyState);
+            //    $('.imgDefualt').hide();
+            //});
+            var volume = "";
+            var js = $(this).attr('data-js');
+            jQuery('html, body').animate({ scrollTop: 0 }, 300);
+
+            var ThreeJsonLoader = new THREE.JSONLoader(true);
+            ThreeJsonLoader.statusDomElement.style.left = "0px";
+            ThreeJsonLoader.statusDomElement.style.width = "auto";
+
+            document.body.appendChild(ThreeJsonLoader.statusDomElement);
+            ThreeLoadCallback = function (geometry, materials) {
+                volume = thingiview.addModel(geometry);
+                //console.log(volume);
+                document.body.removeChild(ThreeJsonLoader.statusDomElement);
+                $('.imgDefualt').hide();
+            };
+
+            thingiview = new Thingiview('viewerThum');
+
+            thingiview.resize(478, 360);
+            ThreeJsonLoader.load(js, ThreeLoadCallback);
+            //여기까지
+
+            ////stl load형식으로 바꾼 추가부분
+            //var filePath = $(this).attr('data-file');
+            //var fileExt = $(this).attr('data-ext');
+
+            //thingiview = new Thingiview('viewerThum');
+
+            //thingiview.resize(478, 360);
+
+            //switch (fileExt) {
+            //    case "stl":
+            //        var stlLoader = new THREE.STLLoader();
+            //        stlLoader.load(filePath, function (geometry) {
+            //            thingiview.addModel(geometry);
+            //            $('.imgDefualt').hide();
+            //        });
+            //        break;
+            //    case "obj":
+            //        var objTest = new THREE.OBJLoader();
+            //        objTest.load(filePath, function (geometry) {
+            //            console.log(geometry);
+            //            thingiview.addModel(geometry);
+            //            $('.imgDefualt').hide();
+            //        });
+            //        break;
+            //}
+            ////여기까지
+
+            var thingiviewanimate = function () {
+                if (thingiview != undefined) {
+                    requestAnimationFrame(thingiviewanimate);
+                    thingiview.render();
+                }
+            }
+
+            thingiviewanimate();
+
+        });
+
+        function closet() {
+            //alert("D");
+            //var a_n = window.event.screenX - window.screenLeft;
+            //var a_b = a_n > document.documentElement.scrollWidth - 20;
+            //if (a_b && window.event.clientY < 0 || window.event.altKey) {
+            //    alert('Close page');
+            //} else {
+            //    alert('Refresh icon');
+            //}
+            window.onbeforeunload = function (e) {
+                e = e || window.event;
+                // For IE<8 and Firefox prior to version 4
+                if (e) {
+                    e.returnValue = '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
+                }
+
+                // For Chrome, Safari, IE8+ and Opera 12+
+                return '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
+            };
+        }
+
+        function uncloset() {
+            window.onbeforeunload = null;
+        }
+
         $(function () {
+            //            $("body").attr("onbeforeunload", "closet()");
             //window.onbeforeunload = function (e) {
             //    e = e || window.event;
             //    // For IE<8 and Firefox prior to version 4
@@ -377,112 +607,16 @@
             //    return '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
             //};
 
-            uploadFileCnt = "@ViewBag.UploadFileCnt";
-
-
-            $(".wrap").addClass("bgW");
             $(".popupArea").hide();
+            $(window).unbind('beforeunload');
 
             var iframe, loadFuc;
             Upload.Init();
 
+            $(".wrap").addClass("bgW");
+
             Upload.UISelect(".select", ".lst_value", ".pCate", "lv1_@Model.CodeNo");
             Upload.UISelect(".select2", ".lst_value2", ".value2", "copy_@Model.Copyright");
-
-            $('input:radio[name="lv1"][value="@Model.CodeNo"]').prop('checked', true);
-            $('input:radio[name="copyright"][value="@Model.Copyright"]').prop('checked', true);
-
-
-
-            $(document).on("click", ".showThum", function () {
-                $('#stl_val').val('');
-                $('#stl_img_no').val('');
-                $('#stl_img_no').val($(this).data('val'));
-
-                $('.popupArea.thumnailPop').show();
-                $('.imgDefualt').show();
-                $('.popupArea .bgArea').css('height', $(document).height());
-
-
-                $("#showIndex").val($(".selectImg ul li").index($(this).parents('li')));
-
-
-                //기존
-                //var file = $(this).attr('data-file');
-                //var fram_url = "/design/Solid?fileNm=" + file;
-                ////viewer_frame
-                //iframe = document.getElementById("viewer_frame");
-                //$("#viewer_frame").attr("src", fram_url);
-
-                //$(iframe).load(function () {
-                //    //console.log(iframe.readyState);
-                //    $('.imgDefualt').hide();
-                //});
-
-                var js = $(this).attr('data-js');
-                jQuery('html, body').animate({ scrollTop: 0 }, 300);
-
-                var ThreeJsonLoader = new THREE.JSONLoader(true);
-                ThreeJsonLoader.statusDomElement.style.left = "0px";
-                ThreeJsonLoader.statusDomElement.style.width = "auto";
-
-                document.body.appendChild(ThreeJsonLoader.statusDomElement);
-                ThreeLoadCallback = function (geometry, materials) {
-                    thingiview.addModel(geometry);
-                    document.body.removeChild(ThreeJsonLoader.statusDomElement);
-                    $('.imgDefualt').hide();
-
-                    $("#save_id").show();
-                };
-
-                thingiview = new Thingiview('viewerThum');
-
-                thingiview.resize(478, 360);
-                ThreeJsonLoader.load(js, ThreeLoadCallback);
-                //여기까지
-
-                ////stl load형식으로 바꾼 추가부분
-                //var filePath = $(this).attr('data-file');
-                //var fileExt = $(this).attr('data-ext');
-
-                //thingiview = new Thingiview('viewerThum');
-
-                //thingiview.resize(478, 360);
-
-                //switch (fileExt) {
-                //    case "stl":
-                //        var stlLoader = new THREE.STLLoader();
-                //        stlLoader.load(filePath, function (geometry) {
-                //            thingiview.addModel(geometry);
-                //            $('.imgDefualt').hide();
-                //        });
-                //        break;
-                //    case "obj":
-                //        var objTest = new THREE.OBJLoader();
-                //        objTest.load(filePath, function (geometry) {
-                //            console.log(geometry);
-                //            thingiview.addModel(geometry);
-                //            $('.imgDefualt').hide();
-                //        });
-                //        break;
-                //}
-                ////여기까지
-
-                var thingiviewanimate = function () {
-                    if (thingiview != undefined) {
-                        requestAnimationFrame(thingiviewanimate);
-                        thingiview.render();
-                    }
-                }
-
-                thingiviewanimate();
-            });
-
-            //수정 버튼
-            $("#editBtn").click(function () {
-                var articleno = $(this).data("val");
-                $(location).attr("href", "/design/Edit?no=" + articleno);
-            });
 
             $(".aMovie").click(function () {
                 videoInsertPop();
@@ -509,16 +643,19 @@
                     videoPopupHide();
                 }
                 else {
-                    alert("잘못된 주소입니다");
+                    alert("Wrong address");
                 }
             });
+
+
+        
+
 
             $("#videoPreView").click(function () {
                 $(".pop_wrap3 .pop_close").hide();
                 $(".movie_view").find('a').remove();
                 $(".movie_view").find('iframe').remove();
                 $(".movie_view").removeAttr("style");
-
                 var text = $("#videoSource").val();
                 var char = "";
                 var fristIndex = text.indexOf("http");
@@ -530,28 +667,11 @@
                 $(".movie_view").append(iframe);
             });
 
-            $(".pop_close").click(function () {
+            $(".pop_close").click(function (e) {
                 videoPopupHide();
             });
 
         });
-
-        function closet() {
-            window.onbeforeunload = function (e) {
-                e = e || window.event;
-                // For IE<8 and Firefox prior to version 4
-                if (e) {
-                    e.returnValue = '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
-                }
-
-                // For Chrome, Safari, IE8+ and Opera 12+
-                return '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
-            };
-        }
-
-        function uncloset() {
-            window.onbeforeunload = null;
-        }
 
         function closeVideo() {
             $(".movie_view").find('a').remove();
@@ -564,17 +684,18 @@
             $(".movie_view").css("display", "none");
             $(".movie_view").find('iframe').remove();
             $(".popupArea").hide();
-        }
+        };
 
         function videoInsertPop() {
             videoPopupHide();
             $(".popupArea.videoSource").show();
-        }
+        };
+
         function videoLinkPop() {
             videoPopupHide();
             $(".popupArea.videoLink").show();
             $(".pop_wrap3 .pop_close").show();
-        }
+        };
 
         function delImg(val) {
 
@@ -615,6 +736,7 @@
         };
 
         function uploadFileSet() {
+            console.log("TEST");
             $(".selectImg ul li div").draggable({
                 helper: 'clone',
                 revert: 'invalid', start: function (event, ui) {
@@ -657,5 +779,6 @@
                 $(this).find('.showThum').hide();
             })
         }
+
     </script>
 }

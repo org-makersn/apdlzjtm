@@ -1,0 +1,156 @@
+﻿@model IList<Makersn.Models.TranslationStateRequestT>
+@{
+    ViewBag.Title = "번역 요청 현황";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int index = 1;
+}
+
+<h2 class="contents_title">
+<a href="/Translation/TranslationReqState">번역 요청 현황</a>&nbsp;&nbsp;l&nbsp;&nbsp;<a href="/Translation/TranslationReqList">번역 현황 리스트</a>
+</h2>
+<!-- contents_zone -->
+<div class="contents_zone">
+
+    <form id="search" name="search">
+        <input type="hidden" id="date" name="date">
+        <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="17%" />
+                <col width="auto" />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th scope="row">구분</th>
+                    <td>
+                        <span class="btnWrap medium">@Html.ActionLink("전체", "TranslationReqState", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("일간", "DailyStateRequest", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("월간", "MonthStateRequest", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("년간", "YearStateRequest", "translation")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">기간선택</th>
+                    <td>
+                        <input type="text" id="sdate" name="sdate" class="input_text" style="width: 106px; margin-right: 5px" readonly="readonly" value="@ViewBag.Start"/>
+                        ~
+						<input type="text" id="edate" name="edate" class="input_text" style="width: 106px; margin-right: 5px" readonly="readonly" value="@ViewBag.End"/>
+                        <span class="btnWrap small"><a href="javascript:void(0);" id="search_btn">검색</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+
+
+    <form id="insert_form" name="insert_form" method="post" action="/admin/items/multi_del//">
+
+        <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <colgroup>
+                 <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th rowspan="2" colspan="2">구분</th>
+                    <th rowspan="2">요청</th>
+                    <th rowspan="2">완료</th>
+                    <th rowspan="2">보류</th>
+                    <th colspan="6">언어별 번역 요청 및 완료</th>
+                </tr>
+                <tr>
+                    <th>영 -> 국</th>
+                    <th>국 -> 영</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var state in Model)
+                {
+                    string strTd = string.Empty;
+                    switch (index)
+                    {
+                        case 2:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "일간");
+                            break;
+                        case 4:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "주간");
+                            break;
+                        case 6:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "월간");
+                            break;
+                        default:
+                            break;
+                    }
+                    <tr>
+                           @if (index == 1)
+                            {
+                                <td colspan="2">@state.Gbn</td>
+                            }
+                            else if (index==8){
+                                <td colspan="2">@state.Gbn</td>
+                            }
+                            else
+                            {
+                                @Html.Raw(strTd)
+                                <td>@state.Gbn</td>
+                            }
+                        <td>@state.RequestCnt</td>
+                        <td>@state.CompleteCnt</td>
+                        <td>@state.HoldCnt</td>
+                        <td>@state.EnForKrCnt</td>
+                        <td>@state.KrForEnCnt</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                        index++;
+                }
+            </tbody>
+        </table>
+    </form>
+    <!-- // page_navi -->
+
+</div>
+<br />
+<br />
+<br />
+
+<!-- // contents_zone -->
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#search_btn").click(function () {
+                var start = $("#sdate").val();
+                var end = $("#edate").val();
+                location.href = '/translation/TranslationReqState?start=' + start + '&end=' + end;
+            });
+
+            $("#sdate,#edate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showOn: 'both',
+                buttonImage: '/Content/images/admin/icon_calender.png',
+                buttonImageOnly: true,
+                dateFormat: 'yy-mm-dd'
+            });
+
+        })
+    </script>
+}

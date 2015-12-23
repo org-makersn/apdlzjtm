@@ -25,8 +25,11 @@ namespace Design.Web.Front.Controllers
         LikesDac likesDac = new LikesDac();
         NoticesDac noticesDac = new NoticesDac();
         FollowerDac followerDac = new FollowerDac();
+        NoticesDac _noticesDac = new NoticesDac();
         MessageDac messageDac = new MessageDac();
         ListDac listDac = new ListDac();
+        //TranslationDac _translationDac = new TranslationDac();
+        TranslationDetailDac _translationDetailDac = new TranslationDetailDac();
 
         private static int _receiveMemberNo;
         private static string _val1;
@@ -52,7 +55,7 @@ namespace Design.Web.Front.Controllers
             if (url != "")
             {
                 member = memberDac.GetMemberNoByBlogUrl2(url);
-                if (member == null) { return Content("<script type='text/javascript'>alert('잘못된 주소입니다.'); location.href='/'</script>"); }
+                if (member == null) { return Content("<script type='text/javascript'>alert('Wrong address.'); location.href='/'</script>"); }
                 no = Base64Helper.Base64Encode(member.No.ToString());
                 memberNo = member.No;
             }
@@ -79,7 +82,8 @@ namespace Design.Web.Front.Controllers
 
             ViewBag.ContClass = "w100";
 
-            if (member.ProfileMsg != null) {
+            if (member.ProfileMsg != null)
+            {
                 member.ProfileMsg = new ContentFilter().HtmlEncode(member.ProfileMsg);
                 member.ProfileMsg = CreateATag(member.ProfileMsg);
             };
@@ -96,6 +100,19 @@ namespace Design.Web.Front.Controllers
         /// <returns></returns>
         public PartialViewResult Lists(int page, string no, string gubun)
         {
+            string langFlag = string.Empty;
+
+            if (Request.Cookies.AllKeys.Contains("GlobalFlag"))
+            {
+                langFlag = Request.Cookies["GlobalFlag"].Value;
+            }
+            else
+            {
+                langFlag = ViewBag.LangFlag;
+            }
+
+            if (langFlag == "ALL")
+                langFlag = "";
 
             if (no == "") { no = Base64Helper.Base64Encode(Profile.UserNo.ToString()); }
             ViewBag.No = no;
@@ -104,19 +121,31 @@ namespace Design.Web.Front.Controllers
 
             int visitorNo = Profile.UserNo;
 
-            IList<ArticleT> list = articleDac.GetMemberArticleByNo(no, gubun, visitorNo);
+            IList<ArticleT> before = articleDac.GetMemberArticleByNo(no, gubun, visitorNo);
+
+            IList<ArticleT> list = new List<ArticleT>();
+            foreach (ArticleT article in before)
+            {
+                TranslationDetailT trans = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(article.No, langFlag);
+                if (trans != null)
+                {
+                    article.Title = trans.Title;
+                }
+                list.Add(article);
+            }
+
             ViewBag.Gubun = gubun;
             ViewBag.VisitorNo = visitorNo;
             ViewBag.CheckSelf = int.Parse(no) == visitorNo ? 1 : 0;
 
-            return PartialView(list.ToPagedList(page, 20));
+            return PartialView(list.ToPagedList(page, 40));
         }
         //public ActionResult Lists(int page = 1, string no = "", string gubun = "", string url = "")
         //{
         //    if (url != "")
         //    {
         //        int memberNo = memberDac.GetMemberNoByBlogUrl(url);
-        //        if (memberNo == 0) { return Content("<script type='text/javascript'>alert('잘못된 주소입니다.'); location.href='/'</script>"); }
+        //        if (memberNo == 0) { return Content("<script type='text/javascript'>alert('Wrong address.'); location.href='/'</script>"); }
         //        no = Base64Helper.Base64Encode(memberNo.ToString());
         //    }
         //    if (no == "" && Profile.UserNo == 0) return Redirect("/");
@@ -191,8 +220,8 @@ namespace Design.Web.Front.Controllers
             int no = Profile.UserNo;
             ViewBag.No = Base64Helper.Base64Encode(no.ToString());
 
-            IList<NoticeT> list = noticesDac.GetNoticeList(no);
-            noticesDac.UpdateNoticeIsNew(no);
+            IList<NoticeT> list = _noticesDac.GetNoticeList(no);
+            _noticesDac.UpdateNoticeIsNew(no);
 
             return PartialView(list.OrderByDescending(o => o.RegDt).ToPagedList(page, 20));
         }
@@ -258,7 +287,7 @@ namespace Design.Web.Front.Controllers
         #region 탈퇴 회원일시 리턴
         public ActionResult returnMainPage()
         {
-            return Content("<script type='text/javascript'>alert('탈퇴한 회원입니다.'); location.href='/'</script>");
+            return Content("<script type='text/javascript'>alert('Invalid User ID.'); location.href='/'</script>");
         }
         #endregion
 
@@ -307,10 +336,9 @@ namespace Design.Web.Front.Controllers
         #region
         public JsonResult GetNoticeCnt()
         {
-            int noticeCnt = noticesDac.GetNoticesCntByMemberNo(Profile.UserNo);
-            int MessageCnt = messageDac.GetNewMessageCount(Profile.UserNo);
+            int result = noticesDac.GetNoticesCntByMemberNo(Profile.UserNo);
             //ViewBag.NoticeCnt = result;
-            return Json(new { notice = noticeCnt, message = MessageCnt });
+            return Json(new { Result = result });
         }
         #endregion
 
@@ -628,7 +656,7 @@ namespace Design.Web.Front.Controllers
                     }
                     else
                     {
-                        response.Message = "gif, jpg, png 형식 파일만 가능합니다.";
+                        response.Message = "Only gif, jpg, png format is allowed.";
                     }
                 }
             }
@@ -725,7 +753,7 @@ namespace Design.Web.Front.Controllers
                     }
                     else
                     {
-                        response.Message = "gif, jpg, png 형식 파일만 가능합니다.";
+                        response.Message = "Only gif, jpg, png format is allowed.";
                     }
                 }
             }
@@ -839,7 +867,7 @@ namespace Design.Web.Front.Controllers
             Regex rgxDomain = new Regex(ptProtocol + domain + adds, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             Match matchDomain = rgxDomain.Match(contents);
 
-            Regex rgxDomainNonProt = new Regex("www."+ domain + adds, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            Regex rgxDomainNonProt = new Regex("www." + domain + adds, RegexOptions.IgnoreCase | RegexOptions.Compiled);
             Match matchDomainNonProt = rgxDomainNonProt.Match(contents);
 
             Regex rgxEmail = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", RegexOptions.IgnoreCase | RegexOptions.Compiled);

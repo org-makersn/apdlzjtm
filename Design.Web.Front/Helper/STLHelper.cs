@@ -131,6 +131,8 @@ namespace Design.Web.Front.Helper
             return stlModel;
         }
 
+
+
         public double slicing(string input)
         {
             Process procConvert = new Process();
@@ -141,7 +143,7 @@ namespace Design.Web.Front.Helper
             //string ini = "C:\\kimgs\\DefaultForMakers1.ini";
             string domainPath = AppDomain.CurrentDomain.BaseDirectory;
             string ini = domainPath + "/slic3r/DefaultForMakers1.ini";
-            string output = changeExt(input,"gcode");
+            string output = changeExt(input, "gcode");
             //string input = workingFolder + fileName + ".stl";
             string log = changeExt(input, "log");
 
@@ -191,13 +193,16 @@ namespace Design.Web.Front.Helper
                 string[] a = result.Split('(');
                 string b = a[1].Split(')')[0];
                 return System.Convert.ToDouble(b.Split('c')[0]);
-            }catch(Exception e){
+            }
+            catch (Exception e)
+            {
                 return 0;
             }
 
         }
 
-        private string changeExt(string path,string ext) {
+        private string changeExt(string path, string ext)
+        {
 
             //string[] temp = path.Split('.');
 
@@ -205,8 +210,6 @@ namespace Design.Web.Front.Helper
             return temp2 + "." + ext;
 
         }
-
-
 
     }
 }

@@ -17,9 +17,6 @@ namespace Makersn.Models
         [IgnoreDataMember]
         public virtual string Category { get; set; }
         public virtual int MainImage { get; set; }
-        public virtual string Title { get; set; }
-        public virtual string Contents { get; set; }
-        public virtual string Tag { get; set; }
         public virtual int Copyright { get; set; }
         public virtual string Visibility { get; set; }
         public virtual int ViewCnt { get; set; }
@@ -31,6 +28,13 @@ namespace Makersn.Models
         public virtual string UpdId { get; set; }
         public virtual string RecommendVisibility { get; set; }
 
+
+        [IgnoreDataMember]
+        public virtual string Title { get; set; }
+        [IgnoreDataMember]
+        public virtual string Contents { get; set; }
+        [IgnoreDataMember]
+        public virtual string Tag { get; set; }
 
 
         [IgnoreDataMember]

@@ -31,5 +31,33 @@
      ]]>
     </Body>
   </MailFormat>
-  
+
+  <MailFormat Id="sendNotice">
+    <Subject>0?</Subject>
+    <Body>
+      <![CDATA[ 
+        
+        <div style="width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff;">
+        <div style="width:645px;margin:0 auto; overflow:hidden;">
+          <div style="height:86px;text-align:left;background:url(http://makersn.com/content/images/common/em_logo.png) no-repeat 5px 38px ">
+          </div>
+          <div style="padding:50px 33px 50px 33px;background:#f5f5f5;border-top-left-radius:7px;border-top-right-radius:7px;word-break:break-all;">
+            
+            <p style="margin-bottom:45px;text-align:left;font-size:13px;color:#505050;">
+        1?
+        </p>
+            
+          </div>
+          <a href='http://makersn.com'> 
+          <div style="height:87px;background:url(http://makersn.com/content/images/common/em_footer.png) #FF7900 no-repeat 380px 21px;border-bottom-left-radius:7px;border-bottom-right-radius:7px">
+          </div>
+          </a>
+
+        </div>
+
+      </div>
+     ]]>
+    </Body> 
+  </MailFormat>
+
 </MailFormats>

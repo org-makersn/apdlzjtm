@@ -10,59 +10,122 @@ using Library.ObjParser;
 using Design.Web.Front.Helper;
 using Design.Web.Front.Models;
 using QuantumConcepts.Formats.StereoLithography;
+using Design.Web.Front.Filter;
 
 namespace Design.Web.Front.Controllers
 {
     //[Authorize]
     public class MainController : BaseController
     {
-        ArticleDac articleDac = new ArticleDac();
-        MemberT member = new MemberT();
-        MemberDac memberDac = new MemberDac();
+        ArticleDac _articleDac = new ArticleDac();
+        MemberT _member = new MemberT();
+        MemberDac _memberDac = new MemberDac();
+        FollowerDac _followerDac = new FollowerDac();
+
+
 
         private Extent Size { get; set; }
 
-        public ActionResult Index(string url = "")
+        public ActionResult Index(string url = "", string gl = "", string no = "", string gubun = "U", int page = 1, int listNo = 0)
         {
             if (url != "")
             {
-                return Content(@"<form action='/profile' id='goBlog' method='post'>
-                                            <input type='hidden' name='url' value='" + url + @"' />
-                                             </form><script>document.getElementById('goBlog').submit();</script>");
-                #region
-//                var chkContoller = EnumHelper.GetEnumDictionaryT<MakersnEnumTypes.ControllerList>();
-//                foreach (var ctrName in chkContoller)
-//                {
-//                    if (url.ToLower() == ctrName.Key.ToLower())
-//                    {
-//                        return Redirect(url + "/index");
-//                    }
-//                }
+                int memberNo = 0;
+                //ActionResult action = new ProfileController().Index("", "U", url, 1, 0);
+                MemberT member = _memberDac.GetMemberNoByBlogUrl2(url);
+                if (member == null) { return Content("<script type='text/javascript'>alert('Wrong address.'); location.href='/'</script>"); }
+                no = Base64Helper.Base64Encode(member.No.ToString());
+                memberNo = member.No;
 
-//                member = memberDac.GetMemberNoByBlogUrl2(url);
-//                if (member == null) { return Content("<script type='text/javascript'>alert('잘못된 주소입니다.'); location.href='/'</script>"); }
-//                //else { return Redirect("/profile/index?url=" + url); }
-//                else
-//                {
-//                    //return RedirectToAction("index", "profile", new { url = url});
-//                    return Content(@"<form action='/profile' id='goBlog' method='post'>
-//                                            <input type='hidden' name='url' value='" + url + @"' />
-//                                             </form><script>document.getElementById('goBlog').submit();</script>");
+                if (member.DelFlag == "Y") { return Redirect("returnMainPage"); }
+
+                int visitorNo = Profile.UserNo;
+
+                ViewBag.No = no;
+                ViewBag.VisitorNo = visitorNo;
+                ViewBag.CheckFollow = _followerDac.CheckFollow(memberNo, visitorNo);
+                ViewBag.CntList = _memberDac.GetCntList(memberNo);
+                ViewBag.CheckSelf = memberNo == visitorNo ? 1 : 0;
+
+                ViewBag.Gubun = gubun;
+                ViewBag.Page = page;
+                ViewBag.ListNo = listNo;
+
+                ViewBag.ContClass = "w100";
+
+                if (member.ProfileMsg != null) { member.ProfileMsg = new ContentFilter().HtmlEncode(member.ProfileMsg); };
+
+
+
+                return View("~/Views/profile/index.cshtml", member);
+
+                //                return Content(@"<form action='/profile' id='goBlog' method='post'>
+                //                                            <input type='hidden' name='url' value='" + url + @"' />
+                //                                             </form><script>document.getElementById('goBlog').submit();</script>");
+                #region
+                //                var chkContoller = EnumHelper.GetEnumDictionaryT<MakersnEnumTypes.ControllerList>();
+                //                foreach (var ctrName in chkContoller)
+                //                {
+                //                    if (url.ToLower() == ctrName.Key.ToLower())
+                //                    {
+                //                        return Redirect(url + "/index");
+                //                    }
+                //                }
+
+                //                member = memberDac.GetMemberNoByBlogUrl2(url);
+                //                if (member == null) { return Content("<script type='text/javascript'>alert('잘못된 주소입니다.'); location.href='/'</script>"); }
+                //                //else { return Redirect("/profile/index?url=" + url); }
+                //                else
+                //                {
+                //                    //return RedirectToAction("index", "profile", new { url = url});
+                //                    return Content(@"<form action='/profile' id='goBlog' method='post'>
+                //                                            <input type='hidden' name='url' value='" + url + @"' />
+                //                                             </form><script>document.getElementById('goBlog').submit();</script>");
                 //                }
                 #endregion
             }
+
+            if (gl == "")
+            {
+                if (Request.Cookies.AllKeys.Contains("GlobalFlag"))
+                {
+                    gl = Request.Cookies["GlobalFlag"].Value;
+                }
+                else
+                {
+                    HttpCookie cookie = new HttpCookie("GlobalFlag");
+                    cookie.Domain = ".makersn.com";
+                    cookie.Value = ViewBag.LangFlag;
+                    gl = ViewBag.LangFlag;
+                    this.ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+                }
+            }
+            else
+            {
+                ViewBag.LangFlag = gl;
+            }
+
+            switch (gl)
+            {
+                case "EN": ViewBag.LangFlagName = "English"; break;
+                case "KR": ViewBag.LangFlagName = "한국어"; break;
+                default: ViewBag.LangFlagName = "All Language"; break;
+            }
+
 
             ViewBag.IsMain = "Y";
             IList<ArticleDetailT> recommendList = new List<ArticleDetailT>();
             var stateList = EnumHelper.GetTitleAndSynonyms<MakersnEnumTypes.CateName>();
 
-            recommendList = articleDac.GetListByOption(Profile.UserNo, 0, "R", 1, 4);
-            if (recommendList.Count == 0) { recommendList = articleDac.GetListByOption(Profile.UserNo, 0, "P", 1, 4); };
-            ViewBag.RecommendList = recommendList;
-            ViewBag.PopularList = articleDac.GetListByOption(Profile.UserNo, 0, "P", 1, 4);
-            ViewBag.NewList = articleDac.GetListByOption(Profile.UserNo, 0, "N", 1, 4);
+            gl = gl == "ALL" ? "" : gl;
 
-            ViewBag.ComList = articleDac.GetListByOption(Profile.UserNo, 10203, "", 1, 4);
+            recommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "R", gl, 1, 4);
+            if (recommendList.Count == 0) { recommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "P", gl, 1, 4); };
+            ViewBag.RecommendList = recommendList;
+            ViewBag.PopularList = _articleDac.GetListByOption(Profile.UserNo, 0, "P", gl, 1, 4);
+            ViewBag.NewList = _articleDac.GetListByOption(Profile.UserNo, 0, "N", gl, 1, 4);
+
+            ViewBag.ComList = _articleDac.GetListByOption(Profile.UserNo, 10203, "", gl, 1, 4);
 
             return View();
         }
@@ -71,7 +134,7 @@ namespace Design.Web.Front.Controllers
         /// 메인 배너 가져오기
         /// </summary>
         /// <returns></returns>
-        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public PartialViewResult GetMainBanner()
         {
             IList<BannerT> banner = new BannerDac().GetBannerInFront();
@@ -262,23 +325,76 @@ namespace Design.Web.Front.Controllers
         }
 
         #region 임시 삭제해야됨
-        //public ActionResult ChgPw()
-        //{
-        //    IList<ChgPwT> list = memberDac.GetMemberPw();
-        //    //CryptFilter crypt = new CryptFilter();
-        //    //foreach (ChgPwT item in list)
-        //    //{
-        //    //    if (item.Pw1 != null)
-        //    //    {
-        //    //        item.Pw2 = crypt.Encrypt(item.Pw1);
-        //    //    }
-        //    //}
-        //    //memberDac.InsertMemberPw(list);
+        public ActionResult ChgPw()
+        {
+            //CryptFilter crypt = new CryptFilter();
 
-        //    memberDac.ChgPwOnce(list);
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    MemberT member = new MemberT();
+            //    string email = string.Empty;
+            //    if (i < 10) { email = "beta10" + i.ToString() + "@makersn.com"; }
+            //    else { email = "beta1" + i.ToString() + "@makersn.com"; }
 
-        //    return View();
-        //}
+            //    string pw = "beta0830" + (i * 3 - 2).ToString();
+
+            //    member.Email = email;
+            //    member.Id = email;
+            //    member.Name = email;
+            //    member.Password = crypt.Encrypt(pw);
+            //    member.Level = 10;
+            //    member.ProfilePic = "";
+            //    member.Status = "1";
+            //    member.SnsType = "em";
+            //    member.AllIs = "on";
+            //    member.RepleIs = "on";
+            //    member.LikeIs = "on";
+            //    member.NoticeIs = "n";
+            //    member.FollowIs = "on";
+            //    member.LoginCnt = 0;
+            //    member.DelFlag = "N";
+            //    member.RegDt = DateTime.Now;
+            //    member.RegId = email;
+            //    member.emailCertify = "Y";
+
+            //    _memberDac.AddMember(member);
+            //}
+
+            //CryptFilter crypt = new CryptFilter();
+
+            //string test = crypt.Encrypt("08301");
+            //string test2 = crypt.Decrypt("VphliIMw8cYfdEOwiEnBAmkSy+74BVfsjY6QVrYm6Rw=");
+
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    MemberT member = new MemberT();
+            //    string email = string.Empty;
+            //    if (i < 10) { email = "beta10" + i.ToString() + "@makersn.com"; }
+            //    else { email = "beta1" + i.ToString() + "@makersn.com"; }
+
+            //    string pw = "0830" + (i * 3 - 2).ToString();
+
+            //    member.No = 1580 + i;
+            //    member.Password = crypt.Encrypt(pw);
+
+            //    _memberDac.TempUpdateMember(member);
+            //}
+
+            //IList<ChgPwT> list = _memberDac.GetMemberPw();
+            ////CryptFilter crypt = new CryptFilter();
+            ////foreach (ChgPwT item in list)
+            ////{
+            ////    if (item.Pw1 != null)
+            ////    {
+            ////        item.Pw2 = crypt.Encrypt(item.Pw1);
+            ////    }
+            ////}
+            ////_memberDac.InsertMemberPw(list);
+
+            //_memberDac.ChgPwOnce(list);
+
+            return View();
+        }
         #endregion
 
 

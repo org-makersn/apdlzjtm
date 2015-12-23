@@ -8,7 +8,7 @@
     int index = 0;
     int count = Model.Count;
 }
-<p class="tit"><span class="boldF">@ViewBag.Name</span>님과의 메세지</p>
+<p class="tit">Chat with <span class="boldF">@ViewBag.Name</span></p>
 <ul class="msgWrap">
     <!-- message 1day -->
     <li>
@@ -24,10 +24,10 @@
                 profilePic = ViewBag.ProfileImgUrl + message.ProfilePic;
             }
 
-            if (date != message.RegDt.ToString("yyyy-MM-dd"))
+            if (date != message.RegDt.ToString("yyyy.MM.dd"))
             {
-            <p class="date">@message.RegDt.ToString("yyyy년 MM월 dd일")</p>
-                date = message.RegDt.ToString("yyyy-MM-dd");
+            <p class="date">@message.RegDt.ToString("yyyy.MM.dd")</p>
+                date = message.RegDt.ToString("yyyy.MM.dd");
             }
             <ul>
 
@@ -44,14 +44,14 @@
 
                         @if (index + 1 < count)
                         {
-                            if (Model[index].RegDt.ToString("yyyy-MM-dd tt hh:mm") != Model[index + 1].RegDt.ToString("yyyy-MM-dd tt hh:mm"))
+                            if (Model[index].RegDt.ToString("yyyy.MM.dd tt hh:mm") != Model[index + 1].RegDt.ToString("yyyy.MM.dd tt hh:mm"))
                             {
-                            <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy-MM-dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
+                            <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy.MM.dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
                             }
                         }
                         else
                         {
-                            <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy-MM-dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
+                            <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy.MM.dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
                         }
 
                         @if (message.MsgGubun == "MSG")

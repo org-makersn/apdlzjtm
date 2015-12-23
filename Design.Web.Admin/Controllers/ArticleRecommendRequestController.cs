@@ -20,7 +20,7 @@ namespace Design.Web.Admin.Controllers
             menuModel.SubIndex = subIndex;
             return menuModel;
         }
-
+       
         public ActionResult Design()
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
@@ -55,7 +55,7 @@ namespace Design.Web.Admin.Controllers
         {
             ViewData["Group"] = MenuModel(1);
 
-            IList<ArticleT> list = articleDac.GetArticleListByAdminPage(cate, RecommendYn, text);
+            IList<ArticleT> list = articleDac.GetArticleListByAdminPage(cate, RecommendYn,"", text);
             ViewData["cnt"] = list.Count;
             ViewData["cateList"] = articleDac.GetArticleCodeNo();
             ViewData["setCate"] = cate;
@@ -72,15 +72,15 @@ namespace Design.Web.Admin.Controllers
             }
             return PartialView(list.OrderByDescending(o => o.RegDt).ToPagedList(page, 20));
         }
-
+        
 
         //LIST recommendation
-        public PartialViewResult RecommendList(int page = 1, string orderby = "regdt", int cate = 0, string option = "", string text = "")
+        public PartialViewResult RecommendList(int page = 1, string orderby = "regdt", int cate = 0,  string option = "", string text = "")
         {
             string RecommendYn = "Y";
             ViewData["Group"] = MenuModel(1);
 
-            IList<ArticleT> list = articleDac.GetArticleListByAdminPage(cate, RecommendYn, text);
+            IList<ArticleT> list = articleDac.GetArticleListByAdminPage(cate, RecommendYn,"", text);
             ViewData["cnt"] = list.Count;
             ViewData["cateList"] = articleDac.GetArticleCodeNo();
             ViewData["setCate"] = cate;
@@ -99,12 +99,12 @@ namespace Design.Web.Admin.Controllers
             //    return PartialView(list.OrderByDescending(o => o.Priority).ToPagedList(page, 20));
             //}
 
-            return PartialView(list.OrderByDescending(o => o.RecommendPriority).ThenByDescending(t => t.RecommendDt).ToPagedList(page, 20));
+            return PartialView(list.OrderByDescending(o => o.RecommendPriority).ThenByDescending(t=>t.RecommendDt).ToPagedList(page, 20));
         }
 
 
-
-        public ActionResult RecommendListEdit(int no)
+        
+        public ActionResult RecommendListEdit(int no) 
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
@@ -129,8 +129,8 @@ namespace Design.Web.Admin.Controllers
             return Redirect("../ArticleRecommendRequest/Design");
         }
 
+        
 
-
-
+        
     }
 }

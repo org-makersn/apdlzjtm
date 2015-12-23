@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "알림 보내기";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2 class="contents_title">공지사항</h2>
+<!-- contents_zone -->
+<div class="contents_zone">
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="20%" />
+                <col width="80%" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <label for="title">제목</label></th>
+                    <td>
+
+                        <input type="text" id="title" name="title" title="제목" value="" class="inputText" style="width: 65%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="semi_content">내용</label></th>
+                    <td>
+                        @Html.TextArea("content", new { id = "content", style = "width:750px;height:350px" })
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <!-- btn -->
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="#" class="_btn_write">등록</a></span>
+        <span class="btnWrap medium"><a href="#" class="_btn_list">취소</a></span>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("._btn_write").click(function () {
+            var content = $("#content").val();
+            var title = $("#title").val();
+            var data = {
+                title: title,
+                content: content
+            };
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    alert("전송되었습니다.");
+                    location.href = "/member/AllNotice";
+                }
+                else {
+                    alert("전송 실패하였습니다.");
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/member/AddAllNotice", data, onSuccess);
+        })
+    </script>
+}

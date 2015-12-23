@@ -1,0 +1,229 @@
+﻿@model PagedList.IPagedList<Makersn.Models.TranslationRequestListT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "번역 요청 리스트";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Makersn.Models.CodeT> codeList = (List<Makersn.Models.CodeT>)ViewData["cateList"];
+    int setCate = (int)ViewData["setCate"];
+}
+
+<h2 class="contents_title">
+<a href="/Translation/TranslationReqState">번역 요청 현황</a>&nbsp;&nbsp;l&nbsp;&nbsp;<a href="/Translation/TranslationReqList">번역 현황 리스트</a>
+</h2>
+<form id="search" name="search">
+    <input type="hidden" id="date" name="date">
+    <input type="hidden" id="sst" name="sst">
+    <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
+        <colgroup>
+            <col width="100px" />
+            <col width="auto" />
+        </colgroup>
+        <tbody>
+            <tr>
+                <th scope="row">정렬순서</th>
+                <td>
+                    <span class="btnWrap small"><a href="javascript:article.orderby('regdt');" class="_sst">게시일순</a></span>
+                    <span class="btnWrap small"><a href="javascript:article.orderby('TransReqDt');" class="_sst">번역 요청일순</a></span>
+                    <span class="btnWrap small"><a href="javascript:article.orderby('TransWorkDt');" class="_sst">완료일순</a></span>
+                    <span class="btnWrap small"><a href="javascript:article.orderby('pop');" class="_sst">인기도순</a></span>
+
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">카테고리검색</th>
+                <td>
+                    <select id="sltCate" style="width: 150px">
+                        <option value="">:: 선택하세요 :: </option>
+                        @foreach (Makersn.Models.CodeT i in codeList)
+                        {
+                            <option value="@i.No" @(setCate == i.No ? " selected" : "")>@i.Name</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">검색</th>
+                <td colspan="5">
+                    <select id="sltOption" name="sfl" style="width: 130px">
+                        <option value="name">게시물명</option>
+                    </select>
+                    <input type="text" id="searchBox"value="@ViewData["text"]" class="input_text" style="width: 200px; padding: 1px 0" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="javascript:translation.Search();" class="_search_btn">검색</a></span>
+        <span class="btnWrap medium"><a href="/Translation/TranslationReqList" class="_reset">초기화</a></span>
+    </div>
+</form>
+
+
+
+
+<div class="right_float_wrap">
+    <div class="left"><strong>@ViewData["cnt"]</strong>개의 리스트</div>
+</div>
+
+<input type="hidden" id="date" name="date">
+
+<table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+    <caption>리스트 게시판</caption>
+    <colgroup>
+       <col width="6%" />
+        <col width="6%" />
+        <col width="8%" />
+        <col width="*" />
+        <col width="9%" />
+        <col width="6%" />
+        <col width="7%" />
+        <col width="6%" />
+        <col width="6%" />
+        <col width="6%" />
+        <col width="6%" />
+        <col width="6%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>
+                <input type="checkbox" id="btnAll" name="chkAll" onclick="translation.checkedAll();"></th>
+            <th>번호</th>
+            <th>이미지</th>
+            <th>게시물 제목</th>
+            <th>카테고리</th>
+            <th>이름</th>
+            <th>번역언어</th>
+            <th>게시일</th>
+            <th>요청일</th>
+            <th>완료일</th>
+            <th>번역자</th>
+            <th>비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var translationReq in Model)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" name="chkAll" value="article.No"/></td>
+                <td>@translationReq.No</td>
+                <td>
+                    @*<img src="@ViewBag.ArticleImgUrl@translationReq.ImageName" width="100px" height="100px" />*@
+                    <img src="@ViewBag.mainUrl@translationReq.Path" width="100px" height="100px" />
+                </td>
+                <td><a href="javascript:translation.goArticle(@translationReq.No)">@translationReq.Title</a></td>
+                <td>@translationReq.Category</td>
+                <td>@translationReq.MemberName</td>
+                <td>@translationReq.TransLanFrom -> @translationReq.TransLanTo</td>
+                <td>@translationReq.RegDt.ToString("yyyy-MM-dd\n\rhh:mm:ss")</td>
+                <td>@translationReq.TransReqDt.ToString("yyyy-MM-dd\n\rhh:mm:ss")</td>
+                <td>@translationReq.TransWorkDt.ToString("yyyy-MM-dd\n\rhh:mm:ss").Replace("0001-01-01\n\r12:00:00","")</td>
+                <td>@translationReq.TransWorkMemName</td>
+                <td>@Html.Raw(translationReq.Remark)</td>
+                @*<td><span class="btnWrap medium"><a href="javascript:translation.Hold(@translationReq.No)">보류</a></span></td>*@
+            </tr>   
+        }
+    </tbody>
+</table>
+
+<!-- page_navi -->
+<div class="page_navi">
+    @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+</div>
+<!-- // page_navi -->
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function translation() { };
+
+        translation.orderby = function (val) {
+            location.replace("/Translation/TranslationReqList?orderby=" + val);
+        }
+
+        translation.checkedAll = function () {
+            var chk = $("#btnAll").is(":checked");
+            $("input[name=chkAll]").each(function () {
+                this.checked = chk;
+            });
+        }
+
+        translation.goArticle = function (val) {
+            var pwidth = 1100;
+            var pheight = 650;
+            var winL = (window.screen.width - pwidth) / 2;
+            var winT = (window.screen.height - pheight) / 2;
+
+            var spec = "toolbar=no,";// 도구메뉴
+            spec += "status=no,"; //상태 바
+            spec += "location=no,"; //주소관련 메뉴
+            spec += "height=" + pheight + ","; //높이
+            spec += "width=" + pwidth + ","; //너비
+            spec += "top=" + winT + ","; //세로위치
+            spec += "left=" + winL + ","; //가로위치
+            spec += "overflow-y:hidden"; //가로위치
+            window.open(
+              '@ViewBag.CurrentDomain/Translation/TranslationWork?no=' + val,
+              "호아챠",
+              spec
+              );
+        }
+
+        translation.Search = function () {
+            var cate = $("#sltCate").val();
+            var text = $("#searchBox").val()
+            location.replace("/Translation/TranslationReqList?cate=" + cate + "&text=" + text);
+        }
+
+        translation.Hold = function (val) {
+           
+            var onSuccess = function (result) {
+                alert("보류되였습니다.");
+                location.reload(true);
+            }
+
+            Ajax.AjaxResponseModelService(this, "/Translation/TranslationHold", { No: val }, onSuccess);
+        }
+
+        translation.visibility = function (val) {
+            var no = "";
+            $("input[name=chkAll]").each(function () {
+                if ($(this).is(":checked")) {
+                    if ($(this).val() != "on") {
+                        no += $(this).val() + ",";
+                    }
+                }
+            });
+            var result = Ajax.SyncPostService("/article/SetVisibiliy", { no: no, setVisi: val });
+            console.log(result);
+            if (result.result == 1) {
+                location.reload(true);
+            }
+        }
+
+        translation.recommend = function (val) {
+            var no = "";
+            $("input[name=chkAll]").each(function () {
+                if ($(this).is(":checked")) {
+                    if ($(this).val() != "on") {
+                        no += $(this).val() + ",";
+                    }
+                }
+            });
+            var result = Ajax.SyncPostService("/article/SetRecommend", { no: no, setNo: val });
+            console.log(result);
+            if (result.result == 1) {
+                location.reload(true);
+            }
+        }
+
+
+        $(document).ready(function () {
+            $('#searchBox').keyup(function (event) {
+                if (event.keyCode == 13) {
+                    translation.Search();
+                }
+            });
+        });
+    </script>
+}

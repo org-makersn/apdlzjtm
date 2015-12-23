@@ -1,0 +1,188 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterModelT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "프린터 등록";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IList<Makersn.Models.PrinterModelT> waitList = ViewBag.WaitList;
+    
+}
+
+<h2 class="contents_title">새로운 프린터 등록 신청</h2>
+
+<div class="contents_zone" style="width: 950px;">
+
+    <div class="right_float_wrap">
+        <div class="left"><strong>@waitList.Count</strong>개의 모델</div>
+    </div>
+
+    @*<input type="hidden" id="date" name="date">*@
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <!-- <th><input type="checkbox" name="chkAll" onclick="checkedAll();"></th> -->
+                <th>신청일</th>
+                <th>신청자</th>
+                <th>회사명</th>
+                <th>모델명</th>
+                <th>승인</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Makersn.Models.PrinterModelT printerModel in waitList)
+            {
+                <tr>
+                    <td>@printerModel.RegDt.ToString("yyyy-MM-dd")</td>
+                    <td>@printerModel.PropMemberName</td>
+                    <td>@printerModel.Brand</td>
+                    <td>@printerModel.Model</td>
+                    <td>
+                        <span style="cursor:pointer" onclick="ApprModel('@printerModel.No','Y')">승인</span> / 
+                        <span style="cursor:pointer" onclick="DeleteModel('@printerModel.No')">거절</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @*@Html.PagedListPager(Model, page => Url.Action("/addPrinterModel", new { startDt = ViewData["startDt"], endDt = ViewData["endDt"], page }))*@
+
+</div>
+
+<h2 class="contents_title">등록된 프린터</h2>
+
+<div class="contents_zone" style="width: 950px;">
+
+    <div class="right_float_wrap">
+        <div class="left"><strong>@ViewBag.Count </strong>개의 모델</div>
+    </div>
+
+    @*<input type="hidden" id="date" name="date">*@
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <!-- <th><input type="checkbox" name="chkAll" onclick="checkedAll();"></th> -->
+                <th style="cursor: pointer" onclick="sort('D')">신청일</th>
+                <th style="cursor: pointer" onclick="sort('M')">신청자</th>
+                <th style="cursor: pointer" onclick="sort('B')">회사명</th>
+                <th>모델명</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Makersn.Models.PrinterModelT printerModel in Model)
+            {
+                <tr>
+                    <td>@printerModel.RegDt.ToString("yyyy-MM-dd")</td>
+                    <td>@printerModel.PropMemberName</td>
+                    <td>@printerModel.Brand</td>
+                    <td>@printerModel.Model</td>
+                    <td><span style="cursor:pointer" class="maskbox_trigger" onclick="EditModel('@printerModel.No')">수정</span></td>
+                    <td><span style="cursor:pointer" onclick="DeleteModel('@printerModel.No')">삭제</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @Html.PagedListPager(Model, page => Url.Action("/addPrinterModel", new { orderby = ViewBag.OrderBy, desc = ViewBag.Desc, page }))
+
+</div>
+
+
+<div id="editModel" class="layer_popup" style="display: block; height: 346px">
+</div>
+
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/mask_box.js")"></script>
+    <script type="text/javascript">
+
+        function ApprModel(val, flag) {
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    location.reload(true);
+                }
+                else {
+                    alert(result.Message);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/printing/ApprPrinterModel", { no: val, flag: flag }, onSuccess);
+        }
+
+        function DeleteModel(val) {
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    location.reload(true);
+                }
+                else {
+                    alert(result.Message);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/printing/DeletePrinterModel", { no: val }, onSuccess);
+        }
+
+        function EditModel(val) {
+            //var data = {
+            //    no: val
+            //}
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Printing/editModel",
+            //    dataType: "html",
+            //    data: data,
+            //    success: function (html) {
+            //        $("#editModel").html(html);
+            //    },
+            //    error: function (e) {
+
+            //    }
+            //});
+            location.href = "/printing/editmodel?no=" + val;
+        }
+
+        function sort(val) {
+            var desc = "@ViewBag.Desc";
+            location.href = "/printing/AddPrinterModel?orderby=" + val + "&desc=" + desc;
+        }
+
+        $(document).ready(function () {
+            $("#sdate,#edate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showOn: 'both',
+                buttonImageOnly: true,
+                buttonImage: '/Content/images/admin/icon_calender.png',
+                dateFormat: 'yy-mm-dd'
+            });
+
+
+            $('#searchBox').keyup(function (event) {
+                if (event.keyCode == 13) {
+
+                }
+            });
+        });
+    </script>
+
+}

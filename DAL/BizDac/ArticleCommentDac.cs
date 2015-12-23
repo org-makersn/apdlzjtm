@@ -128,6 +128,14 @@ namespace Makersn.BizDac
         }
         #endregion
 
+        //public int GetArticleCommentCntByArticleNo(int no)
+        //{
+        //    using (ISession session = NHibernateHelper.OpenSession())
+        //    {
+        //        return session.QueryOver<ArticleCommentT>().Where(w => w.ArticleNo == no).RowCount();
+        //    }
+        //}
+
 
         #region 답글의 부모 댓글 가져오기
         public ArticleCommentT GetRefCommentByRefNo(int refNo)
@@ -138,13 +146,5 @@ namespace Makersn.BizDac
             }
         }
         #endregion
-
-        //public int GetArticleCommentCntByArticleNo(int no)
-        //{
-        //    using (ISession session = NHibernateHelper.OpenSession())
-        //    {
-        //        return session.QueryOver<ArticleCommentT>().Where(w => w.ArticleNo == no).RowCount();
-        //    }
-        //}
     }
 }

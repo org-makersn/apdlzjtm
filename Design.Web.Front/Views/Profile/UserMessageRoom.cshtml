@@ -26,10 +26,10 @@
                         profilePic = ViewBag.ProfileImgUrl + message.ProfilePic;
                     }
 
-                    if (date != message.RegDt.ToString("yyyy-MM-dd"))
+                    if (date != message.RegDt.ToString("yyyy.MM.dd"))
                     {
-                    <p class="date">@message.RegDt.ToString("yyyy년 MM월 dd일")</p>
-                        date = message.RegDt.ToString("yyyy-MM-dd");
+                    <p class="date">@message.RegDt.ToString("yyyy.MM.dd")</p>
+                        date = message.RegDt.ToString("yyyy.MM.dd");
                     }
                     <ul>
 
@@ -46,14 +46,14 @@
 
                                 @if (index + 1 < count)
                                 {
-                                    if (Model[index].RegDt.ToString("yyyy-MM-dd tt hh:mm") != Model[index + 1].RegDt.ToString("yyyy-MM-dd tt hh:mm"))
+                                    if (Model[index].RegDt.ToString("yyyy.MM.dd tt hh:mm") != Model[index + 1].RegDt.ToString("yyyy.MM.dd tt hh:mm"))
                                     {
-                                    <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy-MM-dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
+                                    <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy.MM.dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
                                     }
                                 }
                                 else
                                 {
-                                    <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy-MM-dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
+                                    <p style="display: inline; float: right; color:gray; font-size: x-small">@message.RegDt.ToString("yyyy.MM.dd tt hh:mm", new System.Globalization.CultureInfo("en-US"))</p>
                                 }
 
                                 @if (message.MsgGubun == "MSG")
@@ -83,11 +83,12 @@
         <a href="#" class="aImg" title="이미지 첨부"></a>
     </div>*@
                 <div class="btSet">
-                    <a href="javascript:test()" class="aImg" title="이미지 첨부"></a>
+                    <a href="javascript:sendImg()" class="aImg" title="이미지 첨부"></a>
                     <div style="display: none">
                         <input type="file" class="aImg" name="imgupload" id="messageFile" title="이미지 첨부" />
                         <input type="hidden" name="test" value="1" />
                     </div>
+                    <span style="font-size:small;cursor:pointer" onclick="SendMessage()">전송</span>
                 </div>
             </form>
         </div>
@@ -114,7 +115,7 @@
         sendFile("/Profile/sendImage");
     });
 
-    function test() {
+    function sendImg() {
         $("#messageFile").trigger('click');
     }
 

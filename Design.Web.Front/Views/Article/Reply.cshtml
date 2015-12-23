@@ -34,7 +34,7 @@
             @{if (ViewBag.LogOnChk == 0)
               {
                 <a href="#" onclick="loginPop(0)">
-                    <textarea id="addComment" name="memo" disabled="disabled" placeholder="로그인 후 이용 가능합니다"></textarea></a>
+                    <textarea id="addComment" name="memo" disabled="disabled" placeholder="You need to sign in to use the service"></textarea></a>
               }
               else
               {
@@ -42,7 +42,7 @@
               }
             }
             <p class="upText">
-                <button class="" id="btnAddComment" title="게시" onclick="detail.CommentAdd()"></button>
+                <button class="" id="btnAddComment" title="Write" onclick="detail.CommentAdd()"></button>
             </p>
         </div>
     </div>
@@ -79,7 +79,7 @@
                 <li id="">
                     <p class="userImg">
                         <a href="/Profile?no=@memberNo">
-                            <img src="@articleComment.ProfilePic" alt="기본프로필" /></a>
+                            <img src="@articleComment.ProfilePic" alt="DefaultProfile" /></a>
                     </p>
                     <div class="textZone">
                         <div class="nameZone">
@@ -89,12 +89,12 @@
                             <p class="edit before">
                                 @if (ViewBag.MemberNo == articleComment.MemberNo)
                                 {
-                                    <a class="" id="btnGetEdit" rel="" href="#" onclick="detail.ShowEditComment('@articleComment.No', this)">수정</a>
+                                    <a class="" id="btnGetEdit" rel="" href="#" onclick="detail.ShowEditComment('@articleComment.No', this)">Edit</a>
                                     <img alt="구분" src="/content/images/common/bull_edit.png">
                                 }
                                 @if (ViewBag.MemberNo == articleComment.MemberNo || ViewBag.MemberNo == articleComment.MemberNoRef || profile.UserLevel > 50)
                                 {
-                                    <a onclick="" id="btnCommentDel" href="javascript:detail.CommentDel('@No')">삭제</a>
+                                    <a onclick="" id="btnCommentDel" href="javascript:detail.CommentDel('@No')">Delete</a>
                                 }
                             </p>
 
@@ -102,14 +102,14 @@
                             {
                                 <p class="edit after" style="display: none">
 
-                                    <a class="" rel="" href="#" onclick="detail.CommentUpd('@articleComment.No')">수정</a>
+                                    <a class="" rel="" href="#" onclick="detail.CommentUpd('@articleComment.No')">Edit</a>
                                     <img alt="구분" src="/content/images/common/bull_edit.png">
-                                    <a onclick="detail.HideEditComment(@articleComment.No, this)" href="#">취소</a>
+                                    <a onclick="detail.HideEditComment(@articleComment.No, this)" href="#">Cancle</a>
                                 </p>
                             }
 
-                            <a href="#" onclick="ReplyInReply(this, '@articleComment.MemberNo')" class="reply show">답글</a>
-                            <a href="#" onclick="CancleReplyInReply(this, '@articleComment.MemberNo')" style="display:none" class="reply cancel hide">답글 취소</a>
+                            <a href="#" onclick="ReplyInReply(this, '@articleComment.MemberNo')" class="reply show">Reply</a>
+                            <a href="#" onclick="CancleReplyInReply(this, '@articleComment.MemberNo')" style="display:none" class="reply cancel hide">Reply Cancel</a>
                         </div>
                         <div id="comment_view_@articleComment.No" class="editArea">
                             <div class="userText _memo">@Html.Raw(filter.HtmlEncode(articleComment.Content))</div>
@@ -166,23 +166,21 @@
                             userNm = inReply.Content.Contains("#user#") == true ? inReply.Content.Substring(0, inReply.Content.IndexOf("#")) : "";
 
                             string placeHolder = string.Empty;
-                           
+                            if (userNm != "") {
+                                placeHolder = "Write a reply to " + userNm; 
+                                <input type="hidden" name="hfEditToName" value="@userNm" />
+                            }
                             
                             <div class="userText_reply">
                                 <p class="reply_bar"></p>
                                 <p class="userImg">
                                     <a href="/Profile?no=@inMemberNo">
-                                        <img src="@inReply.ProfilePic" alt="기본프로필"></a>
+                                        <img src="@inReply.ProfilePic" alt="DefaultProfile"></a>
                                 </p>
 
 
                                 @*이름 들어갈곳*@
                                 <p class="name">@inReply.MemberName</p>
-                                @if (userNm != "")
-                                {
-                                    placeHolder = userNm + "님께 답글 쓰기"; 
-                                    <input type="hidden" name="hfEditToName" value="@userNm" />
-                                }
 
                                 <div class="editInArea">
                                     <div class="userText_text"><strong>@userNm</strong> @inReply.Content.Substring(contentIdx)</div>
@@ -190,12 +188,12 @@
                                     <p class="edit">
                                         @if (ViewBag.MemberNo == inReply.MemberNo)
                                         {
-                                            <a class="" rel="" href="#" onclick="ShowEditInComment(this)">수정</a>
+                                            <a class="" rel="" href="#" onclick="ShowEditInComment(this)">Edit</a>
                                             <img alt="구분" src="/content/images/common/bull_edit.png">
                                         }
                                         @if (ViewBag.MemberNo == inReply.MemberNo || ViewBag.MemberNo == inReply.MemberNoRef || profile.UserLevel > 50)
                                         {
-                                            <a onclick="" href="javascript:detail.CommentDel('@inNo')">삭제</a>
+                                            <a onclick="" href="javascript:detail.CommentDel('@inNo')">Delete</a>
                                         }
                                     </p>
                                 </div>
@@ -204,12 +202,12 @@
                                 {
                                     <div class="EditInReply" style="display: none">
                                         <textarea name="reply" style="width: 225px" placeholder="@placeHolder" class="textInReply">@inReply.Content.Substring(contentIdx)</textarea>
-                                        <a href="#" onclick="EditInReply('@inReply.No', this,'@inReply.ArticleNo')">수정</a>
-                                        <a href="#" onclick="HideEditInComment(this)">취소</a>
+                                        <a href="#" onclick="EditInReply('@inReply.No', this,'@inReply.ArticleNo')">Edit</a>
+                                        <a href="#" onclick="HideEditInComment(this)">Cancel</a>
                                     </div>
                                 }
-                                <a href="#" onclick="ReplyInReply(this, '@inReply.MemberNo', '@inReply.MemberName')" class="reply show">답글</a>
-                                <a href="#" onclick="CancleReplyInReply(this, '@inReply.MemberNo')" style="display:none" class="reply cancel hide">답글 취소</a>
+                                <a href="#" onclick="ReplyInReply(this, '@inReply.MemberNo', '@inReply.MemberName')" class="reply show">Reply</a>
+                                <a href="#" onclick="CancleReplyInReply(this, '@inReply.MemberNo')" style="display:none" class="reply cancel hide">Reply Cancel</a>
 
                                 <p class="date">@inReply.Regdt.ToString("yyyy.MM.dd tt hh:mm")</p>
                             </div>
@@ -223,10 +221,10 @@
                                 <p class="reply_bar"></p>
                                 <p class="userImg">
                                     <a href="user_profile.html">
-                                        <img src="@visitorProfilePic" alt="기본프로필"></a>
+                                        <img src="@visitorProfilePic" alt="DefaultProfile"></a>
                                 </p>
                                 <textarea name="reply" class="textInReply"></textarea>
-                                <a href="#" onclick="AddInRePly('@articleComment.No', this, '@articleComment.ArticleNo')" class="btn_reply">답글 게시</a>
+                                <a href="#" onclick="AddInRePly('@articleComment.No', this, '@articleComment.ArticleNo')" class="btn_reply">Reply</a>
                             </div>
                         </div>
 
@@ -264,6 +262,8 @@
         )
 </div>
 
+
+
 <script type="text/javascript">
     if ("@ViewBag.GoReply" == "Y") {
         $("#addComment").focus();
@@ -285,18 +285,15 @@
                 $("#hfReplyToNo").val(0);
             }
 
-            //$(val).text("답글 취소");
-            //$(val).addClass("cancel");
             $(val).hide();
             $(val).next().show();
 
             $("#hfReplyToNo").val(no);
 
-            //$(val).attr("onclick", "CancleReplyInReply(this, "+no+")");
             $(val).parents('.textZone').find(".InReply").show();
 
             if (name != null) {
-                $(val).parents('.textZone').find(".textInReply").attr("placeholder", name + "님께 답글쓰기");
+                $(val).parents('.textZone').find(".textInReply").attr("placeholder", "Write a reply to " + name);
                 $("#chkReply").val(1);
             }
             else {
@@ -307,10 +304,6 @@
     }
 
     function CancleReplyInReply(val) {
-        //$(val).text("답글");
-        //$(val).removeClass("cancel");
-        ////$(val).attr("onclick", "ReplyInReply(this)");
-        //$(val).parents('.textZone').find(".InReply").hide();
         $(val).prev().show();
         $(val).hide();
 

@@ -24,12 +24,14 @@
                     <li><span>@Html.ActionLink("디자인", "State", "Article")</span></li>
                     <li><span>@Html.ActionLink("프린팅", "State", "Printing")</span></li>
                     <li><span>@Html.ActionLink("일반", "Index", "Banner")</span></li>
+                    <li><span>@Html.ActionLink("번역", "Index", "Translation")</span></li>
                     <li><span>@Html.ActionLink("관리자", "admin_auth", "Admin")</span></li>
                 </ul>
             </div>
             <!-- // -->
-            <div class="util_m" style="padding-top:17px;">
-                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" })) {
+            <div class="util_m" style="padding-top: 17px;">
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                {
                     @Html.AntiForgeryToken()
                     <span class="btnWrap small"><a href="/main">사용자메인</a></span>
                     <span class="btnWrap small"><a href="javascript:document.getElementById('logoutForm').submit()">로그오프</a></span>
@@ -52,31 +54,44 @@
                             <li><span class="one">@Html.ActionLink("회원정보", "Index", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("스팟회원정보", "PrinterMember", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("탈퇴회원", "DropMember", "Member")</span></li>
+                            <li><span class="one">@Html.ActionLink("전체알림", "AllNotice", "Member")</span></li>
                         }
                         @if (menu.Group == "_Article")
                         {
                             <li><span class="one">@Html.ActionLink("디자인 현황", "State", "Article")</span></li>
                             <li><span class="one">@Html.ActionLink("디자인 리스트", "Index", "Article")</span></li>
                         }
-                         @if (menu.Group == "_Printing")
+                        @if (menu.Group == "_Printing")
                         {
                             <li><span class="one">@Html.ActionLink("프린팅 현황", "State", "Printing")</span></li>
                             <li><span class="one">@Html.ActionLink("프린팅 리스트", "Listing", "Printing")</span></li>
-                         }
+                            <li><span class="one">@Html.ActionLink("프린터 등록", "AddPrinterModel", "Printing")</span></li>
+                            <li><span class="one">@Html.ActionLink("프린터 인증 신청", "ApprPrinterTest", "Printing")</span></li>
+                            <li><span class="one">@Html.ActionLink("프린터 인증 관리", "MngApprPrinterTest", "Printing")</span></li>
+                            <li><span class="one">@Html.ActionLink("결제 승인", "ApprPayment", "Printing")</span></li>
+                            <li><span class="one">@Html.ActionLink("환불 처리", "ApprPaymentCancle", "Printing")</span></li>
+                            <li><span class="one">@Html.ActionLink("스팟 정산", "Accounting", "Printing")</span></li>
+                        }
                         @if (menu.Group == "_Management")
                         {
-                        <li><span class="one">@Html.ActionLink("메인 배너관리", "Index", "Banner")</span></li> 
-                        <li><span class="one">@Html.ActionLink("공지사항", "Index", "Notices")</span></li>
-                        <li><span class="one">@Html.ActionLink("추천관리", "Design", "ArticleRecommendRequest")</span></li>
-                        <li><span class="one">@Html.ActionLink("문의사항", "Index", "Contact")</li>
-                        <li><span class="one">@Html.ActionLink("리포트", "Index", "Report")</span></li>
-                        <li><span class="one">@Html.ActionLink("검색키워드", "Index", "Popular")</span></li>
+                            <li><span class="one">@Html.ActionLink("메인 배너관리", "Index", "Banner")</span></li> 
+                            <li><span class="one">@Html.ActionLink("공지사항", "Index", "Notices")</span></li>
+                            <li><span class="one">@Html.ActionLink("추천관리", "Design", "ArticleRecommendRequest")</span></li>
+                            <li><span class="one">@Html.ActionLink("문의사항", "Index", "Contact")</span></li>
+                            <li><span class="one">@Html.ActionLink("리포트", "Index", "Report")</span></li>
+                            <li><span class="one">@Html.ActionLink("검색키워드", "Index", "Popular")</span></li>
                         }
                         @if (menu.Group == "_Admin")
                         {
                             <li><span class="one">@Html.ActionLink("관리자 설정", "admin_auth", "Admin")</span></li>
                         }
-                       
+                        @if (menu.Group == "_Trans")
+                        {
+                            <li><span class="one">@Html.ActionLink("번역 현황", "index", "Translation")</span></li>
+                            <li><span class="one">@Html.ActionLink("번역 요청", "TranslationReqState", "Translation")</span></li>
+                            <li><span class="one">@Html.ActionLink("직접 번역", "TranslationDirectState", "Translation")</span></li>
+                        }
+
 
                     </ul>
                 </div>
@@ -105,7 +120,7 @@
             $topm.eq(@menu.MainIndex).find("span").addClass("active");
             $leftm.eq(@menu.SubIndex).find("span").addClass("active");
         })
-        
+
     </script>
     @RenderSection("scripts", required: false)
 </body>

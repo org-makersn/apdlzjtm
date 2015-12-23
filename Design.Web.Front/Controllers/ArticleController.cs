@@ -36,6 +36,9 @@ namespace Design.Web.Front.Controllers
         NoticesDac _noticesDac = new NoticesDac();
         MemberDac _memberDac = new MemberDac();
 
+        TranslationDac _translationDac = new TranslationDac();
+        TranslationDetailDac _translationDetailDac = new TranslationDetailDac();
+
 
 
         static HttpCookie viewCookie = new HttpCookie("viewCntBlock");
@@ -53,53 +56,77 @@ namespace Design.Web.Front.Controllers
         /// <param name="codeNo"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public ActionResult Index(int page = 1, string codeNo = "0", string pageGubun = "")
+        public ActionResult Index(int page = 1, int codeNo = 0, string pageGubun = "", string gl = "", string cateNm = "")
         {
-            int pageSize = 20;
-            int codeNum = int.Parse(codeNo);
+            if (cateNm != "")
+            {
+                codeNo = (int)(Makersn.Util.MakersnEnumTypes.CateName)Enum.Parse(typeof(Makersn.Util.MakersnEnumTypes.CateNameToUrl), cateNm);
+            }
+
+            int pageSize = 40;
+            int codeNum = codeNo;
             IList<ArticleDetailT> list = null;
-            ViewBag.PageTitle = EnumHelper.GetEnumTitle((MakersnEnumTypes.CateName)int.Parse(codeNo)); //EnumTitle 가져오기 string반환
+            ViewBag.PageTitle = EnumHelper.GetEnumTitle((MakersnEnumTypes.CateName)codeNo); //EnumTitle 가져오기 string반환
             ViewBag.CodeNo = codeNo;
             ViewBag.Gubun = pageGubun;
-
-            pageGubun = pageGubun.ToUpper();
 
             switch (pageGubun)
             {
                 case "N":
-                    ViewBag.PageTitle = "신규";
+                    ViewBag.PageTitle = "New";
                     break;
 
                 case "P":
-                    ViewBag.PageTitle = "인기";
+                    ViewBag.PageTitle = "Popluar";
                     break;
 
                 case "R":
-                    ViewBag.PageTitle = "추천";
+                    ViewBag.PageTitle = "Featured";
                     break;
                 default:
                     break;
             }
 
-            int totalCnt = _articleDac.GetTotalCountByOption(Profile.UserNo, codeNum, "", pageGubun);
+            if (Request.Cookies.AllKeys.Contains("GlobalFlag"))
+            {
+                gl = Request.Cookies["GlobalFlag"].Value;
+            }
+
+            ViewBag.LangFlag = gl;
+
+            switch (gl)
+            {
+                case "EN": ViewBag.LangFlagName = "English"; break;
+                case "KR": ViewBag.LangFlagName = "한국어"; break;
+                default: ViewBag.LangFlagName = "All Language"; break;
+            }
+
+            gl = gl == "ALL" ? "" : gl;
+
+            int totalCnt = _articleDac.GetTotalCountByOption(Profile.UserNo, codeNum, "", pageGubun, gl);
 
             int fromIndex = ((page - 1) * pageSize) + 1;
             int toIndex = page * pageSize;
+
+            //PagerInfo pager = new PagerInfo();
+            //pager.CurrentPageIndex = page;
+            //pager.PageSize = pageSize;
+            //pager.RecordCount = totalCnt;
+
+
+            list = _articleDac.GetListByOption(Profile.UserNo, codeNum, pageGubun, gl, fromIndex, toIndex);
+            if (pageGubun == "R")
+            {
+                if (list.Count() == 0)
+                {
+                    list = _articleDac.GetListByOption(Profile.UserNo, codeNum, "N", gl, fromIndex, toIndex);
+                }
+            }
 
             PagerInfo pager = new PagerInfo();
             pager.CurrentPageIndex = page;
             pager.PageSize = pageSize;
             pager.RecordCount = totalCnt;
-
-
-            list = _articleDac.GetListByOption(Profile.UserNo, codeNum, pageGubun, fromIndex, toIndex);
-            if (pageGubun == "R")
-            {
-                if (list.Count() == 0)
-                {
-                    list = _articleDac.GetListByOption(Profile.UserNo, codeNum, "N", fromIndex, toIndex);
-                }
-            }
             PagerQuery<PagerInfo, IList<ArticleDetailT>> model = new PagerQuery<PagerInfo, IList<ArticleDetailT>>(pager, list);
 
             return View(model);
@@ -116,6 +143,20 @@ namespace Design.Web.Front.Controllers
         //[Route("detail/{no:string}")]
         public ActionResult Detail(string no = "", string goReply = "N")
         {
+            string langFlag = string.Empty;
+
+            if (Request.Cookies.AllKeys.Contains("GlobalFlag"))
+            {
+                langFlag = Request.Cookies["GlobalFlag"].Value;
+            }
+            else
+            {
+                langFlag = ViewBag.LangFlag;
+            }
+
+            if (langFlag == "ALL")
+                langFlag = "";
+
             int articleNo = 0;
             var visitorNo = Profile.UserNo;
             ViewBag.GoReply = goReply;
@@ -133,6 +174,14 @@ namespace Design.Web.Front.Controllers
 
                 detail = _articleDac.GetArticleDetailByArticleNo(articleNo, visitorNo);
 
+                TranslationDetailT trans = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleNo, langFlag);
+                if (trans != null)
+                {
+                    detail.Title = trans.Title;
+                    detail.Contents = trans.Contents;
+                    detail.Tag = trans.Tag;
+                }
+
                 ViewBag.MetaDescription = detail.Contents;
 
                 detail.Contents = new ContentFilter().HtmlEncode(detail.Contents);
@@ -140,7 +189,7 @@ namespace Design.Web.Front.Controllers
                 detail.Contents = chkContent(detail.Contents);
                 if ((detail.MemberNo != visitorNo && Profile.UserLevel < 50) && detail.Visibility.ToUpper() == "N")
                 {
-                    return Content("<script>alert('비공개 처리된 게시물 입니다.'); location.href='/';</script>");
+                    return Content("<script>alert('This is a private posting.'); location.href='/';</script>");
                 }
 
                 ViewBag.chkStlCnt = _articleFileDac.GetSTLFileList(articleNo).Count;
@@ -153,9 +202,13 @@ namespace Design.Web.Front.Controllers
             {
 
             }
+            //조회수 증가 방지
+            //if (viewCookie[Profile.UserNo + "/" + no] == null)
+            //{
 
-          
-
+            //viewCookie[Profile.UserNo + "/" + no] = "1";
+            //Response.Cookies["viewCntBlock"].Expires = DateTime.Now.AddMinutes(10);
+            //}
             ViewBag.VisitorNo = visitorNo;
 
             ViewBag.No = no;
@@ -175,12 +228,21 @@ namespace Design.Web.Front.Controllers
         /// <param name="page"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public ActionResult Search(int page = 1, string text = "", string tag = "")
+        public ActionResult Search(int page = 1, string text = "", string tag = "", string gl="")
         {
             text = Server.UrlDecode(text);
             ViewBag.Text = text;
             if (tag != "") { ViewBag.IsTag = "태그"; };
-            IList<ArticleT> list = _articleDac.GetSearchList(text, Profile.UserNo, tag);
+
+            if (Request.Cookies.AllKeys.Contains("GlobalFlag"))
+            {
+                gl = Request.Cookies["GlobalFlag"].Value;
+            }
+            gl = gl == "ALL" ? "" : gl;
+
+            ViewBag.LangFlag = gl;
+
+            IList<ArticleT> list = _articleDac.GetSearchList(text, Profile.UserNo, tag, gl);
 
             //조회수 증가 방지
             //if (searchCookie[Profile.UserNo + "_" + text] == null)
@@ -195,16 +257,15 @@ namespace Design.Web.Front.Controllers
                 popular.RegId = Profile.UserId;
                 popular.MemberNo = Profile.UserNo;
 
-                //IPHostEntry host;
-                //host = Dns.GetHostEntry(Dns.GetHostName());
-                //foreach (IPAddress ip in host.AddressList)
-                //{
-                //    if (ip.AddressFamily.ToString() == "InterNetwork")
-                //    {
-                //        popular.RegIp = ip.ToString();
-                //    }
-                //}
-                popular.RegIp = IPAddressHelper.GetIP(this);
+                IPHostEntry host;
+                host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (IPAddress ip in host.AddressList)
+                {
+                    if (ip.AddressFamily.ToString() == "InterNetwork")
+                    {
+                        popular.RegIp = ip.ToString();
+                    }
+                }
                 PopularDac popularDac = new PopularDac();
                 popularDac.AddSearchText(popular);
 
@@ -296,11 +357,12 @@ namespace Design.Web.Front.Controllers
             //articleContents = articleContents.Replace("#", "");
             if (tags.Length > 1000)
             {
-                response.Message = "태그는 1000자 이하로 가능합니다.";
+                response.Message = "Please write the tag within 1000 characters.";
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
             ArticleT articleT = null;
-
+            //TranslationT tran = null;
+            TranslationDetailT tranDetail = null;
             if (!Int32.TryParse(paramNo, out articleNo))
             {
                 response.Success = false;
@@ -311,10 +373,18 @@ namespace Design.Web.Front.Controllers
             {
                 //update
                 articleT = _articleDac.GetArticleByNo(articleNo);
+                tranDetail = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleT.No, "EN");
+                
+                if (tranDetail != null)
+                {
+                    articleT.Title = tranDetail.Title;
+                    articleT.Contents = tranDetail.Contents;
+                    articleT.Tag = tranDetail.Tag;
+                }
 
                 if (articleT != null)
                 {
-                    if (articleT.MemberNo == Profile.UserNo && articleT.Temp == temp)
+                    if (articleT.MemberNo == Profile.UserNo )
                     {
                         articleT.UpdDt = DateTime.Now;
                         articleT.UpdId = Profile.UserId;
@@ -336,6 +406,16 @@ namespace Design.Web.Front.Controllers
                 articleT.RegIp = IPAddressHelper.GetIP(this);
                 articleT.RecommendYn = "N";
                 articleT.RecommendDt = null;
+
+            }
+
+            if(tranDetail == null){
+
+                //영문텍스트 TRANSLATION_DETAIL
+                tranDetail = new TranslationDetailT();
+                tranDetail.LangFlag = "EN";
+                tranDetail.RegId = Profile.UserId;
+                tranDetail.RegDt = DateTime.Now;
             }
 
             if (articleT != null)
@@ -350,13 +430,20 @@ namespace Design.Web.Front.Controllers
                 articleT.VideoUrl = VideoSource;
 
                 articleT.Tag = tags;
-
-                
-
                 articleNo = _articleDac.SaveOrUpdate(articleT, delNo);
 
+
+                //영문텍스트 TRANSLATION_DETAIL
+                tranDetail.ArticleNo = articleNo;
+                tranDetail.Title = articleT.Title;
+                tranDetail.Contents = articleT.Contents;
+                tranDetail.Tag = articleT.Tag;
+
+
+                _translationDetailDac.SaveOrUpdateTranslationDetail(tranDetail);
+
                 response.Success = true;
-                response.Result = articleNo.ToString(); ;
+                response.Result = articleNo.ToString();
             }
 
             _articleFileDac.UpdateArticleFileSeq(seqArray);
@@ -388,6 +475,13 @@ namespace Design.Web.Front.Controllers
             }
 
             ArticleT articleT = _articleDac.GetArticleForEdit(articleNo);
+            TranslationDetailT transDetail = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleT.No, "EN");
+            if (transDetail != null)
+            {
+                articleT.Title = transDetail.Title;
+                articleT.Tag = transDetail.Tag;
+                articleT.Contents = transDetail.Contents;
+            }
             if (articleT.MemberNo != Profile.UserNo && Profile.UserLevel < 50) { return RedirectToAction("detail", new { no = articleT.No }); }
 
             int UploadCnt = _articleFileDac.GetArticleFileCntByNo(articleT.No);
@@ -418,7 +512,7 @@ namespace Design.Web.Front.Controllers
 
             HttpPostedFileBase stlupload = Request.Files["stlupload"];
             string temp = collection["temp"];
-           
+
             if (stlupload != null)
             {
                 if (stlupload.ContentLength > 0)
@@ -435,8 +529,10 @@ namespace Design.Web.Front.Controllers
                             string saveJSFolder = "Article/article_js";
                             fileName = FileUpload.UploadFile(stlupload, null, save3DFolder, null);
 
-                            string file3Dpath = string.Format("{0}/FileUpload/{1}/", AppDomain.CurrentDomain.BaseDirectory, save3DFolder);
-                            string fileJSpath = string.Format("{0}/FileUpload/{1}/", AppDomain.CurrentDomain.BaseDirectory, saveJSFolder);
+                            //string file3Dpath = string.Format("{0}/FileUpload/{1}/", AppDomain.CurrentDomain.BaseDirectory, save3DFolder);
+                            //string fileJSpath = string.Format("{0}/FileUpload/{1}/", AppDomain.CurrentDomain.BaseDirectory, saveJSFolder);
+                            string file3Dpath = string.Format("{0}/FileUpload/{1}/", @"D:\makersn\Beta.Web.Front", save3DFolder);
+                            string fileJSpath = string.Format("{0}/FileUpload/{1}/", @"D:\makersn\Beta.Web.Front", saveJSFolder);
 
                             StlModel stlModel = new STLHelper().GetStlModel(file3Dpath + fileName, extension);
 
@@ -473,7 +569,7 @@ namespace Design.Web.Front.Controllers
                             articleFileT.Y = sizeResult.Y;
                             articleFileT.Z = sizeResult.Z;
                             articleFileT.Volume = sizeResult.Volume;
-                            //articleFileT.PrintVolume = new STLHelper().slicing(file3Dpath + fileName);
+                            articleFileT.PrintVolume = new STLHelper().slicing(file3Dpath + fileName);
 
                             articleFileT.UseYn = "Y";
                             articleFileT.Temp = temp;
@@ -488,19 +584,19 @@ namespace Design.Web.Front.Controllers
                         }
                         else
                         {
-                            response.Message = "stl, obj 형식 파일만 가능합니다.";
+                            response.Message = "Only stl, obj format is allowed.";
                         }
                     }
                     else
                     {
-                        response.Message = "최대 사이즈 200MB 파일만 가능합니다.";
+                        response.Message = "It has exceeded the maximum size.";
                     }
                 }
             }
 
             var mulltiSeq = collection["multi[]"];
-            string[] seqArray = null;
 
+            string[] seqArray = null;
             if (mulltiSeq != null)
             {
                 seqArray = mulltiSeq.Split(',');
@@ -677,18 +773,18 @@ namespace Design.Web.Front.Controllers
                     }
                     else
                     {
-                        response.Message = "gif, jpg, png 형식 파일만 가능합니다.";
+                        response.Message = "Only gif, jpg, png format is allowed.";
                     }
                 }
             }
 
             var mulltiSeq = collection["multi[]"];
             string[] seqArray = null;
-
             if (mulltiSeq != null)
             {
                 seqArray = mulltiSeq.Split(',');
                 _articleFileDac.UpdateArticleFileSeq(seqArray);
+
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -709,7 +805,7 @@ namespace Design.Web.Front.Controllers
             response.Success = false;
 
             string saveImgFolder = "Article/article_img";
-            string fileImgpath = string.Format("{0}/FileUpload/{1}/", AppDomain.CurrentDomain.BaseDirectory, saveImgFolder);
+            string fileImgpath = string.Format("{0}/FileUpload/{1}/", @"D:\makersn\Beta.Web.Front", saveImgFolder);
 
             if (!Directory.Exists(fileImgpath))
             {
@@ -801,7 +897,7 @@ namespace Design.Web.Front.Controllers
         #endregion
 
         #region
-        public PartialViewResult AppendFile(int no,int idx)
+        public PartialViewResult AppendFile(int no, int idx)
         {
             ArticleFileT file = _articleFileDac.GetArticleFileByNo(no);
             ViewBag.Index = idx;
@@ -847,7 +943,7 @@ namespace Design.Web.Front.Controllers
 
             MemberT visitor = _memberDac.GetMemberProfile(Profile.UserNo);
             ViewBag.VisitorPic = visitor == null ? "" : visitor.ProfilePic;
-            return PartialView(list.OrderByDescending(o => o.Regdt).ToPagedList(page, 5));
+            return PartialView(list.OrderByDescending(o => o.Regdt).ToPagedList(page, 10));
             //return PartialView(list);
         }
         #endregion
@@ -932,10 +1028,9 @@ namespace Design.Web.Front.Controllers
                 _noticesDac.InsertNoticeByComment(notice);
             }
 
-            return Json(new { Message = "등록되었습니다.", Success = true });
+            return Json(new { Message = "Be registered.", Success = true });
         }
         #endregion
-
 
         #region 댓글의 댓글
         public JsonResult AddInReply(int no, string content, int articleNo, int memberNoRef, int chkReply)
@@ -1037,11 +1132,50 @@ namespace Design.Web.Front.Controllers
         /// <returns></returns>
         public PartialViewResult MemberOtherArticle(string no = "")
         {
-            IList<ArticleT> list = _articleDac.GetMemberArticleTop4(int.Parse(no));
+            string langFlag = string.Empty;
+
+            if (Request.Cookies.AllKeys.Contains("GlobalFlag"))
+            {
+                langFlag = Request.Cookies["GlobalFlag"].Value;
+            }
+            else
+            {
+                langFlag = ViewBag.LangFlag;
+            }
+
+            if (langFlag == "ALL")
+                langFlag = "";
+
+            IList<ArticleT> before = _articleDac.GetMemberArticleTop4(int.Parse(no));
+
+            IList<ArticleT> list = new List<ArticleT>();
+            foreach (ArticleT article in before)
+            {
+                TranslationDetailT trans = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(article.No, langFlag);
+                if (trans != null)
+                {
+                    article.Title = trans.Title;
+                }
+                list.Add(article);
+            }
+
+            IList<ArticleDetailT> beforeRecommendList = new List<ArticleDetailT>();
             IList<ArticleDetailT> recommendList = new List<ArticleDetailT>();
-            recommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "R", 1, 4);
-            if (recommendList.Count == 0) { recommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "P", 1, 4); };
-            ViewBag.RecommendList = recommendList;
+
+            beforeRecommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "R", "", 1, 4);
+            if (beforeRecommendList.Count == 0) { beforeRecommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "P", "", 1, 4); };
+
+            foreach (ArticleDetailT recommend in beforeRecommendList)
+            {
+                TranslationDetailT trans = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(recommend.No, langFlag);
+                if (trans != null)
+                {
+                    recommend.Title = trans.Title;
+                }
+                recommendList.Add(recommend);
+            }
+
+            ViewBag.RecommendList = beforeRecommendList;
 
             return PartialView(list);
         }
@@ -1168,7 +1302,7 @@ namespace Design.Web.Front.Controllers
             }
             catch
             {
-                return Content("<script type='text/javascript'> alert('존재하지 않는 파일입니다'); history.go(-1);</script>");
+                return Content("<script type='text/javascript'> alert('File does not exist.'); history.go(-1);</script>");
             }
         }
         #endregion
@@ -1195,20 +1329,10 @@ namespace Design.Web.Front.Controllers
                 }
                 catch
                 {
-                    return Content("<script type='text/javascript'> alert('존재하지 않는 파일이 있습니다.'); history.go(-1);</script>");
+                    return Content("<script type='text/javascript'> alert('There is a file that does not exist.'); history.go(-1);</script>");
                     //return Content(dirPath + f.Rename);
                 }
             }
-
-            // gooksong add download cnt
-            DownloadT download = new DownloadT();
-            download.ArticleNo = articleNo;
-            download.MemberNo = Profile.UserNo;
-            download.RegId = Profile.UserId;
-            download.RegIp = IPAddressHelper.GetIP(this);
-            download.RegDt = DateTime.Now;
-            download.Cnt = 1;
-            _downloadDac.InsertDownloadCnt(download);
 
             zipFile.Save(stream);
             zipFile.Dispose();
@@ -1321,14 +1445,14 @@ namespace Design.Web.Front.Controllers
                 //    matchDomain = matchDomain.NextMatch();
                 //}
 
-                 string replaceDomain = matchDomain.Value.Replace("&nbsp", "");
+                string replaceDomain = matchDomain.Value.Replace("&nbsp", "");
                 if (!domainList.Contains(replaceDomain))
                 {
                     //contents = contents.Replace(matchDomain.Value, "<a href='" + matchDomain.Value + "' target='_blank'>" + matchDomain.Value + "</a>");
                     //domainList += matchDomain.Value;
                     contents = contents.Replace(replaceDomain + "&nbsp", "<a href='" + replaceDomain + "' target='_blank'>" + replaceDomain + "</a>");
                     contents = contents.Replace(replaceDomain + "\r", "<a href='" + replaceDomain + "' target='_blank'>" + replaceDomain + "</a>");
-                    
+
                     domainList.Add(replaceDomain);
                     matchDomain = matchDomain.NextMatch();
                 }
@@ -1374,31 +1498,190 @@ namespace Design.Web.Front.Controllers
         }
 
 
-        #region
-        public ActionResult Competition(int page = 1)
+        #region 번역 페이지
+        [Authorize, HttpGet]
+        public ActionResult Translation(string no = "", int transFlag = 0)
         {
-            int pageSize = 20;
-            IList<ArticleDetailT> list = null;
-            //int codeNum = int.Parse(codeNo);
-            //ViewBag.CodeNo = codeNo;
-            //ViewBag.Gubun = pageGubun;
+            int articleNo = 0;
+            if (no == "")
+            {
+                return RedirectToAction("Upload");
+            }
 
-            int totalCnt = _articleDac.GetCompetitionListCount("컨테스트#01");
+            if (!Int32.TryParse(no, out articleNo))
+            {
+                //history
+                return RedirectToAction("Upload");
+            }
 
-            int fromIndex = ((page - 1) * pageSize) + 1;
-            int toIndex = page * pageSize;
+            ArticleT articleT = _articleDac.GetArticleForEdit(articleNo);
+            TranslationDetailT transDetail = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleT.No, "EN");
+            if (transDetail != null)
+            {
+                articleT.Title = transDetail.Title;
+                articleT.Tag = transDetail.Tag;
+                articleT.Contents = transDetail.Contents;
+            }
+            if (articleT.MemberNo != Profile.UserNo && Profile.UserLevel < 50) { return RedirectToAction("detail", new { no = articleT.No }); }
 
-            PagerInfo pager = new PagerInfo();
-            pager.CurrentPageIndex = page;
-            pager.PageSize = pageSize;
-            pager.RecordCount = totalCnt;
+            int UploadCnt = _articleFileDac.GetArticleFileCntByNo(articleT.No);
+
+            int totalPages = Math.Max((UploadCnt + 5 - 1) / 5, 1);
+            ViewBag.UploadCnt = totalPages == 1 ? totalPages * 5 * 2 : totalPages * 5;
+            ViewBag.UploadFileCnt = UploadCnt;
+            ViewBag.ArticleNo = articleNo;
+
+            //페이지 들어올때 temp와 같은 임시파일이 존재하는지 체크
+            _articleDac.CheckTempFile(articleT.Temp);
+
+            ViewBag.FileList = _articleFileDac.GetFileList(articleNo);
+            ViewBag.TransFlag = transFlag;
+            ViewBag.WrapClass = "bgW";
 
 
-            list = _articleDac.GetCompetitionList(Profile.UserNo, fromIndex, toIndex, "컨테스트#01");
+            return View(articleT);
+        }
+        #endregion
 
-            PagerQuery<PagerInfo, IList<ArticleDetailT>> model = new PagerQuery<PagerInfo, IList<ArticleDetailT>>(pager, list);
+        #region 번역
+        public JsonResult SetTranslation(FormCollection collection)
+        {
+            AjaxResponseModel model = new AjaxResponseModel();
+            model.Success = false;
 
-            return View(model);
+
+            int articleNo = int.Parse(collection["No"]);
+            string transTitle = collection["trans_title"];
+            string transContents = collection["trans_contents"];
+            string transTags = collection["trans_tags"];
+            string language = collection["chkLang"];
+            int transFlag = int.Parse(collection["transFlag"]);
+
+            TranslationDetailT transDetail = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleNo, language);
+
+            if (transDetail != null)
+            {
+                model.Message = "Translation already exists.";
+
+            }
+            else
+            {
+                TranslationT translation = _translationDac.GetTranslation(articleNo, language, transFlag);
+
+                if (translation.ReqMemberNo != Profile.UserNo && Profile.UserLevel < 50)
+                {
+                    model.Message = "You do not have translation rights.";
+                    return Json(model);
+                }
+
+                transDetail = new TranslationDetailT();
+                transDetail.ArticleNo = articleNo;
+                transDetail.TranslationNo = translation.No;
+                transDetail.Title = transTitle;
+                transDetail.Contents = transContents;
+                transDetail.Tag = transTags;
+                transDetail.LangFlag = language;
+                transDetail.RegId = Profile.UserId;
+                transDetail.RegDt = DateTime.Now;
+                model.Result = _translationDetailDac.SaveOrUpdateTranslationDetail(transDetail).ToString();
+                model.Message = "Translation complete.";
+                model.Success = true;
+            }
+
+            return Json(model);
+        }
+        #endregion
+
+        #region 번역 요청
+        public JsonResult RequestTranslation(FormCollection collection)
+        {
+            AjaxResponseModel model = new AjaxResponseModel();
+            model.Success = false;
+
+            int articleNo = int.Parse(collection["articleNo"]);
+            string langFrom = collection["langFrom"];
+            string langTo = collection["langTo"];
+
+            TranslationT translation = new TranslationT();
+            translation.ArticleNo = articleNo;
+            translation.TransFlag = (int)Makersn.Util.MakersnEnumTypes.TranslationFlag.번역요청;
+            translation.Status = (int)Makersn.Util.MakersnEnumTypes.TranslationStatus.요청;
+            translation.LangFrom = langFrom;
+            translation.LangTo = langTo;
+            translation.ReqMemberNo = Profile.UserNo;
+            translation.ReqDt = DateTime.Now;
+            translation.RegId = Profile.UserId;
+            translation.RegDt = DateTime.Now;
+
+            TranslationT chkTrans = _translationDac.CheckTranslation(translation);
+            if (chkTrans != null && chkTrans.TransFlag == (int)Makersn.Util.MakersnEnumTypes.TranslationFlag.번역요청)
+            {
+                model.Message = "It is already traslated.";
+                return Json(model);
+            }
+
+            //TranslationDetailT chkDetail = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleNo, langTo);
+            //if (chkDetail != null)
+            //{
+            //    model.Message = "It is already traslated.";
+            //    return Json(model);
+            //}
+
+            model.Result = _translationDac.InsertTranslation(translation).ToString();
+            model.Success = true;
+            model.Message = "translation request submit";
+
+            return Json(model);
+        }
+        #endregion
+
+        #region 직접 번역
+        public JsonResult DirectTranslation(FormCollection collection)
+        {
+            AjaxResponseModel model = new AjaxResponseModel();
+            model.Success = false;
+
+            int articleNo = int.Parse(collection["articleNo"]);
+            string langFrom = collection["langFrom"];
+            string langTo = collection["langTo"];
+
+            TranslationT translation = new TranslationT();
+            translation.ArticleNo = articleNo;
+            translation.TransFlag = (int)Makersn.Util.MakersnEnumTypes.TranslationFlag.직접번역;
+            translation.Status = (int)Makersn.Util.MakersnEnumTypes.TranslationStatus.완료;
+            translation.LangFrom = langFrom;
+            translation.LangTo = langTo;
+            translation.ReqMemberNo = Profile.UserNo;
+            translation.ReqDt = DateTime.Now;
+            translation.RegId = Profile.UserId;
+            translation.RegDt = DateTime.Now;
+            translation.WorkMemberNo = Profile.UserNo;
+            translation.WorkDt = DateTime.Now;
+
+            TranslationDetailT chkDetail = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleNo, langTo);
+            if (chkDetail != null)
+            {
+                model.Message = "It seems like this post has already been translated in the language you selected. Press 'Okay' if you wish to modify the contents.";
+                return Json(model);
+            }
+
+            TranslationT chkTrans = _translationDac.CheckTranslation(translation);
+            if (chkTrans != null && chkTrans.TransFlag == 2)
+            {
+                model.Message = "It seems like this post has already been translated in the language you selected. Press 'Okay' if you wish to modify the contents.";
+                return Json(model);
+            }
+
+            //기존 번역요청 삭제
+            if (chkTrans != null && chkTrans.TransFlag == (int)Makersn.Util.MakersnEnumTypes.TranslationFlag.번역요청)
+            {
+                _translationDac.DeleteTranslation(chkTrans);
+            }
+
+            model.Result = _translationDac.InsertTranslation(translation).ToString();
+            model.Success = true;
+
+            return Json(model);
         }
         #endregion
     }

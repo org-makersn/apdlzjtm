@@ -12,7 +12,7 @@
     @if (Model.Count == 0)
     {
         <p class="searchImg">
-            <img src="/content/images/search_txt1.gif" alt="앗...검색결과가 없네요! 다른 검색어로 입력해주세요.">
+            <img src="/content/images/search_txt1.png" alt="앗...검색결과가 없네요! 다른 검색어로 입력해주세요.">
         </p>
     }
     else
@@ -31,12 +31,12 @@
                         <!-- ProductBox -->
                         <div class="productBox">
                             <div class="productImg">
-                                <a href="/design/Detail?no=@a.No">
+                                <a href="/design/Detail/@a.No">
                                     <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.Title" /></a>
                             </div>
                             <div class="detailBox">
                                 <div class="productText">
-                                    <a href="/design/Detail?no=@a.No">@a.Title</a>
+                                    <a href="/design/Detail/@a.No">@a.Title</a>
                                 </div>
                                 <div class="by">
                                     <p>by <span class="name"><a href="/Profile?no=@No">@a.MemberName</a></span></p>
@@ -46,7 +46,7 @@
 
                                     <li class="heart"><a href="javascript:search.SetLikes(@a.No,'@ViewBag.LogOnChk')" onclick="return !count++">
                                         <span @likeChk id="likeChk_@a.No">@a.LikeCnt</span></a></li>
-                                    <li class="comment"><a href="/design/Detail?no=@a.No&goReply=Y"><span>@a.CommentCnt</span></a></li>
+                                    <li class="comment"><a href="/design/Detail/@a.No&goReply=Y"><span>@a.CommentCnt</span></a></li>
                                 </ul>
                             </div>
                         </div>

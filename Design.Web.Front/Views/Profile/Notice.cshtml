@@ -48,7 +48,7 @@
                     {
                         case "notice":
                         <p class="text">
-                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName] </span></a>메시지:
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName] </span></a>Message:
 								@n.Comment
                         </p>
                         <span class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</span>
@@ -56,7 +56,7 @@
 
                         case "like":
                         <p class="text">
-                            <a href="/Profile?no=@No"><span class="boldF">@n.MemberName</span></a>님이 <span class="boldF"><a href="/design/Detail?no=@n.RefNo">[@n.ArticleTItle]</a></span> 을 좋아합니다.
+                            <a href="/Profile?no=@No"><span class="boldF">@n.MemberName</span></a> likes <span class="boldF"><a href="/design/Detail/@n.RefNo">[@n.ArticleTItle]</a></span>
                         </p>
 
                         <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</p>
@@ -64,33 +64,34 @@
 
                         case "comment":
                         <p class="text">
-                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a>님이 <span class="boldF"><a href="/design/Detail?no=@n.RefNo">[@n.ArticleTItle]</a></span> 에 댓글을 남겼습니다.
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a> commented on your <span class="boldF"><a href="/design/Detail/@n.RefNo">[@n.ArticleTItle]</a></span>
                         </p>
                         <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</p>
                             break;
                             
                         case "inComment":
                         <p class="text">
-                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a>님이 <span class="boldF"><a href="/design/Detail/@n.RefNo">[@n.ArticleTItle]</a></span>의 내 댓글에 답글을 남겼습니다.
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a> left a reply to <span class="boldF"><a href="/design/Detail/@n.RefNo">[@n.ArticleTItle]</a></span>'s comment .
                         </p>
                         <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</p>
                             break;
 
                         case "newArticle":
                         <p class="text">
-                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a>님이 <a href="/design/Detail?no=@n.RefNo">새 게시물을 업로드 했습니다.</a>
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a> uploaded a <a href="/design/Detail/@n.RefNo">new design </a>
                         </p>
                         <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</p>
                             break;
 
                         case "newFollower":
                         <p class="text">
-                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a>님이 회원님을 팔로우 했습니다.
+                            <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName]</span></a> is followed you
                         </p>
                         <p class="date">@n.RegDt.ToString("yyyy.MM.dd HH:mm")</p>
                             break;
 
                         case "AllNotice":
+
                         <p class="text" style="line-height: 20px">
                             <a href="/Profile?no=@No"><span class="boldF">[@n.MemberName] </span></a>
                             <br />
@@ -98,8 +99,10 @@
                             <br />
                             @Html.Raw(new Design.Web.Front.Filter.ContentFilter().HtmlEncode(n.Comment.Substring(n.Comment.IndexOf("내용:"))))
                         </p>
+
                         <span class="date">@n.RegDt.ToString("yyyy.MM.dd HH:MM")</span>
                             break;
+
                     }
                 </li>
             }
@@ -130,14 +133,14 @@
 <!-- //notice -->
 
 @Html.PagedListPager((PagedList.IPagedList)Model,
-            //page => Url.Action("Notice", new {   no = ViewBag.No, page, gubun = ViewBag.Gubun }), 
-            page =>("/Profile/Notice?page="+ page +"&no="+ ViewBag.No+"&gubun="+ ViewBag.Gubun),
+        //page => Url.Action("Notice", new {   no = ViewBag.No, page, gubun = ViewBag.Gubun }), 
+            page => ("/Profile/Notice?page=" + page + "&no=" + ViewBag.No + "&gubun=" + ViewBag.Gubun),
             PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
             new AjaxOptions
             {
                 HttpMethod = "POST",
                 UpdateTargetId = "partial-part",
-                OnSuccess="$('.back-to-top').trigger('click');"
+                OnSuccess = "$('.back-to-top').trigger('click');"
             })
         )
 

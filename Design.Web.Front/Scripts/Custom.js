@@ -7,11 +7,11 @@ $(function () {
         e.preventDefault();
 
         if ($("#UserId").val() == "") {
-            alert('아이디를 입력해 주세요.');
+            alert('Please enter User ID.');
             $("#UserId").focus();
             return true;
         } else if ($("#Password").val() == "") {
-            alert('패스워드를 입력해 주세요.');
+            alert('Please enter password.');
             $("#Password").focus();
             return true;
         }
@@ -29,10 +29,10 @@ $(function () {
             }
             else {
                 if (result.Result != null) {
-                    alert(result.Result + "\n이메일 인증을 해주세요");
+                    alert(result.Result + "\nPlease confirm your email");
                 }
                 else {
-                    alert("아이디 혹은 비밀번호가 틀립니다."); $("#Password").val("");
+                    alert("The username or password is invalid."); $("#Password").val("");
                 }
             }
         }
@@ -42,8 +42,8 @@ $(function () {
     //검색
     $("#btnSearch").click(function () {
         var text = $("#searchTxt").val().trim();
-        if (check_msg("searchTxt", "검색어를 입력해주세요.", "required:search") == false) return false;
-        //if (text == "") { alert("검색어를 입력해 주세요"); $("#searchTxt").val(''); $('#searchTxt').focus(); return false; }
+        if (check_msg("searchTxt", "Please enter a search word.", "required:search") == false) return false;
+        //if (text == "") { alert("Please enter a search word"); $("#searchTxt").val(''); $('#searchTxt').focus(); return false; }
         location.href = '/design/Search?text=' + encodeURI(text);
 
         $('.searchArea').addClass('on');
@@ -89,28 +89,28 @@ $(function () {
     //회원가입 클릭
     $("#join_submit").click(function () {
 
-        //if (check_msg("JoinName", "이름을 입력해주세요.", "required:name") == false) return false;
-        //if (check_msg("JoinEmail", "이메일을 입력해주세요.", "required:email") == false) return false;
-        //if (check_msg("JoinPassword", "비밀번호를 입력해주세요.", "required:joinPassword") == false) return false;
+        if (check_msg("JoinName", "이름을 입력해주세요.", "required:name") == false) return false;
+        if (check_msg("JoinEmail", "이메일을 입력해주세요.", "required:email") == false) return false;
+        if (check_msg("JoinPassword", "비밀번호를 입력해주세요.", "required:joinPassword") == false) return false;
 
 
         if ($("#JoinPassword").val() != $("#JoinRePassword").val()) {
-            alert("입력한 비밀번호가 일치하지 않습니다.");
+            alert("The password is invalid.");
             $("#JoinPassword").val("");
             $("#JoinRePassword").val("");
             $("#JoinPassword").focus();
             return false;
         }
         if ($("#JoinName").val() == "") {
-            alert('아이디를 입력해 주세요.');
+            alert('Please enter User ID.');
             $("#JoinName").focus();
             return true;
         } else if ($("#JoinEmail").val() == "") {
-            alert('이메일을 입력해 주세요.');
+            alert('Please enter your email.');
             $("#JoinEmail").focus();
             return true;
         } else if ($("#JoinPassword").val() == "") {
-            alert('패스워드를 입력해 주세요.');
+            alert('Please enter password.');
             $("#JoinPassword").focus();
             return true;
         }
@@ -124,16 +124,16 @@ $(function () {
 
         var onSuccess = function (result) {
             if (result.Success) {
-                alert("이메일을 발송하였습니다.\n이메일 인증을 해주세요.");
+                alert("email has been sent.\nPlease confirm your email.");
                 location.reload(true);
             }
             else {
                 switch (result.Result) {
                     case 1:
-                        alert("이미 사용중인 email 이거나\n양식에 맞지 않는 email 입니다.");
+                        alert("The email is already in use or is in wrong format.");
                         break;
                     case 2:
-                        alert("비밀번호 길이를 확인해주세요");
+                        alert("Please check the length of the password.");
                         break;
                 }
             }
@@ -184,7 +184,7 @@ function LogOff() {
 //임시 비밀번호 발급
 function TemporaryPw() {
     var email = $("#TemporaryEmail").val();
-    if (check_msg("TemporaryEmail", "이메일을 입력해주세요.", "required:email") == false) return false;
+    if (check_msg("TemporaryEmail", "Please enter your email.", "required:email") == false) return false;
 
     var onSuccess = function (result) {
         if (result.Success) {
@@ -192,7 +192,7 @@ function TemporaryPw() {
             pwSend();
         }
         else {
-            alert("존재하지 않는 email입니다.");
+            alert("The email does not exist.");
         }
     }
     Ajax.AjaxResponseModelService(this, "/account/SendMail", { email: email }, onSuccess);
@@ -303,7 +303,7 @@ function check_msg(element_id, msg, patton) {
                 else {
                     console.log($('#' + element_id).val());
                     if (re_name.test($('#' + element_id).val()) != true) {
-                        alert('한글 또는 영문 숫자조합만 가능합니다.');
+                        alert('Please use Korean, English or numbers only.');
 
                         //$('#' + element_id).val('');
                         $('#' + element_id).focus();
@@ -435,7 +435,7 @@ function check_msg(element_id, msg, patton) {
                         var $email_val = $email.val() + '@' + $email1.val();
 
                         if (re_mail.test($email_val) != true) {
-                            alert('이메일 형식이 틀렸습니다. 다시 입력해 주세요.');
+                            alert('email format is invalid. Please enter again.');
                             //$email.val('');
                             //$email1.val('');
                             $email.focus();
@@ -445,12 +445,12 @@ function check_msg(element_id, msg, patton) {
                 } else {
                     var $email = $('#' + element_id);
                     if ($email.val().length > 50) {
-                        alert('이메일 길이가 너무 깁니다.');
+                        alert('The length of email is too long.');
                         $email.focus();
                         return false;
                     }
                     if (re_mail.test($email.val()) != true) {
-                        alert('이메일 형식이 틀렸습니다. 다시 입력해 주세요.');
+                        alert('email format is invalid. Please enter again.');
                         //$email.val('');
                         $email.focus();
                         return false;
@@ -461,7 +461,7 @@ function check_msg(element_id, msg, patton) {
             if (patton_arr[i] == 'select') {
                 var $selects = $('select[name=' + element_id + ']');
                 if ($selects.val() == '') {
-                    alert(msg + ' 항목을 입력해 주세요.');
+                    alert(msg + ' Please select a category.');
                     $selects[0].focus();
                     return false;
                 }
@@ -479,7 +479,7 @@ function check_msg(element_id, msg, patton) {
             if (patton_arr[i] == 'checkbox') {
                 var $checkClass = $('.' + element_id);
                 if (!$checkClass.is(":checked")) {
-                    if (msg == '') alert('선택된 항목이 없습니다.');
+                    if (msg == '') alert('Category not selected.');
                     else alert(msg);
 
                     $checkClass[0].focus();
@@ -508,7 +508,7 @@ function check_msg(element_id, msg, patton) {
 
             if (patton_arr[i] == 'alphabet' && val_is == true) {
                 if (re_alpha.test($('#' + element_id).val()) != true) {
-                    alert('영문과 하이폰만 입력 가능합니다.');
+                    alert('Please us English and hyphen only.');
                     $('#' + element_id).focus();
                     return false;
                 }
@@ -516,7 +516,7 @@ function check_msg(element_id, msg, patton) {
 
             if (patton_arr[i] == 'number' && val_is == true) {
                 if (re_num.test($('#' + element_id).val()) != true) {
-                    alert('숫자만 입력 하시기 바랍니다.');
+                    alert('Please enter numbers only.');
                     $('#' + element_id).focus();
                     $('#' + element_id).val('');
                     return false;
@@ -525,7 +525,7 @@ function check_msg(element_id, msg, patton) {
 
             if (patton_arr[i] == 'homepage' && val_is == true) {
                 if (re_url.test($('#' + element_id).val()) != true) {
-                    alert('홈페이지 주소를 바르게 입력해 주세요.');
+                    alert('Please enter the website address correctly.');
 
                     $('#' + element_id).focus();
                     return false;
@@ -537,7 +537,7 @@ function check_msg(element_id, msg, patton) {
 
                 if (re_jumin.test($jumin) != true) {
 
-                    alert('주민번호 형식이 틀렸습니다. 다시 입력해 주세요.');
+                    alert('ID number format is invalid. Please try again.');
                     $('#register_no1').val('');
                     $('#register_no2').val('');
                     $('#register_no1').focus();

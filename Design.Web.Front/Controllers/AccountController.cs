@@ -151,7 +151,7 @@ namespace Design.Web.Front.Controllers
         public void sendEmailCertify(int memberNo, string name, string email)
         {
             string no = Base64Helper.Base64Encode(memberNo.ToString());
-            string Subject = "makersN 회원가입 이메일 인증";
+            string Subject = "MakersN email confirmation";
             string Body = "http://www.makersn.com/account/EmailCertify?chk=" + no;
 
             SendMailModels oMail = new SendMailModels();
@@ -168,11 +168,11 @@ namespace Design.Web.Front.Controllers
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
-                return Content("<script>alert('이메일 인증에 성공하였습니다.'); location.href='/'</script>");
+                return Content("<script>alert('Your email has been confirmed.'); location.href='/'</script>");
             }
             else
             {
-                return Content("<script>alert('잘못된 접근입니다')</script>");
+                return Content("<script>alert('Invalid memory')</script>");
             }
         }
         #endregion
@@ -185,11 +185,11 @@ namespace Design.Web.Front.Controllers
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
-                return Content("<script>alert('이메일 변경에 성공하였습니다.'); location.href='/'</script>");
+                return Content("<script>alert('E-mail was successfully changed.'); location.href='/'</script>");
             }
             else
             {
-                return Content("<script>alert('잘못된 접근입니다')</script>");
+                return Content("<script>alert('Invalid memory')</script>");
             }
         }
         #endregion
@@ -202,11 +202,11 @@ namespace Design.Web.Front.Controllers
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
-                return Content("<script>alert('이메일 변경을 취소 하였습니다.'); location.href='/'</script>");
+                return Content("<script>alert('E-mail change has been cancelled.'); location.href='/'</script>");
             }
             else
             {
-                return Content("<script>alert('잘못된 접근입니다')</script>");
+                return Content("<script>alert('Invalid memory')</script>");
             }
         }
         #endregion
@@ -215,7 +215,7 @@ namespace Design.Web.Front.Controllers
         [HttpPost]
         public JsonResult SendMail(string email)
         {
-            string Subject = "makersn의 임시비밀번호가 발급되었습니다.";
+            string Subject = "We have issued a temporary password for your makersN account.";
             string Body = TemporaryPassword();
 
             if (!memberDac.UpdateTemporaryPassword(email, Body))
