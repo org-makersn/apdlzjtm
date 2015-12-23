@@ -35,8 +35,7 @@ namespace Net.Framwork.BizDac
                 //                RegDt = m.RegDt,
                 //                PhoneNumber = x.PhoneNumber
                 //            }).ToList();
-
-                //List<CustomMemberT> facebooks = new JavaScriptSerializer().Deserialize<List<CustomMemberT>>(data);
+                //            }).AsEnumerable<CustomMemberT>().ToList();
 
                 //members = dbContext.MemberT
                 //    .Join(dbContext.DetailT, m => m.MemberId, d => d.MemberId, (m, d) => new { m, d })

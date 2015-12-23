@@ -24,7 +24,7 @@ namespace Net.Framework.StoreModel
         //public virtual string PhoneNumber { get; set; }
     }
 
-    public class CustomMemberT
+    public class MemberDetailT
     {
         public virtual int MemberId { get; set; }
         public virtual string MemberNm { get; set; }
