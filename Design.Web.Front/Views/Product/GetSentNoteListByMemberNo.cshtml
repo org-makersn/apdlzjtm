@@ -1,0 +1,16 @@
+﻿@using Net.Framework.StoreModel
+@model IList<MemberMsgT>
+@{
+	Layout = null;
+}
+
+
+@foreach (MemberMsgT msg in Model)
+{
+	<h1>보낸사람 : </h1><input type="text" value="@msg.MemberNo" /><br />
+	<h1>받는사람 : </h1><input type="text" value="@msg.MemberNoRef" /><br />
+	<h1>Comment : </h1><input type="text" value="@msg.Comment" /><br />
+	<input type="hidden" id="seqNo" value="@msg.No" />
+	<button onclick='javascript:DeleteNote("@msg.No")'>삭제</button>
+	<h1>-------------------------------------------------------------------</h1>
+}

@@ -198,6 +198,7 @@
     <Compile Include="Controllers\CleanupController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -668,6 +669,10 @@
     <Content Include="Views\Article\Translation.cshtml" />
     <Content Include="Views\Main\betaPop.cshtml" />
     <Content Include="Views\Main\test.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\GetLikedProductsByMemberNo.cshtml" />
+    <Content Include="Views\Product\GetReceivedNoteListByMemberNo.cshtml" />
+    <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

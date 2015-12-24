@@ -82,6 +82,7 @@
     <Compile Include="Logging\InterceptorTransientErrors.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="StoreModel\DetailT.cs" />
+    <Compile Include="StoreModel\MemberMsgT.cs" />
     <Compile Include="StoreModel\MemberT.cs" />
     <Compile Include="StoreModel\StoreCategoryT.cs" />
     <Compile Include="StoreModel\StorePrinterT.cs" />
