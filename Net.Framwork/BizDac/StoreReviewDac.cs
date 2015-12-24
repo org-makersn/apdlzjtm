@@ -45,6 +45,23 @@ namespace Net.Framwork.BizDac
         }
 
         /// <summary>
+        /// select one Store Review By Parent Id
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        internal List<StoreReviewT> getStoreReviewTByParentId(int no)
+        {
+            List<StoreReviewT> printers = null;
+
+            using (dbContext = new StoreContext())
+            {
+                printers = dbContext.StoreReviewT.Where(m => m.ParentNo == no).ToList();
+            }
+
+            return printers;
+        }
+
+        /// <summary>
         /// Insert Store Review
         /// </summary>
         /// <param name="data"></param>
@@ -74,24 +91,24 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 
-                if (dbContext.StoreReviewT.SingleOrDefault(m => m.No == data.No) != null)
-                {
+                //if (dbContext.StoreReviewT.SingleOrDefault(m => m.No == data.No) != null)
+                //{
                     try
                     {
                         dbContext.StoreReviewT.Attach(data);
                         dbContext.Entry<StoreReviewT>(data).State = System.Data.Entity.EntityState.Modified;
-                        dbContext.SaveChangesAsync();
+                        dbContext.SaveChanges();
                     }
                     catch (Exception)
                     {
                         ret = -1;
                     }
-                }
-                else
-                {
-                    ret = -2;
-                    throw new NullReferenceException("The expected original Segment data is not here.");
-                }
+                //}
+                //else
+                //{
+                //    ret = -2;
+                //    throw new NullReferenceException("The expected original Segment data is not here.");
+                //}
             }
             return ret;
         }

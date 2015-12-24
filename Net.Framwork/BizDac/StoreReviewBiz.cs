@@ -9,11 +9,16 @@ namespace Net.Framwork.BizDac
 {
     public class StoreReviewBiz
     {
-        public List<StoreReviewT> getAllStorePrinter() {
+        public List<StoreReviewT> SelectAllStoreReview()
+        {
             return new StoreReviewDac().SelectAllStoreReview();
         }
         public StoreReviewT getStoreReviewById (int no){
             return new StoreReviewDac().SelectStoreReviewTById(no);
+        }
+        public List<StoreReviewT> getStoreReviewTByParentId(int no)
+        {
+            return new StoreReviewDac().getStoreReviewTByParentId(no);
         }
         public int add(StoreReviewT StoreReview)
         {

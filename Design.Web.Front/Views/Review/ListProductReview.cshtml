@@ -1,0 +1,51 @@
+﻿@model List<Net.Framework.StoreModel.StoreReviewT>
+@{
+    ViewBag.Title = "ListProductReview";
+}
+<script>
+    function updateProductReview(no,comment) {
+        var onSuccess = function (result) {
+            if (result.Success) { alert(result.Message); }
+        }
+        var comment = $("#txtComment_" + no).val();
+        Ajax.AjaxResponseModelService(this, "review/UpdateProductReview", { no: no , comment: comment}, onSuccess);
+    }
+
+    function deleteProductReview(no) {
+        var onSuccess = function (result) {
+            if (result.Success) { alert(result.Message); }
+        }
+        Ajax.AjaxResponseModelService(this, "review/DeleteProductReview", { no: no }, onSuccess);
+    }
+    function addProductReviewDepth(no,depth) {
+        var onSuccess = function (result) {
+            if (result.Success) { alert(result.Message); }
+        }
+        var comment = $("#txtPlusComment_" + no).val();
+        depth = depth + 1;
+        Ajax.AjaxResponseModelService(this, "review/AddProductReview", { comment:comment, no: no ,depth: depth }, onSuccess);
+    }
+
+    function viewProductReviewDepth(no){
+        $.ajax({
+            url: '/review/ViewProductReviewDepth/' + no,
+            success: function (result) {
+                $("#partialdiv_"+no).html(result);
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+</script>
+    @foreach (Net.Framework.StoreModel.StoreReviewT _model in Model)
+    {
+        <span>@_model.No  - @_model.Comment</span> 
+        <input type="text" id="txtComment_@_model.No" placeholder="수정할내용"/> 
+        <input type="button" value="수정" onclick="updateProductReview(@_model.No)"/>
+        <input type="button" value="삭제" onclick="deleteProductReview(@_model.No)"/> 
+        <input type="text" id="txtPlusComment_@_model.No" placeholder="답글쓸내용" />
+        <input type="button" value="답글쓰기" onclick="addProductReviewDepth(@_model.No,@_model.Depth)" />
+        <input type="button" value="답글보기" onclick="viewProductReviewDepth(@_model.No)" /><br/>
+        <div id="partialdiv_@_model.No" style="color:brown"></div>
+    }

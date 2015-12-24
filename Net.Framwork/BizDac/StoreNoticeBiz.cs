@@ -9,7 +9,8 @@ namespace Net.Framwork.BizDac
 {
     public class StoreNoticeBiz
     {
-        public List<StoreNoticeT> getAllStorePrinter() {
+        public List<StoreNoticeT> SelectAllStoreNotice()
+        {
             return new StoreNoticeDac().SelectAllStoreNotice();
         }
         public StoreNoticeT getStoreNoticeById (int no){
