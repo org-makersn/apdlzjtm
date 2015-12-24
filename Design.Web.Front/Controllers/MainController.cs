@@ -473,5 +473,26 @@ namespace Design.Web.Front.Controllers
             return file;
         }
 
+        public string test3()
+        {
+            Net.Framwork.BizDac.StoreLikesBiz testBiz = new Net.Framwork.BizDac.StoreLikesBiz();
+            Net.Framework.StoreModel.StoreLikesT like = new Net.Framework.StoreModel.StoreLikesT();
+            //like.MemberNo = 1;
+            //like.ProductNo = 2;
+            //like.RegDt = DateTime.Now;
+            //like.RegId = "TEST";
+            //like.RegIp = "192.168.219.121";
+            //testBiz.add(like);
+
+            //IList<Net.Framework.StoreModel.StoreLikesT > test = testBiz.getAllStorePrinter();
+
+            like.No = 2;
+            like.ProductNo = 50500;
+            testBiz.upd(like);
+
+           
+
+            return "dd";
+        }
     }
 }

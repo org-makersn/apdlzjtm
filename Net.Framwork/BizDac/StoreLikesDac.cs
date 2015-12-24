@@ -57,7 +57,7 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 dbContext.StoreLikesT.Add(data);
-                dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
             }
             return ret;
         }
@@ -74,14 +74,16 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                
-                if (dbContext.StoreLikesT.SingleOrDefault(m => m.No == data.No) != null)
+                //StoreLikesT originData = dbContext.StoreLikesT.Where(s => s.No == data.No).SingleOrDefault();
+                StoreLikesT originData = dbContext.StoreLikesT.SingleOrDefault(s => s.No == data.No);
+                if (originData != null)
                 {
                     try
                     {
-                        dbContext.StoreLikesT.Attach(data);
-                        dbContext.Entry<StoreLikesT>(data).State = System.Data.Entity.EntityState.Modified;
-                        dbContext.SaveChangesAsync();
+                        originData.ProductNo = data.ProductNo;
+                        dbContext.StoreLikesT.Attach(originData);
+                        dbContext.Entry<StoreLikesT>(originData).State = System.Data.Entity.EntityState.Modified;
+                        dbContext.SaveChanges();
                     }
                     catch (Exception)
                     {
