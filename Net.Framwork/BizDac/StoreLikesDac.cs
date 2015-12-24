@@ -57,7 +57,8 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 dbContext.StoreLikesT.Add(data);
-                dbContext.SaveChanges();
+                //dbContext.SaveChanges();
+                ret = dbContext.SaveChanges();
             }
             return ret;
         }

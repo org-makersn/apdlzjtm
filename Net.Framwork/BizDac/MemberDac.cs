@@ -23,31 +23,30 @@ namespace Net.Framwork.BizDac
             {
                 members = dbContext.MemberT.ToList();
 
-                //var data = (from m in dbContext.MemberT
+                //List<MemberDetailT> data = (from m in dbContext.MemberT
                 //            join d in dbContext.DetailT
                 //            on m.MemberId equals d.MemberId into md
                 //            from x in md.DefaultIfEmpty()
-                //            select new
+                //            select new MemberDetailT
                 //            {
                 //                MemberId = m.MemberId,
                 //                MemberNm = m.MemberNm,
                 //                AppId = m.AppId,
                 //                RegDt = m.RegDt,
                 //                PhoneNumber = x.PhoneNumber
-                //            }).ToList();
-                //            }).AsEnumerable<CustomMemberT>().ToList();
+                //            }).AsEnumerable<MemberDetailT>().ToList();
 
-                //members = dbContext.MemberT
-                //    .Join(dbContext.DetailT, m => m.MemberId, d => d.MemberId, (m, d) => new { m, d })
-                //    .Where(e => e.m.MemberId == e.d.MemberId).Take(10)
-                //    .Select(s => new MemberT
-                //    {
-                //        MemberId = s.m.MemberId,
-                //        MemberNm = s.m.MemberNm,
-                //        AppId = s.m.AppId,
-                //        RegDt = s.m.RegDt,
-                //        PhoneNumber = s.d.PhoneNumber
-                //    }).ToList();
+                List<MemberDetailT> data = dbContext.MemberT
+                    .Join(dbContext.DetailT, m => m.MemberId, d => d.MemberId, (m, d) => new { m, d })
+                    .Where(e => e.m.MemberId == e.d.MemberId).Take(10)
+                    .Select(s => new MemberDetailT
+                    {
+                        MemberId = s.m.MemberId,
+                        MemberNm = s.m.MemberNm,
+                        AppId = s.m.AppId,
+                        RegDt = s.m.RegDt,
+                        PhoneNumber = s.d.PhoneNumber
+                    }).AsEnumerable<MemberDetailT>().ToList();
 
                 //string query = "SELECT m.Id as MemberId, m.Member_Nm as MemberNm, m.App_Id as AppId, m.Reg_Dt as RegDt, d.Phone_Number as PhoneNumber "
                 //    + "FROM Member m, Detail d with(nolock) "
@@ -89,8 +88,7 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                dbContext.Entry(data);
-                dbContext.SaveChanges();
+
             }
             return ret;
         }

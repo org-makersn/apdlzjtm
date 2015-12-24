@@ -75,6 +75,7 @@
     <Compile Include="BizDac\StoreProductUpdateHistoryDac.cs" />
     <Compile Include="BizDac\StoreReviewBiz.cs" />
     <Compile Include="BizDac\StoreReviewDac.cs" />
+    <Compile Include="Configurations\ApplicationConfiguration.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\InterceptorLogging.cs" />
@@ -104,9 +105,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configurations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
