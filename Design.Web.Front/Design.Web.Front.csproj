@@ -196,13 +196,16 @@
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CleanupController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PrintingProfileController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -671,6 +674,15 @@
     <Content Include="Views\Main\test.cshtml" />
     <Content Include="Views\Store\StoreMemberRegister.cshtml" />
     <Content Include="Views\Store\FollewingList.cshtml" />
+    <Content Include="Views\Review\Index.cshtml" />
+    <Content Include="Views\Review\ListProductReview.cshtml" />
+    <Content Include="Views\Common\Index.cshtml" />
+    <Content Include="Views\Common\ListNotice.cshtml" />
+    <Content Include="Views\Review\ViewProductReviewDepth.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\GetLikedProductsByMemberNo.cshtml" />
+    <Content Include="Views\Product\GetReceivedNoteListByMemberNo.cshtml" />
+    <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,9 @@
+﻿@model List<Net.Framework.StoreModel.StoreReviewT>
+@{
+    ViewBag.Title = "ViewProductReviewDepth";
+}
+
+@foreach (Net.Framework.StoreModel.StoreReviewT _model in Model)
+{
+    <span>@_model.No  - @_model.Comment</span> <br />
+}

@@ -1,0 +1,13 @@
+﻿@using Net.Framework.StoreModel
+@model IList<StoreLikesT>
+@{
+	Layout = null;
+}
+
+@foreach (StoreLikesT likes in Model)
+{
+<h1>상품번호 : </h1><input type="text" value="@likes.ProductNo" /><br />
+<h1>고객번호 : </h1><input type="text" value="@likes.MemberNo" /><br />
+<h1>SEQ : </h1><input type="text" value="@likes.No" /><br />
+	<h1>-------------------------------------------------------------------</h1>
+}

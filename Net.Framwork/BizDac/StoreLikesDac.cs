@@ -100,6 +100,82 @@ namespace Net.Framwork.BizDac
             return ret;
         }
         
-        
-    }
+			internal int DeleteStoreLikes(StoreLikesT data)
+				{
+					if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
+
+            int ret = 0;
+            using (dbContext = new StoreContext())
+            {
+                //StoreLikesT originData = dbContext.StoreLikesT.Where(s => s.No == data.No).SingleOrDefault();
+                StoreLikesT originData = dbContext.StoreLikesT.SingleOrDefault(s => s.ProductNo == data.ProductNo && s.MemberNo == data.MemberNo);
+                if (originData != null)
+                {
+                    try
+                    {
+                        originData.ProductNo = data.ProductNo;
+                        dbContext.StoreLikesT.Remove(originData);
+												ret = dbContext.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        ret = -1;
+                    }
+                }
+                else
+                {
+                    ret = -2;
+                    throw new NullReferenceException("The expected original Segment data is not here.");
+                }
+            }
+            return ret;
+				}
+
+				/// <summary>
+				/// 상품번호로 좋아요 갯수 출력
+				/// </summary>
+				/// <param name="productNo">상품번호</param>
+				/// <returns>갯수</returns>
+        internal int SelectStoreLikesTByProductNo(int productNo)
+        {
+            int countLikes = 0;
+
+            using (dbContext = new StoreContext())
+            {
+							countLikes = dbContext.StoreLikesT.Where(m => m.ProductNo == productNo).Count();
+            }
+
+						return countLikes;
+        }
+
+				/// <summary>
+				/// 상품번호, 회원번호로 좋아요 유무 체크
+				/// </summary>
+				/// <param name="productNo">상품번호</param>
+				/// <param name="memberNo">회원번호</param>
+				/// <returns></returns>
+				internal StoreLikesT SelectLikesByProductNoAndMemberNo(int productNo, int memberNo)
+				{
+					StoreLikesT printer = null;
+
+					using (dbContext = new StoreContext())
+					{
+						printer = dbContext.StoreLikesT.Where(m => m.ProductNo == productNo && m.MemberNo == memberNo).FirstOrDefault();
+					}
+
+					return printer;
+				}
+
+				internal List<StoreLikesT> SelectLikesByProductNoAndMemberNo(int memberNo)
+				{
+					List<StoreLikesT>  storedLikesList = null;
+
+					using (dbContext = new StoreContext())
+					{
+						storedLikesList = dbContext.StoreLikesT.Where(m => m.MemberNo == memberNo).ToList();
+					}
+
+					return storedLikesList;
+				}
+		}
 }

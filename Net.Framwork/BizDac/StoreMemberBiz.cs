@@ -29,5 +29,25 @@ namespace Net.Framwork.BizDac
 
 
 
-    }
+
+				public List<MemberMsgT> getReceivedNoteListByMemberNo(int memberNo)
+				{
+					return new StoreMemberDac().SelectReceivedNoteListByMemberNo(memberNo);
+				}
+
+				public List<MemberMsgT> getSentNoteListByMemberNo(int memberNo)
+				{
+					return new StoreMemberDac().SelectSentNoteListByMemberNo(memberNo);
+				}
+
+				public int sendNote(MemberMsgT msg)
+				{
+					return new StoreMemberDac().CreateNote(msg);
+				}
+
+				public int deleteNote(int SeqNo)
+				{
+					return new StoreMemberDac().DeleteNote(SeqNo);
+				}
+		}
 }

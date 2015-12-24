@@ -24,9 +24,9 @@ namespace Net.Framework.StoreModel
         [Column("CONTENT")]
         public virtual string Content { get; set; }
         [Column("CHECK_YN")]
-        public virtual char CheckYn { get; set; }
+        public virtual string CheckYn { get; set; }
         [Column("IS_NEW_YN")]
-        public virtual char IsNewYn { get; set; }
+        public virtual string IsNewYn { get; set; }
         [Column("REG_DT")]
         public virtual DateTime RegDt { get; set; }
         [Column("REG_ID")]
