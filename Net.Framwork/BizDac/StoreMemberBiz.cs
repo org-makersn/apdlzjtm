@@ -23,6 +23,11 @@ namespace Net.Framwork.BizDac
         {
             return new StoreMemberDac().UpdateStoreMember(StoreMember);
         }
+        public List< StoreMemberT > getAllMemberList() {
+            return new StoreMemberDac().SelectAllStoreMember();
+        }
+
+
 
     }
 }

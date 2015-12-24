@@ -111,6 +111,15 @@ namespace Design.Web.Front
             );
 
             routes.MapRoute(
+                name: "Store",
+                url: "Store/{action}/{no}",
+                defaults: new { controller = "Store", action = "Index", no = UrlParameter.Optional },
+                namespaces: new[] { "Design.Web.Front" }
+            );
+
+
+
+            routes.MapRoute(
                  name: "blog",
                  url: "{url}",
                  defaults: new { controller = "main", action = "index", url = UrlParameter.Optional }

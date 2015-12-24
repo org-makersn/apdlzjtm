@@ -202,6 +202,7 @@
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PrintingProfileController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -668,6 +669,8 @@
     <Content Include="Views\Article\Translation.cshtml" />
     <Content Include="Views\Main\betaPop.cshtml" />
     <Content Include="Views\Main\test.cshtml" />
+    <Content Include="Views\Store\StoreMemberRegister.cshtml" />
+    <Content Include="Views\Store\FollewingList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

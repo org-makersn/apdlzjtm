@@ -21,7 +21,7 @@ namespace Net.Framework.StoreModel
         public virtual string CellPhone { get; set; }
         [Column("STORE_PROFILE_MSG")]
         public virtual string StoreProfileMsg { get; set; }
-        [Column("SOTRE_URL")]
+        [Column("STORE_URL")]
         public virtual string StoreUrl { get; set; }
         [Column("BANK_NAME")]
         public virtual string BankName { get; set; }
@@ -30,7 +30,7 @@ namespace Net.Framework.StoreModel
         [Column("BANK_ACCOUNT")]
         public virtual string BankAccount { get; set; }
         [Column("DEL_YN")]
-        public virtual char DelYn { get; set; }
+        public virtual string DelYn { get; set; }
         [Column("REG_ID")]
         public virtual string RegId { get; set; }
         [Column("REG_DT")]
