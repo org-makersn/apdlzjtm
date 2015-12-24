@@ -124,11 +124,11 @@ namespace Design.Web.Front
                 namespaces: new[] { "Design.Web.Front" }
             );
 
-						routes.MapRoute(
-								 name: "product",
-								 url: "{url}",
-								 defaults: new { controller = "product", action = "index", url = UrlParameter.Optional }
-						 );
+			routes.MapRoute(
+				name: "product",
+				url: "product/{action}/{no}",
+				defaults: new { controller = "product", action = "index", no = UrlParameter.Optional }
+			 );
 
 
             routes.MapRoute(
