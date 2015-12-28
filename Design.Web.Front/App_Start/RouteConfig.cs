@@ -50,6 +50,20 @@ namespace Design.Web.Front
            );
 
             routes.MapRoute(
+                name: "review",
+                url: "review/{action}/{no}",
+                defaults: new { controller = "review", action = "index", no = UrlParameter.Optional },
+                namespaces: new[] { "Design.Web.Front" }
+            );
+
+            routes.MapRoute(
+                name: "common",
+                url: "common/{action}/{no}",
+                defaults: new { controller = "common", action = "index", no = UrlParameter.Optional },
+                namespaces: new[] { "Design.Web.Front" }
+            );
+
+            routes.MapRoute(
                         name: "printing",
                         url: "printing/{action}/{no}",
                         defaults: new { controller = "printing", action = "Index", no = UrlParameter.Optional },
@@ -109,6 +123,22 @@ namespace Design.Web.Front
                 defaults: new { controller = "cleanup", action = "Index", no = UrlParameter.Optional },
                 namespaces: new[] { "Design.Web.Front" }
             );
+
+			routes.MapRoute(
+				name: "product",
+				url: "product/{action}/{no}",
+				defaults: new { controller = "product", action = "index", no = UrlParameter.Optional }
+			 );
+
+
+            routes.MapRoute(
+                name: "Store",
+                url: "Store/{action}/{no}",
+                defaults: new { controller = "Store", action = "Index", no = UrlParameter.Optional },
+                namespaces: new[] { "Design.Web.Front" }
+            );
+
+
 
             routes.MapRoute(
                  name: "blog",

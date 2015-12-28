@@ -1,0 +1,22 @@
+﻿@{
+    
+    IList<FollowerT> _follower = ViewBag.follerList;
+}
+
+<h2>FollewingList</h2>
+
+
+	@foreach (FollowerT item in _follower)
+    {
+        <input type="text" name="memberNo" value="@item.MemberNo" />
+        <input type="text" name="memberNoRef" value="@item.MemberNoRef" />
+        <input type="text" name="IsView" value="@item.IsNew" />
+        <input type="text" name="RegId" value="@item.RegId" />
+        <input type="text" name="RegDt" value="@item.RegDt" />
+        <input type="hidden" name="SiteGubun" value="@item.SiteGubun" />
+        <br />	 
+	}
+
+
+
+

@@ -75,8 +75,8 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 
-                if (dbContext.StoreNoticeT.SingleOrDefault(m => m.No == data.No) != null)
-                {
+                //if (dbContext.StoreNoticeT.SingleOrDefault(m => m.No == data.No) != null)
+                //{
                     try
                     {
                         dbContext.StoreNoticeT.Attach(data);
@@ -87,12 +87,12 @@ namespace Net.Framwork.BizDac
                     {
                         ret = -1;
                     }
-                }
-                else
-                {
-                    ret = -2;
-                    throw new NullReferenceException("The expected original Segment data is not here.");
-                }
+                //}
+                //else
+                //{
+                //    ret = -2;
+                //    throw new NullReferenceException("The expected original Segment data is not here.");
+                //}
             }
             return ret;
         }

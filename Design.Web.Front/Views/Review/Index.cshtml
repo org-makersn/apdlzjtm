@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "메이커스앤";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div data-ng-view="" data-autoscroll="true"></div>
+
+<style type="text/css">
+    .wrap
+    {
+        background: #fff !important;
+    }
+</style>
+
+<script>
+    function addProductReview() {
+        var onSuccess = function (result) {
+            if (result.Success) { alert(result.Message); }
+        }
+        var comment = $("#txtComment").val();
+        Ajax.AjaxResponseModelService(this, "review/AddProductReview", {comment : comment}, onSuccess);
+    }
+
+</script>
+<input type="text" id="txtComment" placeholder="내용"/>
+<input type="button" onclick="addProductReview();" value="리뷰작성테스트 (add)" />  <br /><br />
+
+@Html.Action("ListProductReview", "Review")
+

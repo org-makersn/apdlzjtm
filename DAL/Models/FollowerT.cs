@@ -14,6 +14,7 @@ namespace Makersn.Models
         public virtual string IsNew { get; set; }
         public virtual string RegId { get; set; }
         public virtual DateTime RegDt { get; set; }
+        public virtual string SiteGubun { get; set; }
 
         public virtual int DesignCnt { get; set; }
         public virtual int LikesCnt { get; set; }

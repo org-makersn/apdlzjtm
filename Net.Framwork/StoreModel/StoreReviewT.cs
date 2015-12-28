@@ -16,7 +16,7 @@ namespace Net.Framework.StoreModel
         [Column("COMMENT")]
         public virtual string Comment { get; set; }
         [Column("SCORE")]
-        public virtual float Score { get; set; } //int가 맞지 않나?
+        public virtual double Score { get; set; } //int가 맞지 않나?
         [Column("IMAGE_NAME")]
         public virtual string ImageName { get; set; }
         [Column("PARENT_NO")]
@@ -24,7 +24,7 @@ namespace Net.Framework.StoreModel
         [Column("DEPTH")]
         public virtual int Depth { get; set; }
         [Column("VISIBILITY_YN")]
-        public virtual char VisibilityYn { get; set; }
+        public virtual string VisibilityYn { get; set; }
         [Column("MEMBER_NO")]
         public virtual int MemberNo { get; set; }
         [Column("REG_IP")]
