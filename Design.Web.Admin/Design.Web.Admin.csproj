@@ -181,6 +181,7 @@
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ArticleRecommendRequestController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\TranslationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -995,6 +996,8 @@
     <Content Include="Views\Member\AllNotice.cshtml" />
     <Content Include="Views\Member\SendNotice.cshtml" />
     <Content Include="Views\Contact\Reply.cshtml" />
+    <Content Include="Views\Store\Index.cshtml" />
+    <Content Include="Views\Store\ProductCertificateList.cshtml" />
     <None Include="Views\Translation\MonthStateDirect.cshtml" />
     <Content Include="Views\Translation\YearStateDirect.cshtml" />
     <Content Include="Views\Translation\TranslationWork.cshtml" />

@@ -8,6 +8,8 @@ using Makersn.Models;
 using PagedList;
 using Makersn.Util;
 using Design.Web.Admin.Models;
+using Net.Framework.StoreModel;
+
 
 namespace Design.Web.Admin.Controllers
 {
@@ -21,7 +23,7 @@ namespace Design.Web.Admin.Controllers
         public MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
-            menuModel.MainIndex = 4;
+            menuModel.MainIndex = 5;
             menuModel.SubIndex = subIndex;
             return menuModel;
         }

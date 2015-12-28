@@ -23,6 +23,10 @@ namespace Net.Framwork.BizDac
         {
             return new StoreProductDac().UpdateStoreProduct(StoreProduct);
         }
+        public List<StoreProductT> searchProductWithCertification(int certificateStatus , string query){
+            return new StoreProductDac().SelectProductWithCertification(certificateStatus, query);
+
+        }
 
     }
 }

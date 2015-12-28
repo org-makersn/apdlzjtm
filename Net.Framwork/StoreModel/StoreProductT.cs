@@ -24,17 +24,17 @@ namespace Net.Framework.StoreModel
         [Column("MIME_TYPE")]
         public virtual string MimeType { get; set; }
         [Column("FILE_SIZE")]
-        public virtual float FileSize { get; set; }
+        public virtual double FileSize { get; set; }
         [Column("FILE_VOLUME")]
-        public virtual float FileVolume { get; set; }
+        public virtual double FileVolume { get; set; }
         [Column("SIZE_X")]
-        public virtual float SizeX { get; set; }
+        public virtual double SizeX { get; set; }
         [Column("SIZE_Y")]
-        public virtual float SizeY { get; set; }
+        public virtual double SizeY { get; set; }
         [Column("SIZE_Z")]
-        public virtual float SizeZ { get; set; }
+        public virtual double SizeZ { get; set; }
         [Column("SCALE")]
-        public virtual float Scale { get; set; }
+        public virtual double Scale { get; set; }
         [Column("SHORT_LINK")]
         public virtual string ShortLing { get; set; }
         [Column("VIDEO_URL")]
@@ -55,8 +55,8 @@ namespace Net.Framework.StoreModel
         public virtual int SellYn { get; set; } //사용 안하기로 하지 않았나?
         [Column("TAG_NAME")]
         public virtual string TagName { get; set; }
-        [Column("CERTIFICATE_YN")]
-        public virtual char CertiFicateYn { get; set; }
+        [Column("CERTIFICATE_STATUS")]
+        public virtual int CertiFicateStatus { get; set; }
         [Column("VISIBILITY_YN")]
         public virtual char VisibilityYn { get; set; }
         [Column("USE_YN")]
@@ -64,9 +64,9 @@ namespace Net.Framework.StoreModel
         [Column("MEMBER_NO")]
         public virtual int MemberNo { get; set; }
         [Column("TXT_SIZE_X")]
-        public virtual float TxtSizeX { get; set; }
+        public virtual double TxtSizeX { get; set; }
         [Column("TXT_SIZE_Y")]
-        public virtual float TxtSizeY { get; set; }
+        public virtual double TxtSizeY { get; set; }
         [Column("DETAIL_TYPE")]
         public virtual int DetailType { get; set; } // 두개 다 컬럼명 데이터 타입 잘못된듯
         [Column("DETAIL_DEPTH")]

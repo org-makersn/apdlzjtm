@@ -96,7 +96,20 @@ namespace Net.Framwork.BizDac
             }
             return ret;
         }
+
+
+        internal List<StoreProductT> SelectProductWithCertification(int certificateStatus,string query)
+        {
+            using (dbContext = new StoreContext())
+            {
+                return dbContext.StoreProductT
+                    .Where(p =>( p.CertiFicateStatus == certificateStatus) )
+                    .ToList();
+            }
+        }
         
+
+        //&& (p.FileName.Contains(query)
         
     }
 }

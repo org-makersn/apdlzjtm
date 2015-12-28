@@ -498,5 +498,17 @@ namespace Makersn.Util
             [EnumTitle("Contest")]
             Contest = 1007
         }
+
+        public enum ProductCertificateStatus
+        {
+            [EnumTitle("요청")]
+            Request = 1,
+            [EnumTitle("거부")]
+            Reject = 2,
+            [EnumTitle("수락")]
+            Accept = 3,
+            [EnumTitle("업로드 완료")]
+            UploadFinished =4
+        }
     }
 }

@@ -23,6 +23,7 @@
                     <li><span>@Html.ActionLink("회원관리", "State", "Member")</span></li>
                     <li><span>@Html.ActionLink("디자인", "State", "Article")</span></li>
                     <li><span>@Html.ActionLink("프린팅", "State", "Printing")</span></li>
+                    <li><span>@Html.ActionLink("스토어", "Index", "Store")</span></li>
                     <li><span>@Html.ActionLink("일반", "Index", "Banner")</span></li>
                     <li><span>@Html.ActionLink("번역", "Index", "Translation")</span></li>
                     <li><span>@Html.ActionLink("관리자", "admin_auth", "Admin")</span></li>
@@ -90,6 +91,12 @@
                             <li><span class="one">@Html.ActionLink("번역 현황", "index", "Translation")</span></li>
                             <li><span class="one">@Html.ActionLink("번역 요청", "TranslationReqState", "Translation")</span></li>
                             <li><span class="one">@Html.ActionLink("직접 번역", "TranslationDirectState", "Translation")</span></li>
+                        }
+                        
+                        @if (menu.Group == "_Store")
+                        {
+                            <li><span class="one">@Html.ActionLink("주문 리스트", "index", "Store")</span></li>
+                            <li><span class="one">@Html.ActionLink("ShapeWays 업로드", "ProductCertificateList", "Store")</span></li>
                         }
 
 

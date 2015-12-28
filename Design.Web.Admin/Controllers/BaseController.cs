@@ -30,6 +30,8 @@ namespace Design.Web.Admin.Controllers
             ViewBag.CurrentDomain = System.Configuration.ConfigurationManager.AppSettings["CurrentDomain"];
             ViewBag.TargetDomain = System.Configuration.ConfigurationManager.AppSettings["TargetDomain"];
 
+            ViewBag.StoreUrl = System.Configuration.ConfigurationManager.AppSettings["StoreUrl"];
+
             if (Profile.UserLevel < 50)
             {
                 System.Web.Security.FormsAuthentication.SignOut();
