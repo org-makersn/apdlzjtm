@@ -3,6 +3,8 @@ using Makersn.BizDac;
 using Makersn.Models;
 using Makersn.Util;
 using Net.Common.Helper;
+using Net.Framework.StoreModel;
+using Net.Framwork.BizDac;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -204,7 +206,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
-            ViewData["Group"] = MenuModel(3);
+            ViewData["Group"] = MenuModel(6);
             ViewData["startDt"] = startDt;
             ViewData["endDt"] = endDt;
             ViewData["option"] = "name";
@@ -243,7 +245,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
-            ViewData["Group"] = MenuModel(4);
+            ViewData["Group"] = MenuModel(7);
 
             IList<NoticeT> before = _noticeDac.GetAllNoticeList();
 
@@ -265,7 +267,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
-            ViewData["Group"] = MenuModel(4);
+            ViewData["Group"] = MenuModel(7);
             return View();
         }
 
@@ -320,5 +322,87 @@ namespace Design.Web.Admin.Controllers
         //    oMail.SendMail("sendNotice", email, new String[] { title, content });
         //    return Json(new AjaxResponseModel { Success = true, Message = "발송되었습니다." });
         //}
+
+
+        #region 스토어 맴버(디자이너) 관리
+        /// <summary>
+        /// 스토어 맴버 리스트 
+        /// </summary>
+        /// <param name="startDt"></param>
+        /// <param name="endDt"></param>
+        /// <param name="page"></param>
+        /// <param name="listCnt"></param>
+        /// <param name="name"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+   
+        public ActionResult StoreMember(string startDt = "", string endDt = "", int page = 1, int listCnt = 20, string name = "", string id = "")
+        {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+
+            ViewData["Group"] = MenuModel(2);
+            ViewData["startDt"] = startDt;
+            ViewData["endDt"] = endDt;
+            ViewData["option"] = "name";
+            if (id != "") { ViewData["option"] = "id"; };
+            ViewData["text"] = name + id;
+            IList<StoreMemberT> list = new StoreMemberBiz().getAllMemberList();
+            list = list.Where(w => w.StoreName.Contains(name)).ToList();
+            DateTime dateStart;
+            DateTime dateEnd;
+            try
+            {
+                dateStart = Convert.ToDateTime(startDt);
+                list = list.Where(w => w.RegDt > dateStart).ToList();
+            }
+            catch (Exception e) { } 
+            try
+            {
+                dateEnd = Convert.ToDateTime(endDt);
+                list = list.Where(w => w.RegDt > dateEnd).ToList();
+            }
+            catch (Exception e) { }
+            ViewData["cnt"] = list.Count;
+            ViewData["listCnt"] = listCnt;
+            return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
+        }
+        #endregion
+        #region 프린팅 업체 관리
+        public ActionResult StorePrintingCom(string startDt = "", string endDt = "", int page = 1, int listCnt = 20, string name = "", string id = "")
+        {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+
+            ViewData["Group"] = MenuModel(2);
+            ViewData["startDt"] = startDt;
+            ViewData["endDt"] = endDt;
+            ViewData["option"] = "name";
+            if (id != "") { ViewData["option"] = "id"; };
+            ViewData["text"] = name + id;
+            IList<StorePrintingCompanyT> list = new StorePrintingCompanyBiz().getAllStorePrintingCompany();
+            list = list.Where(w => w.Name.Contains(name)).ToList();
+            DateTime dateStart;
+            DateTime dateEnd;
+            try
+            {
+                dateStart = Convert.ToDateTime(startDt);
+                list = list.Where(w => w.RegDt > dateStart).ToList();
+            }
+            catch (Exception e) { }
+            try
+            {
+                dateEnd = Convert.ToDateTime(endDt);
+                list = list.Where(w => w.RegDt > dateEnd).ToList();
+            }
+            catch (Exception e) { }
+            ViewData["cnt"] = list.Count;
+            ViewData["listCnt"] = listCnt;
+            return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
+        }
+        public ActionResult StorePrintingComInsert() {
+            return View();
+        }
+
+        #endregion
+
     }
 }

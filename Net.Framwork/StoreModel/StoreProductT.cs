@@ -25,8 +25,10 @@ namespace Net.Framework.StoreModel
         public virtual string MimeType { get; set; }
         [Column("FILE_SIZE")]
         public virtual double FileSize { get; set; }
-        [Column("FILE_VOLUME")]
-        public virtual double FileVolume { get; set; }
+        [Column("SLICED_VOLUME")]
+        public virtual double SlicedVolume { get; set; }
+        [Column("MODEL_VOLUME")]
+        public virtual double ModelVolume { get; set; }
         [Column("SIZE_X")]
         public virtual double SizeX { get; set; }
         [Column("SIZE_Y")]

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "StoreMemberInsert";
+}
+
+<h2>StoreMemberInsert</h2>
+<form id ="insert_form" method="post" enctype="multipart/form-data" action ="/Member/StorePrintingComInsert" >
+
+<br />업체명 <input name ="Name" id="Name" type="text"/>
+<br />전화번호 <input name ="PhoneNum" id="PhoneNum" type="text"/>
+<br />주소 <input name ="Addr1" id="Addr1" type="text"/>
+<br />주소 상세<input name ="Addr2" id="Addr2" type="text"/>
+<br />우편번호 <input name ="PostNum" id="PostNum" type="text"/>
+<br />책임자 명<input name ="ManagerName" id="ManagerName" type="text"/>
+<br />홈 페이지<input name ="Url" id="Url" type="text"/>
+<br />
+    
+<button type="submit" onclick="javascript:uploadStoreMember()">추가</button>
+    
+</form>
+
+@*@{ 
+    <script type="text/javascript">
+        function uploadStoreMember(){
+
+
+            var action = "/Member/PrintingComInsert";
+
+            var options = {
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    if (response.Success == true) {
+                        //var recListUrl = "/printing/prtUpload";
+                        //Ajax.SyncGetPartialView(recListUrl, {}, "partial-part");
+                        location.href = "/Member/PrintingCom";
+                    }
+                },
+                complete: function (response) {
+
+                },
+                error: function (error) {
+                    console.log(error);
+
+                }
+            };
+            $('#insert_form').attr("action", action).ajaxForm(options).submit();
+        }
+   </script>*@
+}

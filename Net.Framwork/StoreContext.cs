@@ -24,7 +24,7 @@ namespace Net.Framework
             //Database.SetInitializer<StoreContext>(null);
         }
 
-        public DbSet<MemberT> MemberT { get; set; }
+        //public DbSet<MemberTestT> MemberTestT { get; set; }
         public DbSet<DetailT> DetailT { get; set; }
         public DbSet<StorePrinterT> StorePrinterT { get; set; }
         public DbSet<StorePrintingCompanyPrinterT> StorePrintingCompanyPrinterT { get; set; }
