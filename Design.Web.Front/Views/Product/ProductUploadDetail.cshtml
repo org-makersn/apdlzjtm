@@ -1,8 +1,51 @@
-﻿@{
+﻿@using Net.Framework.StoreModel;
+
+@{
+    
     ViewBag.Title = "ProductUploadDetail";
+    IList<StoreMaterialT> matList = ViewBag.MaterialList;
+    StoreProductT product = ViewBag.ProductEntity;
 }
 
-<h2>ProductUploadDetail</h2>
+<h1>ProductUploadDetail
 제품 상세 페이지 입니다. 
 
-제품 번호는 @ViewBag.ProductEntity.No
+<br>
+제품 번호는: @product.No
+<br>
+제품 파일 사이즈는: @product.FileSize kb
+<br>
+제품 SIze X: @product.SizeX mm
+<br>
+제품 SIze Y: @product.SizeY mm
+<br> 
+제품 SIze Z: @product.SizeZ mm
+<br>
+제품 모델 부피는: @product.ModelVolume cm³
+<br>
+제품 슬라이싱된 출력 부피는: @product.SlicedVolume cm³
+</h1>
+<br><br><br><br><br>
+
+
+<h1>해당 재질들</h1> 
+<br>
+@{if (matList != null)
+  {
+      foreach (StoreMaterialT material in matList)
+      {
+    <div>&nbsp @material.Name
+        &nbsp @material.Price 원
+    </div>
+    <br>
+      }
+  }
+  else
+  {
+    <h1>등록된 재질이 없습니다. </h1>
+  }
+    
+    
+}
+
+    

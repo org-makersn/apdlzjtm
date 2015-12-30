@@ -303,6 +303,7 @@ namespace Design.Web.Front.Controllers
         {
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(productNo);
             ViewBag.ProductEntity = storeProduct;
+            ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
             return View();
 
         }
@@ -416,7 +417,7 @@ namespace Design.Web.Front.Controllers
                                 _storeProduct.MimeType = "";
                                 _storeProduct.FileSize = Convert.ToDouble(stlupload.ContentLength.ToString());
                                 _storeProduct.SlicedVolume = new STLHelper().slicing(file3Dpath + fileName);
-                                _storeProduct.ModelVolume = sizeResult.Volume;
+                                _storeProduct.ModelVolume = sizeResult.Volume/1000;
                                 _storeProduct.SizeX = sizeResult.X;
                                 _storeProduct.SizeY = sizeResult.Y;
                                 _storeProduct.SizeZ = sizeResult.Z;
