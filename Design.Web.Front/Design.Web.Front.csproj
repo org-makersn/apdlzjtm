@@ -683,6 +683,9 @@
     <Content Include="Views\Product\GetLikedProductsByMemberNo.cshtml" />
     <Content Include="Views\Product\GetReceivedNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
+    <Content Include="Views\Product\ProductPricing.cshtml" />
+    <Content Include="Views\Product\ProductPrintable.cshtml" />
+    <Content Include="Views\Product\ProductUpload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
