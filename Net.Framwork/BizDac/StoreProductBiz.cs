@@ -9,13 +9,13 @@ namespace Net.Framwork.BizDac
 {
     public class StoreProductBiz
     {
-        public List<StoreProductT> getAllStorePrinter() {
+        public List<StoreProductT> getAllStoreProduct() {
             return new StoreProductDac().SelectAllStoreProduct();
         }
         public StoreProductT getStoreProductById (int no){
             return new StoreProductDac().SelectStoreProductTById(no);
         }
-        public int add(StoreProductT StoreProduct)
+        public long add(StoreProductT StoreProduct)
         {
             return new StoreProductDac().InsertStoreProduct(StoreProduct);
         }

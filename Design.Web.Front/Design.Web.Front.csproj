@@ -686,6 +686,7 @@
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
     <Content Include="Views\Product\ProductUpload.cshtml" />
+    <Content Include="Views\Product\ProductUploadDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

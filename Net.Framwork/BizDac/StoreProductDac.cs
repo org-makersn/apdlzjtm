@@ -50,14 +50,15 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public int InsertStoreProduct(StoreProductT data)
+        public long InsertStoreProduct(StoreProductT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
-            int ret = 0;
+            long ret = 0;
             using (dbContext = new StoreContext())
             {
                 dbContext.StoreProductT.Add(data);
-                ret = dbContext.SaveChanges();
+                dbContext.SaveChanges();
+                ret = data.No;
             }
             return ret;
         }
