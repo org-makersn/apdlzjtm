@@ -35,7 +35,7 @@ namespace Design.Web.Admin.Controllers
         {
 
             if(Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-            ViewData["Group"] = MenuModel(0);
+            ViewData["Group"] = MenuModel(1);
 
             List<StoreProductT> productList = new StoreProductBiz().searchProductWithCertification(status, query);
             ViewBag.ProductList = productList;
@@ -45,6 +45,23 @@ namespace Design.Web.Admin.Controllers
             ViewData["cnt"] = productList.Count;
 
             return View(productList.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
+        }
+
+
+        //public void ShapeWaysAccept(int productNo){
+        //}
+
+        //public void ShapeWaysReject(int productNo) { 
+        //}
+        //public void ShapWaysUploaded(int productNo) { 
+        //}
+
+
+        public JsonResult ChangeCertiFicateStatus(int no,int status) {
+            StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
+            storeProduct.CertiFicateStatus = status;
+            new StoreProductBiz().upd(storeProduct);
+            return Json(new { result = 1 });
         }
 
     }
