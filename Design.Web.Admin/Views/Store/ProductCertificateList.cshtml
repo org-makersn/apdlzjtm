@@ -108,11 +108,11 @@
         @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
     </div>
     <!-- // page_navi -->
-    <!-- btn -->
+   @* <!-- btn -->
     <div class="btn_right">
         <span class="btnWrap medium"><a href="#" id="AddBanner" class="_btn_write">등록</a></span>
     </div>
-    <!-- // btn -->
+    <!-- // btn -->*@
 
 </div>
 
@@ -121,15 +121,15 @@
 
 @section Scripts{
     <script type="text/javascript">
-        function Certification() { }
-        Certification.Init = function () {
+      
+
+        $(document).ready(function () {
             $("#search_btn").click(function () {
                 var gubun = $("#certificateType").val();
                 var query = $("#query").val();
-                location.replace("/Banner?certificateType=" + gubun + "&query=" + query);
+                location.replace("/Store/ProductCertificateList?status=" + "@ViewData["certificateType"]" + "&query=" + query);
             });
-        }
-
+        });
         function accept(val) {
             var result = Ajax.SyncPostService("/Store/ChangeCertiFicateStatus", { no: val, status: "@((int)Makersn.Util.MakersnEnumTypes.ProductCertificateStatus.Accept)" });
             console.log(result);

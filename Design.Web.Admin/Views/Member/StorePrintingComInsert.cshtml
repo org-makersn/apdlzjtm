@@ -14,11 +14,12 @@
 <br />홈 페이지<input name ="Url" id="Url" type="text"/>
 <br />
     
-<button type="submit" onclick="javascript:uploadStoreMember()">추가</button>
+<button type="submit">추가</button>
     
 </form>
 
-@*@{ 
+@*
+@{ 
     <script type="text/javascript">
         function uploadStoreMember(){
 
@@ -46,5 +47,6 @@
             };
             $('#insert_form').attr("action", action).ajaxForm(options).submit();
         }
-   </script>*@
+   </script>
 }
+*@

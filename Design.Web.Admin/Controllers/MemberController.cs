@@ -206,7 +206,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
-            ViewData["Group"] = MenuModel(6);
+            ViewData["Group"] = MenuModel(5);
             ViewData["startDt"] = startDt;
             ViewData["endDt"] = endDt;
             ViewData["option"] = "name";
@@ -245,7 +245,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
-            ViewData["Group"] = MenuModel(7);
+            ViewData["Group"] = MenuModel(6);
 
             IList<NoticeT> before = _noticeDac.GetAllNoticeList();
 
@@ -340,7 +340,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
-            ViewData["Group"] = MenuModel(2);
+            ViewData["Group"] = MenuModel(3);
             ViewData["startDt"] = startDt;
             ViewData["endDt"] = endDt;
             ViewData["option"] = "name";
@@ -372,7 +372,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
-            ViewData["Group"] = MenuModel(2);
+            ViewData["Group"] = MenuModel(4);
             ViewData["startDt"] = startDt;
             ViewData["endDt"] = endDt;
             ViewData["option"] = "name";
@@ -398,8 +398,35 @@ namespace Design.Web.Admin.Controllers
             ViewData["listCnt"] = listCnt;
             return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
         }
-        public ActionResult StorePrintingComInsert() {
+
+        [Authorize, HttpGet]
+        public ActionResult StorePrintingComInsert()
+        {
+
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+            ViewData["Group"] = MenuModel(4);
+
             return View();
+        }
+        [HttpPost]
+        public ActionResult StorePrintingComInsert(string Name, string PhoneNum, string Addr1, string Addr2, string PostNum, string ManagerName,string  Url)
+        {
+
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+            ViewData["Group"] = MenuModel(4);
+            StorePrintingCompanyT storePrintingCom = new StorePrintingCompanyT();
+            storePrintingCom.Name = Name;
+            storePrintingCom.PhoneNum = PhoneNum;
+            storePrintingCom.Addr1 = Addr1;
+            storePrintingCom.Addr2 = Addr2;
+            storePrintingCom.PostNum = PostNum;
+            storePrintingCom.ManagerName = ManagerName;
+            storePrintingCom.Url = Url;
+            storePrintingCom.RegId = Profile.UserId;
+            storePrintingCom.RegDt = DateTime.Now;
+            new StorePrintingCompanyBiz().add(storePrintingCom);
+
+            return Redirect("StorePrintingCom");
         }
 
         #endregion

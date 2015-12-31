@@ -39,7 +39,8 @@ namespace Net.Framework
         public DbSet<StoreMemberT> StoreMemberT { get; set; }
         public DbSet<StoreNoticeT> StoreNoticeT { get; set; }
         public DbSet<StoreCategoryT> StoreCategoryT { get; set; }
-				public DbSet<MemberMsgT> MemberMsgT { get; set; }
+        public DbSet<StorePrinterMaterialT> StorePrinterMaterialT { get; set; }
+		public DbSet<MemberMsgT> MemberMsgT { get; set; }
         
         //public DbSet<DetailT> DetailT { get; set; }
 

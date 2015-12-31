@@ -9,7 +9,7 @@ namespace Net.Framwork.BizDac
 {
     public class StorePrinterBiz
     {
-        public List<StorePrinterT> getAllStorePrinter() {
+        public IList<StorePrinterT> getAllStorePrinter() {
             return new StorePrinterDac().SelectAllStorePrinter();
         }
         public StorePrinterT getStorePrinterById (int no){
@@ -22,6 +22,11 @@ namespace Net.Framwork.BizDac
         public int upd(StorePrinterT storePrinter)
         {
             return new StorePrinterDac().UpdateStorePrinter(storePrinter);
+        }
+
+        public IList<StorePrinterT> getSearchedStorePrinter(string text)
+        {
+            return new StorePrinterDac().SelectAllStorePrinter().Where(w => w.PrinterName.Contains(text)).ToList();
         }
 
     }

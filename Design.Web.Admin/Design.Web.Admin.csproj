@@ -1003,6 +1003,8 @@
     </Content>
     <Content Include="Views\Member\StorePrintingCom.cshtml" />
     <Content Include="Views\Member\StorePrintingComInsert.cshtml" />
+    <Content Include="Views\Store\PrinterList.cshtml" />
+    <Content Include="Views\Store\PrinterInsert.cshtml" />
     <None Include="Views\Translation\MonthStateDirect.cshtml" />
     <Content Include="Views\Translation\YearStateDirect.cshtml" />
     <Content Include="Views\Translation\TranslationWork.cshtml" />

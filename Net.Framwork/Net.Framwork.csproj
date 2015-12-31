@@ -75,6 +75,8 @@
     <Compile Include="BizDac\StoreProductUpdateHistoryDac.cs" />
     <Compile Include="BizDac\StoreReviewBiz.cs" />
     <Compile Include="BizDac\StoreReviewDac.cs" />
+    <Compile Include="BizDac\StorePrinterMaterialBiz.cs" />
+    <Compile Include="BizDac\StorePrinterMaterialDac.cs" />
     <Compile Include="Configurations\ApplicationConfiguration.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Logging\ILogger.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="StoreModel\DetailT.cs" />
     <Compile Include="StoreModel\MemberMsgT.cs" />
     <Compile Include="StoreModel\StoreCategoryT.cs" />
+    <Compile Include="StoreModel\StorePrinterMaterialT.cs" />
     <Compile Include="StoreModel\StorePrinterT.cs" />
     <Compile Include="StoreModel\StorePrintingCompanyPrinterT.cs" />
     <Compile Include="StoreModel\StorePrintingCompanyT.cs" />
