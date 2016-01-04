@@ -274,7 +274,7 @@ namespace Design.Web.Front.Helper
             //string input = workingFolder + fileName + ".stl";
             string log = changeExt(input, "log");
 
-            procConvert.StartInfo.FileName = domainPath + "/slic3r/slic3r-mswin-x64-1-2-9a-stable/Slic3r/Slic3r.exe";
+            procConvert.StartInfo.FileName = domainPath + "/slic3r/slic3r-mswin-x64-1-2-9a-stable/Slic3r/slic3r-console.exe";
 
 
 

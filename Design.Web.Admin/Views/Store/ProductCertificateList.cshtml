@@ -52,11 +52,12 @@
         </colgroup>
         <thead>
             <tr>
-                <th>No</th>
-                <th>이미지</th>
-                <th>관리제목(수정)</th>
-                <th>우선순위</th>
-                <th>노출여부</th>
+                <th>제품번호</th>
+                <th>제품명</th>
+                <th>파일명</th>
+                <th>모델부피</th>
+                <th>슬라이싱 된 부피</th>
+                <th>관리</th>
             </tr>
         </thead>
         <tbody>
@@ -74,14 +75,28 @@
                     </td>*@
                     <td class="ta_left"><a href="javascript:Banner.GoEdit(@p.No)" class="_btn_edit" id="title">@p.ProductName</a></td>
                     <td>@p.FileName</td>
-                    <td>@p.FileVolume</td>
+                    <td>@p.ModelVolume</td>
+                    <td>@p.SlicedVolume</td>>
+                    
+                    <td>@if (ViewData["certificateType"].ToString().Equals("1"))
+                        {
+                            <button onclick="javascript:accept(@p.No)">승인</button> 
+                            <button onclick="javascript:reject(@p.No)">거부</button>
+                        }
+                        else if (ViewData["certificateType"].ToString().Equals("3"))
+                        {
+                            <button onclick="javascript:uploadFinished(@p.No)">업로드 완료</button> 
+                        }
+
+                    </td>
+                    
                 </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;">등록된 배너가 없습니다.</td>
+                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;"> 제품이 없습니다.</td>
                 </tr>	
             }
 
@@ -93,11 +108,11 @@
         @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
     </div>
     <!-- // page_navi -->
-    <!-- btn -->
+   @* <!-- btn -->
     <div class="btn_right">
         <span class="btnWrap medium"><a href="#" id="AddBanner" class="_btn_write">등록</a></span>
     </div>
-    <!-- // btn -->
+    <!-- // btn -->*@
 
 </div>
 
@@ -106,14 +121,55 @@
 
 @section Scripts{
     <script type="text/javascript">
-        function Certification() { }
-        Certification.Init = function () {
+      
+
+        $(document).ready(function () {
             $("#search_btn").click(function () {
                 var gubun = $("#certificateType").val();
                 var query = $("#query").val();
-                location.replace("/Banner?certificateType=" + gubun + "&query=" + query);
+                location.replace("/Store/ProductCertificateList?status=" + "@ViewData["certificateType"]" + "&query=" + query);
             });
+        });
+        function accept(val) {
+            var result = Ajax.SyncPostService("/Store/ChangeCertiFicateStatus", { no: val, status: "@((int)Makersn.Util.MakersnEnumTypes.ProductCertificateStatus.Accept)" });
+            console.log(result);
+            if (result.result == 1) {
+                location.reload(true);
+            }
         }
+        function reject(val) {
+            var result = Ajax.SyncPostService("/Store/ChangeCertiFicateStatus", { no: val, status: "@((int)Makersn.Util.MakersnEnumTypes.ProductCertificateStatus.Reject)" });
+            console.log(result);
+            if (result.result == 1) {
+                location.reload(true);
+            }
+        }
+
+        function uploadFinished(val) {
+            var result = Ajax.SyncPostService("/Store/ChangeCertiFicateStatus", { no: val, status: "@((int)Makersn.Util.MakersnEnumTypes.ProductCertificateStatus.UploadFinished)" });
+            console.log(result);
+            if (result.result == 1) {
+                location.reload(true);
+            }
+        }
+
+
+
+        //ArticleRecommendRequest.visibility = function (val) {
+        //    var no = "";
+        //    $("input[name=chkAll]").each(function () {
+        //        if ($(this).is(":checked")) {
+        //            if ($(this).val() != "on") {
+        //                no += $(this).val() + ",";
+        //            }
+        //        }
+        //    });
+        //    var result = Ajax.SyncPostService("/ArticleRecommendRequest/SetVisibiliy", { no: no, setVisi: val });
+        //    console.log(result);
+        //    if (result.result == 1) {
+        //        location.reload(true);
+        //    }
+        //}
 
     </script>
 }

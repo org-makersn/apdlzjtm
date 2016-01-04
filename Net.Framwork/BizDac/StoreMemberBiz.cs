@@ -9,10 +9,8 @@ namespace Net.Framwork.BizDac
 {
     public class StoreMemberBiz
     {
-        public List<StoreMemberT> getAllStorePrinter() {
-            return new StoreMemberDac().SelectAllStoreMember();
-        }
-        public StoreMemberT getStoreMemberById (int no){
+        public StoreMemberT getStoreMemberById(int no)
+        {
             return new StoreMemberDac().SelectStoreMemberTById(no);
         }
         public int add(StoreMemberT StoreMember)
@@ -23,31 +21,32 @@ namespace Net.Framwork.BizDac
         {
             return new StoreMemberDac().UpdateStoreMember(StoreMember);
         }
-        public List< StoreMemberT > getAllMemberList() {
+        public List<StoreMemberT> getAllMemberList()
+        {
             return new StoreMemberDac().SelectAllStoreMember();
         }
 
 
 
 
-				public List<MemberMsgT> getReceivedNoteListByMemberNo(int memberNo)
-				{
-					return new StoreMemberDac().SelectReceivedNoteListByMemberNo(memberNo);
-				}
+        public List<MemberMsgT> getReceivedNoteListByMemberNo(int memberNo)
+        {
+            return new StoreMemberDac().SelectReceivedNoteListByMemberNo(memberNo);
+        }
 
-				public List<MemberMsgT> getSentNoteListByMemberNo(int memberNo)
-				{
-					return new StoreMemberDac().SelectSentNoteListByMemberNo(memberNo);
-				}
+        public List<MemberMsgT> getSentNoteListByMemberNo(int memberNo)
+        {
+            return new StoreMemberDac().SelectSentNoteListByMemberNo(memberNo);
+        }
 
-				public int sendNote(MemberMsgT msg)
-				{
-					return new StoreMemberDac().CreateNote(msg);
-				}
+        public int sendNote(MemberMsgT msg)
+        {
+            return new StoreMemberDac().CreateNote(msg);
+        }
 
-				public int deleteNote(int SeqNo)
-				{
-					return new StoreMemberDac().DeleteNote(SeqNo);
-				}
-		}
+        public int deleteNote(int SeqNo)
+        {
+            return new StoreMemberDac().DeleteNote(SeqNo);
+        }
+    }
 }

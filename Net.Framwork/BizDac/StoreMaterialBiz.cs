@@ -9,7 +9,7 @@ namespace Net.Framwork.BizDac
 {
     public class StoreMaterialBiz
     {
-        public List<StoreMaterialT> getAllStorePrinter() {
+        public List<StoreMaterialT> getAllStoreMaterial() {
             return new StoreMaterialDac().SelectAllStoreMaterial();
         }
         public StoreMaterialT getStoreMaterialById (int no){

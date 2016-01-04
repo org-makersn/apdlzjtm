@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using FluentNHibernate.Cfg;
+﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using Makersn.Models;
 using NHibernate;
 using NHibernate.Caches.SysCache;
-using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
+using System;
+using System.Configuration;
+using System.Web;
 
-namespace Makersn.Models
+
+namespace Makersn
 {
     public class NHibernateHelper
     {
-        private static ISessionFactory sessionFactory;
+        private static readonly DbSettings instance = new DbSettings();
+        private static DbSettings Instance { get { return instance; } }
 
-        private static readonly string _Server_IP = "_Server_IP";
-        private static readonly string _UserNm = "_UserNm";
-        private static readonly string _Password = "_Password";
-        private static readonly string _Database = "_Database";
-        
+        private static ISessionFactory sessionFactory;
         
         private static ISessionFactory GetSessionFactory<T>() where T : ICurrentSessionContext
         {
@@ -34,10 +29,10 @@ namespace Makersn.Models
                             //.ShowSql()
                         #endif
                             .ConnectionString(c => c
-                                        .Server(_Server_IP)
-                                        .Database(_Database)
-                                        .Username(_UserNm)
-                                        .Password(_Password)))
+                                        .Server(instance._Server_IP)
+                                        .Database(instance._Database)
+                                        .Username(instance._UserNm)
+                                        .Password(instance._Password)))
                         .Mappings(m => m.FluentMappings
                             .AddFromAssemblyOf<ArticleT>()
                             .AddFromAssemblyOf<ArticleCommentT>()
@@ -110,6 +105,37 @@ namespace Makersn.Models
                 session.Transaction.Rollback();
                 throw;
             }
+        }
+
+        public class DbSettings
+        {
+            public DbSettings()
+            {
+                _Server_IP = ConfigurationManager.AppSettings["DBServerIP"] ?? "storedb_dev";
+                _UserNm = ConfigurationManager.AppSettings["DBUser"] ?? "0000";
+                _Password = ConfigurationManager.AppSettings["DBPwd"] ?? "0000";
+                _Database = ConfigurationManager.AppSettings["Database"] ?? "0000";
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public string _Server_IP { get; private set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public string _UserNm { get; private set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public string _Password { get; private set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public string _Database { get; private set; }
         }
     }
 }

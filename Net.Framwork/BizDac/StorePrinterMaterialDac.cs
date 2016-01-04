@@ -8,95 +8,87 @@ using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
-    public class StorePrinterDac
+    public class StorePrinterMaterialDac
     {
 
         private static StoreContext dbContext;
-        
+
         /// <summary>
         /// select multi data
         /// </summary>
         /// <returns></returns>
-        internal IList<StorePrinterT> SelectAllStorePrinter()
-        { 
-            
-            List<StorePrinterT> printers = null;
+        internal List<StorePrinterMaterialT> SelectAllStorePrinterMaterial()
+        {
+
+            List<StorePrinterMaterialT> printers = null;
             using (dbContext = new StoreContext())
             {
-                printers = dbContext.StorePrinterT.ToList();
+                printers = dbContext.StorePrinterMaterialT.ToList();
             }
             return printers;
         }
 
         /// <summary>
-        /// select one StorePrinter By Id
+        /// select one StorePrinterMaterial By Id
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
-        internal StorePrinterT SelectStorePrinterById(int no)
+        internal StorePrinterMaterialT SelectStorePrinterMaterialTById(int no)
         {
-            StorePrinterT printer = null;
+            StorePrinterMaterialT printer = null;
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StorePrinterT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StorePrinterMaterialT.Where(m => m.No == no).FirstOrDefault();
             }
 
             return printer;
         }
 
         /// <summary>
-        /// Insert StorePrinter
+        /// Insert StorePrinterMaterial
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int InsertStorePrinter(StorePrinterT data)
+        public long InsertStorePrinterMaterial(StorePrinterMaterialT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
-            int ret = 0;
+            long ret = 0;
             using (dbContext = new StoreContext())
             {
-                dbContext.StorePrinterT.Add(data);
-                ret = dbContext.SaveChanges();
+                dbContext.StorePrinterMaterialT.Add(data);
+                dbContext.SaveChanges();
+                ret = data.No;
             }
             return ret;
         }
 
         /// <summary>
-        /// Update StorePrinter
+        /// Update StorePrinterMaterial
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int UpdateStorePrinter(StorePrinterT data)
+        internal int UpdateStorePrinterMaterial(StorePrinterMaterialT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                
-                if (dbContext.StorePrinterT.SingleOrDefault(m => m.No == data.No) != null)
+                try
                 {
-                    try
-                    {
-                        dbContext.StorePrinterT.Attach(data);
-                        dbContext.Entry<StorePrinterT>(data).State = System.Data.Entity.EntityState.Modified;
-                        dbContext.SaveChangesAsync();
-                    }
-                    catch (Exception)
-                    {
-                        ret = -1;
-                    }
+                    dbContext.StorePrinterMaterialT.Attach(data);
+                    dbContext.Entry<StorePrinterMaterialT>(data).State = System.Data.Entity.EntityState.Modified;
+                    dbContext.SaveChanges();
                 }
-                else
+                catch (Exception)
                 {
-                    ret = -2;
-                    throw new NullReferenceException("The expected original Segment data is not here.");
+                    ret = -1;
                 }
+
             }
             return ret;
         }
-        
-        
+
     }
 }

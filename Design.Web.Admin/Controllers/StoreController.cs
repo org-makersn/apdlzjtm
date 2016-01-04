@@ -6,6 +6,7 @@ using Net.Framwork.BizDac;
 using Makersn.Util;
 using System.Linq;
 using PagedList;
+using System;
 
 namespace Design.Web.Admin.Controllers
 {
@@ -35,7 +36,7 @@ namespace Design.Web.Admin.Controllers
         {
 
             if(Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-            ViewData["Group"] = MenuModel(0);
+            ViewData["Group"] = MenuModel(1);
 
             List<StoreProductT> productList = new StoreProductBiz().searchProductWithCertification(status, query);
             ViewBag.ProductList = productList;
@@ -45,6 +46,80 @@ namespace Design.Web.Admin.Controllers
             ViewData["cnt"] = productList.Count;
 
             return View(productList.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
+        }
+
+
+        //public void ShapeWaysAccept(int productNo){
+        //}
+
+        //public void ShapeWaysReject(int productNo) { 
+        //}
+        //public void ShapWaysUploaded(int productNo) { 
+        //}
+
+
+        public JsonResult ChangeCertiFicateStatus(int no,int status) {
+            StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
+            storeProduct.CertiFicateStatus = status;
+            new StoreProductBiz().upd(storeProduct);
+            return Json(new { result = 1 });
+        }
+
+        public ActionResult PrinterList(string query = "",  int page = 1)
+        {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+            ViewData["Group"] = MenuModel(2);
+
+            IList<StorePrinterT> printerList = new StorePrinterBiz().getSearchedStorePrinter(query);
+            ViewData["query"] = query;
+            ViewData["cnt"] = printerList.Count;
+
+            return View(printerList.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
+        }
+
+
+        [Authorize, HttpGet]
+        public ActionResult PrinterInsert()
+        {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+            ViewData["Group"] = MenuModel(2);
+            IList<StoreMaterialT> matList = new StoreMaterialBiz().getAllStoreMaterial();
+            ViewBag.matList = matList;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult PrinterInsert(string PrinterName, int PrintingCompanyNo, int SizeX, int SizeY, int SizeZ, string matNoInfo, string matUseInfo)
+        {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+            ViewData["Group"] = MenuModel(2);
+            StorePrinterT storePrinter = new StorePrinterT();
+            storePrinter.PrinterName = PrinterName;
+            storePrinter.SizeX = SizeX;
+            storePrinter.SizeY = SizeY;
+            storePrinter.SizeZ = SizeZ;
+            storePrinter.PrintingCompanyNo = PrintingCompanyNo;
+            storePrinter.RegId = Profile.UserId;
+            storePrinter.RegDt= DateTime.Now;
+
+            int printerNo = new StorePrinterBiz().add(storePrinter);
+
+            StorePrinterMaterialBiz materialBiz = new StorePrinterMaterialBiz();
+            string[] matNoList = matNoInfo.Split(';');
+            string[] matUseList = matUseInfo.Split(';');
+            for (int i = 0; i < matNoList.Length; i++) { 
+                if(matUseList[i].Equals("Y")){
+                    StorePrinterMaterialT storePrinterMat = new StorePrinterMaterialT();
+                    storePrinterMat.PrinterNo = printerNo;
+                    storePrinterMat.MaterialNo = Convert.ToInt32(matNoList[i]);
+                    storePrinterMat.RegDt = DateTime.Now;
+                    storePrinterMat.RegId = Profile.UserId;
+                    storePrinterMat.UpdDt = DateTime.Now;
+                    storePrinterMat.UpdId = Profile.UserId;
+                    materialBiz.add(storePrinterMat);
+                }
+            }
+
+            return Redirect("PrinterList");
         }
 
     }

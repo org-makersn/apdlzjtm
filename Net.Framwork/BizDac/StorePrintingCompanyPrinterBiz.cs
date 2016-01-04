@@ -9,7 +9,7 @@ namespace Net.Framwork.BizDac
 {
     public class StorePrintingCompanyPrinterBiz
     {
-        public List<StorePrintingCompanyPrinterT> getAllStorePrinter()
+        public List<StorePrintingCompanyPrinterT> getAllPrintingCompanyPrinter()
         {
             return new StorePrintingCompanyPrinterDac().SelectAllStorePrintingCompanyPrinter();
         }

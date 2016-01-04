@@ -998,6 +998,13 @@
     <Content Include="Views\Contact\Reply.cshtml" />
     <Content Include="Views\Store\Index.cshtml" />
     <Content Include="Views\Store\ProductCertificateList.cshtml" />
+    <Content Include="Views\Member\StoreMember.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Member\StorePrintingCom.cshtml" />
+    <Content Include="Views\Member\StorePrintingComInsert.cshtml" />
+    <Content Include="Views\Store\PrinterList.cshtml" />
+    <Content Include="Views\Store\PrinterInsert.cshtml" />
     <None Include="Views\Translation\MonthStateDirect.cshtml" />
     <Content Include="Views\Translation\YearStateDirect.cshtml" />
     <Content Include="Views\Translation\TranslationWork.cshtml" />

@@ -19,14 +19,18 @@ namespace Net.Framework.StoreModel
         public virtual string FilePath { get; set; }
         [Column("FILE_NAME")]
         public virtual string FileName { get; set; }
+        [Column("FILE_RENAME")]
+        public virtual string FileReName { get; set; }
         [Column("FILE_EXT")]
         public virtual string FileExt { get; set; }
         [Column("MIME_TYPE")]
         public virtual string MimeType { get; set; }
         [Column("FILE_SIZE")]
         public virtual double FileSize { get; set; }
-        [Column("FILE_VOLUME")]
-        public virtual double FileVolume { get; set; }
+        [Column("SLICED_VOLUME")]
+        public virtual double SlicedVolume { get; set; }
+        [Column("MODEL_VOLUME")]
+        public virtual double ModelVolume { get; set; }
         [Column("SIZE_X")]
         public virtual double SizeX { get; set; }
         [Column("SIZE_Y")]
@@ -50,17 +54,17 @@ namespace Net.Framework.StoreModel
         [Column("PART_CNT")]
         public virtual int PartCnt { get; set; }
         [Column("CUSTORMIZE_YN")]
-        public virtual char CustormizeYn { get; set; } //exerd 확인
+        public virtual string CustormizeYn { get; set; } //exerd 확인
         [Column("SELL_YN")]
-        public virtual int SellYn { get; set; } //사용 안하기로 하지 않았나?
+        public virtual string SellYn { get; set; } //사용 안하기로 하지 않았나?
         [Column("TAG_NAME")]
         public virtual string TagName { get; set; }
         [Column("CERTIFICATE_STATUS")]
         public virtual int CertiFicateStatus { get; set; }
         [Column("VISIBILITY_YN")]
-        public virtual char VisibilityYn { get; set; }
+        public virtual string VisibilityYn { get; set; }
         [Column("USE_YN")]
-        public virtual char UseYn { get; set; }
+        public virtual string UseYn { get; set; }
         [Column("MEMBER_NO")]
         public virtual int MemberNo { get; set; }
         [Column("TXT_SIZE_X")]
