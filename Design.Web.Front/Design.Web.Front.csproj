@@ -653,10 +653,6 @@
       <Project>{4226cb43-c074-47ef-8bd8-a136b098bf3f}</Project>
       <Name>DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Library.GoogleMap\Library.GoogleMap.csproj">
-      <Project>{da8860fa-6a21-4682-8d85-3509195c2bc8}</Project>
-      <Name>Library.GoogleMap</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Library.ObjParser\Library.ObjParser.csproj">
       <Project>{3105453e-3a4f-447d-9de0-798c28c68e65}</Project>
       <Name>Library.ObjParser</Name>
