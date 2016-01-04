@@ -62,7 +62,7 @@ namespace Design.Web.Front.Controllers
             ViewBag.PopularList = articleDac.GetListByOption(Profile.UserNo, 0, "P", 1, 4);
             ViewBag.NewList = articleDac.GetListByOption(Profile.UserNo, 0, "N", 1, 4);
 
-            ViewBag.ComList = articleDac.GetListByOption(Profile.UserNo, 10203, "", 1, 4);
+            //ViewBag.ComList = articleDac.GetListByOption(Profile.UserNo, 10203, "", 1, 4);
 
             return View();
         }

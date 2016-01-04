@@ -18,10 +18,10 @@ namespace Makersn.Models
     {
         private static ISessionFactory sessionFactory;
 
-        private static readonly string _Server_IP = "_Server_IP";
-        private static readonly string _UserNm = "_UserNm";
-        private static readonly string _Password = "_Password";
-        private static readonly string _Database = "_Database";
+        private static readonly string _Server_IP = "makersndb_real";
+        private static readonly string _UserNm = "luckymun";
+        private static readonly string _Password = "pingoli1234";
+        private static readonly string _Database = "dbluckymun";
 
         private static ISessionFactory GetSessionFactory<T>() where T : ICurrentSessionContext
         {

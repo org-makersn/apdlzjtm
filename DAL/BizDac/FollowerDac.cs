@@ -13,7 +13,7 @@ namespace Makersn.BizDac
 {
     public class FollowerDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
+        
 
         public int GetFollwerCnt(int memberNo)
         {

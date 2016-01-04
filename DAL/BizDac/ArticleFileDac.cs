@@ -13,7 +13,7 @@ namespace Makersn.BizDac
 {
     public class ArticleFileDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
+        
 
         #region 파일 리스트
         /// <summary>

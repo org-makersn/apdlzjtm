@@ -14,7 +14,7 @@ namespace Makersn.BizDac
 {
     public class NoticesDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
+        
 
         public IList<BoardT> GetNoticesList()
         {

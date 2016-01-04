@@ -310,7 +310,7 @@ namespace Design.Web.Front.Controllers
                 memberT.Name = result.ExtraData["name"];
                 memberT.SnsId = result.ProviderUserId;
                 memberT.ProfilePic = fileNm;
-                memberT.Email = result.UserName;
+                memberT.Email = result.UserName.Contains("@") ? result.UserName : null;
                 memberT.Level = 10;
                 memberT.Status = "1";
                 memberT.SnsType = "fb";

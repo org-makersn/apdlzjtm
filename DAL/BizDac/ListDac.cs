@@ -13,7 +13,7 @@ namespace Makersn.BizDac
 {
     public class ListDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
+        
         public IList<ListT> GetListNames(int memberNo)
         {
             using (ISession session = NHibernateHelper.OpenSession())

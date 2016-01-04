@@ -17,7 +17,7 @@ namespace Makersn.BizDac
     public class ArticleDac : BizDacHelper
     {
 
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
+        
 
         /// <summary>
         /// 

@@ -13,7 +13,7 @@ namespace Makersn.BizDac
 {
     public class MessageDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
+        
 
         public IList<MessageT> GetMessageList(int memberNo)
         {

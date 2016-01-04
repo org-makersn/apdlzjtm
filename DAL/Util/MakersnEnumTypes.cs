@@ -110,8 +110,8 @@ namespace Makersn.Util
             테크툴 = 1005,
             [EnumTitle("교육&학습도구")]
             교육학습도구 = 1006,
-            [EnumTitle("컨테스트")]
-            컨테스트 = 10203
+            //[EnumTitle("컨테스트")]
+            //컨테스트 = 10203
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace Makersn.BizDac
 {
     public class MemberDac
     {
-        string conStr = ConfigurationManager.ConnectionStrings["design"].ConnectionString;
+        
 
         /// <summary>
         /// search target member
