@@ -119,10 +119,12 @@ namespace Design.Web.Front.Controllers
         {
             return View();
         }
+
         public ActionResult ProductPrintable()
         {
             return View();
         }
+
         //public ActionResult ProductUpload() {
         //    return View();
         //}
@@ -308,7 +310,6 @@ namespace Design.Web.Front.Controllers
 
         }
         #endregion
-
 
         #region stl upload
         /// <summary>
@@ -514,7 +515,6 @@ namespace Design.Web.Front.Controllers
         }
         #endregion
 
-
         #region 3D파일 사이즈 구하기
         public ArticleFileT GetSizeFor3DFile(string path, string ext)
         {
@@ -641,7 +641,5 @@ namespace Design.Web.Front.Controllers
             return getSize;
         }
         #endregion
-
-
     }
 }
