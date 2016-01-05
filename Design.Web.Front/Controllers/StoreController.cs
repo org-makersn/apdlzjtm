@@ -22,7 +22,7 @@ namespace Design.Web.Front.Controllers
             return View();
         }
         #region  스토어등록/삭제/업데이트
-        
+
 
         public ActionResult StoreMemberRegister()
         {
@@ -128,7 +128,7 @@ namespace Design.Web.Front.Controllers
             response.Result = _StoreMemberT.MemberNo + "";
             return Json(new { Success = true, Result = result });
         }
-        #endregion 
+        #endregion
 
 
         #region 스토어팔러우
@@ -136,14 +136,15 @@ namespace Design.Web.Front.Controllers
         /// 주석처리 회원아이디가 없으면 90으로 시작
         /// </summary>
         /// <returns></returns>
-        public ActionResult FollewingList(int storeNo) {
+        public ActionResult FollewingList(int storeNo)
+        {
 
             int memberUserno = Profile.UserNo == 0 ? 182 : Profile.UserNo; // 로그인 되어 있는 회원아이디
-            IList<FollowerT> _follerList = new FollowerDac().GetFollowerLIst(storeNo ,memberUserno ).Where(s => s.SiteGubun == "Store").ToList<FollowerT>();
+            IList<FollowerT> _follerList = new FollowerDac().GetFollowerLIst(storeNo, memberUserno).Where(s => s.SiteGubun == "Store").ToList<FollowerT>();
 
-            if (_follerList.Count > 0 )
+            if (_follerList.Count > 0)
             {
-                ViewBag.follerList = _follerList;     
+                ViewBag.follerList = _follerList;
             }
 
             return View();
@@ -154,9 +155,10 @@ namespace Design.Web.Front.Controllers
         /// </summary>
         /// <param name="StoreMemberNo"></param>
         /// <returns></returns>
-        public JsonResult FollowingStore(int StoreMemberNo  ) {
+        public JsonResult FollowingStore(int StoreMemberNo)
+        {
             AjaxResponseModel response = new AjaxResponseModel();
-            
+
             int result = 0;
 
             FollowerT follow = new FollowerT();
@@ -172,7 +174,8 @@ namespace Design.Web.Front.Controllers
             {
 
             }
-            else {
+            else
+            {
                 result = new FollowerDac().SetFollow(follow);
             }
 
@@ -185,7 +188,8 @@ namespace Design.Web.Front.Controllers
         /// </summary>
         /// <param name="StoreMemberNo"></param>
         /// <returns></returns>
-        public int ChkFollower(int StoreMemberNo) {
+        public int ChkFollower(int StoreMemberNo)
+        {
             AjaxResponseModel response = new AjaxResponseModel();
 
             int result = 0;
@@ -233,6 +237,13 @@ namespace Design.Web.Front.Controllers
             testBiz.upd(like);
 
             return "dd";
+        }
+
+
+        public ActionResult Cart()
+        {
+
+            return View();
         }
     }
 }

@@ -195,7 +195,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CleanupController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
@@ -689,6 +688,7 @@
     <Content Include="Views\Product\ProductPrintable.cshtml" />
     <Content Include="Views\Product\ProductUpload.cshtml" />
     <Content Include="Views\Product\ProductUploadDetail.cshtml" />
+    <Content Include="Views\Store\Cart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
