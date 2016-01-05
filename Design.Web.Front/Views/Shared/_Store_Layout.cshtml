@@ -1,38 +1,5 @@
 ﻿@{
     ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
-
-    string strLangFlagName = "";
-    string strTemp = "";
-
-    if (Request.Cookies["GlobalFlag"] != null)
-    {
-        strTemp = Request.Cookies["GlobalFlag"].Value;
-    }
-
-    if (strTemp == "")
-    {
-        HttpCookie cookie = new HttpCookie("GlobalFlag");
-        cookie.Domain = ".makersn.com";
-        if (Request["gl"] != null)
-        {
-            cookie.Value = Request["gl"].ToString();
-            strTemp = Request["gl"].ToString();
-        }
-        else
-        {
-            cookie.Value = "KR";
-            strTemp = "KR";
-        }
-
-        this.Response.Cookies.Add(cookie);
-    }
-
-    switch (strTemp)
-    {
-        case "EN": strLangFlagName = "English"; break;
-        case "KR": strLangFlagName = "한국어"; break;
-        default: strLangFlagName = "모든언어"; break;
-    }
 }
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -68,7 +35,7 @@
     </style>
 
 </head>
-<body data-ng-app="main" data-ng-controller="RootController" onload="betaPopup()">
+<body>
     <!-- Wrap -->
     <div class="wrap @ViewBag.WrapClass">
 
@@ -85,8 +52,7 @@
 
                     <!-- MainMenu -->
                     <ul class="mainMenu">
-                        <li><a href="/" class="on">디자인</a></li>
-                        <li><a href="/Printing">프린팅(beta)</a></li>
+                        <li><a href="/" class="on">디자인</a></li>s
                     </ul>
                     <!-- //MainMenu -->
 
@@ -144,11 +110,11 @@
                         }
                         <!-- //MemberArea -->
                         <div class="en">
-                            <img src="@Url.Content("~/Content/images/common/btn/btn_en.gif")" style="cursor:pointer" onclick="GoGlobleSite('EN')" alt="EN" />
+                            <img src="@Url.Content("~/Content/images/common/btn/btn_en.gif")" style="cursor:pointer" alt="EN" />
                         </div>
                     </div>
                     <!-- rightZone -->
-
+                    s
                 </div>
                 <!-- //headerBox -->
             </div>
@@ -215,40 +181,6 @@
                     <li data-ng-class="{active : activeViewPath==='/privacy'}"><a href="/Info/privacy">개인정보취급방침</a></li>
                 </ul>
 
-                <div class="langSite">
-                    <div class="optLang">
-                        <p class="value site">
-                            사이트 :
-                            <label id="langSiteNm">한국어</label>
-                        </p>
-                        <ul class="valueLi" style="display: none;">
-                            <li id="optSiteBank_1">
-                                <input type="radio" id="selSiteBank_1" name="optSiteLang" value="1" /><label for="optLang_1" onclick="GoGlobleSite('KR')">한국어</label></li>
-                            <li id="optSiteBank_2">
-                                <input type="radio" id="selSiteBank_2" name="optSiteLang" value="2" /><label for="optLang_2" onclick="GoGlobleSite('EN')">English</label></li>
-                        </ul>
-                    </div>
-
-                </div>
-                <div class="langSite post">
-                    <div class="optLang">
-                        <p class="value posts">
-                            게시물 :
-                            <label id="langPostsNm">@strLangFlagName</label>
-                        </p>
-                        <input type="hidden" id="hddSelectLangFlag" />
-                        <ul class="valueLi" style="display: none;">
-                            <li id="optBank_1">
-                                <input type="radio" id="selBank_1" name="optLang" value="1" /><label for="optLang_1" onclick="GloblePosts('ALL')">모든 언어</label></li>
-                            <li id="optBank_2">
-                                <input type="radio" id="selBank_2" name="optLang" value="2" /><label for="optLang_1" onclick="GloblePosts('KR')">한국어</label></li>
-                            <li id="optBank_3">
-                                <input type="radio" id="selBank_3" name="optLang" value="3" /><label for="optLang_2" onclick="GloblePosts('EN')">English</label></li>
-                        </ul>
-                    </div>
-
-                </div>
-
                 <ul class="footSns">
                     <li><a href="https://www.facebook.com/makersn" target="_blank">
                         <img src="@Url.Content("~/Content/images/common/foot_sns1.gif")" alt="facebook" /></a></li>
@@ -285,14 +217,6 @@
                         <form id="login_form" name="login_form" method="post" action="/Account/LogOn">
                             <input type="hidden" name="returnUrl" id="returnUrl" value="">
                             <ul class="keyDown">
-                                @*<li>
-								<span>이메일</span>
-								<div class="inputBox"><input type="text" name="m_id" placeholder="example@example.com" /></div>
-							</li>
-							<li>
-								<span>비밀번호</span>
-								<div class="inputBox"><input type="password" name="password" placeholder="최소 6자리 이상" /></div>
-							</li>*@
                                 <li>
                                     <span>이메일</span>
                                     <div class="inputBox">
@@ -316,7 +240,7 @@
                             <button type="button" class="settingBtn" title="로그인" id="login_submit">로그인</button>
                         </p>
                         @Html.Action("ExternalLoginsList", "Account", new { ReturnUrl = ViewBag.ReturnUrl })
-                        <p class="pop_beta" style="font-size:15px">
+                        <p class="pop_beta" style="font-size: 15px">
                             현재 프린팅 서비스는 '클로즈 베타 테스트' 중으로
 초대를 통해서만 이용할 수 있습니다.
                         </p>
@@ -527,63 +451,9 @@
     </form>
     <!-- //로그인 후 마이페지 -->
 
-    <!-- 베타 팝업 -->
-    <div class="popupArea" id="betaPopup">
-        <div class="bgArea" style="opacity: 0.52; height: 100%;">
-        </div>
-        <div class="popBox5">
-            <div class="pop_wrap4 hAuto">
-                <div class="pop_txt_b">
-                    <span class="pop_img">
-                        <img src="content/images/beta.png"></span><br>
-                    <br>
-                    현재 프린팅 서비스는 '클로즈 베타 테스트' 중으로<br>
-                    초대를 통해서만 이용할 수 있습니다.<br>
-                    테스트 기간 동안의 데이터는 '오픈 베타 서비스' 시작시<br>
-                    삭제되므로 이를 감안해서 이용하시기 바랍니다.<br>
-                    이용 중 불편 및 개선 사항을 고객센터로 보내주시면<br>
-                    우수 의견을 선정해서 소정의 사은품을 보내드립니다.<br>
-                    감사합니다.<br>
-                    <br>
-                </div>
-                <a onclick="closeWin()" style="z-index:300;cursor:pointer" class="no_view">하루동안 보지 않기</a>
-                <a href="javascript:closeBetaPop()" class="pop_close">창 닫기</a>
-            </div>
-        </div>
-    </div>
-    <!-- // 베타 팝업 -->
-
-
-    @*개발자*@
-   @* <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-65149720-1', 'auto');
-        ga('send', 'pageview');
-
-    </script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-65173044-1', 'auto');
-        ga('send', 'pageview');
-    </script>*@
-
 
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/custom")
-    @Scripts.Render("~/bundles/angular")
-    @Scripts.Render("~/bundles/app")
 
     @*<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.cookie.js")"></script>*@
 
@@ -624,333 +494,6 @@
     @RenderSection("scripts", required: false)
 
     <script type="text/javascript">
-        //로그인 아이콘 클릭
-        function chkPopup() {
-            if (loginPop("@ViewBag.LogOnChk")) return false;
-            mypageGo();
-            SetNoticeCnt();
-        }
-
-        function quickChkPopup() {
-            if (!loginPop("@ViewBag.LogOnChk")) {
-                location.href = "/profile";
-            };
-        }
-
-        function SetNoticeCnt() {
-            var onSuccess = function (result) {
-                if (result.notice > 0) {
-                    $("#profileNotice").html("알림 <img src=\"/content/images/common/notice_left.gif\" alt=\"알림\" /><span style=\"font-size: 11px; background-color: #fe7900; line-height: 22px; padding: 5px 4px 3px 4px;margin-left: -1px;\">" + result.notice + "</span><img src=\"/content/images/common/notice_right.gif\" alt=\"알림\" />");
-                    $("#profileMyPage").attr("href", "/profile?gubun=N");
-                }
-                if (result.message > 0) {
-                    $("#messageCnt").html("메시지 <img src=\"/content/images/common/notice_left.gif\" alt=\"메시지\" /><span style=\"font-size: 11px; background-color: #fe7900; line-height: 22px; padding: 5px 4px 3px 4px;margin-left: -1px;\">" + result.message + "</span><img src=\"/content/images/common/notice_right.gif\" alt=\"메시지\" />");
-                }
-            }
-            Ajax.AjaxResponseModelService(this, "/profile/GetNoticeCnt", {}, onSuccess);
-        }
-        //팔로우 기능 (atricle 디테일 페이지)
-        function SetFollowUser(val) {
-            if (!loginPop("@ViewBag.LogOnChk")) {
-
-                var data = {
-                    memberNo: val
-                }
-                var onSuccess = function (result) {
-                    if (result.Result == 1) {
-                        $("#userFollow").addClass("on");
-                    }
-                    else {
-                        $("#userFollow").removeClass("on");
-                    }
-                }
-
-                Ajax.AjaxResponseModelService(this, "/profile/SetFollow", data, onSuccess);
-            }
-        }
-
-        //팔로우 기능(다른사람 프로필 페이지 상단 우측)
-        function SetFollowUser2(val) {
-            if (!loginPop("@ViewBag.LogOnChk")) {
-
-                var data = {
-                    memberNo: val
-                }
-                var onSuccess = function (result) {
-                    if (result.Result == 1) {
-                        //$("#userFollow").addClass("on");
-                        $("#userFollow").removeClass();
-                        $("#userFollow").addClass("flwing");
-                        $("#follower").find(".cnt").text(parseInt($("#follower").find(".cnt").text(), 10) + 1);
-                    }
-                    else {
-                        //$("#userFollow").removeClass("on");
-                        $("#userFollow").removeClass();
-                        $("#userFollow").addClass("flw");
-                        $("#follower").find(".cnt").text(parseInt($("#follower").find(".cnt").text(), 10) - 1);
-                    }
-                }
-
-                Ajax.AjaxResponseModelService(this, "/profile/SetFollow", data, onSuccess);
-            }
-        }
-
-        //팔로잉 기능(팔로잉, 팔로워 페이지)
-        SetFollowInFollowPage = function (val, name) {
-            if (!loginPop("@ViewBag.LogOnChk")) {
-                var data = {
-                    memberNo: val
-                }
-                var onSuccess = function (result) {
-                    if (result.Result == 1) {
-                        $("#btnFollow_" + name).attr("src", "/content/images/common/btn/btn_following.png");
-                        if ("@ViewBag.CheckSelf" == "1") {
-                            $("#following").find(".cnt").text(parseInt($("#following").find(".cnt").text(), 10) + 1);
-                        }
-                    }
-                    else {
-                        $("#btnFollow_" + name).attr("src", "/content/images/common/btn/btn_follow.png");
-                        if ("@ViewBag.CheckSelf" == "1") {
-                            $("#following").find(".cnt").text(parseInt($("#following").find(".cnt").text(), 10) - 1);
-                        }
-                    }
-                }
-
-                Ajax.AjaxResponseModelService(this, "/profile/SetFollow", data, onSuccess);
-            }
-        }
-
-        //좋아요 기능
-        function SetLikes(val, loginChk) {
-            if (!loginPop(loginChk)) {
-                var onSuccess = function (result) {
-                    if (result.Result == 0) {
-                        $("#likeChk_" + val).text(parseInt($("#likeChk_" + val).text()) - 1);
-                        $("#likeChk_" + val).removeClass("on");
-                        if ("@ViewBag.CheckSelf" == "1") {
-                            $("#likes").find(".cnt").text(parseInt($("#likes").find(".cnt").text(), 10) - 1);
-                        }
-                    }
-                    else {
-                        $("#likeChk_" + val).text(parseInt($("#likeChk_" + val).text()) + 1);
-                        $("#likeChk_" + val).addClass("on");
-                        if ("@ViewBag.CheckSelf" == "1") {
-                            $("#likes").find(".cnt").text(parseInt($("#likes").find(".cnt").text(), 10) + 1);
-                        }
-                    }
-                    count = 0;
-                }
-                Ajax.AjaxResponseModelService(this, "/design/SetLikes", { articleNo: val }, onSuccess);
-            }
-            else {
-                count = 0;
-            }
-        }
-
-        function GoProfile() {
-            location.href = "/profile";
-        }
-
-        function GoGlobleSite(globleType) {
-            setCookie("GlobalFlag", "EN", null, "/", ".makersn.com");
-
-            if (globleType == "EN") {
-                $('input:radio[name=optSiteLang]:input[value=1]').attr("checked", true);
-
-                location.href = "@ViewBag.TargetDomain/?gl=EN";
-            }
-            if (globleType == "KR") {
-                $('input:radio[name=optSiteLang]:input[value=2]').attr("checked", true);
-                alert("@ViewBag.CurrentDomain/?gl=@strTemp");
-                location.href = "@ViewBag.CurrentDomain/?gl=KR";
-            }
-        }
-
-        function GloblePosts(globleType) {
-
-            setCookie("GlobalFlag", globleType, null, "/", ".makersn.com");
-
-            location.href = "/?gl=" + globleType;
-        }
-
-        function GoMain() {
-            location.href = "/";
-        }
-
-        function GoPageFromTop(gubun) {
-            $("#hfGubun").val(gubun);
-            var $form_data = $("#topForm").serialize();
-
-            $("#topForm").submit();
-        }
-
-        function CleanUp() {
-            var onSuccess = function (result) {
-                if (result.Success) { alert(result.Message); }
-            }
-
-            Ajax.AjaxResponseModelService(this, "/cleanup", {}, onSuccess);
-        }
-
-        $(function () {
-
-            ////get
-            //var scrollCookie = $.cookie('scroll_loc' + window.location.href);
-
-            //if (scrollCookie != undefined) {
-            //    $(window).scrollTop(scrollCookie);
-            //}
-            ////set
-            //$(window).scroll(function () {
-            //    $.cookie('scroll_loc', $(this).scrollTop());
-            //});
-
-            $("#ArticleUpload").click(function (e) {
-                if (loginPop("@ViewBag.LogOnChk")) return false;
-                $(location).attr("href", "/design/Upload");
-            });
-
-            $("#facebook_login").click(function () {
-                alert("현재 클로즈 베타 테스트 중으로 \n초대를 통해서만 이용할 수 있습니다.");
-                return false;
-
-                //var $form_data = $("#facebook_form").serialize();
-                //var options = {
-                //    beforeSend: function () {
-                //        //alert("here");
-                //    },
-                //    uploadProgress: function (event, position, total, percentComplete) {
-                //    },
-                //    success: function (response) {
-                //        if (response.Success) {
-                //            console.log(response);
-                //        }
-                //        else {
-                //            alert(response.Message);
-                //        }
-                //    },
-                //    complete: function (response) {
-                //    },
-                //    error: function () {
-                //    }
-                //};
-
-                //$('#facebook_form').ajaxForm(options).submit();
-            });
-
-
-            if ("@ViewBag.Gubun" == "") { $("#@ViewBag.CodeNo").addClass("on"); }
-
-            $('body').append('<a href="#" class="back-to-top"></a>');
-
-            $(window).scroll(function () {
-                if ($(this).scrollTop() > 250) {
-                    $('.back-to-top').fadeIn(100);
-
-                    if ($(window).scrollTop() + $(window).height() > $(document).height() - 180) {
-
-                        var marginBottom = 180 - ($(document).height() - $(window).scrollTop() - $(window).height());
-                        $(".back-to-top").css("margin-bottom", marginBottom + "px");
-
-                    } else {
-                        $(".back-to-top").css("margin-bottom", "0px");
-                    }
-                } else {
-                    $('.back-to-top').fadeOut(100);
-                }
-            });
-
-            $('.back-to-top').click(function (event) {
-                event.preventDefault();
-                $('html, body').animate({ scrollTop: 0 }, 500);
-            })
-
-            //사이트 게시글 클릭 하위 메뉴 보여짐
-            $(".value.site").click(function () {
-                $(this).parent().find('ul').toggle();
-                return false;
-            });
-
-            //사이트 게시글 클릭 하위 메뉴 보여짐
-            $(".value.posts").click(function () {
-                $(this).parent().find('ul').toggle();
-                return false;
-            });
-
-            //다른데 클릭 하면 숨김
-            $(document).on('click', function (e) {
-                $('.valueLi').hide();
-            });
-        });
-
-
-        //notice_getCookie, setCookie, betaPopup, closeWin 베타 관련 팝업
-        function notice_getCookie(name) {
-            var nameOfCookie = name + "=";
-            var x = 0;
-            while (x <= document.cookie.length) {
-                var y = (x + nameOfCookie.length);
-                if (document.cookie.substring(x, y) == nameOfCookie) {
-                    if ((endOfCookie = document.cookie.indexOf(";", y)) == -1)
-                        endOfCookie = document.cookie.length;
-                    return unescape(document.cookie.substring(y, endOfCookie));
-                }
-                x = document.cookie.indexOf(" ", x) + 1;
-                if (x == 0) break;
-            }
-            return "";
-        }
-
-        function betaPopup() {
-            if (notice_getCookie("new1") != "done") {
-                //var popUrl = "/main/betaPop";	//팝업창에 출력될 페이지 URL
-                //var popOption = "width=600, height=300, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
-                //window.open(popUrl, "", popOption);
-                $("#betaPopup").show();
-            }
-        }
-
-        function setCookie2(name, value, expiredays) {
-            var todayDate = new Date();
-            todayDate.setDate(todayDate.getDate() + expiredays);
-            document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";"
-        }
-
-        function closeWin() {
-            setCookie2("new1", "done", 1);
-            $("#betaPopup").hide();
-        }
-
-        function closeBetaPop() {
-            $("#betaPopup").hide();
-        }
-
-    </script>
-
-    <script type="text/javascript">
-        // 쿠키 생성 setCookie("Aname","연수아빠",null,"/",".qna.pe.kr");
-        function setCookie(name, value, expires, path, domain, secure) {
-            document.cookie = name + "=" + escape(value) +
-              ((expires) ? "; expires=" + expires.toGMTString() : "") +
-              ((path) ? "; path=" + path : "") +
-              ((domain) ? "; domain=" + domain : "") +
-              ((secure) ? "; secure" : "");
-        }
-
-        // 쿠키 가져오기
-        function getCookie(cName) {
-            cName = cName + '=';
-            var cookieData = document.cookie;
-            var start = cookieData.indexOf(cName);
-            var cValue = '';
-            if (start != -1) {
-                start += cName.length;
-                var end = cookieData.indexOf(';', start);
-                if (end == -1) end = cookieData.length;
-                cValue = cookieData.substring(start, end);
-            }
-            return unescape(cValue);
-        }
 
     </script>
 </body>

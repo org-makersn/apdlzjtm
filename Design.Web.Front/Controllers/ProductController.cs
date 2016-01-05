@@ -1,6 +1,7 @@
 ﻿using Design.Web.Front.Helper;
 using Design.Web.Front.Models;
 using Library.ObjParser;
+using Makers.Common.Define;
 using Makers.Common.Helper;
 using Makersn.BizDac;
 using Makersn.Models;
@@ -118,7 +119,7 @@ namespace Design.Web.Front.Controllers
                                 _storeProduct.RegId = Profile.UserId;
                                 
                                 IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
-                                productNo = new StoreProductBiz().add(_storeProduct);
+                                productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
 
                                 response.Success = true;
                                 response.Result = productNo.ToString();
@@ -128,12 +129,12 @@ namespace Design.Web.Front.Controllers
                             }
                             else
                             {
-                                response.Message = "stl, obj 형식 파일만 가능합니다.";
+                                response.Message = Constant.Product.STL_FileUpload_Validate_Ext_Msg;
                             }
                         }
                         else
                         {
-                            response.Message = "최대 사이즈 100MB 파일만 가능합니다.";
+                            response.Message = Constant.Product.STL_FileUpload_Max_Size__Msg;
                         }
                     }
                 }
@@ -141,27 +142,59 @@ namespace Design.Web.Front.Controllers
 
             return Json(new { Success = response.Success, Message = response.Message, Result = response.Result, Count = uploadCnt, ProductNo = productNo }, JsonRequestBehavior.AllowGet);
         }
-        #endregion
 
-        #region 제품 관련
         /// <summary>
-        /// 
+        /// 제품 관련
         /// </summary>
         /// <param name="productNo"></param>
         /// <returns></returns>
         public ActionResult Models(int no)
         {
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
-            ViewBag.ProductEntity = storeProduct;
-            ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
-            return View();
 
+            ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
+            return View(storeProduct);
+        }
+
+        /// <summary>
+        /// modify
+        /// </summary>
+        /// <param name="productNo"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult Models(int productNo, string productName, int categoryNo, string content, string description, string tagName, string videoUrl)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+
+            StoreProductT product = new StoreProductBiz().getStoreProductById(productNo);
+            if (product != null)
+            {
+                product.ProductName = productName;
+                product.CategoryNo = categoryNo;
+                product.Content = content;
+                product.Description = description;
+                product.TagName = tagName;
+                product.VideoUrl = videoUrl;
+                product.VideoType = "";
+
+                int ret = new StoreProductBiz().setStoreProduct(product);
+                if (ret > 0)
+                {
+                    response.Success = true;
+                }
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
         #region 좋아요 관련
-        //
-        // 좋아요 CREATE / DELETE (상품번호)
+        
+        /// <summary>
+        /// 좋아요 CREATE / DELETE (상품번호)
+        /// </summary>
+        /// <param name="productNo"></param>
+        /// <returns></returns>
         public JsonResult SetLikes(int productNo = 2)
         {
             int result = 0;

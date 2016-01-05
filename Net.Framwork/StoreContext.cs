@@ -41,8 +41,6 @@ namespace Net.Framework
         public DbSet<StoreCategoryT> StoreCategoryT { get; set; }
         public DbSet<StorePrinterMaterialT> StorePrinterMaterialT { get; set; }
 		public DbSet<MemberMsgT> MemberMsgT { get; set; }
-        
-        //public DbSet<DetailT> DetailT { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -60,16 +58,6 @@ namespace Net.Framework
             //        });
             //    bp.ToTable("Member");
             //});
-
-            //modelBuilder.Entity<MemberT>().Map(bp =>
-            //{
-            //    bp.Properties(
-            //        p => new
-            //        {
-            //            p.PhoneNumber
-            //        });
-            //    bp.ToTable("Detail");
-            //}).Property(e => e.PhoneNumber).HasColumnName("Phone_Number");
 
 
         }

@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Define\Constant.cs" />
     <Compile Include="Filter\CryptFilter.cs" />
     <Compile Include="Filter\HtmlFilter.cs" />
     <Compile Include="Filter\Md5Encrypt.cs" />

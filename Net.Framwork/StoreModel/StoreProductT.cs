@@ -47,7 +47,7 @@ namespace Net.Framework.StoreModel
         public virtual string VideoType { get; set; }
         [Column("CATEGORY_NO")]
         public virtual int CategoryNo { get; set; } //exerd 확인
-        [Column("CONTENT")]
+        [Column("CONTENT", TypeName = "text")]
         public virtual string Content { get; set; }
         [Column("DESCRIPTION")]
         public virtual string Description { get; set; }

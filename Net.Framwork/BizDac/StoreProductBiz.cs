@@ -9,23 +9,52 @@ namespace Net.Framwork.BizDac
 {
     public class StoreProductBiz
     {
+        /// <summary>
+        /// 조회
+        /// </summary>
+        /// <returns></returns>
         public List<StoreProductT> getAllStoreProduct() {
             return new StoreProductDac().SelectAllStoreProduct();
         }
+
+        /// <summary>
+        /// 조회
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
         public StoreProductT getStoreProductById (int no){
             return new StoreProductDac().SelectStoreProductTById(no);
         }
-        public long add(StoreProductT StoreProduct)
+
+        /// <summary>
+        /// 등록
+        /// </summary>
+        /// <param name="StoreProduct"></param>
+        /// <returns></returns>
+        public long addStoreProduct(StoreProductT StoreProduct)
         {
             return new StoreProductDac().InsertStoreProduct(StoreProduct);
         }
-        public int upd(StoreProductT StoreProduct)
+
+        /// <summary>
+        /// 수정
+        /// </summary>
+        /// <param name="StoreProduct"></param>
+        /// <returns></returns>
+        public int setStoreProduct(StoreProductT StoreProduct)
         {
             return new StoreProductDac().UpdateStoreProduct(StoreProduct);
         }
-        public List<StoreProductT> searchProductWithCertification(int certificateStatus , string query){
-            return new StoreProductDac().SelectProductWithCertification(certificateStatus, query);
 
+        /// <summary>
+        /// 조회
+        /// </summary>
+        /// <param name="certificateStatus"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public List<StoreProductT> searchProductWithCertification(int certificateStatus , string query)
+        {
+            return new StoreProductDac().SelectProductWithCertification(certificateStatus, query);
         }
 
     }
