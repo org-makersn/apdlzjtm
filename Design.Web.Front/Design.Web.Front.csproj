@@ -686,9 +686,10 @@
     <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
-    <Content Include="Views\Product\ProductUpload.cshtml" />
-    <Content Include="Views\Product\ProductUploadDetail.cshtml" />
-    <Content Include="Views\Store\Cart.cshtml" />
+    <Content Include="Views\Product\Models.cshtml" />
+    <Content Include="Views\Shared\_Store_Layout.cshtml" />
+    <Content Include="Views\Store\Cart.cshtml" />        
+    <Content Include="Views\Product\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

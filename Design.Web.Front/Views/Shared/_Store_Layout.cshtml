@@ -1,0 +1,958 @@
+﻿@{
+    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+
+    string strLangFlagName = "";
+    string strTemp = "";
+
+    if (Request.Cookies["GlobalFlag"] != null)
+    {
+        strTemp = Request.Cookies["GlobalFlag"].Value;
+    }
+
+    if (strTemp == "")
+    {
+        HttpCookie cookie = new HttpCookie("GlobalFlag");
+        cookie.Domain = ".makersn.com";
+        if (Request["gl"] != null)
+        {
+            cookie.Value = Request["gl"].ToString();
+            strTemp = Request["gl"].ToString();
+        }
+        else
+        {
+            cookie.Value = "KR";
+            strTemp = "KR";
+        }
+
+        this.Response.Cookies.Add(cookie);
+    }
+
+    switch (strTemp)
+    {
+        case "EN": strLangFlagName = "English"; break;
+        case "KR": strLangFlagName = "한국어"; break;
+        default: strLangFlagName = "모든언어"; break;
+    }
+}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+
+    <meta name="title" content="makersN, 메이커스앤">
+    <meta name="description" content="메이커스앤은 메이커들의 플랫폼이에요. 원하는 3D 모델을 찾고, 만들고, 나눌 수 있어요. 메이커스앤을 통해 당신의 상상을 현실로 만들어보세요!">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="image_src" href="/Contents/images/common/makers logo.png" />
+    <meta charset="utf-8" />
+    @*<meta content="@Url.VersionedContent("~/favicon.ico")" itemprop="image">*@
+    @RenderSection("head", required: false)
+
+
+    <title>@ViewBag.Title</title>
+    <link rel="shortcut icon" type="image/x-icon" href="@Url.VersionedContent("~/favicon.ico")">
+
+    <link href="@Url.VersionedContent("~/Content/css/common.css")" rel="stylesheet" media="all" />
+    <link href="@Url.VersionedContent("~/Content/css/PagedList.css")" rel="stylesheet" />
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/prettyprint")
+    <style type="text/css">
+        .pagination-container {
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body data-ng-app="main" data-ng-controller="RootController" onload="betaPopup()">
+    <!-- Wrap -->
+    <div class="wrap @ViewBag.WrapClass">
+
+        <!-- Header -->
+        <div class="header">
+
+            <!-- HeaderTop -->
+            <div class="headerTop">
+                <div class="headerBox">
+                    <!-- H1 -->
+                    <h1><a href="javascript:GoMain()">
+                        <img src="@Url.Content("~/Content/images/common/h1_logo.gif")" alt="MakersN Make & Share!" /></a></h1>
+                    <!-- //H1 -->
+
+                    <!-- MainMenu -->
+                    <ul class="mainMenu">
+                        <li><a href="/" class="on">디자인</a></li>
+                        <li><a href="/Printing">프린팅(beta)</a></li>
+                    </ul>
+                    <!-- //MainMenu -->
+
+                    <!-- rightZone -->
+
+                    <div class="rightZone">
+
+                        <!-- SearchArea -->
+                        <div class="searchArea">
+                            <input type="text" id="searchTxt" name="searchTxt" value="@ViewBag.Text" />
+                            <button title="검색" id="btnSearch" class="_search_btn"></button>
+                            @*</form>*@
+                            <p class="line"></p>
+                        </div>
+                        <!-- //SearchArea -->
+
+                        @if (ViewBag.SpotChk != null)
+                        {
+                            <a href="/order/mnghome" class="printingSpot_btn" title="스팟관리"></a>
+                        }
+
+                        <!-- MemberArea -->
+                        <a href="javascript:quickChkPopup()" class="memberArea" title="내 프로필">
+                            @{if (profile.UserProfilePic == "")
+                              {
+                                  profile.UserProfilePic = "/Content/images/common/profile_photo2.png";
+                              }
+                              else
+                              {
+                                  profile.UserProfilePic = ViewBag.ProfileImgUrl + profile.UserProfilePic;
+                              }
+                              switch ((int)ViewBag.LogOnChk)
+                              {
+                                  case 0:
+                                <img src="@Url.Content("~/Content/images/common/btn/btn_login.gif")" alt="Login" id="topProfileImg" />
+                                      break;
+
+                                  default:
+                                <img src="@profile.UserProfilePic" style="width:100%;height:100%" alt="Login"id="topProfileImg" />
+                                      break;
+                              }
+                            }
+                        </a>
+
+                        <a href="#" class="printing_btn" id="showTop" onclick="chkPopup();" title="알림/메시지/내주문/로그아웃">
+                            @if (ViewBag.NoticeCnt + ViewBag.MessageCnt > 0)
+                            {
+                                <img class="new" alt="NEW" id="showTopNew" src="/content/images/common/ico/ico_new_d.png">
+                            }
+                        </a>
+
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                        }
+                        <!-- //MemberArea -->
+                        <div class="en">
+                            <img src="@Url.Content("~/Content/images/common/btn/btn_en.gif")" style="cursor:pointer" onclick="GoGlobleSite('EN')" alt="EN" />
+                        </div>
+                    </div>
+                    <!-- rightZone -->
+
+                </div>
+                <!-- //headerBox -->
+            </div>
+            <!-- //HeaderTop -->
+            <!-- GnbArea -->
+            @*구분 안보이기 임시방편*@
+            @if (ViewBag.ContClass == null)
+            {
+                <div class="gnbArea @ViewBag.Class">
+                    <div class="gnbBox">
+                        <ul class="nav">
+                            @if (ViewBag.InfoList != null)
+                            {
+                                IList<CodeModel> infoList = (IList<CodeModel>)ViewBag.InfoList;
+                                foreach (CodeModel code in infoList)
+                                {
+                                <li id="@code.MenuValue"><a href="@code.MenuUrl">@code.MenuTitle</a></li>
+                                }
+                            }
+                            else
+                            {
+                                foreach (CodeModel menu in ViewBag.MenuList)
+                                {
+                                <li id="@menu.MenuCodeNo"><a href="@menu.MenuUrl">@menu.MenuTitle</a></li>
+                                }
+                            }
+                        </ul>
+
+                        <div class="uploadArea">
+                            <ul class="btnSet">
+
+                                @RenderSection("editBtnzone", required: false)
+                                <li>
+                                    <a href="javascript:void(0);" title="업로드" id="ArticleUpload" class="upload">업로드</a>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+            <!-- //GnbArea -->
+
+        </div>
+        <!-- //Header -->
+        @RenderSection("designMian", required: false)
+        <!-- contWrap -->
+        <div class="contWrap @ViewBag.ContClass">
+            @RenderBody()
+        </div>
+        <!-- //contWrap -->
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footerList">
+                <ul class="footMenu">
+                    <li data-ng-class="{active : activeViewPath==='/about'}"><a href='/Info/about'>소개</a></li>
+                    @*<li data-ng-class="{active : activeViewPath==='/blog'}"><a href="/Info/blog">블로그</a></li>*@
+                    <li data-ng-class="{active : activeViewPath==='/customer'}"><a href="/Info/customer">고객센터</a></li>
+                    <li data-ng-class="{active : activeViewPath==='/notice'}"><a href="/Info/notice">공지사항</a></li>
+                    <li data-ng-class="{active : activeViewPath==='/license'}"><a href="/Info/license">라이센스</a></li>
+                    <li data-ng-class="{active : activeViewPath==='/terms'}"><a href="/Info/terms">약관</a></li>
+                    <li data-ng-class="{active : activeViewPath==='/privacy'}"><a href="/Info/privacy">개인정보취급방침</a></li>
+                </ul>
+
+                <div class="langSite">
+                    <div class="optLang">
+                        <p class="value site">
+                            사이트 :
+                            <label id="langSiteNm">한국어</label>
+                        </p>
+                        <ul class="valueLi" style="display: none;">
+                            <li id="optSiteBank_1">
+                                <input type="radio" id="selSiteBank_1" name="optSiteLang" value="1" /><label for="optLang_1" onclick="GoGlobleSite('KR')">한국어</label></li>
+                            <li id="optSiteBank_2">
+                                <input type="radio" id="selSiteBank_2" name="optSiteLang" value="2" /><label for="optLang_2" onclick="GoGlobleSite('EN')">English</label></li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="langSite post">
+                    <div class="optLang">
+                        <p class="value posts">
+                            게시물 :
+                            <label id="langPostsNm">@strLangFlagName</label>
+                        </p>
+                        <input type="hidden" id="hddSelectLangFlag" />
+                        <ul class="valueLi" style="display: none;">
+                            <li id="optBank_1">
+                                <input type="radio" id="selBank_1" name="optLang" value="1" /><label for="optLang_1" onclick="GloblePosts('ALL')">모든 언어</label></li>
+                            <li id="optBank_2">
+                                <input type="radio" id="selBank_2" name="optLang" value="2" /><label for="optLang_1" onclick="GloblePosts('KR')">한국어</label></li>
+                            <li id="optBank_3">
+                                <input type="radio" id="selBank_3" name="optLang" value="3" /><label for="optLang_2" onclick="GloblePosts('EN')">English</label></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <ul class="footSns">
+                    <li><a href="https://www.facebook.com/makersn" target="_blank">
+                        <img src="@Url.Content("~/Content/images/common/foot_sns1.gif")" alt="facebook" /></a></li>
+                </ul>
+                <div class="copyRight">
+                    <p>© makers corp. All right reserved.</p>
+                </div>
+            </div>
+
+        </div>
+        <!-- //Footer -->
+    </div>
+    <!-- //Wrap -->
+
+    <!-- 로그인팝업 -->
+    <div class="popupArea loginBox">
+        <div class="bgArea">
+        </div>
+        <div class="popBox">
+
+            <!-- Login Wrap -->
+            <div class="loginWrap bg3">
+                <div class="loginHeader">
+                    <p class="headerLogo">
+                        <img src="/content/images/common/login_tit1.png" alt="로그인" />
+                    </p>
+                    <p class="headerBtn">
+                        <a href="#" onclick="joinGo();">
+                            <img src="/content/images/common/btn/btn_join.png" alt="회원가입" /></a>
+                    </p>
+                </div>
+                <div class="loginBox">
+                    <div class="loinStep01">
+                        <form id="login_form" name="login_form" method="post" action="/Account/LogOn">
+                            <input type="hidden" name="returnUrl" id="returnUrl" value="">
+                            <ul class="keyDown">
+                                @*<li>
+								<span>이메일</span>
+								<div class="inputBox"><input type="text" name="m_id" placeholder="example@example.com" /></div>
+							</li>
+							<li>
+								<span>비밀번호</span>
+								<div class="inputBox"><input type="password" name="password" placeholder="최소 6자리 이상" /></div>
+							</li>*@
+                                <li>
+                                    <span>이메일</span>
+                                    <div class="inputBox">
+                                        <input type="text" name="UserId" id="UserId" placeholder="example@example.com" />
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>비밀번호</span>
+                                    <div class="inputBox">
+                                        <input type="password" name="Password" id="Password" placeholder="최소 6자리 이상" />
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="loginGoing">
+                                <span>
+                                    <input type="checkbox" title="로그인 유지" id="login" checked="checked" /><label for="login"> 로그인 상태 유지하기</label></span>
+                                <button type="button" onclick="pwSearch();">비밀번호 찾기</button>
+                            </div>
+                        </form>
+                        <p class="loginBtn">
+                            <button type="button" class="settingBtn" title="로그인" id="login_submit">로그인</button>
+                        </p>
+                        @Html.Action("ExternalLoginsList", "Account", new { ReturnUrl = ViewBag.ReturnUrl })
+                        <p class="pop_beta" style="font-size:15px">
+                            현재 프린팅 서비스는 '클로즈 베타 테스트' 중으로
+초대를 통해서만 이용할 수 있습니다.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            <!-- // Login Wrap -->
+
+        </div>
+    </div>
+    <!-- // 로그인팝업 -->
+
+    <!-- 비밀번호 찾기팝업 -->
+    <div class="popupArea pwSearch">
+        <div class="bgArea">
+        </div>
+        <div class="popBox">
+            <div class="pwWrap bg3">
+                <div class="loginBox">
+                    <p class="pwTit">
+                        <img src="/content/images/common/pwfind_tit.png" alt="비밀번호 찾기" />
+                    </p>
+                    <p class="pwInfo">
+                        가입시 등록하신 이메일 주소를 입력하시면<br />
+                        임시 비밀번호를 보내드립니다.
+                    </p>
+                    <div class="loinStep02">
+                        <form id="find_form" name="find_form" method="post">
+                            <ul class="keyDown">
+                                <li>
+                                    <span>이메일</span>
+                                    <div class="inputBox">
+                                        <input type="text" name="TemporaryEmail" id="TemporaryEmail" placeholder="example@example.com" />
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                        <p class="pwfSend">
+                            <button type="button" onclick="TemporaryPw();" title="임시 비밀번호 발송">임시 비밀번호 발송</button>
+                        </p>
+                        <div class="loginGo">
+                            <button type="button" onclick="loginPop(0);" title="로그인 창으로 돌아가기">로그인 창으로 돌아가기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // 비밀번호 찾기팝업 -->
+
+    <!-- 비밀번호 전송팝업 -->
+    <div class="popupArea pwSend">
+        <div class="bgArea">
+        </div>
+        <div class="popBox">
+            <div class="pwWrap bg3">
+                <div class="loginBox">
+                    <p class="pwsImg">
+                        <img src="/content/images/common/pwsend_img1.png" alt="비밀번호 발송" />
+                    </p>
+                    <p class="sendInfo">
+                        등록하신 이메일 주소로
+                        <br />
+                        임시 비밀번호가 발송되었습니다.<br />
+                        임시 비밀번호로 로그인하신 후에<br />
+                        반드시 새 비밀번호로 변경해주세요.
+                    </p>
+                    <div class="loinStep03">
+                        <div class="loginGo">
+                            <button type="button" onclick="loginPop(0);" title="로그인 창으로 돌아가기">로그인 창으로 돌아가기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- // 비밀번호 전송팝업 -->
+
+
+    <!-- 회원가입 팝업 -->
+    <div class="popupArea join">
+        <div class="bgArea">
+        </div>
+        <div class="popBox">
+
+            <!-- joinWrap -->
+            <div class="joinWrap bg1">
+                <div class="loginHeader">
+                    <p class="headerLogo">
+                        <img src="/content/images/common/login_logo.png" alt="makersN" />
+                    </p>
+                    <p class="headerBtn">
+                        <a href="#" onclick="loginPop(0);">
+                            <img src="/content/images/common/btn/btn_login_pop.png" alt="로그인" /></a>
+                    </p>
+                </div>
+                <div class="headerText">
+                    <p class="txt1">퇴근 후 아이와 함께 놀아줄 장난감을 프린팅했어요.</p>
+                    <p class="txt2">메이커스앤에서는 누구나 3D 디자인을 무료로 다운로드 할 수 있어요!</p>
+                </div>
+                <div class="joinStep01">
+                    <form id="join_form" name="join_form" method="post" action="/Account/JoinOn">
+                        <input type="hidden" name="ReturnUrl" id="joinReturnUrl" value="">
+                        <ul class="keyDown">
+                            <li>
+                                <span>사용자 이름</span>
+                                <div class="inputBox">
+                                    <input type="text" id="JoinName" name="JoinName" placeholder="이름 또는 닉네임" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>이메일</span>
+                                <div class="inputBox">
+                                    <input type="text" id="JoinEmail" name="JoinEmail" placeholder="example@example.com" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>비밀번호</span>
+                                <div class="inputBox">
+                                    <input type="password" id="JoinPassword" name="JoinPassword" placeholder="최소 6자 이상" />
+                                </div>
+                            </li>
+                            <li>
+                                <span>비밀번호 확인</span>
+                                <div class="inputBox">
+                                    <input type="password" id="JoinRePassword" name="JoinRePassword" placeholder="최소 6자 이상" />
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
+
+                    <p class="joinBtn">
+                        <button type="button" title="회원가입" id="join_submit">회원 가입</button>
+                    </p>
+                    @Html.Action("ExternalJoins", "Account", new { ReturnUrl = ViewBag.ReturnUrl })
+                    <p class="agreeGo"><a href="/Info/terms">이용 약관 보기</a></p>
+                </div>
+            </div>
+            <!-- // joinWrap -->
+
+        </div>
+    </div>
+    <!-- // 회원가입 팝업 -->
+
+    <!-- 회원가입 완료 -->
+    <div class="popupArea joinComplete">
+        <div class="bgArea">
+        </div>
+        <div class="popBox">
+
+            <!-- joinWrap -->
+            <div class="joinWrap bg1">
+                <p class="joinTxt1">
+                    <img src="/content/images/common/joinfinish_txt1.png" alt="회원가입이 성공적으로 완료되었습니다.  메이커스앤 회원이 되신 것을 축하합니다." />
+                </p>
+                <div class="joinStep02">
+                    <p class="homeBtn">
+                        <button type="button" onclick="go_url('main.html');" title="홈으로 이동">홈으로 이동</button>
+                    </p>
+                    <p class="profileBtn">
+                        <button type="button" onclick="go_url('my_profile.html');" title="내 프로필 페이지로 이동">내 프로필 페이지로 이동</button>
+                    </p>
+                </div>
+            </div>
+            <!-- // joinWrap -->
+
+        </div>
+    </div>
+    <!-- // 회원가입 완료 -->
+
+    <!-- 로그인 후 마이페지 -->
+    <form id="topForm" action="/profile" method="post">
+        <input type="hidden" id="hfGubun" name="gubun" />
+        <div class="topMypage">
+            <ul>
+                @*<li><a href="javascript:GoProfile()" id="profileMyPage">My page</a></li>*@
+                <li>
+                    <a href="javascript:GoPageFromTop('N')" id="profileNotice">알림</a>
+                </li>
+                <li>
+                    <a href="javascript:GoPageFromTop('message')" id="messageCnt">메시지</a>
+                </li>
+                <li>
+                    <a href="/order/myorder">내 주문</a>
+                </li>
+                @*<li><a href="javascript:GoPageFromTop('S')">Setting</a></li>*@
+                @*@if (profile.UserLevel > 50)
+                {
+                    <li><a href="javascript:CleanUp()">공간정리</a></li>
+                }*@
+                <li><a href="javascript:LogOff();">로그아웃</a></li>
+            </ul>
+            @*<ul>
+                <li onclick="javascript:GoProfile()"><a href="#" id="profileMyPage">마이 페이지</a></li>
+                <li onclick="javascript:GoPageFromTop('N')">
+                    <a href="#" id="profileNotice">알림</a>
+                </li>
+                <li onclick="javascript:GoPageFromTop('S')"><a href="#">설정</a></li>
+                @if (profile.UserLevel > 50)
+                {
+                    <li onclick="javascript:CleanUp()"><a href="#">공간정리</a></li>
+                }
+                <li onclick="javascript:LogOff();"><a href="#">로그아웃</a></li>
+            </ul>*@
+        </div>
+    </form>
+    <!-- //로그인 후 마이페지 -->
+
+    <!-- 베타 팝업 -->
+    <div class="popupArea" id="betaPopup">
+        <div class="bgArea" style="opacity: 0.52; height: 100%;">
+        </div>
+        <div class="popBox5">
+            <div class="pop_wrap4 hAuto">
+                <div class="pop_txt_b">
+                    <span class="pop_img">
+                        <img src="content/images/beta.png"></span><br>
+                    <br>
+                    현재 프린팅 서비스는 '클로즈 베타 테스트' 중으로<br>
+                    초대를 통해서만 이용할 수 있습니다.<br>
+                    테스트 기간 동안의 데이터는 '오픈 베타 서비스' 시작시<br>
+                    삭제되므로 이를 감안해서 이용하시기 바랍니다.<br>
+                    이용 중 불편 및 개선 사항을 고객센터로 보내주시면<br>
+                    우수 의견을 선정해서 소정의 사은품을 보내드립니다.<br>
+                    감사합니다.<br>
+                    <br>
+                </div>
+                <a onclick="closeWin()" style="z-index:300;cursor:pointer" class="no_view">하루동안 보지 않기</a>
+                <a href="javascript:closeBetaPop()" class="pop_close">창 닫기</a>
+            </div>
+        </div>
+    </div>
+    <!-- // 베타 팝업 -->
+
+
+    @*개발자*@
+   @* <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-65149720-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-65173044-1', 'auto');
+        ga('send', 'pageview');
+    </script>*@
+
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/app")
+
+    @*<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.cookie.js")"></script>*@
+
+    @if (ViewBag.IsMain == "N")
+    {
+        <script src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")" type="text/javascript"></script>
+        <script src="@Url.VersionedContent("~/Scripts/jquery.lazyload.js")" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("img.lazy-load").lazyload({ effect: "fadeIn" });
+            });
+        </script>
+    }
+
+    @if (@ViewBag.InfoList != null)
+    {
+        <style type="text/css">
+            .wrap {
+                background: #fff !important;
+            }
+        </style>
+        <script type="text/javascript">
+            $(function () {
+                if ("@ViewBag.InfoList" != "") {
+                    var page = document.location.href;
+                    var indexT = page.lastIndexOf("/");
+                    page = page.substring(indexT + 1);
+                    $("#" + page + "").addClass("on");
+                }
+            });
+        </script>
+    }
+    else
+    {
+        //다른 레이아웃에서 사용할것들
+    }
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        //로그인 아이콘 클릭
+        function chkPopup() {
+            if (loginPop("@ViewBag.LogOnChk")) return false;
+            mypageGo();
+            SetNoticeCnt();
+        }
+
+        function quickChkPopup() {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+                location.href = "/profile";
+            };
+        }
+
+        function SetNoticeCnt() {
+            var onSuccess = function (result) {
+                if (result.notice > 0) {
+                    $("#profileNotice").html("알림 <img src=\"/content/images/common/notice_left.gif\" alt=\"알림\" /><span style=\"font-size: 11px; background-color: #fe7900; line-height: 22px; padding: 5px 4px 3px 4px;margin-left: -1px;\">" + result.notice + "</span><img src=\"/content/images/common/notice_right.gif\" alt=\"알림\" />");
+                    $("#profileMyPage").attr("href", "/profile?gubun=N");
+                }
+                if (result.message > 0) {
+                    $("#messageCnt").html("메시지 <img src=\"/content/images/common/notice_left.gif\" alt=\"메시지\" /><span style=\"font-size: 11px; background-color: #fe7900; line-height: 22px; padding: 5px 4px 3px 4px;margin-left: -1px;\">" + result.message + "</span><img src=\"/content/images/common/notice_right.gif\" alt=\"메시지\" />");
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/profile/GetNoticeCnt", {}, onSuccess);
+        }
+        //팔로우 기능 (atricle 디테일 페이지)
+        function SetFollowUser(val) {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+
+                var data = {
+                    memberNo: val
+                }
+                var onSuccess = function (result) {
+                    if (result.Result == 1) {
+                        $("#userFollow").addClass("on");
+                    }
+                    else {
+                        $("#userFollow").removeClass("on");
+                    }
+                }
+
+                Ajax.AjaxResponseModelService(this, "/profile/SetFollow", data, onSuccess);
+            }
+        }
+
+        //팔로우 기능(다른사람 프로필 페이지 상단 우측)
+        function SetFollowUser2(val) {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+
+                var data = {
+                    memberNo: val
+                }
+                var onSuccess = function (result) {
+                    if (result.Result == 1) {
+                        //$("#userFollow").addClass("on");
+                        $("#userFollow").removeClass();
+                        $("#userFollow").addClass("flwing");
+                        $("#follower").find(".cnt").text(parseInt($("#follower").find(".cnt").text(), 10) + 1);
+                    }
+                    else {
+                        //$("#userFollow").removeClass("on");
+                        $("#userFollow").removeClass();
+                        $("#userFollow").addClass("flw");
+                        $("#follower").find(".cnt").text(parseInt($("#follower").find(".cnt").text(), 10) - 1);
+                    }
+                }
+
+                Ajax.AjaxResponseModelService(this, "/profile/SetFollow", data, onSuccess);
+            }
+        }
+
+        //팔로잉 기능(팔로잉, 팔로워 페이지)
+        SetFollowInFollowPage = function (val, name) {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+                var data = {
+                    memberNo: val
+                }
+                var onSuccess = function (result) {
+                    if (result.Result == 1) {
+                        $("#btnFollow_" + name).attr("src", "/content/images/common/btn/btn_following.png");
+                        if ("@ViewBag.CheckSelf" == "1") {
+                            $("#following").find(".cnt").text(parseInt($("#following").find(".cnt").text(), 10) + 1);
+                        }
+                    }
+                    else {
+                        $("#btnFollow_" + name).attr("src", "/content/images/common/btn/btn_follow.png");
+                        if ("@ViewBag.CheckSelf" == "1") {
+                            $("#following").find(".cnt").text(parseInt($("#following").find(".cnt").text(), 10) - 1);
+                        }
+                    }
+                }
+
+                Ajax.AjaxResponseModelService(this, "/profile/SetFollow", data, onSuccess);
+            }
+        }
+
+        //좋아요 기능
+        function SetLikes(val, loginChk) {
+            if (!loginPop(loginChk)) {
+                var onSuccess = function (result) {
+                    if (result.Result == 0) {
+                        $("#likeChk_" + val).text(parseInt($("#likeChk_" + val).text()) - 1);
+                        $("#likeChk_" + val).removeClass("on");
+                        if ("@ViewBag.CheckSelf" == "1") {
+                            $("#likes").find(".cnt").text(parseInt($("#likes").find(".cnt").text(), 10) - 1);
+                        }
+                    }
+                    else {
+                        $("#likeChk_" + val).text(parseInt($("#likeChk_" + val).text()) + 1);
+                        $("#likeChk_" + val).addClass("on");
+                        if ("@ViewBag.CheckSelf" == "1") {
+                            $("#likes").find(".cnt").text(parseInt($("#likes").find(".cnt").text(), 10) + 1);
+                        }
+                    }
+                    count = 0;
+                }
+                Ajax.AjaxResponseModelService(this, "/design/SetLikes", { articleNo: val }, onSuccess);
+            }
+            else {
+                count = 0;
+            }
+        }
+
+        function GoProfile() {
+            location.href = "/profile";
+        }
+
+        function GoGlobleSite(globleType) {
+            setCookie("GlobalFlag", "EN", null, "/", ".makersn.com");
+
+            if (globleType == "EN") {
+                $('input:radio[name=optSiteLang]:input[value=1]').attr("checked", true);
+
+                location.href = "@ViewBag.TargetDomain/?gl=EN";
+            }
+            if (globleType == "KR") {
+                $('input:radio[name=optSiteLang]:input[value=2]').attr("checked", true);
+                alert("@ViewBag.CurrentDomain/?gl=@strTemp");
+                location.href = "@ViewBag.CurrentDomain/?gl=KR";
+            }
+        }
+
+        function GloblePosts(globleType) {
+
+            setCookie("GlobalFlag", globleType, null, "/", ".makersn.com");
+
+            location.href = "/?gl=" + globleType;
+        }
+
+        function GoMain() {
+            location.href = "/";
+        }
+
+        function GoPageFromTop(gubun) {
+            $("#hfGubun").val(gubun);
+            var $form_data = $("#topForm").serialize();
+
+            $("#topForm").submit();
+        }
+
+        function CleanUp() {
+            var onSuccess = function (result) {
+                if (result.Success) { alert(result.Message); }
+            }
+
+            Ajax.AjaxResponseModelService(this, "/cleanup", {}, onSuccess);
+        }
+
+        $(function () {
+
+            ////get
+            //var scrollCookie = $.cookie('scroll_loc' + window.location.href);
+
+            //if (scrollCookie != undefined) {
+            //    $(window).scrollTop(scrollCookie);
+            //}
+            ////set
+            //$(window).scroll(function () {
+            //    $.cookie('scroll_loc', $(this).scrollTop());
+            //});
+
+            $("#ArticleUpload").click(function (e) {
+                if (loginPop("@ViewBag.LogOnChk")) return false;
+                $(location).attr("href", "/design/Upload");
+            });
+
+            $("#facebook_login").click(function () {
+                alert("현재 클로즈 베타 테스트 중으로 \n초대를 통해서만 이용할 수 있습니다.");
+                return false;
+
+                //var $form_data = $("#facebook_form").serialize();
+                //var options = {
+                //    beforeSend: function () {
+                //        //alert("here");
+                //    },
+                //    uploadProgress: function (event, position, total, percentComplete) {
+                //    },
+                //    success: function (response) {
+                //        if (response.Success) {
+                //            console.log(response);
+                //        }
+                //        else {
+                //            alert(response.Message);
+                //        }
+                //    },
+                //    complete: function (response) {
+                //    },
+                //    error: function () {
+                //    }
+                //};
+
+                //$('#facebook_form').ajaxForm(options).submit();
+            });
+
+
+            if ("@ViewBag.Gubun" == "") { $("#@ViewBag.CodeNo").addClass("on"); }
+
+            $('body').append('<a href="#" class="back-to-top"></a>');
+
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 250) {
+                    $('.back-to-top').fadeIn(100);
+
+                    if ($(window).scrollTop() + $(window).height() > $(document).height() - 180) {
+
+                        var marginBottom = 180 - ($(document).height() - $(window).scrollTop() - $(window).height());
+                        $(".back-to-top").css("margin-bottom", marginBottom + "px");
+
+                    } else {
+                        $(".back-to-top").css("margin-bottom", "0px");
+                    }
+                } else {
+                    $('.back-to-top').fadeOut(100);
+                }
+            });
+
+            $('.back-to-top').click(function (event) {
+                event.preventDefault();
+                $('html, body').animate({ scrollTop: 0 }, 500);
+            })
+
+            //사이트 게시글 클릭 하위 메뉴 보여짐
+            $(".value.site").click(function () {
+                $(this).parent().find('ul').toggle();
+                return false;
+            });
+
+            //사이트 게시글 클릭 하위 메뉴 보여짐
+            $(".value.posts").click(function () {
+                $(this).parent().find('ul').toggle();
+                return false;
+            });
+
+            //다른데 클릭 하면 숨김
+            $(document).on('click', function (e) {
+                $('.valueLi').hide();
+            });
+        });
+
+
+        //notice_getCookie, setCookie, betaPopup, closeWin 베타 관련 팝업
+        function notice_getCookie(name) {
+            var nameOfCookie = name + "=";
+            var x = 0;
+            while (x <= document.cookie.length) {
+                var y = (x + nameOfCookie.length);
+                if (document.cookie.substring(x, y) == nameOfCookie) {
+                    if ((endOfCookie = document.cookie.indexOf(";", y)) == -1)
+                        endOfCookie = document.cookie.length;
+                    return unescape(document.cookie.substring(y, endOfCookie));
+                }
+                x = document.cookie.indexOf(" ", x) + 1;
+                if (x == 0) break;
+            }
+            return "";
+        }
+
+        function betaPopup() {
+            if (notice_getCookie("new1") != "done") {
+                //var popUrl = "/main/betaPop";	//팝업창에 출력될 페이지 URL
+                //var popOption = "width=600, height=300, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+                //window.open(popUrl, "", popOption);
+                $("#betaPopup").show();
+            }
+        }
+
+        function setCookie2(name, value, expiredays) {
+            var todayDate = new Date();
+            todayDate.setDate(todayDate.getDate() + expiredays);
+            document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+        }
+
+        function closeWin() {
+            setCookie2("new1", "done", 1);
+            $("#betaPopup").hide();
+        }
+
+        function closeBetaPop() {
+            $("#betaPopup").hide();
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        // 쿠키 생성 setCookie("Aname","연수아빠",null,"/",".qna.pe.kr");
+        function setCookie(name, value, expires, path, domain, secure) {
+            document.cookie = name + "=" + escape(value) +
+              ((expires) ? "; expires=" + expires.toGMTString() : "") +
+              ((path) ? "; path=" + path : "") +
+              ((domain) ? "; domain=" + domain : "") +
+              ((secure) ? "; secure" : "");
+        }
+
+        // 쿠키 가져오기
+        function getCookie(cName) {
+            cName = cName + '=';
+            var cookieData = document.cookie;
+            var start = cookieData.indexOf(cName);
+            var cValue = '';
+            if (start != -1) {
+                start += cName.length;
+                var end = cookieData.indexOf(';', start);
+                if (end == -1) end = cookieData.length;
+                cValue = cookieData.substring(start, end);
+            }
+            return unescape(cValue);
+        }
+
+    </script>
+</body>
+
+</html>

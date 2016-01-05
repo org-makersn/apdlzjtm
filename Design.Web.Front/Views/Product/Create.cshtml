@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Store_Layout.cshtml";
+}
+
+<h2>판매</h2>
+
+<!-- uploadWrap -->
+<div class="uploadWrap">
+    <!-- File Upload -->
+    <div class="uploadFile">
+        <!-- 3D 모델링 파일 -->
+        <form id="upload_form" name="upload_form" method="post" enctype="multipart/form-data">
+            <div class="modelFile">
+                <div class="upBtnZone">
+                    <p class="title">3D 모델링 파일</p>
+                    <div class="btnAdd">
+                        <button class="file_input_button" title="파일추가"></button>
+                        <input type="file" class="file_input_hidden" name="product_3d_files" id="product_3d_files" multiple/>
+                        <div class="btnLoading" id="do_uploading" style="display: none;">
+                            <div id="progressbar" style="margin: 0px 0px 16px 0px;"><span style="position: absolute; text-align: center; font-size:large; width: 269px; margin: 7px 0 0 0;">My %</span></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="txt">타입 : stl, obj / 최대 사이즈 : 100mb</p>
+            </div>
+        </form>
+        <!-- //3D 모델링 파일 -->
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#product_3d_files").on("change", function (e) {
+                e.preventDefault();
+                var fileobj = $("#product_3d_files");
+                if (UploadValidExtension("3d", fileobj) === false) {
+                    return false;
+                }
+
+                UploadFile("/Product/StlUpload", fileobj);
+            });
+        });
+
+        //파일 업로드
+        UploadFile = function (action, element) {
+
+            //$("#mode").val("temp");
+            var $form_data = $("#upload_form").serialize();
+            var options = {
+                beforeSend: function () {
+
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    $('.btnLoading').show();
+
+                    $("#progressbar").find("span").text(percentComplete + "%");
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        window.location.href = "/Product/Models/" + response.ProductNo + "#materials";
+                    }
+                },
+                complete: function (response) {
+                    //$(element).val("");
+                    $('#do_uploading').hide();
+                    alert("complate");
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            };
+
+            $('#upload_form').attr("action", action).ajaxForm(options).submit();
+        }
+
+        //파일 확장자 체크
+        UploadValidExtension = function (type, fileobj) {
+            var regex;
+
+            if (fileobj[0].files[0].size > 100 * 1024 * 1024) {
+                alert('최대 사이즈를 초과하였습니다.');
+                return false;
+            }
+
+            if (type == "img") {
+
+                regex = /(.jpg|.jpeg|.gif|.png)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('gif, jpg, png 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else if (type == "3d") {
+                regex = /(.stl|.obj)$/i;
+                if (!regex.test(fileobj.val().toLowerCase())) {
+                    alert('stl, obj 형식 파일만 가능합니다.');
+                    return false;
+                }
+            }
+            else {
+                alert('파일 타입을 확인해주세요.');
+                return false;
+            }
+        }
+    </script>
+}
