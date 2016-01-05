@@ -48,6 +48,7 @@ namespace Net.Framework.StoreModel
         [Column("CATEGORY_NO")]
         public virtual int CategoryNo { get; set; } //exerd 확인
         [Column("CONTENT", TypeName = "text")]
+        [MaxLength]
         public virtual string Content { get; set; }
         [Column("DESCRIPTION")]
         public virtual string Description { get; set; }
