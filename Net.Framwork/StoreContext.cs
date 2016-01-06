@@ -42,24 +42,24 @@ namespace Net.Framework
         public DbSet<StorePrinterMaterialT> StorePrinterMaterialT { get; set; }
 		public DbSet<MemberMsgT> MemberMsgT { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            //modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+        //    //modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
 
-            //modelBuilder.Entity<MemberT>().Map(bp =>
-            //{
-            //    bp.Properties(
-            //        p => new
-            //        {
-            //            p.MemberId,
-            //            p.MemberNm,
-            //            p.AppId,
-            //            p.RegDt
-            //        });
-            //    bp.ToTable("Member");
-            //});
+        //    //modelBuilder.Entity<MemberT>().Map(bp =>
+        //    //{
+        //    //    bp.Properties(
+        //    //        p => new
+        //    //        {
+        //    //            p.MemberId,
+        //    //            p.MemberNm,
+        //    //            p.AppId,
+        //    //            p.RegDt
+        //    //        });
+        //    //    bp.ToTable("Member");
+        //    //});
 
 
-        }
+        //}
     }
 }

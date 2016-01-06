@@ -83,7 +83,7 @@ namespace Design.Web.Front.Controllers
 
             if (member.ProfileMsg != null)
             {
-                member.ProfileMsg = new HtmlFilter().HtmlEncode(member.ProfileMsg);
+                member.ProfileMsg = new HtmlFilter().PunctuationEncode(member.ProfileMsg);
                 member.ProfileMsg = CreateATag(member.ProfileMsg);
             };
             ViewBag.PrinterMember = _printerMemberDac.CheckSpotOpen(memberNo);
@@ -207,7 +207,7 @@ namespace Design.Web.Front.Controllers
 
             MemberT member = _memberDac.GetMemberProfile(memberNo);
 
-            if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlEncode(member.ProfileMsg); };
+            if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().PunctuationEncode(member.ProfileMsg); };
             return PartialView(member);
         }
         #endregion
@@ -329,7 +329,7 @@ namespace Design.Web.Front.Controllers
             string memberNo = Base64Helper.Base64Encode(Profile.UserNo.ToString());
             ViewBag.No = memberNo;
             MemberT member = _memberDac.GetMemberProfile(Profile.UserNo);
-            if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlDecode(member.ProfileMsg); };
+            if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().PunctuationDecode(member.ProfileMsg); };
             return PartialView(member);
         }
         //public ActionResult Setting()
@@ -337,7 +337,7 @@ namespace Design.Web.Front.Controllers
         //    string memberNo = Base64Helper.Base64Encode(Profile.UserNo.ToString());
         //    ViewBag.No = memberNo;
         //    MemberT member = memberDac.GetMemberProfile(Profile.UserNo);
-        //    if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlDecode(member.ProfileMsg); };
+        //    if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().PunctuationDecode(member.ProfileMsg); };
         //    return View(member);
         //}
         #endregion

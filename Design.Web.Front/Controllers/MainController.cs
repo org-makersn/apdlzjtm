@@ -51,7 +51,7 @@ namespace Design.Web.Front.Controllers
 
                 ViewBag.ContClass = "w100";
 
-                if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlEncode(member.ProfileMsg); };
+                if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().PunctuationEncode(member.ProfileMsg); };
 
                 return View("~/Views/profile/index.cshtml", member);
 

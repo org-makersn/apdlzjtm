@@ -49,7 +49,7 @@
         <tr>
             <th>리포트 내용</th>
             <td colspan="3" style="word-break:break-all">
-                @Html.Raw(new HtmlFilter().HtmlEncode(Model.Report))
+                @Html.Raw(new HtmlFilter().PunctuationEncode(Model.Report))
             </td>
         </tr>
     </tbody>

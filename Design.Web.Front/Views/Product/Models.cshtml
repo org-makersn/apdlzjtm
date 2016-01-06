@@ -6,9 +6,12 @@
     Layout = "~/Views/Shared/_Store_Layout.cshtml";
 
     IList<StoreMaterialT> matList = ViewBag.MaterialList;
+
+    string content = new HtmlFilter().PunctuationEncode(Model.Content);
+    content = new HtmlFilter().ConvertContent(content);
 }
 
-<h1> 
+<h1>
 
     <br>
     제품 번호는: @Model.No
@@ -27,29 +30,7 @@
 </h1>
 <input type="hidden" id="product_no" value="@Model.No" />
 <br>
-<br>
-<br>
 
-
-<h1>해당 재질들</h1>
-<br>
-@{
-    if (matList != null)
-    {
-        foreach (StoreMaterialT material in matList)
-        {
-    <div>
-        &nbsp @material.Name
-        &nbsp @material.Price 원
-    </div>
-    <br>
-        }
-    }
-    else
-    {
-    <h1>등록된 재질이 없습니다. </h1>
-    }
-}
 
 <!-- inputUpload -->
 <div class="inputUpload">
@@ -62,8 +43,8 @@
                 <input class="inputTit" type="text" id="product_title" name="product_title" value="@Model.ProductName" placeholder="제목을 입력하세요." />
             </div>
             <div class="textArea">
-                <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요."></textarea>
-                <textarea class="input_tag" id="product_tags" name="product_tags" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분)."></textarea>
+                <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요.">@Model.Content</textarea>
+                <textarea class="input_tag" id="product_tags" name="product_tags" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분).">@Model.TagName</textarea>
 
                 <div class="btSet">
                     <a href="#" id="addVideo" class="addVideo" title="동영상 첨부"></a>
@@ -73,6 +54,12 @@
             <input type="text" id="video_url" name="video_url" />
         </div>
     </div>
+
+    
+                <div class="txt">
+                    <p style="word-break: break-all">
+                        @Html.Raw(content)
+                        </p></div>
     <!-- //Left -->
 
     <!-- Right -->
@@ -103,10 +90,64 @@
                 <input type="hidden" id="category_no" value="" />
             </div>
         </div>
+
+        <div class="boxNo2">
+            <p class="headerInput">배송</p>
+            <select>
+                <option value="1">기본배송정책</option>
+                <option value="2">무료 배송</option>
+                <option value="3">상품별 배송비</option>
+                <option value="4">수신자 부담</option>
+            </select>
+            @*<div class="select_delivery">
+                <p class="value_delivery"></p>
+                <ul class="lst_value">
+                    <li id="li_all">
+                        <input type="radio" id="delivery_0" name="delivery" value="0" />
+                        <label for="delivery_0">기본배송정책</label>
+                    </li>
+                    <li id="li_1">
+                        <input type="radio" id="delivery_1" name="delivery" value="1" />
+                        <label for="delivery_1">무료 배송</label>
+                    </li>
+                    <li id="li_2">
+                        <input type="radio" id="delivery_2" name="delivery" value="2" />
+                        <label for="delivery_2">상품별 배송비</label>
+                    </li>
+                    <li id="li_3">
+                        <input type="radio" id="delivery_3" name="delivery" value="3" />
+                        <label for="delivery_3">수신자 부담</label>
+                    </li>
+                </ul>
+                <input type="hidden" id="copy_no" value="" />
+            </div>*@
+        </div>
     </div>
     <!-- //Right -->
 </div>
 <!-- //inputUpload -->
+
+
+
+<h1>옵션(재료 및 색상) : 옵션을 설정하면 구매자들이 재료 및 색상을 선택할 수 있습니다.</h1>
+<br>
+@{
+    if (matList != null)
+    {
+        foreach (StoreMaterialT material in matList)
+        {
+    <div>
+        &nbsp @material.Name
+        &nbsp @material.Price 원
+    </div>
+    <br>
+        }
+    }
+    else
+    {
+    <h1>등록된 재질이 없습니다. </h1>
+    }
+}
 
 <!-- btnZone -->
 <div class="btnZone2">
@@ -163,7 +204,7 @@
 
         Models.Init = function () {
             closet();
-            
+
             Models.UISelect(".select", ".lst_value", ".pCate", "");
 
             $('#code_all').addClass('selected');
@@ -239,7 +280,7 @@
             //    },
             //    success: function (response) {
             //        if (response.Success) {
-                        
+
             //        }
             //        else {
             //            alert(response.Message);
@@ -274,7 +315,6 @@
                 tagName: $("#product_tags").val(),
                 videoUrl: $("#video_url").val()
             }
-            console.log(data);
 
             var onSuccess = function (result) {
                 if (result.Success) {
