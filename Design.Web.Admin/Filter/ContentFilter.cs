@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -81,6 +82,16 @@ namespace Design.Web.Admin.Filter
             theString = theString.Replace("<br /> ", "");
             theString = theString.Replace("<br/> ", "");
             return theString;
+        }
+
+        public string HtmlEncoding(string str)
+        {
+            return WebUtility.HtmlEncode(str);
+        }
+
+        public string HtmlDecoding(string str)
+        {
+            return WebUtility.HtmlDecode(str);
         }
     }
 }
