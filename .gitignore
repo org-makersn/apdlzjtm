@@ -162,5 +162,3 @@ Design.Web.Admin/FileUpload/*.jpeg
 Design.Web.Admin/FileUpload/*.png
 Design.Web.Front/FileUpload
 packages
-NHibernate
-Web.config

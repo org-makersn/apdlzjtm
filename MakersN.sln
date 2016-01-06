@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Common", "Net.Common\Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Framwork", "Net.Framwork\Net.Framwork.csproj", "{B5DBD124-8C5A-4B94-97D7-014BD7C97549}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebUI", "WebUI", "{141E0763-DE33-40C6-A331-A09F50A11C0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Makers.Store", "WebUI\Makers.Store\Makers.Store.csproj", "{AAE83324-8419-405A-913F-1C05B633EDDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,8 +160,29 @@ Global
 		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|x64.ActiveCfg = Release|Any CPU
 		{B5DBD124-8C5A-4B94-97D7-014BD7C97549}.Release|x86.ActiveCfg = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.MacOSX|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.MacOSX|Any CPU.Build.0 = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.MacOSX|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.MacOSX|Mixed Platforms.Build.0 = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.MacOSX|x64.ActiveCfg = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.MacOSX|x86.ActiveCfg = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Release|x64.ActiveCfg = Release|Any CPU
+		{AAE83324-8419-405A-913F-1C05B633EDDC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AAE83324-8419-405A-913F-1C05B633EDDC} = {141E0763-DE33-40C6-A331-A09F50A11C0C}
 	EndGlobalSection
 EndGlobal
