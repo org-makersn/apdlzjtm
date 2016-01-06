@@ -47,11 +47,15 @@ namespace Net.Framework.StoreModel
         public virtual string VideoType { get; set; }
         [Column("CATEGORY_NO")]
         public virtual int CategoryNo { get; set; } //exerd 확인
+
         [Column("CONTENT", TypeName = "text")]
         [MaxLength]
         public virtual string Content { get; set; }
-        [Column("DESCRIPTION")]
+
+        [Column("DESCRIPTION", TypeName = "text")]
+        [MaxLength]
         public virtual string Description { get; set; }
+
         [Column("PART_CNT")]
         public virtual int PartCnt { get; set; }
         [Column("CUSTORMIZE_YN")]

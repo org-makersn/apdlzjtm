@@ -20,7 +20,7 @@
 
             @foreach (Makersn.Models.NoticeT n in Model)
             {
-                string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(n.MemberNo.ToString());
+                string No = Base64Helper.Base64Encode(n.MemberNo.ToString());
                 //n.MemberProfilePic = n.MemberProfilePic == null ? "/Content/images/profile_photo.jpg" : n.MemberProfilePic;
                 if (string.IsNullOrEmpty(n.MemberProfilePic))
                 {

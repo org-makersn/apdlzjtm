@@ -17,11 +17,10 @@ namespace Design.Web.Front.Controllers
     //[Authorize]
     public class MainController : BaseController
     {
-        ArticleDac _articleDac = new ArticleDac();
-        MemberT _member = new MemberT();
-        MemberDac _memberDac = new MemberDac();
-        FollowerDac _followerDac = new FollowerDac();
-
+        private ArticleDac _articleDac = new ArticleDac();
+        private MemberT _member = new MemberT();
+        private MemberDac _memberDac = new MemberDac();
+        private FollowerDac _followerDac = new FollowerDac();
 
         private Extent Size { get; set; }
 
@@ -54,13 +53,8 @@ namespace Design.Web.Front.Controllers
 
                 if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().HtmlEncode(member.ProfileMsg); };
 
-
-
                 return View("~/Views/profile/index.cshtml", member);
 
-//                return Content(@"<form action='/profile' id='goBlog' method='post'>
-//                                            <input type='hidden' name='url' value='" + url + @"' />
-//                                             </form><script>document.getElementById('goBlog').submit();</script>");
                 #region
                 //                var chkContoller = EnumHelper.GetEnumDictionaryT<MakersnEnumTypes.ControllerList>();
                 //                foreach (var ctrName in chkContoller)

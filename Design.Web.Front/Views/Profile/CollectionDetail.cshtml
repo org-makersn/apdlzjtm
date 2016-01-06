@@ -27,7 +27,7 @@
         {
             string className = index % 4 == 0 ? "class=mgR0" : "";
             string likeChk = a.chkLikes == 1 ? "class=on" : "";
-            string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(@a.MemberNo.ToString());
+            string No = Base64Helper.Base64Encode(@a.MemberNo.ToString());
             
             <li @className>
                 <!-- ProductBox -->

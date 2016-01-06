@@ -15,7 +15,7 @@
     {
         profilePic = ViewBag.ProfileImgUrl + Model.ProfilePic;
     }
-    string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(Model.No.ToString());
+    string No = Base64Helper.Base64Encode(Model.No.ToString());
     string followClass = ViewBag.CheckFollow == 0 ? "flw" : "flwing";
 
     ProfileT cntLIst = ViewBag.CntList;
