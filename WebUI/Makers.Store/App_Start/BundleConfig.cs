@@ -20,8 +20,8 @@ namespace Makers.Store
 
             bundles.Add(new ScriptBundle("~/bundles/custom").Include(
                         "~/Scripts/common.js",
-                        "~/Scripts/AjaxModel.js",
-                        "~/Scripts/Custom.js"));
+                        "~/Scripts/ajaxmodel.js",
+                        "~/Scripts/custom.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/prettyprint").Include(
                         "~/Scripts/google-code-prettify/prettify.js"));

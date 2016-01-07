@@ -153,3 +153,42 @@ Ajax.AjaxResponseModelService = function (srcObj, targetUrl, params, onSuccess, 
     });
 }
 
+Ajax.AjaxAsyncPostGetParialView = function (targetUrl, params, options, placeholder) {
+    var settings = {
+        type: 'POST',
+        async: true,
+        dataType: 'html'
+    };
+
+    options = $.extend(true, {}, settings, options);
+    $.ajax({
+        url: targetUrl,
+        data: params,
+        type: options.type,
+        async: options.async,
+        dataType: options.dataType,
+        crossDomain: true,
+        beforeSend: function () {
+            //$(placeholder).addClass('loading');
+        },
+        success: function (data) {
+            $(placeholder).html(data);
+        },
+        error: function (xhr) {
+            if (xhr != null && typeof (xhr.responseText) != 'undefined') {
+                try {
+                    var exception = $.parseJSON(error.responseText);
+                    alert(
+                      "Server error" +
+                      "\nClassName=" + exception.ExceptionClassName +
+                      "\nMessage=" + exception.ExceptionMessage +
+                      exception.ExceptionStackTrace);
+                } catch (ex) {
+                    alert("오류 메시지 해석 중 오류가 발생했습니다.(" + ex.name + ")");
+                }
+            }
+        }
+    });
+}
+
+

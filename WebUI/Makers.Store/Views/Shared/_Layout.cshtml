@@ -9,16 +9,10 @@
 <html class="no-js">
 <!--<![endif]-->
 <head>
-
     <meta name="title" content="makersN, 메이커스앤">
     <meta name="description" content="메이커스앤은 메이커들의 플랫폼이에요. 원하는 3D 모델을 찾고, 만들고, 나눌 수 있어요. 메이커스앤을 통해 당신의 상상을 현실로 만들어보세요!">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="image_src" href="/Contents/images/common/makers logo.png" />
     <meta charset="utf-8" />
-    @*<meta content="@Url.VersionedContent("~/favicon.ico")" itemprop="image">*@
-    @RenderSection("head", required: false)
-
-
     <title>@ViewBag.Title</title>
     <link rel="shortcut icon" type="image/x-icon" href="@Url.VersionedContent("~/favicon.ico")">
 
@@ -33,6 +27,7 @@
         }
     </style>
 
+    @RenderSection("head", required: false)
 </head>
 <body>
     <!-- Wrap -->
@@ -51,7 +46,7 @@
 
                     <!-- MainMenu -->
                     <ul class="mainMenu">
-                        <li><a href="http://localhost.makersn.com" class="on">디자인</a></li>
+                        <li><a href="http://local.makersn.com" class="on">디자인</a></li>
                     </ul>
                     <!-- //MainMenu -->
 
@@ -96,10 +91,6 @@
                             }
                         </a>
 
-                        <a href="#" class="printing_btn" id="showTop" onclick="chkPopup();" title="알림/메시지/내주문/로그아웃">
-                            <img class="new" alt="NEW" id="showTopNew" src="/content/images/common/ico/ico_new_d.png">
-                        </a>
-
                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                         {
                             @Html.AntiForgeryToken()
@@ -112,7 +103,7 @@
             </div>
             <!-- //HeaderTop -->
             <!-- GnbArea -->
-            
+
             <!-- //GnbArea -->
 
         </div>
@@ -374,6 +365,7 @@
         <input type="hidden" id="hfGubun" name="gubun" />
         <div class="topMypage">
             <ul>
+                @*<li><a href="javascript:GoProfile()" id="profileMyPage">My page</a></li>*@
                 <li>
                     <a href="javascript:GoPageFromTop('N')" id="profileNotice">알림</a>
                 </li>
@@ -388,7 +380,6 @@
         </div>
     </form>
     <!-- //로그인 후 마이페지 -->
-
 
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/custom")
@@ -433,6 +424,16 @@
 
     <script type="text/javascript">
 
+        //로그인 아이콘 클릭
+        function chkPopup() {
+            if (loginPop("@ViewBag.LogOnChk")) return false;
+        }
+
+        function quickChkPopup() {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+                location.href = "/profile";
+            };
+        }
     </script>
 </body>
 

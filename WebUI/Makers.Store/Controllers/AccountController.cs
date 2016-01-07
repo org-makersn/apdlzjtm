@@ -30,18 +30,6 @@ namespace Makers.Store.Controllers
             return View();
         }
 
-        /// <summary>
-        /// LogOn
-        /// </summary>
-        /// <param name="returnUrl"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult LogOn(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View(new AccountModels.LogOnPageModel() { ReturlUrl = returnUrl });
-        }
-
         [HttpPost]
         public JsonResult LogOn(AccountModels.LogOnModel model, string returnUrl)
         {
@@ -64,7 +52,6 @@ namespace Makers.Store.Controllers
                     profile.UserId = member.Id;
                     profile.UserProfilePic = member.ProfilePic;
                     profile.UserLevel = member.Level;
-                    //string hashAttr = string.Format("{0},{1},{2},{3}", member.No, member.Name, member.Id, member.ProfilePic);
 
                     var hashJson = JsonConvert.SerializeObject(profile);
 

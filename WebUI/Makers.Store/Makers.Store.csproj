@@ -187,19 +187,52 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\default.css" />
+    <Content Include="Content\css\font.css" />
+    <Content Include="Content\css\layout.css" />
     <Content Include="Content\css\nanumbarungothic.css" />
+    <Content Include="Content\images\common\bg_search_line.gif" />
+    <Content Include="Content\images\common\btn\btn_join.png" />
+    <Content Include="Content\images\common\btn\btn_login.gif" />
+    <Content Include="Content\images\common\btn\btn_login.png" />
+    <Content Include="Content\images\common\btn\btn_login_on.png" />
+    <Content Include="Content\images\common\btn\btn_login_pop.png" />
+    <Content Include="Content\images\common\btn\btn_search.png" />
+    <Content Include="Content\images\common\btn\btn_search_on.png" />
+    <Content Include="Content\images\common\foot_sns1.gif" />
+    <Content Include="Content\images\common\h1_logo.gif" />
+    <Content Include="Content\images\common\ico\ico_new_d.png" />
+    <Content Include="Content\images\common\joinfinish_txt1.png" />
+    <Content Include="Content\images\common\loading_bar.gif" />
+    <Content Include="Content\images\common\login_bg1.jpg" />
+    <Content Include="Content\images\common\login_bg2.jpg" />
+    <Content Include="Content\images\common\login_bg3.jpg" />
+    <Content Include="Content\images\common\login_logo.png" />
+    <Content Include="Content\images\common\login_tit1.png" />
+    <Content Include="Content\images\common\pop_logo.gif" />
+    <Content Include="Content\images\common\foot_logo.gif" />
+    <Content Include="Content\images\common\pwfind_tit.png" />
+    <Content Include="Content\images\common\pwsend_img1.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />
     <Content Include="Content\css\NanumBarunGothicBold.woff" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\ajaxmodel.js" />
+    <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.form.min.js" />
+    <Content Include="Scripts\jquery.lazyload.js" />
+    <Content Include="Scripts\jquery.lazyload.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.form.min.js.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -227,7 +260,6 @@
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\ExternalLoginsList.cshtml" />
-    <Content Include="Views\Account\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
