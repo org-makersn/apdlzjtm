@@ -6,11 +6,9 @@ using System.Web.Mvc;
 
 namespace Makers.Store.Controllers
 {
+    //[Authorize]
     public class HomeController : BaseController
     {
-        //
-        // GET: /Home/
-
         public ActionResult Index()
         {
             return View();

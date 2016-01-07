@@ -14,7 +14,6 @@ using System.Web.Mvc;
 
 namespace Design.Web.Front.Controllers
 {
-    //[Authorize]
     public class MainController : BaseController
     {
         private ArticleDac _articleDac = new ArticleDac();

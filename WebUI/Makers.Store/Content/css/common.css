@@ -1,0 +1,79 @@
+﻿@charset "utf-8";
+
+@import url('layout.css');  /* 페이지 레이아웃 */
+@import url('default.css'); /* 여백등 기본 스타일 지정 */
+@import url('font.css');    /* 폰트 지정 */
+
+/**
+* =================================================================================
+* INFORMATION
+* ---------------------------------------------------------------------------------
+* @Author : Lee, Seung, Hee (lv0821@naver.com)
+* @File Name : common.css
+* @Description : Style Sheet
+* @Version : 1.0
+* @Create Date : 2015.04.13
+* @Update Date : N/A
+* @History : N/A
+===================================================================================
+*/
+
+/*=================================================================================
+* Default - Css
+=================================================================================*/
+
+
+/* Reset */
+html,body,div,p,h1,h2,h3,h4,h5,h6,menu,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,button,select,iframe {
+	margin: 0;
+	padding: 0;	
+	font-family:'Nanum Barun Gothic', '나눔바른고딕', nbg, sans-serif;
+}
+html{height:100%}
+html>/**/body {overflow-y:scroll; height: 100%}
+html	{*overflow-y:scroll; 
+		/* scrollbar-face-color:#000000;
+		scrollbar-shadow-color:#000000;
+		scrollbar-highlight-color:#000000;
+		scrollbar-3dlight-color:#a4adb4;
+		scrollbar-darkshadow-color:#a4adb4;
+		scrollbar-track-color:#000000;
+		scrollbar-arrow-color:#a4adb4;*/
+}
+form {
+	margin: 0px;
+	padding: 0px;
+}
+fieldset {
+	border: 0 none;
+	margin: 0px;
+	padding: 0px;
+}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,form,fieldset,p,button{margin:0;padding:0; font-family:'Nanum Barun Gothic', sans-serif; font-weight:300;letter-spacing:-0.3px }
+body,h1,h2,h3,h4,input,button,textarea{ font-family:'Nanum Barun Gothic', '나눔바른고딕', nbg, Roboto, sans-serif; font-size:12px;color:#575757}
+body{background:#fff;text-align:left;*word-break:break-all;-ms-word-break:break-all}
+img,fieldset,iframe{border:0 none}
+li{list-style:none}
+input,select,button{vertical-align:middle; outline:none;}
+img{vertical-align:top}
+i,em,address{font-style:normal}
+label,button{cursor:pointer}
+button{margin:0;padding:0}
+a{color:#575757;text-decoration:none; outline:none;}
+button {outline:none;}
+a:hover{color:#575757;text-decoration:none; font-family: 'Nanum Barun Gothic', sans-serif;}
+hr, caption {display:none}
+legend{*width:0}
+table{/* border-collapse:collapse;table-layout:fixed; */border-collapse:collapse;border-spacing:0}
+q:before,q:after,blockquote:before,blockquote:after{content:"";content:none}
+a img{border:none;}
+a, button { transition: all 0.4s ease-out 0s; }
+article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}
+
+
+.back-to-top { position: fixed; bottom:5em; right:5em;  width: 46px; height: 46px; font-weight:bold; display:none; background:url('../images/common/ico/ico_top.png') no-repeat; }
+.back-to-top:hover { width: 46px; height: 46px; color: #ff7900; }
+
+
+
+
