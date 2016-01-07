@@ -21,6 +21,7 @@ namespace Design.Web.Front.Controllers
         {
             return View();
         }
+
         #region  스토어등록/삭제/업데이트
         
 
@@ -130,7 +131,6 @@ namespace Design.Web.Front.Controllers
         }
         #endregion 
 
-
         #region 스토어팔러우
         /// <summary>
         /// 주석처리 회원아이디가 없으면 90으로 시작
@@ -211,8 +211,6 @@ namespace Design.Web.Front.Controllers
         }
 
         #endregion
-
-
 
 
         public string test3()
