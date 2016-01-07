@@ -7,7 +7,7 @@ using System.Web;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace Makers.Common.Helper
+namespace Net.Common.Helper
 {
     public class FileHelper
     {

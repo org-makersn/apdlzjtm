@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Makers.Common.Model
+namespace Net.Common.Model
 {
     public class _3DModel
     {

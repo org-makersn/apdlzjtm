@@ -1,5 +1,5 @@
 ﻿
-namespace Makers.Common.Define
+namespace Net.Common.Define
 {
     public static class Constant
     {

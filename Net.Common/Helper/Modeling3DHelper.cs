@@ -1,5 +1,5 @@
 ﻿using Library.ObjParser;
-using Makers.Common.Model;
+using Net.Common.Model;
 using QuantumConcepts.Formats.StereoLithography;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Makers.Common.Helper
+namespace Net.Common.Helper
 {
     public class Modeling3DHelper
     {

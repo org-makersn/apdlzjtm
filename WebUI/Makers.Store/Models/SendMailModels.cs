@@ -3,7 +3,7 @@ using System.Net.Mail;
 using System.Web;
 using System.Xml;
 
-namespace Design.Web.Front.Models
+namespace Makers.Store.Models
 {
     public class SendMailModels
     {
