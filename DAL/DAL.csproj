@@ -103,8 +103,6 @@
     <Compile Include="BizDac\PrinterOurputImgDac.cs" />
     <Compile Include="BizDac\PrinterNoticeDac.cs" />
     <Compile Include="BizDac\PrinterColorDac.cs" />
-    <Compile Include="BizDac\StoreCartDac.cs" />
-    <Compile Include="BizDac\StoreOrderDac.cs" />
     <Compile Include="BizDac\TranslationDetailDac.cs" />
     <Compile Include="BizDac\TranslationDac.cs" />
     <Compile Include="BizDac\OrderAccountingDac.cs" />
@@ -164,9 +162,6 @@
     <Compile Include="Models\MemberTMap.cs" />
     <Compile Include="Models\MessageT.cs" />
     <Compile Include="Models\MessageTMap.cs" />
-    <Compile Include="Models\StoreCartT.cs" />
-    <Compile Include="Models\StoreOrderT.cs" />
-    <Compile Include="Models\StoreShippingT.cs" />
     <Compile Include="NHibernate\NHibernateHelper.cs" />
     <Compile Include="Models\BoardT.cs" />
     <Compile Include="Models\BoardTMap.cs" />

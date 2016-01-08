@@ -178,6 +178,7 @@
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -215,6 +216,7 @@
     <Content Include="Content\images\common\foot_logo.gif" />
     <Content Include="Content\images\common\pwfind_tit.png" />
     <Content Include="Content\images\common\pwsend_img1.png" />
+    <Content Include="Content\plugin_check.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />
@@ -270,6 +272,11 @@
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Store\Cart.cshtml" />
+    <Content Include="Views\Store\FollewingList.cshtml" />
+    <Content Include="Views\Store\Order.cshtml" />
+    <Content Include="Views\Store\PaymentRequest.cshtml" />
+    <Content Include="Views\Store\StoreMemberRegister.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -298,6 +305,17 @@
       <Project>{b5dbd124-8c5a-4b94-97d7-014bd7c97549}</Project>
       <Name>Net.Framwork</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="INIPAY50Lib">
+      <Guid>{3D526659-3918-491A-8FA9-A1829C0447BC}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Makersn.Models;
-using NHibernate;
-using Makersn.Util;
 using System.Globalization;
+using Net.Framework.StoreModel;
 
 namespace Makersn.BizDac
 {

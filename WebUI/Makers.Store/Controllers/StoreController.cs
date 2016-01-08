@@ -1,6 +1,4 @@
-﻿using Design.Web.Front.Models;
-using Makersn.BizDac;
-using Makersn.Models;
+﻿using Makersn.BizDac;
 using Net.Framework.StoreModel;
 using Net.Framwork.BizDac;
 using System;
@@ -8,9 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Net.Common.Model;
+using Newtonsoft.Json;
+using Makersn.Models;
 
-
-namespace Design.Web.Front.Controllers
+namespace Makers.Store.Controllers
 {
     public class StoreController : BaseController
     {

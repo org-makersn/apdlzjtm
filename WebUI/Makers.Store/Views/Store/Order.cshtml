@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Order";
+}
+<script type="text/javascript">
+
+    function popPaymentRequest() {
+        //document.location.href = "http://local.paymenttest.com/plugin_check.html";
+        var url = "../content/plugin_check.html";
+
+        document.location.href = url;
+
+        //var popOption = "resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+        //window.open(url, "", popOption);
+    }
+
+</script>
+<h2>Order</h2>
+
+<p>
+결제방법 
+    <select>
+        <option value="0">신용카드결제</option>
+        <option value="0">실시간 계좌이체</option>
+        <option value="0">무통장 입금</option>
+        <option value="0">핸드폰</option>
+    </select>
+</p>
+<p>
+상품명
+<input type="text" value="미니언즈" id="txtProductName" />
+</p>
+<p>
+성명
+<input type="text" value="홍길동" id="txtFullName" />
+</p>
+<p>
+전자우편
+<input type="text" value="sslee@makersi.com" id="txtEmailAddr" />
+</p>
+<p>
+이동전화
+<input type="text" value="010-1111-2222" id="txtHppNo" />
+</p>
+<p>
+<input type="button" id="memb_pic_del" class="btnOrder" title="결제" value="결제" onclick="popPaymentRequest();">
+</p>

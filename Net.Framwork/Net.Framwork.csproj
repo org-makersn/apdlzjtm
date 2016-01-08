@@ -52,6 +52,8 @@
   <ItemGroup>
     <Compile Include="BizDac\MemberTestBiz.cs" />
     <Compile Include="BizDac\MemberTestDac.cs" />
+    <Compile Include="BizDac\StoreCartDac.cs" />
+    <Compile Include="BizDac\StoreOrderDac.cs" />
     <Compile Include="BizDac\StorePrinterBiz.cs" />
     <Compile Include="BizDac\StorePrinterDac.cs" />
     <Compile Include="BizDac\StorePrintingCompanyPrinterBiz.cs" />
@@ -86,7 +88,9 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="StoreModel\MemberMsgT.cs" />
     <Compile Include="StoreModel\MemberT.cs" />
+    <Compile Include="StoreModel\StoreCartT.cs" />
     <Compile Include="StoreModel\StoreCategoryT.cs" />
+    <Compile Include="StoreModel\StoreOrderT.cs" />
     <Compile Include="StoreModel\StorePrinterMaterialT.cs" />
     <Compile Include="StoreModel\StorePrinterT.cs" />
     <Compile Include="StoreModel\StorePrintingCompanyPrinterT.cs" />
@@ -103,6 +107,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="StoreContext.cs" />
+    <Compile Include="StoreModel\StoreShippingT.cs" />
     <Compile Include="Util\EnumHelper.cs" />
   </ItemGroup>
   <ItemGroup>
