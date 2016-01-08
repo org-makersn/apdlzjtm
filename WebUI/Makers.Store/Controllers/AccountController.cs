@@ -21,7 +21,6 @@ namespace Makers.Store.Controllers
     public class AccountController : BaseController
     {
         private MemberDac _memberDac = new MemberDac();
-        CryptFilter crypt = new CryptFilter();
 
         //[Authorize]
         [ActionName("Index")]
@@ -102,7 +101,7 @@ namespace Makers.Store.Controllers
                 member.Email = JoinEmail;
                 member.Id = JoinEmail;
                 member.Name = JoinName;
-                member.Password = crypt.Encrypt(JoinPassword);
+                member.Password = CryptFilter.Encrypt(JoinPassword);
                 member.Level = 10;
                 member.ProfilePic = "";
                 member.Status = "1";

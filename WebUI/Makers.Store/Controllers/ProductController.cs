@@ -91,9 +91,9 @@ namespace Makers.Store.Controllers
                                 _storeProduct.Scale = 100;
                                 _storeProduct.ShortLing = "";
                                 _storeProduct.VideoUrl = "";
-                                _storeProduct.VideoType = "";
+                                //_storeProduct.VideoType = "";
                                 _storeProduct.CategoryNo = 0;
-                                _storeProduct.Content = "";
+                                _storeProduct.Contents = "";
                                 _storeProduct.Description = "";
                                 _storeProduct.PartCnt = 1;
                                 _storeProduct.CustormizeYn = "Y";
@@ -165,11 +165,11 @@ namespace Makers.Store.Controllers
             {
                 product.ProductName = productName;
                 product.CategoryNo = categoryNo;
-                product.Content = content;
+                product.Contents = content;
                 product.Description = description;
                 product.TagName = tagName;
                 product.VideoUrl = videoUrl;
-                product.VideoType = "";
+                //product.VideoType = "";
 
                 int ret = new StoreProductBiz().setStoreProduct(product);
                 if (ret > 0)

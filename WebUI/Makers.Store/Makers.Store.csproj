@@ -217,6 +217,7 @@
     <Content Include="Content\images\common\foot_logo.gif" />
     <Content Include="Content\images\common\pwfind_tit.png" />
     <Content Include="Content\images\common\pwsend_img1.png" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />

@@ -21,8 +21,8 @@ namespace Net.Framework.StoreModel
         public virtual int RefNo { get; set; }
         [Column("TYPE")]
         public virtual string Type { get; set; }
-        [Column("CONTENT")]
-        public virtual string Content { get; set; }
+        [Column("CONTENTS")]
+        public virtual string Contents { get; set; }
         [Column("CHECK_YN")]
         public virtual string CheckYn { get; set; }
         [Column("IS_NEW_YN")]
