@@ -77,7 +77,7 @@ namespace Makers.Store.Controllers
         {
             FormsAuthentication.SignOut();
 
-            return RedirectToAction("Index", "Main");
+            return RedirectToAction("Index", "Home");
         }
 
         #region 회원가입
@@ -370,7 +370,7 @@ namespace Makers.Store.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Main");
+                return RedirectToAction("Index", "Home");
             }
         }
 

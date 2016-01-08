@@ -199,6 +199,8 @@
     <Content Include="Content\images\common\btn\btn_login.png" />
     <Content Include="Content\images\common\btn\btn_login_on.png" />
     <Content Include="Content\images\common\btn\btn_login_pop.png" />
+    <Content Include="Content\images\common\btn\btn_myprint_drop.png" />
+    <Content Include="Content\images\common\btn\btn_myprint_drop_on.png" />
     <Content Include="Content\images\common\btn\btn_search.png" />
     <Content Include="Content\images\common\btn\btn_search_on.png" />
     <Content Include="Content\images\common\foot_sns1.gif" />

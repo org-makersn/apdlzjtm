@@ -90,6 +90,8 @@
                               }
                             }
                         </a>
+                        <a href="#" class="printing_btn" id="showTop" onclick="chkPopup();" title="알림/메시지/내주문/로그아웃">
+                        </a>
 
                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                         {
@@ -365,7 +367,6 @@
         <input type="hidden" id="hfGubun" name="gubun" />
         <div class="topMypage">
             <ul>
-                @*<li><a href="javascript:GoProfile()" id="profileMyPage">My page</a></li>*@
                 <li>
                     <a href="javascript:GoPageFromTop('N')" id="profileNotice">알림</a>
                 </li>
@@ -427,6 +428,7 @@
         //로그인 아이콘 클릭
         function chkPopup() {
             if (loginPop("@ViewBag.LogOnChk")) return false;
+            mypageGo();
         }
 
         function quickChkPopup() {
