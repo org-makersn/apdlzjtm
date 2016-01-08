@@ -271,6 +271,7 @@
     <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
