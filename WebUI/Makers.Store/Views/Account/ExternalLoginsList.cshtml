@@ -1,0 +1,27 @@
+﻿@model ICollection<AuthenticationClientData>
+
+@if (Model.Count == 0)
+{
+    <div class="message-info">
+        <p>
+            구성된 외부 인증 서비스가 없습니다.
+        </p>
+    </div>
+}
+else
+{
+    using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = ViewBag.ReturnUrl }))
+    {
+        @Html.AntiForgeryToken()
+    
+        foreach (AuthenticationClientData p in Model)
+        {
+            if (p.AuthenticationClient.ProviderName == "facebook")
+            {
+                <p class="facebookJoin">
+                    <button type="submit" class="settingBtn facebook_login" id="facebook_login" name="provider" value="@p.AuthenticationClient.ProviderName" title="페이스북 계정으로 로그인">페이스북 계정으로 로그인</button>
+                </p>
+            }
+        }
+    }
+}

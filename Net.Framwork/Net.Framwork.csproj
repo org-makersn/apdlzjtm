@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Net.Framwork</RootNamespace>
     <AssemblyName>Net.Framwork</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -83,8 +84,8 @@
     <Compile Include="Logging\InterceptorLogging.cs" />
     <Compile Include="Logging\InterceptorTransientErrors.cs" />
     <Compile Include="Logging\Logger.cs" />
-    <Compile Include="StoreModel\DetailT.cs" />
     <Compile Include="StoreModel\MemberMsgT.cs" />
+    <Compile Include="StoreModel\MemberT.cs" />
     <Compile Include="StoreModel\StoreCategoryT.cs" />
     <Compile Include="StoreModel\StorePrinterMaterialT.cs" />
     <Compile Include="StoreModel\StorePrinterT.cs" />

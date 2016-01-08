@@ -24,8 +24,6 @@ namespace Net.Framework
             //Database.SetInitializer<StoreContext>(null);
         }
 
-        //public DbSet<MemberTestT> MemberTestT { get; set; }
-        public DbSet<DetailT> DetailT { get; set; }
         public DbSet<StorePrinterT> StorePrinterT { get; set; }
         public DbSet<StorePrintingCompanyPrinterT> StorePrintingCompanyPrinterT { get; set; }
         public DbSet<StorePrintingCompanyT> StorePrintingCompanyT { get; set; }
@@ -41,37 +39,25 @@ namespace Net.Framework
         public DbSet<StoreCategoryT> StoreCategoryT { get; set; }
         public DbSet<StorePrinterMaterialT> StorePrinterMaterialT { get; set; }
 		public DbSet<MemberMsgT> MemberMsgT { get; set; }
-        
-        //public DbSet<DetailT> DetailT { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            //modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+        //    //modelBuilder.Conventions.Remove<IncludeMetadataConvention>();
 
-            //modelBuilder.Entity<MemberT>().Map(bp =>
-            //{
-            //    bp.Properties(
-            //        p => new
-            //        {
-            //            p.MemberId,
-            //            p.MemberNm,
-            //            p.AppId,
-            //            p.RegDt
-            //        });
-            //    bp.ToTable("Member");
-            //});
-
-            //modelBuilder.Entity<MemberT>().Map(bp =>
-            //{
-            //    bp.Properties(
-            //        p => new
-            //        {
-            //            p.PhoneNumber
-            //        });
-            //    bp.ToTable("Detail");
-            //}).Property(e => e.PhoneNumber).HasColumnName("Phone_Number");
+        //    //modelBuilder.Entity<MemberT>().Map(bp =>
+        //    //{
+        //    //    bp.Properties(
+        //    //        p => new
+        //    //        {
+        //    //            p.MemberId,
+        //    //            p.MemberNm,
+        //    //            p.AppId,
+        //    //            p.RegDt
+        //    //        });
+        //    //    bp.ToTable("Member");
+        //    //});
 
 
-        }
+        //}
     }
 }

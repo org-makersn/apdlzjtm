@@ -555,6 +555,7 @@
     <Content Include="Scripts\three.js" />
     <Content Include="Scripts\three.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Product\Models.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

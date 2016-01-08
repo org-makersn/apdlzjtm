@@ -75,25 +75,17 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                
-                //if (dbContext.StoreProductT.SingleOrDefault(m => m.No == data.No) != null)
-                //{
-                    try
-                    {
-                        dbContext.StoreProductT.Attach(data);
-                        dbContext.Entry<StoreProductT>(data).State = System.Data.Entity.EntityState.Modified;
-                        dbContext.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        ret = -1;
-                    }
-                //}
-                //else
-                //{
-                //    ret = -2;
-                //    throw new NullReferenceException("The expected original Segment data is not here.");
-                //}
+                try
+                {
+                    dbContext.StoreProductT.Attach(data);
+                    dbContext.Entry<StoreProductT>(data).State = System.Data.Entity.EntityState.Modified;
+                    dbContext.SaveChanges();
+                    ret = 1;
+                }
+                catch (Exception)
+                {
+                    ret = -1;
+                }
             }
             return ret;
         }

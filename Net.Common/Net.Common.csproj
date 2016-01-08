@@ -7,10 +7,11 @@
     <ProjectGuid>{65C05F9A-EE28-4908-A18D-48A5BF36829D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Makers.Common</RootNamespace>
-    <AssemblyName>Makers.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Net.Common</RootNamespace>
+    <AssemblyName>Net.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +36,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -69,18 +71,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Define\Constant.cs" />
     <Compile Include="Filter\CryptFilter.cs" />
     <Compile Include="Filter\HtmlFilter.cs" />
     <Compile Include="Filter\Md5Encrypt.cs" />
+    <Compile Include="Helper\Modeling3DHelper.cs" />
     <Compile Include="Helper\Base64Helper.cs" />
     <Compile Include="Helper\DateTimeHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\IPAddressHelper.cs" />
     <Compile Include="Helper\IPScanner.cs" />
+    <Compile Include="Model\3DModel.cs" />
+    <Compile Include="Model\AccountModels.cs" />
+    <Compile Include="Model\AjaxResponseModel.cs" />
+    <Compile Include="Model\CodeModel.cs" />
+    <Compile Include="Model\ProfileModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Library.ObjParser\Library.ObjParser.csproj">
+      <Project>{3105453e-3a4f-447d-9de0-798c28c68e65}</Project>
+      <Name>Library.ObjParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Library.StlParser\Library.StlParser.csproj">
+      <Project>{f7edd416-199a-4928-844f-2cd3237b7852}</Project>
+      <Name>Library.StlParser</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
     <None Include="IP\Searchwry.dat" />
     <None Include="packages.config" />
   </ItemGroup>

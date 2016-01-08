@@ -1,5 +1,4 @@
 ﻿@model IList<Makersn.Models.MessageT>
-@using Design.Web.Front.Filter
 @{
     string date = "";
 
@@ -58,7 +57,7 @@
 
                                 @if (message.MsgGubun == "MSG")
                                 {
-                                    <p class="txt">@Html.Raw(new HtmlFilter().HtmlEncode(message.Comment))</p>
+                                    <p class="txt">@Html.Raw(new HtmlFilter().PunctuationEncode(message.Comment))</p>
                                 }
                                 else
                                 {

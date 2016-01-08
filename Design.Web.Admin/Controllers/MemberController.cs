@@ -318,7 +318,7 @@ namespace Design.Web.Admin.Controllers
         //public JsonResult sendNoticeEmail(string email, string title, string content)
         //{
         //    SendMailModels oMail = new SendMailModels();
-        //    content = new HtmlFilter().HtmlEncode(content);
+        //    content = new HtmlFilter().PunctuationEncode(content);
         //    oMail.SendMail("sendNotice", email, new String[] { title, content });
         //    return Json(new AjaxResponseModel { Success = true, Message = "발송되었습니다." });
         //}

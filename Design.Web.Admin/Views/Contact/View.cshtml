@@ -32,11 +32,11 @@
 			</tr>			
 			<tr>
 				<th>내용</th>
-				<td>@Html.Raw(new HtmlFilter().HtmlEncode(Model.Comment))</td>
+				<td>@Html.Raw(new HtmlFilter().PunctuationEncode(Model.Comment))</td>
 			</tr>
 			<tr>
 				<th>답변</th>
-				<td>@Html.Raw(new HtmlFilter().HtmlEncode(Model.Reply))</td>
+				<td>@Html.Raw(new HtmlFilter().PunctuationEncode(Model.Reply))</td>
 			</tr>
 			<tr>
 				<th>처리상태</th>

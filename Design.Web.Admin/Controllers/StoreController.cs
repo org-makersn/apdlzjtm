@@ -20,6 +20,7 @@ namespace Design.Web.Admin.Controllers
             menuModel.SubIndex = subIndex;
             return menuModel;
         }
+
         /// <summary>
         /// Store Managing Default Page
         /// This is a Order Listing Page
@@ -32,6 +33,14 @@ namespace Design.Web.Admin.Controllers
             ViewData["Group"] = MenuModel(0);
             return View();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="status"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public ActionResult ProductCertificateList(string query = "", int status = (int)MakersnEnumTypes.ProductCertificateStatus.Request, int page = 1)
         {
 
@@ -48,23 +57,25 @@ namespace Design.Web.Admin.Controllers
             return View(productList.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
         }
 
-
-        //public void ShapeWaysAccept(int productNo){
-        //}
-
-        //public void ShapeWaysReject(int productNo) { 
-        //}
-        //public void ShapWaysUploaded(int productNo) { 
-        //}
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="no"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public JsonResult ChangeCertiFicateStatus(int no,int status) {
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
             storeProduct.CertiFicateStatus = status;
-            new StoreProductBiz().upd(storeProduct);
+            new StoreProductBiz().setStoreProduct(storeProduct);
             return Json(new { result = 1 });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public ActionResult PrinterList(string query = "",  int page = 1)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
@@ -77,7 +88,10 @@ namespace Design.Web.Admin.Controllers
             return View(printerList.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [Authorize, HttpGet]
         public ActionResult PrinterInsert()
         {
@@ -87,6 +101,18 @@ namespace Design.Web.Admin.Controllers
             ViewBag.matList = matList;
             return View();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="PrinterName"></param>
+        /// <param name="PrintingCompanyNo"></param>
+        /// <param name="SizeX"></param>
+        /// <param name="SizeY"></param>
+        /// <param name="SizeZ"></param>
+        /// <param name="matNoInfo"></param>
+        /// <param name="matUseInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult PrinterInsert(string PrinterName, int PrintingCompanyNo, int SizeX, int SizeY, int SizeZ, string matNoInfo, string matUseInfo)
         {

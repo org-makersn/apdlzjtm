@@ -17,8 +17,8 @@
 
             @foreach (Makersn.Models.MessageT message in Model)
             {
-                string memberNo = Design.Web.Front.Helper.Base64Helper.Base64Encode(message.MemberNo.ToString());
-                string memberNoRef = Design.Web.Front.Helper.Base64Helper.Base64Encode(message.MemberNoRef.ToString());
+                string memberNo = Base64Helper.Base64Encode(message.MemberNo.ToString());
+                string memberNoRef = Base64Helper.Base64Encode(message.MemberNoRef.ToString());
 
                 string profilePic = string.Empty;
 
