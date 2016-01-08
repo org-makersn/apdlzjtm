@@ -222,7 +222,9 @@
     <Content Include="Content\css\NanumBarunGothic.woff" />
     <Content Include="Content\css\NanumBarunGothicBold.woff" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\ajaxmodel.js" />
     <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
