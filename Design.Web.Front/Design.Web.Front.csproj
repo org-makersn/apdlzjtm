@@ -199,7 +199,6 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MainController.cs" />
-    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PrintingController.cs" />
@@ -392,6 +391,7 @@
     <Content Include="Content\images\store_bg1.jpg" />
     <Content Include="Content\images\store_visu1.jpg" />
     <Content Include="Content\css\PagedList.css" />
+    <Content Include="Content\plugin_check.html" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -688,8 +688,10 @@
     <Content Include="Views\Product\ProductPrintable.cshtml" />
     <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Shared\_Store_Layout.cshtml" />
-    <Content Include="Views\Store\Cart.cshtml" />        
+    <Content Include="Views\Store\Cart.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Store\Order.cshtml" />
+    <Content Include="Views\Store\PaymentRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -727,6 +729,17 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="INIPAY50Lib">
+      <Guid>{3D526659-3918-491A-8FA9-A1829C0447BC}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
