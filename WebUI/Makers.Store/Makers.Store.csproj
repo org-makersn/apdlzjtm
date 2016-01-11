@@ -203,6 +203,8 @@
     <Content Include="Content\images\common\btn\btn_myprint_drop_on.png" />
     <Content Include="Content\images\common\btn\btn_search.png" />
     <Content Include="Content\images\common\btn\btn_search_on.png" />
+    <Content Include="Content\images\common\btn_addfile.png" />
+    <Content Include="Content\images\common\btn_addfile_over.png" />
     <Content Include="Content\images\common\foot_sns1.gif" />
     <Content Include="Content\images\common\h1_logo.gif" />
     <Content Include="Content\images\common\ico\ico_new_d.png" />

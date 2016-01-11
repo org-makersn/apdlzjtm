@@ -3,12 +3,12 @@
 
 @{
     ViewBag.Title = "ProductUploadDetail";
-    Layout = "~/Views/Shared/_Store_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
     IList<StoreMaterialT> matList = ViewBag.MaterialList;
 
-    string content = new HtmlFilter().PunctuationEncode(Model.Content);
-    content = new HtmlFilter().ConvertContent(content);
+    string contents = new HtmlFilter().PunctuationEncode(Model.Contents);
+    contents = new HtmlFilter().ConvertContent(contents);
 }
 
 <h1>
@@ -43,7 +43,7 @@
                 <input class="inputTit" type="text" id="product_title" name="product_title" value="@Model.ProductName" placeholder="제목을 입력하세요." />
             </div>
             <div class="textArea">
-                <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요.">@Model.Content</textarea>
+                <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요.">@Model.Contents</textarea>
                 <textarea class="input_tag" id="product_tags" name="product_tags" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분).">@Model.TagName</textarea>
 
                 <div class="btSet">
@@ -58,7 +58,7 @@
     
                 <div class="txt">
                     <p style="word-break: break-all">
-                        @Html.Raw(content)
+                        @Html.Raw(contents)
                         </p></div>
     <!-- //Left -->
 

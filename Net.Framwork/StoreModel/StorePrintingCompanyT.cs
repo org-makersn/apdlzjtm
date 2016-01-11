@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Net.Framework.StoreModel
 {
-    [Table("STORE_PRINTING_COM")]
+    [Table("STORE_PRINTING_COMPANY")]
     public class StorePrintingCompanyT
     {
         [Key]
