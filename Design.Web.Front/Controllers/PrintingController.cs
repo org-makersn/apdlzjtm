@@ -87,14 +87,14 @@ namespace Design.Web.Front.Controllers
                 if (imgNameInfo.Length == imgReNameInfo.Length)
                 {
                     OrderT order = new OrderT();
-                    order.PrinterMemberNo = Profile.UserNo;
+                    order.PrinterMemberNo = profileModel.UserNo;
                     order.MemberNo = 1;
                     order.PrinterNo = printerNo;
                     order.TestFlag = "Y";
                     order.RequireComment = message;
                     order.OrderStatus = (int)Makersn.Util.MakersnEnumTypes.OrderState.테스트요청;
                     order.RegDt = DateTime.Now;
-                    order.RegId = Profile.UserId;
+                    order.RegId = profileModel.UserId;
 
 
                     long orderNo = _orderDac.InsertOrderInTest(order);
@@ -108,7 +108,7 @@ namespace Design.Web.Front.Controllers
                             img.OrderNo = orderNo;
                             img.ImageName = imgNameInfo[i];
                             img.ImageReName = imgReNameInfo[i];
-                            img.RegId = Profile.UserId;
+                            img.RegId = profileModel.UserId;
                             img.RegDt = DateTime.Now;
                             imgList.Add(img);
                         }
@@ -313,7 +313,7 @@ namespace Design.Web.Front.Controllers
         //            break;
         //    }
 
-        //    int totalCnt = articleDac.GetTotalCountByOption(Profile.UserNo, codeNum, "", pageGubun);
+        //    int totalCnt = articleDac.GetTotalCountByOption(profileModel.UserNo, codeNum, "", pageGubun);
 
         //    int fromIndex = ((page - 1) * pageSize) + 1;
         //    int toIndex = page * pageSize;
@@ -324,12 +324,12 @@ namespace Design.Web.Front.Controllers
         //    pager.RecordCount = totalCnt;
 
 
-        //    list = articleDac.GetListByOption(Profile.UserNo, codeNum, pageGubun, fromIndex, toIndex);
+        //    list = articleDac.GetListByOption(profileModel.UserNo, codeNum, pageGubun, fromIndex, toIndex);
         //    if (pageGubun == "R")
         //    {
         //        if (list.Count() == 0)
         //        {
-        //            list = articleDac.GetListByOption(Profile.UserNo, codeNum, "N", fromIndex, toIndex);
+        //            list = articleDac.GetListByOption(profileModel.UserNo, codeNum, "N", fromIndex, toIndex);
         //        }
         //    }
         //    PagerQuery<PagerInfo, IList<ArticleDetailT>> model = new PagerQuery<PagerInfo, IList<ArticleDetailT>>(pager, list);
@@ -405,7 +405,7 @@ namespace Design.Web.Front.Controllers
         public PartialViewResult Reply(int page = 1, int no = 1, string goReply = "N")
         {
             ViewBag.No = no;
-            ViewBag.MemberNo = Profile.UserNo;
+            ViewBag.MemberNo = profileModel.UserNo;
             ViewBag.GoReply = goReply;
             IList<PrinterCommentT> list = _printerCommentDac.GetPrinterCommentList(no);
             return PartialView(list.OrderByDescending(o => o.Regdt).ToPagedList(page, 5));
@@ -435,7 +435,7 @@ namespace Design.Web.Front.Controllers
             prt.No = int.Parse(commentNo);
             prt.Content = content;
             prt.UpdDt = DateTime.Now;
-            prt.UpdId = Profile.UserId;
+            prt.UpdId = profileModel.UserId;
 
             //no = Base64Helper.Base64Decode(no);
             _printerCommentDac.UpdatePrinterCommentByNo(prt);
@@ -446,17 +446,17 @@ namespace Design.Web.Front.Controllers
         #region 댓글 추가
         public JsonResult CommentAdd(int printerNo = 0, string content = "", string printerMemberNo = "0")
         {
-            if (Profile.UserNo == 0) { return Json(new { Success = false }); };
+            if (profileModel.UserNo == 0) { return Json(new { Success = false }); };
             printerMemberNo = Base64Helper.Base64Decode(printerMemberNo);
             string getIp = IPAddressHelper.GetIP(this);
             PrinterCommentT prt = new PrinterCommentT();
             prt.PrinterNo = printerNo;
             prt.Content = content;
             prt.Regdt = DateTime.Now;
-            prt.RegId = Profile.UserId;
+            prt.RegId = profileModel.UserId;
             prt.MemberNoRef = int.Parse(printerMemberNo);
-            prt.MemberNo = Profile.UserNo;
-            prt.Writer = Profile.UserNm;
+            prt.MemberNo = profileModel.UserNo;
+            prt.Writer = profileModel.UserNm;
             prt.RegIp = getIp;
             _printerCommentDac.InsertPrinterComment(prt);
 
@@ -467,7 +467,7 @@ namespace Design.Web.Front.Controllers
         [Authorize, HttpGet]
         public ActionResult PrtUpload(int printerNo = 0, string flag = "")
         {
-            ViewBag.Temp = Profile.UserNo + "_" + new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
+            ViewBag.Temp = profileModel.UserNo + "_" + new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
             ViewBag.PrinterBrandlList = _printerModelDac.GetPrinterBrandList();
             ViewBag.MaterialList = _materialDac.getMaterialList();
             PrinterT printer = new PrinterT();
@@ -533,7 +533,7 @@ namespace Design.Web.Front.Controllers
             printer.Model = printerModel.Model;
 
 
-            printer.MemberNo = Profile.UserNo;
+            printer.MemberNo = profileModel.UserNo;
             //printer.DelDt = System.DateTime.Now;
 
 
@@ -550,13 +550,13 @@ namespace Design.Web.Front.Controllers
             //insert Printer
             if (printerNoStr != "" && printerNoStr != "0")
             {
-                printer.UpdDt = System.DateTime.Now;
-                printer.UpdId = Profile.UserNm;
+                printer.UpdDt = DateTime.Now;
+                printer.UpdId = profileModel.UserNm;
                 _printerDac.UpdatePrinter(printer);
             }
             else
             {
-                printer.RegId = Profile.UserNm;
+                printer.RegId = profileModel.UserNm;
                 printer.RegDt = System.DateTime.Now;
                 printer.DelFlag = "N";
                 printer.RecommendPriority = 0;
@@ -566,7 +566,7 @@ namespace Design.Web.Front.Controllers
                 printerNo = _printerDac.InsertPrinter(printer);
             }
 
-            Success = _printerDac.doPrtEdit(printerNo, Profile.UserId, Profile.UserNm, IPAddressHelper.GetIP(this), printer, imgNameInfo, imgReNameInfo, imgSizeInfo, matInfo);
+            Success = _printerDac.doPrtEdit(printerNo, profileModel.UserId, profileModel.UserNm, IPAddressHelper.GetIP(this), printer, imgNameInfo, imgReNameInfo, imgSizeInfo, matInfo);
 
 
             //int printerNo = 70;
@@ -593,7 +593,7 @@ namespace Design.Web.Front.Controllers
             //                img.Size = imgSizeInfo[i];
             //                img.FileGubun = "prt_img";
             //                img.Seq = i;
-            //                img.RegId = Profile.UserId;
+            //                img.RegId = profileModel.UserId;
             //                img.RegDt = DateTime.Now;
             //                img.RegIp = IPAddressHelper.GetIP(this);
             //                imgList.Add(img);
@@ -610,7 +610,7 @@ namespace Design.Web.Front.Controllers
             //{
             //    if (matInfo[i] != "")
             //    {
-            //        _printerMaterialDac.InsertWithColorByStr(printerNo, Profile.UserNm, matInfo[i]);
+            //        _printerMaterialDac.InsertWithColorByStr(printerNo, profileModel.UserNm, matInfo[i]);
             //    }
             //}
 
@@ -721,9 +721,9 @@ namespace Design.Web.Front.Controllers
             printerModel.Brand = brand;
             printerModel.Model = model;
             printerModel.ApprYn = "N";
-            printerModel.PropMemberNo = Profile.UserNo;
+            printerModel.PropMemberNo = profileModel.UserNo;
             printerModel.RegDt = DateTime.Now;
-            printerModel.RegId = Profile.UserId;
+            printerModel.RegId = profileModel.UserId;
 
             response.Success = _printerModelDac.AddPrinterModel(printerModel);
             response.Message = "요청 되었습니다.";
@@ -735,7 +735,7 @@ namespace Design.Web.Front.Controllers
         #region
         public ActionResult PrtMng(int page = 1)
         {
-            int prtMemNo = Profile.UserNo;
+            int prtMemNo = profileModel.UserNo;
             IList<PrinterT> printerList = _printerDac.GetPrinterByPrtMemberNo(prtMemNo);
             foreach (PrinterT printer in printerList)
             {
@@ -764,7 +764,7 @@ namespace Design.Web.Front.Controllers
         #region 약관 동의
         public ActionResult AcceptTermsOfUse()
         {
-            PrinterMemberT printerMember = _printerMemberDac.GetPrinterMemberByNo(Profile.UserNo);
+            PrinterMemberT printerMember = _printerMemberDac.GetPrinterMemberByNo(profileModel.UserNo);
             if (printerMember != null)
             {
                 return Redirect("/printing/prtUpload");
@@ -776,7 +776,7 @@ namespace Design.Web.Front.Controllers
         #region 스팟 오픈
         public ActionResult SpotOpen()
         {
-            int memberNo = Profile.UserNo;
+            int memberNo = profileModel.UserNo;
             PrinterMemberT printerMember = _printerMemberDac.GetPrinterMemberByNo(memberNo);
             if (printerMember != null)
             {
@@ -841,7 +841,7 @@ namespace Design.Web.Front.Controllers
 
         public ActionResult SpotOpenDone()
         {
-            PrinterMemberT spot = _printerMemberDac.GetPrinterMemberByNo(Profile.UserNo);
+            PrinterMemberT spot = _printerMemberDac.GetPrinterMemberByNo(profileModel.UserNo);
             ViewBag.ContClass = "w100";
             return View(spot);
         }

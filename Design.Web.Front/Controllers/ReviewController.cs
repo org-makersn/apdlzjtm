@@ -47,7 +47,7 @@ namespace Design.Web.Front.Controllers
                     _review.MemberNo = 1234;
                     _review.RegIp = "127.0.0.1";
                     _review.RegDt = DateTime.Now;
-                    _review.RegId = Profile.UserId;
+                    _review.RegId = profileModel.UserId;
 
                     _reviewBiz.add(_review);
 
@@ -73,7 +73,7 @@ namespace Design.Web.Front.Controllers
                     _review.MemberNo = 1234;
                     _review.RegIp = "127.0.0.1";
                     _review.RegDt = DateTime.Now;
-                    _review.RegId = Profile.UserId;
+                    _review.RegId = profileModel.UserId;
                     _review.Depth = depth;
                     _review.ParentNo = no;
 

@@ -36,7 +36,7 @@ namespace Design.Web.Front.Controllers
 
                 if (member.DelFlag == "Y") { return Redirect("returnMainPage"); }
 
-                int visitorNo = Profile.UserNo;
+                int visitorNo = profileModel.UserNo;
 
                 ViewBag.No = no;
                 ViewBag.VisitorNo = visitorNo;
@@ -131,13 +131,13 @@ namespace Design.Web.Front.Controllers
 
             gl = gl == "ALL" ? "" : gl;
 
-            recommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "R", gl, 1, 4);
-            if (recommendList.Count == 0) { recommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "P", gl, 1, 4); };
+            recommendList = _articleDac.GetListByOption(profileModel.UserNo, 0, "R", gl, 1, 4);
+            if (recommendList.Count == 0) { recommendList = _articleDac.GetListByOption(profileModel.UserNo, 0, "P", gl, 1, 4); };
             ViewBag.RecommendList = recommendList;
-            ViewBag.PopularList = _articleDac.GetListByOption(Profile.UserNo, 0, "P", gl, 1, 4);
-            ViewBag.NewList = _articleDac.GetListByOption(Profile.UserNo, 0, "N", gl, 1, 4);
+            ViewBag.PopularList = _articleDac.GetListByOption(profileModel.UserNo, 0, "P", gl, 1, 4);
+            ViewBag.NewList = _articleDac.GetListByOption(profileModel.UserNo, 0, "N", gl, 1, 4);
 
-            ViewBag.ComList = _articleDac.GetListByOption(Profile.UserNo, 10203, "", gl, 1, 4);
+            ViewBag.ComList = _articleDac.GetListByOption(profileModel.UserNo, 10203, "", gl, 1, 4);
 
             return View();
         }

@@ -27,7 +27,7 @@ namespace Design.Web.Front.Controllers
 
         public ActionResult StoreMemberRegister()
         {
-            ViewBag.userNo = Profile.UserNo;
+            ViewBag.userNo = profileModel.UserNo;
             IList<StoreMemberT> _StoreMemberT = new StoreMemberBiz().getAllMemberList().Where(s => s.DelYn.ToLower() == "n").ToList<StoreMemberT>();
             ViewBag.StoreMemberList = _StoreMemberT;
 
@@ -138,7 +138,7 @@ namespace Design.Web.Front.Controllers
         /// <returns></returns>
         public ActionResult FollewingList(int storeNo) {
 
-            int memberUserno = Profile.UserNo == 0 ? 182 : Profile.UserNo; // 로그인 되어 있는 회원아이디
+            int memberUserno = profileModel.UserNo == 0 ? 182 : profileModel.UserNo; // 로그인 되어 있는 회원아이디
             IList<FollowerT> _follerList = new FollowerDac().GetFollowerLIst(storeNo ,memberUserno ).Where(s => s.SiteGubun == "Store").ToList<FollowerT>();
 
             if (_follerList.Count > 0 )
@@ -163,12 +163,12 @@ namespace Design.Web.Front.Controllers
 
             follow.SiteGubun = "Store";
             follow.MemberNoRef = StoreMemberNo;
-            follow.MemberNo = Profile.UserNo;
+            follow.MemberNo = profileModel.UserNo;
             follow.IsNew = "Y";
             follow.RegId = "admin";
             follow.RegDt = DateTime.Now;
 
-            if (Profile.UserNo == 0)
+            if (profileModel.UserNo == 0)
             {
 
             }
@@ -194,18 +194,18 @@ namespace Design.Web.Front.Controllers
 
             follow.SiteGubun = "Store";
             follow.MemberNoRef = StoreMemberNo;
-            follow.MemberNo = Profile.UserNo;
+            follow.MemberNo = profileModel.UserNo;
             follow.IsNew = "Y";
             follow.RegId = "admin";
             follow.RegDt = DateTime.Now;
 
-            if (Profile.UserNo == 0)
+            if (profileModel.UserNo == 0)
             {
 
             }
             else
             {
-                result = new FollowerDac().CheckFollow(Profile.UserNo, StoreMemberNo);
+                result = new FollowerDac().CheckFollow(profileModel.UserNo, StoreMemberNo);
             }
             return result;
         }

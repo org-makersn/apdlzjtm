@@ -39,12 +39,12 @@ namespace Design.Web.Front.Controllers
 
         public ActionResult Index(int articleNo = 0, int printerNo = 0, int material = 0, int color = 0, int orderNo = 0)
         {
-            if (Profile.UserNo == 0)
+            if (profileModel.UserNo == 0)
             {
                 return Content("<script>alert('로그인 후 이용해 주세요.'); history.go(-1);</script>");
             }
 
-            string temp = Profile.UserNo + "_" + new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
+            string temp = profileModel.UserNo + "_" + new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
             IList<OrderDetailT> orderList = new List<OrderDetailT>();
             //ViewBag.WrapClass = "bgW";
 
@@ -82,7 +82,7 @@ namespace Design.Web.Front.Controllers
                         data.PrintVolume = file.PrintVolume;
 
                         data.RegDt = DateTime.Now;
-                        data.RegId = Profile.UserId;
+                        data.RegId = profileModel.UserId;
                         data.No = _orderDetailDac.InsertOrderDetail(data);
                         orderList.Add(data);
                     }
@@ -92,7 +92,7 @@ namespace Design.Web.Front.Controllers
 
             if (orderNo != 0)
             {
-                OrderT order = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+                OrderT order = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
                 if (order == null || !(order.OrderStatus == 210 || order.OrderStatus == 215))
                 {
                     return Content("<script>alert('잘못된 접근입니다'); location.href = '/order/myorder';</script>");
@@ -129,7 +129,7 @@ namespace Design.Web.Front.Controllers
         /// <returns></returns>
         public ActionResult MngHome(int page = 1, string searchType = "ordMemNm", string status = "0", string dtStart = "", string dtEnd = "", string text = "")
         {
-            int memberNo = Profile.UserNo;
+            int memberNo = profileModel.UserNo;
             DateTime nowDt = DateTime.Now;
             DateTime beforDt = nowDt.AddHours(-12);
             IList<OrderT> newOrderList = _orderDac.GetSearchOrderListPrt(memberNo, (int)MakersnEnumTypes.OrderState.결제완료, (int)MakersnEnumTypes.OrderState.결제완료, "", "0", beforDt.ToString("yyyy-MM-dd"), nowDt.ToString("yyyy-MM-dd"), "");
@@ -158,7 +158,7 @@ namespace Design.Web.Front.Controllers
         #region 스팟 주문관리 출력 페이지
         public ActionResult MngDetailPrtPre(long orderNo = 0, int status = 0)
         {
-            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
             if (order == null || order.OrderStatus != (int)MakersnEnumTypes.OrderState.출력중)
             {
                 ViewBag.Announce = "something wrong";
@@ -177,7 +177,7 @@ namespace Design.Web.Front.Controllers
         [HttpGet]
         public ActionResult MngDetailPrtDone(long orderNo)
         {
-            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
             ViewBag.OrderEntity = order;
             ViewBag.OrderMember = _memberDac.GetMemberProfile(order.MemberNo);
             ViewBag.ImgList = _printerOurputImgDac.GetImglistByOrderNo(order.No);
@@ -217,7 +217,7 @@ namespace Design.Web.Front.Controllers
                             img.OrderNo = orderNo;
                             img.ImageName = imgNameInfo[i];
                             img.ImageReName = imgReNameInfo[i];
-                            img.RegId = Profile.UserId;
+                            img.RegId = profileModel.UserId;
                             img.RegDt = DateTime.Now;
                             imgList.Add(img);
                         }
@@ -226,24 +226,24 @@ namespace Design.Web.Front.Controllers
                     // notice
                     PrinterNoticeT prtNotice = new PrinterNoticeT();
                     prtNotice.OrderNo = orderNo;
-                    prtNotice.MemberNo = Profile.UserNo;
+                    prtNotice.MemberNo = profileModel.UserNo;
                     prtNotice.MemberNoRef = orderMemNo;
                     prtNotice.Comment = message;
                     prtNotice.Type = "outputImage";
                     prtNotice.IsNew = "Y";
                     prtNotice.RegDt = DateTime.Now;
-                    prtNotice.RegId = Profile.UserId;
+                    prtNotice.RegId = profileModel.UserId;
                     prtNotice.RegIp = IPAddressHelper.GetIP(this);
                     _PrinterNoticeDac.InsertNotice(prtNotice);
 
                     //change status
-                    OrderT order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+                    OrderT order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
 
                     if (orderStat != 0)
                     {
                         order.OrderStatus = orderStat;
                         order.UpdDt = System.DateTime.Now;
-                        order.UpdId = Profile.UserId;
+                        order.UpdId = profileModel.UserId;
                         _orderDac.UpdateOrder(order);
                     }
 
@@ -265,7 +265,7 @@ namespace Design.Web.Front.Controllers
         [HttpGet]
         public ActionResult MngDetailPostPre(long orderNo = 0)
         {
-            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
             if (order == null || (order.OrderStatus != (int)MakersnEnumTypes.OrderState.배송요청 && order.OrderStatus != (int)MakersnEnumTypes.OrderState.배송중 && (order.OrderStatus != (int)MakersnEnumTypes.OrderState.배송완료)))
             {
                 ViewBag.Announce = "something wrong";
@@ -307,19 +307,19 @@ namespace Design.Web.Front.Controllers
                 {
                     PrinterNoticeT prtNotice = new PrinterNoticeT();
                     prtNotice.OrderNo = orderNo;
-                    prtNotice.MemberNo = Profile.UserNo;
+                    prtNotice.MemberNo = profileModel.UserNo;
                     prtNotice.MemberNoRef = orderMemNo;
                     prtNotice.Comment = "고객님의 주문이 택배사(" + DeliveryCompany + ") 으로 발송 되었으며 송장번호는 " + DeliveryNum + " 입니다.";
                     prtNotice.Type = "posted";
                     prtNotice.IsNew = "Y";
                     prtNotice.RegDt = DateTime.Now;
-                    prtNotice.RegId = Profile.UserId;
+                    prtNotice.RegId = profileModel.UserId;
                     prtNotice.RegIp = IPAddressHelper.GetIP(this);
                     _PrinterNoticeDac.InsertNotice(prtNotice);
                 }
 
                 // change status
-                order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+                order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
                 int orderStat = 0;
                 if (type == "택배")
                 {
@@ -344,7 +344,7 @@ namespace Design.Web.Front.Controllers
                     order.OrderStatus = orderStat;
                     order.UpdDt = System.DateTime.Now;
                     order.PostDt = System.DateTime.Now;
-                    order.UpdId = Profile.UserId;
+                    order.UpdId = profileModel.UserId;
                     _orderDac.UpdateOrder(order);
                 }
 
@@ -359,7 +359,7 @@ namespace Design.Web.Front.Controllers
         [HttpGet]
         public ActionResult MngDetailPostDone(long orderNo)
         {
-            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
             ViewBag.OrderEntity = order;
             ViewBag.OrderMember = _memberDac.GetMemberProfile(order.MemberNo);
             ViewBag.Printer = _printerDac.GetPrinterByNo(order.PrinterNo);
@@ -374,7 +374,7 @@ namespace Design.Web.Front.Controllers
         #region
         public ActionResult MngDetailInfo(long orderNo)
         {
-            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
             order.PrinterName = _printerDac.GetPrinterByNo(order.PrinterNo).Brand + _printerDac.GetPrinterByNo(order.PrinterNo).Model;
             ViewBag.OrderEntity = order;
             ViewBag.OrderMember = _memberDac.GetMemberProfile(order.MemberNo);
@@ -422,7 +422,7 @@ namespace Design.Web.Front.Controllers
         #region 새주문 관리
         public ActionResult MngDetailNew(int orderNo = 0, int status = 0)
         {
-            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
             if (order.OrderStatus <= (int)MakersnEnumTypes.OrderState.결제완료)
             {
                 ViewBag.Order = order;
@@ -438,7 +438,7 @@ namespace Design.Web.Front.Controllers
 
         public JsonResult ChangeStat(int orderNo, string status)
         {
-            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNoPrt(orderNo, profileModel.UserNo);
             int orderStat = 0;
             foreach (MakersnEnumTypes.OrderState enumtemp in Enum.GetValues(typeof(MakersnEnumTypes.OrderState)))
             {
@@ -449,7 +449,7 @@ namespace Design.Web.Front.Controllers
             {
                 order.OrderStatus = orderStat;
                 order.UpdDt = System.DateTime.Now;
-                order.UpdId = Profile.UserId;
+                order.UpdId = profileModel.UserId;
                 _orderDac.UpdateOrder(order);
 
 
@@ -458,13 +458,13 @@ namespace Design.Web.Front.Controllers
 
                     PrinterNoticeT prtNotice = new PrinterNoticeT();
                     prtNotice.OrderNo = order.No;
-                    prtNotice.MemberNo = Profile.UserNo;
+                    prtNotice.MemberNo = profileModel.UserNo;
                     prtNotice.MemberNoRef = order.MemberNo;
-                    //prtNotice.Comment = Profile.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
+                    //prtNotice.Comment = profileModel.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
                     prtNotice.Type = "orderReqReject";
                     prtNotice.IsNew = "Y";
                     prtNotice.RegDt = DateTime.Now;
-                    prtNotice.RegId = Profile.UserId;
+                    prtNotice.RegId = profileModel.UserId;
                     prtNotice.RegIp = IPAddressHelper.GetIP(this);
                     _PrinterNoticeDac.InsertNotice(prtNotice);
                 }
@@ -473,13 +473,13 @@ namespace Design.Web.Front.Controllers
 
                     PrinterNoticeT prtNotice = new PrinterNoticeT();
                     prtNotice.OrderNo = order.No;
-                    prtNotice.MemberNo = Profile.UserNo;
+                    prtNotice.MemberNo = profileModel.UserNo;
                     prtNotice.MemberNoRef = order.MemberNo;
-                    //prtNotice.Comment = Profile.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
+                    //prtNotice.Comment = profileModel.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
                     prtNotice.Type = "orderReqAccept";
                     prtNotice.IsNew = "Y";
                     prtNotice.RegDt = DateTime.Now;
-                    prtNotice.RegId = Profile.UserId;
+                    prtNotice.RegId = profileModel.UserId;
                     prtNotice.RegIp = IPAddressHelper.GetIP(this);
                     _PrinterNoticeDac.InsertNotice(prtNotice);
                 }
@@ -517,7 +517,7 @@ namespace Design.Web.Front.Controllers
         #region 내 주문
         public ActionResult MyOrderDetail(int orderNo = 1)
         {
-            OrderT order = _orderDac.GetOrderByNoForOrderDetail(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNoForOrderDetail(orderNo, profileModel.UserNo);
             ViewBag.Order = order;
             IList<OrderDetailT> list = _orderDac.GetOrderDetailByMyOrder(order.No);
             ViewBag.PrinterList = _printerDac.GetPrinterByPrtMemberNo(order.PrinterMemberNo);
@@ -525,7 +525,7 @@ namespace Design.Web.Front.Controllers
             IList<MaterialT> matList = _printerDac.GetMatrialListByPrinterNo(order.PrinterNo);
             ViewBag.MaterialList = matList;
             ViewBag.ColorList = _printerDac.GetMaterialColorByPrinterNo(order.PrinterNo, matList[0].No);
-            ViewBag.UserNm = Profile.UserNm;
+            ViewBag.UserNm = profileModel.UserNm;
 
             return View(list);
         }
@@ -548,7 +548,7 @@ namespace Design.Web.Front.Controllers
         public ActionResult MyOrder(int page = 1)
         {
             ViewBag.WrapClass = "bgW";
-            int memberNo = Profile.UserNo;
+            int memberNo = profileModel.UserNo;
             IList<OrderT> allList = _orderDac.GetMyOrderList(memberNo);
 
             IList<OrderT> list = new List<OrderT>();
@@ -570,7 +570,7 @@ namespace Design.Web.Front.Controllers
 
         public ActionResult MyOrderReview(int orderNo)
         {
-            OrderT order = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
             if (order == null)
             {
                 return Content("<script>alert('잘못된 접근입니다.'); location.href='/order/myorder';</script>");
@@ -586,7 +586,7 @@ namespace Design.Web.Front.Controllers
 
             ViewBag.Order = order;
             ViewBag.Printer = _printerDac.GetPrinterByNo(order.PrinterNo);
-            ViewBag.Review = _reviewDac.GetReviewByOrderNo(orderNo, Profile.UserNo);
+            ViewBag.Review = _reviewDac.GetReviewByOrderNo(orderNo, profileModel.UserNo);
             ViewBag.SpotName = _memberDac.GetMemberProfile(order.PrinterMemberNo).Name;
 
             return View(list);
@@ -596,14 +596,14 @@ namespace Design.Web.Front.Controllers
         {
             AjaxResponseModel model = new AjaxResponseModel();
             model.Success = false;
-            OrderT order = _orderDac.GetOrderByNo(odNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(odNo, profileModel.UserNo);
 
-            if (order.PrinterMemberNo == Profile.UserNo)
+            if (order.PrinterMemberNo == profileModel.UserNo)
             {
                 model.Message = "본인 스팟에는 평점을 남길 수 없습니다.";
                 order.OrderStatus = (int)Makersn.Util.MakersnEnumTypes.OrderState.거래완료;
                 order.UpdDt = DateTime.Now;
-                order.UpdId = Profile.UserId;
+                order.UpdId = profileModel.UserId;
                 _orderDac.UpdateOrderbyDone(order);
                 return Json(model);
             }
@@ -619,11 +619,11 @@ namespace Design.Web.Front.Controllers
 
                 ReviewT review = new ReviewT();
                 review.OrderNo = odNo;
-                review.MemberNo = Profile.UserNo;
+                review.MemberNo = profileModel.UserNo;
                 review.PrinterNo = no;
                 review.Score = score;
                 review.Comment = text;
-                review.RegId = Profile.UserId;
+                review.RegId = profileModel.UserId;
                 review.RegDt = DateTime.Now;
 
                 _reviewDac.addReview(review);
@@ -631,7 +631,7 @@ namespace Design.Web.Front.Controllers
                 order.OrderStatus = (int)Makersn.Util.MakersnEnumTypes.OrderState.거래완료;
                 order.OrderDoneDt = DateTime.Now;
                 order.UpdDt = DateTime.Now;
-                order.UpdId = Profile.UserId;
+                order.UpdId = profileModel.UserId;
 
                 order.TotalPrice = 0;
                 foreach (OrderDetailT od in detail)
@@ -650,7 +650,7 @@ namespace Design.Web.Front.Controllers
                 //oa.Price = order.TotalPrice;
                 //oa.Status = (int)Makersn.Util.MakersnEnumTypes.OrderAccountingStatus.미결제;
                 //oa.RegDt = DateTime.Now;
-                //oa.RegId = Profile.UserId;
+                //oa.RegId = profileModel.UserId;
 
                 //_orderAccountingDac.InsertOrderAccounting(oa);
 
@@ -730,7 +730,7 @@ namespace Design.Web.Front.Controllers
                             orderDetail.SizeZ = sizeResult.Z;
                             orderDetail.Volume = sizeResult.Volume;
                             orderDetail.RegDt = DateTime.Now;
-                            orderDetail.RegId = Profile.UserId;
+                            orderDetail.RegId = profileModel.UserId;
 
                             orderDetail.No = _orderDetailDac.InsertOrderDetail(orderDetail);
 
@@ -806,7 +806,7 @@ namespace Design.Web.Front.Controllers
         {
             OrderDetailT detail = new OrderDetailT();
             detail.No = no;
-            detail.Temp = Profile.UserNo.ToString();
+            detail.Temp = profileModel.UserNo.ToString();
 
             _orderDetailDac.DeleteFile(detail);
 
@@ -917,7 +917,7 @@ namespace Design.Web.Front.Controllers
                 return Json(response);
             }
 
-            OrderT chkOrder = _orderDac.GetOrderByTemp(temp, Profile.UserNo);
+            OrderT chkOrder = _orderDac.GetOrderByTemp(temp, profileModel.UserNo);
             if (chkOrder != null)
             {
                 response.Success = false;
@@ -938,7 +938,7 @@ namespace Design.Web.Front.Controllers
 
             OrderT order = new OrderT();
             order.OrderNo = orderNo;
-            order.MemberNo = Profile.UserNo;
+            order.MemberNo = profileModel.UserNo;
             order.PrinterMemberNo = printer.MemberNo;
             order.PrinterNo = printerNo;
             order.Quality = printer.Quality;
@@ -947,7 +947,7 @@ namespace Design.Web.Front.Controllers
             order.Temp = temp;
             order.TestFlag = "N";
             order.PostMode = postMode;
-            order.RegId = Profile.UserId;
+            order.RegId = profileModel.UserId;
             order.RegDt = DateTime.Now;
             order.AccountState = (int)MakersnEnumTypes.OrderAccountingStatus.미결제;
 
@@ -980,7 +980,7 @@ namespace Design.Web.Front.Controllers
             int preOrderNo = int.Parse(collection["PreOrderNo"]);
             if (preOrderNo != 0)
             {
-                OrderT preOrder = _orderDac.GetOrderByNo(preOrderNo, Profile.UserNo);
+                OrderT preOrder = _orderDac.GetOrderByNo(preOrderNo, profileModel.UserNo);
                 _orderDac.DeleteOrder(preOrder);
             }
 
@@ -995,12 +995,12 @@ namespace Design.Web.Front.Controllers
         {
             ViewBag.WrapClass = "bgW";
 
-            OrderT order = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
             if (order == null || (int)Makersn.Util.MakersnEnumTypes.OrderState.결제완료 <= order.OrderStatus)
             {
                 return Content("<script>alert('잘못된 접근입니다.'); location.href='/order/myorder';</script>");
             }
-            MemberT member = _memberDac.GetMemberProfile(Profile.UserNo);
+            MemberT member = _memberDac.GetMemberProfile(profileModel.UserNo);
             ViewBag.Member = member;
             order.OrderMemberName = member.Name;
             order.Email = member.Email;
@@ -1009,7 +1009,7 @@ namespace Design.Web.Front.Controllers
             ViewBag.Order = order;
             IList<OrderDetailT> list = _orderDac.GetOrderDetailByMyOrder(order.No);
 
-            ViewBag.DefaultAddress = _orderDac.GetDefaultAddress(Profile.UserNo);
+            ViewBag.DefaultAddress = _orderDac.GetDefaultAddress(profileModel.UserNo);
             ViewBag.Printer = _printerDac.GetPrinterByNo(order.PrinterNo);
             ViewBag.Spot = _printerMemberDac.GetPrinterMemberByNo(order.PrinterMemberNo);
 
@@ -1022,12 +1022,12 @@ namespace Design.Web.Front.Controllers
         {
             DefaultAddressT address = new DefaultAddressT();
 
-            OrderT order = _orderDac.GetLatelyOrderTop1ByMemberNo(Profile.UserNo);
+            OrderT order = _orderDac.GetLatelyOrderTop1ByMemberNo(profileModel.UserNo);
 
             switch (type)
             {
                 case "D":
-                    address = _orderDac.GetDefaultAddress(Profile.UserNo);
+                    address = _orderDac.GetDefaultAddress(profileModel.UserNo);
                     address = address == null ? new DefaultAddressT() : address;
                     break;
                 case "B":
@@ -1054,7 +1054,7 @@ namespace Design.Web.Front.Controllers
         #region 주문 상세
         public ActionResult OrderDetailPop(int orderNo = 1)
         {
-            OrderT order = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
 
             if (order == null) { return Content("<script>alert('잘못된 접근입니다.'); location.href='/order/myorder';</script>"); }
 
@@ -1071,7 +1071,7 @@ namespace Design.Web.Front.Controllers
 
             ViewBag.Printer = _printerDac.GetPrinterByNo(order.PrinterNo);
 
-            ViewBag.UserNm = Profile.UserNm;
+            ViewBag.UserNm = profileModel.UserNm;
 
             return View(list);
         }
@@ -1081,7 +1081,7 @@ namespace Design.Web.Front.Controllers
         public ActionResult ShowOutputImage(int orderNo = 0)
         {
             ViewBag.WrapClass = "bgW";
-            OrderT chkOrder = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+            OrderT chkOrder = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
             if (chkOrder == null) { return Content("<script>alert('잘못된 접근입니다'); location.href = '/order/myorder';</script>"); }
             IList<PrinterOutputImageT> list = _orderDac.GetOutputImage(orderNo);
             ViewBag.Comment = _PrinterNoticeDac.GetNoticeByOrderNoAndType(orderNo, "outputImage")[0].Comment;
@@ -1098,7 +1098,7 @@ namespace Design.Web.Front.Controllers
             AjaxResponseModel model = new AjaxResponseModel();
             model.Success = false;
 
-            OrderT order = _orderDac.GetOrderByNo(no, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(no, profileModel.UserNo);
 
             if (order == null)
             {
@@ -1106,10 +1106,10 @@ namespace Design.Web.Front.Controllers
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
 
-            order.MemberNo = Profile.UserNo;
+            order.MemberNo = profileModel.UserNo;
             order.OrderStatus = (int)(Makersn.Util.MakersnEnumTypes.OrderState.배송요청);
             order.UpdDt = DateTime.Now;
-            order.UpdId = Profile.UserId;
+            order.UpdId = profileModel.UserId;
 
             _orderDac.UpdateOrder(order);
 
@@ -1121,13 +1121,13 @@ namespace Design.Web.Front.Controllers
                 // notice
                 PrinterNoticeT prtNotice = new PrinterNoticeT();
                 prtNotice.OrderNo = order.No;
-                prtNotice.MemberNo = Profile.UserNo;
+                prtNotice.MemberNo = profileModel.UserNo;
                 prtNotice.MemberNoRef = order.PrinterMemberNo;
-                //prtNotice.Comment = Profile.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
+                //prtNotice.Comment = profileModel.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
                 prtNotice.Type = "postReq";
                 prtNotice.IsNew = "Y";
                 prtNotice.RegDt = DateTime.Now;
-                prtNotice.RegId = Profile.UserId;
+                prtNotice.RegId = profileModel.UserId;
                 prtNotice.RegIp = IPAddressHelper.GetIP(this);
                 _PrinterNoticeDac.InsertNotice(prtNotice);
 
@@ -1139,13 +1139,13 @@ namespace Design.Web.Front.Controllers
 
                 PrinterNoticeT prtNotice = new PrinterNoticeT();
                 prtNotice.OrderNo = order.No;
-                prtNotice.MemberNo = Profile.UserNo;
+                prtNotice.MemberNo = profileModel.UserNo;
                 prtNotice.MemberNoRef = order.PrinterMemberNo;
-                //prtNotice.Comment = Profile.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
+                //prtNotice.Comment = profileModel.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
                 prtNotice.Type = "pickupReq";
                 prtNotice.IsNew = "Y";
                 prtNotice.RegDt = DateTime.Now;
-                prtNotice.RegId = Profile.UserId;
+                prtNotice.RegId = profileModel.UserId;
                 prtNotice.RegIp = IPAddressHelper.GetIP(this);
                 _PrinterNoticeDac.InsertNotice(prtNotice);
                 model.Message = "방문 요청을 하였습니다. \n스팟에 문의하여 방문 약속을 잡으세요.";
@@ -1164,7 +1164,7 @@ namespace Design.Web.Front.Controllers
             AjaxResponseModel model = new AjaxResponseModel();
             model.Success = false;
 
-            OrderT order = _orderDac.GetOrderByNo(no, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(no, profileModel.UserNo);
             if (!(order.OrderStatus == 100 || order.OrderStatus == 110 || order.OrderStatus == 120) || order == null)
             {
                 model.Message = "잘못된 접근입니다.";
@@ -1234,15 +1234,15 @@ namespace Design.Web.Front.Controllers
                 }
 
                 MemberT member = new MemberT();
-                member.No = Profile.UserNo;
+                member.No = profileModel.UserNo;
                 member.CellPhone = ordHp[0] + "-" + ordHp[1] + "-" + ordHp[2]; ;
                 member.Email = ordEmail;
                 member.UpdDt = DateTime.Now;
-                member.UpdId = Profile.UserId;
+                member.UpdId = profileModel.UserId;
 
                 _memberDac.UpdateMemberByOrder(member);
 
-                OrderT order = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+                OrderT order = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
                 if (order == null)
                 {
                     model.Message = "잘못된 경로입니다;";
@@ -1306,11 +1306,11 @@ namespace Design.Web.Front.Controllers
                 prtNotice.OrderNo = order.No;
                 prtNotice.MemberNo = order.MemberNo;
                 prtNotice.MemberNoRef = order.PrinterMemberNo;
-                prtNotice.Comment = Profile.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
+                prtNotice.Comment = profileModel.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
                 prtNotice.Type = "paymentFinished";
                 prtNotice.IsNew = "Y";
                 prtNotice.RegDt = DateTime.Now;
-                prtNotice.RegId = Profile.UserId;
+                prtNotice.RegId = profileModel.UserId;
                 prtNotice.RegIp = IPAddressHelper.GetIP(this);
                 _PrinterNoticeDac.InsertNotice(prtNotice);
 
@@ -1318,7 +1318,7 @@ namespace Design.Web.Front.Controllers
 
                 order.OrderDt = DateTime.Now;
                 order.UpdDt = DateTime.Now;
-                order.UpdId = Profile.UserId;
+                order.UpdId = profileModel.UserId;
 
                 _orderDac.UpdateOrder(order);
 
@@ -1328,13 +1328,13 @@ namespace Design.Web.Front.Controllers
                 //// notice
                 //PrinterNoticeT prtNotice = new PrinterNoticeT();
                 //prtNotice.OrderNo = orderNo;
-                //prtNotice.MemberNo = Profile.UserNo;
+                //prtNotice.MemberNo = profileModel.UserNo;
                 //prtNotice.MemberNoRef = order.PrinterMemberNo;
-                //prtNotice.Comment = Profile.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
+                //prtNotice.Comment = profileModel.UserNm + " 님 께서 새로운 주문이 들어왔습니다.";
                 //prtNotice.Type = "paymentFinished";
                 //prtNotice.IsNew = "Y";
                 //prtNotice.RegDt = DateTime.Now;
-                //prtNotice.RegId = Profile.UserId;
+                //prtNotice.RegId = profileModel.UserId;
                 //prtNotice.RegIp = IPAddressHelper.GetIP(this);
                 //_PrinterNoticeDac.InsertNotice(prtNotice);
 
@@ -1343,13 +1343,13 @@ namespace Design.Web.Front.Controllers
 
                 if (cartCheck != "" && cartCheck != null)
                 {
-                    DefaultAddressT address = _orderDac.GetDefaultAddress(Profile.UserNo);
+                    DefaultAddressT address = _orderDac.GetDefaultAddress(profileModel.UserNo);
                     if (address == null)
                     {
                         address = new DefaultAddressT();
-                        address.MemberNo = Profile.UserNo;
+                        address.MemberNo = profileModel.UserNo;
                         address.RegDt = DateTime.Now;
-                        address.RegId = Profile.UserId;
+                        address.RegId = profileModel.UserId;
                     }
                     address.PostMemberName = order.PostMemberName;
                     address.CellPhone = order.CellPhone;
@@ -1358,7 +1358,7 @@ namespace Design.Web.Front.Controllers
                     address.Address = order.PostAddress;
                     address.AddressDetail = order.PostAddressDetail;
                     address.UpdDt = DateTime.Now;
-                    address.UpdId = Profile.UserId;
+                    address.UpdId = profileModel.UserId;
 
 
                     _orderDac.SaveOrUpdateDefaultAddress(address);
@@ -1379,7 +1379,7 @@ namespace Design.Web.Front.Controllers
         #region 배송 정보 보기
         public PartialViewResult GetPostInfo(int orderNo)
         {
-            OrderT order = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
             order.PrinterMemberName = _memberDac.GetMemberProfile(order.PrinterMemberNo).Name;
 
             return PartialView(order);
@@ -1389,7 +1389,7 @@ namespace Design.Web.Front.Controllers
         #region
         public ActionResult OrderDone(int orderNo)
         {
-            OrderT order = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
             order.PrinterMemberName = _memberDac.GetMemberProfile(order.PrinterMemberNo).Name;
             IList<OrderDetailT> detail = _orderDetailDac.GetDetailListByOrderNo(order.No);
 
@@ -1410,7 +1410,7 @@ namespace Design.Web.Front.Controllers
             AjaxResponseModel model = new AjaxResponseModel();
             model.Success = false;
 
-            OrderT order = _orderDac.GetOrderByNo(orderNo, Profile.UserNo);
+            OrderT order = _orderDac.GetOrderByNo(orderNo, profileModel.UserNo);
 
             if (order == null)
             {
@@ -1420,7 +1420,7 @@ namespace Design.Web.Front.Controllers
             {
                 order.OrderStatus = (int)Makersn.Util.MakersnEnumTypes.OrderState.배송완료;
                 order.UpdDt = DateTime.Now;
-                order.UpdId = Profile.UserId;
+                order.UpdId = profileModel.UserId;
                 _orderDac.UpdateOrder(order);
                 model.Success = true;
             }

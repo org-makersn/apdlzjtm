@@ -10,17 +10,18 @@ namespace Makers.Store.Controllers
 {
     public class BaseController : Controller
     {
-        private ProfileModel profileModel;
+        public ProfileModel profileModel;
 
         public BaseController()
         {
-            ViewBag.LogOnMemner = Profile;
-            ViewBag.LogOnChk = Profile.UserNo == 0 ? 0 : 1;
+            profileModel = Profile;
+            ViewBag.LogOnMemner = profileModel;
+            ViewBag.LogOnChk = profileModel.UserNo == 0 ? 0 : 1;
 
             ViewBag.IsMain = "N";
         }
 
-        public ProfileModel Profile
+        private ProfileModel Profile
         {
             get
             {

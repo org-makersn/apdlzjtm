@@ -21,9 +21,9 @@ namespace Makers.Store.Controllers
 
             IList<StoreProductT> list = null;
 
-            int totalCnt = new StoreProductBiz().getTotalCountByOption(Profile.UserNo, codeNo);
+            int totalCnt = new StoreProductBiz().getTotalCountByOption(profileModel.UserNo, codeNo);
 
-            list = new StoreProductBiz().getProductsByOption(Profile.UserNo, codeNo);
+            list = new StoreProductBiz().getProductsByOption(profileModel.UserNo, codeNo);
 
             PagerInfo pager = new PagerInfo();
             pager.CurrentPageIndex = page;

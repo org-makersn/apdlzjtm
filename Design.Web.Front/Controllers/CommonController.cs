@@ -35,7 +35,7 @@ namespace Design.Web.Front.Controllers
                 _notice.CheckYn = CheckYN;
                 _notice.IsNewYn = IsNewYN;
                 _notice.RegDt = DateTime.Now;
-                _notice.RegId = Profile.UserId;
+                _notice.RegId = profileModel.UserId;
 
                 _noticeBiz.add(_notice);
 

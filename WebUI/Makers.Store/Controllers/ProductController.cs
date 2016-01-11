@@ -24,7 +24,7 @@ namespace Makers.Store.Controllers
         // GET: /Product/
         public ActionResult Index()
         {
-            ViewBag.UserNo = Profile.UserNo;
+            ViewBag.UserNo = profileModel.UserNo;
             return View();
         }
 
@@ -109,7 +109,7 @@ namespace Makers.Store.Controllers
                                 _storeProduct.DetailDepth = 0;
                                 _storeProduct.TxtLoc = "";
                                 _storeProduct.RegDt = DateTime.Now;
-                                _storeProduct.RegId = Profile.UserId;
+                                _storeProduct.RegId = profileModel.UserId;
 
                                 IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
                                 productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
@@ -193,7 +193,7 @@ namespace Makers.Store.Controllers
             int result = 0;
 
             StoreLikesT like = new StoreLikesT();
-            like.MemberNo = Profile.UserNo;
+            like.MemberNo = profileModel.UserNo;
             like.RegIp = IPAddressHelper.GetIP(this);
             like.ProductNo = productNo;
             like.RegId = "test";
