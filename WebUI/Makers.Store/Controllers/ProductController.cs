@@ -67,27 +67,27 @@ namespace Makers.Store.Controllers
 
                             if (extType.Contains(extension.ToLower()))
                             {
-                                string save3DFolder = string.Format(@"{0}\product\3d-files", instance.PhysicalDir);
-
-                                string fileReName = new FileHelper().UploadFile(stlupload, null, save3DFolder, null);
+                                string modelingDir = @"product\3d-files";
+                                string save3DPath = string.Format(@"{0}\{1}", instance.PhysicalDir, modelingDir);
+                                string fileReName = new FileHelper().UploadFile(stlupload, null, save3DPath, null);
 
                                 StoreProductT _storeProduct = new StoreProductT();
 
-                                _storeProduct.VarNo = 10000;
+                                _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
                                 _storeProduct.ProductName = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
-                                _storeProduct.FilePath = save3DFolder;
+                                _storeProduct.FilePath = modelingDir;
                                 _storeProduct.FileName = stlupload.FileName;
                                 _storeProduct.FileReName = fileReName;
                                 _storeProduct.FileExt = extension.ToLower();
                                 _storeProduct.MimeType = stlupload.ContentType;
                                 _storeProduct.FileSize = Convert.ToDouble(stlupload.ContentLength.ToString());
 
-                                _storeProduct.SlicedVolume = 0;
-                                _storeProduct.ModelVolume = 0;
+                                _storeProduct.MaterialVolume = 0;
+                                _storeProduct.ObjectVolume = 0;
                                 _storeProduct.SizeX = 0;
                                 _storeProduct.SizeY = 0;
-                                _storeProduct.SizeZ = 0
-                                    ;
+                                _storeProduct.SizeZ = 0;
+
                                 _storeProduct.Scale = 100;
                                 _storeProduct.ShortLing = "";
                                 _storeProduct.VideoUrl = "";
@@ -111,11 +111,14 @@ namespace Makers.Store.Controllers
                                 _storeProduct.RegDt = DateTime.Now;
                                 _storeProduct.RegId = profileModel.UserId;
 
-                                IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
+                                //IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
                                 productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
 
-                                response.Success = true;
-                                response.Result = productNo.ToString();
+                                if (productNo > 0)
+                                {
+                                    response.Success = true;
+                                    response.Result = productNo.ToString();
+                                }
 
                                 //Result[index] = articleFileNo;
                                 index++;
@@ -144,7 +147,7 @@ namespace Makers.Store.Controllers
         public ActionResult Models(int no)
         {
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
-            ViewBag.AttrYN = storeProduct.SlicedVolume == 0 ? "N" : "Y";
+            ViewBag.AttrYN = storeProduct.MaterialVolume == 0 || storeProduct.ObjectVolume == 0 ? "N" : "Y";
             ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
             return View(storeProduct);
         }
@@ -191,24 +194,27 @@ namespace Makers.Store.Controllers
             AjaxResponseModel response = new AjaxResponseModel();
             response.Success = false;
 
+            int status = 0;
+
             string saveJSFolder = @"product\js-files";
 
             StoreProductT product = new StoreProductBiz().getStoreProductById(productNo);
 
             if (product != null)
             {
-                ModelingSize getSize = null;
+                ModelingSize getSize = new ModelingSize();
                 string fullpath = string.Format(@"{0}\{1}\{2}", instance.PhysicalDir, product.FilePath, product.FileReName);
-                if (product.ModelVolume == 0)
+                if (product.ObjectVolume == 0)
                 {
-                    _3DModel _3dModel = new Modeling3DHelper().GetStlModel(fullpath, product.FileExt);
+                    status += 1;
+                    _3DModel _3dModel = new Modeling3DHelper().Get3DModel(fullpath, product.FileExt);
 
                     getSize = new Modeling3DHelper().GetSizeFor3DFile(fullpath, product.FileExt);
 
                     product.SizeX = getSize.X;
                     product.SizeY = getSize.Y;
                     product.SizeZ = getSize.Z;
-                    product.ModelVolume = getSize.Volume / 1000;
+                    product.ObjectVolume = getSize.ObjectVolume;
 
                     string jsfullpath = string.Format(@"{0}\{1}\{2}.js", instance.PhysicalDir, saveJSFolder, product.FileReName);
 
@@ -216,22 +222,36 @@ namespace Makers.Store.Controllers
 
                     bool result = new FileHelper().FileWriteAllText(jsfullpath, strBuff);
                 }
-
-                if (product.SlicedVolume == 0)
+                else
                 {
-                    product.SlicedVolume = new Modeling3DHelper().Slicing(fullpath, instance.Slic3rDir);
-                    getSize.Slicing = product.SlicedVolume;
+                    getSize.X = product.SizeX;
+                    getSize.Y = product.SizeY;
+                    getSize.Z = product.SizeZ;
+                    getSize.ObjectVolume = product.ObjectVolume;
                 }
 
-                int ret = new StoreProductBiz().setStoreProduct(product);
-                if (ret > 0)
+                if (product.MaterialVolume == 0)
                 {
-                    response.Success = true;
-                    response.Result = JsonConvert.SerializeObject(getSize);
+                    status += 1;
+                    product.MaterialVolume = new Modeling3DHelper().Slicing(fullpath, instance.Slic3rDir);
+                    getSize.MaterialVolume = product.MaterialVolume;
+                }
+                else
+                {
+                    getSize.MaterialVolume = product.MaterialVolume;
                 }
 
+                if (status > 0)
+                {
+                    int ret = new StoreProductBiz().setStoreProduct(product);
+                    if (ret > 0)
+                    {
+                        response.Success = true;
+                        response.Result = JsonConvert.SerializeObject(getSize);
+                    }
+                }
             }
-            return Json(response);
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
         #endregion
 

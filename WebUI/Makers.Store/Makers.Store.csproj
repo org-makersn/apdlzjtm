@@ -333,7 +333,6 @@
     <Content Include="Views\Product\GetReceivedNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
-    <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
@@ -343,6 +342,7 @@
     <Content Include="Views\Cart\List.cshtml" />
     <Content Include="Views\Order\List.cshtml" />
     <Content Include="Views\Cart\plugin_check.cshtml" />
+    <Content Include="Views\Product\Models.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

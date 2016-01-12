@@ -12,10 +12,17 @@ namespace Net.Common.Helper
 {
     public class Modeling3DHelper
     {
-        List<QuantumConcepts.Formats.StereoLithography.Vertex> VertexList = new List<QuantumConcepts.Formats.StereoLithography.Vertex>();
+        private List<QuantumConcepts.Formats.StereoLithography.Vertex> VertexList = null;
         private Extent Size { get; set; }
 
-        public _3DModel GetStlModel(string filename, string extension)
+        #region _3DModel 변환
+        /// <summary>
+        /// _3DModel 변환
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="extension"></param>
+        /// <returns></returns>
+        public _3DModel Get3DModel(string filename, string extension)
         {
             _3DModel stlModel = new _3DModel();
             Metadata metadata = new Metadata();
@@ -66,6 +73,7 @@ namespace Net.Common.Helper
 
             if (extension == ".obj")
             {
+                VertexList = new List<QuantumConcepts.Formats.StereoLithography.Vertex>();
                 OBJDocument objDoc = new OBJDocument().LoadObj(filename);
 
                 stlModel.faces = new int[objDoc.FaceList.Count() * 4];
@@ -96,9 +104,16 @@ namespace Net.Common.Helper
             }
 
             return stlModel;
-        }
+        } 
+        #endregion
 
         #region 3D파일 사이즈 구하기
+        /// <summary>
+        /// 3D파일 사이즈 구하기
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="ext"></param>
+        /// <returns></returns>
         public ModelingSize GetSizeFor3DFile(string path, string ext)
         {
             ModelingSize getSize = new ModelingSize();
@@ -113,7 +128,6 @@ namespace Net.Common.Helper
             double x3 = 0;
             double y3 = 0;
             double z3 = 0;
-
 
             switch (ext)
             {
@@ -155,6 +169,7 @@ namespace Net.Common.Helper
                     break;
 
                 case ".obj":
+                    VertexList = new List<QuantumConcepts.Formats.StereoLithography.Vertex>();
                     OBJDocument objDoc = new OBJDocument().LoadObj(path);
                     int[] idx = new int[3];
 
@@ -216,16 +231,15 @@ namespace Net.Common.Helper
             getSize.X = Math.Round(Size.XSize, 1);
             getSize.Y = Math.Round(Size.YSize, 1);
             getSize.Z = Math.Round(Size.ZSize, 1);
-            getSize.Volume = Math.Round(volume, 1);
-            //volume = slicing(path);
-            //getSize.Volume = Math.Round(volume, 1); 
+            getSize.ObjectVolume = Math.Round(volume, 1) / 1000;
 
             return getSize;
         }
         #endregion
 
+        #region 슬라이싱
         /// <summary>
-        /// 
+        /// 슬라이싱 slic3r
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -285,6 +299,7 @@ namespace Net.Common.Helper
             }
 
             return ret;
-        }
+        } 
+        #endregion
     }
 }

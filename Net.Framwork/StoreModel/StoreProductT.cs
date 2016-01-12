@@ -27,10 +27,10 @@ namespace Net.Framework.StoreModel
         public virtual string MimeType { get; set; }
         [Column("FILE_SIZE")]
         public virtual double FileSize { get; set; }
-        [Column("SLICED_VOLUME")]
-        public virtual double SlicedVolume { get; set; }
-        [Column("MODEL_VOLUME")]
-        public virtual double ModelVolume { get; set; }
+        [Column("MATERIAL_VOLUME")]
+        public virtual double MaterialVolume { get; set; }
+        [Column("OBJECT_VOLUME")]
+        public virtual double ObjectVolume { get; set; }
         [Column("SIZE_X")]
         public virtual double SizeX { get; set; }
         [Column("SIZE_Y")]
@@ -87,7 +87,8 @@ namespace Net.Framework.StoreModel
         [Column("REG_ID")]
         public virtual string RegId { get; set; }
         [Column("UPD_DT")]
-        public virtual DateTime UpdDt { get; set; }
+        public virtual Nullable<DateTime> UpdDt { get; set; }
+        //public virtual DateTime UpdDt { get; set; }
         [Column("UPD_ID")]
         public virtual string UpdId { get; set; }
     }

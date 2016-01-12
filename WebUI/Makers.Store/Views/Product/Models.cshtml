@@ -1,8 +1,8 @@
-﻿@model StoreProductT
-@using Net.Framework.StoreModel
+﻿@using Net.Framework.StoreModel
+@model StoreProductT
 
 @{
-    ViewBag.Title = "ProductUploadDetail";
+    ViewBag.Title = "Models";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     IList<StoreMaterialT> matList = ViewBag.MaterialList;
@@ -24,9 +24,9 @@
     <br>
     제품 SIze Z: <span id="size_z">@Model.SizeZ</span> mm
     <br>
-    제품 모델 부피는: <span id="modelvolume">@Model.ModelVolume</span> cm³
+    제품 모델 부피는: <span id="objectvolume">@Model.ObjectVolume</span> cm³
     <br>
-    제품 슬라이싱된 출력 부피는: <span id="slicedvolume">@Model.SlicedVolume</span> cm³
+    제품 슬라이싱된 출력 부피는: <span id="materialvolume">@Model.MaterialVolume</span> cm³
 </h1>
 <br>
 
@@ -133,7 +133,7 @@
 @{
     if (matList != null)
     {
-        foreach (StoreMaterialT material in matList)
+        foreach (var material in matList)
         {
     <div>
         &nbsp @material.Name
@@ -343,7 +343,13 @@
 
             var onSuccess = function (result) {
                 if (result.Success) {
-                    var modeling = result.result;
+                    var modeling = JSON.parse(result.Result);
+                    console.log(modeling);
+                    $("#size_x").text(modeling.X);
+                    $("#size_y").text(modeling.Y);
+                    $("#size_z").text(modeling.Z);
+                    $("#objectvolume").text(modeling.ObjectVolume);
+                    $("#materialvolume").text(modeling.MaterialVolume);
                 }
             }
             Ajax.AjaxResponseModelService(this, "/Product/GetModelingAttr", data, onSuccess);
@@ -369,16 +375,3 @@
         Models.Init();
     </script>
 }
-product.SizeX = getSize.X;
-                    product.SizeY = getSize.Y;
-                    product.SizeZ = getSize.Z;
-                    product.ModelVolume = getSize.Volume / 1000;
-
-                    string jsfullpath = string.Format(@"{0}\{1}\{2}.js", instance.PhysicalDir, saveJSFolder, product.FileReName);
-
-                    var strBuff = JsonConvert.SerializeObject(_3dModel);
-
-                    bool result = new FileHelper().FileWriteAllText(jsfullpath, strBuff);
-                }
-
-                if (product.SlicedVolume
