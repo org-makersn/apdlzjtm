@@ -40,6 +40,7 @@
             <p class="headerInput">제목 &amp; 설명</p>
             <div>
                 <input class="inputTit" type="text" id="product_title" name="product_title" value="@Model.ProductName" placeholder="제목을 입력하세요." />
+
             </div>
             <div class="textArea">
                 <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요.">@Model.Contents</textarea>
@@ -50,15 +51,9 @@
                 </div>
                 @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
             </div>
-            <input type="text" id="video_url" name="video_url" />
+            <input type="text" id="video_url" name="video_url" value="@Model.VideoUrl" placeholder="동영상 주소" />
         </div>
     </div>
-
-    
-                <div class="txt">
-                    <p style="word-break: break-all">
-                        @Html.Raw(contents)
-                        </p></div>
     <!-- //Left -->
 
     <!-- Right -->
@@ -310,7 +305,7 @@
 
 
             var data = {
-                productNo: $("#product_no").val(),
+                productNo: $("#pruduct_no").val(),
                 productName: $("#product_title").val(),
                 categoryNo: "1002",
                 content: $("#product_contents").val(),
@@ -319,9 +314,11 @@
                 videoUrl: $("#video_url").val()
             }
 
+            console.log(data);
+
             var onSuccess = function (result) {
                 if (result.Success) {
-
+                    alert("저장 완료");
                 }
             }
             Ajax.AjaxResponseModelService(this, "/product/models", data, onSuccess);
@@ -344,7 +341,7 @@
             var onSuccess = function (result) {
                 if (result.Success) {
                     var modeling = JSON.parse(result.Result);
-                    console.log(modeling);
+                    
                     $("#size_x").text(modeling.X);
                     $("#size_y").text(modeling.Y);
                     $("#size_z").text(modeling.Z);

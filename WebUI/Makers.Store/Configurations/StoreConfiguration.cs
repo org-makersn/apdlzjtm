@@ -14,8 +14,7 @@ namespace Makers.Store.Configurations
 
         private StoreConfiguration()
         {
-            PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\storefile";
-            UncDir = ConfigurationManager.AppSettings["UncDir"] ?? @"192.168.219.103";
+            PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfiles";
             Slic3rDir = ConfigurationManager.AppSettings["Slic3rDir"] ?? @"D:\slic3r";
         }
 
@@ -24,11 +23,6 @@ namespace Makers.Store.Configurations
         /// slic3r 시 물리적 경로 사용해야 함
         /// </summary>
         public string PhysicalDir { get; private set; }
-
-        /// <summary>
-        /// unc 경로 사용될지 안될지 몰라 추가함
-        /// </summary>
-        public string UncDir { get; private set; }
 
         /// <summary>
         /// slic3r 폴더 경로

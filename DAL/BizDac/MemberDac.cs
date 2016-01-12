@@ -1049,6 +1049,12 @@ namespace Makersn.BizDac
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         public IList<DashBoardStateT> SearchDashBoardStateTargetAll(string start = "", string end = "")
         {
             string[] arrGbn = { "오늘", "어제", "이번주", "지난주", "이번달", "지난달", "기간선택" };
@@ -1227,6 +1233,12 @@ namespace Makersn.BizDac
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         public IList<DashBoardStateT> GetMemberStateTargetDaily(string start, string end)
         {
             string query = string.Format(@"select
@@ -1314,6 +1326,12 @@ namespace Makersn.BizDac
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         public IList<DashBoardStateT> GetMemberStateTargetMonth(string start, string end)
         {
             {
@@ -1403,6 +1421,10 @@ namespace Makersn.BizDac
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IList<DashBoardStateT> GetMemberStateTargetYear()
         {
             string query = @"select

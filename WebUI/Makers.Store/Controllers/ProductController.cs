@@ -20,15 +20,18 @@ namespace Makers.Store.Controllers
     {
         StoreLikesBiz likesBiz = new StoreLikesBiz();
         StoreMemberBiz memberBiz = new StoreMemberBiz();
-        private Extent Size { get; set; }// Stl Model Size
-        //
-        // GET: /Product/
+        
         public ActionResult Index()
         {
             ViewBag.UserNo = profileModel.UserNo;
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
         public ActionResult Create(string ex)
         {
             return View();
@@ -67,7 +70,7 @@ namespace Makers.Store.Controllers
 
                             if (extType.Contains(extension.ToLower()))
                             {
-                                string modelingDir = @"product\3d-files";
+                                string modelingDir = Constant.StoreUploadDir.ModelingDir;
                                 string save3DPath = string.Format(@"{0}\{1}", instance.PhysicalDir, modelingDir);
                                 string fileReName = new FileHelper().UploadFile(stlupload, null, save3DPath, null);
 
@@ -111,7 +114,6 @@ namespace Makers.Store.Controllers
                                 _storeProduct.RegDt = DateTime.Now;
                                 _storeProduct.RegId = profileModel.UserId;
 
-                                //IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
                                 productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
 
                                 if (productNo > 0)
@@ -196,7 +198,7 @@ namespace Makers.Store.Controllers
 
             int status = 0;
 
-            string saveJSFolder = @"product\js-files";
+            string saveJSFolder = Constant.StoreUploadDir.JsonToJsDir;
 
             StoreProductT product = new StoreProductBiz().getStoreProductById(productNo);
 
@@ -308,12 +310,24 @@ namespace Makers.Store.Controllers
             return PartialView(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
         public ActionResult GetSentNoteListByMemberNo(int memberNo)
         {
             var result = memberBiz.getSentNoteListByMemberNo(memberNo);
             return PartialView(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fromMember"></param>
+        /// <param name="targetMember"></param>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         public JsonResult SendNote(int fromMember, int targetMember, string comment)
         {
             MemberMsgT msg = new MemberMsgT();
@@ -333,12 +347,16 @@ namespace Makers.Store.Controllers
             return Json(new { Success = true, Result = result }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SeqNo"></param>
+        /// <returns></returns>
         public JsonResult DeleteNote(int SeqNo)
         {
             int result = memberBiz.deleteNote(SeqNo);
             return Json(new { Success = true, Result = result }, JsonRequestBehavior.AllowGet);
         }
-
 
         /// <summary>
         /// 가격 선정

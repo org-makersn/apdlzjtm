@@ -17,10 +17,10 @@ namespace Net.Framwork.BizDac
         /// select multi data
         /// </summary>
         /// <returns></returns>
-        internal List<StoreProductT> SelectAllStoreProduct()
-        { 
-            
-            List<StoreProductT> printers = null;
+        internal IList<StoreProductT> SelectAllStoreProduct()
+        {
+
+            IList<StoreProductT> printers = null;
             using (dbContext = new StoreContext())
             {
                 printers = dbContext.StoreProductT.ToList();
