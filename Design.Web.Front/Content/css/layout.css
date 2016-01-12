@@ -152,7 +152,7 @@ filter: alpha(opacity=0);-ms-filter: alpha(opacity=0);-khtml-opacity: 0;
 
 
 /* MainSlide */
-.unslider-carousel	{position:relative;overflow:auto;background:#4FC9FF;display:block;height:400px;width:100%; }
+.unslider-carousel	{position:relative;overflow:hidden;background:#000;display:block;height:400px;width:100%; }
 .unslider-carousel ul	{list-style:none;margin:0;width:100%}
 .unslider-carousel ul li	{float:left; height:400px;width:100%;padding:0;margin:0;display:block;position:relative}
 .unslider-carousel .container	{margin:0 auto;position:relative;top:80%;-webkit-transform:translateY(-80%);-ms-transform:translateY(-80%);transform:translateY(-80%)}

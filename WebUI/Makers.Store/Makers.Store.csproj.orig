@@ -169,7 +169,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Configurations\StoreConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -220,7 +219,7 @@
     <Content Include="Content\images\common\foot_logo.gif" />
     <Content Include="Content\images\common\pwfind_tit.png" />
     <Content Include="Content\images\common\pwsend_img1.png" />
-    <Content Include="favicon.ico" />
+<<<<<<< HEAD
     <Content Include="Content\images\payment\ANI.GIF" />
     <Content Include="Content\images\payment\BANK.GIF" />
     <Content Include="Content\images\payment\BOTTOM.GIF" />
@@ -278,6 +277,9 @@
     <Content Include="Content\images\payment\TITLE_02.GIF" />
     <Content Include="Content\images\payment\TITLE_04.GIF" />
     <Content Include="Content\plugin_check.html" />
+=======
+    <Content Include="favicon.ico" />
+>>>>>>> 0ab53488dbf30ef4d112afd9dfb31684d9ca78dd
     <Content Include="Global.asax" />
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />
@@ -308,9 +310,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Product\Models.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

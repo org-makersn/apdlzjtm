@@ -1,0 +1,121 @@
+﻿@using Net.Framework.StoreModel
+@model StoreCartT
+@{
+    ViewBag.Title = "List";    
+}
+@section Scripts{
+       
+ }
+<h2>List</h2>
+
+<p>
+상품주문번호 <input type="text" value="" id="txtOid" />
+</p>
+<p>
+장바구니번호 <input type="text" value="@Model.CartNo" id="txtCartNo" />
+</p>
+<p>
+상점아이디 <input type="text" value="" id="txtMid" />
+</p>
+<p>
+위변조체크값 <input type="text" value="" id="txtIniRn" />
+</p>
+<p>
+결제금액 <input type="text" value="" id="txtPrice" />
+</p>
+<p>
+상품명 <input type="text" value="" id="txtGoodName" />
+</p>
+<p>
+화폐단위 <input type="text" value="" id="txtCurrency" />
+</p>
+<p>
+스토어URL <input type="text" value="" id="txtUrl" />
+</p>
+<p>
+안심클릭 카드코드 <input type="text" value="" id="txtCardCode" />
+</p>
+<p>
+지불방법 <input type="text" value="" id="txtPayMethod" />
+</p>
+<p>
+암호문 <input type="text" value="" id="txtEncrypted" />
+</p>
+<p>
+세션키 <input type="text" value="" id="txtSessionKey" />
+</p>
+<p>
+지불요청타입 <input type="text" value="" id="txtType" />
+</p>
+<p>
+무이자 설정 여부 <input type="text" value="" id="txtNoInterest" />
+</p>
+<p>
+할부개월 정보설정 <input type="text" value="" id="txtQuotaBase" />
+</p>
+<p>
+구매자 성명 <input type="text" value="" id="txtBuyerName" />
+</p>
+<p>
+구매자 이동전화 <input type="text" value="" id="txtBuyerTel" />
+</p>
+<p>
+구매자 이메일주소 <input type="text" value="" id="txtBuyerEmail" />
+</p>
+<p>
+받는사람 성명 <input type="text" value="" id="txtRecvName" />
+</p>
+<p>
+받는사람 이동전화 <input type="text" value="" id="txtRecvTel" />
+</p>
+<p>
+받는사람 이동전화2 <input type="text" value="" id="txtRecvTel2" />
+</p>
+<p>
+받는사람 주소 <input type="text" value="" id="txtRecvAddr" />
+</p>
+<p>
+받는사람 우편번호 <input type="text" value="" id="txtRecvPostNum" />
+</p>
+<p>
+전달메시지 <input type="text" value="" id="txtRecvMsg" />
+</p>
+<p>
+제휴카드코드 <input type="text" value="" id="txtJoinCard" />
+</p>
+<p>
+제휴카드 유효기간 <input type="text" value="" id="txtJoinExpire" />
+</p>
+<p>
+유저아이디 <input type="text" value="" id="txtUserId" />
+</p>
+<p>
+과세금액 <input type="text" value="" id="txtTax" />
+</p>
+<p>
+면세금액 <input type="text" value="" id="txtTaxFree" />
+</p>
+<p>
+주문취소여부 <input type="text" value="" id="txtOrderCancelYn" />
+</p>
+<p>
+고객번호 <input type="text" value="" id="txtMemberNo" />
+</p>
+<p>
+주문일자 <input type="text" value="" id="txtOrderDate" />
+</p>
+<p>
+결제상태 <input type="text" value="" id="txtPaymentStatus" />
+</p>
+<p>
+배송주소 <input type="text" value="" id="txtAddr1" />
+</p>
+<p>
+배송주소 상세 <input type="text" value="" id="txtAddr2" />
+</p>
+<p>
+우편번호 <input type="text" value="" id="txtPostNo" />
+</p>
+<p>
+    <input type="button" id="btnPayRequest" value="결제하기" />
+</p>

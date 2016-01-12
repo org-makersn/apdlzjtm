@@ -192,7 +192,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Configurations\ApplicationConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -200,11 +199,13 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PrintingProfileController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -554,7 +555,6 @@
     <Content Include="Scripts\three.js" />
     <Content Include="Scripts\three.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Product\Models.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -686,11 +686,15 @@
     <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\Product\ProductUpload.cshtml" />
+    <Content Include="Views\Product\ProductUploadDetail.cshtml" />
+    <Content Include="Views\Store\Cart.cshtml" />
+=======
     <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Shared\_Store_Layout.cshtml" />
-    <Content Include="Views\Store\Cart.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
-    <Content Include="Views\Store\Order.cshtml" />
+>>>>>>> c4add4c337a17f1d703e29c69a26cf223a3e84a2
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -728,17 +732,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="INIPAY50Lib">
-      <Guid>{3D526659-3918-491A-8FA9-A1829C0447BC}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
