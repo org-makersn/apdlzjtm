@@ -38,6 +38,15 @@ namespace Makersn.BizDac
         }
         #endregion
 
+        #region GetOrderList - 주문리스트
+        public List<StoreOrderT> GetOrderList(string cartNo)
+        {
+            List<StoreOrderT> storeOrderT = new List<StoreOrderT>();
+
+            return storeOrderT;
+        }
+        #endregion
+
         #region GetOrderInfo - 주문서 확인
         public StoreOrderT GetOrderInfo()
         {

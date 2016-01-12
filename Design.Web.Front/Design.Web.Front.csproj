@@ -690,7 +690,6 @@
     <Content Include="Views\Store\Cart.cshtml" />
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Store\Order.cshtml" />
-    <Content Include="Views\Store\PaymentRequest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

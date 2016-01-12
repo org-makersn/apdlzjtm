@@ -23,7 +23,7 @@ table, img {border:none}
 .txt_03a:visited {font-size: 8pt;line-height:18px;color:#333333; text-decoration:none}
 .txt_03a:hover  {font-size: 8pt;line-height:18px;color:#EC5900; text-decoration:underline}
 </style>
-<script  type="text/JavaScript">
+<script type="text/JavaScript">
 <!--
 function MM_reloadPage(init) {  //reloads the window if Nav4 resized
   if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
@@ -40,7 +40,6 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 </script>
 
 </head>
-<body bgcolor="#FFFFFF" text="#242424" leftmargin=5 topmargin=5 marginwidth=0 marginheight=0 bottommargin=0 rightmargin=0>
 
 <DIV STYLE="display:none;">
 	<DIV ID="ofirst">
@@ -281,7 +280,6 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 </DIV>
 
 
-</body>	
 <!-------------------------------------------------------------------------------
 * 										*
 * 아래 자바 스크립트 함수(checkPlugin)는 고객 PC에 플러그인이			*
@@ -296,7 +294,16 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 -------------------------------------------------------------------------------->
 <script type="text/JavaScript" src="http://plugin.inicis.com/pay40_check.js"></script>
 <script type="text/JavaScript">
-	if(navigator.userAgent.indexOf("Windows NT 6.0") != -1) <!-- 비스타 인경우 -->
+
+    // post parameter 받기
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+	if(navigator.userAgent.indexOf("Windows NT 6.0") != -1) // 비스타 인경
 	{
 		document.body.innerHTML = othird.innerHTML;
 	
@@ -304,7 +311,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 	else
 	{
 		var g_fIsSP1 = false;
-		g_fIsSP1 = (window.navigator.appMinorVersion.indexOf("SP2") != -1); <!-- XP 서비스 팩 2 인 경우 -->
+		g_fIsSP1 = (window.navigator.appMinorVersion.indexOf("SP2") != -1); // XP 서비스 팩 2 인 경우
    		if (g_fIsSP1)
 		{
 			document.body.innerHTML = ofirst.innerHTML;  
@@ -313,10 +320,15 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 		{
   			document.body.innerHTML = osecond.innerHTML;
 		}
-	}
-    StartSmartUpdate();
+    }
+
+	StartSmartUpdate();
+
 	function checkPlugin()
 	{
+	    var cartNo = getParameterByName("cartNo");
+	    document.getElementById("cartNo").value = cartNo;
+
 		if(navigator.appName == 'Netscape')
 		{
 			if(document.INIpay == null )
@@ -327,7 +339,11 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 			{
 				//실제 적용시에는 다음 페이지로 데이타를 POST 하기 위해 다음 줄의 형식으로  적용 바랍니다.
 				//document.way_INI.submit(); 
-			    window.location = "../store/PaymentRequest";
+			    var url = "../order/list";
+			    var f = document.forms.cartInfo;
+
+			    f.action = url;
+			    f.submit();
 			}
 		}
 		else
@@ -340,7 +356,11 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 			{
 				//실제 적용시에는 다음 페이지로 데이타를 POST 하기 위해 다음 줄의 형식으로  적용 바랍니다.
 			    //document.way_INI.submit(); 
-			    window.location = "../store/PaymentRequest";
+			    var url = "../order/list";
+			    var f = document.forms.cartInfo;
+
+			    f.action = url;
+			    f.submit();
 			}
 		}
 	}
@@ -351,17 +371,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 	
 	setTimeout("checkPlugin()","1000");
 </script>
-<!-- 실제 적용시에는 다음 내용 처럼 다음 페이지로 넘길 데이자를 선언해 준다 .
-
-<form name=way_INI action=INIsecurepay_test.asp method=post>
-<input type=hidden name=goodname size=20 value="구두">
-<input type=hidden name=price size=20 value="1000">
-<input type=hidden name=buyername size=20 value="홍길동">
-<input type=hidden name=buyeremail size=20 value="hkd@abcd.com">
-<input type=hidden name=parentemail size=20 value="parents@parents.com">
-<input type=hidden name=buyertel size=20 value="011-123-1234">
-			:                :
-
+<form name="cartInfo" method="post">
+    <input type="hidden" name="cartNo" id="cartNo" />
 </form>
--->
 </html>

@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "List";
+}
+@section Scripts{
+<script type="text/javascript">
+    $("#btnAllProductOrder").on("click", function () {
+        var url = "plugin_check";
+        var f = document.forms.cartInfo;
+
+        f.action = url;
+        f.submit();
+    })
+
+</script>    
+    
+}
+<h2>List</h2>
+<form id="cartInfo" method="post">
+    <input type="text" name="cartNo" value="0000000001" />
+</form>
+
+<input type="button" id="btnAllProductOrder" value="전체상품주문" />

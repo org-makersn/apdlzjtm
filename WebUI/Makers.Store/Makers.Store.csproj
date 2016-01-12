@@ -134,10 +134,6 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -175,8 +171,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
@@ -192,6 +190,7 @@
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\default.css" />
     <Content Include="Content\css\font.css" />
+    <Content Include="Content\css\group.css" />
     <Content Include="Content\css\layout.css" />
     <Content Include="Content\css\nanumbarungothic.css" />
     <Content Include="Content\images\common\bg_search_line.gif" />
@@ -216,6 +215,62 @@
     <Content Include="Content\images\common\foot_logo.gif" />
     <Content Include="Content\images\common\pwfind_tit.png" />
     <Content Include="Content\images\common\pwsend_img1.png" />
+    <Content Include="Content\images\payment\ANI.GIF" />
+    <Content Include="Content\images\payment\BANK.GIF" />
+    <Content Include="Content\images\payment\BOTTOM.GIF" />
+    <Content Include="Content\images\payment\BOTTOM01.GIF" />
+    <Content Include="Content\images\payment\button_01.gif" />
+    <Content Include="Content\images\payment\button_02.gif" />
+    <Content Include="Content\images\payment\button_03.gif" />
+    <Content Include="Content\images\payment\button_04.gif" />
+    <Content Include="Content\images\payment\button_05.gif" />
+    <Content Include="Content\images\payment\button_06.gif" />
+    <Content Include="Content\images\payment\button_07.gif" />
+    <Content Include="Content\images\payment\button_08.gif" />
+    <Content Include="Content\images\payment\cancle_top.gif" />
+    <Content Include="Content\images\payment\CARD.GIF" />
+    <Content Include="Content\images\payment\cash_top.gif" />
+    <Content Include="Content\images\payment\CENTER.GIF" />
+    <Content Include="Content\images\payment\CHECK.GIF" />
+    <Content Include="Content\images\payment\check_img.gif" />
+    <Content Include="Content\images\payment\check_img10.gif" />
+    <Content Include="Content\images\payment\check_img2.gif" />
+    <Content Include="Content\images\payment\check_img3.gif" />
+    <Content Include="Content\images\payment\check_img4.gif" />
+    <Content Include="Content\images\payment\check_img5.gif" />
+    <Content Include="Content\images\payment\check_img6.gif" />
+    <Content Include="Content\images\payment\check_img7.gif" />
+    <Content Include="Content\images\payment\check_img8.gif" />
+    <Content Include="Content\images\payment\check_img9.gif" />
+    <Content Include="Content\images\payment\HPP.GIF" />
+    <Content Include="Content\images\payment\ICON.GIF" />
+    <Content Include="Content\images\payment\ICON02.GIF" />
+    <Content Include="Content\images\payment\ICON03.GIF" />
+    <Content Include="Content\images\payment\ICON04.GIF" />
+    <Content Include="Content\images\payment\img_01.gif" />
+    <Content Include="Content\images\payment\img_02.gif" />
+    <Content Include="Content\images\payment\img_vista1.gif" />
+    <Content Include="Content\images\payment\img_vista2.gif" />
+    <Content Include="Content\images\payment\INDEX.GIF" />
+    <Content Include="Content\images\payment\INDEX2.GIF" />
+    <Content Include="Content\images\payment\kmerce.gif" />
+    <Content Include="Content\images\payment\LIFE.GIF" />
+    <Content Include="Content\images\payment\LINE.GIF" />
+    <Content Include="Content\images\payment\LOADING.GIF" />
+    <Content Include="Content\images\payment\loading_bg.gif" />
+    <Content Include="Content\images\payment\logo.gif" />
+    <Content Include="Content\images\payment\NEMO.GIF" />
+    <Content Include="Content\images\payment\OKCASH.GIF" />
+    <Content Include="Content\images\payment\PHONE.GIF" />
+    <Content Include="Content\images\payment\RIGHT.GIF" />
+    <Content Include="Content\images\payment\spool_org.gif" />
+    <Content Include="Content\images\payment\spool_top.gif" />
+    <Content Include="Content\images\payment\teen_top.gif" />
+    <Content Include="Content\images\payment\TICKET.GIF" />
+    <Content Include="Content\images\payment\time_02.gif" />
+    <Content Include="Content\images\payment\TITLE_01.GIF" />
+    <Content Include="Content\images\payment\TITLE_02.GIF" />
+    <Content Include="Content\images\payment\TITLE_04.GIF" />
     <Content Include="Content\plugin_check.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\css\NanumBarunGothic.eot" />
@@ -274,11 +329,12 @@
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
-    <Content Include="Views\Store\Cart.cshtml" />
     <Content Include="Views\Store\FollewingList.cshtml" />
-    <Content Include="Views\Store\Order.cshtml" />
     <Content Include="Views\Store\PaymentRequest.cshtml" />
     <Content Include="Views\Store\StoreMemberRegister.cshtml" />
+    <Content Include="Views\Cart\List.cshtml" />
+    <Content Include="Views\Order\List.cshtml" />
+    <Content Include="Views\Cart\plugin_check.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
