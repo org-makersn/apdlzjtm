@@ -22,7 +22,6 @@ namespace Design.Web.Front.Configurations
 
             CurrentDomain = ConfigurationManager.AppSettings["CurrentDomain"] ?? "http://beta.makersn.com";
             TargetDomain = ConfigurationManager.AppSettings["TargetDomain"] ?? "http://betaen.makersn.com";
-
         }
 
         /// <summary>

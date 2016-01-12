@@ -33,7 +33,7 @@ namespace Net.Common.Helper
             int indexF = 0;
             int indexV = 0;
 
-            if (extension == "stl")
+            if (extension == ".stl")
             {
                 STLDocument facets = STLDocument.Open(filename);
 
@@ -64,7 +64,7 @@ namespace Net.Common.Helper
                 }
             }
 
-            if (extension == "obj")
+            if (extension == ".obj")
             {
                 OBJDocument objDoc = new OBJDocument().LoadObj(filename);
 
@@ -117,7 +117,7 @@ namespace Net.Common.Helper
 
             switch (ext)
             {
-                case "stl":
+                case ".stl":
                     STLDocument facets = STLDocument.Open(path);
                     //stl
                     Size = new Extent
@@ -154,7 +154,7 @@ namespace Net.Common.Helper
                     }
                     break;
 
-                case "obj":
+                case ".obj":
                     OBJDocument objDoc = new OBJDocument().LoadObj(path);
                     int[] idx = new int[3];
 
@@ -227,81 +227,64 @@ namespace Net.Common.Helper
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="filePath"></param>
         /// <returns></returns>
-        public double slicing(string input)
+        public double Slicing(string filePath, string workingDir)
         {
-            Process procConvert = new Process();
+            double ret = 0;
+            string config = "config.ini";
 
-            //AppDomain.CurrentDomain.BaseDirectory
-            string domainPath = @"C:\Slic3r\";
-            string ini = domainPath + "DefaultForMakers1.ini";
-            string output = changeExt(input, "gcode");
-            //string input = workingFolder + fileName + ".stl";
-            string log = changeExt(input, "log");
+            string gcode = new FileHelper().ChangeExt(filePath, "gcode");
+            string log = new FileHelper().ChangeExt(filePath, "log");
 
-            procConvert.StartInfo.FileName = domainPath + "slic3r-console.exe";
+            StringBuilder command = new StringBuilder();
+            command.Append("--load ");
+            command.Append(config);
+            command.Append(" --print-center ");
+            command.Append("100,");
+            command.Append("100");
+            command.Append(" -o ");
+            command.Append(gcode);
+            command.Append(" ");
+            command.Append(filePath);
 
-            procConvert.EnableRaisingEvents = true;
-            StringBuilder sb = new StringBuilder();
-            sb.Append("--load ");
-            sb.Append(ini);
-            sb.Append(" --print-center ");
-            sb.Append("100");
-            sb.Append(",");
-            sb.Append("100");
-            sb.Append(" -o ");
-            sb.Append(output);
-            sb.Append(" ");
-            sb.Append(input);
-            procConvert.StartInfo.Arguments = sb.ToString();
-            procConvert.StartInfo.UseShellExecute = false;
-            procConvert.StartInfo.RedirectStandardOutput = true;
-            procConvert.StartInfo.RedirectStandardError = true;
-            procConvert.Start();
-            // Start the asynchronous read of the standard output stream.
-
-            //procConvert.Start();
-
-            //procConvert.BeginOutputReadLine();
-            //procConvert.BeginErrorReadLine();
-
-            var result = procConvert.StandardOutput.ReadToEnd();
-
-            procConvert.WaitForExit();
-
-
-            procConvert.StartInfo.UseShellExecute = false;
-            procConvert.StartInfo.RedirectStandardOutput = true;
-
-            File.WriteAllText(log, result);
-
-            try
+            using (Process proc = new Process())
             {
-                string[] a = result.Split('(');
-                string b = a[1].Split(')')[0];
-                return System.Convert.ToDouble(b.Split('c')[0]);
+                //proc.EnableRaisingEvents = true;
+                proc.StartInfo.WorkingDirectory = workingDir;
+                proc.StartInfo.FileName = string.Format(@"{0}\{1}", workingDir, "slic3r-console.exe");
+                proc.StartInfo.Arguments = command.ToString();
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.RedirectStandardError = true;
+                proc.StartInfo.UseShellExecute = false;
+                proc.Start();
+
+                proc.WaitForExit();
+
+                //proc.BeginOutputReadLine();
+                //proc.BeginErrorReadLine();
+
+                string output = proc.StandardOutput.ReadToEnd();
+                if (!string.IsNullOrEmpty(output))
+                {
+                    new FileHelper().FileWriteAllText(log, output);
+
+                    string[] strArr = output.Split('(');
+                    string str = strArr[1].Split(')')[0];
+
+                    ret = Convert.ToDouble(str.Split('c')[0]);
+                }
+
+                string error = proc.StandardError.ReadToEnd();
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    new FileHelper().FileWriteAllText(log, error);
+                }
             }
-            catch (Exception e)
-            {
-                return 0;
-            }
+
+            return ret;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="ext"></param>
-        /// <returns></returns>
-        private string changeExt(string path, string ext)
-        {
-            //string[] temp = path.Split('.');
-
-            string temp2 = path.Substring(0, path.LastIndexOf('.'));
-            return temp2 + "." + ext;
-        }
-
-
     }
 }

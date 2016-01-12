@@ -1,15 +1,20 @@
-﻿using Design.Web.Front.Models;
+﻿using Design.Web.Front.Helper;
+using Design.Web.Front.Models;
 using Library.ObjParser;
+using Makersn.BizDac;
 using Makersn.Models;
-using Net.Common.Define;
+using Makersn.Util;
+using Net.Common.Filter;
 using Net.Common.Helper;
 using Net.Framework.StoreModel;
 using Net.Framwork.BizDac;
+using Newtonsoft.Json;
 using QuantumConcepts.Formats.StereoLithography;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -28,166 +33,8 @@ namespace Design.Web.Front.Controllers
             return View();
         }
 
-        public ActionResult Create(string ex)
-        {
-            return View();
-        }
-
-        #region stl upload
-        /// <summary>
-        /// stl upload
-        /// </summary>
-        /// <param name="stlupload"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public JsonResult StlUpload(FormCollection collection, IEnumerable<HttpPostedFileBase> product_3d_files)
-        {
-            AjaxResponseModel response = new AjaxResponseModel();
-            response.Success = false;
-
-            int uploadCnt = product_3d_files.Count();
-            int[] Result = new int[uploadCnt];
-            int index = 0;
-            long productNo = 0;
-
-            string temp = collection["temp"];
-
-            foreach (HttpPostedFileBase stlupload in product_3d_files)
-            {
-                if (stlupload != null)
-                {
-                    if (stlupload.ContentLength > 0)
-                    {
-                        if (stlupload.ContentLength < 200 * 1024 * 1024)
-                        {
-                            string[] extType = { ".stl", ".obj" };
-
-                            string extension = Path.GetExtension(stlupload.FileName);
-
-                            if (extType.Contains(extension.ToLower()))
-                            {
-                                string save3DFolder = @"\product\3d-files";
-                                //string saveJSFolder = @"\product\js-files";
-
-                                string fileReName = FileHelper.UploadFile(stlupload, null, save3DFolder, null);
-                                
-                                StoreProductT _storeProduct = new StoreProductT();
-
-                                _storeProduct.VarNo = 10000;
-                                _storeProduct.ProductName = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
-                                _storeProduct.FilePath = save3DFolder;
-                                _storeProduct.FileName = stlupload.FileName;
-                                _storeProduct.FileReName = fileReName;
-                                _storeProduct.FileExt = extension.ToLower();
-                                _storeProduct.MimeType = stlupload.ContentType;
-                                _storeProduct.FileSize = Convert.ToDouble(stlupload.ContentLength.ToString());
-
-                                _storeProduct.SlicedVolume = 0;
-                                _storeProduct.ModelVolume = 0;
-                                _storeProduct.SizeX = 0;
-                                _storeProduct.SizeY = 0;
-                                _storeProduct.SizeZ = 0
-                                    ;
-                                _storeProduct.Scale = 100;
-                                _storeProduct.ShortLing = "";
-                                _storeProduct.VideoUrl = "";
-                                //_storeProduct.VideoType = "";
-                                _storeProduct.CategoryNo = 0;
-                                _storeProduct.Contents = "";
-                                _storeProduct.Description = "";
-                                _storeProduct.PartCnt = 1;
-                                _storeProduct.CustormizeYn = "Y";
-                                _storeProduct.SellYn = "Y";
-                                _storeProduct.TagName = "";
-                                _storeProduct.CertiFicateStatus = 1;
-                                _storeProduct.VisibilityYn = "Y";
-                                _storeProduct.UseYn = "Y";
-                                _storeProduct.MemberNo = 0;
-                                _storeProduct.TxtSizeX = 0;
-                                _storeProduct.TxtSizeY = 0;
-                                _storeProduct.DetailType = 0;
-                                _storeProduct.DetailDepth = 0;
-                                _storeProduct.TxtLoc = "";
-                                _storeProduct.RegDt = DateTime.Now;
-                                _storeProduct.RegId = profileModel.UserId;
-                                
-                                IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
-                                productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
-
-                                response.Success = true;
-                                response.Result = productNo.ToString();
-
-                                //Result[index] = articleFileNo;
-                                index++;
-                            }
-                            else
-                            {
-                                response.Message = Constant.Product.STL_FileUpload_Validate_Ext_Msg;
-                            }
-                        }
-                        else
-                        {
-                            response.Message = Constant.Product.STL_FileUpload_Max_Size__Msg;
-                        }
-                    }
-                }
-            }
-
-            return Json(new { Success = response.Success, Message = response.Message, Result = response.Result, Count = uploadCnt, ProductNo = productNo }, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// 제품 관련
-        /// </summary>
-        /// <param name="productNo"></param>
-        /// <returns></returns>
-        public ActionResult Models(int no)
-        {
-            StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
-
-            ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
-            return View(storeProduct);
-        }
-
-        /// <summary>
-        /// modify
-        /// </summary>
-        /// <param name="productNo"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public JsonResult Models(int productNo, string productName, int categoryNo, string content, string description, string tagName, string videoUrl)
-        {
-            AjaxResponseModel response = new AjaxResponseModel();
-            response.Success = false;
-
-            StoreProductT product = new StoreProductBiz().getStoreProductById(productNo);
-            if (product != null)
-            {
-                product.ProductName = productName;
-                product.CategoryNo = categoryNo;
-                product.Contents = content;
-                product.Description = description;
-                product.TagName = tagName;
-                product.VideoUrl = videoUrl;
-                //product.VideoType = "";
-
-                int ret = new StoreProductBiz().setStoreProduct(product);
-                if (ret > 0)
-                {
-                    response.Success = true;
-                }
-            }
-            return Json(response, JsonRequestBehavior.AllowGet);
-        }
-        #endregion
-
-        #region 좋아요 관련
-        
-        /// <summary>
-        /// 좋아요 CREATE / DELETE (상품번호)
-        /// </summary>
-        /// <param name="productNo"></param>
-        /// <returns></returns>
+        //
+        // 좋아요 CREATE / DELETE (상품번호)
         public JsonResult SetLikes(int productNo = 2)
         {
             int result = 0;
@@ -202,7 +49,7 @@ namespace Design.Web.Front.Controllers
             result = likesBiz.set(like);
 
             return Json(new { Success = true, Result = result }, JsonRequestBehavior.AllowGet);
-        } 
+        }
 
         //
         // 상품별 좋아요 갯수 출력 (상품번호)
@@ -221,13 +68,8 @@ namespace Design.Web.Front.Controllers
             return PartialView(result);
             //return Json(new { Success = true, Result = result }, JsonRequestBehavior.AllowGet);
         }
-        #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="memberNo"></param>
-        /// <returns></returns>
+        //
         public ActionResult GetReceivedNoteListByMemberNo(int memberNo)
         {
             var result = memberBiz.getReceivedNoteListByMemberNo(memberNo);
@@ -242,6 +84,7 @@ namespace Design.Web.Front.Controllers
 
         public JsonResult SendNote(int fromMember, int targetMember, string comment)
         {
+
             MemberMsgT msg = new MemberMsgT();
 
             msg.MemberNo = fromMember;
@@ -282,13 +125,396 @@ namespace Design.Web.Front.Controllers
             return View();
         }
 
-        #region 모델링 파일 사이즈 
+        //public ActionResult ProductUpload() {
+        //    return View();
+        //}
+
+        #region get방식 제품 업로드
+
+        [Authorize, HttpGet]
+        public ActionResult Create()
+        {
+            ViewBag.Temp = profileModel.UserNo + "_" + new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
+
+            //int articleNo = 0;
+            //ArticleT articleT = new ArticleT();
+            //if (no != "")
+            //{
+            //    articleT = articleDac.GetArticleByNo(articleNo);
+            //}
+
+            //if (!Int32.TryParse(no, out articleNo))
+            //{
+            //    //history
+            //    return RedirectToAction("Upload");
+            //}
+
+            return View();
+        }
+        #endregion
+
+        #region post방식 제품 업로드(필요없을듯 )
+        //    /// <summary>
+        //    /// article upload
+        //    /// </summary>
+        //    /// <param name="collection"></param>
+        //    /// <returns></returns>
+        //    [HttpPost]
+        //    public JsonResult ProductUpload(FormCollection collection)
+        //    {
+        //        AjaxResponseModel response = new AjaxResponseModel();
+        //        response.Success = false;
+
+        //        int articleNo = 0;
+
+        //        string paramNo = collection["No"];
+        //        string temp = collection["temp"];
+        //        string mode = collection["mode"];
+        //        int mainImg = Convert.ToInt32(collection["main_img"]);
+        //        string articleTitle = collection["article_title"];
+        //        string articleContents = collection["article_contents"];
+        //        int codeNo = Convert.ToInt32(collection["lv1"]);
+        //        int copyright = Convert.ToInt32(collection["copyright"]);
+        //        string delNo = collection["del_no"];
+        //        string VideoSource = collection["insertVideoSource"];
+        //        //string[] splitArray = articleContents.Split('#');
+        //        //string tags = "";
+        //        string tags = collection["article_tags"];
+
+        //        var mulltiSeq = collection["multi[]"];
+        //        string[] seqArray = mulltiSeq.Split(',');
+
+
+        ////        //for (int i = 1; i < splitArray.Length; i++)
+        ////        //{
+        ////        //    try
+        ////        //    {
+        ////        //        splitArray[i] = splitArray[i].Replace("\r\n", " ");
+        ////        //        splitArray[i] = splitArray[i].Replace("\n", " ");
+        ////        //        splitArray[i] = splitArray[i].Replace("\r", " ");
+        ////        //        tags += splitArray[i].Substring(0, splitArray[i].IndexOf(' '));
+        ////        //    }
+        ////        //    catch
+        ////        //    {
+        ////        //        tags += splitArray[i];
+        ////        //    }
+        ////        //    if (i < splitArray.Length - 1) { tags += ","; };
+        ////        //}
+        ////        //articleContents = articleContents.Replace("#", "");
+        ////        if (tags.Length > 1000)
+        ////        {
+        ////            response.Message = "태그는 1000자 이하로 가능합니다.";
+        ////            return Json(response, JsonRequestBehavior.AllowGet);
+        ////        }
+        ////        ArticleT articleT = null;
+        ////        //TranslationT tran = null;
+        ////        TranslationDetailT tranDetail = null;
+        ////        if (!Int32.TryParse(paramNo, out articleNo))
+        ////        {
+        ////            response.Success = false;
+        ////            response.Message = "pk error";
+        ////        }
+
+        ////        if (articleNo > 0)
+        ////        {
+        ////            //update
+        ////            articleT = _articleDac.GetArticleByNo(articleNo);
+        ////            tranDetail = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleT.No, "KR");
+        ////            if (tranDetail != null)
+        ////            {
+        ////                articleT.Title = tranDetail.Title;
+        ////                articleT.Contents = tranDetail.Contents;
+        ////                articleT.Tag = tranDetail.Tag;
+        ////            }
+
+        ////            if (articleT != null)
+        ////            {
+        ////                if (articleT.MemberNo == Profile.UserNo && articleT.Temp == temp)
+        ////                {
+        ////                    articleT.UpdDt = DateTime.Now;
+        ////                    articleT.UpdId = Profile.UserId;
+        ////                    articleT.RegIp = IPAddressHelper.GetIP(this);
+        ////                }
+        ////            }
+        ////        }
+        ////        else
+        ////        {
+        ////            //save
+        ////            articleT = new ArticleT();
+        ////            articleT.MemberNo = Profile.UserNo;
+        ////            //태그 #**
+        ////            articleT.Tag = tags;
+        ////            articleT.Temp = temp;
+        ////            articleT.ViewCnt = 0;
+        ////            articleT.RegDt = DateTime.Now;
+        ////            articleT.RegId = Profile.UserId;
+        ////            articleT.RegIp = IPAddressHelper.GetIP(this);
+        ////            articleT.RecommendYn = "N";
+        ////            articleT.RecommendDt = null;
+        ////        }
+
+        ////        if (tranDetail == null)
+        ////        {
+
+        ////            //영문텍스트 TRANSLATION_DETAIL
+        ////            tranDetail = new TranslationDetailT();
+        ////            tranDetail.LangFlag = "KR";
+        ////            tranDetail.RegId = Profile.UserId;
+        ////            tranDetail.RegDt = DateTime.Now;
+        ////        }
+
+        ////        //return Json(response);
+
+        ////        if (articleT != null)
+        ////        {
+        ////            articleT.Title = articleTitle;
+        ////            articleT.Contents = articleContents;
+        ////            articleT.Visibility = mode == "upload" ? "Y" : "N";
+        ////            articleT.Copyright = copyright;
+        ////            articleT.CodeNo = codeNo;
+        ////            articleT.MainImage = mainImg;
+
+        ////            articleT.VideoUrl = VideoSource;
+
+        ////            articleT.Tag = tags;
+        ////            articleNo = _articleDac.SaveOrUpdate(articleT, delNo);
+
+
+        ////            //영문텍스트 TRANSLATION_DETAIL
+        ////            tranDetail.ArticleNo = articleNo;
+        ////            tranDetail.Title = articleT.Title;
+        ////            tranDetail.Contents = articleT.Contents;
+        ////            tranDetail.Tag = articleT.Tag;
+
+
+        ////            _translationDetailDac.SaveOrUpdateTranslationDetail(tranDetail);
+
+        ////            response.Success = true;
+        ////            response.Result = articleNo.ToString();
+        ////        }
+
+        ////        _articleFileDac.UpdateArticleFileSeq(seqArray);
+
+
+        //        return Json(response, JsonRequestBehavior.AllowGet);
+        //    }
+        #endregion
+
+        #region 제품 업로드 정보 확인 페이지
+        public ActionResult ProductUploadDetail(int productNo)
+        {
+            StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(productNo);
+            ViewBag.ProductEntity = storeProduct;
+            ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
+            return View();
+
+        }
+        #endregion
+
+        #region stl upload
         /// <summary>
-        /// 
+        /// stl upload
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="ext"></param>
+        /// <param name="stlupload"></param>
         /// <returns></returns>
+        [HttpPost]
+        public JsonResult StlUpload(FormCollection collection, IEnumerable<HttpPostedFileBase> ProductStlUploads)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+            string fileName = string.Empty;
+
+            //foreach (var stl in stlupload)
+            //{
+            //    string testNm = stl.FileName;
+            //}
+            //return null;
+
+            #region 신규 반환값
+
+            int uploadCnt = ProductStlUploads.Count();
+            bool Success = false;
+            string Message = string.Empty;
+            int[] Result = new int[uploadCnt];
+            int index = 0;
+            long productNo = 0;
+            #endregion
+
+            //HttpPostedFileBase stlupload = Request.Files["stlupload"];
+            string temp = collection["temp"];
+
+            foreach (HttpPostedFileBase stlupload in ProductStlUploads)
+            {
+                if (stlupload != null)
+                {
+                    if (stlupload.ContentLength > 0)
+                    {
+                        if (stlupload.ContentLength < 200 * 1024 * 1024)
+                        {
+                            string[] extType = { "stl", "obj" };
+
+                            string extension = Path.GetExtension(stlupload.FileName).ToLower().Replace(".", "").ToLower();
+
+                            if (!extType.Contains(extension))
+                            {
+                                Message = "stl, obj 형식 파일만 가능합니다.";
+                                return Json(new { Success = Success, Message = Message }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //response.Message = "최대 사이즈 100MB 파일만 가능합니다.";
+                        Message = "최대 사이즈 100MB 파일만 가능합니다.";
+                    }
+                }
+            }
+
+            foreach (HttpPostedFileBase stlupload in ProductStlUploads)
+            {
+                if (stlupload != null)
+                {
+                    if (stlupload.ContentLength > 0)
+                    {
+                        if (stlupload.ContentLength < 200 * 1024 * 1024)
+                        {
+                            string[] extType = { "stl", "obj" };
+
+                            string extension = Path.GetExtension(stlupload.FileName).ToLower().Replace(".", "").ToLower();
+
+                            if (extType.Contains(extension))
+                            {
+                                string save3DFolder = "Article/article_3d";
+                                string saveJSFolder = "Article/article_js";
+                                fileName = FileUpload.UploadFile(stlupload, null, save3DFolder, null);
+
+                                string file3Dpath = string.Format("{0}/FileUpload/{1}/", AppDomain.CurrentDomain.BaseDirectory, save3DFolder);
+                                string fileJSpath = string.Format("{0}/FileUpload/{1}/", AppDomain.CurrentDomain.BaseDirectory, saveJSFolder);
+
+                                StlModel stlModel = new STLHelper().GetStlModel(file3Dpath + fileName, extension);
+
+                                ArticleFileT sizeResult = GetSizeFor3DFile(file3Dpath + fileName, extension);
+
+                                var json = JsonConvert.SerializeObject(stlModel);
+
+                                if (!Directory.Exists(fileJSpath))
+                                {
+                                    Directory.CreateDirectory(fileJSpath);
+                                }
+
+                                string jsFileNm = fileJSpath + fileName + ".js";
+
+                                System.IO.File.WriteAllText(jsFileNm, json, Encoding.UTF8);
+
+                                StoreProductT _storeProduct = new StoreProductT();
+
+                                _storeProduct.VarNo = 10000;
+                                _storeProduct.ProductName = "";
+                                _storeProduct.FilePath = "";
+                                _storeProduct.FileName = stlupload.FileName;
+                                _storeProduct.FileReName = fileName;
+                                _storeProduct.FileReName = fileName;
+                                _storeProduct.FileExt = extension;
+                                _storeProduct.MimeType = "";
+                                _storeProduct.FileSize = Convert.ToDouble(stlupload.ContentLength.ToString());
+                                _storeProduct.SlicedVolume = new STLHelper().slicing(file3Dpath + fileName);
+                                _storeProduct.ModelVolume = sizeResult.Volume / 1000;
+                                _storeProduct.SizeX = sizeResult.X;
+                                _storeProduct.SizeY = sizeResult.Y;
+                                _storeProduct.SizeZ = sizeResult.Z;
+                                _storeProduct.Scale = 1.0;
+                                _storeProduct.ShortLing = "";
+                                _storeProduct.VideoUrl = "";
+                                _storeProduct.CategoryNo = 0;
+                                _storeProduct.Contents = "";
+                                _storeProduct.Description = "";
+                                _storeProduct.PartCnt = 1;
+                                _storeProduct.CustormizeYn = "Y";
+                                _storeProduct.SellYn = "Y";
+                                _storeProduct.TagName = "";
+                                _storeProduct.CertiFicateStatus = 1;
+                                _storeProduct.VisibilityYn = "Y";
+                                _storeProduct.UseYn = "Y";
+                                _storeProduct.MemberNo = 0;
+                                _storeProduct.TxtSizeX = 0;
+                                _storeProduct.TxtSizeY = 0;
+                                _storeProduct.DetailType = 0;
+                                _storeProduct.DetailDepth = 0;
+                                _storeProduct.TxtLoc = "";
+                                _storeProduct.RegDt = DateTime.Now;
+                                _storeProduct.RegId = profileModel.UserId;
+                                _storeProduct.UpdDt = DateTime.Now;
+                                _storeProduct.UpdId = profileModel.UserId;
+
+                                IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
+                                productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
+
+                                //ArticleFileT articleFileT = new ArticleFileT();
+
+                                //articleFileT.FileGubun = "temp";
+                                //articleFileT.FileType = "stl";
+                                //articleFileT.MemberNo = Profile.UserNo;
+                                //articleFileT.Seq = 5000;
+                                //articleFileT.ImgUseYn = "N";
+                                //articleFileT.Ext = extension;
+                                //articleFileT.ThumbYn = "N";
+                                //articleFileT.MimeType = stlupload.ContentType;
+                                //articleFileT.Name = stlupload.FileName;
+                                //articleFileT.Size = stlupload.ContentLength.ToString();
+                                //articleFileT.Rename = fileName;
+                                //articleFileT.Path = string.Format("/{0}/", save3DFolder);
+                                ////articleFileT.Width = "630";
+                                ////articleFileT.Height = "470";
+                                //articleFileT.X = sizeResult.X;
+                                //articleFileT.Y = sizeResult.Y;
+                                //articleFileT.Z = sizeResult.Z;
+                                //articleFileT.Volume = sizeResult.Volume;
+                                ////articleFileT.PrintVolume = new STLHelper().slicing(file3Dpath + fileName);
+
+                                //articleFileT.UseYn = "Y";
+                                //articleFileT.Temp = temp;
+                                //articleFileT.RegIp = IPAddressHelper.GetIP(this);
+                                //articleFileT.RegId = Profile.UserId;
+                                //articleFileT.RegDt = DateTime.Now;
+
+                                ////int articleFileNo = _articleFileDac.InsertArticleFile(articleFileT);
+
+                                ////response.Success = true;
+                                ////response.Result = articleFileNo.ToString();
+                                Success = true;
+                                //Result[index] = articleFileNo;
+                                index++;
+                            }
+                            else
+                            {
+                                //response.Message = "stl, obj 형식 파일만 가능합니다.";
+                                Message = "stl, obj 형식 파일만 가능합니다.";
+                            }
+                        }
+                        else
+                        {
+                            //response.Message = "최대 사이즈 100MB 파일만 가능합니다.";
+                            Message = "최대 사이즈 100MB 파일만 가능합니다.";
+                        }
+                    }
+                }
+            }
+
+            var mulltiSeq = collection["multi[]"];
+
+            string[] seqArray = null;
+            if (mulltiSeq != null)
+            {
+                seqArray = mulltiSeq.Split(',');
+                //_articleFileDac.UpdateArticleFileSeq(seqArray);
+            }
+
+
+            return Json(new { Success = Success, Message = Message, Result = Result, Count = uploadCnt, ProductNo = productNo }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region 3D파일 사이즈 구하기
         public ArticleFileT GetSizeFor3DFile(string path, string ext)
         {
             ArticleFileT getSize = new ArticleFileT();

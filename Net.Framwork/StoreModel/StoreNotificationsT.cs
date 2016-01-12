@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Net.Framework.StoreModel
 {
-    [Table("STORE_NOTICE")]
-    public class StoreNoticeT
+    [Table("STORE_NOTIFICATIONS")]
+    public class StoreNotificationsT
     {
         [Key]
         [Column("NO")]

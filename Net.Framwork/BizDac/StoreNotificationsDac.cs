@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
-    public class StoreNoticeDac
+    public class StoreNotificationsDac
     {
 
         private static StoreContext dbContext;
@@ -17,10 +17,10 @@ namespace Net.Framwork.BizDac
         /// select multi data
         /// </summary>
         /// <returns></returns>
-        internal List<StoreNoticeT> SelectAllStoreNotice()
+        internal List<StoreNotificationsT> SelectAllStoreNotice()
         { 
             
-            List<StoreNoticeT> printers = null;
+            List<StoreNotificationsT> printers = null;
             using (dbContext = new StoreContext())
             {
                 printers = dbContext.StoreNoticeT.ToList();
@@ -33,9 +33,9 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
-        internal StoreNoticeT SelectStoreNoticeTById(int no)
+        internal StoreNotificationsT SelectStoreNoticeTById(int no)
         {
-            StoreNoticeT printer = null;
+            StoreNotificationsT printer = null;
 
             using (dbContext = new StoreContext())
             {
@@ -50,7 +50,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int InsertStoreNotice(StoreNoticeT data)
+        internal int InsertStoreNotice(StoreNotificationsT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
             int ret = 0;
@@ -67,7 +67,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int UpdateStoreNotice(StoreNoticeT data)
+        internal int UpdateStoreNotice(StoreNotificationsT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
@@ -80,7 +80,7 @@ namespace Net.Framwork.BizDac
                     try
                     {
                         dbContext.StoreNoticeT.Attach(data);
-                        dbContext.Entry<StoreNoticeT>(data).State = System.Data.Entity.EntityState.Modified;
+                        dbContext.Entry<StoreNotificationsT>(data).State = System.Data.Entity.EntityState.Modified;
                         dbContext.SaveChangesAsync();
                     }
                     catch (Exception)

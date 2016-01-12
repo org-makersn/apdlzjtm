@@ -9,26 +9,25 @@
 
     string contents = new HtmlFilter().PunctuationEncode(Model.Contents);
     contents = new HtmlFilter().ConvertContent(contents);
+
+    string attrSuccess = ViewBag.AttrSuccess;
 }
 
 <h1>
-
-    <br>
-    제품 번호는: @Model.No
+    @Html.Hidden("pruduct_no", Model.No)
     <br>
     제품 파일 사이즈는: @Model.FileSize kb
     <br>
-    제품 SIze X: @Model.SizeX mm
+    제품 SIze X: <span id="size_x">@Model.SizeX</span> mm
     <br>
-    제품 SIze Y: @Model.SizeY mm
+    제품 SIze Y: <span id="size_y">@Model.SizeY</span> mm
     <br>
-    제품 SIze Z: @Model.SizeZ mm
+    제품 SIze Z: <span id="size_z">@Model.SizeZ</span> mm
     <br>
-    제품 모델 부피는: @Model.ModelVolume cm³
+    제품 모델 부피는: <span id="modelvolume">@Model.ModelVolume</span> cm³
     <br>
-    제품 슬라이싱된 출력 부피는: @Model.SlicedVolume cm³
+    제품 슬라이싱된 출력 부피는: <span id="slicedvolume">@Model.SlicedVolume</span> cm³
 </h1>
-<input type="hidden" id="product_no" value="@Model.No" />
 <br>
 
 
@@ -228,6 +227,10 @@
             $('.lst_value2 li').mouseenter(function () {
                 $('.lst_value2 li').removeClass('selected');
             })
+            var attr_yn = "@ViewBag.AttrYN";
+            if (attr_yn == "N") {
+                Models.GetModelingAttr();
+            }
         }
 
         Models.UISelect = function (obj, valLst, val, check_id) {
@@ -321,7 +324,7 @@
 
                 }
             }
-            Ajax.AjaxResponseModelService(this, "/product/Models", data, onSuccess);
+            Ajax.AjaxResponseModelService(this, "/product/models", data, onSuccess);
         }
 
         Models.TempUpload = function () {
@@ -330,6 +333,20 @@
 
         Models.UploadCancle = function () {
             alert("UploadCancle");
+        }
+
+        Models.GetModelingAttr = function () {
+
+            var data = {
+                productNo: $("#pruduct_no").val()
+            }
+
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    var modeling = result.result;
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/Product/GetModelingAttr", data, onSuccess);
         }
 
         function closet() {
@@ -352,3 +369,16 @@
         Models.Init();
     </script>
 }
+product.SizeX = getSize.X;
+                    product.SizeY = getSize.Y;
+                    product.SizeZ = getSize.Z;
+                    product.ModelVolume = getSize.Volume / 1000;
+
+                    string jsfullpath = string.Format(@"{0}\{1}\{2}.js", instance.PhysicalDir, saveJSFolder, product.FileReName);
+
+                    var strBuff = JsonConvert.SerializeObject(_3dModel);
+
+                    bool result = new FileHelper().FileWriteAllText(jsfullpath, strBuff);
+                }
+
+                if (product.SlicedVolume

@@ -50,5 +50,6 @@ namespace Net.Common.Model
         public double Y { get; set; }
         public double Z { get; set; }
         public double Volume { get; set; }
+        public double Slicing { get; set; }
     }
 }
