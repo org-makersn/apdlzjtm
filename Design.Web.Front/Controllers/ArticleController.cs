@@ -108,14 +108,14 @@ namespace Design.Web.Front.Controllers
             }
             gl = gl == "ALL" ? "" : gl;
 
-            int totalCnt = _articleDac.GetTotalCountByOption(Profile.UserNo, codeNum, "", pageGubun, gl);
+            int totalCnt = _articleDac.GetTotalCountByOption(profileModel.UserNo, codeNum, "", pageGubun, gl);
 
-            list = _articleDac.GetListByOption(Profile.UserNo, codeNum, pageGubun, gl, fromIndex, toIndex);
+            list = _articleDac.GetListByOption(profileModel.UserNo, codeNum, pageGubun, gl, fromIndex, toIndex);
             if (pageGubun == "R")
             {
                 if (list.Count() == 0)
                 {
-                    list = _articleDac.GetListByOption(Profile.UserNo, codeNum, "N", gl, fromIndex, toIndex);
+                    list = _articleDac.GetListByOption(profileModel.UserNo, codeNum, "N", gl, fromIndex, toIndex);
                 }
             }
 
@@ -154,7 +154,7 @@ namespace Design.Web.Front.Controllers
                 langFlag = "";
 
             int articleNo = 0;
-            var visitorNo = Profile.UserNo;
+            var visitorNo = profileModel.UserNo;
             ViewBag.GoReply = goReply;
             ArticleDetailT detail = new ArticleDetailT();
             if (Int32.TryParse(no, out articleNo))
@@ -183,7 +183,7 @@ namespace Design.Web.Front.Controllers
                 detail.Contents = new HtmlFilter().PunctuationEncode(detail.Contents);
                 //detail.Contents = detail.Contents.Replace("#", "");
                 detail.Contents = chkContent(detail.Contents);
-                if ((detail.MemberNo != visitorNo && Profile.UserLevel < 50) && detail.Visibility.ToUpper() == "N")
+                if ((detail.MemberNo != visitorNo && profileModel.UserLevel < 50) && detail.Visibility.ToUpper() == "N")
                 {
                     return Content("<script>alert('비공개 처리된 게시물 입니다.'); location.href='/';</script>");
                 }
@@ -233,11 +233,11 @@ namespace Design.Web.Front.Controllers
             ViewBag.LangFlag = gl;
 
 
-            IList<ArticleT> list = _articleDac.GetSearchList(text, Profile.UserNo, tag, gl);
+            IList<ArticleT> list = _articleDac.GetSearchList(text, profileModel.UserNo, tag, gl);
 
             //조회수 증가 방지
-            //if (searchCookie[Profile.UserNo + "_" + text] == null)
-            if (Request.Cookies[Profile.UserNo + "_" + text] == null)
+            //if (searchCookie[profileModel.UserNo + "_" + text] == null)
+            if (Request.Cookies[profileModel.UserNo + "_" + text] == null)
             {
                 PopularT popular = new PopularT();
 
@@ -245,8 +245,8 @@ namespace Design.Web.Front.Controllers
                 popular.RegDt = Convert.ToDateTime(chgDt);
                 popular.Word = text;
                 popular.Cnt = 1;
-                popular.RegId = Profile.UserId;
-                popular.MemberNo = Profile.UserNo;
+                popular.RegId = profileModel.UserId;
+                popular.MemberNo = profileModel.UserNo;
 
                 IPHostEntry host;
                 host = Dns.GetHostEntry(Dns.GetHostName());
@@ -260,10 +260,10 @@ namespace Design.Web.Front.Controllers
                 PopularDac popularDac = new PopularDac();
                 popularDac.AddSearchText(popular);
 
-                //searchCookie[Profile.UserNo + "_" + text] = "1";
-                //Response.Cookies[Profile.UserNo + "_" + text].Expires = DateTime.Now.AddDays(-1);
-                Response.Cookies[Profile.UserNo + "_" + text].Value = Profile.UserNo + "_" + text;
-                Response.Cookies[Profile.UserNo + "_" + text].Expires = DateTime.Now.AddDays(-1);
+                //searchCookie[profileModel.UserNo + "_" + text] = "1";
+                //Response.Cookies[profileModel.UserNo + "_" + text].Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies[profileModel.UserNo + "_" + text].Value = profileModel.UserNo + "_" + text;
+                Response.Cookies[profileModel.UserNo + "_" + text].Expires = DateTime.Now.AddDays(-1);
 
                 //Response.Cookies["searchCntBlock"].Expires = DateTime.Now.AddDays(-1);
                 //Response.Cookies["searchCntBlock"].Expires = DateTime.Now.AddMinutes(10);
@@ -281,7 +281,7 @@ namespace Design.Web.Front.Controllers
         [Authorize, HttpGet]
         public ActionResult Upload()
         {
-            ViewBag.Temp = Profile.UserNo + "_" + new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
+            ViewBag.Temp = profileModel.UserNo + "_" + new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
 
             //int articleNo = 0;
             //ArticleT articleT = new ArticleT();
@@ -374,10 +374,10 @@ namespace Design.Web.Front.Controllers
 
                 if (articleT != null)
                 {
-                    if (articleT.MemberNo == Profile.UserNo && articleT.Temp == temp)
+                    if (articleT.MemberNo == profileModel.UserNo && articleT.Temp == temp)
                     {
                         articleT.UpdDt = DateTime.Now;
-                        articleT.UpdId = Profile.UserId;
+                        articleT.UpdId = profileModel.UserId;
                         articleT.RegIp = IPAddressHelper.GetIP(this);
                     }
                 }
@@ -386,13 +386,13 @@ namespace Design.Web.Front.Controllers
             {
                 //save
                 articleT = new ArticleT();
-                articleT.MemberNo = Profile.UserNo;
+                articleT.MemberNo = profileModel.UserNo;
                 //태그 #**
                 articleT.Tag = tags;
                 articleT.Temp = temp;
                 articleT.ViewCnt = 0;
                 articleT.RegDt = DateTime.Now;
-                articleT.RegId = Profile.UserId;
+                articleT.RegId = profileModel.UserId;
                 articleT.RegIp = IPAddressHelper.GetIP(this);
                 articleT.RecommendYn = "N";
                 articleT.RecommendDt = null;
@@ -404,7 +404,7 @@ namespace Design.Web.Front.Controllers
                 //영문텍스트 TRANSLATION_DETAIL
                 tranDetail = new TranslationDetailT();
                 tranDetail.LangFlag = "KR";
-                tranDetail.RegId = Profile.UserId;
+                tranDetail.RegId = profileModel.UserId;
                 tranDetail.RegDt = DateTime.Now;
             }
 
@@ -475,7 +475,7 @@ namespace Design.Web.Front.Controllers
                 articleT.Tag = transDetail.Tag;
                 articleT.Contents = transDetail.Contents;
             }
-            if (articleT.MemberNo != Profile.UserNo && Profile.UserLevel < 50) { return RedirectToAction("detail", new { no = articleT.No }); }
+            if (articleT.MemberNo != profileModel.UserNo && profileModel.UserLevel < 50) { return RedirectToAction("detail", new { no = articleT.No }); }
 
             int UploadCnt = _articleFileDac.GetArticleFileCntByNo(articleT.No);
 
@@ -589,7 +589,7 @@ namespace Design.Web.Front.Controllers
 
                                 articleFileT.FileGubun = "temp";
                                 articleFileT.FileType = "stl";
-                                articleFileT.MemberNo = Profile.UserNo;
+                                articleFileT.MemberNo = profileModel.UserNo;
                                 articleFileT.Seq = 5000;
                                 articleFileT.ImgUseYn = "N";
                                 articleFileT.Ext = extension;
@@ -610,7 +610,7 @@ namespace Design.Web.Front.Controllers
                                 articleFileT.UseYn = "Y";
                                 articleFileT.Temp = temp;
                                 articleFileT.RegIp = IPAddressHelper.GetIP(this);
-                                articleFileT.RegId = Profile.UserId;
+                                articleFileT.RegId = profileModel.UserId;
                                 articleFileT.RegDt = DateTime.Now;
 
                                 int articleFileNo = _articleFileDac.InsertArticleFile(articleFileT);
@@ -841,7 +841,7 @@ namespace Design.Web.Front.Controllers
 
                             articleFileT.FileGubun = "temp";
                             articleFileT.FileType = "img";
-                            articleFileT.MemberNo = Profile.UserNo;
+                            articleFileT.MemberNo = profileModel.UserNo;
                             articleFileT.Seq = 5000;
                             articleFileT.ImgUseYn = "U";
                             articleFileT.Ext = extension;
@@ -858,7 +858,7 @@ namespace Design.Web.Front.Controllers
                             articleFileT.UseYn = "Y";
                             articleFileT.Temp = temp;
                             articleFileT.RegIp = IPAddressHelper.GetIP(this);
-                            articleFileT.RegId = Profile.UserId;
+                            articleFileT.RegId = profileModel.UserId;
                             articleFileT.RegDt = DateTime.Now;
 
                             int articleFileNo = _articleFileDac.InsertArticleFile(articleFileT);
@@ -1038,11 +1038,11 @@ namespace Design.Web.Front.Controllers
         public PartialViewResult Reply(string no = "", int page = 1, string goReply = "N")
         {
             ViewBag.No = no;
-            ViewBag.MemberNo = Profile.UserNo;
+            ViewBag.MemberNo = profileModel.UserNo;
             ViewBag.GoReply = goReply;
             IList<ArticleCommentT> list = _articleCommentDac.GetArticleCommentListByNo(int.Parse(no));
 
-            MemberT visitor = _memberDac.GetMemberProfile(Profile.UserNo);
+            MemberT visitor = _memberDac.GetMemberProfile(profileModel.UserNo);
             ViewBag.VisitorPic = visitor == null ? "" : visitor.ProfilePic;
             return PartialView(list.OrderByDescending(o => o.Regdt).ToPagedList(page, 10));
             //return PartialView(list);
@@ -1078,7 +1078,7 @@ namespace Design.Web.Front.Controllers
             act.No = int.Parse(commentNo);
             act.Content = content;
             act.UpdDt = DateTime.Now;
-            act.UpdId = Profile.UserId;
+            act.UpdId = profileModel.UserId;
 
             //no = Base64Helper.Base64Decode(no);
             _articleCommentDac.UpdateArticleCommentByNo(act);
@@ -1095,17 +1095,17 @@ namespace Design.Web.Front.Controllers
         /// <returns></returns>
         public JsonResult CommentAdd(int articleNo = 0, string content = "", string articleMemberNo = "0")
         {
-            if (Profile.UserNo == 0) { return Json(new { Success = false }); };
+            if (profileModel.UserNo == 0) { return Json(new { Success = false }); };
             articleMemberNo = Base64Helper.Base64Decode(articleMemberNo);
             string getIp = IPAddressHelper.GetIP(this);
             ArticleCommentT act = new ArticleCommentT();
             act.ArticleNo = articleNo;
             act.Content = content;
             act.Regdt = DateTime.Now;
-            act.RegId = Profile.UserId;
+            act.RegId = profileModel.UserId;
             act.MemberNoRef = int.Parse(articleMemberNo);
-            act.MemberNo = Profile.UserNo;
-            act.Writer = Profile.UserNm;
+            act.MemberNo = profileModel.UserNo;
+            act.Writer = profileModel.UserNm;
             act.RegIp = getIp;
             act.Depth = 0;
 
@@ -1117,13 +1117,13 @@ namespace Design.Web.Front.Controllers
                 NoticeT notice = new NoticeT();
                 notice.IdxName = "c:" + articleNo;
                 notice.ArticleNo = articleNo;
-                notice.MemberNo = Profile.UserNo;
+                notice.MemberNo = profileModel.UserNo;
                 notice.MemberNoRef = act.MemberNoRef;
                 notice.RefNo = articleCommentNo;
                 notice.Type = "comment";
                 notice.IsNew = "Y";
                 notice.RegDt = DateTime.Now;
-                notice.RegId = Profile.UserId;
+                notice.RegId = profileModel.UserId;
                 notice.RegIp = IPAddressHelper.GetClientIP();
 
                 _noticesDac.InsertNoticeByComment(notice);
@@ -1138,7 +1138,7 @@ namespace Design.Web.Front.Controllers
         {
             AjaxResponseModel model = new AjaxResponseModel();
             model.Success = false;
-            if (Profile.UserNo == 0) { return Json(new { Success = false }); };
+            if (profileModel.UserNo == 0) { return Json(new { Success = false }); };
             try
             {
                 ArticleT article = _articleDac.GetArticleByNo(articleNo);
@@ -1163,9 +1163,9 @@ namespace Design.Web.Front.Controllers
 
                 //act.Content = content;
                 act.Regdt = DateTime.Now;
-                act.RegId = Profile.UserId;
-                act.MemberNoRef = memberNoRef; act.MemberNo = Profile.UserNo;
-                act.Writer = Profile.UserNm;
+                act.RegId = profileModel.UserId;
+                act.MemberNoRef = memberNoRef; act.MemberNo = profileModel.UserNo;
+                act.Writer = profileModel.UserNm;
                 act.RegIp = getIp;
                 act.RefNo = no;
                 act.Depth = 1;
@@ -1177,30 +1177,30 @@ namespace Design.Web.Front.Controllers
                     NoticeT notice = new NoticeT();
                     notice.IdxName = "c:" + articleNo;
                     notice.ArticleNo = articleNo;
-                    notice.MemberNo = Profile.UserNo;
+                    notice.MemberNo = profileModel.UserNo;
                     notice.MemberNoRef = act.MemberNoRef;
                     notice.RefNo = articleCommentNo;
                     notice.Type = "inComment";
                     notice.IsNew = "Y";
                     notice.RegDt = DateTime.Now;
-                    notice.RegId = Profile.UserId;
+                    notice.RegId = profileModel.UserId;
                     notice.RegIp = IPAddressHelper.GetClientIP();
 
                     _noticesDac.InsertNoticeByComment(notice);
                 }
 
-                if (refCommentMemberNo != 0 && refCommentMemberNo != Profile.UserNo)
+                if (refCommentMemberNo != 0 && refCommentMemberNo != profileModel.UserNo)
                 {
                     NoticeT notice = new NoticeT();
                     notice.IdxName = "c:" + articleNo;
                     notice.ArticleNo = articleNo;
-                    notice.MemberNo = Profile.UserNo;
+                    notice.MemberNo = profileModel.UserNo;
                     notice.MemberNoRef = refCommentMemberNo;
                     notice.RefNo = articleCommentNo;
                     notice.Type = "inComment";
                     notice.IsNew = "Y";
                     notice.RegDt = DateTime.Now;
-                    notice.RegId = Profile.UserId;
+                    notice.RegId = profileModel.UserId;
                     notice.RegIp = IPAddressHelper.GetClientIP();
 
                     _noticesDac.InsertNoticeByComment(notice);
@@ -1261,8 +1261,8 @@ namespace Design.Web.Front.Controllers
 
             IList<ArticleDetailT> beforeRecommendList = new List<ArticleDetailT>();
             IList<ArticleDetailT> recommendList = new List<ArticleDetailT>();
-            beforeRecommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "R", "", 1, 4);
-            if (beforeRecommendList.Count == 0) { beforeRecommendList = _articleDac.GetListByOption(Profile.UserNo, 0, "P", "", 1, 4); };
+            beforeRecommendList = _articleDac.GetListByOption(profileModel.UserNo, 0, "R", "", 1, 4);
+            if (beforeRecommendList.Count == 0) { beforeRecommendList = _articleDac.GetListByOption(profileModel.UserNo, 0, "P", "", 1, 4); };
 
             foreach (ArticleDetailT recommend in beforeRecommendList)
             {
@@ -1288,9 +1288,9 @@ namespace Design.Web.Front.Controllers
         /// <returns></returns>
         public PartialViewResult DetailRightContents(int authorNo)
         {
-            ViewBag.CheckFollow = new FollowerDac().CheckFollow(authorNo, Profile.UserNo);
-            //ViewBag.VisitorNo = Base64Helper.Base64Encode(Profile.UserNo.ToString());
-            ViewBag.chkSelf = (Profile.UserNo == authorNo);
+            ViewBag.CheckFollow = new FollowerDac().CheckFollow(authorNo, profileModel.UserNo);
+            //ViewBag.VisitorNo = Base64Helper.Base64Encode(profileModel.UserNo.ToString());
+            ViewBag.chkSelf = (profileModel.UserNo == authorNo);
             ViewBag.AuthorNo = Base64Helper.Base64Encode(authorNo.ToString());
             return PartialView();
         }
@@ -1299,19 +1299,19 @@ namespace Design.Web.Front.Controllers
         #region 신고
         public JsonResult SendReport(int articleNo, string reportComment)
         {
-            if (Profile.UserNo == 0) { return Json(new { Success = false, Message = "로그인해주세요." }); }
+            if (profileModel.UserNo == 0) { return Json(new { Success = false, Message = "로그인해주세요." }); }
             ReportT report = new ReportT();
             report.ArticleNo = articleNo;
             report.Report = reportComment;
-            report.MemberNo = Profile.UserNo;
+            report.MemberNo = profileModel.UserNo;
             report.RegDt = DateTime.Now;
-            report.RegId = Profile.UserId;
+            report.RegId = profileModel.UserId;
             report.RegIp = IPAddressHelper.GetIP(this);
             report.State = 1;
             int result = _reportDac.InsertReport(report);
 
             string title = _articleDac.GetArticleByNo(articleNo).Title;
-            sendEmailReport(Profile.UserId, title, reportComment);
+            sendEmailReport(profileModel.UserId, title, reportComment);
 
             return Json(new { Success = true, Result = result, Message = "접수 되었습니다." });
         }
@@ -1330,11 +1330,11 @@ namespace Design.Web.Front.Controllers
         #region 좋아요 클릭
         public JsonResult SetLikes(int articleNo)
         {
-            if (Profile.UserNo == 0) { return Json(new { Success = false, Message = "로그인해주세요." }); }
+            if (profileModel.UserNo == 0) { return Json(new { Success = false, Message = "로그인해주세요." }); }
             LikesT likes = new LikesT();
             likes.ArticleNo = articleNo;
-            likes.MemberNo = Profile.UserNo;
-            likes.RegId = Profile.UserId;
+            likes.MemberNo = profileModel.UserNo;
+            likes.RegId = profileModel.UserId;
             likes.RegDt = DateTime.Now;
             likes.RegIp = IPAddressHelper.GetIP(this);
             int result = _likesDac.SetLikes(likes);
@@ -1344,13 +1344,13 @@ namespace Design.Web.Front.Controllers
             NoticeT notice = new NoticeT();
             notice.IdxName = "l:" + articleNo.ToString();
             notice.ArticleNo = articleNo;
-            notice.MemberNo = Profile.UserNo;
+            notice.MemberNo = profileModel.UserNo;
             notice.MemberNoRef = articleMemberNo;
             notice.Type = "like";
             notice.IsNew = "y";
             notice.RefNo = result;
             notice.RegDt = DateTime.Now;
-            notice.RegId = Profile.UserId;
+            notice.RegId = profileModel.UserId;
             notice.RegIp = IPAddressHelper.GetClientIP();
 
             _noticesDac.InsertNoticesLikes(notice);
@@ -1367,7 +1367,7 @@ namespace Design.Web.Front.Controllers
         public PartialViewResult DetailRightCntList(int articleNo)
         {
             ArticleT article = new ArticleT();
-            article = _articleDac.GetDetailPageCntList(articleNo, Profile.UserNo);
+            article = _articleDac.GetDetailPageCntList(articleNo, profileModel.UserNo);
             return PartialView(article);
         }
         #endregion
@@ -1390,8 +1390,8 @@ namespace Design.Web.Front.Controllers
                 response = (HttpWebResponse)request.GetResponse();
                 DownloadT download = new DownloadT();
                 download.ArticleNo = articleNo;
-                download.MemberNo = Profile.UserNo;
-                download.RegId = Profile.UserId;
+                download.MemberNo = profileModel.UserNo;
+                download.RegId = profileModel.UserId;
                 download.RegIp = IPAddressHelper.GetIP(this);
                 download.RegDt = DateTime.Now;
                 download.Cnt = 1;
@@ -1444,9 +1444,9 @@ namespace Design.Web.Front.Controllers
         public JsonResult AddNewList(string listName)
         {
             ListT list = new ListT();
-            list.MemberNo = Profile.UserNo;
+            list.MemberNo = profileModel.UserNo;
             list.ListName = listName;
-            list.RegId = Profile.UserId;
+            list.RegId = profileModel.UserId;
             list.RegDt = DateTime.Now;
             int result = _articleDac.InsertNewList(list);
             return Json(new { Success = true, Result = result });
@@ -1457,8 +1457,8 @@ namespace Design.Web.Front.Controllers
             ListArticleT listArticle = new ListArticleT();
             listArticle.ArticleNo = articleNo;
             listArticle.ListNo = listNo;
-            listArticle.MemberNo = Profile.UserNo;
-            listArticle.RegId = Profile.UserId;
+            listArticle.MemberNo = profileModel.UserNo;
+            listArticle.RegId = profileModel.UserId;
             listArticle.RegDt = DateTime.Now;
 
             bool result = _listDac.InsertListArticle(listArticle);
@@ -1579,13 +1579,13 @@ namespace Design.Web.Front.Controllers
             ArticleDetailT detail = new ArticleDetailT();
             if (Int32.TryParse(no, out articleNo))
             {
-                detail = _articleDac.GetArticleDetailByArticleNo(articleNo, Profile.UserNo);
+                detail = _articleDac.GetArticleDetailByArticleNo(articleNo, profileModel.UserNo);
                 detail.Contents = new HtmlFilter().PunctuationEncode(detail.Contents);
 
                 ViewBag.Files = _articleFileDac.GetFileList(articleNo);
                 ViewBag.MainImg = detail.MainImgName;
             }
-            ViewBag.VisitorNo = Profile.UserNo;
+            ViewBag.VisitorNo = profileModel.UserNo;
 
             ViewBag.No = no;
             ViewBag.CodeNo = detail.CodeNo;
@@ -1616,7 +1616,7 @@ namespace Design.Web.Front.Controllers
             pager.RecordCount = totalCnt;
 
 
-            list = _articleDac.GetCompetitionList(Profile.UserNo, fromIndex, toIndex, "컨테스트#01");
+            list = _articleDac.GetCompetitionList(profileModel.UserNo, fromIndex, toIndex, "컨테스트#01");
 
             PagerQuery<PagerInfo, IList<ArticleDetailT>> model = new PagerQuery<PagerInfo, IList<ArticleDetailT>>(pager, list);
 
@@ -1649,7 +1649,7 @@ namespace Design.Web.Front.Controllers
                 articleT.Tag = transDetail.Tag;
                 articleT.Contents = transDetail.Contents;
             }
-            if (articleT.MemberNo != Profile.UserNo && Profile.UserLevel < 50) { return RedirectToAction("detail", new { no = articleT.No }); }
+            if (articleT.MemberNo != profileModel.UserNo && profileModel.UserLevel < 50) { return RedirectToAction("detail", new { no = articleT.No }); }
 
             int UploadCnt = _articleFileDac.GetArticleFileCntByNo(articleT.No);
 
@@ -1693,7 +1693,7 @@ namespace Design.Web.Front.Controllers
             {
                 TranslationT translation = _translationDac.GetTranslation(articleNo, language, transFlag);
 
-                if (translation.ReqMemberNo != Profile.UserNo && Profile.UserLevel < 50)
+                if (translation.ReqMemberNo != profileModel.UserNo && profileModel.UserLevel < 50)
                 {
                     model.Message = "번역 권한이 없습니다.";
                     return Json(model);
@@ -1706,7 +1706,7 @@ namespace Design.Web.Front.Controllers
                 transDetail.Contents = transContents;
                 transDetail.Tag = transTags;
                 transDetail.LangFlag = language;
-                transDetail.RegId = Profile.UserId;
+                transDetail.RegId = profileModel.UserId;
                 transDetail.RegDt = DateTime.Now;
                 model.Result = _translationDetailDac.SaveOrUpdateTranslationDetail(transDetail).ToString();
                 model.Message = "번역 되었습니다.";
@@ -1733,9 +1733,9 @@ namespace Design.Web.Front.Controllers
             translation.Status = (int)Makersn.Util.MakersnEnumTypes.TranslationStatus.요청;
             translation.LangFrom = langFrom;
             translation.LangTo = langTo;
-            translation.ReqMemberNo = Profile.UserNo;
+            translation.ReqMemberNo = profileModel.UserNo;
             translation.ReqDt = DateTime.Now;
-            translation.RegId = Profile.UserId;
+            translation.RegId = profileModel.UserId;
             translation.RegDt = DateTime.Now;
 
             TranslationT chkTrans = _translationDac.CheckTranslation(translation);
@@ -1776,11 +1776,11 @@ namespace Design.Web.Front.Controllers
             translation.Status = (int)Makersn.Util.MakersnEnumTypes.TranslationStatus.완료;
             translation.LangFrom = langFrom;
             translation.LangTo = langTo;
-            translation.ReqMemberNo = Profile.UserNo;
+            translation.ReqMemberNo = profileModel.UserNo;
             translation.ReqDt = DateTime.Now;
-            translation.RegId = Profile.UserId;
+            translation.RegId = profileModel.UserId;
             translation.RegDt = DateTime.Now;
-            translation.WorkMemberNo = Profile.UserNo;
+            translation.WorkMemberNo = profileModel.UserNo;
             translation.WorkDt = DateTime.Now;
 
             TranslationDetailT chkDetail = _translationDetailDac.GetTranslationDetailByArticleNoAndLangFlag(articleNo, langTo);

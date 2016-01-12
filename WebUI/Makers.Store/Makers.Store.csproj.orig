@@ -219,7 +219,7 @@
     <Content Include="Content\images\common\foot_logo.gif" />
     <Content Include="Content\images\common\pwfind_tit.png" />
     <Content Include="Content\images\common\pwsend_img1.png" />
-    <Content Include="favicon.ico" />
+<<<<<<< HEAD
     <Content Include="Content\images\payment\ANI.GIF" />
     <Content Include="Content\images\payment\BANK.GIF" />
     <Content Include="Content\images\payment\BOTTOM.GIF" />
@@ -277,6 +277,9 @@
     <Content Include="Content\images\payment\TITLE_02.GIF" />
     <Content Include="Content\images\payment\TITLE_04.GIF" />
     <Content Include="Content\plugin_check.html" />
+=======
+    <Content Include="favicon.ico" />
+>>>>>>> 0ab53488dbf30ef4d112afd9dfb31684d9ca78dd
     <Content Include="Global.asax" />
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />

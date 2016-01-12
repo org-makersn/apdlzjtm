@@ -24,7 +24,7 @@ namespace Design.Web.Front.Controllers
         // GET: /Product/
         public ActionResult Index()
         {
-            ViewBag.UserNo = Profile.UserNo;
+            ViewBag.UserNo = profileModel.UserNo;
             return View();
         }
 
@@ -91,9 +91,9 @@ namespace Design.Web.Front.Controllers
                                 _storeProduct.Scale = 100;
                                 _storeProduct.ShortLing = "";
                                 _storeProduct.VideoUrl = "";
-                                _storeProduct.VideoType = "";
+                                //_storeProduct.VideoType = "";
                                 _storeProduct.CategoryNo = 0;
-                                _storeProduct.Content = "";
+                                _storeProduct.Contents = "";
                                 _storeProduct.Description = "";
                                 _storeProduct.PartCnt = 1;
                                 _storeProduct.CustormizeYn = "Y";
@@ -109,7 +109,7 @@ namespace Design.Web.Front.Controllers
                                 _storeProduct.DetailDepth = 0;
                                 _storeProduct.TxtLoc = "";
                                 _storeProduct.RegDt = DateTime.Now;
-                                _storeProduct.RegId = Profile.UserId;
+                                _storeProduct.RegId = profileModel.UserId;
                                 
                                 IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
                                 productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
@@ -165,11 +165,11 @@ namespace Design.Web.Front.Controllers
             {
                 product.ProductName = productName;
                 product.CategoryNo = categoryNo;
-                product.Content = content;
+                product.Contents = content;
                 product.Description = description;
                 product.TagName = tagName;
                 product.VideoUrl = videoUrl;
-                product.VideoType = "";
+                //product.VideoType = "";
 
                 int ret = new StoreProductBiz().setStoreProduct(product);
                 if (ret > 0)
@@ -193,7 +193,7 @@ namespace Design.Web.Front.Controllers
             int result = 0;
 
             StoreLikesT like = new StoreLikesT();
-            like.MemberNo = Profile.UserNo;
+            like.MemberNo = profileModel.UserNo;
             like.RegIp = IPAddressHelper.GetIP(this);
             like.ProductNo = productNo;
             like.RegId = "test";

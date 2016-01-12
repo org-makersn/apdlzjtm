@@ -1,6 +1,22 @@
-﻿@{
+﻿@model PagerQuery<PagerInfo, IList<Net.Framework.StoreModel.StoreProductT>>
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Index</h2>
+
+
+<div class="baseList">
+    <ul class="item_area">
+    @foreach (var product in Model.EntityList)
+    {
+        <li>@product.ProductName</li>
+    }
+    </ul>
+</div>
+
+<!-- //페이징 -->
+<div class="pagination-container">
+    @Html.PageNavigate(Model.Pager.CurrentPageIndex, Model.Pager.PageSize, Model.Pager.RecordCount)
+</div>

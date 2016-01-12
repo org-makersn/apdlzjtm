@@ -43,14 +43,14 @@ namespace Net.Framework.StoreModel
         public virtual string ShortLing { get; set; }
         [Column("VIDEO_URL")]
         public virtual string VideoUrl { get; set; }
-        [Column("VIDEO_TYPE")]
-        public virtual string VideoType { get; set; }
+        //[Column("VIDEO_TYPE")]
+        //public virtual string VideoType { get; set; }
         [Column("CATEGORY_NO")]
         public virtual int CategoryNo { get; set; } //exerd 확인
 
-        [Column("CONTENT", TypeName = "text")]
+        [Column("CONTENTS", TypeName = "text")]
         [MaxLength]
-        public virtual string Content { get; set; }
+        public virtual string Contents { get; set; }
 
         [Column("DESCRIPTION", TypeName = "text")]
         [MaxLength]

@@ -116,14 +116,14 @@ namespace Design.Web.Front.Controllers
             contact.Comment = model.Comment;
             contact.CodeNo = model.QnACode;
             contact.RegDt = DateTime.Now;
-            contact.RegId = Profile.UserId;
-            contact.MemberNo = Profile.UserNo;
+            contact.RegId = profileModel.UserId;
+            contact.MemberNo = profileModel.UserNo;
             contact.RegIp = IPAddressHelper.GetClientIP();
             contact.State = 1;
             contact.Reply = "";
             contactDac.InsertQnA(contact);
 
-            sendEmailQnA(Profile.UserId, model.Title, model.Comment, model.Email);
+            sendEmailQnA(profileModel.UserId, model.Title, model.Comment, model.Email);
 
             return Json(new { Success = true });
         }

@@ -139,8 +139,13 @@ namespace Makers.Store.Controllers
         public ActionResult FollewingList(int storeNo)
         {
 
-            int memberUserno = profileModel.UserNo == 0 ? 182 : profileModel.UserNo; // 로그인 되어 있는 회원아이디
+<<<<<<< HEAD:WebUI/Makers.Store/Controllers/StoreController.cs
+            int memberUserno = Profile.UserNo == 0 ? 182 : Profile.UserNo; // 로그인 되어 있는 회원아이디
             IList<FollowerT> _follerList = new FollowerDac().GetFollowerLIst(storeNo, memberUserno).Where(s => s.SiteGubun == "Store").ToList<FollowerT>();
+=======
+            int memberUserno = profileModel.UserNo == 0 ? 182 : profileModel.UserNo; // 로그인 되어 있는 회원아이디
+            IList<FollowerT> _follerList = new FollowerDac().GetFollowerLIst(storeNo ,memberUserno ).Where(s => s.SiteGubun == "Store").ToList<FollowerT>();
+>>>>>>> 0ab53488dbf30ef4d112afd9dfb31684d9ca78dd:Design.Web.Front/Controllers/StoreController.cs
 
             if (_follerList.Count > 0)
             {

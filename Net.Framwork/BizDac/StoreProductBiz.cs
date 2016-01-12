@@ -57,5 +57,26 @@ namespace Net.Framwork.BizDac
             return new StoreProductDac().SelectProductWithCertification(certificateStatus, query);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="codeNo"></param>
+        /// <returns></returns>
+        public int getTotalCountByOption(int memberNo, int codeNo)
+        {
+            return new StoreProductDac().SelectTotalCountByOption(memberNo, codeNo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="codeNo"></param>
+        /// <returns></returns>
+        public IList<StoreProductT> getProductsByOption(int memberNo, int codeNo)
+        {
+            return new StoreProductDac().SelectProductsByOption(memberNo, codeNo);
+        }
     }
 }

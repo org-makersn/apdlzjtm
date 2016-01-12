@@ -90,7 +90,12 @@ namespace Net.Framwork.BizDac
             return ret;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="certificateStatus"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         internal List<StoreProductT> SelectProductWithCertification(int certificateStatus,string query)
         {
             using (dbContext = new StoreContext())
@@ -100,13 +105,6 @@ namespace Net.Framwork.BizDac
                     .ToList();
             }
         }
-        
-
-        //&& (p.FileName.Contains(query)
-
-
-
-
 
         //public int SaveOrUpdate(ArticleT data, string delno)
         //{
@@ -180,6 +178,33 @@ namespace Net.Framwork.BizDac
         //        }
         //    }
         //}
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="codeNo"></param>
+        /// <returns></returns>
+        internal int SelectTotalCountByOption(int memberNo, int codeNo)
+        {
+            using (dbContext = new StoreContext())
+            {
+                return dbContext.StoreProductT.Count(p => p.CategoryNo == codeNo);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="codeNo"></param>
+        /// <returns></returns>
+        internal IList<StoreProductT> SelectProductsByOption(int memberNo, int codeNo)
+        {
+            using (dbContext = new StoreContext())
+            {
+                return dbContext.StoreProductT.Where(p => p.CategoryNo == codeNo).ToList();
+            }
+        }
     }
 }

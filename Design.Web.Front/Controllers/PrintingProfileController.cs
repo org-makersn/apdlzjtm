@@ -37,9 +37,9 @@ namespace Design.Web.Front.Controllers
             }
 
 
-            if (memberNum == 0 || memberNum == Profile.UserNo)
+            if (memberNum == 0 || memberNum == profileModel.UserNo)
             {
-                memberNum = Profile.UserNo;
+                memberNum = profileModel.UserNo;
                 selfFlag = true;
             }
 
@@ -95,7 +95,7 @@ namespace Design.Web.Front.Controllers
             if (collection["PrtMemNo"] != "")
             {
                 printerMemberNo = System.Convert.ToInt32(collection["PrtMemNo"]);
-                if (printerMemberNo == Profile.UserNo)
+                if (printerMemberNo == profileModel.UserNo)
                 {
                     Success = true;
                 }
