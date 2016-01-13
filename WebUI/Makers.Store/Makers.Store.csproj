@@ -276,7 +276,6 @@
     <Content Include="Content\images\payment\TITLE_01.GIF" />
     <Content Include="Content\images\payment\TITLE_02.GIF" />
     <Content Include="Content\images\payment\TITLE_04.GIF" />
-    <Content Include="Content\plugin_check.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />
