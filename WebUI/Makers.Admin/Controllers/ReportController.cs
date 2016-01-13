@@ -16,9 +16,7 @@ namespace Makers.Admin.Controllers
     {
         ReportDac rd = new ReportDac();
 
-        private MenuModel menuModel = new MenuModel();
-
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
             menuModel.MainIndex = 5;

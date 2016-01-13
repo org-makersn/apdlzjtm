@@ -11,10 +11,9 @@ namespace Makers.Admin.Controllers
     [Authorize]
     public class ArticleRecommendRequestController : BaseController
     {
-        private MenuModel menuModel = new MenuModel();
         ArticleDac articleDac = new ArticleDac();
 
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
             menuModel.MainIndex = 5;

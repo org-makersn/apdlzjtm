@@ -17,9 +17,7 @@ namespace Makers.Admin.Controllers
     {
         BannerDac bannerDac = new BannerDac();
 
-        private MenuModel menuModel = new MenuModel();
-
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
             menuModel.MainIndex = 5;

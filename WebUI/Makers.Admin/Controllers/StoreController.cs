@@ -12,8 +12,7 @@ namespace Makers.Admin.Controllers
 {
     public class StoreController : BaseController
     {
-        private MenuModel menuModel = new MenuModel();
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Store";
             menuModel.MainIndex = 4;

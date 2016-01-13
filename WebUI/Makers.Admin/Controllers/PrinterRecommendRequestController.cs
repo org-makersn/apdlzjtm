@@ -11,10 +11,9 @@ namespace Makers.Admin.Controllers
     [Authorize]
     public class PrinterRecommendRequestController : BaseController
     {
-
-        private MenuModel menuModel = new MenuModel();
         PrinterDac printerDac = new PrinterDac();
-        public MenuModel MenuModel(int subIndex)
+
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
             menuModel.MainIndex = 5;

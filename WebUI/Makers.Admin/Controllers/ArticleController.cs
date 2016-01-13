@@ -17,9 +17,7 @@ namespace Makers.Admin.Controllers
     {
         ArticleDac articleDac = new ArticleDac();
 
-        private MenuModel menuModel = new MenuModel();
-
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Article";
             menuModel.MainIndex = 2;
