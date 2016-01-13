@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MailFormats>
+
+  <MailFormat Id="QnA">
+    <Subject>0?</Subject>
+    <Body>
+      <![CDATA[ 
+        
+        <div style="width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff;">
+        <div style="width:645px;margin:0 auto; overflow:hidden;">
+          <div style="height:86px;text-align:left;background:url(http://makersn.com/content/images/common/em_logo.png) no-repeat 5px 38px ">
+          </div>
+          <div style="padding:50px 33px 50px 33px;background:#f5f5f5;border-top-left-radius:7px;border-top-right-radius:7px;word-break:break-all;">
+            <p style="margin-bottom:49px;text-align:left;font-size:30px;color:#6d6d6d">문의사항</p>
+            <p style="margin-bottom:45px;text-align:left;font-size:17px;color:#505050;line-height:35px">
+              안녕하세요.<br />
+        MakersN입니다.<br /><br />
+        문의제목 : 1? <br />
+        내용 : 2? <br /><br />
+        
+        3?
+        </p>
+            <a href="http://www.makersn.com" style="width:579px;margin:0 0 45px 0;text-align:left;font-size:16px;color:#0096ff">http://www.makersn.com</a>
+          </div>
+          <div style="height:87px;background:url(http://makersn.com/content/images/common/em_footer.png) #FF7900 no-repeat 380px 21px;border-bottom-left-radius:7px;border-bottom-right-radius:7px">
+          </div>
+
+        </div>
+
+      </div>
+     ]]>
+    </Body>
+  </MailFormat>
+
+  <MailFormat Id="sendNotice">
+    <Subject>0?</Subject>
+    <Body>
+      <![CDATA[ 
+        
+        <div style="width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff;">
+        <div style="width:645px;margin:0 auto; overflow:hidden;">
+          <div style="height:86px;text-align:left;background:url(http://makersn.com/content/images/common/em_logo.png) no-repeat 5px 38px ">
+          </div>
+          <div style="padding:50px 33px 50px 33px;background:#f5f5f5;border-top-left-radius:7px;border-top-right-radius:7px;word-break:break-all;">
+            
+            <p style="margin-bottom:45px;text-align:left;font-size:13px;color:#505050;">
+        1?
+        </p>
+            
+          </div>
+          <a href='http://makersn.com'> 
+          <div style="height:87px;background:url(http://makersn.com/content/images/common/em_footer.png) #FF7900 no-repeat 380px 21px;border-bottom-left-radius:7px;border-bottom-right-radius:7px">
+          </div>
+          </a>
+
+        </div>
+
+      </div>
+     ]]>
+    </Body> 
+  </MailFormat>
+
+</MailFormats>

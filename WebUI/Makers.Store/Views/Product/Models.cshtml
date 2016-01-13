@@ -1,34 +1,33 @@
-﻿@model StoreProductT
-@using Net.Framework.StoreModel
+﻿@using Net.Framework.StoreModel
+@model StoreProductT
 
 @{
-    ViewBag.Title = "ProductUploadDetail";
+    ViewBag.Title = "Models";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     IList<StoreMaterialT> matList = ViewBag.MaterialList;
 
     string contents = new HtmlFilter().PunctuationEncode(Model.Contents);
     contents = new HtmlFilter().ConvertContent(contents);
+
+    string attrSuccess = ViewBag.AttrSuccess;
 }
 
 <h1>
-
-    <br>
-    제품 번호는: @Model.No
+    @Html.Hidden("pruduct_no", Model.No)
     <br>
     제품 파일 사이즈는: @Model.FileSize kb
     <br>
-    제품 SIze X: @Model.SizeX mm
+    제품 SIze X: <span id="size_x">@Model.SizeX</span> mm
     <br>
-    제품 SIze Y: @Model.SizeY mm
+    제품 SIze Y: <span id="size_y">@Model.SizeY</span> mm
     <br>
-    제품 SIze Z: @Model.SizeZ mm
+    제품 SIze Z: <span id="size_z">@Model.SizeZ</span> mm
     <br>
-    제품 모델 부피는: @Model.ModelVolume cm³
+    제품 모델 부피는: <span id="objectvolume">@Model.ObjectVolume</span> cm³
     <br>
-    제품 슬라이싱된 출력 부피는: @Model.SlicedVolume cm³
+    제품 슬라이싱된 출력 부피는: <span id="materialvolume">@Model.MaterialVolume</span> cm³
 </h1>
-<input type="hidden" id="product_no" value="@Model.No" />
 <br>
 
 
@@ -41,6 +40,7 @@
             <p class="headerInput">제목 &amp; 설명</p>
             <div>
                 <input class="inputTit" type="text" id="product_title" name="product_title" value="@Model.ProductName" placeholder="제목을 입력하세요." />
+
             </div>
             <div class="textArea">
                 <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요.">@Model.Contents</textarea>
@@ -51,15 +51,9 @@
                 </div>
                 @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
             </div>
-            <input type="text" id="video_url" name="video_url" />
+            <input type="text" id="video_url" name="video_url" value="@Model.VideoUrl" placeholder="동영상 주소" />
         </div>
     </div>
-
-    
-                <div class="txt">
-                    <p style="word-break: break-all">
-                        @Html.Raw(contents)
-                        </p></div>
     <!-- //Left -->
 
     <!-- Right -->
@@ -134,7 +128,7 @@
 @{
     if (matList != null)
     {
-        foreach (StoreMaterialT material in matList)
+        foreach (var material in matList)
         {
     <div>
         &nbsp @material.Name
@@ -228,6 +222,10 @@
             $('.lst_value2 li').mouseenter(function () {
                 $('.lst_value2 li').removeClass('selected');
             })
+            var attr_yn = "@ViewBag.AttrYN";
+            if (attr_yn == "N") {
+                Models.GetModelingAttr();
+            }
         }
 
         Models.UISelect = function (obj, valLst, val, check_id) {
@@ -307,7 +305,7 @@
 
 
             var data = {
-                productNo: $("#product_no").val(),
+                productNo: $("#pruduct_no").val(),
                 productName: $("#product_title").val(),
                 categoryNo: "1002",
                 content: $("#product_contents").val(),
@@ -316,12 +314,14 @@
                 videoUrl: $("#video_url").val()
             }
 
+            console.log(data);
+
             var onSuccess = function (result) {
                 if (result.Success) {
-
+                    alert("저장 완료");
                 }
             }
-            Ajax.AjaxResponseModelService(this, "/product/Models", data, onSuccess);
+            Ajax.AjaxResponseModelService(this, "/product/models", data, onSuccess);
         }
 
         Models.TempUpload = function () {
@@ -330,6 +330,26 @@
 
         Models.UploadCancle = function () {
             alert("UploadCancle");
+        }
+
+        Models.GetModelingAttr = function () {
+
+            var data = {
+                productNo: $("#pruduct_no").val()
+            }
+
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    var modeling = JSON.parse(result.Result);
+                    
+                    $("#size_x").text(modeling.X);
+                    $("#size_y").text(modeling.Y);
+                    $("#size_z").text(modeling.Z);
+                    $("#objectvolume").text(modeling.ObjectVolume);
+                    $("#materialvolume").text(modeling.MaterialVolume);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/Product/GetModelingAttr", data, onSuccess);
         }
 
         function closet() {

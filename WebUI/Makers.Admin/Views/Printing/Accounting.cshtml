@@ -1,0 +1,279 @@
+﻿@model PagedList.IPagedList<Makersn.Models.OrderAccountingStateT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "결제 승인";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IList<Makersn.Models.OrderAccountingStateT> LIstFinished = ViewBag.LIstFinished;
+}
+<h2 class="contents_title">미정산 리스트</h2>
+
+@*<div class="right_float_wrap">
+    <div class="left"><strong>@ViewBag.Cnt</strong>개의 리스트</div>
+</div>*@
+
+<input type="hidden" id="date" name="date">
+
+<table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+    <caption>리스트 게시판</caption>
+    <colgroup>
+        <col width="3%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="4%" />
+        <col width="4%" />
+        <col width="4%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>주문날자(월)</th>
+            <th>스팟이름</th>
+            <th>은행명</th>
+            <th>예금주</th>
+            <th>계좌번호</th>
+            <th>매출(배송료)</th>
+            <th>결제해당금액(배송료)</th>
+            <th>수익</th>
+            <th>결제상태</th>
+            <th>관리</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int index = 0;}
+        @foreach (Makersn.Models.OrderAccountingStateT order in Model)
+        {
+                <tr class ="OrderForMem">
+                    <td>@(order.Year).@order.Month</td>
+                    <td>@order.PrinterMemberName</td>
+                    <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.BankType), order.Bank)</td>
+                    <td>@order.BankName</td>
+                    <td>@order.Account</td>
+                    <td>@(string.Format("{0:N0}", order.Price + order.PostPrice))(@string.Format("{0:N0}", order.PostPrice))</td>
+                    <td>@(string.Format("{0:N0}", order.PaidPrice))(@string.Format("{0:N0}", order.PostPrice))</td>
+                    <td>@(string.Format("{0:N0}", order.Price + order.PostPrice - order.PaidPrice))</td>
+                    <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.OrderAccountingStatus), order.Status)</td>
+                    <td>
+                        <button onclick ="javascript:Adjustment('@order.Year','@order.Month','@order.PrinterMemberNo' , '@order.PrinterMemberName' , '@order.PaidPrice', @order.PostPrice)" >정산</button>
+                        
+                    <input  type ="hidden" value ="@(++index)"/>
+                    </td>
+                    @*<a href="javascript:Adjustment('@order.Year','@order.Month','@order.PrinterMemberNo' , '@order.PrinterMemberName' , '@order.PaidPrice', @order.PostPrice)">정산</a>*@
+                </tr>
+                <tr class="detail idx@(index)" >
+                    <td colspan="20">
+                        <table width="100%">
+                            <colgroup>
+                                <col width="3%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="4%" />
+                                <col width="4%" />
+                                <col width="4%" />
+                            </colgroup>
+                            <thead>
+
+                                <tr>
+                                    <th>번호</th>
+                                    <th>주문번호</th>
+                                    <th>주문일</th>
+                                    <th>준문완료일</th>
+                                    <th>주문자명</th>
+                                    <th>매출(배송료)</th>
+                                    <th>결제해당금액(배송료)</th>
+                                    <th>수익</th>
+                                    <th>결제상태</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (Makersn.Models.OrderT orderDetail in order.OrderList)
+                                {
+                                    <tr>
+                                        <td>@orderDetail.No</td>
+                                        <td>@orderDetail.OrderNo</td>
+                                        <td>@orderDetail.RegDt</td>
+                                        <td>@orderDetail.OrderDoneDt</td>
+                                        <td>@orderDetail.OrderMemberName</td>
+                                        <td>@(string.Format("{0:N0}", orderDetail.TotalPrice + orderDetail.PostPrice))(@string.Format("{0:N0}", orderDetail.PostPrice))</td>
+                                        <td>@(string.Format("{0:N0}", orderDetail.TotalPrice * (1 - Makersn.Util.DataSetting.PRT_ORDER_RECEIVE_RATE)))(@string.Format("{0:N0}", orderDetail.PostPrice))</td>
+                                        <td>@(string.Format("{0:N0}", orderDetail.TotalPrice * (Makersn.Util.DataSetting.PRT_ORDER_RECEIVE_RATE)))</td>
+                                        <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.OrderAccountingStatus), orderDetail.AccountState)</td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+
+                </tr>
+
+
+        }
+    </tbody>
+</table>
+
+<!-- page_navi -->
+<div class="page_navi">
+    @Html.PagedListPager(Model, page => Url.Action("/printing/Accounting", new { page }))
+</div>
+<!-- // page_navi -->
+
+
+
+<h2 class="contents_title">정산완료 리스트</h2>
+@*
+<div class="right_float_wrap">
+    <div class="left"><strong>@ViewBag.Cnt</strong>개의 리스트</div>
+</div>*@
+
+<input type="hidden" id="date" name="date">
+
+<table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+    <caption>리스트 게시판</caption>
+    <colgroup>
+        <col width="5%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="4%" />
+        <col width="4%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>주문날자(월)</th>
+            <th>스팟이름</th>
+            <th>은행명</th>
+            <th>예금주</th>
+            <th>계좌번호</th>
+            <th>매출(배송료)</th>
+            <th>결제해당금액(배송료)</th>
+            <th>수익</th>
+            <th>결제상태</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Makersn.Models.OrderAccountingStateT order in LIstFinished)
+        { 
+                <tr class ="OrderForMem">
+                    <td>@(order.Year).@order.Month</td>
+                    <td>@order.PrinterMemberName</td>
+                    <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.BankType), order.Bank)</td>
+                    <td>@order.BankName</td>
+                    <td>@order.Account</td>
+                    <td>@(string.Format("{0:N0}", order.Price + order.PostPrice))(@string.Format("{0:N0}", order.PostPrice))</td>
+                    <td>@(string.Format("{0:N0}", order.PaidPrice))(@string.Format("{0:N0}", order.PostPrice))</td>
+                    <td>@(string.Format("{0:N0}", order.Price + order.PostPrice - order.PaidPrice))</td>
+                    <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.OrderAccountingStatus), order.Status)
+                        <input  type ="hidden" value ="@(++index)"/>
+                    </td>
+                    @*<td><a href="javascript:Adjustment('@order.Year','@order.Month','@order.PrinterMemberNo')">정산하기</a></td>*@
+
+                </tr>
+                <tr class="detail idx@(index)" >
+                    <td colspan="20">
+                        <table width="100%">
+                            <colgroup>
+                                <col width="5%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="7%" />
+                                <col width="4%" />
+                                <col width="4%" />
+                                <col width="4%" />
+                            </colgroup>
+                            <thead>
+
+                                <tr>
+                                    <th>번호</th>
+                                    <th>주문번호</th>
+                                    <th>주문일</th>
+                                    <th>준문완료일</th>
+                                    <th>주문자명</th>
+                                    <th>매출(배송료)</th>
+                                    <th>결제해당금액(배송료)</th>
+                                    <th>수익</th>
+                                    <th>결제상태</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (Makersn.Models.OrderT orderDetail in order.OrderList)
+                                {
+                                    <tr>
+                                        <td>@orderDetail.No</td>
+                                        <td>@orderDetail.OrderNo</td>
+                                        <td>@orderDetail.RegDt</td>
+                                        <td>@orderDetail.OrderDoneDt</td>
+                                        <td>@orderDetail.OrderMemberName</td>
+                                        <td>@(string.Format("{0:N0}", orderDetail.TotalPrice + orderDetail.PostPrice))(@string.Format("{0:N0}", orderDetail.PostPrice))</td>
+                                        <td>@(string.Format("{0:N0}", orderDetail.TotalPrice * (1 - Makersn.Util.DataSetting.PRT_ORDER_RECEIVE_RATE)))(@string.Format("{0:N0}", orderDetail.PostPrice))</td>
+                                        <td>@(string.Format("{0:N0}", orderDetail.TotalPrice * (Makersn.Util.DataSetting.PRT_ORDER_RECEIVE_RATE)))</td>
+                                        <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.OrderAccountingStatus), orderDetail.AccountState)</td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+
+                </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        function Adjustment(year, month, printerMemberNo, printerMemberName, paidPrice, postPrice) {
+            if (confirm("" + printerMemberName + " 에게 정산확인 하시겠습니까")) {
+                var onSuccess = function (result) {
+                    location.reload(true);
+                }
+
+                Ajax.AjaxResponseModelService(this, "/printing/Adjustment", { year: year, month: month, printerMemberNo: printerMemberNo, paidPrice: paidPrice, postPrice: postPrice }, onSuccess);
+            }
+        }
+
+        $(function () {
+            $(".OrderForMem").removeClass("on");
+            $(".detail").hide();
+
+            var $list_atag = $('.OrderForMem'),
+                $textbox = $('.detail');
+
+            $list_atag.on('click', function () {
+                var idx = $(this);
+                var idxValue = $(this).find("input").val();
+                $textbox.hide("fast");
+                if ($(this).is('.on')) {
+                    $list_atag.removeClass('on');
+                } else {
+                    $list_atag.removeClass('on');
+                    $(this).toggleClass('on');
+
+                    $('.idx'+idxValue).slideToggle('fast', function () {
+                        $('html,body').animate({ scrollTop: idx.offset().top - 100 });
+                    });
+                }
+                return false;
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+@ViewBag.EncodeT
+<br />
+@ViewBag.DecodeT
+
+<div class="contents_zone">
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="_url_base" name="_url_base" value="" />
+        <input type="hidden" name="mode" value="write">
+
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="200x" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+            <tbody>
+                <tr>
+                    <th>관리용 제목</th>
+                    <td>
+                        <input type="text" id="title" name="title" value="" class="input_text" style="width: 75%;" /></td>
+                </tr>
+                <tr>
+                    <th>이미지</th>
+                    <td>
+                        <input type="file" id="up_image" name="up_image" class="input_text" style="width: 80%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>링크주소</th>
+                    <td>
+                        <input type="text" id="url" name="url" value="" class="input_text" style="width: 300px;" />
+                        <input type="radio" name="opener" value="y" />
+                        새창 &nbsp; 
+					<input type="radio" name="opener" value="n" checked="checked" />
+                        기존창&nbsp; 
+					<p style="color: blue">* http:// 필수 입력</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>노출여부</th>
+                    <td>
+                        <input type="radio" name="publish" value="y" checked="checked" />
+                        사용 &nbsp; 
+					<input type="radio" name="publish" value="n" />
+                        미사용&nbsp; 
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="priority">우선순위</label></th>
+                    <td>
+                        <select id="priority" name="priority" class="input_text" style="width: 120px;">
+                            <option value="">없음</option>
+                            <option value="25">25</option>
+                            <option value="24">24</option>
+                            <option value="23">23</option>
+                            <option value="22">22</option>
+                            <option value="21">21</option>
+                            <option value="20">20</option>
+                            <option value="19">19</option>
+                            <option value="18">18</option>
+                            <option value="17">17</option>
+                            <option value="16">16</option>
+                            <option value="15">15</option>
+                            <option value="14">14</option>
+                            <option value="13">13</option>
+                            <option value="12">12</option>
+                            <option value="11">11</option>
+                            <option value="10">10</option>
+                            <option value="9">9</option>
+                            <option value="8">8</option>
+                            <option value="7">7</option>
+                            <option value="6">6</option>
+                            <option value="5">5</option>
+                            <option value="4">4</option>
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <!-- btn -->
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="#" class="_btn_reg">등록</a></span>
+        <span class="btnWrap medium"><a href="#" class="_btn_list">목록</a></span>
+    </div>
+
+    <!-- // btn -->
+    <br />
+
+    <div>
+
+        <p style="margin-bottom: 5px;">
+            <select name="lang" id="editor">
+                <option value="ko">한국어</option>
+                <option value="en">English</option>
+                <option value="zh_CN">简体中文</option>
+            </select>
+        </p>
+        @Html.TextArea("content", new { id = "content", style = "width:750px;height:350px" })
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var editor;
+        //var editorItems = [
+		//			'source', '|', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+		//			'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+		//			'insertunorderedlist', '|', 'emoticons', 'image', 'link', 'unlink', '|', 'preview', 'fullscreen'
+        //];
+        KindEditor.ready(function (K) {
+            editor = K.create('textarea[id="content"]', {
+                allowFileManager: true,
+                allowUpload: true,
+                langType: 'ko',
+                //items: editorItems,
+                afterBlur: function () { this.sync(); },
+                fileManagerJson: '/KindEditor/FileManager',     //Browse file method 
+                uploadJson: '/KindEditor/UploadImage'           //Upload file method     
+            });
+            K('select[id=editor]').change(function () {
+                if (editor) {
+                    editor.remove();
+                    editor = null;
+                }
+                editor = K.create('textarea[id="content"]', {
+                    langType: this.value,
+                    items: editorItems,
+                    fileManagerJson: '/KindEditor/FileManager',     //Browse file method 
+                    uploadJson: '/KindEditor/UploadImage'
+                });
+            });
+            K('select[id=editor]').change();
+        });
+
+        $(function () {
+            //게시글 등록
+            $("._btn_reg").click(function (e) {
+
+                var action_url = '/Home/UploadImage';
+
+                $("#insert_form").attr('action', action_url);
+                $("#insert_form").submit();
+            });
+
+        });
+    </script>
+}

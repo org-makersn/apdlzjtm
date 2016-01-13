@@ -367,6 +367,7 @@ namespace Design.Web.Admin.Controllers
             return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
         }
         #endregion
+
         #region 프린팅 업체 관리
         public ActionResult StorePrintingCom(string startDt = "", string endDt = "", int page = 1, int listCnt = 20, string name = "", string id = "")
         {
@@ -419,7 +420,7 @@ namespace Design.Web.Admin.Controllers
             storePrintingCom.PhoneNum = PhoneNum;
             storePrintingCom.Addr1 = Addr1;
             storePrintingCom.Addr2 = Addr2;
-            storePrintingCom.PostNum = PostNum;
+            storePrintingCom.PostCode = PostNum;
             storePrintingCom.ManagerName = ManagerName;
             storePrintingCom.Url = Url;
             storePrintingCom.RegId = Profile.UserId;

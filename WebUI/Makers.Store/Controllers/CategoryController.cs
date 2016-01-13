@@ -12,6 +12,12 @@ namespace Makers.Store.Controllers
 {
     public class CategoryController : BaseController
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="codeNo"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public ActionResult Index(int codeNo = 0, int page = 1)
         {
             int pageSize = 40;
@@ -34,5 +40,13 @@ namespace Makers.Store.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Initialize()
+        {
+            return View();
+        }
     }
 }

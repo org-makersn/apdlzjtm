@@ -1,0 +1,55 @@
+﻿@using Net.Framework.StoreModel
+@{
+    ViewBag.Title = "PrinterInsert";
+    IList<StoreMaterialT> matList = ViewBag.matList;
+}
+
+<h2>PrinterInsert</h2>
+<form id="insert_form" method="post" enctype="multipart/form-data" action ="/Store/PrinterInsert">
+    
+<br>프린터 업체 번호:<input id="PrintingCompanyNo" name="PrintingCompanyNo"/>
+<br>프린터 명:<input id="PrinterName" name="PrinterName"/>
+<br>프린터 출력사이즈 X:<input id="SizeX" name="SizeX"/>
+<br>프린터 출력사이즈 Y:<input id="SizeY" name="SizeY"/>
+<br>프린터 출력사이즈 X:<input id="SizeZ" name="SizeZ"/>
+    <input type="hidden" name="matNoInfo" id="matNoInfo">
+    <input type="hidden" name="matUseInfo" id="matUseInfo">
+</form>
+@foreach(StoreMaterialT mat in matList){
+    <div>
+    <input type="hidden" class="matNo" value="@mat.No"/>
+    재질명: @mat.Name
+    사용여부(사용Y,사용안함N):<input class="matUse" name="matUse" id="matUse"/>
+   </div>
+}
+
+<button onclick="javascript:upload()">등록</button>
+@{
+    <script type="text/javascript">
+        function upload() {
+
+            var length = $(".matNo").length;
+            var matNo = "";
+            var matUse = "";
+            for (var i = 0; i < length; i++) {
+                matNo = matNo + $(".matNo").eq(i).attr("value");
+                matUse = matUse + $(".matUse").eq(i).val();
+                if (i != length - 1)
+                {
+                    matNo = matNo + ";";
+                    matUse = matUse + ";";
+                }
+            }
+            $("#matNoInfo").attr("value",matNo);
+            $("#matUseInfo").attr("value", matUse);
+            $("#insert_form").submit();
+        }
+   
+
+    </script>
+    }
+
+
+
+
+

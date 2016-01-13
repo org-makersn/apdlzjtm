@@ -1,0 +1,181 @@
+﻿@using Makersn.Models
+@using Net.Framework.StoreModel;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IList<DashBoardStateT> MemberList = ViewData["DashBoardList"] as IList<DashBoardStateT>;
+    int indexM = 1;
+}
+
+
+<div class="contents_zone">
+    <div class="cont_sub_title">전체</div>
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th rowspan="2" colspan="2">구분</th>
+                <th colspan="4">회원</th>
+                @*<th rowspan="2">게시물업로드</th>
+                <th rowspan="2">게시물다운로드</th>
+                <th rowspan="2">탈퇴자</th>*@
+                <th colspan="2">디자인</th>
+                <th colspan="4">프린팅</th>
+            </tr>
+            <tr>
+                <th>전체</th>
+                <th>이메일</th>
+                <th>페이스북</th>
+                <th>탈퇴자</th>
+                <th>업로드</th>
+                <th>다운로드</th>
+                <th>스팟</th>
+                <th>프린터</th>
+                <th>주문</th>
+                <th>주문금액</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var state in MemberList)
+            {
+                if (indexM == 8) { break; }
+                string strTd = string.Empty;
+                switch (indexM)
+                {
+                    case 2:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "일간");
+                        break;
+                    case 4:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "주간");
+                        break;
+                    case 6:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "월간");
+                        break;
+                    default:
+                        break;
+                }
+                  
+                <tr>
+                    @if (indexM == 1)
+                    {
+                        <td colspan="2">@state.Gbn</td>
+                    }
+                    else
+                    {
+                        @Html.Raw(strTd)
+                        <td>@state.Gbn</td>
+                    }
+                    <td>@(state.EmailCnt + state.FacebookCnt + state.DropMemberCnt)</td>
+                    <td>@state.EmailCnt</td>
+                    <td>@state.FacebookCnt</td>
+                    <td>@state.DropMemberCnt</td>
+                    <td>@state.ArticleCnt</td>
+                    <td>@state.DownloadCnt</td>
+                    <td>@state.SpotCnt</td>
+                    <td>@state.PrinterCnt</td>
+                    <td>@state.OrderCnt</td>
+                    <td>@state.TotalPrice</td>
+                @* <td>@state.DropMemberCnt</td>*@
+                </tr>
+                    indexM++;
+            }
+        </tbody>
+    </table>
+
+    <br />
+    @*<div class="cont_sub_title">* 게시물 관련</div>
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="7%" />
+            <col width="8%" />
+            <col width="8%" />
+            <col width="8%" />
+            <col width="8%" />
+            <col width="9%" />
+            <col width="9%" />
+            <col width="9%" />
+            <col width="7%" />
+            <col width="9%" />
+            <col width="9%" />
+            <col width="9%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th rowspan="2" colspan="2">구분</th>
+                <th rowspan="2">전체</br>게시물</th>
+                <th rowspan="2">공개된</br>게시물</th>
+                <th colspan="6">카테고리</th>
+                <th rowspan="2">저장된</br>게시물</th>
+                <th rowspan="2">게시물</br>다운로드</th>
+            </tr>
+            <tr>
+                <th>아트&건축</th>
+                <th>패션&악세사리</th>
+                <th>캐릭터&토이</th>
+                <th>생활용품&데코</th>
+                <th>테크&툴</th>
+                <th>교육&학습도구</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var state in ArticleList)
+            {
+                string strTd = string.Empty;
+                switch (indexA)
+                {
+                    case 2:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "일간");
+                        break;
+                    case 4:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "주간");
+                        break;
+                    case 6:
+                        strTd = string.Format("<td rowspan=\"2\">{0}</td>", "월간");
+                        break;
+                    default:
+                        break;
+                }
+                 
+                <tr>
+                    @if (indexA == 1)
+                    {
+                        <td colspan="2">@state.Gbn</td>
+                    }
+                    else
+                    {
+                        @Html.Raw(strTd)
+                        <td>@state.Gbn</td>
+                    }
+                    <td>@(state.PublicCnt + state.SavedCnt)</td>
+                    <td>@state.PublicCnt</td>
+                    <td>@state.CodeNo1001</td>
+                    <td>@state.CodeNo1002</td>
+                    <td>@state.CodeNo1003</td>
+                    <td>@state.CodeNo1004</td>
+                    <td>@state.CodeNo1005</td>
+                    <td>@state.CodeNo1006</td>
+                    <td>@state.SavedCnt</td>
+                    <td>@state.DownloadCnt</td>
+                </tr>
+                    indexA++;
+            }
+        </tbody>
+    </table>*@
+</div>

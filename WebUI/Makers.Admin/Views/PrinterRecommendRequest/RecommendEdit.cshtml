@@ -1,0 +1,163 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "프린터 리스트";
+    @*<Makersn.Models.CodeT> codeList = (List<Makersn.Models.CodeT>)ViewData["cateList"];
+    int setCate = (int)ViewData["setCate"];*@
+}
+
+<div id="test">
+</div>
+
+    <h2 class="contents_title">디자인 관리</h2>
+
+
+    <form id="search" name="search">
+        <input type="hidden" id="date" name="date">
+        <input type="hidden" id="sst" name="sst">
+        <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="100px" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">정렬순서</th>
+                    <td>
+                        <span class="btnWrap small"><a href="javascript:PrinterRecommendRequest.orderby('regdt');" class="_sst">등록일순</a></span>
+                        <span class="btnWrap small"><a href="javascript:PrinterRecommendRequest.orderby('pop');" class="_sst">인기도순</a></span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th scope="row">검색</th>
+                    <td colspan="5">
+
+                        <select id="sltRecommendYn" style="width: 130px">
+                            <option value="">추천여부</option>
+                            <option value="Y" @((string)ViewData["RecommendYn"] == "Y" ? " selected" : "")>추천</option>
+                            <option value="N" @((string)ViewData["RecommendYn"] == "N" ? " selected" : "")>비추천</option>
+                        </select>
+                        <select id="sltOption" name="sfl" style="width: 130px">
+                            <option value="name">게시물명</option>
+                        </select>
+                        <input type="text" name="query2" id="searchBox" value="@ViewData["text"]" class="input_text" style="width: 200px; padding: 1px 0" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="btn_center">
+            <span class="btnWrap medium"><a href="javascript:PrinterRecommendRequest.SearchEdit();" class="_search_btn">검색</a></span>
+            <span class="btnWrap medium"><a href="javascript:void();"  onclick="$('#searchBox').val('');" class="_reset">초기화</a></span>
+        </div>
+    </form>
+
+
+
+
+    <div class="right_float_wrap">
+        <div class="left"><strong>@ViewData["cnt"]</strong>개의 리스트</div>
+    </div>
+
+    <input type="hidden" id="date" name="date">
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            @*<col width="6%" />
+        <col width="6%" />
+        <col width="10%" />
+        <col width="*" />
+        <col width="10%" />
+        <col width="10%" />
+        <col width="4%" />
+        <col width="4%" />
+        <col width="4%" />
+        <col width="4%" />
+        <col width="10%" />
+        <col width="8%" />*@
+            <col width="6%" />
+            <col width="6%" />
+            <col width="10%" />
+            <col width="*" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" id="btnAll" name="chkAll" onclick="printer.checkedAll();"></th>
+                <th>번호</th>
+                <th>이미지</th>
+                <th>스팟명</th>
+                <th>브랜드</th>
+                <th>이름</th>
+                @*<th>조회수</th>
+            <th>좋아요</th>
+            <th>코멘트</th>*@
+                <th>인기도</th>
+                <th>게시일</th>
+                <th>추천여부</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Printer in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="chkAll" value="@Printer.No"/></td>
+                    <td>@Printer.No</td>
+                    <td>
+                        <img src="@ViewBag.PrintImgUrl@Printer.ImageName" width="50px" height="50px" />
+                        @*Printer.RecommendYn*@
+                    </td>
+                    <td><a href="javascript:Printer.goPrinter(@Printer.No)">@Printer.PrinterMemberName</a></td>
+                    <td>@Printer.Brand</td>
+                    <td>@Printer.MemberName</td>
+                    @*<td>@Printer.ViewCnt</td>
+                <td>@Printer.LikeCnt</td>
+                <td>@Printer.CommentCnt</td>*@
+                    <td>미정</td>
+                    <td>@Printer.RegDt.ToString("yyyy-MM-dd")</td>
+                    @*<td>@(Printer.Visibility == "Y" ? "노출" : "비노출")</td>*@
+                    <td>@(Printer.RecommendYn == "Y" ? "추천" : "비추천")</td>
+                </tr>   
+            }
+
+
+
+        </tbody>
+    </table>
+
+    <div class="page_navi">
+        @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("RecommendEdit", new { page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "RecommendEdit"
+            })
+        )
+    </div>
+
+    <div class="two_btn_wrap">
+        @*<div class="box_left_zone">
+        <!-- <span class="btnWrap medium"><a href="javascript:void(0);" class="_sel_del">선택삭제</a></span> -->
+        <span class="btnWrap medium"><a href="javascript:Printer.visibility('Y');" class="_sel_init">선택노출</a></span>
+        <span class="btnWrap medium"><a href="javascript:Printer.visibility('N');" class="_sel_init">선택비노출</a></span>
+    </div>*@
+        <div class="box_left_zone">
+            <!-- <span class="btnWrap medium"><a href="javascript:void(0);" class="_sel_del">선택삭제</a></span> -->
+            <span class="btnWrap medium"><a href="javascript:PrinterRecommendRequest.recommend('Y');" class="_sel_init">선택 추천</a></span>
+            <span class="btnWrap medium"><a href="javascript:PrinterRecommendRequest.recommend('N');" class="_sel_init">선택 추천 취소</a></span>
+        </div>
+
+        <div class="box_right_zone">
+        </div>
+    </div>

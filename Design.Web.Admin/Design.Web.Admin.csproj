@@ -1005,6 +1005,7 @@
     <Content Include="Views\Member\StorePrintingComInsert.cshtml" />
     <Content Include="Views\Store\PrinterList.cshtml" />
     <Content Include="Views\Store\PrinterInsert.cshtml" />
+    <Content Include="Views\CommonRequest\Index.cshtml" />
     <None Include="Views\Translation\MonthStateDirect.cshtml" />
     <Content Include="Views\Translation\YearStateDirect.cshtml" />
     <Content Include="Views\Translation\TranslationWork.cshtml" />
@@ -1015,6 +1016,7 @@
     <Folder Include="FileUpload\Banner\" />
     <Folder Include="FileUpload\KindEditor\attached\flash\" />
     <Folder Include="FileUpload\KindEditor\attached\image\" />
+    <Folder Include="Views\Printer\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

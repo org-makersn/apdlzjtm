@@ -19,8 +19,8 @@ namespace Net.Framework.StoreModel
         public virtual string Addr1 { get; set; }
         [Column("ADDR2")]
         public virtual string Addr2 { get; set; }
-        [Column("POST_NUM")]
-        public virtual string PostNum { get; set; }
+        [Column("POST_CODE")]
+        public virtual string PostCode { get; set; }
         [Column("MANAGER_NAME")]
         public virtual string ManagerName { get; set; }
         [Column("URL")]

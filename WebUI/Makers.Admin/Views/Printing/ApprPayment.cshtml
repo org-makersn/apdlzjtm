@@ -1,0 +1,197 @@
+﻿@model PagedList.IPagedList<Makersn.Models.OrderT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "결제 승인";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IList<Makersn.Models.OrderT> ApprList = ViewBag.ApprList;
+}
+<h2 class="contents_title">결제 승인</h2>
+
+<div class="right_float_wrap">
+    <div class="left"><strong>@ViewBag.Cnt</strong>개의 리스트</div>
+</div>
+
+<input type="hidden" id="date" name="date">
+
+<table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+    <caption>리스트 게시판</caption>
+    <colgroup>
+        <col width="3%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>주문번호</th>
+            <th>주문일</th>
+            <th>주문자명</th>
+            <th>스팟명</th>
+            <th>주문상태</th>
+            <th>결제방법</th>
+            <th>금액</th>
+            <th>관리</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Makersn.Models.OrderT order in Model)
+        {
+            <tr>
+                <td>@order.No</td>
+                <td>@order.OrderNo</td>
+                <td>@(((DateTime)order.OrderDt).ToString("yyyy-MM-dd"))</td>
+                <td>@order.OrderMemberName</td>
+                <td>@order.PrinterMemberName</td>
+                <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.OrderState), order.OrderStatus)</td>
+                <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.PayType), order.PayType)</td>
+                <td>@string.Format("{0:N0}", order.TotalPrice + order.PostPrice)</td>
+                <td><a href="javascript:apprPayment('@order.No','@order.OrderMemberName')">승인</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- page_navi -->
+<div class="page_navi">
+    @Html.PagedListPager(Model, page => Url.Action("/printing/apprPayment", new { page }))
+</div>
+<!-- // page_navi -->
+
+
+
+<h2 class="contents_title">12시간 이내에 결제 된 리스트</h2>
+
+<div class="right_float_wrap">
+    <div class="left"><strong>@ApprList.Count</strong>개의 리스트</div>
+</div>
+
+<input type="hidden" id="date" name="date">
+
+<table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+    <caption>리스트 게시판</caption>
+    <colgroup>
+        <col width="3%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>주문번호</th>
+            <th>주문일</th>
+            <th>주문자명</th>
+            <th>스팟명</th>
+            <th>주문상태</th>
+            <th>결제방법</th>
+            <th>금액</th>
+            <th>관리</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Makersn.Models.OrderT order in ApprList)
+        {
+            bool stateBool = ((int)Makersn.Util.MakersnEnumTypes.OrderState.결제완료 >= order.OrderStatus);
+            <tr>
+                <td>@order.No</td>
+                <td>@order.OrderNo</td>
+                <td>@(((DateTime)order.OrderDt).ToString("yyyy-MM-dd"))</td>
+                <td>@order.OrderMemberName</td>
+                <td>@order.PrinterMemberName</td>
+                <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.OrderState), order.OrderStatus)</td>
+                <td>@Enum.GetName(typeof(Makersn.Util.MakersnEnumTypes.PayType), order.PayType)</td>
+                <td>@string.Format("{0:N0}", order.TotalPrice + order.PostPrice)</td>
+                <td><a href="javascript:cancelApprPayment('@order.No','@order.OrderMemberName','@stateBool.ToString()')">승인취소</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $("#sdate,#edate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: 'both',
+            buttonImage: '/Content/images/admin/icon_calender.png',
+            buttonImageOnly: true,
+            dateFormat: 'yy-mm-dd'
+        });
+
+
+        function Printing() { };
+
+        Printing.goPrinter = function (val) {
+            //window.open(
+            //  'http://www.makersn.com/Printer/Detail?no=' + val,
+            //  'blank'
+            //  );
+        }
+
+        Printing.Search = function () {
+            var text = $("#searchBox").val();
+            var start = $("#sdate").val();
+            var end = $("#edate").val();
+            var state = $("#state").val();
+            var dateGubun = $("#dateGubun").val();
+            var txtGubun = $("#txtGubun").val();
+
+            location.replace("/printing/listing?text=" + text + "&start=" + start + "&end=" + end + "&state=" + state + "&dateGubun=" + dateGubun + "&txtGubun=" + txtGubun);
+        }
+
+
+        $(document).ready(function () {
+            $('#searchBox').keyup(function (event) {
+                if (event.keyCode == 13) {
+                    if ($("#searchBox").val().trim() != "") {
+                        Printing.Search();
+                    }
+                }
+            });
+        });
+
+        function apprPayment(no, name) {
+            if (confirm(name + "님의 결제상태를 결제완료로 승인합니다.\n" + name + "님이 맞는지 확인해 주세요")) {
+                var onSuccess = function (result) {
+                    alert(result.Message);
+                    location.reload(true);
+                }
+
+                Ajax.AjaxResponseModelService(this, "/printing/ApprOrderStatus", { no: no }, onSuccess);
+            }
+        }
+
+        function cancelApprPayment(no, name, status) {
+            if (status != "True") {
+                alert("이미 주문 승락이 되어 취소 할 수 없습니다.");
+            }
+            else {
+                if (confirm(name + "님의 결제승인을 취소합니다.\n" + name + "님이 맞는지 확인해 주세요")) {
+                    var onSuccess = function (result) {
+                        alert(result.Message);
+                        location.reload(true);
+                    }
+
+                    Ajax.AjaxResponseModelService(this, "/printing/CancelApprOrderStatus", { no: no }, onSuccess);
+                }
+            }
+        }
+    </script>
+}

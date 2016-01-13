@@ -1,0 +1,168 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterStateT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "프린팅 리스트";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2 class="contents_title">프린팅 리스트</h2>
+
+<form id="search" name="search">
+    <input type="hidden" id="date" name="date">
+    <input type="hidden" id="sst" name="sst">
+    <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
+        <colgroup>
+            <col width="20%" />
+            <col width="40%" />
+            <col width="40%" />
+        </colgroup>
+        <caption>게시판</caption>
+        <tbody>
+            <tr>
+                <th scope="row">주문상태</th>
+                <th scope="row">주문기간</th>
+                <th scope="row">검색어 입력</th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownList("state")
+                </td>
+                <td>
+                    <select id="dateGubun">
+                        <option value="0">전체</option>
+                    </select>
+
+                    <input type="text" id="sdate" name="sdate" class="input_text" style="width: 106px; margin-right: 5px" readonly="readonly" value="@ViewBag.Start"/>
+                    ~                                                                                                     
+						<input type="text" id="edate" name="edate" class="input_text" style="width: 106px; margin-right: 5px" readonly="readonly" value="@ViewBag.End"/>
+                </td>
+                <td>
+                    <select id="txtGubun" style="width: 20%">
+                        <option value="0">주문자명+스팟명</option>
+                    </select>
+                    <input type="text" id="searchBox"  value="@ViewData["text"]" class="input_text" style="width: 75%" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="javascript:Printing.Search();" class="_search_btn">검색</a></span>
+        <span class="btnWrap medium"><a href="/printing/listing" class="_reset">초기화</a></span>
+    </div>
+</form>
+
+
+
+
+<div class="right_float_wrap">
+    <div class="left"><strong>@ViewData["cnt"]</strong>개의 리스트</div>
+</div>
+
+<input type="hidden" id="date" name="date">
+
+<table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+    <caption>리스트 게시판</caption>
+    <colgroup>
+        <col width="2%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+        <col width="7%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>번호</th>
+
+            <th>이미지</th>
+            <th>주문번호</th>
+            <th>주문일</th>
+            <th>주문자명</th>
+            <th>스팟명</th>
+            <th>주문상태</th>
+            <th>결제방법</th>
+            <th>금액</th>
+            <th>관리</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Makersn.Models.PrinterStateT printer in Model)
+        {
+            <tr>
+                <td>
+                    @printer.No
+                </td>
+                <td>
+                    <img src="@ViewBag.ArticleImgUrl@printer.ImgName" width="120px" height="120px" />
+                </td>
+                <td>@printer.OrderNo</td>
+                <td>@printer.RegDt</td>
+                <td>@printer.OrderMemberName</td>
+                <td>@printer.SpotName</td>
+                <td>@Makersn.Util.EnumHelper.GetEnumTitle((Makersn.Util.MakersnEnumTypes.OrderState)printer.OrderStatus)</td>
+                <td>@Makersn.Util.EnumHelper.GetEnumTitle((Makersn.Util.MakersnEnumTypes.PayType)printer.PayType)</td>
+                <td>@printer.Price 원</td>
+                <td></td>
+            </tr>   
+        }
+
+
+
+    </tbody>
+</table>
+
+<!-- page_navi -->
+<div class="page_navi">
+    @Html.PagedListPager(Model, page => Url.Action("/printing/listing", new { page }))
+</div>
+<!-- // page_navi -->
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $("#sdate,#edate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: 'both',
+            buttonImage: '/Content/images/admin/icon_calender.png',
+            buttonImageOnly: true,
+            dateFormat: 'yy-mm-dd'
+        });
+
+
+        function Printing() { };
+
+        Printing.goPrinter = function (val) {
+            //window.open(
+            //  'http://www.makersn.com/Printer/Detail?no=' + val,
+            //  'blank'
+            //  );
+        }
+
+        Printing.Search = function () {
+            var text = $("#searchBox").val();
+            var start = $("#sdate").val();
+            var end = $("#edate").val();
+            var state = $("#state").val();
+            var dateGubun = $("#dateGubun").val();
+            var txtGubun = $("#txtGubun").val();
+            
+            location.replace("/printing/listing?text=" + text + "&start=" + start + "&end=" + end + "&state=" + state + "&dateGubun=" + dateGubun + "&txtGubun=" + txtGubun);
+        }
+
+
+        $(document).ready(function () {
+            $('#searchBox').keyup(function (event) {
+                if (event.keyCode == 13) {
+                    if ($("#searchBox").val().trim() != "") {
+                        Printing.Search();
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "SendMail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SendMail</h2>
+
+@using (Html.BeginForm("SendMail", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+  
+    <table>
+        <tr>
+            <td>Subject</td>
+            <td>
+                <input type="text" name="Subject" id="Subject" /></td>
+        </tr>
+        <tr>
+            <td>Body</td>
+            <td>
+                <textarea name="Body" id="Body" cols="5" rows="3"></textarea></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Send" name="Send" id="Send" /></td>
+        </tr>
+    </table>
+}

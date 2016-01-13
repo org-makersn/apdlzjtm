@@ -169,6 +169,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configurations\StoreConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -194,6 +195,11 @@
     <Content Include="Content\css\layout.css" />
     <Content Include="Content\css\nanumbarungothic.css" />
     <Content Include="Content\images\common\bg_search_line.gif" />
+    <Content Include="Content\images\common\btn\btnThumb.gif" />
+    <Content Include="Content\images\common\btn\btnThumb_over.gif" />
+    <Content Include="Content\images\common\btn\btnUpFile.gif" />
+    <Content Include="Content\images\common\btn\btnUpFile_over.gif" />
+    <Content Include="Content\images\common\btn\btnUseConfirmOk.png" />
     <Content Include="Content\images\common\btn\btn_join.png" />
     <Content Include="Content\images\common\btn\btn_login.gif" />
     <Content Include="Content\images\common\btn\btn_login.png" />
@@ -306,7 +312,9 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Product\Models.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -329,7 +337,6 @@
     <Content Include="Views\Product\GetReceivedNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
-    <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
@@ -339,6 +346,7 @@
     <Content Include="Views\Cart\List.cshtml" />
     <Content Include="Views\Order\List.cshtml" />
     <Content Include="Views\Cart\plugin_check.cshtml" />
+    <Content Include="Views\Product\Models.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

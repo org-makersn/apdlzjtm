@@ -64,8 +64,8 @@
     <Compile Include="BizDac\StoreMaterialDac.cs" />
     <Compile Include="BizDac\StoreMemberBiz.cs" />
     <Compile Include="BizDac\StoreMemberDac.cs" />
-    <Compile Include="BizDac\StoreNoticeBiz.cs" />
-    <Compile Include="BizDac\StoreNoticeDac.cs" />
+    <Compile Include="BizDac\StoreNotificationsBiz.cs" />
+    <Compile Include="BizDac\StoreNotificationsDac.cs" />
     <Compile Include="BizDac\StorePrintingCompanyBiz.cs" />
     <Compile Include="BizDac\StorePrintingCompanyDac.cs" />
     <Compile Include="BizDac\StorePrintingTypeBiz.cs" />
@@ -103,7 +103,7 @@
     <Compile Include="StoreModel\StoreLikesT.cs" />
     <Compile Include="StoreModel\StoreMaterialT.cs" />
     <Compile Include="StoreModel\StoreMemberT.cs" />
-    <Compile Include="StoreModel\StoreNoticeT.cs" />
+    <Compile Include="StoreModel\StoreNotificationsT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="StoreContext.cs" />

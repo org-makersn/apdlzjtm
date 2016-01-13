@@ -1,0 +1,138 @@
+﻿@model PagedList.IPagedList<Makersn.Models.BoardT>
+@using PagedList.Mvc;
+;
+@{
+    ViewBag.Title = "공지사항";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<h2 class="contents_title">공지사항</h2>
+
+@if (ViewBag.Flag == "KR")
+{
+    <strong>
+        <a href="/notices">한국어 사이트</a>&nbsp;&nbsp;
+    </strong>
+}
+else
+{
+    <a href="/notices">한국어 사이트</a>
+}
+l
+&nbsp;
+@if (ViewBag.Flag == "EN")
+{
+    <strong><a href="/notices?langFlag=EN">영문 사이트</a></strong>
+}
+else
+{
+    <a href="/notices?langFlag=EN">영문 사이트</a>
+}
+<br />
+<br />
+<br />
+
+<!-- contents_zone -->
+<div class="contents_zone">
+    @*<form id="search" name="search">*@
+        <!-- list_search_zone -->
+        <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="100px" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">검색</th>
+                    <td>
+                        <select id="sfl" name="sfl" style="width: 130px">
+                            <option value="sfl1" @((string)ViewData["gubun"] == "sfl1" ? " selected" : "") >전체</option>
+                            <option value="sfl2" @((string)ViewData["gubun"] == "sfl2" ? " selected" : "")>제목</option>
+                            <option value="sfl3" @((string)ViewData["gubun"] == "sfl3" ? " selected" : "")>내용</option>
+                        </select>
+                        <input type="text" id="stx" name="stx" value="@ViewData["text"]" class="input_text" style="width: 150px; padding: 1px 0" />
+                        <span class="btnWrap medium"><a href="#" class="_search_btn">검색</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- list_search_zone -->
+
+        <div class="right_float_wrap">
+            <div class="left"><strong>@ViewData["cnt"]</strong> 의 게시물</div>
+        </div>
+        <!-- // list_search_zone -->
+    @*</form>*@
+
+    <div class="faq_wrap">
+        @foreach (Makersn.Models.BoardT n in Model)
+        {
+            <div class="q_low">
+                <div class="lowin"><a href="#" class="_btn_view" rel="@n.No">@n.Title </a>&nbsp;[@n.RegDt.ToString("yyyy-MM-dd")]</div>
+            </div>
+            <div class="a_low">
+                <div class="lowin">
+
+                    @Html.Raw(new HtmlFilter().PunctuationDecode(n.SemiContent))
+                </div>
+            </div>
+        }
+    </div>
+    <!-- // faq_wrap -->
+
+    <!-- page_navi -->
+    <div class="page_navi" style="padding-bottom: 0;">
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+    </div>
+    <!-- // page_navi -->
+    <!-- btn -->
+    <div class="btn_right">
+        <span class="btnWrap medium"><a href="/notices/write?flag=@ViewBag.Flag" class="_btn_write">등록</a></span>
+    </div>
+    <!-- // btn -->
+</div>
+
+<input type="hidden" id="langFlag" name="langFlag" value="@ViewBag.Flag" />
+
+@section Scripts{
+    <script type="text/javascript">
+        function Notices() { };
+        Notices.VIew = function (val) {
+            //location.replace("/notices/View?no=" + val);
+        }
+        $(document).ready(function () {
+
+            //글보기
+            $("._btn_view").click(function () {
+                var $this_no = $(this).attr("rel");
+                location.href = '/notices/View?no=' + $this_no;
+                return false;
+            });
+
+            $(".q_low").on("click", function () {
+                $(this).next().slideToggle();
+                $(".a_low").not($(this).next()).slideUp();
+            });
+
+
+            $("#stx").keypress(function (event) {
+                if (event.keyCode == 13) {
+                    $("._search_btn").click();
+                }
+            });
+            $("._search_btn").click(function () {
+                var text = $("#stx").val();
+                var gubun = $("#sfl").val();
+                var langFlag = "@ViewBag.Flag";
+
+                location.replace("/notices?text=" + text + "&gubun=" + gubun + "&langFlag=" + langFlag);
+            })
+
+        });
+    </script>
+}

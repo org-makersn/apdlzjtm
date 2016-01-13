@@ -11,6 +11,8 @@ namespace Design.Web.Front.Controllers
 {
     public class BaseController : Controller
     {
+        public ApplicationConfiguration instance = ApplicationConfiguration.Instance;
+
         public ProfileModel profileModel;
 
         PrinterMemberDac _printerMemberDac = new PrinterMemberDac();
@@ -29,8 +31,6 @@ namespace Design.Web.Front.Controllers
             //클릭시 가져오는걸로
             ViewBag.NoticeCnt = _noticesDac.GetNoticesCntByMemberNo(profileModel.UserNo);
             ViewBag.MessageCnt = _messageDac.GetNewMessageCount(profileModel.UserNo);
-
-            ApplicationConfiguration instance = ApplicationConfiguration.Instance;
 
             ViewBag.ProfileImgUrl = instance.ProfileImgUrl;
             ViewBag.ArticleImgUrl = instance.ArticleImgUrl;

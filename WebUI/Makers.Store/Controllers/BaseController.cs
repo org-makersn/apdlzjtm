@@ -1,4 +1,5 @@
-﻿using Net.Common.Model;
+﻿using Makers.Store.Configurations;
+using Net.Common.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace Makers.Store.Controllers
 {
     public class BaseController : Controller
     {
+        public StoreConfiguration instance = StoreConfiguration.Instance;
         public ProfileModel profileModel;
 
         public BaseController()

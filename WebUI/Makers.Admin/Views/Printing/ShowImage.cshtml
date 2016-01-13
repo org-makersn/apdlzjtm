@@ -1,0 +1,58 @@
+﻿@model IList<Makersn.Models.PrinterOutputImageT>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@foreach (Makersn.Models.PrinterOutputImageT image in Model)
+{
+    <img src="@ViewBag.PrintImgUrl@image.ImageReName" style="width:450px;height:300px"/>
+    <br />
+    <br />
+}
+
+<textarea style="width: 400px; height: 100px;" id="comment" name="comment" placeholder="거절 메시지"></textarea>
+
+<a href="#" onclick="ApprPrinter('@ViewBag.PrinterNo','Y')">승인</a>
+@*<a href="#" onclick="DeleteTest('@Model[0].OrderNo')">거절</a>*@
+<a href="#" onclick="sendRefusalComment('@Model[0].OrderNo')">거절</a>
+
+@section Scripts{
+    <script type="text/javascript">
+        function ApprPrinter(no, flag) {
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    alert(result.Message);
+                    location.href = "/Printing/ApprPrinterTest";
+                }
+                else {
+                    alert(result.Message);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/printing/SetApprPrinterTest", { no: no, flag: flag }, onSuccess);
+        }
+
+        function sendRefusalComment(val) {
+            var comment = $("#comment").val();
+            if (comment.length == 0) {
+                if (confirm("거절 메시지가 없습니다.\n이대로 거절 하시겠습니까?")) {
+                    DeleteTest(val, comment);
+                }
+            }
+            else {
+                DeleteTest(val, comment);
+            }
+           
+        }
+        function DeleteTest(orderNo, comment) {
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    location.href = "/printing/apprprintertest";
+                }
+                else {
+                    alert(result.Message);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/printing/DeletePrinterTest", { no: orderNo, comment: comment }, onSuccess);
+        }
+    </script>
+}

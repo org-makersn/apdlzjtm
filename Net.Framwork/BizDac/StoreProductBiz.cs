@@ -13,7 +13,7 @@ namespace Net.Framwork.BizDac
         /// 조회
         /// </summary>
         /// <returns></returns>
-        public List<StoreProductT> getAllStoreProduct() {
+        public IList<StoreProductT> getAllStoreProduct() {
             return new StoreProductDac().SelectAllStoreProduct();
         }
 

@@ -5,6 +5,7 @@ using Net.Common.Helper;
 using Net.Common.Model;
 using Net.Framework.StoreModel;
 using Net.Framwork.BizDac;
+using Newtonsoft.Json;
 using QuantumConcepts.Formats.StereoLithography;
 using System;
 using System.Collections.Generic;
@@ -19,15 +20,18 @@ namespace Makers.Store.Controllers
     {
         StoreLikesBiz likesBiz = new StoreLikesBiz();
         StoreMemberBiz memberBiz = new StoreMemberBiz();
-        private Extent Size { get; set; }// Stl Model Size
-        //
-        // GET: /Product/
+        
         public ActionResult Index()
         {
             ViewBag.UserNo = profileModel.UserNo;
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
         public ActionResult Create(string ex)
         {
             return View();
@@ -66,28 +70,27 @@ namespace Makers.Store.Controllers
 
                             if (extType.Contains(extension.ToLower()))
                             {
-                                string save3DFolder = @"\product\3d-files";
-                                //string saveJSFolder = @"\product\js-files";
-
-                                string fileReName = FileHelper.UploadFile(stlupload, null, save3DFolder, null);
+                                string modelingDir = Constant.StoreUploadDir.ModelingDir;
+                                string save3DPath = string.Format(@"{0}\{1}", instance.PhysicalDir, modelingDir);
+                                string fileReName = new FileHelper().UploadFile(stlupload, null, save3DPath, null);
 
                                 StoreProductT _storeProduct = new StoreProductT();
 
-                                _storeProduct.VarNo = 10000;
+                                _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
                                 _storeProduct.ProductName = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
-                                _storeProduct.FilePath = save3DFolder;
+                                _storeProduct.FilePath = modelingDir;
                                 _storeProduct.FileName = stlupload.FileName;
                                 _storeProduct.FileReName = fileReName;
                                 _storeProduct.FileExt = extension.ToLower();
                                 _storeProduct.MimeType = stlupload.ContentType;
                                 _storeProduct.FileSize = Convert.ToDouble(stlupload.ContentLength.ToString());
 
-                                _storeProduct.SlicedVolume = 0;
-                                _storeProduct.ModelVolume = 0;
+                                _storeProduct.MaterialVolume = 0;
+                                _storeProduct.ObjectVolume = 0;
                                 _storeProduct.SizeX = 0;
                                 _storeProduct.SizeY = 0;
-                                _storeProduct.SizeZ = 0
-                                    ;
+                                _storeProduct.SizeZ = 0;
+
                                 _storeProduct.Scale = 100;
                                 _storeProduct.ShortLing = "";
                                 _storeProduct.VideoUrl = "";
@@ -111,11 +114,13 @@ namespace Makers.Store.Controllers
                                 _storeProduct.RegDt = DateTime.Now;
                                 _storeProduct.RegId = profileModel.UserId;
 
-                                IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
                                 productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
 
-                                response.Success = true;
-                                response.Result = productNo.ToString();
+                                if (productNo > 0)
+                                {
+                                    response.Success = true;
+                                    response.Result = productNo.ToString();
+                                }
 
                                 //Result[index] = articleFileNo;
                                 index++;
@@ -144,7 +149,7 @@ namespace Makers.Store.Controllers
         public ActionResult Models(int no)
         {
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
-
+            ViewBag.AttrYN = storeProduct.MaterialVolume == 0 || storeProduct.ObjectVolume == 0 ? "N" : "Y";
             ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
             return View(storeProduct);
         }
@@ -175,6 +180,77 @@ namespace Makers.Store.Controllers
                 if (ret > 0)
                 {
                     response.Success = true;
+                }
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 사이즈, 부피, 불륨
+        /// </summary>
+        /// <param name="productNo"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult GetModelingAttr(int productNo)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+
+            int status = 0;
+
+            string saveJSFolder = Constant.StoreUploadDir.JsonToJsDir;
+
+            StoreProductT product = new StoreProductBiz().getStoreProductById(productNo);
+
+            if (product != null)
+            {
+                ModelingSize getSize = new ModelingSize();
+                string fullpath = string.Format(@"{0}\{1}\{2}", instance.PhysicalDir, product.FilePath, product.FileReName);
+                if (product.ObjectVolume == 0)
+                {
+                    status += 1;
+                    _3DModel _3dModel = new Modeling3DHelper().Get3DModel(fullpath, product.FileExt);
+
+                    getSize = new Modeling3DHelper().GetSizeFor3DFile(fullpath, product.FileExt);
+
+                    product.SizeX = getSize.X;
+                    product.SizeY = getSize.Y;
+                    product.SizeZ = getSize.Z;
+                    product.ObjectVolume = getSize.ObjectVolume;
+
+                    string jsfullpath = string.Format(@"{0}\{1}\{2}.js", instance.PhysicalDir, saveJSFolder, product.FileReName);
+
+                    var strBuff = JsonConvert.SerializeObject(_3dModel);
+
+                    bool result = new FileHelper().FileWriteAllText(jsfullpath, strBuff);
+                }
+                else
+                {
+                    getSize.X = product.SizeX;
+                    getSize.Y = product.SizeY;
+                    getSize.Z = product.SizeZ;
+                    getSize.ObjectVolume = product.ObjectVolume;
+                }
+
+                if (product.MaterialVolume == 0)
+                {
+                    status += 1;
+                    product.MaterialVolume = new Modeling3DHelper().Slicing(fullpath, instance.Slic3rDir);
+                    getSize.MaterialVolume = product.MaterialVolume;
+                }
+                else
+                {
+                    getSize.MaterialVolume = product.MaterialVolume;
+                }
+
+                if (status > 0)
+                {
+                    int ret = new StoreProductBiz().setStoreProduct(product);
+                    if (ret > 0)
+                    {
+                        response.Success = true;
+                        response.Result = JsonConvert.SerializeObject(getSize);
+                    }
                 }
             }
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -234,12 +310,24 @@ namespace Makers.Store.Controllers
             return PartialView(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
         public ActionResult GetSentNoteListByMemberNo(int memberNo)
         {
             var result = memberBiz.getSentNoteListByMemberNo(memberNo);
             return PartialView(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fromMember"></param>
+        /// <param name="targetMember"></param>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         public JsonResult SendNote(int fromMember, int targetMember, string comment)
         {
             MemberMsgT msg = new MemberMsgT();
@@ -259,12 +347,16 @@ namespace Makers.Store.Controllers
             return Json(new { Success = true, Result = result }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SeqNo"></param>
+        /// <returns></returns>
         public JsonResult DeleteNote(int SeqNo)
         {
             int result = memberBiz.deleteNote(SeqNo);
             return Json(new { Success = true, Result = result }, JsonRequestBehavior.AllowGet);
         }
-
 
         /// <summary>
         /// 가격 선정
@@ -281,138 +373,5 @@ namespace Makers.Store.Controllers
         {
             return View();
         }
-
-        #region 모델링 파일 사이즈
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="ext"></param>
-        /// <returns></returns>
-        public ArticleFileT GetSizeFor3DFile(string path, string ext)
-        {
-            ArticleFileT getSize = new ArticleFileT();
-
-            double volume = 0;
-            double x1 = 0;
-            double y1 = 0;
-            double z1 = 0;
-            double x2 = 0;
-            double y2 = 0;
-            double z2 = 0;
-            double x3 = 0;
-            double y3 = 0;
-            double z3 = 0;
-
-
-            switch (ext)
-            {
-                case "stl":
-                    STLDocument facets = STLDocument.Open(path);
-                    //stl
-                    Size = new Extent
-                    {
-                        XMax = facets.Facets.Max(f => f.Vertices.Max(v => v.X)),
-                        XMin = facets.Facets.Min(f => f.Vertices.Min(v => v.X)),
-                        YMax = facets.Facets.Max(f => f.Vertices.Max(v => v.Y)),
-                        YMin = facets.Facets.Min(f => f.Vertices.Min(v => v.Y)),
-                        ZMax = facets.Facets.Max(f => f.Vertices.Max(v => v.Z)),
-                        ZMin = facets.Facets.Min(f => f.Vertices.Min(v => v.Z)),
-                    };
-
-                    for (int i = 0; i < facets.Facets.Count; i++)
-                    {
-                        x1 = facets.Facets[i].Vertices[0].X;
-                        y1 = facets.Facets[i].Vertices[0].Y;
-                        z1 = facets.Facets[i].Vertices[0].Z;
-
-                        x2 = facets.Facets[i].Vertices[1].X;
-                        y2 = facets.Facets[i].Vertices[1].Y;
-                        z2 = facets.Facets[i].Vertices[1].Z;
-
-                        x3 = facets.Facets[i].Vertices[2].X;
-                        y3 = facets.Facets[i].Vertices[2].Y;
-                        z3 = facets.Facets[i].Vertices[2].Z;
-
-                        volume +=
-                            (-x3 * y2 * z1 +
-                            x2 * y3 * z1 +
-                            x3 * y1 * z2 -
-                            x1 * y3 * z2 -
-                            x2 * y1 * z3 +
-                            x1 * y2 * z3) / 6;
-                    }
-                    break;
-
-                case "obj":
-                    OBJDocument objDoc = new OBJDocument().LoadObj(path);
-                    int[] idx = new int[3];
-                    List<Library.ObjParser.Vertex> test = objDoc.VertexList.Where(s => (int)s.Y != 0).OrderByDescending(s => s.Y).ToList();
-
-                    Size = new Extent
-                    {
-                        XMax = objDoc.VertexList.Where(w => (int)w.X != 0).Max(v => v.X),
-                        XMin = objDoc.VertexList.Where(w => (int)w.X != 0).Min(v => v.X),
-                        //YMax = objDoc.VertexList.Max(v => v.Y) <= 0 ? objDoc.VertexList.Where(s => (int)s.Y != 0).OrderByDescending(s => s.Y).Max(v => v.Y) : objDoc.VertexList.Max(v => v.Y),
-                        YMax = objDoc.VertexList.Where(w => (int)w.Y != 0).Max(v => v.Y),
-                        YMin = objDoc.VertexList.Where(w => (int)w.Y != 0).Min(v => v.Y),
-                        ZMax = objDoc.VertexList.Where(w => (int)w.Z != 0).Max(v => v.Z),
-                        ZMin = objDoc.VertexList.Where(w => (int)w.Z != 0).Min(v => v.Z)
-                    };
-
-                    int vertexCnt = objDoc.VertexList.Count();
-                    for (int i = 0; i < objDoc.FaceList.Count; i++)
-                    {
-                        idx[0] = objDoc.FaceList[i].VertexIndexList[0] - 1;
-                        idx[1] = objDoc.FaceList[i].VertexIndexList[1] - 1;
-                        idx[2] = objDoc.FaceList[i].VertexIndexList[2] - 1;
-                        if (idx[0] > 0 && idx[1] > 0 && idx[2] > 0)
-                        {
-                            if (idx[0] > vertexCnt && idx[1] > vertexCnt && idx[2] > vertexCnt)
-                            {
-                                //log 로 남겨보기
-                            }
-                            else
-                            {
-                                x1 = objDoc.VertexList[idx[0]].X;
-                                y1 = objDoc.VertexList[idx[0]].Y;
-                                z1 = objDoc.VertexList[idx[0]].Z;
-
-                                x2 = objDoc.VertexList[idx[1]].X;
-                                y2 = objDoc.VertexList[idx[1]].Y;
-                                z2 = objDoc.VertexList[idx[1]].Z;
-
-                                x3 = objDoc.VertexList[idx[2]].X;
-                                y3 = objDoc.VertexList[idx[2]].Y;
-                                z3 = objDoc.VertexList[idx[2]].Z;
-
-                                volume +=
-                                    (-x3 * y2 * z1 +
-                                    x2 * y3 * z1 +
-                                    x3 * y1 * z2 -
-                                    x1 * y3 * z2 -
-                                    x2 * y1 * z3 +
-                                    x1 * y2 * z3) / 6;
-                            }
-                        }
-                        else
-                        {
-                            //log 로 남겨보기
-
-                        }
-                    }
-                    break;
-
-            }
-            volume = volume < 0 ? volume * -1 : volume;
-
-            getSize.X = Math.Round(Size.XSize, 1);
-            getSize.Y = Math.Round(Size.YSize, 1);
-            getSize.Z = Math.Round(Size.ZSize, 1);
-            getSize.Volume = Math.Round(volume, 1);
-
-            return getSize;
-        }
-        #endregion
     }
 }

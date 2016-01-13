@@ -1,0 +1,97 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PopularStateT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<div class="contents_zone">
+
+    <!-- //list_search_zone -->
+    <div class="right_float_wrap">
+
+        <div class="left">
+            총 <strong>@ViewData["cnt"]</strong>건
+        </div>
+    </div>
+    <form id="insert_form" name="insert_form" method="post">
+
+        <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <caption>리스트 게시판</caption>
+            <colgroup>
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+                <col width="10%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th rowspan="2">구분</th>
+                    <th rowspan="2">검색어</th>
+                    <th rowspan="2">누적전체</th>
+                    <th colspan="2">일간</th>
+                    <th colspan="2">주간</th>
+                    <th colspan="2">월간</th>
+                </tr>
+                <tr>
+                    <th>오늘</th>
+                    <th>어제</th>
+                    <th>이번주</th>
+                    <th>지난주</th>
+                    <th>이번달</th>
+                    <th>지난달</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@for (int i = 0; i < Model.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                    <tr>
+                        <td>@i</td>
+                        <td>@Model[i].Word</td>
+                        <td>@Model[i].Cnt</td>
+                    </tr>
+                    }
+                    else{
+                        <tr>
+                            <td>
+                                @Model[i].Cnt
+                            </td>
+                        </tr>
+                    }
+                }*@
+                @foreach (Makersn.Models.PopularStateT p in Model)
+                {
+                    <tr>
+                        <td>@p.RowNum</td>
+                        <td>@p.Word</td>
+                        <td>@p.TotalCnt</td>
+                        <td>@p.TodayCnt</td>
+                        <td>@p.YesterdayCnt</td>
+                        <td>@p.ThisweekCnt</td>
+                        <td>@p.LastweekCnt</td>
+                        <td>@p.ThismonthCnt</td>
+                        <td>@p.LastmonthCnt</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </form>
+    <!-- page_navi -->
+    <div class="page_navi">
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+    </div>
+    <!-- // page_navi -->
+
+</div>

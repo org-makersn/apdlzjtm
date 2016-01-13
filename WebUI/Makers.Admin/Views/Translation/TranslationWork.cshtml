@@ -1,0 +1,307 @@
+﻿@model Makersn.Models.TranslationDetailT
+@{
+    ViewBag.Title = "TranslationWork";
+    Layout = "~/Views/Shared/_Popup_Layout.cshtml";
+
+    Makersn.Models.TranslationDetailT detailTo = ViewBag.TransDetailTo == null ? new Makersn.Models.TranslationDetailT() : ViewBag.TransDetailTo;
+}
+ <link rel="shortcut icon" type="image/x-icon" href="http://beta.makersn.com/favicon.ico">
+
+    <link href="http://beta.makersn.com/Content/css/common.css" rel="stylesheet" media="all" />
+    <link href="http://beta.makersn.com/Content/css/PagedList.css" rel="stylesheet" />
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/prettyprint")
+    <style type="text/css">
+        .pagination-container {
+            text-align: center;
+        }
+    </style>
+
+<style type="text/css">
+         /* Drag Image */
+        .uploadWrap .dragImg {  padding-bottom: 20px; }
+        .uploadWrap .dragImg .mainBoxDrag { position:relative; float:left; margin-right:19px; width:278px; height:210px; background:url('../images/bg_drag.gif') no-repeat; }
+        .uploadWrap.Spot .dragImg .mainBoxDrag{margin-left:11px}
+        .uploadWrap .dragImg .mainBoxDrag div { width:272px !important; height:204px !important; left:0 !important; top:0 !important; }
+        .uploadWrap .dragImg .mainBoxDrag img { width:272px !important; height:204px !important; margin: 3px 0 0 3px; }
+        .uploadWrap .dragImg .selectImg { float:left; width:702px; padding-bottom:17px; }
+        .uploadWrap.Spot .dragImg .selectImg{width:650px}
+        .uploadWrap .dragImg .selectImg ul {}
+        .uploadWrap .dragImg .selectImg ul li { position:relative; float:left; width:137px; height:103px; margin:0 4px 4px 0; text-align:center; line-height:100px; color:#cfcfcf; font-size:18px; font-weight: bold; vertical-align: middle; border: 1px solid #d3d3d3; } 
+        .uploadWrap.Spot .dragImg .selectImg ul li{width:125px}
+        .uploadWrap .dragImg .selectImg ul li .delImg { display:none; position:absolute; left:0; top:0; width:24px; height:24px; background:url('../images/common/btn/btnDelImg.png') no-repeat center; }  
+        .uploadWrap .dragImg .selectImg ul li img { width:135px; height:101px; z-index:100;} 
+        .uploadWrap.Spot .dragImg .selectImg ul li img{width:123px}
+        .uploadWrap .dragImg .selectImg ul li div { z-index:100;  height:101px;}
+        .uploadWrap .dragImg .selectImg .fileName { position:absolute; left:0; top:43px; line-height:20px; text-align:center; width:100%; word-wrap:break-word;}
+        .uploadWrap .dragImg .selectImg ul li.no1{ background:url('../images/bg_num01.gif') no-repeat; }
+        .uploadWrap .dragImg .selectImg ul li.no2{ background:url('../images/bg_num02.gif') no-repeat; }
+        .uploadWrap .dragImg .selectImg ul li.no3{ background:url('../images/bg_num03.gif') no-repeat; }
+        .uploadWrap .dragImg .selectImg ul li.no4{ background:url('../images/bg_num04.gif') no-repeat; }
+        .uploadWrap .dragImg .selectImg ul li.no5{ margin-right:0px; background:url('../images/bg_num05.gif') no-repeat; } 
+        .uploadWrap .dragImg .selectImg ul li.no6{ background:url('../images/bg_num06.gif') no-repeat ; } 
+        .uploadWrap .dragImg .selectImg ul li.no7{ background:url('../images/bg_num07.gif') no-repeat; } 
+        .uploadWrap .dragImg .selectImg ul li.no8{ background:url('../images/bg_num08.gif') no-repeat; } 
+        .uploadWrap .dragImg .selectImg ul li.no9{ background:url('../images/bg_num09.gif') no-repeat; } 
+        .uploadWrap .dragImg .selectImg ul li.no10{ margin-right:0; background:url('../images/bg_num10.gif') no-repeat; } 
+        .uploadWrap .dragImg .selectImg ul li.file3dIn {background:url('../images/bg3dFile.png') no-repeat center; }
+
+        .uploadWrap .dragImg .btnMores { clear: both; text-align: right; border-top: 1px solid #dedede; }
+
+        .btnMores a{display:inline-block;width:60px;height:27px;border-left:1px solid #dedede;border-right:1px solid #dedede;border-bottom:1px solid #dedede;color:#808080;text-align:center;text-indent:3px;line-height:28px;margin-left:-4px}
+        .btnMores a:first-child{}
+
+        .btnMores a:hover{background:#f8f8f8}
+        .btnMores { clear: both; text-align: right; border-top: 1px solid #dedede; }/*추가*/
+
+        /* inputUpload */
+        .inputUpload { overflow: hidden; padding-bottom: 75px;}
+
+        .inputUpload .left { float:left; padding-left: 40px; padding-top: 10px; width:480px; margin-right:80px; }
+        .inputUpload .right {float:left; width:480px; padding-top: 10px;}
+        .uploadWrap.Spot .inputUpload .left { width:460px; }
+        .uploadWrap.Spot .inputUpload .right {width:460px;}
+        .uploadWrap.Spot .inputUpload{overflow:visible}
+
+        .inputUpload .headerInput { padding:0 0 9px 8px; font-size:16px; color:#575757; }
+        .inputUpload .headerInput.eng{padding-top:3px;width:480px;text-transform:uppercase;letter-spacing:0.3px;font-size:14px;}
+        .inputUpload .headerInput.printer{padding-bottom:0}
+        .inputUpload .inputTit { height:45px; border:1px solid #ccc; font-size:14px; color:#777; width: 480px; padding: 5px 10px; }
+        .inputUpload .inputTit.eng{font-family:'roboto', nbg, sans-serif;border:1px solid #ff7900}
+        .inputUpload .textArea { border-right:1px solid #cccccc; border-bottom:1px solid #cccccc;  border-left:1px solid #cccccc; height:345px; width:480px; }
+        .inputUpload .textArea.eng{border-right:1px solid #ff7900; border-bottom:1px solid #ff7900;  border-left:1px solid #ff7900;}
+        .inputUpload .textArea textarea.input_content { display:block;resize:none; font-size:14px; color:#777; height:204px; width:478px; padding: 10px; border:none; }
+       
+        .inputUpload .textArea textarea.input_content { display:block;resize:none; font-size:14px; color:#777; height:204px; width:478px; padding: 10px; border:none; }
+        .inputUpload .textArea textarea.input_content.eng{font-family:'roboto', nbg, sans-serif}
+        .inputUpload .textArea textarea.input_tag { display:block;resize:none; font-size:14px; color:#777; height:100px; width:478px; padding: 10px; border-top:1px solid #ccc; border-right:none;border-left:none;border-bottom:none; margin:0}
+        .inputUpload .textArea textarea.input_tag.eng{font-family:'roboto', nbg, sans-serif;border-top:1px solid #ff7900}
+        .inputUpload .textArea .btSet { background-color: #f3f3f3; height: 40px; padding: 10px 10px 10px 320px;border-top:1px solid #ccc }
+        .inputUpload .textArea.eng .btSet{background-color:#fff1e5;border-top:1px solid #ff7900}
+        .inputUpload .textArea .btSet a { display:inline-block; margin: 0 13px; width: 20px; height: 20px; }
+        .inputUpload .textArea .btSet a.aImg { background:url('../images/common/btn/btn_addi.gif') no-repeat center; }
+        .inputUpload .textArea .btSet a.aImg:hover, .inputUpload .textArea .btSet a.aImg.on { background:url('../images/common/btn/btn_addi_on.gif') no-repeat center; }
+        .inputUpload .textArea .btSet a.aMovie { background:url('../images/common/btn/btn_addm.png') no-repeat center; float:right}
+        .inputUpload .textArea .btSet a.aMovie:hover, .inputUpload .textArea .btSet a.aMovie.on { background:url('../images/common/btn/btn_addm_on.png') no-repeat center; }
+        .inputUpload .textArea .btSet a.aFile { background:url('../images/common/btn/btn_addf.gif') no-repeat center; }
+        .inputUpload .textArea .btSet a.aFile:hover ,.inputUpload .textArea .btSet a.aFile.on { background:url('../images/common/btn/btn_addf_on.gif') no-repeat center; }
+        .inputUpload .textArea2 { border: 1px solid #dadada; }
+        .inputUpload .textArea2 textarea { resize:none; font-size:14px; color:#777; height:340px; width:478px; padding: 10px; border:none; }
+        .uploadWrap.Spot .inputUpload .textArea2 textarea{height:150px}
+        .uploadWrap.Spot .inputUpload .textArea2 textarea{width:458px}
+        .inputUpload .noti { font-size: 12px; color: #808080; text-align: right; padding: 10px 0; }
+        .inputUpload .right { float:left; width:460px; }
+        .inputUpload .right .boxNo1 { margin-bottom: 160px; }
+        .inputUpload .right .boxNo1.eng{ margin-bottom: 45px; }
+        .inputUpload .right .boxNo1.eng.lang{position:relative;}
+        .inputUpload .right .boxNo1.eng.lang .lang_select{position:absolute;top:0;right:-20px;height:30px}
+        .inputUpload .right .boxNo1.eng.lang .lang_select .ko{display:inline-block;margin-left:3px;background:url(../images/common/btn/btn_tran_ko.png) no-repeat;width:24px;height:24px}
+        .inputUpload .right .boxNo1.eng.lang .lang_select .ko:hover{background:url(../images/common/btn/btn_tran_ko_on.png) no-repeat}
+        .inputUpload .right .boxNo1.eng.lang .lang_select .en{display:inline-block;margin-left:3px;background:url(../images/common/btn/btn_tran_en.png) no-repeat;width:24px;height:24px}
+        .inputUpload .right .boxNo1.eng.lang .lang_select .en:hover{background:url(../images/common/btn/btn_tran_en_on.png) no-repeat}
+        .inputUpload .right .boxNo1.eng.lang .lang_select .cn{display:inline-block;margin-left:3px;background:url(../images/common/btn/btn_tran_cn.png) no-repeat;width:24px;height:24px}
+        .inputUpload .right .boxNo1.eng.lang .lang_select .cn:hover{background:url(../images/common/btn/btn_tran_cn_on.png) no-repeat}
+        .inputUpload .right .boxNo1.eng.lang .lang_select .jp{display:inline-block;margin-left:3px;background:url(../images/common/btn/btn_tran_jp.png) no-repeat;width:24px;height:24px}
+        .inputUpload .right .boxNo1.eng.lang .lang_select .jp:hover{background:url(../images/common/btn/btn_tran_jp_on.png) no-repeat}
+
+        /* btnZone */
+.btnZone2 { position:initial; text-align:center; margin-bottom:70px; border-top:1px solid #dedede; padding-top:43px;}
+.btnZone2 .btnUpFile { border:none; display:inline-block;   width:135px; height:46px; background:url('http://beta.makersn.com/content/images/common/btn/btnUpFile.gif') no-repeat;  margin:0 auto; position:relative; left:2px;}
+.btnZone2 .btnUpFile:hover{background:url('http://beta.makersn.com/content/images/common/btn/btnUpFile_over.gif') no-repeat}
+.btnZone2 .btnUpCancel { position:absolute; right:300px; top:472px; border:none; width:135px; height:46px; font-size: 14px; font-weight: bold; text-align: center; color: #fff; background-color: #a6a6a6; }
+.btnZone2 .btnUpCancel:hover { background-color: #8a8a8a; }
+
+.addInfoTxt { position:relative;}
+.addInfoTxt img{ position:absolute; right:10px; top:-44px;}
+.uploadWrap .dragImg .showThum {display:none; position:absolute; right:0; bottom:0;  width:24px; height:24px; z-index:999;}
+.uploadWrap .dragImg .selectImg .showThum img{ width:24px; height:24px;}
+
+.popupArea.contact { display:none; }
+.popupArea.contact .popBox { width:314px; height:245px; margin-left:-157px; min-height:0; }
+.popupArea.contact .titleContact { font-size:16px; color:#575757; line-height:28px; margin:70px 0 50px 0; text-align:center;}
+.popupArea.contact .contactZone { text-align:center;}
+
+.popupArea.uploadEnd { display:none; }
+.popupArea.uploadEnd .popBox { width:314px; height:245px; margin-left:-157px; min-height:0; }
+.popupArea.uploadEnd .titleContact {font-size:18px; color:#575757; line-height:28px; margin:50px 0 30px 0; text-align:center;}
+.popupArea.uploadEnd .contactZone {text-align:center;}
+
+</style>
+<style type="text/css">  
+html {overflow:hidden;}  
+</style>  
+<h2>TranslationWork</h2>
+<h1>번역 페이지</h1>
+
+  <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @Html.HiddenFor(model => model.No)
+        @Html.HiddenFor(model => model.ArticleNo)
+        <input type="hidden" id="transFlag" name="transFlag" value="@ViewBag.transFlag" />
+
+
+<div class="inputUpload">
+    <!-- Left -->
+    <div class="left">
+
+        <div class="boxNo1">
+            <p class="headerInput">제목 &amp; 설명</p>
+            <div>
+                <input id="article_title" class="inputTit" readonly="readonly" type="text" name="article_title" value="@Model.Title" />
+            </div>
+            <div class="textArea">
+                <textarea class="input_content" id="article_contents" name="article_contents" readonly="readonly" placeholder="내용을 입력하세요." >@Model.Contents</textarea>
+                <textarea class="input_tag" id="article_tags" name="article_tags" readonly="readonly" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분).">@Model.Tag</textarea>
+
+                <div class="btSet">
+                    <a href="#" class="aMovie" title="동영상 첨부"></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- //Left -->
+
+    <!-- Right -->
+    <div class="right">
+
+        <div class="boxNo1 eng lang">
+            <p class="headerInput eng">TITLE & DESCRIPTION</p>
+            <div class="lang_select">
+                <a href="javascript:TransFor('EN')" class="en on"></a>
+            </div>
+
+            <div>
+                <input id="trans_title" class="inputTit eng" type="text" name="trans_title" value="@detailTo.Title" placeholder="Title" />
+            </div>
+            <div class="textArea eng">
+                <textarea class="input_content eng" id="trans_contents" name="trans_contents" placeholder="Contents in English">@detailTo.Contents</textarea>
+                <textarea class="input_tag eng" id="trans_tags" name="trans_tags" placeholder="Tags in English">@detailTo.Tag</textarea>
+
+                <div class="btSet">
+                    <a href="#" class="aMovie" title="동영상 첨부"></a>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="chkLang" name="chkLang" value="EN" />
+    </div>
+    <!-- //Right -->
+     </div>
+        <!-- //inputUpload -->
+    </form>
+    <!-- btnZone -->
+    <div class="btnZone2">
+        <button title="업로드" class="btnUpFile _btn_reg" onclick="SetTranslation();"></button>
+        @*<button title="취소" class="btnUpCancel" onclick="return history.back();">취소</button>*@
+    </div>
+    <!-- //btnZone -->
+</div>
+
+@section Scripts{
+    <link rel="stylesheet" type="text/css" href="http://beta.makersn.com/Content/css/jquery-ui-1.8.18.custom.css" />
+    <script type="text/javascript" src="http://beta.makersn.com/Scripts/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="http://beta.makersn.com/Scripts/jquery.bxslider.min.js"></script>
+    <script type="text/javascript" src="http://beta.makersn.com/Scripts/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://beta.makersn.com/Scripts/jquery.form.min.js"></script>
+
+    <script src="http://beta.makersn.com/Scripts/three.min.js")"></script>
+    @Scripts.Render("~/bundles/viewer")
+
+    @*<script type="text/javascript" src="@Url.VersionedContent("~/Scripts/Article/Upload.js")"></script>*@
+    <script type="text/javascript">
+        $(function () {
+
+            $(".popupArea").hide();
+          @*  $('input:radio[name="lv1"][value="@Model.CodeNo"]').prop('checked', true);
+            $('input:radio[name="copyright"][value="@Model.Copyright"]').prop('checked', true);*@
+
+
+
+            //수정 버튼
+            $("#editBtn").click(function () {
+                var articleno = $(this).data("val");
+                $(location).attr("href", "/design/Edit?no=" + articleno);
+            });
+
+     
+            $(".pop_close").click(function () {
+                videoPopupHide();
+            });
+
+        });
+
+        function closet() {
+            window.onbeforeunload = function (e) {
+                e = e || window.event;
+                // For IE<8 and Firefox prior to version 4
+                if (e) {
+                    e.returnValue = '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
+                }
+
+                // For Chrome, Safari, IE8+ and Opera 12+
+                return '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
+            };
+        }
+
+        function uncloset() {
+            window.onbeforeunload = null;
+        }
+
+        function SetTranslation() {
+
+            window.onbeforeunload = null;//페이지 새로고침 끄기
+
+            $("#mode").val("upload");
+
+            if (document.getElementById("trans_title").value == "")
+            {
+                alert("제목을 입력해 주세요."); return false;
+            }
+            if (document.getElementById("trans_contents").value == "") {
+                alert("내용을 입력해 주세요."); return false;
+            }
+
+            //var $form_data = $("#insert_form").serialize();
+            var options = {
+                beforeSend: function () {
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        alert(response.Message);
+                        opener.location.reload(true);
+                        //this.close();
+                        window.open("about:blank", "_self").close();
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    var exception = null;
+                    if (error != null && typeof (error.responseText) != 'undefined') {
+                        try {
+                            exception = $.parseJSON(error.responseText);
+                            if (typeof (exception.ExceptionMessage) != "undefined" && $.trim(exception.ExceptionMessage) != '') {
+                                alert(exception.ExceptionMessage);
+                            }
+                        } catch (ex) {
+                            //alert(ex.name); 
+                        }
+                    }
+                }
+            };
+
+            $('#insert_form').attr("action", "/translation/SetTranslation").ajaxForm(options).submit();
+        }
+
+        function TransFor(lang) {
+            $("#chkLang").val(lang);
+        }
+    </script>
+}

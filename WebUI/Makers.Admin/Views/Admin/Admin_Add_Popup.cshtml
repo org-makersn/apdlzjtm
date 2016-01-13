@@ -1,0 +1,259 @@
+﻿@model Makersn.Models.MemberT
+@{
+    ViewBag.Title = "관리자 설정";
+    Layout = "~/Views/Shared/_Popup_Layout.cshtml";
+}
+
+
+<div class="popup_top">
+
+    <p>관리자 수정</p>
+    <span class="btn_close"><a href="#none">
+        <img src="/Content/images/admin/btn_close.png" alt="" /></a></span>
+</div>
+
+<form id="insert_form" name="insert_form" method="post" class="edit_class">
+    <input type="hidden" name="memb_no" value="202">
+    <input type="hidden" name="mode" id="mode">
+    <input type="hidden" name="link_url" value="admin/admin_auth/edit_ajax">
+    <div class="popup_con">
+        <table cellpadding="0" cellspacing="0" border="0" class="">
+            <colgroup>
+                <col width="80px" />
+                <col width="auto" />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>아이디</td>
+                    <td>
+                        @if (ViewData["gubun"] == "i")
+                        {
+                        <input type="text" id="mem_id" name="mem_id" class="input_text" style="width: 65%;" />
+                        <span class="btnWrap small font_b"><a href="#" id="id_check">중복확인</a></span>
+                        <p id="error_id" style="color: red;"></p>
+                        }
+                        else
+                        {
+                        <input type="text" id="mem_id" class="input_text" disabled="disabled" style="width: 65%;" value="@Model.Id"/> 
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>어드민 이름</td>
+                    <td>
+                          <input type="text" id="mem_name" name="mem_name" value="@Model.Name" class="input_text" style="width:65%;" />
+                        <p id="error_name" style="color: red;"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>비밀번호</td>
+                    <td>
+                        <input type="password" id="mem_pw" name="password" value="@Model.Password" class="input_text" style="width: 65%;" />
+                        <p id="error_password" style="color: red;"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>이메일</td>
+                    <td>
+                        <input type="text" id="mem_email" name="email" value="@Model.Email" class="input_text" style="width: 65%;" />
+                    </td>
+                </tr>
+                @*<tr>
+                    <td>전화번호</td>
+                    <td>
+                        <input type="text" id="mem_phone" name="mobile" value="" class="input_text" style="width: 65%;" />
+                    </td>
+                </tr>*@
+
+            </tbody>
+        </table>
+    </div>
+    <div class="popup_bot">
+        @if (@Model.No == 0)
+        {
+            <span class="btnWrap medium font_b">
+                <a href="#" id="insertPopup" class="_btn_insert">추가</a></span>
+        }
+        else
+        {
+            <span class="btnWrap medium font_b">
+                <a href="#" id="updatePopup" class="_btn_edit">수정</a></span>
+            <span class="btnWrap medium font_b">
+                <a href="#" id="deletePopup">삭제</a></span>
+        }
+    </div>
+    
+    <input type="hidden" id="mem_no" value="@Model.No">
+    <input type="hidden" id="chk_id" value="0" />
+</form>
+@*<div class="popup_con">
+    <table cellpadding="0" cellspacing="0" border="0" class="">
+        <colgroup>
+            <col width="80px" />
+            <col width="auto" />
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>아이디</td>
+                <td>
+                    @if (ViewData["gubun"] == "i")
+                    {
+                        <input type="text" id="mem_id" name="mem_id" class="input_text" style="width: 65%;" />
+                        <span class="btnWrap small font_b"><a href="#" id="id_check">중복확인</a></span>
+                        <p id="error_id" style="color: red;"></p>
+                    }
+                    else
+                    {
+                        <input type="text" id="mem_id" disabled="disabled" value="@Model.Id"/> 
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>어드민 이름</td>
+                <td>
+                    <input type="text" id="mem_name" name="mem_name" value="@Model.Name" class="input_text" style="width:65%;" />
+                    <p id="error_name" style="color: red;"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td>
+                    <input type="password" id="mem_pw" name="mem_pw" value="@Model.Password" class="input_text" style="width:65%;" />
+                    <p id="error_password" style="color: red;"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>이메일</td>
+                <td>
+                    <input type="text" id="mem_email" name="mem_email" value="@Model.Email" class="input_text" style="width:65%;" />
+                </td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+                <td>
+                    <input type="text" id="mem_phone" name="mem_phone" class="input_text" style="width: 65%;" />
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <input type="hidden" id="mem_no" value="@Model.No">
+    <input type="hidden" name="mode" id="mode">
+</div>*@
+
+
+@*@if (@Model.No == 0)
+{
+    <span class="btnWrap medium font_b">
+        <a href="#" id="insert" class="maskbox_trigger _btn_insert">추가</a></span>
+}
+else
+{
+    <span class="btnWrap medium font_b">
+        <a href="#" id="update" class="maskbox_trigger _btn_edit">수정</a></span>
+    <span class="btnWrap medium font_b">
+        <a href="#" id="delete">삭제</a></span>
+}*@
+
+@section Scripts{
+    <script type="text/javascript">
+        function Add() { }
+        Add.Init = function () {
+            $("#updatePopup").click(function () {
+                Add.Update();
+            });
+            $("#deletePopup").click(function () {
+                Add.Delete();
+            });
+
+            $("#insertPopup").click(function () {
+                Add.Insert();
+            });
+
+            $("#id_check").click(function () {
+                Add.Check();
+            });
+        }
+
+        Add.Check = function () {
+            var data = {
+                id: $("#mem_id").val()
+            }
+            var onSuccess = function (result) {
+                if (result == 0) {
+                    $("#error_id").text("사용 가능한 아이디 입니다.");
+                    $("#error_id").css('color', 'blue');
+                    $("#chk_id").val(1);
+                }
+                else {
+                    $("#error_id").text("이미 사용중인 아이디 입니다.");
+                    $("#error_id").css('color', 'red');
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/Admin/Check_Id", data, onSuccess);
+        }
+
+        Add.Delete = function () {
+            if (confirm("삭제하시겠습니까?") != true) { return false; }
+
+            var data = {
+                no: $("#mem_no").val()
+            }
+            var onSuccess = function (result) {
+                console.log(result);
+                parent.parent.location.replace("/Admin/Admin_Auth");
+            }
+            Ajax.AjaxResponseModelService(this, "/Admin/Member_Delete", data, onSuccess);
+        }
+
+        Add.Insert = function () {
+            if ($("#chk_id").val() != 1) { alert("중복체크를 해주세요"); return false; }
+
+            var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+            if (pattern.test($("#mem_email").val()) == false) { alert("올바른 이메일 주소를 입력해 주세요"); };
+
+            var data = {
+                id: $("#mem_id").val(),
+                name: $("#mem_name").val(),
+                pw: $("#mem_pw").val(),
+                email: $("#mem_email").val(),
+                phone: $("#mem_phone").val()
+            }
+            var onSuccess = function (result) {
+                console.log(result);
+                parent.parent.location.replace("/Admin/Admin_Auth");
+            }
+            Ajax.AjaxResponseModelService(this, "/Admin/Admin_Add", data, onSuccess);
+        }
+
+        Add.Update = function () {
+
+            var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+            if (pattern.test($("#mem_email").val()) == false) { alert("올바른 이메일 주소를 입력해 주세요"); };
+
+            var data = {
+                no: $("#mem_no").val(),
+                id: $("#mem_id").val(),
+                name: $("#mem_name").val(),
+                pw: $("#mem_pw").val(),
+                email: $("#mem_email").val(),
+                phone: $("#mem_phone").val()
+            }
+            console.log(data);
+            var onSuccess = function (result) {
+                console.log(result);
+                parent.parent.location.replace("/Admin/Admin_Auth");
+            }
+            Ajax.AjaxResponseModelService(this, "/Admin/Admin_Edit", data, onSuccess);
+        }
+
+        $(document).ready(function () {
+            Add.Init();
+            $("#mem_id").change(function () {
+                $("#chk_id").val(0);
+            })
+        });
+    </script>
+}

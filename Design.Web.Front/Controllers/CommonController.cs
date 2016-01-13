@@ -21,8 +21,8 @@ namespace Design.Web.Front.Controllers
             bool result = false;
             string message = "";
 
-            Net.Framwork.BizDac.StoreNoticeBiz _noticeBiz = new Net.Framwork.BizDac.StoreNoticeBiz();
-            Net.Framework.StoreModel.StoreNoticeT _notice = new Net.Framework.StoreModel.StoreNoticeT();
+            Net.Framwork.BizDac.StoreNotificationsBiz _noticeBiz = new Net.Framwork.BizDac.StoreNotificationsBiz();
+            Net.Framework.StoreModel.StoreNotificationsT _notice = new Net.Framework.StoreModel.StoreNotificationsT();
 
             try
             {
@@ -51,10 +51,10 @@ namespace Design.Web.Front.Controllers
 
         public ActionResult ListNotice()
         {
-            Net.Framwork.BizDac.StoreNoticeBiz _noticeBiz = new Net.Framwork.BizDac.StoreNoticeBiz();
-            List<Net.Framework.StoreModel.StoreNoticeT> _notice = new List<Net.Framework.StoreModel.StoreNoticeT>();
+            Net.Framwork.BizDac.StoreNotificationsBiz _noticeBiz = new Net.Framwork.BizDac.StoreNotificationsBiz();
+            List<Net.Framework.StoreModel.StoreNotificationsT> _notice = new List<Net.Framework.StoreModel.StoreNotificationsT>();
 
-            _notice = _noticeBiz.SelectAllStoreNotice().Where(m => m.CheckYn == "N").ToList<Net.Framework.StoreModel.StoreNoticeT>();
+            _notice = _noticeBiz.SelectAllStoreNotice().Where(m => m.CheckYn == "N").ToList<Net.Framework.StoreModel.StoreNotificationsT>();
 
             return PartialView(_notice);
         }
@@ -64,8 +64,8 @@ namespace Design.Web.Front.Controllers
             bool result = false;
             string message = "";
 
-            Net.Framwork.BizDac.StoreNoticeBiz _noticeBiz = new Net.Framwork.BizDac.StoreNoticeBiz();
-            Net.Framework.StoreModel.StoreNoticeT _notice = new Net.Framework.StoreModel.StoreNoticeT();
+            Net.Framwork.BizDac.StoreNotificationsBiz _noticeBiz = new Net.Framwork.BizDac.StoreNotificationsBiz();
+            Net.Framework.StoreModel.StoreNotificationsT _notice = new Net.Framework.StoreModel.StoreNotificationsT();
 
             _notice = _noticeBiz.getStoreNoticeById(no);
             if (_notice != null)
@@ -89,8 +89,8 @@ namespace Design.Web.Front.Controllers
             bool result = false;
             string message = "";
 
-            Net.Framwork.BizDac.StoreNoticeBiz _noticeBiz = new Net.Framwork.BizDac.StoreNoticeBiz();
-            Net.Framework.StoreModel.StoreNoticeT _notice = new Net.Framework.StoreModel.StoreNoticeT();
+            Net.Framwork.BizDac.StoreNotificationsBiz _noticeBiz = new Net.Framwork.BizDac.StoreNotificationsBiz();
+            Net.Framework.StoreModel.StoreNotificationsT _notice = new Net.Framework.StoreModel.StoreNotificationsT();
 
             _notice = _noticeBiz.getStoreNoticeById(no);
             if (_notice != null)

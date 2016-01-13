@@ -3,6 +3,7 @@ using Makers.Store.Models;
 using Makersn.BizDac;
 using Makersn.Models;
 using Microsoft.Web.WebPages.OAuth;
+using Net.Common.Define;
 using Net.Common.Filter;
 using Net.Common.Helper;
 using Net.Common.Model;
@@ -234,6 +235,12 @@ namespace Makers.Store.Controllers
         #endregion
 
         #region sns login
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -243,6 +250,11 @@ namespace Makers.Store.Controllers
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
@@ -279,8 +291,8 @@ namespace Makers.Store.Controllers
             else
             {
                 //create
-                string saveImgFolder = "Profile/thumb";
-                string fileImgpath = string.Format("{0}/FileUpload/{1}/", AppDomain.CurrentDomain.BaseDirectory, saveImgFolder);
+                string saveImgFolder = Constant.CommonUploadDir.ProfileDir;
+                string fileImgpath = string.Format(@"{0}\{1}/", instance.PhysicalDir, saveImgFolder);
 
                 if (!Directory.Exists(fileImgpath))
                 {

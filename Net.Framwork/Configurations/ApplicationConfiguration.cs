@@ -22,7 +22,7 @@ namespace Net.Framwork.Configurations
         /// <summary>
         /// 
         /// </summary>
-        public string Attr1 { get; private set; }
+        public string Attrbute { get; private set; }
 
 
         public class EtcConfiguration
