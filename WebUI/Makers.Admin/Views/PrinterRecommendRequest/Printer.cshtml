@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "추천";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="bannerCate">
+    <a href="/ArticleRecommendRequest/Design">디자인</a>l<a href="/PrinterRecommendRequest/Printer">프린터</a>
+</div>
+
+<div id="RecommendList">
+</div>
+
+<div id="RecommendEdit">
+</div>
+
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
+    <script type="text/javascript">
+
+
+
+        function PrinterRecommendRequest() { };
+        $(document).ready(function () {
+
+            var recListUrl = "/PrinterRecommendRequest/RecommendList";
+            Ajax.SyncGetPartialView(recListUrl, {}, "RecommendList");
+
+            var recEditUrl = "/PrinterRecommendRequest/RecommendEdit";
+            Ajax.SyncGetPartialView(recEditUrl, {}, "RecommendEdit");
+
+
+        })
+
+
+        PrinterRecommendRequest.RecommendListUpdateVisibility = function (val) {
+            var no = val;
+            Ajax.SyncGetPartialView("/PrinterRecommendRequest/RecommendListUpdateVisibility", { no: no }, "RecommendList");
+        }
+        PrinterRecommendRequest.SearchList = function () {
+            var text = $("#query").val();
+            Ajax.SyncGetPartialView("/PrinterRecommendRequest/RecommendList", { text: text }, "RecommendList");
+        }
+
+        PrinterRecommendRequest.RecommendListUpdatePriority = function (val) {
+            var no = $(val).parents("tr").find("td").eq(0).text();
+            var priority = $(val).val();
+            Ajax.SyncGetPartialView("/PrinterRecommendRequest/RecommendListUpdatePriority", { no: no, priority: priority }, "RecommendList");
+        }
+        PrinterRecommendRequest.RecommendListEdit = function (val) {
+            var no = val;
+            Ajax.SyncGetPartialView("/PrinterRecommendRequest/RecommendListEdit", { no: no }, "RecommendList");
+        }
+
+
+
+        PrinterRecommendRequest.SearchEdit = function () {
+            var cate = $("#sltCate").val();
+            var RecommendYn = $("#sltRecommendYn").val();
+            //var option = $("#sltOption").val();
+            var text = $("#searchBox").val()
+            Ajax.SyncGetPartialView("/PrinterRecommendRequest/RecommendEdit", { cate: cate, RecommendYn: RecommendYn, text: text }, "RecommendEdit");
+        }
+
+        PrinterRecommendRequest.recommend = function (val) {
+            var no = "";
+            $("input[name=chkAll]").each(function () {
+                if ($(this).is(":checked")) {
+                    if ($(this).val() != "on") {
+                        no += $(this).val() + ",";
+                    }
+                }
+            });
+            var result = Ajax.SyncPostService("/PrinterRecommendRequest/SetRecommend", { no: no, setNo: val });
+            console.log(result);
+            if (result.result == 1) {
+                location.reload(true);
+            }
+        }
+
+        PrinterRecommendRequest.orderby = function (val) {
+            var recEditUrl = "/PrinterRecommendRequest/RecommendEdit";
+            Ajax.SyncGetPartialView(recEditUrl, { orderby: val }, "RecommendEdit");
+        }
+        
+        @*
+
+        
+
+        PrinterRecommendRequest.checkedAll = function () {
+            var chk = $("#btnAll").is(":checked");
+            $("input[name=chkAll]").each(function () {
+                this.checked = chk;
+            });
+        }
+
+        PrinterRecommendRequest.goPrinter = function (val) {
+            window.open(
+              'http://www.makersn.com/Printer/Detail?no=' + val,
+              'blank'
+              );
+        }
+
+        
+
+        PrinterRecommendRequest.visibility = function (val) {
+            var no = "";
+            $("input[name=chkAll]").each(function () {
+                if ($(this).is(":checked")) {
+                    if ($(this).val() != "on") {
+                        no += $(this).val() + ",";
+                    }
+                }
+            });
+            var result = Ajax.SyncPostService("/PrinterRecommendRequest/SetVisibiliy", { no: no, setVisi: val });
+            console.log(result);
+            if (result.result == 1) {
+                location.reload(true);
+            }
+        }
+
+       
+
+        
+
+
+        
+
+        
+
+        
+        *@
+        
+    </script>
+
+
+}

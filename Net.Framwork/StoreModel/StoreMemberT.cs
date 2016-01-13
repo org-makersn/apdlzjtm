@@ -15,8 +15,8 @@ namespace Net.Framework.StoreModel
         public virtual int MemberNo { get; set; }
         [Column("STORE_NAME")]
         public virtual string StoreName { get; set; }
-        [Column("HOME_PHONE")]
-        public virtual string HomePhone { get; set; }
+        [Column("OFFICE_PHONE")]
+        public virtual string OfficePhone { get; set; }
         [Column("CELL_PHONE")]
         public virtual string CellPhone { get; set; }
         [Column("STORE_PROFILE_MSG")]

@@ -1,0 +1,25 @@
+﻿@model Makersn.Models.PrinterModelT
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form id="editModel" action="/printing/setEditModel" method="post">
+    <input type="text" name="brand" class="input_text" value="@Model.Brand" placeholder="회사" style="width:200px; display:block"/>
+    <input type="text" name="model" class="input_text" value="@Model.Model" placeholder="모델" style="width:200px; display:block"/>
+    <input type="hidden" name="no" value="@Model.No" />
+    <br />
+    <input type="button" value="취소" id="btnCancel" />
+    <input type="button" value="수정" id="btnEditModel" />
+</form>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnCancel").click(function () {
+                history.go(-1)
+            });
+            $("#btnEditModel").click(function () {
+                $("#editModel").submit();
+            })
+        })
+    </script>
+}

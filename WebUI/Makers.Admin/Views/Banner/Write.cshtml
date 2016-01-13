@@ -1,0 +1,141 @@
+﻿@model Makersn.Models.BannerT
+@{
+    ViewBag.Title = "Write";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="contents_zone">
+
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="200x" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+            <tbody>
+                <tr>
+                    <th>관리용 제목</th>
+                    <td>
+                        
+                    @Html.EditorFor(model => model.Title, new { @class = "input_text",style="width: 75%;"})
+                    @Html.ValidationMessageFor(model => model.Title)
+                        </td>
+                </tr>
+                <tr>
+                    <th>이미지</th>
+                    <td>
+                        @Html.TextBoxFor(model => model.Image, new { type = "file", id="image", @class = "input_text",style="width: 75%;" })
+                        @Html.ValidationMessageFor(model => model.Image)
+                    </td>
+                </tr>
+                <tr>
+                    <th>링크주소</th>
+                    <td>
+                        <input type="text" id="url" name="url" class="input_text" style="width: 300px;" value="http://" />
+                        <input type="radio" name="opener" value="y" />
+                        새창 &nbsp; 
+					<input type="radio" name="opener" value="n" checked="checked" />
+                        기존창&nbsp; 
+					<p style="color: blue">* http:// 필수 입력</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>노출여부</th>
+                    <td>
+                        <input type="radio" name="publish" value="y" checked="checked" />
+                        사용 &nbsp; 
+					<input type="radio" name="publish" value="n" />
+                        미사용&nbsp; 
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="priority">우선순위</label></th>
+                    <td>
+                        <select id="priority" name="priority" class="input_text" style="width: 120px;">
+                            <option value="0">없음</option>
+                            @for (var i = 25; i > 0; i--)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="bannerType" value="@ViewBag.BannerType" />
+    </form>
+
+    <!-- btn -->
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="Add" class="_btn_reg">등록</a></span>
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="GoList" class="_btn_list" onclick="$(location).attr('href','/Banner');">목록</a></span>
+
+    </div>
+
+    <!-- // btn -->
+    <br />
+</div>
+
+@section Scripts{
+
+    <link href="@Url.Content("~/Content/uploadify.css")" rel="stylesheet"/>
+    <style type="text/css">
+        .uploadify-queue-item .cancel a
+        {
+            background: url('/Content/uploadify-cancel.png') 0 0 no-repeat;
+            float: right;
+            height: 16px;
+            text-indent: -9999px;
+            width: 16px;
+        }
+    </style>
+    <script src="@Url.Content("~/Scripts/jquery.uploadify.min.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/ajaxfileupload.js")"></script>*@
+    <script type="text/javascript">
+        function Write() { }
+        Write.Init = function () {
+
+        }
+
+        $("#Add").click(function () {
+
+            var action_url = '/Banner/BannerAdd';
+
+            $("#insert_form").attr('action', action_url);
+            $("#insert_form").submit();
+            //var title = $("#title").val();
+            //var img = ""; // 이미지 제외하고 함
+            //var link = $("#url").val();
+            //var opener = $(":input:radio[name='opener']:checked").val()
+            //var publish = $(":input:radio[name='publish']:checked").val()
+            //var priority = $("#priority").val();
+
+            //var data = {
+            //    title: title,
+            //    publish: publish,
+            //    opener: opener,
+            //    link: link,
+            //    priority: priority
+            //}
+            //var onSuccess = function (result) {
+            //    console.log(result);
+            //    location.replace("/Banner");
+            //}
+            //Ajax.AjaxResponseModelService(this, "/Banner/BannerAdd", data, "up_image", onSuccess);
+        });
+
+        $("#GoLIst").click(function () {
+            location.replace("/Banner");
+        });
+
+        $(function () {
+            Write.Init();
+
+        });
+    </script>
+}

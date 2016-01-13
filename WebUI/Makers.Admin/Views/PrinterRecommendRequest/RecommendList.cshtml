@@ -1,0 +1,90 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterT>
+@using PagedList.Mvc;
+
+<div class="contents_zone">
+    <h2 class="contents_title">추천 프린터 리스트</h2>
+
+
+    <!-- list_search_zone -->
+    <form id="search" name="search">
+        <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="100px" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">검색</th>
+                    <td>
+                        <select id="sfl" name="sfl" style="width: 130px">
+                            <option value="title">제목</option>
+                        </select>
+                        <input type="text" id="query" name="query" class="input_text" style="width: 200px; padding: 1px 0" value="@ViewData["text"]" />
+                        <span class="btnWrap small"><a href="javascript:PrinterRecommendRequest.SearchList();" class="_search_btn" id="search_btn">검색</a></span>
+                        <span class="btnWrap small" style="margin-left: 10px;"><a href="javascript:void();" class="_reset" onclick="$('#query').val('');">재설정</a></span>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </form>
+   
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="8%" />
+            <col width="10%" />
+            <col width="*" />
+            <col width="10%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>이미지</th>
+                <th>관리제목(수정)</th>
+                <th>우선순위</th>
+                <th>노출여부</th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach (var printer in Model)
+                {
+                <tr>
+                    <td>@printer.No</td>
+                    <td>
+                        <p class="memb_img">
+                            <a @*href="javascript:ArticleRecommendRequest.RecommendListEdit(@printer.No);" *@class="_btn_edit" id="img">
+                                <img src="@ViewBag.PrintImgUrl@printer.ImageName") width="100px" height="100px" /></a>
+                        <p>
+                    </td>
+                    <td class="ta_left"><a @*href="javascript:PrinterRecommendRequest.RecommendListEdit(@printer.No);"*@  class="_btn_edit" id="title">@printer.PrinterMemberName<br>@printer.Brand</a></td>
+                    <td><input value ="@printer.RecommendPriority" onchange="javascript:PrinterRecommendRequest.RecommendListUpdatePriority(this)"></td>
+                    
+                    <td><a id="visibility" href="javascript:PrinterRecommendRequest.RecommendListUpdateVisibility(@printer.No);">@(printer.RecommendVisibility == "Y" ? "사용" : "비사용")</a></td>
+                </tr>
+                }
+           	
+            
+
+
+        </tbody>
+    </table>
+    <!-- page_navi -->
+    <div class="page_navi">
+        @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("RecommendList", new { page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "RecommendList",
+                OnSuccess = "goTop();"
+            })
+        )
+    </div>
+
+</div>

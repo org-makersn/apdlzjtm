@@ -1,0 +1,126 @@
+﻿@model PagedList.IPagedList<Makersn.Models.ContactT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "문의사항";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Makersn.Models.CodeT> codeList = (List<Makersn.Models.CodeT>)ViewData["cateList"];
+    int setCate = (int)ViewData["setCate"];
+}
+
+
+
+<h2 class="contents_title">문의사항</h2>
+
+<!-- contents_zone -->
+<div class="contents_zone">
+
+    <!-- list_search_zone -->
+    <form id="search" name="search">
+        <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="100px" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">검색</th>
+                    <td>
+                        <select id="cate_no" name="cate_no" style="width: 150px">
+                            <option value="">::: 카테고리 선택 :::</option>
+                            @foreach (Makersn.Models.CodeT i in codeList)
+                            {
+                                <option value="@i.No" @(setCate == i.No ? " selected" : "")>@i.Name</option>
+                            }
+                        </select>
+
+                        @Html.DropDownList("state")
+
+                        <select id="sfl" name="sfl" style="width: 80px">
+                            <option value="sfl1" @(ViewData["gubun"] == "sfl1" ? " selected" : "")>전체</option>
+                            <option value="sfl2" @(ViewData["gubun"] == "sfl2" ? " selected" : "")>제목</option>
+                            <option value="sfl3" @(ViewData["gubun"] == "sfl3" ? " selected" : "")>이메일</option>
+                        </select>
+                        <input type="text" id="stx" name="stx" value="@ViewData["text"]" class="input_text" style="width: 150px; padding: 1px 0" />
+                        <span class="btnWrap medium"><a href="#" class="_search_btn">검색</a></span>
+                        <span class="btnWrap small" style="margin-left: 10px;"><a href="#" class="_reset">재설정</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+    <!-- //list_search_zone -->
+    <div class="right_float_wrap">
+        <div class="left"><strong>@Model.Count</strong> 의 리스트</div>
+    </div>
+    <!-- // list_search_zone -->
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="60px" />
+            <col width="120px" />
+            <col width="auto" />
+            <col width="100px" />
+            <col width="120px" />
+            <col width="60px" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>카테고리(수정)</th>
+                <th>제목(상세보기)</th>
+                <th>이메일</th>
+                <th>등록일</th>
+                <th>처리여부</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (Makersn.Models.ContactT c in Model)
+            {
+                <tr>
+                    <td>@c.No</td>
+                    <td><a href="/contact/reply?no=@c.No">@c.CodeName</a></td>
+                    <td><a href="/contact/reply?no=@c.No">@c.Title</a></td>
+                    <td><a href="mailto:@c.Email">@c.Email</a></td>
+                    <td>@c.RegDt.ToString("yyyy-MM-dd")</td>
+                    <td>[@c.StrState]</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    
+    <!-- page_navi -->
+    <div class="page_navi">
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+    </div>
+    <!-- // page_navi -->
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //검색 재설정
+            $("._reset").click(function () {
+                location.replace("/contact");
+                return false;
+            });
+
+            $("._search_btn").click(function () {
+                var cate = $("#cate_no").val();
+                var gubun = $('#sfl').val();
+                var text = $('#stx').val();
+                var state = $('#state').val();
+
+                location.replace("/contact/index?cate=" + cate + "&gubun=" + gubun + "&text=" + text + "&state=" + state);
+
+                return false;
+            });
+        })
+    </script>
+}

@@ -48,7 +48,7 @@ namespace Makers.Store.Controllers
 
             _StoreMemberT.MemberNo = 1;
             _StoreMemberT.StoreName = collection["StoreName"];
-            _StoreMemberT.HomePhone = collection["TelNo"];
+            _StoreMemberT.OfficePhone = collection["TelNo"];
             _StoreMemberT.CellPhone = collection["CellPhone"];
             _StoreMemberT.StoreProfileMsg = collection["StoreProfileMsg"];
             _StoreMemberT.StoreUrl = collection["StoreUrl"];
@@ -83,7 +83,7 @@ namespace Makers.Store.Controllers
             {
                 _StoreMemberT.MemberNo = 1;
                 _StoreMemberT.StoreName = collection["memberNo"];
-                _StoreMemberT.HomePhone = collection["TelNo"];
+                _StoreMemberT.OfficePhone = collection["TelNo"];
                 _StoreMemberT.CellPhone = collection["CellPhone"];
                 _StoreMemberT.StoreProfileMsg = collection["StoreProfileMsg"];
                 _StoreMemberT.StoreUrl = collection["StoreUrl"];

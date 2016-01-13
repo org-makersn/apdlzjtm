@@ -1,0 +1,112 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "프린터 인증";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="contents_title">프린터 인증 신청</h2>
+
+<div class="contents_zone" style="width: 950px;">
+    <div class="right_float_wrap">
+
+        <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <caption>리스트 게시판</caption>
+            <colgroup>
+                <col width="15%" />
+                <col width="15%" />
+                <col width="15%" />
+                <col width="15%" />
+                <col width="15%" />
+                <col width="15%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <!-- <th><input type="checkbox" name="chkAll" onclick="checkedAll();"></th> -->
+                    <th>신청일</th>
+                    <th>신청 스팟</th>
+                    <th>회사명</th>
+                    <th>모델명</th>
+                    <th>사진보기</th>
+                    <th>승인</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Makersn.Models.PrinterT printer in Model)
+                {
+                    <tr>
+                        <td>@printer.RegDt.ToString("yyyy-MM-dd")</td>
+                        <td>@printer.SpotName</td>
+                        <td>@printer.Brand</td>
+                        <td>@printer.Model</td>
+                        <td>
+                            <a href="/printing/showImage?no=@printer.orderNo">사진 보기</a>
+                        </td>
+                        <td>
+                            <span style="cursor:pointer" onclick="ApprPrinter('@printer.No','Y')">승인</span> / 
+                            <span style="cursor:pointer" onclick="DeleteTest('@printer.orderNo')">거절</span>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        @*@Html.PagedListPager(Model, page => Url.Action("/apprPrinterTest", new { startDt = ViewData["startDt"], endDt = ViewData["endDt"], page }))*@
+
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $("#sdate,#edate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: 'both',
+            buttonImage: '/Content/images/admin/icon_calender.png',
+            buttonImageOnly: true,
+            dateFormat: 'yy-mm-dd'
+        });
+
+
+        $(document).ready(function () {
+            $('#searchBox').keyup(function (event) {
+                if (event.keyCode == 13) {
+                    if ($("#searchBox").val().trim() != "") {
+
+                    }
+                }
+            });
+        });
+
+        function ApprPrinter(no, flag) {
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    location.reload(true);
+                }
+                else {
+                    alert(result.Message);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/printing/SetApprPrinterTest", { no: no, flag: flag }, onSuccess);
+        }
+
+        function DeleteTest(val) {
+            if (confirm("거절메시지를 입력하지 않으셨습니다.\n기본 메시지로 전송하시겠습니까?")) {
+                var onSuccess = function (result) {
+                    if (result.Success) {
+                        location.reload(true);
+                    }
+                    else {
+                        alert(result.Message);
+                    }
+                }
+                Ajax.AjaxResponseModelService(this, "/printing/DeletePrinterTest", { no: val, comment: "사진이 잘 안보입니다. 다시 찍어주세요." }, onSuccess);
+            }
+        }
+    </script>
+}

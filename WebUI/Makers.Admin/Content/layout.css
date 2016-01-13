@@ -1,0 +1,112 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+/*
+	date: 2011-11-11
+	corder: Kim In Kyung
+	use: 레이아웃
+*/
+
+/* 상단 */
+.admin_body{}
+.page_wrap{position:relative;}
+.page_wrap .top_wrap{height:50px; background-repeat: repeat-x; background-position:left top; position:relative; margin:0 0px 0 0; z-index:1000;}
+.page_wrap .top_wrap h1.top_logo{display:block; padding:8px 0 0 20px;}
+
+.top_wrap .util_m{position:absolute; top:5px; right:5px; display:inline-block;}
+
+.top_menu_wrap{position:absolute; top:20px; left:220px;}
+.top_menu_wrap ul.top_menu{}
+.top_menu_wrap ul.top_menu li{float:left; display:inline-block; text-align:center; font-weight:bold; margin:0 2px 0 0;}
+.top_menu_wrap ul.top_menu li span{width:119px; height:27px; float:left; display:inline-block; background-repeat: repeat-x; background-position:left top;  line-height:220%;}
+.top_menu_wrap ul.top_menu li span a{color:#767676; display:inline-block; width:119px; height:27px;}
+.top_menu_wrap ul.top_menu li span.active{width:119px; height:27px; float:left; display:inline-block; background-repeat: repeat-x; background-position:left top;}
+.top_menu_wrap ul.top_menu li span.active a{color:#fff !important;}
+.top_menu_wrap ul.top_menu li span a:hover{color:#a8a8a8 !important; }
+.top_menu_wrap ul.top_menu li span.active a:hover{color:#fff !important;}
+
+.util_menu_wrap{position:absolute; top:5px; right:5px; font-size:9px; font-family:arial}
+.util_menu_wrap ul.util_menu{}
+.util_menu_wrap ul.util_menu li{float:left; display:inline-block; text-align:center; font-weight:bold; padding:0 10px; border-left:1px solid #d1d1d1; height:9px}
+.util_menu_wrap a{color:#d3d3d3 !important; position:relative; top:-4px;}
+.util_menu_wrap a:hover{color:#d1d1d1 !important;}
+
+/* 컨텐츠 */
+/* add footer */
+.page_wrap .footer_wrap{ width:70%; margin:auto; height: 30px; line-height:30px;}
+
+.page_wrap .middle_wrap{ position:relative; width:100%; border:0px solid red;}
+.page_wrap .middle_wrap:after{display:block; content:''; clear:both;}
+.page_wrap .middle_wrap .left_wrap{width:170px; float:left;  border:1px solid #bababa; border-bottom:0px; background-color:#eeeeee; margin:30px 0 0 20px;}
+
+.page_wrap .middle_wrap .left_wrap ul.menu_list{}
+.page_wrap .middle_wrap .left_wrap ul.menu_list li{}
+.page_wrap ul.top_menu li span{background:url('/Content/images/admin/top_m.png') !important;}
+.page_wrap .middle_wrap .left_wrap ul.menu_list li span.one{width:100%; display:inline-block; border-bottom:1px solid #bababa;}
+.page_wrap .middle_wrap .left_wrap ul.menu_list li a{color:#505050; display:block;height:30px; line-height:250%; padding:0 0 0 10px;}
+.page_wrap .middle_wrap .left_wrap ul.menu_list li a:hover{}
+.left_wrap ul.menu_list li span.active{border-bottom:0px solid #bababa;background-repeat: no-repeat !important; background-position:160px 9px !important; background-color:#fff !important;  font-weight:bold;}
+span.active a{}
+
+.left_two_wrap{background-color:#dbdbdb;border-top:1px solid #bababa;}
+
+.page_wrap .middle_wrap .right_wrap{float:left; margin:0 20px 0 20px; border:0px solid red; padding:30px 0 0 0; width:82%;}
+* html .page_wrap .middle_wrap .right_wrap{float:left; border:0px solid red; padding:30px 0 0 30px; margin:10px 0 0 120px}
+.page_wrap .middle_wrap .right_wrap .contents_zone{width:100%; padding:0 0 40px 0;}
+.page_wrap .middle_wrap .right_wrap h2.contents_title{display:block; font-size:16px; background:url("/Content/images/admin/tit_bul.png") no-repeat left 1px !important; padding:0 0 3px 22px; margin:0 0 25px 0;}
+* html .page_wrap .middle_wrap .right_wrap h2.contents_title{display:block; font-size:16px; background:url("/Content/images/admin/tit_bul.png") no-repeat left 1px !important; padding:0 0 3px 20px; margin:0 0 25px 0;}
+
+
+/* goldskin */
+.goldskin .top_wrap{background:url("/Content/images/admin/gold/top_bg.png") !important;}
+.goldskin ul.top_menu li span.active{background:url('/Content/images/admin/gold/top_m_on.png') !important;}
+.goldskin span.active{background:url("/Content/images/admin/gold/left_bul_ac.png") !important;}
+.goldskin .page_navi ul.page_num li a:hover{color:#cd9c4a;}
+.goldskin .page_navi ul.page_num li a.active{color:#cd9c4a; font-weight:bold;}
+.goldskin .box_wrap{background:#cd9c4a url("/Content/images/admin/login_dot.png");}
+.goldskin span.active a{color:#cd9c4a !important}
+
+
+/* greenskin */
+.greenskin .top_wrap{background:url("/Content/images/admin/green/top_bg.png") !important;}
+.greenskin ul.top_menu li span.active{background:url('/Content/images/admin/green/top_m_on.png') !important;}
+.greenskin span.active{background:url("/Content/images/admin/green/left_bul_ac.png") !important;}
+.greenskin .page_navi ul.page_num li a:hover{color:#347e1f;}
+.greenskin .page_navi ul.page_num li a.active{color:#347e1f; font-weight:bold;}
+.greenskin .box_wrap{background:#347e1f url("/Content/images/admin/login_dot.png");}
+.greenskin span.active a{color:#347e1f !important}
+
+
+/* blueskin */
+.blueskin .top_wrap{background:url("/Content/images/admin/blue/top_bg.png") !important;}
+.blueskin ul.top_menu li span.active{background:url('/Content/images/admin/blue/top_m_on.png') !important;}
+.blueskin span.active{background:url("/Content/images/admin/blue/left_bul_ac.png") !important;}
+.blueskin .page_navi ul.page_num li a:hover{color:#098ecf;}
+.blueskin .page_navi ul.page_num li a.active{color:#098ecf; font-weight:bold;}
+.blueskin .box_wrap{background:#098ecf url("/Content/images/admin/login_dot.png");}
+.blueskin span.active a{color:#098ecf !important}
+
+
+/* redskin */
+.redskin .top_wrap{background:url("/Content/images/admin/red/top_bg.png") !important;}
+.redskin ul.top_menu li span.active{background:url('/Content/images/admin/red/top_m_on.png') !important;}
+.redskin span.active{background:url("/Content/images/admin/red/left_bul_ac.png") !important;}
+.redskin .page_navi ul.page_num li a:hover{color:#c71131;}
+.redskin .page_navi ul.page_num li a.active{color:#c71131; font-weight:bold;}
+.redskin .box_wrap{background:#c71131 url("/Content/images/admin/login_dot.png");}
+.redskin span.active a{color:#c71131 !important}
+
+/* blackskin */
+.blackskin .top_wrap{background:url("/Content/images/admin/black/top_bg.png") !important;}
+.blackskin ul.top_menu li span.active{background:url('/Content/images/admin/black/top_m_on.png') !important;}
+.blackskin span.active{background:url("/Content/images/admin/black/left_bul_ac.png") !important;}
+.blackskin .page_navi ul.page_num li a:hover{color:#000;}
+.blackskin .page_navi ul.page_num li a.active{color:#000; font-weight:bold;}
+.blackskin .box_wrap{background:#000 url("/Content/images/admin/login_dot.png");}
+.blackskin span.active a{color:#000 !important}
+
+
+
+
+/* 하단 */
+.page_wrap .middle_wrap .right_wrap p.copyright{position:absolute; bottom:10px; left:400px; font-size:11px}

@@ -1,0 +1,114 @@
+﻿@model PagedList.IPagedList<Makersn.Models.PrinterT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "프린터 인증";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IList<int> printNoList = new List<int>();
+}
+
+<h2 class="contents_title">인증 프린터 목록</h2>
+
+<div class="contents_zone" style="width: 950px;">
+    <div class="right_float_wrap">
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th style="cursor: pointer" onclick="sort('D')">신청일</th>
+                <th style="cursor: pointer" onclick="sort('M')">신청 스팟</th>
+                <th style="cursor: pointer" onclick="sort('B')">회사명</th>
+                <th>모델명</th>
+                <th style="cursor: pointer" onclick="sort('S')">평점</th>
+                <th>승인</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Makersn.Models.PrinterT printer in Model)
+            {
+                if (!printNoList.Contains(printer.No))
+                {
+                <tr>
+                    <td>@printer.RegDt.ToString("yyyy-MM-dd")</td>
+                    <td>@printer.SpotName</td>
+                    <td>@printer.Brand</td>
+                    <td>@printer.Model</td>
+                    <td>@printer.Score</td>
+                    <td>
+                        @if (printer.TestCompleteFlag == "N")
+                        {
+                            <span style="cursor:pointer" onclick="ApprPrinter('@printer.No','Y')">승인</span>
+                        }
+                        else
+                        {
+                            <span style="cursor:pointer" onclick="ApprPrinter('@printer.No','N')">승인취소</span>
+                        }
+
+                    </td>
+                </tr>
+                        printNoList.Add(printer.No);
+                }
+            }
+
+        </tbody>
+    </table>
+
+
+    </div>
+    @Html.PagedListPager(Model, page => Url.Action("/apprPrinterTest", new { orderby = ViewBag.OrderBy, desc = ViewBag.Desc, page }))
+</div>
+
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $("#sdate,#edate").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showOn: 'both',
+            buttonImage: '/Content/images/admin/icon_calender.png',
+            buttonImageOnly: true,
+            dateFormat: 'yy-mm-dd'
+        });
+
+
+        $(document).ready(function () {
+            $('#searchBox').keyup(function (event) {
+                if (event.keyCode == 13) {
+                    if ($("#searchBox").val().trim() != "") {
+
+                    }
+                }
+            });
+        });
+
+        function ApprPrinter(no, flag) {
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    location.reload(true);
+                }
+                else {
+                    alert(result.Message);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/printing/SetApprPrinterTest", { no: no, flag: flag }, onSuccess);
+        }
+
+        function sort(val) {
+            var desc = "@ViewBag.Desc";
+            location.href = "/printing/MngApprPrinterTest?orderby=" + val + "&desc=" + desc;
+        }
+
+    </script>
+}

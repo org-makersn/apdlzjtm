@@ -1,0 +1,138 @@
+﻿@model IList<Makersn.Models.TranslationStateRequestT>
+@{
+    ViewBag.Title = "MonthStateRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int index = 1;
+}
+
+
+<h2 class="contents_title">
+<a href="/Translation/TranslationReqState">번역 요청 현황</a>&nbsp;&nbsp;l&nbsp;&nbsp;<a href="/Translation/TranslationReqList">번역 현황 리스트</a>
+</h2>
+<h2 class="contents_title">번역요청 현황 - 월간</h2>
+<!-- contents_zone -->
+<div class="contents_zone">
+
+    <form id="search" name="search">
+        <input type="hidden" id="date" name="date">
+        <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="17%" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">구분</th>
+                    <td>
+                        <span class="btnWrap medium">@Html.ActionLink("전체", "TranslationReqState", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("일간", "DailyStateRequest", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("월간", "MonthStateRequest", "translation")</span>
+                        <span class="btnWrap medium">@Html.ActionLink("년간", "YearStateRequest", "translation")</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">기간선택</th>
+                    <td>
+                       @Html.DropDownList("year")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+
+
+    <form id="insert_form" name="insert_form" method="post" action="/admin/items/multi_del//">
+
+        <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+            <caption>리스트 게시판</caption>
+            <colgroup>
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+                <col width="7%" />
+            </colgroup>
+            <thead>
+                <tr>
+                     <th rowspan="2">구분</th>
+                    <th rowspan="2">요청</th>
+                    <th rowspan="2">완료</th>
+                    <th rowspan="2">보류</th>
+                    <th colspan="6">언어별 직접 및 요청 번역</th>
+                </tr>
+                <tr>
+                    <th>영 → 국</th>
+                    <th>국 → 영</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var state in Model){
+                    string strTd = string.Empty;
+                    switch (index)
+                    {
+                        case 2:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "일간");
+                            break;
+                        case 4:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "주간");
+                            break;
+                        case 6:
+                            strTd = string.Format("<td rowspan=\"2\">{0}</td>", "월간");
+                            break;
+                        default:
+                            break;
+                    }
+                <tr>
+                    <td>@index 월</td>
+                    <td>@state.RequestCnt</td>
+                    <td>@state.CompleteCnt</td>
+                    <td>@state.HoldCnt</td>
+                    <td>@state.EnForKrCnt</td>
+                    <td>@state.KrForEnCnt</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                    index++;
+                }
+            </tbody>
+        </table>
+    </form>
+    <!-- // page_navi -->
+</div>
+<br />
+<br />
+<br />
+
+<!-- // contents_zone -->
+
+<!-- //============ 컨텐츠부분 끝 ==================== -->
+
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#year").change(function () {
+                var returnUrl = "/Translation/MonthStateRequest?year=" + $(this).val();
+                $(location).attr("href", returnUrl);
+            });
+            $("#Month").change(function () {
+                var returnUrl = "/Translation/MonthStateRequest?year=" + $("#year").val();
+                $(location).attr("href", returnUrl);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,227 @@
+﻿@model PagedList.IPagedList<Makersn.Models.MemberT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "회원정보";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+<h2 class="contents_title">회원정보</h2>
+
+<div class="contents_zone" style="width: 950px;">
+
+    <form id="search" name="search">
+        <input type="hidden" id="date" name="date">
+        <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
+            <colgroup>
+                <col width="17%" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">가입일</th>
+                    <td>
+                        <input type="text" id="sdate" name="sdate" value="@ViewData["startDt"]" readonly="readonly" class="input_text" style="width: 106px; margin-right: 5px" />
+                        ~
+						<input type="text" id="edate" name="edate" value="@ViewData["endDt"]" readonly="readonly" class="input_text" style="width: 106px; margin-right: 5px" />
+                        <span class="btnWrap small"><a href="javascript:memberList.SearchDtBnt(0);" class="_date" id="_date_1">오늘</a></span>
+                        <span class="btnWrap small"><a href="javascript:memberList.SearchDtBnt(7);" class="_date" id="_date_2">일주일</a></span>
+                        <span class="btnWrap small"><a href="javascript:memberList.SearchDtBnt(30);" class="_date" id="_date_3">1개월</a></span>
+                        <span class="btnWrap small"><a href="javascript:memberList.SearchDtBnt(90);" class="_date" id="_date_4">3개월</a></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">검색</th>
+                    <td>
+                        <select id="slt" name="sfl" style="width: 130px">
+                            <option value="name">이름</option>
+                            <option value="id" @(ViewData["option"] == "id" ? " selected" : "")>아이디</option>
+                        </select>
+                        <input type="text" id="searchBox" name="stx" value="@ViewData["text"]" class="input_text" style="width: 200px; padding: 1px 0" />
+
+                        <span class="btnWrap small"><a href="javascript:memberList.SearchOption('D')">다운로드순</a></span>
+                        <span class="btnWrap small"><a href="javascript:memberList.SearchOption('U')">업로드순</a></span>
+                        <span class="btnWrap small"><a href="javascript:memberList.SearchOption('C')">코맨트순</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <div class="btn_center">
+        <span class="btnWrap medium" id="btnSearch"><a href="javascript:memberList.Search()">검색</a></span>
+        <span class="btnWrap medium" id="btnClear"><a href="/Member">초기화</a></span>
+    </div>
+
+    <div class="right_float_wrap">
+        <div class="left"><strong>@ViewData["cnt"]</strong>명의 회원</div>
+    </div>
+
+    @*<input type="hidden" id="date" name="date">*@
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style01" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="5%" />
+            <col width="8%" />
+            <col width="10%" />
+            <col width="8%" />
+            <col width="auto" />
+            <col width="10%" />
+            <col width="8%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="7%" />
+            <col width="12%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <!-- <th><input type="checkbox" name="chkAll" onclick="checkedAll();"></th> -->
+                <th>번호</th>
+                <th>사진</th>
+                <th>이름</th>
+                <th>프로필</th>
+                <th>이메일</th>
+                <th>가입일</th>
+                <th>가입구분</th>
+                <th>업로드수</th>
+                <th>다운로드수</th>
+                <th>남긴코멘트</th>
+                <th>구매</th>
+                <th>비고</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var member in Model)
+            {
+                byte[] ayData = System.Text.Encoding.Default.GetBytes(""+member.No);
+                string tobase = Convert.ToBase64String(ayData);
+                //string tobase = member.No.ToString("G");
+                <tr>
+                    <td>@member.No</td>
+                    <td>
+                        <img src="@(member.ProfilePic == null ? "/Content/images/common/defualtUser.png" : @member.ProfilePic)" /></td>
+                    <td><a href="javascript:memberList.GoProfile('@tobase')">@member.Name</a></td>
+                    <td><span style="color: blue;">@member.BlogUrl</span></td>
+                    <td>@member.Id</td>
+                    <td>@member.RegDt.ToString("yyyy-MM-dd")</td>
+                    <td>@member.SnsType</td>
+                    <td>@member.UploadCntY / @member.UploadCntN</td>
+                    <td>@member.DownloadCnt</td>
+                    <td>@member.CommentCnt</td>
+                    <td>@member.OrderCnt</td>
+                    <td></td>
+                </tr>   
+            }
+
+
+
+        </tbody>
+    </table>
+
+    @Html.PagedListPager(Model, page => Url.Action("/", new { startDt = ViewData["startDt"], endDt = ViewData["endDt"], page, gubun = ViewBag.Gubun }))
+
+    <!-- // page_navi -->
+    @*    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="two_btn_wrap">
+        <div class="box_left_zone">
+            <!-- <span class="btnWrap medium"><a href="javascript:void(0);" class="_sel_init" data-val="10" data-type="일반회원">일반회원</a></span> -->
+        </div>
+
+        <div class="box_right_zone">
+            <!-- <span class="btnWrap medium"><a href="javascript:void(0);" class="_sel_del">선택삭제</a></span> -->
+            <!-- <span class="btnWrap medium"><a href="javascript:void(0);" class="_btn_write">임의회원가입</a></span> -->
+        </div>
+    </div>*@
+
+
+    <!-- // btn -->
+
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function memberList() { };
+
+        memberList.Init = function () {
+
+            //$("#btnSearch").click(function () {
+            //    memberList.Search();
+            //});
+            //$("#btnClear").click(function () {
+            //    location.replace("/Member");
+            //});
+        }
+        memberList.Search = function () {
+            var startDt = $("#sdate").val();
+            var endDt = $("#edate").val();
+            var text = $("#searchBox").val();
+            var option = $("#slt").val();
+            //var data = {
+            //    startDt:startDt,
+            //    endDt:endDt
+            //};
+            location.replace("/Member/index?startDt=" + startDt + "&endDt=" + endDt + "&" + option + "=" + text);
+            //Ajax.SyncPostService("/Member/index", data);
+        }
+        memberList.GoProfile = function (val) {
+            window.open(
+                //'@(ViewBag.TargetDomain)/profile?no=' + val,
+                "http://www.makersn.com/profile?no=" + val,
+                ''
+                );
+        }
+
+        memberList.SearchDtBnt = function (val) {
+            var date = new Date();
+            date.setDate(date.getDate() - val);
+            var startDt = date.toLocaleDateString();
+            var index = startDt.lastIndexOf(".");
+            startDt = startDt.substring(0, index);
+            var array = startDt.split(". ");
+            startDt = array[0] + "-" + array[1] + "-" + array[2];
+
+            var endDate = new Date();
+            endDate.setDate(endDate.getDate());
+            var endDt = endDate.toLocaleDateString();
+            index = endDt.lastIndexOf(".");
+            endDt = endDt.substring(0, index);
+            array = endDt.split(". ");
+            endDt = array[0] + "-" + array[1] + "-" + array[2];
+
+            location.replace("/Member/index?startDt=" + startDt + "&endDt=" + endDt);
+        }
+
+        memberList.SearchOption = function (val) {
+            location.replace("/member/index?gubun="+val);
+        }
+
+
+        $(document).ready(function () {
+            $("#sdate,#edate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showOn: 'both',
+                buttonImageOnly: true,
+                buttonImage: '/Content/images/admin/icon_calender.png',
+                dateFormat: 'yy-mm-dd'
+            });
+
+            memberList.Init();
+
+            $('#searchBox').keyup(function (event) {
+                if (event.keyCode == 13) {
+                    memberList.Search()
+                }
+            });
+        });
+    </script>
+
+}
