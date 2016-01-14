@@ -119,7 +119,7 @@ namespace Design.Web.Admin.Controllers
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
             ViewData["Group"] = MenuModel(2);
             StorePrinterT storePrinter = new StorePrinterT();
-            storePrinter.PrinterName = PrinterName;
+            storePrinter.Name = PrinterName;
             storePrinter.SizeX = SizeX;
             storePrinter.SizeY = SizeY;
             storePrinter.SizeZ = SizeZ;

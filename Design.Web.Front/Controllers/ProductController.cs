@@ -409,8 +409,7 @@ namespace Design.Web.Front.Controllers
                                 StoreProductT _storeProduct = new StoreProductT();
 
                                 _storeProduct.VarNo = 10000;
-                                _storeProduct.ProductName = "";
-                                _storeProduct.FilePath = "";
+                                _storeProduct.Name = "";
                                 _storeProduct.FileName = stlupload.FileName;
                                 _storeProduct.FileReName = fileName;
                                 _storeProduct.FileReName = fileName;

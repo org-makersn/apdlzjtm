@@ -26,7 +26,7 @@ namespace Net.Framwork.BizDac
 
         public IList<StorePrinterT> getSearchedStorePrinter(string text)
         {
-            return new StorePrinterDac().SelectAllStorePrinter().Where(w => w.PrinterName.Contains(text)).ToList();
+            return new StorePrinterDac().SelectAllStorePrinter().Where(w => w.Name.Contains(text)).ToList();
         }
 
     }

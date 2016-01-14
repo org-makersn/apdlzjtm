@@ -14,10 +14,8 @@ namespace Net.Framework.StoreModel
         
         [Column("VAR_NO")]
         public virtual long VarNo { get; set; }
-        [Column("PRODUCT_NAME")]
-        public virtual string ProductName { get; set; }
-        [Column("FILE_PATH")]
-        public virtual string FilePath { get; set; }
+        [Column("NAME")]
+        public virtual string Name { get; set; }
         [Column("FILE_NAME")]
         public virtual string FileName { get; set; }
         [Column("FILE_RENAME")]

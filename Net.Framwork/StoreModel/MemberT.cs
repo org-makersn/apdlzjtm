@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Net.Framwork.StoreModel
 {
     //나중에
-    public class _MemberT
+    class MemberT
     {
         //public virtual int No { get; set; }
         //[Required(ErrorMessage = "ID를 입력해주세요.")]

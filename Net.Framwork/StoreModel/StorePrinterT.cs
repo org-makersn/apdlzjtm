@@ -12,16 +12,18 @@ namespace Net.Framework.StoreModel
         [Column("NO")]
         public virtual int No { get; set; }
 
-        [Column("PRINTER_NAME")]
-        public virtual string PrinterName { get; set; }
+        [Column("NAME")]
+        public virtual string Name { get; set; }
         [Column("SIZE_X")]
         public virtual double SizeX { get; set; }
         [Column("SIZE_Y")]
         public virtual double SizeY { get; set; }
         [Column("SIZE_Z")]
         public virtual double SizeZ { get; set; }
-        [Column("STORE_PRINTING_COMPANY_NO")]
+        [Column("PRINTING_COMPANY_NO")]
         public virtual int PrintingCompanyNo { get; set; }
+        [Column("PRINTING_TYPE_NO")]
+        public virtual int PrintingTypeNo { get; set; }
 
         [Column("REG_DT")]
         public virtual DateTime RegDt { get; set; }

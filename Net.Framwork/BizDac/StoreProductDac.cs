@@ -101,7 +101,7 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 return dbContext.StoreProductT
-                    .Where(p =>( p.CertiFicateStatus == certificateStatus) && p.ProductName.Contains(query) )
+                    .Where(p =>( p.CertiFicateStatus == certificateStatus) && p.Name.Contains(query) )
                     .ToList();
             }
         }

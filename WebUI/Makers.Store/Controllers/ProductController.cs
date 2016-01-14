@@ -77,8 +77,7 @@ namespace Makers.Store.Controllers
                                 StoreProductT _storeProduct = new StoreProductT();
 
                                 _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
-                                _storeProduct.ProductName = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
-                                _storeProduct.FilePath = modelingDir;
+                                _storeProduct.Name = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
                                 _storeProduct.FileName = stlupload.FileName;
                                 _storeProduct.FileReName = fileReName;
                                 _storeProduct.FileExt = extension.ToLower();
@@ -168,7 +167,7 @@ namespace Makers.Store.Controllers
             StoreProductT product = new StoreProductBiz().getStoreProductById(productNo);
             if (product != null)
             {
-                product.ProductName = productName;
+                product.Name = productName;
                 product.CategoryNo = categoryNo;
                 product.Contents = content;
                 product.Description = description;
@@ -205,7 +204,7 @@ namespace Makers.Store.Controllers
             if (product != null)
             {
                 ModelingSize getSize = new ModelingSize();
-                string fullpath = string.Format(@"{0}\{1}\{2}", instance.PhysicalDir, product.FilePath, product.FileReName);
+                string fullpath = string.Format(@"{0}\{1}\{2}", instance.PhysicalDir, Constant.StoreUploadDir.ModelingDir, product.FileReName);
                 if (product.ObjectVolume == 0)
                 {
                     status += 1;
