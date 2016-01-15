@@ -24,6 +24,7 @@ namespace Makers.Store.Controllers
         public ActionResult Index()
         {
             ViewBag.UserNo = profileModel.UserNo;
+
             return View();
         }
 
@@ -76,7 +77,7 @@ namespace Makers.Store.Controllers
 
                                 StoreProductT _storeProduct = new StoreProductT();
 
-                                _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
+                                _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now).ToString();
                                 _storeProduct.Name = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
                                 _storeProduct.FileName = stlupload.FileName;
                                 _storeProduct.FileReName = fileReName;
@@ -150,6 +151,8 @@ namespace Makers.Store.Controllers
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
             ViewBag.AttrYN = storeProduct.MaterialVolume == 0 || storeProduct.ObjectVolume == 0 ? "N" : "Y";
             ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
+
+            //IList<StoreProductT> testLst = new StoreProductDac().SelectProductTest();
             return View(storeProduct);
         }
 

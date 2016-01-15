@@ -408,7 +408,7 @@ namespace Design.Web.Front.Controllers
 
                                 StoreProductT _storeProduct = new StoreProductT();
 
-                                _storeProduct.VarNo = 10000;
+                                _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now).ToString();
                                 _storeProduct.Name = "";
                                 _storeProduct.FileName = stlupload.FileName;
                                 _storeProduct.FileReName = fileName;
@@ -447,36 +447,6 @@ namespace Design.Web.Front.Controllers
 
                                 IList<StoreProductT> list = new StoreProductBiz().getAllStoreProduct();
                                 productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
-
-                                //ArticleFileT articleFileT = new ArticleFileT();
-
-                                //articleFileT.FileGubun = "temp";
-                                //articleFileT.FileType = "stl";
-                                //articleFileT.MemberNo = Profile.UserNo;
-                                //articleFileT.Seq = 5000;
-                                //articleFileT.ImgUseYn = "N";
-                                //articleFileT.Ext = extension;
-                                //articleFileT.ThumbYn = "N";
-                                //articleFileT.MimeType = stlupload.ContentType;
-                                //articleFileT.Name = stlupload.FileName;
-                                //articleFileT.Size = stlupload.ContentLength.ToString();
-                                //articleFileT.Rename = fileName;
-                                //articleFileT.Path = string.Format("/{0}/", save3DFolder);
-                                ////articleFileT.Width = "630";
-                                ////articleFileT.Height = "470";
-                                //articleFileT.X = sizeResult.X;
-                                //articleFileT.Y = sizeResult.Y;
-                                //articleFileT.Z = sizeResult.Z;
-                                //articleFileT.Volume = sizeResult.Volume;
-                                ////articleFileT.PrintVolume = new STLHelper().slicing(file3Dpath + fileName);
-
-                                //articleFileT.UseYn = "Y";
-                                //articleFileT.Temp = temp;
-                                //articleFileT.RegIp = IPAddressHelper.GetIP(this);
-                                //articleFileT.RegId = Profile.UserId;
-                                //articleFileT.RegDt = DateTime.Now;
-
-                                ////int articleFileNo = _articleFileDac.InsertArticleFile(articleFileT);
 
                                 ////response.Success = true;
                                 ////response.Result = articleFileNo.ToString();

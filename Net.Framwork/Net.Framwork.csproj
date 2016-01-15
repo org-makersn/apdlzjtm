@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BizDac\DacBase.cs" />
     <Compile Include="BizDac\MemberTestBiz.cs" />
     <Compile Include="BizDac\MemberTestDac.cs" />
     <Compile Include="BizDac\StoreCartDac.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="BizDac\StorePrinterMaterialBiz.cs" />
     <Compile Include="BizDac\StorePrinterMaterialDac.cs" />
     <Compile Include="Configurations\ApplicationConfiguration.cs" />
+    <Compile Include="Helper\SqlParameterHelper.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\InterceptorLogging.cs" />
@@ -115,7 +117,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreProduct.SelectProductList_S.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

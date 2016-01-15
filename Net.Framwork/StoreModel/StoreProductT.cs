@@ -13,7 +13,7 @@ namespace Net.Framework.StoreModel
         public virtual long No { get; set; }
         
         [Column("VAR_NO")]
-        public virtual long VarNo { get; set; }
+        public virtual string VarNo { get; set; }
         [Column("NAME")]
         public virtual string Name { get; set; }
         [Column("FILE_NAME")]
