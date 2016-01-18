@@ -53,7 +53,7 @@ namespace Makers.Admin.Controllers
             ViewData["query"] = query;
             ViewData["cnt"] = productList.Count;
 
-            return View(productList.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
+            return View(productList.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Makers.Admin.Controllers
         /// <returns></returns>
         public JsonResult ChangeCertiFicateStatus(int no,int status) {
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
-            storeProduct.CertificateYn = status;
+            storeProduct.CERTIFICATE_YN = status;
             new StoreProductBiz().setStoreProduct(storeProduct);
             return Json(new { result = 1 });
         }
@@ -84,7 +84,7 @@ namespace Makers.Admin.Controllers
             ViewData["query"] = query;
             ViewData["cnt"] = printerList.Count;
 
-            return View(printerList.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
+            return View(printerList.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
         }
 
         /// <summary>
@@ -118,13 +118,13 @@ namespace Makers.Admin.Controllers
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
             ViewData["Group"] = MenuModel(2);
             StorePrinterT storePrinter = new StorePrinterT();
-            storePrinter.Name = PrinterName;
-            storePrinter.SizeX = SizeX;
-            storePrinter.SizeY = SizeY;
-            storePrinter.SizeZ = SizeZ;
-            storePrinter.PrintingCompanyNo = PrintingCompanyNo;
-            storePrinter.RegId = Profile.UserId;
-            storePrinter.RegDt= DateTime.Now;
+            storePrinter.NAME = PrinterName;
+            storePrinter.SIZE_X = SizeX;
+            storePrinter.SIZE_Y = SizeY;
+            storePrinter.SIZE_Z = SizeZ;
+            storePrinter.PRINTING_COMPANY_NO = PrintingCompanyNo;
+            storePrinter.REG_ID = Profile.UserId;
+            storePrinter.REG_DT= DateTime.Now;
 
             int printerNo = new StorePrinterBiz().add(storePrinter);
 
@@ -134,12 +134,10 @@ namespace Makers.Admin.Controllers
             for (int i = 0; i < matNoList.Length; i++) { 
                 if(matUseList[i].Equals("Y")){
                     StorePrinterMaterialT storePrinterMat = new StorePrinterMaterialT();
-                    storePrinterMat.PrinterNo = printerNo;
-                    storePrinterMat.MaterialNo = Convert.ToInt32(matNoList[i]);
-                    storePrinterMat.RegDt = DateTime.Now;
-                    storePrinterMat.RegId = Profile.UserId;
-                    storePrinterMat.UpdDt = DateTime.Now;
-                    storePrinterMat.UpdId = Profile.UserId;
+                    storePrinterMat.PRINTER_NO = printerNo;
+                    storePrinterMat.MATERIAL_NO = Convert.ToInt32(matNoList[i]);
+                    storePrinterMat.REG_DT = DateTime.Now;
+                    storePrinterMat.REG_ID = Profile.UserId;
                     materialBiz.add(storePrinterMat);
                 }
             }

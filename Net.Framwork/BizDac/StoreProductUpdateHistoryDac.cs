@@ -39,7 +39,7 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StoreProductUpdateHistoryT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StoreProductUpdateHistoryT.Where(m => m.NO == no).FirstOrDefault();
             }
 
             return printer;
@@ -75,7 +75,7 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 
-                if (dbContext.StoreProductUpdateHistoryT.SingleOrDefault(m => m.No == data.No) != null)
+                if (dbContext.StoreProductUpdateHistoryT.SingleOrDefault(m => m.NO == data.NO) != null)
                 {
                     try
                     {

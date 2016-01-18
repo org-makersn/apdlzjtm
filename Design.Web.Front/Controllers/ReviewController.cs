@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Net.Common.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,7 +22,7 @@ namespace Design.Web.Front.Controllers
             Net.Framwork.BizDac.StoreReviewBiz _reviewBiz = new Net.Framwork.BizDac.StoreReviewBiz();
             List<Net.Framework.StoreModel.StoreReviewT> _review = new List<Net.Framework.StoreModel.StoreReviewT>();
 
-            _review = _reviewBiz.SelectAllStoreReview().Where(m => m.VisibilityYn == "Y" && m.Depth == 0).ToList<Net.Framework.StoreModel.StoreReviewT>();
+            _review = _reviewBiz.SelectAllStoreReview().Where(m => m.VISIBILITY_YN.ToString() == "Y" && m.DEPTH == 0).ToList<Net.Framework.StoreModel.StoreReviewT>();
            
             return PartialView(_review);
         }
@@ -39,15 +40,15 @@ namespace Design.Web.Front.Controllers
                 //첫글
                 try
                 {
-                    _review.ProductNo = 1234;
-                    _review.Comment = comment;
-                    _review.Score = 100;
-                    _review.ImageName = "test";
-                    _review.VisibilityYn = "Y";
-                    _review.MemberNo = 1234;
-                    _review.RegIp = "127.0.0.1";
-                    _review.RegDt = DateTime.Now;
-                    _review.RegId = profileModel.UserId;
+                    _review.PRODUCT_NO = 1234;
+                    _review.COMMENT = comment;
+                    _review.SCORE = 100;
+                    _review.IMAGE_NAME = "test";
+                    _review.VISIBILITY_YN = "Y";
+                    _review.MEMBER_NO = 1234;
+                    _review.REG_IP = IPAddressHelper.GetIP(this);
+                    _review.REG_DT = DateTime.Now;
+                    _review.REG_ID = profileModel.UserId;
 
                     _reviewBiz.add(_review);
 
@@ -65,17 +66,17 @@ namespace Design.Web.Front.Controllers
                 //댓글
                 try
                 {
-                    _review.ProductNo = 1234;
-                    _review.Comment = comment;
-                    _review.Score = 100;
-                    _review.ImageName = "test";
-                    _review.VisibilityYn = "Y";
-                    _review.MemberNo = 1234;
-                    _review.RegIp = "127.0.0.1";
-                    _review.RegDt = DateTime.Now;
-                    _review.RegId = profileModel.UserId;
-                    _review.Depth = depth;
-                    _review.ParentNo = no;
+                    _review.PRODUCT_NO = 1234;
+                    _review.COMMENT = comment;
+                    _review.SCORE = 100;
+                    _review.IMAGE_NAME = "test";
+                    _review.VISIBILITY_YN = "Y";
+                    _review.MEMBER_NO = 1234;
+                    _review.REG_IP = IPAddressHelper.GetIP(this);
+                    _review.REG_DT = DateTime.Now;
+                    _review.REG_ID = profileModel.UserId;
+                    _review.DEPTH = depth;
+                    _review.PARENT_NO = no;
 
                     _reviewBiz.add(_review);
 
@@ -102,7 +103,7 @@ namespace Design.Web.Front.Controllers
             _review = _reviewBiz.getStoreReviewById(no);
             if (_review != null)
             {
-                _review.Comment = comment;
+                _review.COMMENT = comment;
                 _reviewBiz.upd(_review);
 
                 result = true;
@@ -128,7 +129,7 @@ namespace Design.Web.Front.Controllers
             _review = _reviewBiz.getStoreReviewById(no);
             if (_review != null)
             {
-                _review.VisibilityYn = "N";
+                _review.VISIBILITY_YN = "N";
                 _reviewBiz.upd(_review);
 
                 result = true;

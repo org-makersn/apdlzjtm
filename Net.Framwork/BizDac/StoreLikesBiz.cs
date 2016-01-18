@@ -12,13 +12,16 @@ namespace Net.Framwork.BizDac
         public List<StoreLikesT> getAllStorePrinter() {
             return new StoreLikesDac().SelectAllStoreLikes();
         }
+
         public StoreLikesT getStoreLikesById (int memberNo){
 					return new StoreLikesDac().SelectStoreLikesTById(memberNo);
         }
+
         public int add(StoreLikesT StoreLikes)
         {
             return new StoreLikesDac().InsertStoreLikes(StoreLikes);
         }
+
         public int upd(StoreLikesT StoreLikes)
         {
             return new StoreLikesDac().UpdateStoreLikes(StoreLikes);
@@ -31,7 +34,7 @@ namespace Net.Framwork.BizDac
 
 				public int set(StoreLikesT StoreLikes)
 				{
-					StoreLikesT exist = new StoreLikesDac().SelectLikesByProductNoAndMemberNo(StoreLikes.ProductNo, StoreLikes.MemberNo);
+					StoreLikesT exist = new StoreLikesDac().SelectLikesByProductNoAndMemberNo(StoreLikes.PRODUCT_NO, StoreLikes.MEMBER_NO);
 					if (exist != null)
 					{
 						return new StoreLikesDac().DeleteStoreLikes(StoreLikes);

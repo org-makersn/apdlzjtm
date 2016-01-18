@@ -38,7 +38,7 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StorePrintingCompanyPrinterT.Where(m => m.No == StorePirnterId).FirstOrDefault();
+                printer = dbContext.StorePrintingCompanyPrinterT.Where(m => m.NO == StorePirnterId).FirstOrDefault();
             }
 
             return printer;
@@ -71,7 +71,7 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                var originalData = dbContext.StorePrintingCompanyPrinterT.SingleOrDefault(m => m.No == data.No);
+                var originalData = dbContext.StorePrintingCompanyPrinterT.SingleOrDefault(m => m.NO == data.NO);
                 if (originalData != null)
                 {
                     try

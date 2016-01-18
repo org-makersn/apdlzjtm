@@ -200,7 +200,6 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\MainController.cs" />
-    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -554,7 +553,6 @@
     <Content Include="Scripts\three.js" />
     <Content Include="Scripts\three.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Product\Models.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -680,16 +678,8 @@
     <Content Include="Views\Common\Index.cshtml" />
     <Content Include="Views\Common\ListNotice.cshtml" />
     <Content Include="Views\Review\ViewProductReviewDepth.cshtml" />
-    <Content Include="Views\Product\Index.cshtml" />
-    <Content Include="Views\Product\GetLikedProductsByMemberNo.cshtml" />
-    <Content Include="Views\Product\GetReceivedNoteListByMemberNo.cshtml" />
-    <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
-    <Content Include="Views\Product\ProductPricing.cshtml" />
-    <Content Include="Views\Product\ProductPrintable.cshtml" />
-    <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Shared\_Store_Layout.cshtml" />
     <Content Include="Views\Store\Cart.cshtml" />
-    <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Store\Order.cshtml" />
   </ItemGroup>
   <ItemGroup>

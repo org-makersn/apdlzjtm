@@ -7,26 +7,26 @@
 
     IList<StoreMaterialT> matList = ViewBag.MaterialList;
 
-    string contents = new HtmlFilter().PunctuationEncode(Model.Contents);
+    string contents = new HtmlFilter().PunctuationEncode(Model.CONTENTS);
     contents = new HtmlFilter().ConvertContent(contents);
 
     string attrSuccess = ViewBag.AttrSuccess;
 }
 
 <h1>
-    @Html.Hidden("pruduct_no", Model.No)
+    @Html.Hidden("pruduct_no", Model.NO)
     <br>
-    제품 파일 사이즈는: @Model.FileSize kb
+    제품 파일 사이즈는: @Model.FILE_SIZE kb
     <br>
-    제품 SIze X: <span id="size_x">@Model.SizeX</span> mm
+    제품 SIze X: <span id="size_x">@Model.SIZE_X</span> mm
     <br>
-    제품 SIze Y: <span id="size_y">@Model.SizeY</span> mm
+    제품 SIze Y: <span id="size_y">@Model.SIZE_Y</span> mm
     <br>
-    제품 SIze Z: <span id="size_z">@Model.SizeZ</span> mm
+    제품 SIze Z: <span id="size_z">@Model.SIZE_Z</span> mm
     <br>
-    제품 모델 부피는: <span id="objectvolume">@Model.ObjectVolume</span> cm³
+    제품 모델 부피는: <span id="objectvolume">@Model.OBJECT_VOLUME</span> cm³
     <br>
-    제품 슬라이싱된 출력 부피는: <span id="materialvolume">@Model.MaterialVolume</span> cm³
+    제품 슬라이싱된 출력 부피는: <span id="materialvolume">@Model.MATERIAL_VOLUME</span> cm³
 </h1>
 <br>
 
@@ -39,19 +39,19 @@
         <div class="boxNo1">
             <p class="headerInput">제목 &amp; 설명</p>
             <div>
-                <input class="inputTit" type="text" id="product_title" name="product_title" value="@Model.Name" placeholder="제목을 입력하세요." />
+                <input class="inputTit" type="text" id="product_title" name="product_title" value="@Model.NAME" placeholder="제목을 입력하세요." />
 
             </div>
             <div class="textArea">
-                <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요.">@Model.Contents</textarea>
-                <textarea class="input_tag" id="product_tags" name="product_tags" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분).">@Model.TagName</textarea>
+                <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요.">@Model.CONTENTS</textarea>
+                <textarea class="input_tag" id="product_tags" name="product_tags" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분).">@Model.TAG_NAME</textarea>
 
                 <div class="btSet">
                     <a href="#" id="addVideo" class="addVideo" title="동영상 첨부"></a>
                 </div>
                 @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
             </div>
-            <input type="text" id="video_url" name="video_url" value="@Model.VideoUrl" placeholder="동영상 주소" />
+            <input type="text" id="video_url" name="video_url" value="@Model.VIDEO_URL" placeholder="동영상 주소" />
         </div>
     </div>
     <!-- //Left -->
@@ -131,8 +131,8 @@
         foreach (var material in matList)
         {
     <div>
-        &nbsp @material.Name
-        &nbsp @material.Price 원
+        &nbsp @material.NAME
+        &nbsp @material.PRICE 원
     </div>
     <br>
         }

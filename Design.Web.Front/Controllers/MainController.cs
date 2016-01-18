@@ -479,8 +479,8 @@ namespace Design.Web.Front.Controllers
 
             //IList<Net.Framework.StoreModel.StoreLikesT > test = testBiz.getAllStorePrinter();
 
-            like.No = 2;
-            like.ProductNo = 50500;
+            like.NO = 2;
+            like.PRODUCT_NO = 50500;
             testBiz.upd(like);
 
            

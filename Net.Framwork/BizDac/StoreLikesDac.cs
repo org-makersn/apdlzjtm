@@ -12,14 +12,14 @@ namespace Net.Framwork.BizDac
     {
 
         private static StoreContext dbContext;
-        
+
         /// <summary>
         /// select multi data
         /// </summary>
         /// <returns></returns>
         internal List<StoreLikesT> SelectAllStoreLikes()
-        { 
-            
+        {
+
             List<StoreLikesT> printers = null;
             using (dbContext = new StoreContext())
             {
@@ -39,7 +39,7 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StoreLikesT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StoreLikesT.Where(m => m.NO == no).FirstOrDefault();
             }
 
             return printer;
@@ -75,13 +75,12 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                //StoreLikesT originData = dbContext.StoreLikesT.Where(s => s.No == data.No).SingleOrDefault();
-                StoreLikesT originData = dbContext.StoreLikesT.SingleOrDefault(s => s.No == data.No);
+                StoreLikesT originData = dbContext.StoreLikesT.SingleOrDefault(s => s.NO == data.NO);
                 if (originData != null)
                 {
                     try
                     {
-                        originData.ProductNo = data.ProductNo;
+                        originData.PRODUCT_NO = data.PRODUCT_NO;
                         dbContext.StoreLikesT.Attach(originData);
                         dbContext.Entry<StoreLikesT>(originData).State = System.Data.Entity.EntityState.Modified;
                         dbContext.SaveChanges();
@@ -99,23 +98,28 @@ namespace Net.Framwork.BizDac
             }
             return ret;
         }
-        
-			internal int DeleteStoreLikes(StoreLikesT data)
-				{
-					if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        internal int DeleteStoreLikes(StoreLikesT data)
+        {
+            if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
             int ret = 0;
             using (dbContext = new StoreContext())
             {
                 //StoreLikesT originData = dbContext.StoreLikesT.Where(s => s.No == data.No).SingleOrDefault();
-                StoreLikesT originData = dbContext.StoreLikesT.SingleOrDefault(s => s.ProductNo == data.ProductNo && s.MemberNo == data.MemberNo);
+                StoreLikesT originData = dbContext.StoreLikesT.SingleOrDefault(s => s.PRODUCT_NO == data.PRODUCT_NO && s.MEMBER_NO == data.MEMBER_NO);
                 if (originData != null)
                 {
                     try
                     {
-                        originData.ProductNo = data.ProductNo;
+                        originData.PRODUCT_NO = data.PRODUCT_NO;
                         dbContext.StoreLikesT.Remove(originData);
-												ret = dbContext.SaveChanges();
+                        ret = dbContext.SaveChanges();
                     }
                     catch (Exception)
                     {
@@ -129,53 +133,58 @@ namespace Net.Framwork.BizDac
                 }
             }
             return ret;
-				}
+        }
 
-				/// <summary>
-				/// 상품번호로 좋아요 갯수 출력
-				/// </summary>
-				/// <param name="productNo">상품번호</param>
-				/// <returns>갯수</returns>
+        /// <summary>
+        /// 상품번호로 좋아요 갯수 출력
+        /// </summary>
+        /// <param name="productNo">상품번호</param>
+        /// <returns>갯수</returns>
         internal int SelectStoreLikesTByProductNo(int productNo)
         {
             int countLikes = 0;
 
             using (dbContext = new StoreContext())
             {
-							countLikes = dbContext.StoreLikesT.Where(m => m.ProductNo == productNo).Count();
+                countLikes = dbContext.StoreLikesT.Where(m => m.PRODUCT_NO == productNo).Count();
             }
 
-						return countLikes;
+            return countLikes;
         }
 
-				/// <summary>
-				/// 상품번호, 회원번호로 좋아요 유무 체크
-				/// </summary>
-				/// <param name="productNo">상품번호</param>
-				/// <param name="memberNo">회원번호</param>
-				/// <returns></returns>
-				internal StoreLikesT SelectLikesByProductNoAndMemberNo(int productNo, int memberNo)
-				{
-					StoreLikesT printer = null;
+        /// <summary>
+        /// 상품번호, 회원번호로 좋아요 유무 체크
+        /// </summary>
+        /// <param name="productNo">상품번호</param>
+        /// <param name="memberNo">회원번호</param>
+        /// <returns></returns>
+        internal StoreLikesT SelectLikesByProductNoAndMemberNo(int productNo, int memberNo)
+        {
+            StoreLikesT printer = null;
 
-					using (dbContext = new StoreContext())
-					{
-						printer = dbContext.StoreLikesT.Where(m => m.ProductNo == productNo && m.MemberNo == memberNo).FirstOrDefault();
-					}
+            using (dbContext = new StoreContext())
+            {
+                printer = dbContext.StoreLikesT.Where(m => m.PRODUCT_NO == productNo && m.MEMBER_NO == memberNo).FirstOrDefault();
+            }
 
-					return printer;
-				}
+            return printer;
+        }
 
-				internal List<StoreLikesT> SelectLikesByProductNoAndMemberNo(int memberNo)
-				{
-					List<StoreLikesT>  storedLikesList = null;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
+        internal List<StoreLikesT> SelectLikesByProductNoAndMemberNo(int memberNo)
+        {
+            List<StoreLikesT> storedLikesList = null;
 
-					using (dbContext = new StoreContext())
-					{
-						storedLikesList = dbContext.StoreLikesT.Where(m => m.MemberNo == memberNo).ToList();
-					}
+            using (dbContext = new StoreContext())
+            {
+                storedLikesList = dbContext.StoreLikesT.Where(m => m.MEMBER_NO == memberNo).ToList();
+            }
 
-					return storedLikesList;
-				}
-		}
+            return storedLikesList;
+        }
+    }
 }

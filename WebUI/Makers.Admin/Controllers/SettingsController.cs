@@ -44,7 +44,7 @@ namespace Makers.Admin.Controllers
 
                 ViewData["cnt"] = models.Count;
 
-                return View("MaterialAdd", models.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
+                return View("MaterialAdd", models.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
             }
             else if (mode.Contains("edit"))
             {
@@ -52,7 +52,7 @@ namespace Makers.Admin.Controllers
 
                 ViewData["cnt"] = models.Count;
 
-                return View("MaterialEdit", models.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
+                return View("MaterialEdit", models.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
             }
             else
             {
@@ -60,7 +60,7 @@ namespace Makers.Admin.Controllers
 
                 ViewData["cnt"] = models.Count;
 
-                return View(models.OrderByDescending(p => p.RegDt).ToPagedList(page, 20));
+                return View(models.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
             }
         }
 
