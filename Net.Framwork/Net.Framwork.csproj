@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BizDac\DacBase.cs" />
+    <Compile Include="Helper\DacBase.cs" />
     <Compile Include="BizDac\MemberTestBiz.cs" />
     <Compile Include="BizDac\MemberTestDac.cs" />
     <Compile Include="BizDac\StoreCartDac.cs" />
@@ -82,7 +82,7 @@
     <Compile Include="BizDac\StorePrinterMaterialBiz.cs" />
     <Compile Include="BizDac\StorePrinterMaterialDac.cs" />
     <Compile Include="Configurations\ApplicationConfiguration.cs" />
-    <Compile Include="Helper\SqlParameterHelper.cs" />
+    <Compile Include="Helper\DacHelper.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\InterceptorLogging.cs" />
@@ -121,6 +121,12 @@
     <EmbeddedResource Include="SqlCmd\StoreProduct.SelectProductList_S.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Net.SqlTools\Net.SqlTools.csproj">
+      <Project>{b86f3a73-4f3b-4a47-b248-0d99d0d4a2d0}</Project>
+      <Name>Net.SqlTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,7 +9,7 @@ namespace Net.Framework.StoreModel
     {
         [Key]
         [Column("NO")]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        //[DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public virtual long No { get; set; }
         
         [Column("VAR_NO")]
@@ -27,9 +27,9 @@ namespace Net.Framework.StoreModel
         [Column("FILE_SIZE")]
         public virtual double FileSize { get; set; }
         [Column("MATERIAL_VOLUME")]
-        public virtual double MaterialVolume { get; set; }
+        public virtual double? MaterialVolume { get; set; }
         [Column("OBJECT_VOLUME")]
-        public virtual double ObjectVolume { get; set; }
+        public virtual double? ObjectVolume { get; set; }
         [Column("SIZE_X")]
         public virtual double SizeX { get; set; }
         [Column("SIZE_Y")]
@@ -51,20 +51,20 @@ namespace Net.Framework.StoreModel
         [MaxLength]
         public virtual string Contents { get; set; }
 
-        [Column("DESCRIPTION", TypeName = "text")]
+        [Column("DESCRIPTION")]
         [MaxLength]
         public virtual string Description { get; set; }
 
         [Column("PART_CNT")]
         public virtual int PartCnt { get; set; }
-        [Column("CUSTORMIZE_YN")]
-        public virtual string CustormizeYn { get; set; } //exerd 확인
+        [Column("CUSTERMIZE_YN")]
+        public virtual string CustermizeYn { get; set; } //exerd 확인
         [Column("SELL_YN")]
         public virtual string SellYn { get; set; } //사용 안하기로 하지 않았나?
         [Column("TAG_NAME")]
         public virtual string TagName { get; set; }
-        [Column("CERTIFICATE_STATUS")]
-        public virtual int CertiFicateStatus { get; set; }
+        [Column("CERTIFICATE_YN")]
+        public virtual int CertificateYn { get; set; }
         [Column("VISIBILITY_YN")]
         public virtual string VisibilityYn { get; set; }
         [Column("USE_YN")]
@@ -72,9 +72,9 @@ namespace Net.Framework.StoreModel
         [Column("MEMBER_NO")]
         public virtual int MemberNo { get; set; }
         [Column("TXT_SIZE_X")]
-        public virtual double TxtSizeX { get; set; }
+        public virtual double? TxtSizeX { get; set; }
         [Column("TXT_SIZE_Y")]
-        public virtual double TxtSizeY { get; set; }
+        public virtual double? TxtSizeY { get; set; }
         [Column("DETAIL_TYPE")]
         public virtual int DetailType { get; set; } // 두개 다 컬럼명 데이터 타입 잘못된듯
         [Column("DETAIL_DEPTH")]
@@ -86,8 +86,7 @@ namespace Net.Framework.StoreModel
         [Column("REG_ID")]
         public virtual string RegId { get; set; }
         [Column("UPD_DT")]
-        public virtual Nullable<DateTime> UpdDt { get; set; }
-        //public virtual DateTime UpdDt { get; set; }
+        public virtual DateTime? UpdDt { get; set; }
         [Column("UPD_ID")]
         public virtual string UpdId { get; set; }
     }

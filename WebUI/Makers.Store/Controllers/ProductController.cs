@@ -35,6 +35,9 @@ namespace Makers.Store.Controllers
         /// <returns></returns>
         public ActionResult Create(string ex)
         {
+            //IList<StoreProductT> testLst = new StoreProductDac().SelectProductTest();
+            new StoreProductDac().SelectProductTest();
+
             return View();
         }
 
@@ -99,10 +102,10 @@ namespace Makers.Store.Controllers
                                 _storeProduct.Contents = "";
                                 _storeProduct.Description = "";
                                 _storeProduct.PartCnt = 1;
-                                _storeProduct.CustormizeYn = "Y";
+                                _storeProduct.CustermizeYn = "Y";
                                 _storeProduct.SellYn = "Y";
                                 _storeProduct.TagName = "";
-                                _storeProduct.CertiFicateStatus = 1;
+                                _storeProduct.CertificateYn = 1;
                                 _storeProduct.VisibilityYn = "Y";
                                 _storeProduct.UseYn = "Y";
                                 _storeProduct.MemberNo = 0;
@@ -152,7 +155,6 @@ namespace Makers.Store.Controllers
             ViewBag.AttrYN = storeProduct.MaterialVolume == 0 || storeProduct.ObjectVolume == 0 ? "N" : "Y";
             ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
 
-            //IList<StoreProductT> testLst = new StoreProductDac().SelectProductTest();
             return View(storeProduct);
         }
 
@@ -231,18 +233,18 @@ namespace Makers.Store.Controllers
                     getSize.X = product.SizeX;
                     getSize.Y = product.SizeY;
                     getSize.Z = product.SizeZ;
-                    getSize.ObjectVolume = product.ObjectVolume;
+                    getSize.ObjectVolume = product.ObjectVolume.Value;
                 }
 
                 if (product.MaterialVolume == 0)
                 {
                     status += 1;
                     product.MaterialVolume = new Modeling3DHelper().Slicing(fullpath, instance.Slic3rDir);
-                    getSize.MaterialVolume = product.MaterialVolume;
+                    getSize.MaterialVolume = product.MaterialVolume.Value;
                 }
                 else
                 {
-                    getSize.MaterialVolume = product.MaterialVolume;
+                    getSize.MaterialVolume = product.MaterialVolume.Value;
                 }
 
                 if (status > 0)

@@ -428,10 +428,10 @@ namespace Design.Web.Front.Controllers
                                 _storeProduct.Contents = "";
                                 _storeProduct.Description = "";
                                 _storeProduct.PartCnt = 1;
-                                _storeProduct.CustormizeYn = "Y";
+                                _storeProduct.CustermizeYn = "Y";
                                 _storeProduct.SellYn = "Y";
                                 _storeProduct.TagName = "";
-                                _storeProduct.CertiFicateStatus = 1;
+                                _storeProduct.CertificateYn = 1;
                                 _storeProduct.VisibilityYn = "Y";
                                 _storeProduct.UseYn = "Y";
                                 _storeProduct.MemberNo = 0;

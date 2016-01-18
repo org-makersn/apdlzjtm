@@ -1,15 +1,17 @@
 ﻿using Net.Framework;
 using Net.Framework.StoreModel;
+using Net.Framwork.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
     public class StoreProductDac : DacBase
     {
+        private static readonly StoreContext instance = new StoreContext();
+
+        public static StoreContext dbContext { get; set; }
         
         /// <summary>
         /// select multi data
@@ -52,6 +54,7 @@ namespace Net.Framwork.BizDac
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
             long ret = 0;
+
             using (dbContext = new StoreContext())
             {
                 dbContext.StoreProductT.Add(data);
@@ -99,7 +102,7 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 return dbContext.StoreProductT
-                    .Where(p =>( p.CertiFicateStatus == certificateStatus) && p.Name.Contains(query) )
+                    .Where(p =>( p.CertificateYn == certificateStatus) && p.Name.Contains(query) )
                     .ToList();
             }
         }
@@ -135,12 +138,9 @@ namespace Net.Framwork.BizDac
 
         public void SelectProductTest()
         {
-            string query = GetSqlCommand("StoreProduct.SelectProductList_S");
-            using (dbContext = new StoreContext())
-            {
-                var test = dbContext.Database.ExecuteSqlCommand(query);
-                //var test dbContext.Database.SqlQuery<StoreProductT>(query).ToList();
-            }
+            string query = new DacHelper().GetSqlCommand("StoreProduct.SelectProductList_S");
+
+            IEnumerable<StoreProductT> list = dbHelper.ExecuteMultiple<StoreProductT>(query);
         }
     }
 }

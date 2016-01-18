@@ -64,7 +64,7 @@ namespace Makers.Admin.Controllers
         /// <returns></returns>
         public JsonResult ChangeCertiFicateStatus(int no,int status) {
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
-            storeProduct.CertiFicateStatus = status;
+            storeProduct.CertificateYn = status;
             new StoreProductBiz().setStoreProduct(storeProduct);
             return Json(new { result = 1 });
         }
