@@ -39,7 +39,7 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StorePrinterMaterialT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StorePrinterMaterialT.Where(m => m.NO == no).FirstOrDefault();
             }
 
             return printer;
@@ -58,7 +58,7 @@ namespace Net.Framwork.BizDac
             {
                 dbContext.StorePrinterMaterialT.Add(data);
                 dbContext.SaveChanges();
-                ret = data.No;
+                ret = data.NO;
             }
             return ret;
         }

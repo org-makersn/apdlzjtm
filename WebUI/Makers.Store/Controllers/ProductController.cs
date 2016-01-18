@@ -80,42 +80,42 @@ namespace Makers.Store.Controllers
 
                                 StoreProductT _storeProduct = new StoreProductT();
 
-                                _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now).ToString();
-                                _storeProduct.Name = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
-                                _storeProduct.FileName = stlupload.FileName;
-                                _storeProduct.FileReName = fileReName;
-                                _storeProduct.FileExt = extension.ToLower();
-                                _storeProduct.MimeType = stlupload.ContentType;
-                                _storeProduct.FileSize = Convert.ToDouble(stlupload.ContentLength.ToString());
+                                _storeProduct.VAR_NO = new DateTimeHelper().ConvertToUnixTime(DateTime.Now).ToString();
+                                _storeProduct.NAME = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
+                                _storeProduct.FILE_NAME = stlupload.FileName;
+                                _storeProduct.FILE_RENAME = fileReName;
+                                _storeProduct.FILE_EXT = extension.ToLower();
+                                _storeProduct.MIME_TYPE = stlupload.ContentType;
+                                _storeProduct.FILE_SIZE = Convert.ToDouble(stlupload.ContentLength.ToString());
 
-                                _storeProduct.MaterialVolume = 0;
-                                _storeProduct.ObjectVolume = 0;
-                                _storeProduct.SizeX = 0;
-                                _storeProduct.SizeY = 0;
-                                _storeProduct.SizeZ = 0;
+                                _storeProduct.MATERIAL_VOLUME = 0;
+                                _storeProduct.OBJECT_VOLUME = 0;
+                                _storeProduct.SIZE_X = 0;
+                                _storeProduct.SIZE_Y = 0;
+                                _storeProduct.SIZE_Z = 0;
 
-                                _storeProduct.Scale = 100;
-                                _storeProduct.ShortLing = "";
-                                _storeProduct.VideoUrl = "";
+                                _storeProduct.SCALE = 100;
+                                _storeProduct.SHORT_LINK = "";
+                                _storeProduct.VIDEO_URL = "";
                                 //_storeProduct.VideoType = "";
-                                _storeProduct.CategoryNo = 0;
-                                _storeProduct.Contents = "";
-                                _storeProduct.Description = "";
-                                _storeProduct.PartCnt = 1;
-                                _storeProduct.CustermizeYn = "Y";
-                                _storeProduct.SellYn = "Y";
-                                _storeProduct.TagName = "";
-                                _storeProduct.CertificateYn = 1;
-                                _storeProduct.VisibilityYn = "Y";
-                                _storeProduct.UseYn = "Y";
-                                _storeProduct.MemberNo = 0;
-                                _storeProduct.TxtSizeX = 0;
-                                _storeProduct.TxtSizeY = 0;
-                                _storeProduct.DetailType = 0;
-                                _storeProduct.DetailDepth = 0;
-                                _storeProduct.TxtLoc = "";
-                                _storeProduct.RegDt = DateTime.Now;
-                                _storeProduct.RegId = profileModel.UserId;
+                                _storeProduct.CATEGORY_NO = 0;
+                                _storeProduct.CONTENTS = "";
+                                _storeProduct.DESCRIPTION = "";
+                                _storeProduct.PART_CNT = 1;
+                                _storeProduct.CUSTERMIZE_YN = "Y";
+                                _storeProduct.SELL_YN = "Y";
+                                _storeProduct.TAG_NAME = "";
+                                _storeProduct.CERTIFICATE_YN = 1;
+                                _storeProduct.VISIBILITY_YN = "Y";
+                                _storeProduct.USE_YN = "Y";
+                                _storeProduct.MEMBER_NO = 0;
+                                _storeProduct.TXT_SIZE_X = 0;
+                                _storeProduct.TXT_SIZE_Y = 0;
+                                _storeProduct.DETAIL_TYPE = 0;
+                                _storeProduct.DETAIL_DEPTH = 0;
+                                _storeProduct.TXT_LOC = "";
+                                _storeProduct.REG_DT = DateTime.Now;
+                                _storeProduct.REG_ID = profileModel.UserId;
 
                                 productNo = new StoreProductBiz().addStoreProduct(_storeProduct);
 
@@ -152,7 +152,7 @@ namespace Makers.Store.Controllers
         public ActionResult Models(int no)
         {
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
-            ViewBag.AttrYN = storeProduct.MaterialVolume == 0 || storeProduct.ObjectVolume == 0 ? "N" : "Y";
+            ViewBag.AttrYN = storeProduct.MATERIAL_VOLUME == 0 || storeProduct.OBJECT_VOLUME == 0 ? "N" : "Y";
             ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
 
             return View(storeProduct);
@@ -172,12 +172,12 @@ namespace Makers.Store.Controllers
             StoreProductT product = new StoreProductBiz().getStoreProductById(productNo);
             if (product != null)
             {
-                product.Name = productName;
-                product.CategoryNo = categoryNo;
-                product.Contents = content;
-                product.Description = description;
-                product.TagName = tagName;
-                product.VideoUrl = videoUrl;
+                product.NAME = productName;
+                product.CATEGORY_NO = categoryNo;
+                product.CONTENTS = content;
+                product.DESCRIPTION = description;
+                product.TAG_NAME = tagName;
+                product.VIDEO_URL = videoUrl;
                 //product.VideoType = "";
 
                 int ret = new StoreProductBiz().setStoreProduct(product);
@@ -209,20 +209,20 @@ namespace Makers.Store.Controllers
             if (product != null)
             {
                 ModelingSize getSize = new ModelingSize();
-                string fullpath = string.Format(@"{0}\{1}\{2}", instance.PhysicalDir, Constant.StoreUploadDir.ModelingDir, product.FileReName);
-                if (product.ObjectVolume == 0)
+                string fullpath = string.Format(@"{0}\{1}\{2}", instance.PhysicalDir, Constant.StoreUploadDir.ModelingDir, product.FILE_RENAME);
+                if (product.OBJECT_VOLUME == 0)
                 {
                     status += 1;
-                    _3DModel _3dModel = new Modeling3DHelper().Get3DModel(fullpath, product.FileExt);
+                    _3DModel _3dModel = new Modeling3DHelper().Get3DModel(fullpath, product.FILE_EXT);
 
-                    getSize = new Modeling3DHelper().GetSizeFor3DFile(fullpath, product.FileExt);
+                    getSize = new Modeling3DHelper().GetSizeFor3DFile(fullpath, product.FILE_EXT);
 
-                    product.SizeX = getSize.X;
-                    product.SizeY = getSize.Y;
-                    product.SizeZ = getSize.Z;
-                    product.ObjectVolume = getSize.ObjectVolume;
+                    product.SIZE_X = getSize.X;
+                    product.SIZE_Y = getSize.Y;
+                    product.SIZE_Z = getSize.Z;
+                    product.OBJECT_VOLUME = getSize.ObjectVolume;
 
-                    string jsfullpath = string.Format(@"{0}\{1}\{2}.js", instance.PhysicalDir, saveJSFolder, product.FileReName);
+                    string jsfullpath = string.Format(@"{0}\{1}\{2}.js", instance.PhysicalDir, saveJSFolder, product.FILE_RENAME);
 
                     var strBuff = JsonConvert.SerializeObject(_3dModel);
 
@@ -230,21 +230,21 @@ namespace Makers.Store.Controllers
                 }
                 else
                 {
-                    getSize.X = product.SizeX;
-                    getSize.Y = product.SizeY;
-                    getSize.Z = product.SizeZ;
-                    getSize.ObjectVolume = product.ObjectVolume.Value;
+                    getSize.X = product.SIZE_X.Value;
+                    getSize.Y = product.SIZE_Y.Value;
+                    getSize.Z = product.SIZE_Z.Value;
+                    getSize.ObjectVolume = product.OBJECT_VOLUME.Value;
                 }
 
-                if (product.MaterialVolume == 0)
+                if (product.MATERIAL_VOLUME == 0)
                 {
                     status += 1;
-                    product.MaterialVolume = new Modeling3DHelper().Slicing(fullpath, instance.Slic3rDir);
-                    getSize.MaterialVolume = product.MaterialVolume.Value;
+                    product.MATERIAL_VOLUME = new Modeling3DHelper().Slicing(fullpath, instance.Slic3rDir);
+                    getSize.MaterialVolume = product.MATERIAL_VOLUME.Value;
                 }
                 else
                 {
-                    getSize.MaterialVolume = product.MaterialVolume.Value;
+                    getSize.MaterialVolume = product.MATERIAL_VOLUME.Value;
                 }
 
                 if (status > 0)
@@ -273,11 +273,11 @@ namespace Makers.Store.Controllers
             int result = 0;
 
             StoreLikesT like = new StoreLikesT();
-            like.MemberNo = profileModel.UserNo;
-            like.RegIp = IPAddressHelper.GetIP(this);
-            like.ProductNo = productNo;
-            like.RegId = "test";
-            like.RegDt = DateTime.Now;
+            like.MEMBER_NO = profileModel.UserNo;
+            like.REG_IP = IPAddressHelper.GetIP(this);
+            like.PRODUCT_NO = productNo;
+            like.REG_ID = "test";
+            like.REG_DT = DateTime.Now;
 
             result = likesBiz.set(like);
 

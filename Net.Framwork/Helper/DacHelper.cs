@@ -4,14 +4,14 @@ using System.Reflection;
 
 namespace Net.Framwork.Helper
 {
-    public class DacHelper
+    public static class DacHelper
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public string GetSqlCommand(string _query)
+        public static string GetSqlCommand(string _query)
         {
             Assembly _assembly = Assembly.GetExecutingAssembly();
 

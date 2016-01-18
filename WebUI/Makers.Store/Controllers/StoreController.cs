@@ -28,7 +28,7 @@ namespace Makers.Store.Controllers
         public ActionResult StoreMemberRegister()
         {
             ViewBag.userNo = profileModel.UserNo;
-            IList<StoreMemberT> _StoreMemberT = new StoreMemberBiz().getAllMemberList().Where(s => s.DelYn.ToLower() == "n").ToList<StoreMemberT>();
+            IList<StoreMemberT> _StoreMemberT = new StoreMemberBiz().getAllMemberList().Where(s => s.DEL_YN.ToLower() == "n").ToList<StoreMemberT>();
             ViewBag.StoreMemberList = _StoreMemberT;
 
             return View();
@@ -46,26 +46,24 @@ namespace Makers.Store.Controllers
             StoreMemberBiz _StoreMemberBiz = new StoreMemberBiz();
             StoreMemberT _StoreMemberT = new StoreMemberT();
 
-            _StoreMemberT.MemberNo = 1;
-            _StoreMemberT.StoreName = collection["StoreName"];
-            _StoreMemberT.OfficePhone = collection["TelNo"];
-            _StoreMemberT.CellPhone = collection["CellPhone"];
-            _StoreMemberT.StoreProfileMsg = collection["StoreProfileMsg"];
-            _StoreMemberT.StoreUrl = collection["StoreUrl"];
-            _StoreMemberT.BankName = collection["bankName"];
-            _StoreMemberT.BankUserName = collection["bankUserName"];
-            _StoreMemberT.BankAccount = collection["bankAccount"];
-            _StoreMemberT.DelYn = "N";
-            _StoreMemberT.RegId = collection["regId"];
-            _StoreMemberT.RegDt = DateTime.Now;
-            _StoreMemberT.UpdId = collection["StoreProfileMsg"];
-            _StoreMemberT.UpdDt = DateTime.Now;
+            _StoreMemberT.MEMBER_NO = 1;
+            _StoreMemberT.STORE_NAME = collection["StoreName"];
+            _StoreMemberT.OFFICE_PHONE = collection["TelNo"];
+            _StoreMemberT.CELL_PHONE = collection["CellPhone"];
+            _StoreMemberT.STORE_PROFILE_MSG = collection["StoreProfileMsg"];
+            _StoreMemberT.STORE_URL = collection["StoreUrl"];
+            _StoreMemberT.BANK_NAME = collection["bankName"];
+            _StoreMemberT.BANK_USER_NAME = collection["bankUserName"];
+            _StoreMemberT.BANK_ACCOUNT = collection["bankAccount"];
+            _StoreMemberT.DEL_YN = "N";
+            _StoreMemberT.REG_ID = collection["regId"];
+            _StoreMemberT.REG_DT = DateTime.Now;
 
             _StoreMemberBiz.add(_StoreMemberT);
 
             response.Success = true;
 
-            response.Result = _StoreMemberT.MemberNo + "";
+            response.Result = _StoreMemberT.MEMBER_NO + "";
             return Json(response, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
@@ -81,26 +79,24 @@ namespace Makers.Store.Controllers
             StoreMemberT _StoreMemberT = _StoreMemberBiz.getStoreMemberById(Convert.ToInt32(collection["no"]));
             if (_StoreMemberT != null)
             {
-                _StoreMemberT.MemberNo = 1;
-                _StoreMemberT.StoreName = collection["memberNo"];
-                _StoreMemberT.OfficePhone = collection["TelNo"];
-                _StoreMemberT.CellPhone = collection["CellPhone"];
-                _StoreMemberT.StoreProfileMsg = collection["StoreProfileMsg"];
-                _StoreMemberT.StoreUrl = collection["StoreUrl"];
-                _StoreMemberT.BankName = collection["bankName"];
-                _StoreMemberT.BankUserName = collection["bankUserName"];
-                _StoreMemberT.BankAccount = collection["bankAccount"];
+                _StoreMemberT.MEMBER_NO = 1;
+                _StoreMemberT.STORE_NAME = collection["memberNo"];
+                _StoreMemberT.OFFICE_PHONE = collection["TelNo"];
+                _StoreMemberT.CELL_PHONE = collection["CellPhone"];
+                _StoreMemberT.STORE_PROFILE_MSG = collection["StoreProfileMsg"];
+                _StoreMemberT.STORE_URL = collection["StoreUrl"];
+                _StoreMemberT.BANK_NAME = collection["bankName"];
+                _StoreMemberT.BANK_USER_NAME = collection["bankUserName"];
+                _StoreMemberT.BANK_ACCOUNT = collection["bankAccount"];
                 //_StoreMemberT.DelYn =  collection["delYn"];
-                _StoreMemberT.RegId = collection["regId"];
-                _StoreMemberT.RegDt = DateTime.Now;
-                _StoreMemberT.UpdId = collection["StoreProfileMsg"];
-                _StoreMemberT.UpdDt = DateTime.Now;
+                _StoreMemberT.UPD_ID = profileModel.UserId;
+                _StoreMemberT.UPD_DT = DateTime.Now;
 
                 _StoreMemberBiz.upd(_StoreMemberT);
             }
             response.Success = true;
 
-            response.Result = _StoreMemberT.No + "";
+            response.Result = _StoreMemberT.NO + "";
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
@@ -118,7 +114,7 @@ namespace Makers.Store.Controllers
             _StoreMemberBiz.getStoreMemberById(memberno);
             if (_StoreMemberT != null)
             {
-                _StoreMemberT.DelYn = "Y";
+                _StoreMemberT.DEL_YN = "Y";
                 result = _StoreMemberBiz.upd(_StoreMemberT);
             }
             else
@@ -126,7 +122,7 @@ namespace Makers.Store.Controllers
 
             }
             response.Success = true;
-            response.Result = _StoreMemberT.MemberNo + "";
+            response.Result = _StoreMemberT.MEMBER_NO + "";
             return Json(new { Success = true, Result = result });
         }
         #endregion
@@ -230,8 +226,9 @@ namespace Makers.Store.Controllers
 
             //IList<Net.Framework.StoreModel.StoreLikesT > test = testBiz.getAllStorePrinter();
 
-            like.No = 2;
-            like.ProductNo = 50500;
+            like.NO = 2;
+            like.PRODUCT_NO = 50500;
+
             testBiz.upd(like);
 
             return "dd";

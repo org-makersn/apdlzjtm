@@ -347,24 +347,24 @@ namespace Design.Web.Admin.Controllers
             if (id != "") { ViewData["option"] = "id"; };
             ViewData["text"] = name + id;
             IList<StoreMemberT> list = new StoreMemberBiz().getAllMemberList();
-            list = list.Where(w => w.StoreName.Contains(name)).ToList();
+            list = list.Where(w => w.STORE_NAME.Contains(name)).ToList();
             DateTime dateStart;
             DateTime dateEnd;
             try
             {
                 dateStart = Convert.ToDateTime(startDt);
-                list = list.Where(w => w.RegDt > dateStart).ToList();
+                list = list.Where(w => w.REG_DT > dateStart).ToList();
             }
             catch (Exception e) { } 
             try
             {
                 dateEnd = Convert.ToDateTime(endDt);
-                list = list.Where(w => w.RegDt > dateEnd).ToList();
+                list = list.Where(w => w.REG_DT > dateEnd).ToList();
             }
             catch (Exception e) { }
             ViewData["cnt"] = list.Count;
             ViewData["listCnt"] = listCnt;
-            return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
+            return View(list.OrderByDescending(o => o.NO).ToPagedList(page, listCnt));
         }
         #endregion
 
@@ -380,24 +380,24 @@ namespace Design.Web.Admin.Controllers
             if (id != "") { ViewData["option"] = "id"; };
             ViewData["text"] = name + id;
             IList<StorePrintingCompanyT> list = new StorePrintingCompanyBiz().getAllStorePrintingCompany();
-            list = list.Where(w => w.Name.Contains(name)).ToList();
+            list = list.Where(w => w.NAME.Contains(name)).ToList();
             DateTime dateStart;
             DateTime dateEnd;
             try
             {
                 dateStart = Convert.ToDateTime(startDt);
-                list = list.Where(w => w.RegDt > dateStart).ToList();
+                list = list.Where(w => w.REG_DT > dateStart).ToList();
             }
             catch (Exception e) { }
             try
             {
                 dateEnd = Convert.ToDateTime(endDt);
-                list = list.Where(w => w.RegDt > dateEnd).ToList();
+                list = list.Where(w => w.REG_DT > dateEnd).ToList();
             }
             catch (Exception e) { }
             ViewData["cnt"] = list.Count;
             ViewData["listCnt"] = listCnt;
-            return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
+            return View(list.OrderByDescending(o => o.NO).ToPagedList(page, listCnt));
         }
 
         [Authorize, HttpGet]
@@ -416,15 +416,15 @@ namespace Design.Web.Admin.Controllers
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
             ViewData["Group"] = MenuModel(4);
             StorePrintingCompanyT storePrintingCom = new StorePrintingCompanyT();
-            storePrintingCom.Name = Name;
-            storePrintingCom.OfficePhone = PhoneNum;
-            storePrintingCom.Addr1 = Addr1;
-            storePrintingCom.Addr2 = Addr2;
-            storePrintingCom.PostCode = PostNum;
-            storePrintingCom.ManagerName = ManagerName;
-            storePrintingCom.Url = Url;
-            storePrintingCom.RegId = Profile.UserId;
-            storePrintingCom.RegDt = DateTime.Now;
+            storePrintingCom.NAME = Name;
+            storePrintingCom.OFFICE_PHONE = PhoneNum;
+            storePrintingCom.ADDR1 = Addr1;
+            storePrintingCom.ADDR2 = Addr2;
+            storePrintingCom.POST_CODE = PostNum;
+            storePrintingCom.MANAGER_NAME = ManagerName;
+            storePrintingCom.URL = Url;
+            storePrintingCom.REG_ID = Profile.UserId;
+            storePrintingCom.REG_DT = DateTime.Now;
             new StorePrintingCompanyBiz().add(storePrintingCom);
 
             return Redirect("StorePrintingCom");

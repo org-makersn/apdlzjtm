@@ -1,6 +1,7 @@
 ﻿using Net.Framework;
 using Net.Framework.StoreModel;
 using Net.Framwork.Helper;
+using Net.Framwork.StoreModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StoreProductT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StoreProductT.Where(m => m.NO == no).FirstOrDefault();
             }
 
             return printer;
@@ -59,7 +60,7 @@ namespace Net.Framwork.BizDac
             {
                 dbContext.StoreProductT.Add(data);
                 dbContext.SaveChanges();
-                ret = data.No;
+                ret = data.NO;
             }
             return ret;
         }
@@ -102,7 +103,7 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 return dbContext.StoreProductT
-                    .Where(p =>( p.CertificateYn == certificateStatus) && p.Name.Contains(query) )
+                    .Where(p =>( p.CERTIFICATE_YN == certificateStatus) && p.NAME.Contains(query) )
                     .ToList();
             }
         }
@@ -117,7 +118,7 @@ namespace Net.Framwork.BizDac
         {
             using (dbContext = new StoreContext())
             {
-                return dbContext.StoreProductT.Count(p => p.CategoryNo == codeNo);
+                return dbContext.StoreProductT.Count(p => p.CATEGORY_NO == codeNo);
             }
         }
 
@@ -131,16 +132,31 @@ namespace Net.Framwork.BizDac
         {
             using (dbContext = new StoreContext())
             {
-                return dbContext.StoreProductT.Where(p => p.CategoryNo == codeNo).ToList();
+                return dbContext.StoreProductT.Where(p => p.CATEGORY_NO == codeNo).ToList();
             }
         }
 
 
-        public void SelectProductTest()
+        public IList<StoreProductExT> SelectProductTest()
         {
-            string query = new DacHelper().GetSqlCommand("StoreProduct.SelectProductList_S");
+            string query = DacHelper.GetSqlCommand("StoreProduct.SelectProductList_S");
 
-            IEnumerable<StoreProductT> list = dbHelper.ExecuteMultiple<StoreProductT>(query);
+            var states = dbHelper.ExecuteMultiple<StoreProductExT>(query);
+
+            //IEnumerable<StoreProductT> list = states != null ? states.ToList() : null;
+            //foreach (var item in list)
+            //{
+            //    string mit = item.USE_YN.Value.ToString();
+            //}
+            //return list;
+
+            using (dbContext = new StoreContext())
+            {
+                IList<StoreProductExT> list = dbContext.Database.SqlQuery<StoreProductExT>(query).ToList();
+
+                //IList<StoreProductExT> list1 = dbContext.StoreProductT.ToList();
+                return list;
+            }
         }
     }
 }

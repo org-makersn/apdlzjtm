@@ -38,7 +38,7 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StoreMemberT.Where(m => m.No == no).FirstOrDefault();
+                printer = dbContext.StoreMemberT.Where(m => m.NO == no).FirstOrDefault();
             }
 
             return printer;
@@ -74,7 +74,7 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 
-                //if (dbContext.StoreMemberT.SingleOrDefault(m => m.No == data.No) != null)
+                //if (dbContext.StoreMemberT.SingleOrDefault(m => m.NO == data.NO) != null)
                 //{
                     try
                     {

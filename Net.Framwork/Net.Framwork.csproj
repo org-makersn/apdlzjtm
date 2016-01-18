@@ -43,6 +43,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -101,6 +102,7 @@
     <Compile Include="StoreModel\StorePrintingCompanyT.cs" />
     <Compile Include="StoreModel\StorePrintingTypeT.cs" />
     <Compile Include="StoreModel\StoreProductDetailT.cs" />
+    <Compile Include="StoreModel\StoreProductExT.cs" />
     <Compile Include="StoreModel\StoreProductT.cs" />
     <Compile Include="StoreModel\StoreProductUpdateHistoryT.cs" />
     <Compile Include="StoreModel\StoreReviewT.cs" />
