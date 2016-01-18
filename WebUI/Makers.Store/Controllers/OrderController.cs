@@ -29,7 +29,7 @@ namespace Makers.Store.Controllers
             master.OrderInfoList = new List<OrderInfo>();
             master.StoreCart = new StoreCartT();           
 
-            master.StoreCart.CART_NO = forms["cartNo"];
+            master.StoreCart.CartNo = forms["cartNo"];
             master.EncResult = StartChkFake(); // 페이지 위변조 체크
             master.OrderInfoList = GetOrderList(1); // admin으로 조회        
 

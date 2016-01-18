@@ -145,32 +145,32 @@ namespace Net.Framework.StoreModel
     {
         [Key]
         [Column("CART_NO")]
-        public virtual string CART_NO { get; set; }
+        public virtual string CartNo { get; set; }
 
         [Column("PRODUCT_DETAIL_NO")]
-        public virtual Int64 PRODUCT_DETAIL_NO { get; set; }
+        public virtual Int64 ProductDetailNo { get; set; }
         [Column("PRODUCT_NAME")]
-        public virtual string PRODUCT_NAME { get; set; }
+        public virtual string ProductName { get; set; }
         [Column("NAME")]
-        public virtual string NAME { get; set; }
+        public virtual string Name { get; set; }
         [Column("FILE_SIZE")]
-        public virtual int FILE_SIZE { get; set; }
+        public virtual int FIleSize { get; set; }
         [Column("MATERIAL_VOLUME")]
-        public virtual string MATERIAL_VOLUME { get; set; }
+        public virtual string MaterialVolume { get; set; }
         [Column("OBJECT_VOLUME")]
-        public virtual string OBJECT_VOLUME { get; set; }
+        public virtual string ObjectVolume { get; set; }
         [Column("SIZE_X")]
-        public virtual float SIZE_X { get; set; }
+        public virtual float SIzeX { get; set; }
         [Column("SIZE_Y")]
-        public virtual float SIZE_Y { get; set; }
+        public virtual float SizeY { get; set; }
         [Column("TOTAL_PRICE")]
-        public virtual int TOTAL_PRICE { get; set; }
+        public virtual int TotalPrice { get; set; }
         [Column("PRODUCT_CNT")]
-        public virtual int PRODUCT_CNT { get; set; }
+        public virtual int ProductCnt { get; set; }
         [Column("PAYMENT_PRICE")]
-        public virtual int PAYMENT_PRICE { get; set; }
+        public virtual int PaymentPrice { get; set; }
         [Column("SHIPPING_PRICE")]
-        public virtual int SHIPPING_PRICE { get; set; }    
+        public virtual int ShippingPrice { get; set; }    
     }
 
     public class EncResult

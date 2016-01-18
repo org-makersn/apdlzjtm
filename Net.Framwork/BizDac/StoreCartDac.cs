@@ -143,9 +143,9 @@ namespace Net.Framwork.BizDac
             using (dbContext = new StoreContext())
             {
                 string query = @"
-                            SELECT 
-	                            MAX(CART_NO) + 1 AS MAX_CART_NO
-                            FROM STORE_CART WITH(NOLOCK) ";
+                                SELECT 
+	                                MAX(CART_NO) + 1 AS MAX_CART_NO
+                                FROM STORE_CART WITH(NOLOCK) ";
 
                 newCartNo = dbContext.Database.SqlQuery<Int64>(query).ToString();
             }

@@ -35,9 +35,24 @@ namespace Makers.Store.Controllers
         public PartialViewResult plugin_check(FormCollection forms)
         {
             StoreCartT storeCartT = new StoreCartT();
-            storeCartT.CART_NO = forms["cartNo"];
+            storeCartT.CartNo = forms["cartNo"];
 
             return PartialView(storeCartT);
+        }
+
+        public void AddCart()
+        {
+            int cnt = int.Parse(Request["cnt"]);
+
+            StoreCartT storeCartT = new StoreCartT();
+            storeCartT.MemberNo = 1;
+            storeCartT.ProductCnt = cnt;
+            storeCartT.ProductDetailNo = 1;
+            storeCartT.RegDt = DateTime.Now;
+
+            int result = new StoreCartBiz().InsertCart(storeCartT);
+
+            Response.Write(result);
         }
     }
 }

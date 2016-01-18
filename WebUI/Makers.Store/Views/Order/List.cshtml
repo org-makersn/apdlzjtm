@@ -111,21 +111,21 @@
         @foreach (OrderInfo data in Model)
         {
             <tr>
-                <td>@data.PRODUCT_DETAIL_NO</td>
-                <td>@data.PRODUCT_NAME</td>
-                <td>@data.NAME</td>
-                <td>@data.FILE_SIZE</td>
-                <td>@data.MATERIAL_VOLUME</td>
-                <td>@data.OBJECT_VOLUME</td>
-                <td>@data.SIZE_X</td>
-                <td>@data.SIZE_Y</td>
-                <td>@data.TOTAL_PRICE</td>
-                <td>@data.PRODUCT_CNT</td>
-                <td>@data.PAYMENT_PRICE</td>
-                <td>@data.SHIPPING_PRICE</td>
+                <td>@data.ProductDetailNo</td>
+                <td>@data.ProductName</td>
+                <td>@data.Name</td>
+                <td>@data.FIleSize</td>
+                <td>@data.MaterialVolume</td>
+                <td>@data.ObjectVolume</td>
+                <td>@data.SIzeX</td>
+                <td>@data.SizeY</td>
+                <td>@data.TotalPrice</td>
+                <td>@data.ProductCnt</td>
+                <td>@data.PaymentPrice</td>
+                <td>@data.ShippingPrice</td>
             </tr>
-            cartNo = data.CART_NO;
-            totPaymoney += data.TOTAL_PRICE;
+            cartNo = data.CartNo;
+            totPaymoney += data.TotalPrice;
         }
     </table>
 

@@ -32,13 +32,13 @@
         @foreach (StoreCartT data in Model)
         {
             <tr>
-                <td>@data.PRODUCT_NAME</td>
-                <td>@data.TOTAL_PRICE</td>
-                <td>@data.PRODUCT_CNT</td>
-                <td>@data.ORDER_YN</td>
+                <td>@data.ProductDetailNo</td>
+                <td>가격</td>
+                <td>@data.ProductCnt</td>
+                <td>@data.OrderYn</td>
             </tr>
-            cartNo = data.CART_NO;
-            totPaymoney += data.TOTAL_PRICE;
+            cartNo = data.CartNo;
+            totPaymoney += 1000; // total price
         }
     </table>
 
