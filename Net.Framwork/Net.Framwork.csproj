@@ -52,7 +52,9 @@
   <ItemGroup>
     <Compile Include="BizDac\MemberTestBiz.cs" />
     <Compile Include="BizDac\MemberTestDac.cs" />
+    <Compile Include="BizDac\StoreCartBiz.cs" />
     <Compile Include="BizDac\StoreCartDac.cs" />
+    <Compile Include="BizDac\StoreOrderBiz.cs" />
     <Compile Include="BizDac\StoreOrderDac.cs" />
     <Compile Include="BizDac\StorePrinterBiz.cs" />
     <Compile Include="BizDac\StorePrinterDac.cs" />

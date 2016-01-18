@@ -25,16 +25,15 @@ namespace Makers.Store.Controllers
         [HttpPost]
         public ActionResult LIst(FormCollection forms)
         {
+            OrderMaster master = new OrderMaster();
+            master.OrderInfoList = new List<OrderInfo>();
+            master.StoreCart = new StoreCartT();           
 
-            StoreCartT cartT = new StoreCartT();
-            StoreOrderT orderT = new StoreOrderT();
-            
-            cartT.CartNo = forms["cartNo"];
+            master.StoreCart.CART_NO = forms["cartNo"];
+            master.EncResult = StartChkFake(); // 페이지 위변조 체크
+            master.OrderInfoList = GetOrderList(1); // admin으로 조회        
 
-            // 주문정보 가져오기
-            
-
-            return View(cartT);
+            return View(master);
         }
 
         #region GetOrderList - 주문정보 Get
@@ -43,13 +42,12 @@ namespace Makers.Store.Controllers
         /// </summary>
         /// <param name="cartNo"></param>
         /// <returns></returns>
-        public List<StoreOrderT> GetOrderList(string cartNo)
+        public List<OrderInfo> GetOrderList(int memberNo)
         {
-            List<StoreOrderT> storeOrderList = new List<StoreOrderT>();
+            List<OrderInfo> orderInfoList = new List<OrderInfo>();
+            orderInfoList = new StoreOrderBiz().GetStoreOrderListByMemberNo(memberNo);
 
-
-
-            return storeOrderList;
+            return orderInfoList;
         }
         #endregion
 
@@ -58,7 +56,7 @@ namespace Makers.Store.Controllers
         /// StartChkFake - 위변조 체크
         /// </summary>
         /// <returns></returns>
-        public ActionResult StartChkFake()
+        public EncResult StartChkFake()
         {
             //###############################################################################
             //# 1. 객체 생성 #
@@ -92,17 +90,18 @@ namespace Makers.Store.Controllers
             //###############################################################################
             //6. 암호화  결과 #
             //###############################################################################
-            resultcode = INIpay.GetResult(ref intPInst, "resultcode");		//결과코드 성공이면 '00' 실패 '01'
-            resultmsg = INIpay.GetResult(ref intPInst, "resultmsg");		//결과메세지 
-            rn_value = INIpay.GetResult(ref intPInst, "rn");				// 암호화 결과값
-            return_enc = INIpay.GetResult(ref intPInst, "return_enc");		// 암호화 결과값
-            ini_certid.Value = INIpay.GetResult(ref intPInst, "ini_certid");		// 암호화 결과값
-            ini_encfield.Value = return_enc;
+            EncResult ER = new EncResult();
+            ER.resultcode = INIpay.GetResult(ref intPInst, "resultcode");		//결과코드 성공이면 '00' 실패 '01'
+            ER.resultmsg = INIpay.GetResult(ref intPInst, "resultmsg");		//결과메세지 
+            ER.rn_value = INIpay.GetResult(ref intPInst, "rn");				// 암호화 결과값
+            ER.return_enc = INIpay.GetResult(ref intPInst, "return_enc");		// 암호화 결과값
+            ER.ini_certid = INIpay.GetResult(ref intPInst, "ini_certid");		// 암호화 결과값
+            ER.ini_encfield = ER.return_enc;
 
             //###############################################################################
             //7. RN 값 세션에 저장 #
             //###############################################################################
-            Session["INI_RN"] = rn_value; //	//RN값 => 결제 처리 페이지에서 체크 하기 위해 세션에 저장 (또는 DB에 저장)하여 다음 결제 처리 페이지 에서 체크)
+            Session["INI_RN"] = ER.rn_value; //	//RN값 => 결제 처리 페이지에서 체크 하기 위해 세션에 저장 (또는 DB에 저장)하여 다음 결제 처리 페이지 에서 체크)
             Session["INI_PRICE"] = "1004"; //결제 금액 =>  결제 처리 페이지에서 체크 하기 위해 세션에 저장 (또는 DB에 저장)하여 다음 결제 처리 페이지 에서
 
             //###############################################################################
@@ -114,13 +113,14 @@ namespace Makers.Store.Controllers
             //###############################################################################
             //# 9. 결제 페이지 생성 성공 유무에 대한 처리  #
             //###############################################################################
-            if (!resultcode.Equals("00"))
+            if (!ER.resultcode.Equals("00"))
             {
                 Response.Write("결제 페이지 생성에 문제 발생<BR>");
-                Response.Write("에러원인 :  " + resultmsg);
+                Response.Write("에러원인 :  " + ER.resultmsg);
             }
 
-            return View();
+            return ER;
+
         }
         #endregion
 

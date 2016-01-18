@@ -169,6 +169,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configurations\StoreConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -194,6 +195,11 @@
     <Content Include="Content\css\layout.css" />
     <Content Include="Content\css\nanumbarungothic.css" />
     <Content Include="Content\images\common\bg_search_line.gif" />
+    <Content Include="Content\images\common\btn\btnThumb.gif" />
+    <Content Include="Content\images\common\btn\btnThumb_over.gif" />
+    <Content Include="Content\images\common\btn\btnUpFile.gif" />
+    <Content Include="Content\images\common\btn\btnUpFile_over.gif" />
+    <Content Include="Content\images\common\btn\btnUseConfirmOk.png" />
     <Content Include="Content\images\common\btn\btn_join.png" />
     <Content Include="Content\images\common\btn\btn_login.gif" />
     <Content Include="Content\images\common\btn\btn_login.png" />

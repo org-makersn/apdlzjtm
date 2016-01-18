@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Net.Framework.StoreModel
+@model IList<StoreCartT>
+@{
     ViewBag.Title = "List";
 }
 @section Scripts{
@@ -15,8 +17,38 @@
     
 }
 <h2>List</h2>
+@{
+    string cartNo = "";
+    int totPaymoney = 0;
+ }
+
+    <table style="border:solid 1px blue;" border="1">        
+            <tr>
+                <td>상품명</td>    
+                <td>판매가</td>    
+                <td>갯수</td>      
+                <td>주문여부</td>  
+            </tr>
+        @foreach (StoreCartT data in Model)
+        {
+            <tr>
+                <td>@data.PRODUCT_NAME</td>
+                <td>@data.TOTAL_PRICE</td>
+                <td>@data.PRODUCT_CNT</td>
+                <td>@data.ORDER_YN</td>
+            </tr>
+            cartNo = data.CART_NO;
+            totPaymoney += data.TOTAL_PRICE;
+        }
+    </table>
+
 <form id="cartInfo" method="post">
-    <input type="text" name="cartNo" value="0000000001" />
+    <input type="text" name="cartNo" value="@cartNo" />
 </form>
 
+<p>
+<input type="text" readonly="readonly" id="txtTotPayMoney" value="@totPaymoney" />
+</p>
+<p>
 <input type="button" id="btnAllProductOrder" value="전체상품주문" />
+</p>

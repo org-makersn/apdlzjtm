@@ -24,14 +24,18 @@ namespace Makers.Store.Controllers
 
         public ActionResult List()
         {
-            return View();
+            int memberNo = 1; // admin
+            List<StoreCartT> storeCartList = new List<StoreCartT>();
+            storeCartList = new StoreCartBiz().GetStoreCartListByMemberNo(memberNo);
+            
+            return View(storeCartList);
         }
 
         [HttpPost]
         public PartialViewResult plugin_check(FormCollection forms)
         {
             StoreCartT storeCartT = new StoreCartT();
-            storeCartT.CartNo = forms["cartNo"];
+            storeCartT.CART_NO = forms["cartNo"];
 
             return PartialView(storeCartT);
         }

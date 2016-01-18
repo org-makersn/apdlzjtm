@@ -1,4 +1,5 @@
-﻿@model Net.Framework.StoreModel.StoreCartT
+﻿@using Net.Framework.StoreModel
+@model IList<OrderInfo>
 @{
     ViewBag.Title = "List";    
 }
@@ -84,13 +85,55 @@
 </script> 
  }
 
+@{
+    string cartNo = "";
+    int totPaymoney = 0;
+ }
+
 <h2>List</h2>
+
+<table style="border:solid 1px blue;" border="1">        
+            <tr>
+                <td>상품상세번호</td>
+                <td>상품명</td>
+                <td>구매자</td>
+                <td>파일사이즈</td>
+                <td>MATERIAL_VOLUME</td>
+                <td>OBJECT_VOLUME</td>
+                <td>SIZE_X</td>
+                <td>SIZE_Y</td>
+                <td>판매가</td>    
+                <td>갯수</td>      
+                <td>결제비용</td>  
+                <td>배송비</td>  
+            </tr>
+
+        @foreach (OrderInfo data in Model)
+        {
+            <tr>
+                <td>@data.PRODUCT_DETAIL_NO</td>
+                <td>@data.PRODUCT_NAME</td>
+                <td>@data.NAME</td>
+                <td>@data.FILE_SIZE</td>
+                <td>@data.MATERIAL_VOLUME</td>
+                <td>@data.OBJECT_VOLUME</td>
+                <td>@data.SIZE_X</td>
+                <td>@data.SIZE_Y</td>
+                <td>@data.TOTAL_PRICE</td>
+                <td>@data.PRODUCT_CNT</td>
+                <td>@data.PAYMENT_PRICE</td>
+                <td>@data.SHIPPING_PRICE</td>
+            </tr>
+            cartNo = data.CART_NO;
+            totPaymoney += data.TOTAL_PRICE;
+        }
+    </table>
 
 <p>
 상품주문번호 <input type="text" value="" id="txtOid" />
 </p>
 <p>
-장바구니번호 <input type="text" value="@Model.CartNo" id="txtCartNo" />
+장바구니번호 <input type="text" value="@cartNo" id="txtCartNo" />
 </p>
 <p>
 상점아이디 <input type="text" value="" id="txtMid" />

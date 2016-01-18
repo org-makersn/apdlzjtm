@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -85,5 +86,100 @@ namespace Net.Framework.StoreModel
         public virtual DateTime UpdDt { get; set; }
         [Column("UPD_ID")]
         public virtual string UpdId { get; set; }
+    }
+
+    [Table("STORE_ORDER_DETAIL")]
+    public class StoreOrderDetailT
+    {
+        [Key]
+        [Column("NO")]
+        public virtual Int64 No { get; set; }
+
+        [Column("ORDER_MASTER_NO")]
+        public virtual Int64 OrderMasterNo { get; set; }
+        [Column("PRODUCT_DETAIL_NO")]
+        public virtual Int64 ProductDetailNo { get; set; }
+        [Column("PRINTING_COM_NO")]
+        public virtual Int64 PrintingComNo { get; set; }
+        [Column("PRODUCT_PRICE")]
+        public virtual int ProductPrice { get; set; }
+        [Column("SHIPPING_PRICE")]
+        public virtual string ShippingPrice { get; set; }
+        [Column("PRODUCT_CNT")]
+        public virtual int ProductCnt { get; set; }
+        [Column("ORDER_STATUS")]
+        public virtual string OrderStatus { get; set; }
+        [Column("CANCEL_YN")]
+        public virtual string CancelYn { get; set; }
+        [Column("GIFT_MSG")]
+        public virtual string GigtMsg { get; set; }
+        [Column("SLOW_MAKE_YN")]
+        public virtual string SlowMakeYn { get; set; }
+        [Column("DISCOUNT_NO")]
+        public virtual int DiscountNo { get; set; }
+        [Column("COMPLETE_DATE")]
+        public virtual DateTime CompleteDate { get; set; }
+        [Column("IMG_SRC")]
+        public virtual string ImgSrc { get; set; }
+        [Column("SCALE")]
+        public virtual int Scale { get; set; }
+        [Column("REG_DT")]
+        public virtual DateTime RegDt { get; set; }
+        [Column("REG_ID")]
+        public virtual string RegId { get; set; }
+        [Column("UPD_DT")]
+        public virtual DateTime UpdDt { get; set; }
+        [Column("UPD_ID")]
+        public virtual string UpdId { get; set; }
+    }
+
+    public class OrderMaster
+    {
+        public virtual List<OrderInfo> OrderInfoList { get; set; }
+        public virtual StoreCartT StoreCart{get; set;}
+        public virtual EncResult EncResult{get; set;}
+    }
+
+    [Table("ORDER_INFO")]
+    public class OrderInfo
+    {
+        [Key]
+        [Column("CART_NO")]
+        public virtual string CART_NO { get; set; }
+
+        [Column("PRODUCT_DETAIL_NO")]
+        public virtual Int64 PRODUCT_DETAIL_NO { get; set; }
+        [Column("PRODUCT_NAME")]
+        public virtual string PRODUCT_NAME { get; set; }
+        [Column("NAME")]
+        public virtual string NAME { get; set; }
+        [Column("FILE_SIZE")]
+        public virtual int FILE_SIZE { get; set; }
+        [Column("MATERIAL_VOLUME")]
+        public virtual string MATERIAL_VOLUME { get; set; }
+        [Column("OBJECT_VOLUME")]
+        public virtual string OBJECT_VOLUME { get; set; }
+        [Column("SIZE_X")]
+        public virtual float SIZE_X { get; set; }
+        [Column("SIZE_Y")]
+        public virtual float SIZE_Y { get; set; }
+        [Column("TOTAL_PRICE")]
+        public virtual int TOTAL_PRICE { get; set; }
+        [Column("PRODUCT_CNT")]
+        public virtual int PRODUCT_CNT { get; set; }
+        [Column("PAYMENT_PRICE")]
+        public virtual int PAYMENT_PRICE { get; set; }
+        [Column("SHIPPING_PRICE")]
+        public virtual int SHIPPING_PRICE { get; set; }    
+    }
+
+    public class EncResult
+    {
+        public virtual string resultcode { get; set; }
+        public virtual string resultmsg { get; set; }
+        public virtual string rn_value { get; set; }
+        public virtual string return_enc { get; set; }
+        public virtual string ini_certid { get; set; }
+        public virtual string ini_encfield { get; set; }
     }
 }

@@ -39,6 +39,10 @@ namespace Net.Framework
         public DbSet<StoreCategoryT> StoreCategoryT { get; set; }
         public DbSet<StorePrinterMaterialT> StorePrinterMaterialT { get; set; }
 		public DbSet<MemberMsgT> MemberMsgT { get; set; }
+        public DbSet<StoreCartT> StoreCartT { get; set; }
+        public DbSet<StoreOrderT> StoreOrderT { get; set; }
+        public DbSet<StoreOrderDetailT> StoreOrderDetailT { get; set; }
+        public DbSet<OrderInfo> StoreOrderInfoT { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{

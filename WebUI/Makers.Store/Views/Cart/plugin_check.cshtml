@@ -313,8 +313,6 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
                 alert(" 자동으로 플러그인 프로그램이 설치되지 않았습니다. \n\n 페이지상의 조치절차에 따라 설치하세요.");
             }
             else {
-                //실제 적용시에는 다음 페이지로 데이타를 POST 하기 위해 다음 줄의 형식으로  적용 바랍니다.
-                //document.way_INI.submit(); 
                 var url = "../order/list";
                 var f = document.forms.cartInfo;
 
@@ -327,8 +325,6 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
                 alert(" 자동으로 플러그인 프로그램이 설치되지 않았습니다. \n\n 페이지상의 조치절차에 따라 설치하세요.");
             }
             else {
-                //실제 적용시에는 다음 페이지로 데이타를 POST 하기 위해 다음 줄의 형식으로  적용 바랍니다.
-                //document.way_INI.submit(); 
                 var url = "../order/list";
                 var f = document.forms.cartInfo;
 
@@ -344,6 +340,6 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     setTimeout("checkPlugin()", "1000");
 </script>
 <form name="cartInfo"  method="post">
-    <input type="hidden" name="cartNo" value="@Model.CartNo" />
+    <input type="hidden" name="cartNo" value="@Model.CART_NO" />
 </form>
 </html>

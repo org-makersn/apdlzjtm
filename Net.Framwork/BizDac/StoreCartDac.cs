@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Net.Framework;
+using Net.Framework.StoreModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Globalization;
-using Net.Framework.StoreModel;
+using System.Data.SqlClient;
 
-namespace Makersn.BizDac
+namespace Net.Framwork.BizDac
 {
     public class StoreCartDac
     {
         #region 전역변수
-        
+        private static StoreContext dbContext;
         #endregion
 
         #region GetStoreCartByMemberNo - 장바구니 리스트
@@ -20,81 +21,66 @@ namespace Makersn.BizDac
         /// </summary>
         /// <param name="memberNo"></param>
         /// <returns></returns>
-        public List<StoreCartT> GetStoreCartByMemberNo(int memberNo)
+        internal List<StoreCartT> GetStoreCartByMemberNo(int memberNo)
         {
-            List<StoreCartT> storeCartList = new List<StoreCartT>();
-
             // 장바구니 get
-//            string query = @"
-//                            SELECT 
-//                             SC.NO,
-//                             SC.CART_NO,
-//                             SC.MEMBER_NO,
-//                             M.NAME,
-//                             SP.PRODUCT_NAME,
-//                             SPD.TOTAL_PRICE,
-//                             SC.ORDER_YN,
-//                             SC.PRODUCT_CNT 
-//                             FROM STORE_CART AS SC WITH(NOLOCK)
-//                             LEFT JOIN STORE_PRODUCT_DETAIL AS SPD WITH(NOLOCK) ON SC.PRODUCT_DETAIL_NO=SPD.NO
-//                             INNER JOIN STORE_PRODUCT AS SP WITH(NOLOCK) ON SPD.PRODUCT_NO = SP.NO
-//                             INNER JOIN MEMBER AS M WITH(NOLOCK) ON SC.MEMBER_NO=M.NO
-//                            WHERE SC.MEMBER_NO :memberNo
-//                            AND ORDER_YN IS NULL ";
-            
-//            using (ISession session = NHibernateHelper.OpenSession())
-//            {
-//                IQuery queryObj = session.CreateSQLQuery(query);
-//                queryObj.SetParameter("memberNo", memberNo);
+            List<StoreCartT> storeCartList = new List<StoreCartT>();
+            memberNo = 1;
 
-//                IList<object[]> result = queryObj.List<object[]>();
+            using (dbContext = new StoreContext())
+            {
 
-//                foreach (object[] row in result)
-//                {
-//                    StoreCartT storeCart = new StoreCartT();
-//                    storeCart.No = (Int64)row[0];
-//                    storeCart.CartNo = (string)row[1];
-//                    storeCart.MemberNo = (int)row[2];
-//                    storeCart.Name = (string)row[3];
-//                    storeCart.ProductName = (string)row[4];
-//                    storeCart.TotalPrice = (int)row[5];
-//                    storeCart.OrderYn = (string)row[6];
-//                    storeCart.ProductCnt = (int)row[7];
-//                    storeCartList.Add(storeCart);
-//                }
+                string query = @"
+                            SELECT 
+                             SC.NO,
+                             SC.CART_NO,
+                             SC.MEMBER_NO,
+                             M.NAME,
+                             SP.NAME AS PRODUCT_NAME,
+                             SPD.TOTAL_PRICE,
+                             SPD.NO AS PRODUCT_DETAIL_NO,
+                             SC.ORDER_YN,
+                             SC.PRODUCT_CNT,
+                             SC.REG_DT,
+                             SC.REG_ID,
+                             SC.UPD_DT,
+                             SC.UPD_ID   
+                             FROM STORE_CART AS SC WITH(NOLOCK)
+                             LEFT JOIN STORE_PRODUCT_DETAIL AS SPD WITH(NOLOCK) ON SC.PRODUCT_DETAIL_NO=SPD.NO
+                             INNER JOIN STORE_PRODUCT AS SP WITH(NOLOCK) ON SPD.PRODUCT_NO = SP.NO
+                             INNER JOIN MEMBER AS M WITH(NOLOCK) ON SC.MEMBER_NO=M.NO
+                            WHERE SC.MEMBER_NO = @memberNo
+                            AND ORDER_YN IS NULL ";
 
-//            }
+                using (dbContext = new StoreContext())
+                {                    
+                    IEnumerable<StoreCartT> data = dbContext.Database.SqlQuery<StoreCartT>(query,
+                        new SqlParameter("memberNo", memberNo));
+                    storeCartList = data.ToList();
+                }
+
+            }
+
             return storeCartList;
         }
         #endregion 
 
-        #region InsertCart - 장바구니 담기
+        #region InsertStoreCart - 장바구니 저장
         /// <summary>
-        /// InsertCart - 장바구니 담기
+        /// InsertStoreCart - 장바구니 저장
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public int InsertCart(StoreCartT data)
+        internal int InsertStoreCart(StoreCartT data)
         {
-            // 장바구니에 미 주문 상품이 있는지 체크
-            List<StoreCartT> storeCartList = new List<StoreCartT>();
-            storeCartList = GetStoreCartByMemberNo(data.MemberNo);
-            int cartGoodsCnt = storeCartList.Count;
-            int result = 0;
-
-            // 미 주문 상품이 없으면 장바구니번호 생성
-            if (cartGoodsCnt == 0)
+            if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
+            int ret = 0;
+            using (dbContext = new StoreContext())
             {
-                data.CartNo = GetCreateCartNo(data.MemberNo);
+                dbContext.StoreCartT.Add(data);
+                ret = dbContext.SaveChanges();
             }
-
-            //using (ISession session = NHibernateHelper.OpenSession())
-            //{                
-            //    result = (Int32)session.Save(data);
-            //    session.Flush();
-            //}
-
-            return result;
+            return ret;
         }
         #endregion
 
@@ -104,7 +90,7 @@ namespace Makersn.BizDac
         /// </summary>
         /// <param name="dataList"></param>
         /// <returns></returns>
-        public int updateCartByCondition(List<StoreCartT> dataList)
+        internal int updateCartByCondition(List<StoreCartT> dataList)
         {
             int result = 0;
 
@@ -119,7 +105,7 @@ namespace Makersn.BizDac
         /// <param name="memberNo"></param>
         /// <param name="productDetailNo"></param>
         /// <returns></returns>
-        public void DeleteCartByCondition(int memberNo, Int64 productDetailNo)
+        internal void DeleteCartByCondition(int memberNo, Int64 productDetailNo)
         {
             //using (ISession session = NHibernateHelper.OpenSession())
             //{
@@ -150,29 +136,19 @@ namespace Makersn.BizDac
         /// </summary>
         /// <param name="memberNo"></param>
         /// <returns></returns>
-        public string GetCreateCartNo(int memberNo)
+        internal string GetCreateCartNo()
         {
-            string maxCartNo = "";
             string newCartNo = "";
-            
-//            using (ISession session = NHibernateHelper.OpenSession())
-//            {
-//                string query = @"
-//                            SELECT 
-//	                            MAX(CART_NO) AS MAX_CART_NO
-//                            FROM STORE_CART WITH(NOLOCK) ";
 
-//                IQuery queryObj = session.CreateSQLQuery(query);
-//                IList<object[]> result = queryObj.List<object[]>();
-                
+            using (dbContext = new StoreContext())
+            {
+                string query = @"
+                            SELECT 
+	                            MAX(CART_NO) + 1 AS MAX_CART_NO
+                            FROM STORE_CART WITH(NOLOCK) ";
 
-//                foreach (object[] row in result)
-//                {                   
-//                    maxCartNo = (string)row[0];                    
-//                }
-
-//                newCartNo = (maxCartNo + 1).ToString();                
-//            }
+                newCartNo = dbContext.Database.SqlQuery<Int64>(query).ToString();
+            }
 
             return newCartNo;
         }
