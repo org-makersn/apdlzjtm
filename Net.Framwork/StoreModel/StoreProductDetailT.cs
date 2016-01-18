@@ -30,8 +30,6 @@ namespace Net.Framework.StoreModel
         public virtual float SuccessRete { get; set; }
         [Column("SELECT_YN")]
         public virtual char SelectYn { get; set; }
-        [Column("IMAGE_PATH")]
-        public virtual string ImagePath { get; set; }
         [Column("IMAGE_NAME")]
         public virtual string ImageName { get; set; }
         [Column("IMAGE_EXT")]

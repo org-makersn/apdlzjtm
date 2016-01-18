@@ -9,9 +9,7 @@ namespace Makers.Admin.Controllers
     [Authorize]
     public class DashBoardController : BaseController
     {
-        private MenuModel menuModel = new MenuModel();
-
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_DashBoard";
             menuModel.MainIndex = 0;

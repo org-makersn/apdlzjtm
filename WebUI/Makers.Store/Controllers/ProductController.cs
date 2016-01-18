@@ -24,6 +24,7 @@ namespace Makers.Store.Controllers
         public ActionResult Index()
         {
             ViewBag.UserNo = profileModel.UserNo;
+
             return View();
         }
 
@@ -34,6 +35,9 @@ namespace Makers.Store.Controllers
         /// <returns></returns>
         public ActionResult Create(string ex)
         {
+            //IList<StoreProductT> testLst = new StoreProductDac().SelectProductTest();
+            new StoreProductDac().SelectProductTest();
+
             return View();
         }
 
@@ -76,9 +80,8 @@ namespace Makers.Store.Controllers
 
                                 StoreProductT _storeProduct = new StoreProductT();
 
-                                _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
-                                _storeProduct.ProductName = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
-                                _storeProduct.FilePath = modelingDir;
+                                _storeProduct.VarNo = new DateTimeHelper().ConvertToUnixTime(DateTime.Now).ToString();
+                                _storeProduct.Name = stlupload.FileName.Replace(extension, string.Empty).Replace("_", " ");
                                 _storeProduct.FileName = stlupload.FileName;
                                 _storeProduct.FileReName = fileReName;
                                 _storeProduct.FileExt = extension.ToLower();
@@ -99,10 +102,10 @@ namespace Makers.Store.Controllers
                                 _storeProduct.Contents = "";
                                 _storeProduct.Description = "";
                                 _storeProduct.PartCnt = 1;
-                                _storeProduct.CustormizeYn = "Y";
+                                _storeProduct.CustermizeYn = "Y";
                                 _storeProduct.SellYn = "Y";
                                 _storeProduct.TagName = "";
-                                _storeProduct.CertiFicateStatus = 1;
+                                _storeProduct.CertificateYn = 1;
                                 _storeProduct.VisibilityYn = "Y";
                                 _storeProduct.UseYn = "Y";
                                 _storeProduct.MemberNo = 0;
@@ -151,6 +154,7 @@ namespace Makers.Store.Controllers
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
             ViewBag.AttrYN = storeProduct.MaterialVolume == 0 || storeProduct.ObjectVolume == 0 ? "N" : "Y";
             ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
+
             return View(storeProduct);
         }
 
@@ -168,7 +172,7 @@ namespace Makers.Store.Controllers
             StoreProductT product = new StoreProductBiz().getStoreProductById(productNo);
             if (product != null)
             {
-                product.ProductName = productName;
+                product.Name = productName;
                 product.CategoryNo = categoryNo;
                 product.Contents = content;
                 product.Description = description;
@@ -205,7 +209,7 @@ namespace Makers.Store.Controllers
             if (product != null)
             {
                 ModelingSize getSize = new ModelingSize();
-                string fullpath = string.Format(@"{0}\{1}\{2}", instance.PhysicalDir, product.FilePath, product.FileReName);
+                string fullpath = string.Format(@"{0}\{1}\{2}", instance.PhysicalDir, Constant.StoreUploadDir.ModelingDir, product.FileReName);
                 if (product.ObjectVolume == 0)
                 {
                     status += 1;
@@ -229,18 +233,18 @@ namespace Makers.Store.Controllers
                     getSize.X = product.SizeX;
                     getSize.Y = product.SizeY;
                     getSize.Z = product.SizeZ;
-                    getSize.ObjectVolume = product.ObjectVolume;
+                    getSize.ObjectVolume = product.ObjectVolume.Value;
                 }
 
                 if (product.MaterialVolume == 0)
                 {
                     status += 1;
                     product.MaterialVolume = new Modeling3DHelper().Slicing(fullpath, instance.Slic3rDir);
-                    getSize.MaterialVolume = product.MaterialVolume;
+                    getSize.MaterialVolume = product.MaterialVolume.Value;
                 }
                 else
                 {
-                    getSize.MaterialVolume = product.MaterialVolume;
+                    getSize.MaterialVolume = product.MaterialVolume.Value;
                 }
 
                 if (status > 0)

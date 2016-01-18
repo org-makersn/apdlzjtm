@@ -156,6 +156,7 @@
     <Compile Include="Controllers\PrinterRecommendRequestController.cs" />
     <Compile Include="Controllers\PrintingController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\StorePrinterController.cs" />
     <Compile Include="Controllers\TranslationController.cs" />
@@ -975,6 +976,11 @@
     <Content Include="Views\Translation\YearState.cshtml" />
     <Content Include="Views\Translation\YearStateDirect.cshtml" />
     <Content Include="Views\Translation\YearStateRequest.cshtml" />
+    <Content Include="Views\Settings\Materials.cshtml" />
+    <Content Include="Views\Settings\Code.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\Settings\MaterialAdd.cshtml" />
+    <Content Include="Views\Settings\MaterialEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

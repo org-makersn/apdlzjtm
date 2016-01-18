@@ -20,9 +20,7 @@ namespace Makers.Admin.Controllers
         MemberDac _memberDac = new MemberDac();
         NoticesDac _noticeDac = new NoticesDac();
 
-        private MenuModel menuModel = new MenuModel();
-
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Member";
             menuModel.MainIndex = 1;
@@ -417,7 +415,7 @@ namespace Makers.Admin.Controllers
             ViewData["Group"] = MenuModel(4);
             StorePrintingCompanyT storePrintingCom = new StorePrintingCompanyT();
             storePrintingCom.Name = Name;
-            storePrintingCom.PhoneNum = PhoneNum;
+            storePrintingCom.OfficePhone = PhoneNum;
             storePrintingCom.Addr1 = Addr1;
             storePrintingCom.Addr2 = Addr2;
             storePrintingCom.PostCode = PostNum;

@@ -10,9 +10,7 @@ namespace Makers.Admin.Controllers
     [Authorize]
     public class AdminController : BaseController
     {
-        private MenuModel menuModel = new MenuModel();
-
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Admin";
             menuModel.MainIndex = 7;

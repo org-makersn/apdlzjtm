@@ -19,14 +19,14 @@ namespace Makers.Admin.Controllers
         ArticleDac articleDac = new ArticleDac();
         PrinterDac _printerDac = new PrinterDac();
         MemberDac memberDac = new MemberDac();
-        private MenuModel menuModel = new MenuModel();
         PrinterModelDac _printerModelDac = new PrinterModelDac();
         PrinterOurputImgDac _printerOuputimgDac = new PrinterOurputImgDac();
         OrderDac _orderDac = new OrderDac();
         MessageDac _messageDac = new MessageDac();
         PrinterNoticeDac _PrinterNoticeDac = new PrinterNoticeDac();
         OrderAccountingDac _orderAccountingDac = new OrderAccountingDac();
-        public MenuModel MenuModel(int subIndex)
+
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Printing";
             menuModel.MainIndex = 3;

@@ -9,20 +9,17 @@ namespace Net.Framework.StoreModel
     {
         [Key]
         [Column("NO")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int No { get; set; }
 
-        //[Column("MEMBER_NO")]
-        //public virtual int MemberNo { get; set; }
         [Column("NAME")]
         public virtual string Name { get; set; }
         [Column("PRICE")]
         public virtual int Price { get; set; }
         [Column("SLICE_YN")]
         public virtual string SliceYn{ get; set; }
-        [Column("VIEW_IMG")]
-        public virtual string ViewImg { get; set; }
-        [Column("MAT_IMG")]
-        public virtual string MatImg { get; set; }
+        [Column("IMAGE_NAME")]
+        public virtual string ImageName { get; set; }
         [Column("SORT")]
         public virtual int Sort { get; set; }
         [Column("REG_DT")]

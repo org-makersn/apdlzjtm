@@ -12,8 +12,11 @@ namespace Makers.Admin.Controllers
         public static string UserNm;
         private ProfileModel profileModel;
 
+        public MenuModel menuModel = null;
+
         public BaseController()
         {
+            menuModel = new MenuModel();
             //var user = System.Web.HttpContext.Current.User;
             //UserNm = user.Identity.Name;
             UserNm = Profile.UserNm;

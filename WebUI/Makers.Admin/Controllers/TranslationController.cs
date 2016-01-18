@@ -15,15 +15,12 @@ namespace Makers.Admin.Controllers
     [Authorize]
     public class TranslationController : BaseController
     {
-
-        private MenuModel menuModel = new MenuModel();
-
         TranslationDac _translationDac = new TranslationDac();
         TranslationDetailDac _translationDetailDac = new TranslationDetailDac();
         ArticleDac _articleDac = new ArticleDac();
         ArticleFileDac _articleFileDac = new ArticleFileDac();
 
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Trans";
             menuModel.MainIndex = 6;

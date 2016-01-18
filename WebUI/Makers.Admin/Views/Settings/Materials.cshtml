@@ -1,0 +1,67 @@
+﻿@model PagedList.IPagedList<StoreMaterialT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Materials";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="contents_zone" style="width: 1004px;">
+    <h2 class="contents_title">Materials</h2>
+
+    <div class="right_float_wrap">
+        <div class="left"><strong>@ViewData["cnt"]</strong> 의 리스트</div>
+    </div>
+
+    <div class="btn_right">
+        <span class="btnWrap medium"><a href="/Store/PrinterInsert" class="_btn_write">등록</a></span>
+    </div>
+
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="8%" />
+            <col width="20%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="*" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>순번</th>
+                <th>재료명</th>
+                <th>단위가격</th>
+                <th>슬라이싱 여부</th>
+                <th>sort</th>
+                <th>이미지</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if ((int)ViewData["cnt"] > 0)
+            {
+                foreach (var material in Model)
+                {
+                <tr>
+                    <td>@material.No</td>
+                    <td>@material.Name</td>
+                    <td>@material.Price</td>
+                    <td>@material.SliceYn</td>
+                    <td>@material.Sort</td>
+                    <td></td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;"> 제품이 없습니다.</td>
+                </tr>	
+            }
+        </tbody>
+    </table>
+    <!-- page_navi -->
+    <div class="page_navi">
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+    </div>
+    <!-- // page_navi -->
+</div>

@@ -13,8 +13,8 @@ namespace Net.Framework.StoreModel
 
         [Column("NAME")]
         public virtual string Name { get; set; }
-        [Column("PHONE_NUM")]
-        public virtual string PhoneNum { get; set; }
+        [Column("OFFICE_PHONE")]
+        public virtual string OfficePhone { get; set; }
         [Column("ADDR1")]
         public virtual string Addr1 { get; set; }
         [Column("ADDR2")]

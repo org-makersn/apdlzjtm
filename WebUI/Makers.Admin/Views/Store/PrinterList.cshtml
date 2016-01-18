@@ -1,7 +1,8 @@
-﻿@model PagedList.IPagedList<Net.Framework.StoreModel.StorePrinterT>
+﻿@model PagedList.IPagedList<StorePrinterT>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "PrinterList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="contents_zone">
@@ -44,19 +45,20 @@
         <caption>리스트 게시판</caption>
         <colgroup>
             <col width="8%" />
-            <col width="10%" />
-            <col width="*" />
-            <col width="10%" />
+            <col width="20%" />
             <col width="15%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="*" />
         </colgroup>
         <thead>
             <tr>
                 <th>제품번호</th>
-                <th>제품명</th>
-                <th>파일명</th>
-                <th>모델부피</th>
-                <th>슬라이싱 된 부피</th>
-                <th>관리</th>
+                <th>프린터명</th>
+                <th>x size</th>
+                <th>y size</th>
+                <th>z size</th>
+                <th>프린터 업체</th>
             </tr>
         </thead>
         <tbody>
@@ -77,8 +79,7 @@
                     <td>@p.SizeX</td>
                     <td>@p.SizeY</td>
                     <td>@p.SizeZ</td>
-                    <td>@p.PrintingCompanyNo</td>>
-                    
+                    <td>@p.PrintingCompanyNo</td>
                 </tr>
                 }
             }
@@ -88,8 +89,6 @@
                     <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;"> 제품이 없습니다.</td>
                 </tr>	
             }
-
-
         </tbody>
     </table>
     <!-- page_navi -->

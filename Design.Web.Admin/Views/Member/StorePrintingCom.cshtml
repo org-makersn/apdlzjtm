@@ -5,10 +5,10 @@
 }
 
 
-<h2 class="contents_title">스토어 회원정보</h2>
 
 <div class="contents_zone" style="width: 950px;">
 
+    <h2 class="contents_title">스토어 회원정보</h2>
     <form id="search" name="search">
         <input type="hidden" id="date" name="date">
         <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
@@ -18,7 +18,7 @@
             </colgroup>
             <caption>게시판</caption>
             <tbody>
-               @* <tr>
+                @* <tr>
                     <th scope="row">가입일</th>
                     <td>
                         <input type="text" id="sdate" name="sdate" value="@ViewData["startDt"]" readonly="readonly" class="input_text" style="width: 106px; margin-right: 5px" />
@@ -48,8 +48,6 @@
         <span class="btnWrap medium" id="btnSearch"><a href="javascript:memberList.Search()">검색</a></span>
         <span class="btnWrap medium" id="btnClear"><a href="/StoreMember">초기화</a></span>
     </div>
-
-
 
     <div class="btn_right">
         <span class="btnWrap medium"><a href="/Member/StorePrintingComInsert" class="_btn_write">등록</a></span>
@@ -92,7 +90,7 @@
                 //byte[] ayData = System.Text.Encoding.Default.GetBytes("" + printingCompany.No);
                 //string tobase = Convert.ToBase64String(ayData);
                 //string tobase = member.No.ToString("G");
-                <tr>     
+                <tr>
                     <td>@printingCompany.Name</td>
                     <td>@printingCompany.PhoneNum</td>
                     <td>@printingCompany.Addr1</td>
@@ -102,9 +100,6 @@
                     <td>@printingCompany.Url</td>
                 </tr>   
             }
-
-
-
         </tbody>
     </table>
 
@@ -157,7 +152,7 @@
             location.replace("/Member/StorePrintingCom?startDt=" + startDt + "&endDt=" + endDt + "&" + option + "=" + text);
             //Ajax.SyncPostService("/Member/index", data);
         }
-        
+
 
 
         $(document).ready(function () {

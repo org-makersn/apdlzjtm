@@ -76,9 +76,10 @@
                     <td class="ta_left"><a href="javascript:Banner.GoEdit(@p.No)" class="_btn_edit" id="title">@p.ProductName</a></td>
                     <td>@p.FileName</td>
                     <td>@p.ObjectVolume</td>
-                    <td>@p.MaterialVolume</td>>
-                    
-                    <td>@if (ViewData["certificateType"].ToString().Equals("1"))
+                    <td>@p.MaterialVolume</td>
+
+                    <td>
+                        @if (ViewData["certificateType"].ToString().Equals("1"))
                         {
                             <button onclick="javascript:accept(@p.No)">승인</button> 
                             <button onclick="javascript:reject(@p.No)">거부</button>
@@ -89,18 +90,15 @@
                         }
 
                     </td>
-                    
                 </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;"> 제품이 없습니다.</td>
+                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;">제품이 없습니다.</td>
                 </tr>	
             }
-
-
         </tbody>
     </table>
     <!-- page_navi -->
@@ -108,7 +106,7 @@
         @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
     </div>
     <!-- // page_navi -->
-   @* <!-- btn -->
+    @* <!-- btn -->
     <div class="btn_right">
         <span class="btnWrap medium"><a href="#" id="AddBanner" class="_btn_write">등록</a></span>
     </div>
@@ -117,11 +115,9 @@
 </div>
 
 
-
-
 @section Scripts{
     <script type="text/javascript">
-      
+
 
         $(document).ready(function () {
             $("#search_btn").click(function () {
@@ -152,8 +148,6 @@
                 location.reload(true);
             }
         }
-
-
 
         //ArticleRecommendRequest.visibility = function (val) {
         //    var no = "";

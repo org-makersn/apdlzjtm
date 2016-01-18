@@ -417,7 +417,7 @@ namespace Design.Web.Admin.Controllers
             ViewData["Group"] = MenuModel(4);
             StorePrintingCompanyT storePrintingCom = new StorePrintingCompanyT();
             storePrintingCom.Name = Name;
-            storePrintingCom.PhoneNum = PhoneNum;
+            storePrintingCom.OfficePhone = PhoneNum;
             storePrintingCom.Addr1 = Addr1;
             storePrintingCom.Addr2 = Addr2;
             storePrintingCom.PostCode = PostNum;

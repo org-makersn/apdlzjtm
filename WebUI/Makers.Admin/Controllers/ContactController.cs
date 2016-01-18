@@ -15,9 +15,7 @@ namespace Makers.Admin.Controllers
     {
         ContactDac cd = new ContactDac();
 
-        private MenuModel menuModel = new MenuModel();
-
-        public MenuModel MenuModel(int subIndex)
+        private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
             menuModel.MainIndex = 5;

@@ -9,6 +9,7 @@ namespace Net.Framework.StoreModel
     {
         [Key]
         [Column("NO")]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public virtual long No { get; set; }
 
         [Column("PRODUCT_NO")]
