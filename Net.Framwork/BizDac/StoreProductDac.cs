@@ -144,11 +144,6 @@ namespace Net.Framwork.BizDac
             var states = dbHelper.ExecuteMultiple<StoreProductExT>(query);
 
             //IEnumerable<StoreProductT> list = states != null ? states.ToList() : null;
-            //foreach (var item in list)
-            //{
-            //    string mit = item.USE_YN.Value.ToString();
-            //}
-            //return list;
 
             using (dbContext = new StoreContext())
             {

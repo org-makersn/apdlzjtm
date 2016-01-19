@@ -2,20 +2,20 @@
 @{
     
     ViewBag.Title = "StoreMemberRegister";
-    
+
     IList<StoreMemberT> _StoreMemberList = ViewBag.StoreMemberList;
 }
 
 
 
 <form id="insert_form" method="post" enctype="multipart/form-data">
-    <input type="text" name="memberNo"      id="memberNo" value="1" />맴버no 
+    <input type="text" name="memberNo" id="memberNo" value="1" />맴버no 
     <br />
-    <input type="text" name="StoreName"     id="StoreName" value="1" />스토어명 
+    <input type="text" name="StoreName" id="StoreName" value="1" />스토어명 
     <br />
-    <input type="text" name="TelNo"         id="TelNo" value="1" />전화 번호
+    <input type="text" name="TelNo" id="TelNo" value="1" />전화 번호
     <br />
-    <input type="text" name="CellPhone"   id ="CellPhone" value="1" />휴대폰번호
+    <input type="text" name="CellPhone" id="CellPhone" value="1" />휴대폰번호
     
     <input type="text" name="StoreProfileMsg" id="StoreProfileMsg" value="1" />스토어프로필 메시지
     <br />
@@ -40,7 +40,7 @@
 @{
     foreach (StoreMemberT storeMember in _StoreMemberList)
     {
-    <form id="MemberList_@storeMember.No" method="post" enctype="multipart/form-data">
+    <form id="MemberList_@storeMember.NO" method="post" enctype="multipart/form-data">
         맴버no        
         <input type="text"     name="memberNo"          value="@storeMember.MEMBER_NO">
         스토어명                         
@@ -67,9 +67,9 @@
         <input type="button" value="삭제" onclick="StoreMemberDelete("@storeMember.NO")" />
         @if (ViewBag.userNo != 0)
         {
-          <input type="button" value="팔러우하기" onclick="Following("@storeMember.MEMBER_NO")" />       
+            <input type="button" value="팔러우하기" onclick="Following("@storeMember.MEMBER_NO")" />       
         }
-        
+
     </form>   
     }    
 }

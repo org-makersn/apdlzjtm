@@ -1,6 +1,7 @@
 ﻿using Library.ObjParser;
 using Makersn.Models;
 using Net.Common.Define;
+using Net.Common.Filter;
 using Net.Common.Helper;
 using Net.Common.Model;
 using Net.Framework.StoreModel;
@@ -35,15 +36,12 @@ namespace Makers.Store.Controllers
         /// <returns></returns>
         public ActionResult Create(string ex)
         {
-            //IList<StoreProductT> testLst = new StoreProductDac().SelectProductTest();
-            new StoreProductDac().SelectProductTest();
-
             return View();
         }
 
-        #region stl upload
+        #region 모델링 업로드
         /// <summary>
-        /// stl upload
+        /// 모델링 업로드
         /// </summary>
         /// <param name="stlupload"></param>
         /// <returns></returns>
@@ -302,6 +300,14 @@ namespace Makers.Store.Controllers
             //return Json(new { Success = true, Result = result }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
+        public ActionResult Details(long no)
+        {
+            string aaa = Md5Encrypt.MD5Hash(no.ToString());
+            string bbb = Md5Encrypt.SHA256Hash(no.ToString());
+
+            return View();
+        }
 
         /// <summary>
         /// 

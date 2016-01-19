@@ -282,6 +282,7 @@
     <Content Include="Content\images\payment\TITLE_01.GIF" />
     <Content Include="Content\images\payment\TITLE_02.GIF" />
     <Content Include="Content\images\payment\TITLE_04.GIF" />
+    <Content Include="Content\plugin_check.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />
@@ -313,6 +314,8 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Product\Models.js" />
     <Content Include="Web.config" />
+    <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -335,7 +338,6 @@
     <Content Include="Views\Product\GetReceivedNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\GetSentNoteListByMemberNo.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
-    <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Product\ProductPricing.cshtml" />
     <Content Include="Views\Product\ProductPrintable.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
@@ -345,6 +347,8 @@
     <Content Include="Views\Cart\List.cshtml" />
     <Content Include="Views\Order\List.cshtml" />
     <Content Include="Views\Cart\plugin_check.cshtml" />
+    <Content Include="Views\Product\Models.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -382,7 +386,7 @@
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
   <PropertyGroup>
