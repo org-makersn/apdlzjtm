@@ -338,6 +338,8 @@
                 productNo: $("#pruduct_no").val()
             }
 
+            console.log(data);
+
             var onSuccess = function (result) {
                 if (result.Success) {
                     var modeling = JSON.parse(result.Result);

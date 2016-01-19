@@ -348,6 +348,7 @@
     <Content Include="Views\Order\List.cshtml" />
     <Content Include="Views\Cart\plugin_check.cshtml" />
     <Content Include="Views\Product\Models.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
