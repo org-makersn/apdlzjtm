@@ -1,15 +1,17 @@
-﻿using Net.Framework;
+﻿using System;
+using Net.Framework;
+using Net.Framwork.Helper;
 using Net.Framework.StoreModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using Net.SqlTools;
 
 namespace Net.Framwork.BizDac
 {
-    public class StoreOrderDac
+    public class StoreOrderDac : DacBase
     {
         #region 전역변수
         private static StoreContext dbContext;
@@ -47,30 +49,13 @@ namespace Net.Framwork.BizDac
         internal List<OrderInfo> GetOrderList(int memberNo)
         {
             List<OrderInfo> orderInfoList = new List<OrderInfo>();
+            string query = DacHelper.GetSqlCommand("StoreOrder.SelectOrderList_S");
 
-            string query = @"SELECT
-	                        SC.CART_NO,
-	                        SC.PRODUCT_DETAIL_NO,
-	                        SP.NAME AS PRODUCT_NAME,
-	                        SM.NAME,
-	                        SP.FILE_SIZE,
-	                        SP.MATERIAL_VOLUME,
-	                        SP.OBJECT_VOLUME,
-	                        SP.SIZE_X,
-	                        SP.SIZE_Y,
-	                        ISNULL(SPD.TOTAL_PRICE, 0) AS TOTAL_PRICE,
-	                        ISNULL(SC.PRODUCT_CNT, 0) AS PRODUCT_CNT,	
-	                        ISNULL(SPD.TOTAL_PRICE, 0) * ISNULL(SC.PRODUCT_CNT, 0) AS PAYMENT_PRICE,
-	                        3000 AS SHIPPING_PRICE -- 배송비
-                        FROM STORE_CART AS SC WITH(NOLOCK) 
-                        INNER JOIN STORE_PRODUCT_DETAIL AS SPD WITH(NOLOCK) ON SC.PRODUCT_DETAIL_NO=SPD.NO
-                        INNER JOIN STORE_PRODUCT AS SP WITH(NOLOCK) ON SPD.PRODUCT_NO=SP.NO
-                        LEFT JOIN STORE_MATERIAL AS SM WITH(NOLOCK) ON SPD.MATERIAL_NO=SM.NO 
-                        WHERE SC.ORDER_YN IS NULL
-                        AND SC.MEMBER_NO = @memberNo ";
-
-            IEnumerable<OrderInfo> data = dbContext.Database.SqlQuery<OrderInfo>(query);
-            orderInfoList = data.ToList();
+            using (dbContext = new StoreContext())
+            {
+                orderInfoList = dbContext.Database.SqlQuery<OrderInfo>(query,
+                    new SqlParameter("MEMBER_NO", memberNo)).ToList();
+            }
 
             return orderInfoList;
         }

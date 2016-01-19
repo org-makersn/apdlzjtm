@@ -18,7 +18,7 @@ namespace Net.Framwork.BizDac
         public int InsertCart(StoreCartT data)
         {
             // 장바구니에 미 주문 상품이 있는지 체크
-            List<StoreCartT> storeCartList = new List<StoreCartT>();
+            List<StoreCartInfo> storeCartList = new List<StoreCartInfo>();
             storeCartList = new StoreCartDac().GetStoreCartByMemberNo(data.MemberNo);
             int cartGoodsCnt = storeCartList.Count;
             int result = 0;
@@ -26,8 +26,12 @@ namespace Net.Framwork.BizDac
             // 미 주문 상품이 없으면 장바구니번호 생성
             if (cartGoodsCnt == 0)
             {
-                //data.CART_NO = new StoreCartDac().GetCreateCartNo();
-                data.CartNo = "1000000000";
+                data.CartNo = new StoreCartDac().GetCreateCartNo();
+                //data.CartNo = "1000000000";
+            }
+            else
+            {
+                data.CartNo = storeCartList[0].CART_NO;
             }
 
             result = new StoreCartDac().InsertStoreCart(data);
@@ -42,9 +46,9 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="memberNo"></param>
         /// <returns></returns>
-        public List<StoreCartT> GetStoreCartListByMemberNo(int memberNo)
+        public List<StoreCartInfo> GetStoreCartListByMemberNo(int memberNo)
         {
-            List<StoreCartT> data = new List<StoreCartT>();
+            List<StoreCartInfo> data = new List<StoreCartInfo>();
 
             data = new StoreCartDac().GetStoreCartByMemberNo(memberNo);
 

@@ -1,5 +1,5 @@
 ﻿@using Net.Framework.StoreModel
-@model IList<OrderInfo>
+@model List<OrderInfo>
 @{
     ViewBag.Title = "List";    
 }
@@ -102,6 +102,7 @@
                 <td>OBJECT_VOLUME</td>
                 <td>SIZE_X</td>
                 <td>SIZE_Y</td>
+                <td>SIZE_Z</td>
                 <td>판매가</td>    
                 <td>갯수</td>      
                 <td>결제비용</td>  
@@ -111,21 +112,22 @@
         @foreach (OrderInfo data in Model)
         {
             <tr>
-                <td>@data.ProductDetailNo</td>
-                <td>@data.ProductName</td>
-                <td>@data.Name</td>
-                <td>@data.FIleSize</td>
-                <td>@data.MaterialVolume</td>
-                <td>@data.ObjectVolume</td>
-                <td>@data.SIzeX</td>
-                <td>@data.SizeY</td>
-                <td>@data.TotalPrice</td>
-                <td>@data.ProductCnt</td>
-                <td>@data.PaymentPrice</td>
-                <td>@data.ShippingPrice</td>
+                <td>@data.PRODUCT_DETAIL_NO</td>
+                <td>@data.PRODUCT_NAME</td>
+                <td>@data.NAME</td>
+                <td>@data.FILE_SIZE</td>
+                <td>@data.MATERIAL_VOLUME</td>
+                <td>@data.OBJECT_VOLUME</td>
+                <td>@data.SIZE_X</td>
+                <td>@data.SIZE_Y</td>
+                <td>@data.SIZE_Z</td>
+                <td>@data.TOTAL_PRICE</td>
+                <td>@data.PRODUCT_CNT</td>
+                <td>@data.PAYMENT_PRICE</td>
+                <td>@data.SHIPPING_PRICE</td>
             </tr>
-            cartNo = data.CartNo;
-            totPaymoney += data.TotalPrice;
+            cartNo = data.CART_NO;
+            totPaymoney += (data.TOTAL_PRICE * data.PRODUCT_CNT) + data.SHIPPING_PRICE;
         }
     </table>
 

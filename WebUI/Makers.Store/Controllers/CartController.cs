@@ -25,7 +25,7 @@ namespace Makers.Store.Controllers
         public ActionResult List()
         {
             int memberNo = 1; // admin
-            List<StoreCartT> storeCartList = new List<StoreCartT>();
+            List<StoreCartInfo> storeCartList = new List<StoreCartInfo>();
             storeCartList = new StoreCartBiz().GetStoreCartListByMemberNo(memberNo);
             
             return View(storeCartList);
@@ -49,6 +49,7 @@ namespace Makers.Store.Controllers
             storeCartT.ProductCnt = cnt;
             storeCartT.ProductDetailNo = 1;
             storeCartT.RegDt = DateTime.Now;
+            storeCartT.RegId = "admin";
 
             int result = new StoreCartBiz().InsertCart(storeCartT);
 

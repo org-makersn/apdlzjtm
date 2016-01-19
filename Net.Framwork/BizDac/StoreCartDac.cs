@@ -1,15 +1,17 @@
 ﻿using Net.Framework;
 using Net.Framework.StoreModel;
+using Net.Framwork.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace Net.Framwork.BizDac
 {
-    public class StoreCartDac
+    public class StoreCartDac : DacBase
     {
         #region 전역변수
         private static StoreContext dbContext;
@@ -21,47 +23,21 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="memberNo"></param>
         /// <returns></returns>
-        internal List<StoreCartT> GetStoreCartByMemberNo(int memberNo)
+        internal List<StoreCartInfo> GetStoreCartByMemberNo(int memberNo)
         {
             // 장바구니 get
-            List<StoreCartT> storeCartList = new List<StoreCartT>();
-            memberNo = 1;
+            List<StoreCartInfo> list = new List<StoreCartInfo>();
+            string query = DacHelper.GetSqlCommand("StoreCart.SelectCartList_S");
+
+            //var states = dbHelper.ExecuteMultiple<StoreCartInfo>(query);
 
             using (dbContext = new StoreContext())
             {
-
-                string query = @"
-                            SELECT 
-                             SC.NO,
-                             SC.CART_NO,
-                             SC.MEMBER_NO,
-                             M.NAME,
-                             SP.NAME AS PRODUCT_NAME,
-                             SPD.TOTAL_PRICE,
-                             SPD.NO AS PRODUCT_DETAIL_NO,
-                             SC.ORDER_YN,
-                             SC.PRODUCT_CNT,
-                             SC.REG_DT,
-                             SC.REG_ID,
-                             SC.UPD_DT,
-                             SC.UPD_ID   
-                             FROM STORE_CART AS SC WITH(NOLOCK)
-                             LEFT JOIN STORE_PRODUCT_DETAIL AS SPD WITH(NOLOCK) ON SC.PRODUCT_DETAIL_NO=SPD.NO
-                             INNER JOIN STORE_PRODUCT AS SP WITH(NOLOCK) ON SPD.PRODUCT_NO = SP.NO
-                             INNER JOIN MEMBER AS M WITH(NOLOCK) ON SC.MEMBER_NO=M.NO
-                            WHERE SC.MEMBER_NO = @memberNo
-                            AND ORDER_YN IS NULL ";
-
-                using (dbContext = new StoreContext())
-                {                    
-                    IEnumerable<StoreCartT> data = dbContext.Database.SqlQuery<StoreCartT>(query,
-                        new SqlParameter("memberNo", memberNo));
-                    storeCartList = data.ToList();
-                }
-
+                list = dbContext.Database.SqlQuery<StoreCartInfo>(query,
+                    new SqlParameter("MEMBER_NO", memberNo)).ToList();                
             }
 
-            return storeCartList;
+            return list;
         }
         #endregion 
 
@@ -140,14 +116,11 @@ namespace Net.Framwork.BizDac
         {
             string newCartNo = "";
 
+            string query = DacHelper.GetSqlCommand("StoreCart.SelectCartList_S");
+
             using (dbContext = new StoreContext())
             {
-                string query = @"
-                                SELECT 
-	                                MAX(CART_NO) + 1 AS MAX_CART_NO
-                                FROM STORE_CART WITH(NOLOCK) ";
-
-                newCartNo = dbContext.Database.SqlQuery<Int64>(query).ToString();
+                newCartNo = dbContext.Database.SqlQuery<string>(query).ToString();
             }
 
             return newCartNo;

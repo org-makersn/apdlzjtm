@@ -33,7 +33,7 @@ namespace Makers.Store.Controllers
             master.EncResult = StartChkFake(); // 페이지 위변조 체크
             master.OrderInfoList = GetOrderList(1); // admin으로 조회        
 
-            return View(master);
+            return View(master.OrderInfoList);
         }
 
         #region GetOrderList - 주문정보 Get

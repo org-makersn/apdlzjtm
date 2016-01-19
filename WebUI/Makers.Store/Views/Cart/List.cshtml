@@ -1,5 +1,5 @@
 ﻿@using Net.Framework.StoreModel
-@model IList<StoreCartT>
+@model List<StoreCartInfo>
 @{
     ViewBag.Title = "List";
 }
@@ -29,16 +29,16 @@
                 <td>갯수</td>      
                 <td>주문여부</td>  
             </tr>
-        @foreach (StoreCartT data in Model)
+        @foreach (StoreCartInfo data in Model)
         {
             <tr>
-                <td>@data.ProductDetailNo</td>
-                <td>가격</td>
-                <td>@data.ProductCnt</td>
-                <td>@data.OrderYn</td>
+                <td>@data.PRODUCT_NAME</td>
+                <td>@data.TOTAL_PRICE</td>
+                <td>@data.PRODUCT_CNT</td>
+                <td>@data.ORDER_YN</td>
             </tr>
-            cartNo = data.CartNo;
-            totPaymoney += 1000; // total price
+            cartNo = data.CART_NO;
+            totPaymoney += (data.TOTAL_PRICE * data.PRODUCT_CNT); // total price
         }
     </table>
 

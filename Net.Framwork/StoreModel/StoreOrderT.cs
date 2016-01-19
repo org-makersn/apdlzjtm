@@ -8,8 +8,8 @@ namespace Net.Framework.StoreModel
     [Table("STORE_ORDER")]
     public class StoreOrderT
     {
-        [Key]
-        [Column("NO")]
+        [Key, Column("NO")]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public virtual Int64 No { get; set; }
 
         [Column("OID")]
@@ -91,8 +91,8 @@ namespace Net.Framework.StoreModel
     [Table("STORE_ORDER_DETAIL")]
     public class StoreOrderDetailT
     {
-        [Key]
-        [Column("NO")]
+        [Key, Column("NO")]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public virtual Int64 No { get; set; }
 
         [Column("ORDER_MASTER_NO")]
@@ -140,37 +140,22 @@ namespace Net.Framework.StoreModel
         public virtual EncResult EncResult{get; set;}
     }
 
-    [Table("ORDER_INFO")]
     public class OrderInfo
     {
-        [Key]
-        [Column("CART_NO")]
-        public virtual string CartNo { get; set; }
-
-        [Column("PRODUCT_DETAIL_NO")]
-        public virtual Int64 ProductDetailNo { get; set; }
-        [Column("PRODUCT_NAME")]
-        public virtual string ProductName { get; set; }
-        [Column("NAME")]
-        public virtual string Name { get; set; }
-        [Column("FILE_SIZE")]
-        public virtual int FIleSize { get; set; }
-        [Column("MATERIAL_VOLUME")]
-        public virtual string MaterialVolume { get; set; }
-        [Column("OBJECT_VOLUME")]
-        public virtual string ObjectVolume { get; set; }
-        [Column("SIZE_X")]
-        public virtual float SIzeX { get; set; }
-        [Column("SIZE_Y")]
-        public virtual float SizeY { get; set; }
-        [Column("TOTAL_PRICE")]
-        public virtual int TotalPrice { get; set; }
-        [Column("PRODUCT_CNT")]
-        public virtual int ProductCnt { get; set; }
-        [Column("PAYMENT_PRICE")]
-        public virtual int PaymentPrice { get; set; }
-        [Column("SHIPPING_PRICE")]
-        public virtual int ShippingPrice { get; set; }    
+        public virtual string CART_NO { get; set; }
+        public virtual Int64 PRODUCT_DETAIL_NO { get; set; }
+        public virtual string PRODUCT_NAME { get; set; }
+        public virtual string NAME { get; set; }
+        public virtual double FILE_SIZE { get; set; }
+        public virtual double MATERIAL_VOLUME { get; set; }
+        public virtual double OBJECT_VOLUME { get; set; }
+        public virtual double SIZE_X { get; set; }
+        public virtual double SIZE_Y { get; set; }
+        public virtual double SIZE_Z { get; set; }
+        public virtual int TOTAL_PRICE { get; set; }
+        public virtual int PRODUCT_CNT { get; set; }
+        public virtual int PAYMENT_PRICE { get; set; }
+        public virtual int SHIPPING_PRICE { get; set; }    
     }
 
     public class EncResult

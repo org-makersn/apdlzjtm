@@ -13,21 +13,32 @@ namespace Net.Framwork.Helper
         /// <returns></returns>
         public static string GetSqlCommand(string _query)
         {
+            string result = "";
             Assembly _assembly = Assembly.GetExecutingAssembly();
 
-            StreamReader _textStreamReader;
             try
             {
                 string _nameSpace = _assembly.GetName().Name;
                 string _text = string.Format("{0}.SqlCmd.{1}.sql", _nameSpace, _query);
-                _textStreamReader = new StreamReader(_assembly.GetManifestResourceStream(_text));
+
+                using (StreamReader reader = new StreamReader(_assembly.GetManifestResourceStream(_text)))
+                {
+                    string line = reader.ReadLine();
+
+                    while (line != null)
+                    {
+                        result += line + " ";
+                        line = reader.ReadLine();
+                    }
+                }
+
             }
             catch (Exception)
             {
                 throw;
             }
 
-            return _textStreamReader.ReadLine();
+            return result;
         }
 
     }
