@@ -15,19 +15,27 @@ namespace Net.Framwork.Helper
         {
             Assembly _assembly = Assembly.GetExecutingAssembly();
 
-            StreamReader _textStreamReader;
+            string strBuff = "";
+            string strBuffTemp = "";
             try
             {
                 string _nameSpace = _assembly.GetName().Name;
                 string _text = string.Format("{0}.SqlCmd.{1}.sql", _nameSpace, _query);
-                _textStreamReader = new StreamReader(_assembly.GetManifestResourceStream(_text));
+
+                using (StreamReader sr = new StreamReader(_assembly.GetManifestResourceStream(_text)))
+                {
+                    while ((strBuffTemp = sr.ReadLine()) != null)
+                    {
+                        strBuff += strBuffTemp + " ";
+                    }
+                }
             }
             catch (Exception)
             {
                 throw;
             }
 
-            return _textStreamReader.ReadLine();
+            return strBuff;
         }
 
     }
