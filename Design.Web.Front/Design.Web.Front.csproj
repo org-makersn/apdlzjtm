@@ -265,7 +265,9 @@
     <Content Include="Content\images\common\bg_line2.gif" />
     <Content Include="Content\images\common\bg_line3.gif" />
     <Content Include="Content\images\common\bg_search_line.gif" />
+    <Content Include="Content\images\common\bottomShadow.png" />
     <Content Include="Content\images\common\btnThumnail.png" />
+    <Content Include="Content\images\common\btn\bottomShadow.png" />
     <Content Include="Content\images\common\btn\btnArrowLeft.png" />
     <Content Include="Content\images\common\btn\btnDelImg.png" />
     <Content Include="Content\images\common\btn\btnReportClose.png" />
@@ -467,6 +469,8 @@
     <Content Include="Scripts\GithubRender\3d-0111bb2d.js" />
     <Content Include="Scripts\GithubRender\3d-cec88640.css" />
     <Content Include="Areas\Common\Views\web.config" />
+    <Content Include="Content\css\NanumBarunGothicLight.ttf" />
+    <Content Include="Content\css\NanumBarunGothicLight.woff" />
     <None Include="Properties\PublishProfiles\디자인 프론트페이지.pubxml" />
     <Content Include="MailFormat.xml" />
     <Content Include="Scripts\ajaxfileupload.js" />
