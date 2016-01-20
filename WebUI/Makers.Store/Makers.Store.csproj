@@ -314,8 +314,6 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Product\Models.js" />
     <Content Include="Web.config" />
-    <SubType>Designer</SubType>
-    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -349,6 +347,8 @@
     <Content Include="Views\Cart\plugin_check.cshtml" />
     <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Order\PostNo.cshtml" />
+    <Content Include="Views\Order\PopPostInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -386,7 +386,7 @@
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
   <PropertyGroup>

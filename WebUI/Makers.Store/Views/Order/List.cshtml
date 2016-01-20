@@ -1,7 +1,9 @@
 ﻿@using Net.Framework.StoreModel
-@model List<OrderInfo>
+@model OrderMaster
 @{
-    ViewBag.Title = "List";    
+    ViewBag.Title = "주문상세";
+    OrderMaster m = new OrderMaster();
+    m.OrderInfoList = Model.OrderInfoList;
 }
 @section Scripts{
 <!-------------------------------------------------------------------------------                                        
@@ -109,7 +111,7 @@
                 <td>배송비</td>  
             </tr>
 
-        @foreach (OrderInfo data in Model)
+        @foreach (OrderInfo data in m.OrderInfoList)
         {
             <tr>
                 <td>@data.PRODUCT_DETAIL_NO</td>
@@ -144,7 +146,7 @@
 위변조체크값 <input type="text" value="" id="txtIniRn" />
 </p>
 <p>
-결제금액 <input type="text" value="" id="txtPrice" />
+결제금액 <input type="text" value="@totPaymoney" id="txtPrice" />
 </p>
 <p>
 상품명 <input type="text" value="" id="txtGoodName" />
@@ -237,8 +239,15 @@
 배송주소 상세 <input type="text" value="" id="txtAddr2" />
 </p>
 <p>
-우편번호 <input type="text" value="" id="txtPostNo" />
+우편번호 <input type="text" value="" id="txtPostNo" /> <input type="button" value="검색" id="btnSchPostNo" />
 </p>
 <p>
     <input type="button" id="btnPayRequest" value="결제하기" />
 </p>
+<script type="text/javascript">
+
+    $("#btnSchPostNo").on("click", function () {
+        openerWin("PopPostInfo");
+    })
+
+</script>

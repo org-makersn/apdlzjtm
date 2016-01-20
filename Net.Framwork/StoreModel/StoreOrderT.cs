@@ -160,11 +160,38 @@ namespace Net.Framework.StoreModel
 
     public class EncResult
     {
-        public virtual string resultcode { get; set; }
-        public virtual string resultmsg { get; set; }
-        public virtual string rn_value { get; set; }
-        public virtual string return_enc { get; set; }
-        public virtual string ini_certid { get; set; }
-        public virtual string ini_encfield { get; set; }
+        public virtual string ResultCode { get; set; }
+        public virtual string ResultMsg { get; set; }
+        public virtual string RnValue { get; set; }
+        public virtual string ReturnEnc { get; set; }
+        public virtual string IniCertId { get; set; }
+        public virtual string IniEncField { get; set; }
+    }
+
+    public class PostAddressInfo
+    {
+        public virtual CmmMsgHeader CmmMsgHeader { get; set; }
+        public virtual List<NewAddressListAreaCdSearchAll> AddressList { get; set; }
+    }
+
+    public class CmmMsgHeader
+    {
+        public virtual string RequestMsgId { get; set; }
+        public virtual string ResponseMsgId { get; set; }
+        public virtual string ResponseTime { get; set; }
+        public virtual string SuccessYn { get; set; }
+        public virtual string ReturnCode { get; set; }
+        public virtual string ErrMsg { get; set; }
+        public virtual string TotalCount { get; set; }
+        public virtual string CountPerPage { get; set; }
+        public virtual string TotalPage { get; set; }
+        public virtual string CurrentPage { get; set; }    
+    }
+
+    public class NewAddressListAreaCdSearchAll
+    {
+        public virtual string ZipNo { get; set; }
+        public virtual string LnmAdres { get; set; }
+        public virtual string RnAdres { get; set; }
     }
 }

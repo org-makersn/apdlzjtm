@@ -43,11 +43,12 @@ namespace Makers.Store.Controllers
         public void AddCart()
         {
             int cnt = int.Parse(Request["cnt"]);
+            int productDetailNo = int.Parse(Request["productDetailNo"]);
 
             StoreCartT storeCartT = new StoreCartT();
             storeCartT.MemberNo = 1;
             storeCartT.ProductCnt = cnt;
-            storeCartT.ProductDetailNo = 1;
+            storeCartT.ProductDetailNo = productDetailNo;
             storeCartT.RegDt = DateTime.Now;
             storeCartT.RegId = "admin";
 

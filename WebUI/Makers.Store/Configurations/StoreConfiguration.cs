@@ -16,6 +16,8 @@ namespace Makers.Store.Configurations
         {
             PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfiles";
             Slic3rDir = ConfigurationManager.AppSettings["Slic3rDir"] ?? @"D:\slic3r";
+            ServiceUrl = ConfigurationManager.AppSettings["ServiceUrl"] ?? @"http://openapi.epost.go.kr/postal/retrieveNewAdressAreaCdSearchAllService/retrieveNewAdressAreaCdSearchAllService/getNewAddressListAreaCdSearchAll";
+            ServiceKey = ConfigurationManager.AppSettings["ServiceKey"] ?? @"H7xR5DleYEuhPTFBxnqXc%2B5rkjgzsHQiUUzQCvhp8JVZ2JhMTtRrGq%2FfgqcJ%2B%2BKQ1Rt2q0PyT5%2BnAqMKQ9RKYA%3D%3D";
         }
 
         /// <summary>
@@ -28,5 +30,15 @@ namespace Makers.Store.Configurations
         /// slic3r 폴더 경로
         /// </summary>
         public string Slic3rDir { get; set; }
+
+        /// <summary>
+        /// 우편번호 api 호출 경로
+        /// </summary>
+        public string ServiceUrl { get; set; }
+
+        /// <summary>
+        /// 우편번호 api 호출 key
+        /// </summary>
+        public string ServiceKey { get; set; }
     }
 }

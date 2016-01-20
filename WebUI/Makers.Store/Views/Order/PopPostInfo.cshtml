@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "우편번호찾기";
+}
+@section scripts{
+ 
+<script type="text/javascript">
+
+    $("#btnPostInfoSearch").on("click", function () {
+        var url = "GetPostNo";
+
+        var data = {
+            srchwrd: $("#txtKeyword").val(),
+            countPerPage: 20,
+            currentPage : 1
+
+        }
+
+        var onSuccess = function (result) {
+            if (result.Success) {
+                var postData = JSON.parse(result.Result);
+
+                var CmmMsgHeader = postData.CmmMsgHeader;
+                var AddressList = postData.AddressList;
+                var strList = "";
+                
+                strList += "<table style='border:solid 1px blue;' border='1'>"
+                        + "<tr>"
+                            + "<td>순번</td>"
+                            + "<td>도로명주소</td>"
+                            + "<td>지번주소</td>"
+                            + "<td>우편번호</td>";
+
+                for (var i = 0; i < AddressList.length; i++) {
+                    strList += "<tr>"
+                                + "<td>" + (i+1) + "</td>"
+                                + "<td>" + AddressList[i].LnmAdres + "</td>"
+                                + "<td>" + AddressList[i].RnAdres + "</td>"
+                                + "<td>" + AddressList[i].ZipNo + "</td>"
+                              + "</tr>";
+                }
+
+                strList += "</table>";
+
+                $("#divPostDataList").html(strList);
+                $("#txtTotalPage").val(CmmMsgHeader.TotalPage);
+                $("#txtTotalCount").val(CmmMsgHeader.TotalCount);
+            }
+        }
+        Ajax.AjaxResponseModelService(this, "GetPostInfoData", data, onSuccess);
+
+    })
+
+</script>   
+ }
+<h2>우편번호찾기</h2>
+<div>
+    <input type="text" id="txtKeyword" />
+    <input type="button" value="검색" id="btnPostInfoSearch" />
+    totalPage : <input type="text" id="txtTotalPage" />
+    totalCount : <input type="text" id="txtTotalCount" />
+
+    <div id="divPostDataList"></div>
+</div>
