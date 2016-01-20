@@ -112,7 +112,7 @@
                             <a href="#" onclick="CancleReplyInReply(this, '@articleComment.MemberNo')" style="display:none" class="reply cancel hide">답글 취소</a>
                         </div>
                         <div id="comment_view_@articleComment.No" class="editArea">
-                            <div class="userText _memo">@Html.Raw(filter.HtmlEncode(articleComment.Content))</div>
+                            <div class="userText _memo">@Html.Raw(filter.PunctuationEncode(articleComment.Content))</div>
                             @*<div class="editBtnBox">
                                 @if (ViewBag.MemberNo == articleComment.MemberNo)
                                 {
