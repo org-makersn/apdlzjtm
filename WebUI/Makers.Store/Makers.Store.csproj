@@ -347,8 +347,9 @@
     <Content Include="Views\Cart\plugin_check.cshtml" />
     <Content Include="Views\Product\Models.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
-    <Content Include="Views\Order\PostNo.cshtml" />
     <Content Include="Views\Order\PopPostInfo.cshtml" />
+    <Content Include="Views\Shared\_Layout2.cshtml" />
+    <Content Include="Views\Order\Paging.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

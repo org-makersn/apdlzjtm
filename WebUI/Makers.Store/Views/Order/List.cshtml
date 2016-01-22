@@ -233,13 +233,16 @@
 결제상태 <input type="text" value="" id="txtPaymentStatus" />
 </p>
 <p>
-배송주소 <input type="text" value="" id="txtAddr1" />
+배송주소(도로명) <input type="text" size="50" readonly="readonly" id="txtLnmAddr" />
 </p>
 <p>
-배송주소 상세 <input type="text" value="" id="txtAddr2" />
+배송주소(지번) <input type="text" size="50" readonly="readonly" id="txtRnAddr" />
 </p>
 <p>
-우편번호 <input type="text" value="" id="txtPostNo" /> <input type="button" value="검색" id="btnSchPostNo" />
+배송주소 상세 <input type="text" id="txtAddrDetail" />
+</p>
+<p>
+우편번호 <input type="text" readonly="readonly" id="txtPostNo" /> <input type="button" value="검색" id="btnSchPostNo" />
 </p>
 <p>
     <input type="button" id="btnPayRequest" value="결제하기" />

@@ -27,6 +27,21 @@ namespace Makers.Store.Controllers
             return View();
         }
 
+        public ActionResult PopPostInfo()
+        {
+            return View();
+        }
+
+        public PartialViewResult Paging(int currentPage = 1, int PageSize = 20, int totalCount = 0)
+        {
+            BoardInfo model = new BoardInfo();
+            model.CurrentPage = currentPage;
+            model.PageSize = PageSize;
+            model.TotalCount = totalCount;
+
+            return PartialView(model);
+        }
+
         [HttpPost]
         public ActionResult LIst(FormCollection forms)
         {
@@ -41,12 +56,7 @@ namespace Makers.Store.Controllers
             return View(master);
         }
 
-        public ActionResult PopPostInfo()
-        {
-            return View();
-        }
-
-        #region PostNo - 우편번호 검색
+        #region GetPostInfoData - 우편번호 검색
         /// <summary>
         /// 우편번호 검색
         /// </summary>
@@ -111,6 +121,7 @@ namespace Makers.Store.Controllers
 
             }
 
+            
             return Json(response, JsonRequestBehavior.AllowGet); ;
 
         }

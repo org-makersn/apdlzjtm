@@ -105,6 +105,76 @@ namespace Makers.Store.Helper
             return new HtmlString(output.ToString());
         }
 
+        public static HtmlString PageNavigateForScriptMethod(this HtmlHelper htmlHelper, int currentPage, int pageSize, int totalCount)
+        {
+            var redirectTo = HttpContext.Current.Request.Url.AbsolutePath + "?";
+
+            var rawUrl = HttpContext.Current.Request.RawUrl;
+
+
+            pageSize = pageSize == 0 ? 3 : pageSize;
+            var totalPages = Math.Max((totalCount + pageSize - 1) / pageSize, 1);
+            var output = new StringBuilder();
+            output.Append("<div class='paging'>");
+            if (totalPages > 1)
+            {
+                if (currentPage != 1)
+                {
+                    int tenPre = currentPage - 10 <= 0 ? 1 : currentPage - 10;
+                    output.AppendFormat("<a href='javascript:SearchPostData({0},{1});' class='first_page'>처음 페이지</a>", 1, pageSize);
+                }
+                if (currentPage > 1)
+                {
+                    output.AppendFormat("<a href='javascript:SearchPostData({0},{1});' rel='prev' class='prev_page'>이전 페이지</a>", currentPage - 1, pageSize);
+                }
+
+                output.Append(" ");
+                int currint = 5;
+                int loopTime = 10; // loop time of paging
+
+                if ((currentPage - currint) < 1) // special proceed at begining
+                {
+                    loopTime = loopTime + currint - currentPage;
+                }
+                if ((currentPage + currint) > totalPages)
+                { // special preceed at the end
+                    currint = currint + currint - totalPages + currentPage;
+                }
+
+                for (int i = 0; i <= loopTime; i++)
+                {
+                    if ((currentPage + i - currint) >= 1 && (currentPage + i - currint) <= totalPages)
+                    {
+                        if (currint == i)
+                        {
+                            output.AppendFormat("<a class='paging_no on'>{0}</a>", currentPage);
+                        }
+                        else
+                        {
+                            output.AppendFormat("<a href='javascript:SearchPostData({0},{1});' class='paging_no'>{2}</a>", currentPage + i - currint, pageSize, currentPage + i - currint);
+                        }
+                    }
+
+                    output.Append(" ");
+                }
+                if (currentPage < totalPages)
+                {
+                    output.AppendFormat("<a href='javascript:SearchPostData({0},{1});' rel='next' class='next_page'>다음 페이지</a>", currentPage + 1, pageSize);
+                }
+
+                output.Append(" ");
+                if (currentPage != totalPages)
+                {                   
+                    int tenNext = currentPage + 10 > totalPages ? totalPages : currentPage + 10;
+                    output.AppendFormat("<a href='javascript:SearchPostData({0},{1});' class='last_page'>마지막 페이지</a>", tenNext, pageSize);
+                }
+                output.Append(" ");
+            }
+
+            output.Append("</div>");
+            return new HtmlString(output.ToString());
+        }
+
 
     }
 

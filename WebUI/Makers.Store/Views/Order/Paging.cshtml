@@ -1,0 +1,9 @@
+﻿@using Net.Framework.StoreModel
+@model BoardInfo
+@{
+    Layout = null;
+}
+
+<div class="pagination-container">
+    @Html.PageNavigateForScriptMethod(Model.CurrentPage, Model.PageSize, Model.TotalCount)        
+</div>

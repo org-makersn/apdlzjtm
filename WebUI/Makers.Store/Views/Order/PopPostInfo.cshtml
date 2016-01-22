@@ -1,54 +1,83 @@
-﻿@{
+﻿@using System.Text
+@using System.Web.UI
+@using System.Web.UI.HtmlControls
+@{
     ViewBag.Title = "우편번호찾기";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 @section scripts{
  
 <script type="text/javascript">
 
-    $("#btnPostInfoSearch").on("click", function () {
+    $("#btnPostInfoSearch").on("click", function () {        
+        SearchPostData(1, 20); // 처음 검색 클릭 시
+    })
+
+    function SearchPostData(curIndex, cntPerPage) {
         var url = "GetPostNo";
 
         var data = {
             srchwrd: $("#txtKeyword").val(),
-            countPerPage: 20,
-            currentPage : 1
-
+            countPerPage: cntPerPage,
+            currentPage: curIndex
         }
 
         var onSuccess = function (result) {
-            if (result.Success) {
-                var postData = JSON.parse(result.Result);
-
-                var CmmMsgHeader = postData.CmmMsgHeader;
-                var AddressList = postData.AddressList;
-                var strList = "";
-                
-                strList += "<table style='border:solid 1px blue;' border='1'>"
-                        + "<tr>"
-                            + "<td>순번</td>"
-                            + "<td>도로명주소</td>"
-                            + "<td>지번주소</td>"
-                            + "<td>우편번호</td>";
-
-                for (var i = 0; i < AddressList.length; i++) {
-                    strList += "<tr>"
-                                + "<td>" + (i+1) + "</td>"
-                                + "<td>" + AddressList[i].LnmAdres + "</td>"
-                                + "<td>" + AddressList[i].RnAdres + "</td>"
-                                + "<td>" + AddressList[i].ZipNo + "</td>"
-                              + "</tr>";
-                }
-
-                strList += "</table>";
-
-                $("#divPostDataList").html(strList);
-                $("#txtTotalPage").val(CmmMsgHeader.TotalPage);
-                $("#txtTotalCount").val(CmmMsgHeader.TotalCount);
-            }
+            GeneratePostInfoGrid(result);
         }
         Ajax.AjaxResponseModelService(this, "GetPostInfoData", data, onSuccess);
+    }
 
-    })
+    function GeneratePostInfoGrid(result) {
+        if (result.Success) {
+            var postData = JSON.parse(result.Result);
+
+            var CmmMsgHeader = postData.CmmMsgHeader;
+            var AddressList = postData.AddressList;
+            var strList = "";
+
+            strList += "<table style='border:solid 1px blue;' border='1'>"
+                    + "<tr>"
+                        + "<td>도로명주소</td>"
+                        + "<td>지번주소</td>"
+                        + "<td>우편번호</td>";
+
+            for (var i = 0; i < AddressList.length; i++) {
+                var idObj = "'trAddrInfo" + i + "'";
+                strList += "<tr id='trAddrInfo"+ i +"'>"
+                            + "<td><a href=javascript:selAddr("+ idObj +");>" + AddressList[i].LnmAdres + "</a></td>"
+                            + "<td><a href=javascript:selAddr(" + idObj + ");>" + AddressList[i].RnAdres + "</a></td>"
+                            + "<td>" + AddressList[i].ZipNo + "</td>"
+                          + "</tr>";
+            }
+
+            strList += "</table>";
+
+            $("#divPostDataList").html(strList);
+
+            GetPageNavigate(CmmMsgHeader.TotalPage, CmmMsgHeader.TotalCount, CmmMsgHeader.CurrentPage);
+        }
+    }
+
+    function GetPageNavigate(totPage, totCnt, curPage) {
+        
+        Ajax.SyncGetPartialView("/Order/Paging", { currentPage: curPage, PageSize: 20, totalCount: totCnt }, "divPager");
+    }
+
+    function selAddr(obj) {
+        
+        var aa = $("#" + obj);
+        var lnmAddr = aa.children().eq(0).text();
+        var rnAddr = aa.children().eq(1).text();
+        var zipNo = aa.children().eq(2).text();
+
+        $("#txtLnmAddr", opener.document).val(lnmAddr);
+        $("#txtRnAddr", opener.document).val(rnAddr);
+        $("#txtPostNo", opener.document).val(zipNo);
+
+        self.close();
+    }
+
 
 </script>   
  }
@@ -56,8 +85,7 @@
 <div>
     <input type="text" id="txtKeyword" />
     <input type="button" value="검색" id="btnPostInfoSearch" />
-    totalPage : <input type="text" id="txtTotalPage" />
-    totalCount : <input type="text" id="txtTotalCount" />
-
+    <br /><br />
     <div id="divPostDataList"></div>
+    <div id="divPager"></div>
 </div>
