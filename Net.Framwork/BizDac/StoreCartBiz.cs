@@ -27,7 +27,6 @@ namespace Net.Framwork.BizDac
             if (cartGoodsCnt == 0)
             {
                 data.CartNo = new StoreCartDac().GetCreateCartNo();
-                //data.CartNo = "1000000000";
             }
             else
             {
@@ -54,6 +53,22 @@ namespace Net.Framwork.BizDac
 
             return data;
         }
+        #endregion
+
+        #region DeleteCartByProductDetailNo - 장바구니 삭제
+        /// <summary>
+        /// 장바구니 삭제
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="productDetailNo"></param>
+        /// <returns></returns>
+        public int DeleteCartByCondition(int memberNo, Int64 productDetailNo)
+        {
+            return new StoreCartDac().DeleteCartByCondition(memberNo, productDetailNo);
+        }
+        #endregion
+
+        #region 장바구니 수정
         #endregion
     }
 

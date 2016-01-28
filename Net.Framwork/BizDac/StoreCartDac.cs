@@ -81,28 +81,34 @@ namespace Net.Framwork.BizDac
         /// <param name="memberNo"></param>
         /// <param name="productDetailNo"></param>
         /// <returns></returns>
-        internal void DeleteCartByCondition(int memberNo, Int64 productDetailNo)
+        internal int DeleteCartByCondition(int memberNo, Int64 productDetailNo)
         {
-            //using (ISession session = NHibernateHelper.OpenSession())
-            //{
-            //    using (ITransaction transaction = session.BeginTransaction())
-            //    {
-            //        try
-            //        {
-            //            StoreCartT storeCart = new StoreCartT();
-            //            storeCart.No = productDetailNo;
+            if (productDetailNo == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
-            //            session.Delete(storeCart);
-
-            //            transaction.Commit();
-            //            session.Flush();
-            //        }
-            //        catch (Exception)
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //}
+            int ret = 0;
+            using (dbContext = new StoreContext())
+            {
+                StoreCartT originData = dbContext.StoreCartT.SingleOrDefault(s => s.No == productDetailNo && s.MemberNo == memberNo);
+                if (originData != null)
+                {
+                    try
+                    {
+                        originData.No = productDetailNo;
+                        dbContext.StoreCartT.Remove(originData);
+                        ret = dbContext.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        ret = -1;
+                    }
+                }
+                else
+                {
+                    ret = -2;
+                    throw new NullReferenceException("The expected original Segment data is not here.");
+                }
+            }
+            return ret;
         }
         #endregion
 
@@ -114,16 +120,16 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         internal string GetCreateCartNo()
         {
-            string newCartNo = "";
+            List<int> newCartNo;
 
-            string query = DacHelper.GetSqlCommand("StoreCart.SelectCartList_S");
+            string query = DacHelper.GetSqlCommand("StoreCart.GetMaxCartNo");
 
             using (dbContext = new StoreContext())
             {
-                newCartNo = dbContext.Database.SqlQuery<string>(query).ToString();
+                newCartNo = dbContext.Database.SqlQuery<int>(query).ToList();
             }
 
-            return newCartNo;
+            return newCartNo[0].ToString();
         }
         #endregion
     }

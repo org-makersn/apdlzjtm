@@ -294,17 +294,16 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 <script type="text/JavaScript">
     if (navigator.userAgent.indexOf("Windows NT 6.0") != -1) {
         document.body.innerHTML = othird.innerHTML;
-
     }
     else {
-        var g_fIsSP1 = false;
-        g_fIsSP1 = (window.navigator.appMinorVersion.indexOf("SP2") != -1);
-        if (g_fIsSP1) {
-            document.body.innerHTML = ofirst.innerHTML;
-        }
-        else {
-            document.body.innerHTML = osecond.innerHTML;
-        }
+            var g_fIsSP1 = false;
+            g_fIsSP1 = (window.navigator.appMinorVersion.indexOf("SP2") != -1);
+            if (g_fIsSP1) {
+                document.body.innerHTML = ofirst.innerHTML;
+            }
+            else {
+                document.body.innerHTML = osecond.innerHTML;
+            }        
     }
     StartSmartUpdate();
     function checkPlugin() {

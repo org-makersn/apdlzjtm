@@ -18,6 +18,14 @@
 
 <script type="text/javascript" src="http://plugin.inicis.com/pay61_secuni_cross.js"></script>
 <script type="text/javascript" >
+    $(document).ready(function () {
+        enable_click();
+
+        $("body").on("focusin", function () {
+            focus_control();
+        });
+    })
+
     StartSmartUpdate();
 
     var openwin;
@@ -27,9 +35,9 @@
 	    // 에 값들이 채워지게 됩니다. 일반적인 경우, 플러그인은 결제처리를 직접하는 것이
 	    // 아니라, 중요한 정보를 암호화 하여 Hidden Field의 값들을 채우고 종료하며,
 	    // 다음 페이지인 INIsecurepay.asp로 데이터가 포스트 되어 결제 처리됨을 유의하시기 바랍니다.
-	    if(document.ini.clickcontrol.value == "enable"){
+        if (document.forms.ini.clickcontrol.vaue == "enable") {
 
-		    if(document.ini.goodname.value == "")  // 필수항목 체크 (상품명, 상품가격)
+            if ($("#goodname").val() == "")  // 필수항목 체크 (상품명, 상품가격)
 		    {
 			    alert("상품명이 빠졌습니다. 필수항목입니다.");
 			    return false;
@@ -42,7 +50,7 @@
 		    else{			
 			    if(MakePayMessage(frm)){
 				    disable_click();
-				    openwin = window.open("childwin.html","childwin","width=299,height=149");
+				    openwin = window.open("../content/childwin.html","childwin","width=299,height=149");
 				    return true;
 			    }else{
 				    if( IsPluginModule() ){//plugin타입 체크
@@ -58,16 +66,16 @@
     }
 
     function enable_click(){
-	    document.ini.clickcontrol.value = "enable"
+        document.forms.ini.clickcontrol.vaue = "enable";
     }
 
     function disable_click(){
-	    document.ini.clickcontrol.value = "disable"
+        document.forms.ini.clickcontrol.vaue = "disable";
     }
 
     function focus_control(){
-	    if(document.ini.clickcontrol.value == "disable")
-		    openwin.focus();
+        if (document.forms.ini.clickcontrol.vaue == "disable")
+            openwin.focus();
     }
 </script>
 <script type="text/JavaScript">
@@ -85,11 +93,6 @@
     }
     //-->
 </script> 
- }
-
-@{
-    string cartNo = "";
-    int totPaymoney = 0;
  }
 
 <h2>List</h2>
@@ -128,129 +131,130 @@
                 <td>@data.PAYMENT_PRICE</td>
                 <td>@data.SHIPPING_PRICE</td>
             </tr>
-            cartNo = data.CART_NO;
-            totPaymoney += (data.TOTAL_PRICE * data.PRODUCT_CNT) + data.SHIPPING_PRICE;
         }
     </table>
 
-<p>
-상품주문번호 <input type="text" value="" id="txtOid" />
-</p>
-<p>
-장바구니번호 <input type="text" value="@cartNo" id="txtCartNo" />
-</p>
-<p>
-상점아이디 <input type="text" value="" id="txtMid" />
-</p>
-<p>
-위변조체크값 <input type="text" value="" id="txtIniRn" />
-</p>
-<p>
-결제금액 <input type="text" value="@totPaymoney" id="txtPrice" />
-</p>
-<p>
-상품명 <input type="text" value="" id="txtGoodName" />
-</p>
-<p>
-화폐단위 <input type="text" value="" id="txtCurrency" />
-</p>
-<p>
-스토어URL <input type="text" value="" id="txtUrl" />
-</p>
-<p>
-안심클릭 카드코드 <input type="text" value="" id="txtCardCode" />
-</p>
-<p>
-지불방법 <input type="text" value="" id="txtPayMethod" />
-</p>
-<p>
-암호문 <input type="text" value="" id="txtEncrypted" />
-</p>
-<p>
-세션키 <input type="text" value="" id="txtSessionKey" />
-</p>
-<p>
-지불요청타입 <input type="text" value="" id="txtType" />
-</p>
-<p>
-무이자 설정 여부 <input type="text" value="" id="txtNoInterest" />
-</p>
-<p>
-할부개월 정보설정 <input type="text" value="" id="txtQuotaBase" />
-</p>
-<p>
-구매자 성명 <input type="text" value="" id="txtBuyerName" />
-</p>
-<p>
-구매자 이동전화 <input type="text" value="" id="txtBuyerTel" />
-</p>
-<p>
-구매자 이메일주소 <input type="text" value="" id="txtBuyerEmail" />
-</p>
-<p>
-받는사람 성명 <input type="text" value="" id="txtRecvName" />
-</p>
-<p>
-받는사람 이동전화 <input type="text" value="" id="txtRecvTel" />
-</p>
-<p>
-받는사람 이동전화2 <input type="text" value="" id="txtRecvTel2" />
-</p>
-<p>
-받는사람 주소 <input type="text" value="" id="txtRecvAddr" />
-</p>
-<p>
-받는사람 우편번호 <input type="text" value="" id="txtRecvPostNum" />
-</p>
-<p>
-전달메시지 <input type="text" value="" id="txtRecvMsg" />
-</p>
-<p>
-제휴카드코드 <input type="text" value="" id="txtJoinCard" />
-</p>
-<p>
-제휴카드 유효기간 <input type="text" value="" id="txtJoinExpire" />
-</p>
-<p>
-유저아이디 <input type="text" value="" id="txtUserId" />
-</p>
-<p>
-과세금액 <input type="text" value="" id="txtTax" />
-</p>
-<p>
-면세금액 <input type="text" value="" id="txtTaxFree" />
-</p>
-<p>
-주문취소여부 <input type="text" value="" id="txtOrderCancelYn" />
-</p>
-<p>
-고객번호 <input type="text" value="" id="txtMemberNo" />
-</p>
-<p>
-주문일자 <input type="text" value="" id="txtOrderDate" />
-</p>
-<p>
-결제상태 <input type="text" value="" id="txtPaymentStatus" />
-</p>
-<p>
-배송주소(도로명) <input type="text" size="50" readonly="readonly" id="txtLnmAddr" />
-</p>
-<p>
-배송주소(지번) <input type="text" size="50" readonly="readonly" id="txtRnAddr" />
-</p>
-<p>
-배송주소 상세 <input type="text" id="txtAddrDetail" />
-</p>
-<p>
-우편번호 <input type="text" readonly="readonly" id="txtPostNo" /> <input type="button" value="검색" id="btnSchPostNo" />
-</p>
-<p>
-    <input type="button" id="btnPayRequest" value="결제하기" />
-</p>
+<form id="ini" onsubmit="return pay(this)" method="post">
+    <p>
+        <select id="gopaymethod" name="gopaymethod">
+            <option value="">선택</option>
+            <option value="Card">신용카드</option>
+            <option value="DirectBank">실시간 은행계좌이체</option>
+            <option value="VBank">무통장 입금 </option>
+            <option value="HPP">핸드폰 결제</option>
+        </select>
+    </p>
+    <p>
+    상품명 <input type="text" value="testGoods" id="goodname" name="goodname" />
+    </p>
+    <p>
+    성명 <input type="text" value="홍길동" id="buyername" name="buyername" />
+    </p>
+    <p>
+    구매자 이메일주소 <input type="text" value="sslee@makersi.com" id="buyeremail" name="buyeremail" />
+    </p>
+    <p>
+    구매자 이동전화 <input type="text" value="010-1234-5678" id="buyertel" name="buyertel" />
+    </p>    
+    <p>
+    과세금액 <input type="text" value="" id="tax" name="tax" />
+    </p>
+    <p>
+    면세금액 <input type="text" value="" id="taxfree" name="taxfree" />
+    </p>
+    <p>
+    결제금액 <input type="text" value="@Model.TotalPrice" id="price" name="price" />
+    </p>
+    <p>
+    상품주문번호 <input type="text" value="" id="txtOid" />
+    </p>
+    <p>
+    장바구니번호 <input type="text" value="@Model.StoreCart.CartNo" id="txtCartNo" />
+    </p>
+    <p>
+    화폐단위 <input type="text" value="@Model.Currency" id="currency" name="currency" />
+    </p>
+    <p>
+    스토어URL <input type="text" value="" id="url" name="url" />
+    </p>
+    <p>
+    지불요청타입 <input type="text" value="" id="txtType" />
+    </p>
+    <p>
+    받는사람 성명 <input type="text" value="" id="recvname" name="recvname" />
+    </p>
+    <p>
+    받는사람 이동전화 <input type="text" value="" id="recvtel" name="recvtel" />
+    </p>
+    <p>
+    받는사람 이동전화2 <input type="text" value="" id="recvtel2" name="recvtel2" />
+    </p>
+    <p>
+    전달메시지 <input type="text" value="" id="recvmsg" name="recvmsg" />
+    </p>
+    <p>
+    유저아이디 <input type="text" value="" id="txtUserId" />
+    </p>    
+    <p>
+    고객번호 <input type="text" value="" id="txtMemberNo" />
+    </p>
+    <p>
+    주문일자 <input type="text" value="" id="txtOrderDate" />
+    </p>
+    <p>
+    배송주소(도로명) <input type="text" size="50" readonly="readonly" id="recvaddr" name="recvaddr" />
+    </p>
+    <p>
+    배송주소(지번) <input type="text" size="50" readonly="readonly" id="recvaddr2" name="recvaddr2" />
+    </p>
+    <p>
+    배송주소 상세 <input type="text" id="recvaddrDetail" name="recvaddrDetail" />
+    </p>
+    <p>
+    배송비 <input type="text" id="txtShippingPrice" />
+    </p>
+    <p>
+    우편번호 <input type="text" readonly="readonly" id="recvpostnum" /> <input type="button" value="검색" id="btnSchPostNo" />
+    </p>
+    <p>
+        <input type="button" id="btnPay" name="btnPay" value="결제하기" />
+    </p>
+    @DateTime.Now.AddDays(7).ToShortDateString()
+    <!-- <input type=hidden name=ini_logoimage_url  value="http://[사용할 이미지주소] "/> -->
+    <!-- <input type=hidden name=ini_menuarea_url value="http://[사용할 이미지주소]" /> -->
+    <input type="hidden" id="acceptmethod" name="acceptmethod" value="VERIFY(1056313):SKIN(ORIGINAL):HPP(1):VBANK(20160228)"> 
+    <input type="hidden" id="oid" name="oid" value="Merchant_Order_ID" >
+	<input type="hidden" id="INIregno" name="INIregno" > 
+    <input type="hidden" id="ini_encfield" name="ini_encfield" value="@Model.EncResult.IniEncField" > 
+    <input type="hidden" id="ini_certid" name="ini_certid" value="@Model.EncResult.IniCertId" >
+	<input type="hidden" id="quotainterest" > 
+    <input type="hidden" id="paymethod" name="paymethod">
+	<input type="hidden" id="cardcode" name="cardcode" > 
+    <input type="hidden" id="cardquota" name="cardquota" >
+	<input type="hidden" id="rbankcode" name="rbankcode" > 
+    <input type="hidden" id="reqsign" name="reqsign" value="DONE" >
+	<input type="hidden" id="encrypted" name="encrypted" > 
+    <input type="hidden" id="sessionkey" name="sessionkey" >
+	<input type="hidden" id="uid" name="uid" > 
+    <input type="hidden" id="sid" name="sid" >
+	<input type="hidden" id="version" name="version" value="5000" > 
+    <input type="hidden" id="clickcontrol" name="clickcontrol" >
+    <input type="hidden" id="mid" name="mid" value="@Model.Mid" >
+</form>
 <script type="text/javascript">
 
     $("#btnSchPostNo").on("click", function () {
         openerWin("PopPostInfo");
+    })
+
+    $("#btnPay").on("click", function () {
+        var url = "INIsecureResult";
+        var frm = document.forms.ini;
+
+        if (pay(frm)) {
+            frm.action = url;
+            frm.submit();
+        }
     })
 
 </script>

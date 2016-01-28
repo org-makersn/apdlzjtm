@@ -24,11 +24,15 @@ namespace Makers.Store.Controllers
 
         public ActionResult List()
         {
-            int memberNo = 1; // admin
+            return View();
+        }
+
+        public PartialViewResult Grid()
+        {
             List<StoreCartInfo> storeCartList = new List<StoreCartInfo>();
-            storeCartList = new StoreCartBiz().GetStoreCartListByMemberNo(memberNo);
-            
-            return View(storeCartList);
+            storeCartList = new StoreCartBiz().GetStoreCartListByMemberNo(profileModel.UserNo);
+
+            return PartialView(storeCartList);
         }
 
         [HttpPost]
@@ -40,21 +44,27 @@ namespace Makers.Store.Controllers
             return PartialView(storeCartT);
         }
 
-        public void AddCart()
-        {
-            int cnt = int.Parse(Request["cnt"]);
-            int productDetailNo = int.Parse(Request["productDetailNo"]);
-
+        [HttpPost]
+        public void AddCart(Int64 productDetailNo, int cnt)
+        {            
             StoreCartT storeCartT = new StoreCartT();
-            storeCartT.MemberNo = 1;
+            storeCartT.MemberNo = profileModel.UserNo;
             storeCartT.ProductCnt = cnt;
             storeCartT.ProductDetailNo = productDetailNo;
             storeCartT.RegDt = DateTime.Now;
-            storeCartT.RegId = "admin";
+            storeCartT.RegId = profileModel.UserId;
 
             int result = new StoreCartBiz().InsertCart(storeCartT);
 
             Response.Write(result);
+        }
+
+        [HttpPost]
+        public int DeleteCart(Int64 cartSeq)
+        {
+            int result = new StoreCartBiz().DeleteCartByCondition(profileModel.UserNo, cartSeq);
+
+            return result;
         }
     }
 }

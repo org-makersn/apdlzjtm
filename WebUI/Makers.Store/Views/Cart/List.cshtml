@@ -1,56 +1,77 @@
-﻿@using Net.Framework.StoreModel
-@model List<StoreCartInfo>
-@{
-    ViewBag.Title = "List";
+﻿@{
+    ViewBag.Title = "내장바구니";
 }
 @section Scripts{
 <script type="text/javascript">
+
+    $(document).ready(function () {
+        GetCartList();
+    })
+
     $("#btnAllProductOrder").on("click", function () {
+        GoOrderList();
+    })
+
+    $("#btnAddCart").on("click", function () {
+
+        if (!confirm("추가하시겠습니까?")) {
+            return;
+        }
+
+        var data = {            
+            productDetailNo: $("#txtCartNum").val(),
+            cnt: $("#selCnt").val()
+        }
+
+        var onSuccess = function (result) {
+            GetCartList();
+        }
+        Ajax.AjaxResponseModelService(this, "AddCart", data, onSuccess);
+    })
+
+    function GetCartList() {
+        Ajax.SyncGetPartialView("/Cart/Grid", {}, "divCartList");
+    }
+
+    function CartDelete(cartSeq) {
+        var data = {
+            cartSeq: cartSeq
+        }
+
+        var onSuccess = function (result) {
+            GetCartList();
+        }
+        Ajax.AjaxResponseModelService(this, "DeleteCart", data, onSuccess);
+    }
+
+    function GoOrderList() {
         var url = "plugin_check";
         var f = document.forms.cartInfo;
 
         f.action = url;
         f.submit();
-    })
+    }
 
 </script>    
     
 }
 <h2>List</h2>
-@{
-    string cartNo = "";
-    int totPaymoney = 0;
- }
-
-    <table style="border:solid 1px blue;" border="1">        
-            <tr>
-                <td>상품명</td>    
-                <td>판매가</td>    
-                <td>갯수</td>      
-                <td>주문여부</td>  
-            </tr>
-        @foreach (StoreCartInfo data in Model)
-        {
-            <tr>
-                <td>@data.PRODUCT_NAME</td>
-                <td>@data.TOTAL_PRICE</td>
-                <td>@data.PRODUCT_CNT</td>
-                <td>@data.ORDER_YN</td>
-            </tr>
-            cartNo = data.CART_NO;
-            totPaymoney += (data.TOTAL_PRICE * data.PRODUCT_CNT); // total price
-        }
-    </table>
-
-<form id="cartInfo" method="post">
-    장바구니번호
-    <input type="text" name="cartNo" value="@cartNo" />
-</form>
-
-<p>
-    비용 합계
-    <input type="text" readonly="readonly" id="txtTotPayMoney" value="@totPaymoney" />
-</p>
+    <input type="text" id="txtCartNum" />
+    <select id="selCnt">
+        <option selected value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select>
+    <input type="button" value="추가" id="btnAddCart" />
+    <br /><br />
+    <div id="divCartList"></div>
 <p>
 <input type="button" id="btnAllProductOrder" value="전체상품주문" />
 </p>

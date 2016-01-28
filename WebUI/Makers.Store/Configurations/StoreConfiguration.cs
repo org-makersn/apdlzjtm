@@ -18,6 +18,9 @@ namespace Makers.Store.Configurations
             Slic3rDir = ConfigurationManager.AppSettings["Slic3rDir"] ?? @"D:\slic3r";
             ServiceUrl = ConfigurationManager.AppSettings["ServiceUrl"] ?? @"http://openapi.epost.go.kr/postal/retrieveNewAdressAreaCdSearchAllService/retrieveNewAdressAreaCdSearchAllService/getNewAddressListAreaCdSearchAll";
             ServiceKey = ConfigurationManager.AppSettings["ServiceKey"] ?? @"H7xR5DleYEuhPTFBxnqXc%2B5rkjgzsHQiUUzQCvhp8JVZ2JhMTtRrGq%2FfgqcJ%2B%2BKQ1Rt2q0PyT5%2BnAqMKQ9RKYA%3D%3D";
+            Mid = ConfigurationManager.AppSettings["Mid"] ?? @"INIpayTest";
+            MidPassword = ConfigurationManager.AppSettings["MidPassword"] ?? @"1111";
+            Currency = ConfigurationManager.AppSettings["Currency"] ?? @"WON";
         }
 
         /// <summary>
@@ -40,5 +43,20 @@ namespace Makers.Store.Configurations
         /// 우편번호 api 호출 key
         /// </summary>
         public string ServiceKey { get; set; }
+
+        /// <summary>
+        /// Kg이니시스 상점 아이디
+        /// </summary>
+        public string Mid { get; set; }
+
+        /// <summary>
+        /// Kg이니시스 상점 아이디 비밀번호
+        /// </summary>
+        public string MidPassword { get; set; }
+
+        /// <summary>
+        /// Kg이니시스 통화단위
+        /// </summary>
+        public string Currency { get; set; }
     }
 }

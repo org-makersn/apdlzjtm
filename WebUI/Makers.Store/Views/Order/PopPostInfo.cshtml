@@ -13,9 +13,14 @@
         SearchPostData(1, 20); // 처음 검색 클릭 시
     })
 
-    function SearchPostData(curIndex, cntPerPage) {
-        var url = "GetPostNo";
+    //검색창 엔터 이벤트
+    $('#txtKeyword').keypress(function (event) {
+        if (event.keyCode == 13) {
+            SearchPostData(1, 20); // 처음 검색 클릭 시
+        }
+    });
 
+    function SearchPostData(curIndex, cntPerPage) {
         var data = {
             srchwrd: $("#txtKeyword").val(),
             countPerPage: cntPerPage,
@@ -71,9 +76,9 @@
         var rnAddr = aa.children().eq(1).text();
         var zipNo = aa.children().eq(2).text();
 
-        $("#txtLnmAddr", opener.document).val(lnmAddr);
-        $("#txtRnAddr", opener.document).val(rnAddr);
-        $("#txtPostNo", opener.document).val(zipNo);
+        $("#recvaddr", opener.document).val(lnmAddr);
+        $("#recvaddr2", opener.document).val(rnAddr);
+        $("#recvpostnum", opener.document).val(zipNo);
 
         self.close();
     }

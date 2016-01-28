@@ -1,0 +1,612 @@
+﻿@using Net.Framework.StoreModel;
+@model StorePaymentT
+@{
+    ViewBag.Title = "결제결과";
+}
+@section Scripts{
+<script type="text/javascript">
+var openwin=window.open("childwin.html","childwin","width=300,height=160");
+openwin.close();
+	
+/*-------------------------------------------------------------------------------------------------------
+* 1. ResultCode
+*       가. 결 과 코 드: "00" 인 경우 결제 성공[무통장입금인 경우 - 고객님의 무통장입금 요청이 완료]	*
+*       나. 결 과 코 드: "00"외의 값인 경우 결제 실패  						*
+*------------------------------------------------------------------------------------------------------*/
+	
+function receipt(tid)
+{
+	if("@Model.Common.Resultcode" == "00")
+	{
+		var receiptUrl = "https://iniweb.inicis.com/DefaultWebApp/mall/cr/cm/mCmReceipt_head.jsp?noTid=" + @Model.Common.Tid + "&noMethod=1";
+		window.open(receiptUrl,"receipt","width=430,height=700, scrollbars=yes,resizable=yes");
+	}
+	else
+	{
+		alert("해당하는 결제내역이 없습니다");
+	}
+}
+	
+function errhelp()
+{
+	var errhelpUrl = "http://www.inicis.com/Help/errorcode_list.jsp?pstPayMethod=all&pstCode=" + @Model.Common.ResultErrorcode
+	window.open(errhelpUrl,"errhelp","width=573,height=423");
+}
+</script>
+
+<script type="text/JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+//-->
+</script>
+}
+
+@{
+    string backgroundUrl = "";
+
+    if (Model.Common.Resultcode.Equals("01"))
+    {
+        backgroundUrl = "../content/images/payment/spool_top.gif";
+    }
+    else
+    {
+        switch (Model.Common.PayMethod)
+        {
+            case "Card": // 신용카드
+                backgroundUrl = "../content/images/payment/card.gif";
+                break;
+
+            case "VCard":  // ISP
+                backgroundUrl = "../content/images/payment/card.gif";
+                break;
+            case "HPP":  // 휴대폰
+                backgroundUrl = "../content/images/payment/hpp.gif";
+                break;
+
+            case "Ars1588Bill":  // 1588
+                backgroundUrl = "../content/images/payment/phone.gif";
+                break;
+
+            case "PhoneBill":  // 폰빌
+                backgroundUrl = "../content/images/payment/phone.gif";
+                break;
+            case "OCBPoint":  // OKCASHBAG
+                backgroundUrl = "../content/images/payment/okcash.gif";
+                break;
+
+            case "DirectBank":   // 은행계좌이체
+                backgroundUrl = "../content/images/payment/bank.gif";
+                break;
+
+            case "VBank":   // 무통장 입금 서비스
+                backgroundUrl = "../content/images/payment/bank.gif";
+                break;
+
+            case "Culture":   // 문화상품권 결제
+                backgroundUrl = "../content/images/payment/ticket.gif";
+                break;
+
+            case "NEMO":   // 네모 결제
+                backgroundUrl = "../content/images/payment/nemo.gif";
+                break;
+
+            case "Teen":   // 틴캐쉬
+                backgroundUrl = "../content/images/payment/teen.gif";
+                break;
+
+            default:  // 기타 지불수단의 경우
+                backgroundUrl = "../content/images/payment/card.gif";
+                break;
+
+        }
+    }
+    
+}
+
+<form id="ini"  method="post"  >
+<table width="632" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td height="85" background="@backgroundUrl" style="padding:0 0 0 64">
+    				
+	  <!-------------------------------------------------------------------------------------------------------
+	   *  아래 부분은 모든 결제수단의 공통적인 결과메세지 출력 부분입니다.
+	   *	1. ResultCode 	(결 과 코 드)
+	   *  	2. ResultMsg	(결과 메세지)
+	   *  	3. PayMethod	(결 제 수 단)
+	   *  	4. Tid			(거 래 번 호)	
+	   *  	5. Moid  		(주 문 번 호)
+	   -------------------------------------------------------------------------------------------------------->
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td width="3%" valign="top"><img src="../content/images/payment/title_01.gif" width="8" height="27" vspace="5"></td>
+          <td width="97%" height="40" class="pl_03"><font color="#FFFFFF"><b>결제결과</b></font></td>
+        </tr>
+      </table>
+	</td>
+  </tr>
+  <tr>
+    <td align="center" bgcolor="6095BC">
+      <table width="620" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td bgcolor="#FFFFFF" style="padding:0 0 0 56">
+		  <table width="510" border="0" cellspacing="0" cellpadding="0">
+              <tr> 
+                <td width="7"><img src="../content/images/payment/life.gif" width="7" height="30"></td>
+                <td background="../content/images/payment/center.gif"><img src="../content/images/payment/icon03.gif" width="12" height="10">
+                
+                <!-------------------------------------------------------------------------------------------------------
+                 * 1. ResultCode 										*	
+                 *       가. 결 과 코 드: "00" 인 경우 결제 성공[무통장입금인 경우 - 고객님의 무통장입금 요청이 완료]	*
+                 *       나. 결 과 코 드: "00"외의 값인 경우 결제 실패  						*
+                 --------------------------------------------------------------------------------------------------------> 
+                  <b>
+                  @if(Model.Common.Resultcode.Equals("00") && Model.Common.PayMethod.Equals("VBank"))
+                    {
+                        <label>입금 요청이 완료되었습니다.</label>
+                    }
+                    else if (Model.Common.Resultcode.Equals("00"))
+                    {
+                        <label>고객님의 결제요청이 성공되었습니다.</label>
+                    }
+                    else
+                    { 
+                        <label>고객님의 결제요청이 실패되었습니다.</label>
+                    }                    
+					
+				 </b></td>
+                <td width="8"><img src="../content/images/payment/right.gif" width="8" height="30"></td>
+              </tr>
+            </table>
+            <br>
+            <table width="510" border="0" cellspacing="0" cellpadding="0">
+              <tr> 
+                <td width="407"  style="padding:0 0 0 9">
+				  <img src="../content/images/payment/icon.gif" width="10" height="11"> 
+                  <strong><font color="433F37">결제내역</font></strong></td>
+                <td width="103">&nbsp;</td>                
+              </tr>
+              <tr> 
+                <td colspan="2" style="padding:0 0 0 23">
+		  		  <table width="470" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                	  <!-------------------------------------------------------------------------------------------------------
+                	   * 2. PayMethod 										*	
+                	   *       가. 결제 방법에 대한 값									*
+                	   *       	ㄱ. 신용카드 	- 	Card								*
+                	   *		ㄴ. ISP		-	VCard								*	
+                	   *		ㄷ. 은행계좌	-	DirectBank							*
+                	   *		ㄹ. 무통장입금	-	VBank								*
+                	   *		ㅁ. 핸드폰	- 	HPP								*
+                	   *		ㅂ. 전화결제 (ars전화 결제)	-	Ars1588Bill					*
+                	   *		ㅅ. 전화결제 (받는전화결제)	-	PhoneBill					*
+                	   *		ㅇ. OK CASH BAG POINT		-	OCBPoint					*
+                	   *		ㅈ. 문화상품권	-	Culture								*
+                	   *		ㅊ. 네모	-	NEMO								*
+                	   -------------------------------------------------------------------------------------------------------->
+                      <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
+                      <td width="109" height="25">결 제 방 법</td>
+                      <td width="343">@Model.Common.PayMethod</td>
+                    </tr>
+                    <tr> 
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+                    <tr> 
+                      <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
+                      <td width="109" height="26">결 과 코 드</td>
+                      <td width="343">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr> 
+                            <td>@Model.Common.Resultcode</td>
+                            <td width='142' align='right'>
+                			<!-------------------------------------------------------------------------------------------------------
+                			 * 2. ResultCode 값에 따라 "영수증 보기" 또는 "실패 내역 자세히 보기" 버튼 출력		*
+                			 *       가. 결제 코드의 값이 "00"인 경우에는 "영수증 보기" 버튼 출력					*
+                			 *       나. 결제 코드의 값이 "00" 외의 값인 경우에는 "실패 내역 자세히 보기" 버튼 출력			*
+                			 -------------------------------------------------------------------------------------------------------->
+							<!-- 실패결과 상세 내역 버튼 출력 -->
+							@if (Model.Common.Resultcode.Equals("00"))
+                            { 
+                                <a href='javascript:receipt();'><img src='../content/images/payment/button_02.gif' width='94' height='24' border='0'></a>
+                            }
+                           else
+                           {
+                                <a href='javascript:errhelp();'><img src='../content/images/payment/button_01.gif' width='142' height='24' border='0'></a>
+                           }
+                              
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                   	
+                   	
+                <!-------------------------------------------------------------------------------------------------------
+                 * 1. ResultMsg 										*
+                 *       가. 결과 내용을 보여 준다 실패시에는 "[에러코드] 실패 메세지" 형태로 보여 준다.                *
+                 *		예> [9121]서명확인오류									*
+                 -------------------------------------------------------------------------------------------------------->
+                    <tr> 
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+                    <tr> 
+                      <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
+                      <td width="109" height="25">결 과 내 용</td>
+                      <td width="343">
+                      	@Model.Common.ResultMsg
+                      	<br>
+                      	<a href="http://www.inicis.com/Help" target=new><img src='http://www.inicis.com/images/inicis_050119_img2.gif' border=0></a>
+                      </td>
+                    </tr>00000000000
+                    <tr> 
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+                    
+                <!-------------------------------------------------------------------------------------------------------
+                 * 1. Tid											*
+                 *       가. 이니시스가 부여한 거래 번호 -모든 거래를 구분할 수 있는 키가 되는 값			*
+                 -------------------------------------------------------------------------------------------------------->
+                    <tr> 
+                      <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
+                      <td width="109" height="25">거 래 번 호</td>
+                      <td width="343">@Model.Common.Tid</td>
+                    </tr>
+                    <tr> 
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+                    
+                	<!-- Moid : 상점에서 자체적으로 사용하는 거래번호 -->
+                    <tr> 
+                      <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
+                      <td width="109" height="25">주 문 번 호</td>
+                      <td width="343">@Model.Common.MoId</td>
+                    </tr>
+                    <tr> 
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+                    
+                    <!-- 거래금액 -->
+                    <tr> 
+                      <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
+                      <td width="109" height="25">거 래 금 액</td>
+                      <td width="343">@Model.GoodsPrice</td>
+                    </tr>
+                    <tr> 
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+
+<!-- 결제수단이 카드일 경우 -->
+                    @if (Model.Common.PayMethod.Equals("Card") || Model.Common.PayMethod.Equals("VCard"))
+                    { 
+
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>신용카드번호</td>
+                      <td width='343'>@Model.VCard.Num</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+					<tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>승 인 날 짜</td>
+                      <td width='343'>@Model.Appl.Date</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>승 인 시 각</td>
+                      <td width='343'>@Model.Appl.Time</td>
+                    </tr>                	    
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>승 인 번 호</td>
+                      <td width='343'>@Model.VCard.ApplNum</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>할 부 기 간</td>
+                      <td width='343'>@Model.VCard.Quota</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>카 드 종 류</td>
+                      <td width='343'>@Model.VCard.Code</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>카드발급사</td>
+                      <td width='343'>@Model.VCard.BankCode</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3'>&nbsp;</td>
+                    </tr>
+                    <tr> <!-- 결제수단이 카드/ okcashbag 복합일 경우 -->
+                	 <td style='padding:0 0 0 9' colspan='3'><img src='../content/images/payment/icon.gif' width='10' height='11'> 
+        	        	  <strong><font color='433F37'>OK CASHBAG 적립 및 사용내역</font></strong></td>
+                	</tr>
+                	<tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>카 드 번 호</td>
+                      <td width='343'>@Model.Ocb.Num</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>적립 승인번호</td>
+                      <td width='343'>@Model.Ocb.SaveApplNum</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>사용 승인번호</td>
+                      <td width='343'>@Model.Ocb.PayApplNum</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>승 인 일 시</td>
+                      <td width='343'>@Model.Ocb.ApplDate</td>
+                    </tr>
+                	<tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>포인트지불금액</td>
+                      <td width='343'>@Model.Ocb.PayPrice</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    }
+
+				<!-- 결제수단이 계좌이체일 경우 -->
+                @if (Model.Common.PayMethod.Equals("DirectBank"))
+                { 
+	                <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>계좌이체 은행</td>
+                      <td width='343'>@Model.DirectBank.AcctBankCode</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+          			<tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>승 인 날 짜</td>
+                      <td width='343'>@Model.Appl.Date</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>승 인 시 각</td>
+                      <td width='343'>@Model.Appl.Time</td>
+                    </tr>
+                    <tr>
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr>
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+                    <tr> 
+                      <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
+                      <td width="109" height="25">현금영수증 결과</td>
+                      <td width="343">@Model.Cshr.ResultCode</td>
+                    </tr>
+                   	<tr> 
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>현금영수증 <br> 발급구분코드</td>
+                      <td width='343'>@Model.Cshr.Type</td>
+                      <font color=red><b>(0 - 소득공제용, 1 - 지출증빙용)</b></font>
+                    </tr>
+                    <tr> 
+                      <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
+                    </tr>
+                }
+
+				<!-- 결제수단이 무통장일 경우 -->
+                @if (Model.Common.PayMethod.Equals("VBank"))
+                { 
+	                <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>입금계좌번호</td>
+                      <td width='343'>@Model.Vact.Num</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>입금 은행코드</td>
+                      <td width='343'>@Model.Vact.BankCode</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>예금주 명</td>
+                      <td width='343'>@Model.Vact.Name</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>송금자 명</td>
+                      <td width='343'>@Model.Vact.InputName</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>송금 일시</td>
+                      <td width='343'>@Model.Vact.Date @Model.Vact.Time</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                }
+					
+					<!-- 결제수단이 핸드폰일 경우 -->	
+                    @if (Model.Common.PayMethod.Equals("HPP"))
+                    { 
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>휴대폰번호</td>
+                      <td width='343'>@Model.Hpp.Num</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>승 인 날 짜</td>
+                      <td width='343'>@Model.Vact.Date</td>
+                    </tr>
+                    <tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    <tr> 
+                      <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
+                      <td width='109' height='25'>승 인 시 각</td>
+                      <td width='343'>@Model.Vact.Time</td>
+                    </tr>
+					<tr> 
+                      <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
+                    </tr>
+                    }
+                    <tr>
+                        <td>
+
+    @if (Model.Common.Resultcode.Equals("00"))
+    {
+
+        if (Model.Common.PayMethod.Equals("Card"))
+        {       
+            <table width='510' border='0' cellspacing='0' cellpadding='0'>
+         	  <tr> 
+         	    <td height='25'  style='padding:0 0 0 9'><img src='../content/images/payment/icon.gif' width='10' height='11'> 
+         	      <strong><font color='433F37'>이용안내</font></strong></td>
+         	  </tr>
+         	  <tr> 
+         	    <td  style='padding:0 0 0 23'> 
+         	      <table width='470' border='0' cellspacing='0' cellpadding='0'>
+         	        <tr>          					          
+         	          <td height='25'>(1) 신용카드 청구서에 <b>\"이니시스(inicis.com)\"</b>으로 표기됩니다.</td>
+         	        </tr>
+         	        <tr>         					          
+         	          <td height='25'>(2) LG카드 및 BC카드의 경우 <b>\"이니시스(이용 상점명)\"</b>으로 표기되고, 삼성카드의 경우 <b>\"이니시스(이용상점 URL)\"</b>로 표기됩니다.</td>
+         	        </tr>
+         	        <tr> 
+         	          <td height='1' colspan='2' align='center'  background='../content/images/payment/line.gif'></td>
+         	        </tr>
+         	      </table>
+         	    </td>
+         	  </tr>
+         	</table>
+        }
+
+        if (Model.Common.PayMethod.Equals("VCard"))
+        {
+			<table width='510' border='0' cellspacing='0' cellpadding='0'>
+         	  <tr> 
+         	    <td height='25'  style='padding:0 0 0 9'><img src='../content/images/payment/icon.gif' width='10' height='11'> 
+         	      <strong><font color='433F37'>이용안내</font></strong></td>
+         	  </tr>
+         	  <tr> 
+         	    <td  style='padding:0 0 0 23'> 
+         	      <table width='470' border='0' cellspacing='0' cellpadding='0'>
+         	        <tr>          					          
+         	          <td height='25'>(1) 신용카드 청구서에 <b>\"이니시스(inicis.com)\"</b>으로 표기됩니다.</td>
+         	        </tr>
+         	        <tr>         					          
+         	          <td height='25'>(2) LG카드 및 BC카드의 경우 <b>\"이니시스(이용 상점명)\"</b>으로 표기되고, 삼성카드의 경우 <b>\"이니시스(이용상점 URL)\"</b>로 표기됩니다.</td>
+         	        </tr>
+         	        <tr> 
+         	          <td height='1' colspan='2' align='center'  background='../content/images/payment/line.gif'></td>
+         	        </tr>
+         	      </table>
+         	    </td>
+         	  </tr>
+         	</table>
+        }
+
+        if (Model.Common.PayMethod.Equals("HPP"))
+        {
+            <table width='510' border='0' cellspacing='0' cellpadding='0'>
+         	  <tr> 
+         	    <td height='25'  style='padding:0 0 0 9'><img src='../content/images/payment/icon.gif' width='10' height='11'> 
+         	      <strong><font color='433F37'>이용안내</font></strong></td>
+         	  </tr>
+         	  <tr> 
+         	    <td  style='padding:0 0 0 23'> 
+         	      <table width='470' border='0' cellspacing='0' cellpadding='0'>
+         	        <tr>          					          
+         	          <td height='25'>(1) 핸드폰 청구서에 <b>\"소액결제\"</b> 또는 <b>\"외부정보이용료\"</b>로 청구됩니다.<br>
+         	          (2) 본인의 월 한도금액을 확인하시고자 할 경우 각 이동통신사의 고객센터를 이용해주십시오.
+         	          </td>
+         	        </tr>
+         	        <tr> 
+         	          <td height='1' colspan='2' align='center'  background='../content/images/payment/line.gif'></td>
+         	        </tr>
+         	        
+         	      </table></td>
+         	  </tr>
+         	</table>
+        }
+
+    }
+                            </td>
+                        </tr>
+
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</form>
+<table width="632" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td><img src="../content/images/payment/bottom01.gif" width="632" height="13"></td>
+  </tr>
+</table>  

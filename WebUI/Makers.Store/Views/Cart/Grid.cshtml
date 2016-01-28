@@ -1,0 +1,36 @@
+﻿@using Net.Framework.StoreModel
+@model List<StoreCartInfo>
+@{
+    string cartNo = "";
+    int totPaymoney = 0;
+ }
+<table style="border:solid 1px blue;" border="1">        
+<tr>
+    <td>상품명</td>    
+    <td>판매가</td>    
+    <td>갯수</td>      
+    <td>주문여부</td>  
+    <td>비고</td>
+</tr>
+@foreach (StoreCartInfo data in Model)
+{
+<tr>
+    <td>@data.PRODUCT_NAME</td>
+    <td>@data.TOTAL_PRICE</td>
+    <td>@data.PRODUCT_CNT</td>
+    <td>@data.ORDER_YN</td>
+    <td><a href="javascript:CartDelete(@data.No);">삭제</a></td>
+</tr>
+cartNo = data.CART_NO;
+totPaymoney += (data.TOTAL_PRICE * data.PRODUCT_CNT); // total price
+}
+</table>
+<form id="cartInfo" method="post">
+    장바구니번호
+    <input type="text" name="cartNo" value="@cartNo" />
+</form>
+
+<p>
+    비용 합계
+    <input type="text" readonly="readonly" id="txtTotPayMoney" value="@totPaymoney" />
+</p>

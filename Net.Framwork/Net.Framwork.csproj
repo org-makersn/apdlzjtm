@@ -96,6 +96,7 @@
     <Compile Include="StoreModel\StoreCartT.cs" />
     <Compile Include="StoreModel\StoreCategoryT.cs" />
     <Compile Include="StoreModel\StoreOrderT.cs" />
+    <Compile Include="StoreModel\StorePayment.cs" />
     <Compile Include="StoreModel\StorePrinterMaterialT.cs" />
     <Compile Include="StoreModel\StorePrinterT.cs" />
     <Compile Include="StoreModel\StorePrintingCompanyPrinterT.cs" />
