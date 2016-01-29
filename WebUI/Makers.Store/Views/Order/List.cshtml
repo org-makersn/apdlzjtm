@@ -137,7 +137,7 @@
 <form id="ini" onsubmit="return pay(this)" method="post">
     <p>
         <select id="gopaymethod" name="gopaymethod">
-            <option value="">선택</option>
+            <option >선택</option>
             <option value="Card">신용카드</option>
             <option value="DirectBank">실시간 은행계좌이체</option>
             <option value="VBank">무통장 입금 </option>
@@ -145,85 +145,75 @@
         </select>
     </p>
     <p>
-    상품명 <input type="text" value="testGoods" id="goodname" name="goodname" />
+    상품명 <input type="text" value="@Model.GoodsName" id="goodname" name="goodname" />
     </p>
     <p>
-    성명 <input type="text" value="홍길동" id="buyername" name="buyername" />
+    성명 <input type="text" value="@Model.BuyerName" id="buyername" name="buyername" />
     </p>
     <p>
     구매자 이메일주소 <input type="text" value="sslee@makersi.com" id="buyeremail" name="buyeremail" />
     </p>
     <p>
-    구매자 이동전화 <input type="text" value="010-1234-5678" id="buyertel" name="buyertel" />
+    구매자 이동전화 <input type="text" value="010-4275-5633" id="buyertel" name="buyertel" />
     </p>    
-    <p>
-    과세금액 <input type="text" value="" id="tax" name="tax" />
-    </p>
-    <p>
-    면세금액 <input type="text" value="" id="taxfree" name="taxfree" />
-    </p>
     <p>
     결제금액 <input type="text" value="@Model.TotalPrice" id="price" name="price" />
     </p>
     <p>
-    상품주문번호 <input type="text" value="" id="txtOid" />
+    장바구니번호 <input type="text" value="@Model.StoreCart.CartNo" id="cartNo" name="cartNo" />
     </p>
     <p>
-    장바구니번호 <input type="text" value="@Model.StoreCart.CartNo" id="txtCartNo" />
+    받는사람 성명 <input type="text" id="recvname" name="recvname" />
     </p>
     <p>
-    화폐단위 <input type="text" value="@Model.Currency" id="currency" name="currency" />
+    받는사람 이동전화 <input type="text" id="recvtel" name="recvtel" />
     </p>
     <p>
-    스토어URL <input type="text" value="" id="url" name="url" />
+    받는사람 이동전화2 <input type="text" id="recvtel2" name="recvtel2" />
     </p>
     <p>
-    지불요청타입 <input type="text" value="" id="txtType" />
+    전달메시지 <input type="text"  id="recvmsg" name="recvmsg" />
     </p>
     <p>
-    받는사람 성명 <input type="text" value="" id="recvname" name="recvname" />
+    주문일자 <input type="text"  id="txtOrderDate" />
     </p>
     <p>
-    받는사람 이동전화 <input type="text" value="" id="recvtel" name="recvtel" />
+    느린제작 여부 <label for="rdoSlowMakeY">Y</label><input type="radio" id="rdoSlowMakeY" name="rdoSlowMakeYn" value="Y" />   <label for="rdoSlowMakeN">N</label><input type="radio" id="rdoSlowMakeN" name="rdoSlowMakeYn" value="N" />   
     </p>
-    <p>
-    받는사람 이동전화2 <input type="text" value="" id="recvtel2" name="recvtel2" />
-    </p>
-    <p>
-    전달메시지 <input type="text" value="" id="recvmsg" name="recvmsg" />
-    </p>
-    <p>
-    유저아이디 <input type="text" value="" id="txtUserId" />
-    </p>    
-    <p>
-    고객번호 <input type="text" value="" id="txtMemberNo" />
-    </p>
-    <p>
-    주문일자 <input type="text" value="" id="txtOrderDate" />
-    </p>
-    <p>
-    배송주소(도로명) <input type="text" size="50" readonly="readonly" id="recvaddr" name="recvaddr" />
-    </p>
-    <p>
-    배송주소(지번) <input type="text" size="50" readonly="readonly" id="recvaddr2" name="recvaddr2" />
-    </p>
-    <p>
-    배송주소 상세 <input type="text" id="recvaddrDetail" name="recvaddrDetail" />
-    </p>
-    <p>
-    배송비 <input type="text" id="txtShippingPrice" />
-    </p>
-    <p>
-    우편번호 <input type="text" readonly="readonly" id="recvpostnum" /> <input type="button" value="검색" id="btnSchPostNo" />
-    </p>
+    <div id="divShippingAddrList"></div>
+    <table style="border:solid 1px red;" border="1">
+        <tr>
+            <td><input type="checkbox" id="chkDefaultAddr" name="chkDefaultAddr" />기본배송지로 지정</td>
+            <td><input type="checkbox" id="chkNewAddr" />신규배송지</td>
+            <td><input type="checkbox" id="chkLastAddr" />과거배송지</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <p>
+                    배송지명 <input type="text" id="txtShippingName" />
+                </p>
+                <p>
+                배송주소(도로명) <input type="text" size="50" readonly="readonly" id="recvaddr" name="recvaddr" />
+                </p>
+                <p>
+                배송주소(지번) <input type="text" size="50" readonly="readonly" id="recvaddr2" name="recvaddr2" />
+                </p>
+                <p>
+                배송주소 상세 <input type="text" id="recvaddrDetail" name="recvaddrDetail" /> <input type="button" id="btnAddShippingInfo" value="추가" />
+                </p>
+                <p>
+                우편번호 <input type="text" readonly="readonly" id="recvpostnum" /> <input type="button" value="검색" id="btnSchPostNo" />
+                </p>
+            </td>
+        </tr>
+    </table>
     <p>
         <input type="button" id="btnPay" name="btnPay" value="결제하기" />
     </p>
-    @DateTime.Now.AddDays(7).ToShortDateString()
     <!-- <input type=hidden name=ini_logoimage_url  value="http://[사용할 이미지주소] "/> -->
     <!-- <input type=hidden name=ini_menuarea_url value="http://[사용할 이미지주소]" /> -->
-    <input type="hidden" id="acceptmethod" name="acceptmethod" value="VERIFY(1056313):SKIN(ORIGINAL):HPP(1):VBANK(20160228)"> 
-    <input type="hidden" id="oid" name="oid" value="Merchant_Order_ID" >
+    <input type="hidden" id="acceptmethod" name="acceptmethod" value="VERIFY(1056313):SKIN(ORIGINAL):HPP(1):VBANK(@DateTime.Now.AddDays(7).ToShortDateString().Replace("-",""))"> 
+    <input type="hidden" id="oid" name="oid" value="@Model.Oid" >
 	<input type="hidden" id="INIregno" name="INIregno" > 
     <input type="hidden" id="ini_encfield" name="ini_encfield" value="@Model.EncResult.IniEncField" > 
     <input type="hidden" id="ini_certid" name="ini_certid" value="@Model.EncResult.IniCertId" >
@@ -240,8 +230,15 @@
 	<input type="hidden" id="version" name="version" value="5000" > 
     <input type="hidden" id="clickcontrol" name="clickcontrol" >
     <input type="hidden" id="mid" name="mid" value="@Model.Mid" >
+    <input type="hidden" value="@Model.Currency" id="currency" name="currency" />
+    <input type="hidden" id="url" name="url" />
+
 </form>
 <script type="text/javascript">
+
+    $(document).ready(function () {
+        GetShippingAddrList();
+    })
 
     $("#btnSchPostNo").on("click", function () {
         openerWin("PopPostInfo");
@@ -256,5 +253,28 @@
             frm.submit();
         }
     })
+
+    $("#btnAddShippingInfo").on("click", function () {
+
+        var chkVal = $("input:checkbox[name=chkDefaultAddr]").is(":checked");
+
+        var data = {
+            shippingName: $("#txtShippingName").val(),
+            addr1: $("#recvaddr").val(),
+            addr2: $("#recvaddr2").val(),
+            addrDetail: $("#recvaddrDetail").val(),
+            postNo: $("#recvpostnum").val(),
+            defaultYn: chkVal == true ? "Y" : "N"
+        }
+
+        var onSuccess = function (result) {
+            GetShippingAddrList();
+        }
+        Ajax.AjaxResponseModelService(this, "/Shipping/AddShippingInfo", data, onSuccess);
+    })
+
+    function GetShippingAddrList() {
+        Ajax.SyncGetPartialView("/Shipping/List", { }, "divShippingAddrList");
+    }
 
 </script>

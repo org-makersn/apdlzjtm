@@ -54,9 +54,7 @@ namespace Makers.Store.Controllers
             storeCartT.RegDt = DateTime.Now;
             storeCartT.RegId = profileModel.UserId;
 
-            int result = new StoreCartBiz().InsertCart(storeCartT);
-
-            Response.Write(result);
+            new StoreCartBiz().InsertCart(storeCartT);
         }
 
         [HttpPost]

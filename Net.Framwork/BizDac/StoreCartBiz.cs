@@ -39,9 +39,9 @@ namespace Net.Framwork.BizDac
         }
         #endregion
 
-        #region GetStoreCartListByMemberNo - 카트리스트 Get
+        #region GetStoreCartListByMemberNo - 장바구니 리스트 Get
         /// <summary>
-        /// GetStoreCartListByMemberNo - 카트리스트 Get
+        /// GetStoreCartListByMemberNo - 장바구니 리스트 Get
         /// </summary>
         /// <param name="memberNo"></param>
         /// <returns></returns>

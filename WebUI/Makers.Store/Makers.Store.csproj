@@ -177,6 +177,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ShippingController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -352,6 +353,7 @@
     <Content Include="Views\Order\Paging.cshtml" />
     <Content Include="Views\Order\INIsecureResult.cshtml" />
     <Content Include="Views\Cart\Grid.cshtml" />
+    <Content Include="Views\Shipping\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

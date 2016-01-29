@@ -61,20 +61,24 @@ namespace Makers.Store.Controllers
         public ActionResult LIst(FormCollection forms)
         {
             OrderMaster master = new OrderMaster();
+            StoreOrderBiz biz = new StoreOrderBiz();
             master.OrderInfoList = new List<OrderInfo>();
             master.StoreCart = new StoreCartT();
-
             master.Mid = instance.Mid;
+            master.Oid = biz.GetNewOrderNo();
             master.Currency = instance.Currency;
+            master.BuyerName = profileModel.UserNm;
             master.StoreCart.CartNo = forms["cartNo"];
-            master.OrderInfoList = GetOrderList(); // admin으로 조회     
+            master.OrderInfoList = biz.GetStoreOrderListByMemberNo(profileModel.UserNo); // admin으로 조회     
 
             int index = 0;
+            string firstGoodsName = "";
             foreach (OrderInfo item in master.OrderInfoList)
             {
                 if (index == 0)
                 {
                     master.TotalPrice += item.PAYMENT_PRICE + item.SHIPPING_PRICE;
+                    firstGoodsName = item.PRODUCT_NAME;
                 }
                 else
                 {
@@ -83,27 +87,19 @@ namespace Makers.Store.Controllers
                 index++;
             }
 
-
+            if (index > 0)
+            {
+                master.GoodsName = firstGoodsName + " 외 " + (index - 1) + "건";
+            }
+            else
+            {
+                master.GoodsName = firstGoodsName;
+            }
             master.EncResult = StartChkFake(master.TotalPrice.ToString()); // 페이지 위변조 체크
 
             return View(master);
         }
-        #endregion
-
-        #region GetOrderList - 주문정보 Get
-        /// <summary>
-        /// GetOrderList - 주문정보 Get
-        /// </summary>
-        /// <param name="cartNo"></param>
-        /// <returns></returns>
-        public List<OrderInfo> GetOrderList()
-        {
-            List<OrderInfo> orderInfoList = new List<OrderInfo>();
-            orderInfoList = new StoreOrderBiz().GetStoreOrderListByMemberNo(profileModel.UserNo);
-
-            return orderInfoList;
-        }
-        #endregion                
+        #endregion            
 
         #region 1. StartChkFake - 위변조 체크
         /// <summary>
@@ -426,84 +422,119 @@ namespace Makers.Store.Controllers
 
             INIpay.Destroy(ref intPInst);
 
+            #region 주문서 저장(DB 처리)
             /*###############################################################################
             # 지불결과 DB 연동 부분 #
             # 지불결과를 디비처리하시고 디비처리시 실패가 나시면 이니시스에 취소요청을 합니다
             ###############################################################################*/
-
-
-            // * 데이터베이스 처리부분 삽입
-            // * 처리 실패시 아래 주석부분을 풀면, 이니시스에 해당 거래를 취소요청합니다
+            
             StoreOrderT storeOrderT = new StoreOrderT();
-            storeOrderT.Oid = "";
-            storeOrderT.CartNo = "";
+            StoreOrderBiz biz = new StoreOrderBiz();
+            List<OrderInfo> OrderInfoList = new List<OrderInfo>();
+            List<StoreOrderDetailT> storeOrderDetailList = new List<StoreOrderDetailT>();
+            Int64 orderMasterNo = 0;
+            int orderDetailNo = 0;
+
+            storeOrderT.Oid = Request.Params["oid"];
+            storeOrderT.CartNo = Request.Params["cartNo"];
             storeOrderT.Mid = instance.Mid;
             storeOrderT.Price = storePaymentT.GoodsPrice;
-            storeOrderT.GoodName = "";
+            storeOrderT.GoodName = Request.Params["goodname"];
             storeOrderT.PayMethod = storePaymentT.Common.PayMethod;
-            storeOrderT.Type = "";
+            storeOrderT.Type = "chkfake"; // 고정값
             storeOrderT.BuyerName = Request.Params["buyername"];
             storeOrderT.BuyerEmail = Request.Params["buyeremail"];
             storeOrderT.BuyerTel = Request.Params["buyertel"];
             storeOrderT.RecvName = Request.Params["recvname"];
             storeOrderT.RecvTel = Request.Params["recvtel"];
-            storeOrderT.RecvAddr = Request.Params["recvaddr"];
-            storeOrderT.RecvPostNum = Request.Params["recvpostnum"];
             storeOrderT.RecvMsg = Request.Params["recvmsg"];
             storeOrderT.UserId = profileModel.UserId;
             storeOrderT.MemberNo = profileModel.UserNo;
             storeOrderT.OrderDate = DateTime.Now;
-            storeOrderT.PaymentStatus = "";
-            storeOrderT.Addr1 = Request.Params["txtLnmAddr"];
-            storeOrderT.Addr2 = Request.Params["txtRnAddr"];
-            storeOrderT.AddrDetail = Request.Params["txtAddrDetail"];
-            storeOrderT.PostNo = Request.Params["txtPostNo"];
-            storeOrderT.ShippingPrice = Request.Params["txtShippingPrice"];
+            storeOrderT.PaymentStatus = "1"; // 주문완료
+            storeOrderT.ShippingAddrNo = Int64.Parse(Request.Params["shippingAddrNo"]);
+            storeOrderT.ShippingPrice = Request.Params["shippingPrice"];
+            storeOrderT.SlowMakeYn = Request.Params["rdoSlowMakeYn"];            
             storeOrderT.RegId = profileModel.UserId;
 
-            //###############################################################################
-            //# 1. 객체 생성 #
-            //################
-            INIPAY50Lib.INItx50 INIpayCancel = new INIPAY50Lib.INItx50Class();
+            // 주문 마스터 저장
+            orderMasterNo = biz.InsertOrderInfo(storeOrderT);
 
-            //###############################################################################
-            //# 2. 인스턴스 초기화 /3. 거래 유형 설정 #
-            //######################
-            INIpayCancel.Initialize("cancel"); 
-            intPInst = INIpay.Initialize(string.Empty);
+            // 주문상세내역 호출
+            OrderInfoList = biz.GetStoreOrderListByMemberNo(profileModel.UserNo);
 
-            INIpay.SetActionType(ref intPInst, "cancel");
-            //###############################################################################
-            //# 4. 정보 설정 #
-            //################
-            INIpay.SetField(ref intPInst, "pgid", "IniTechPG_"); //PG ID (고정)
-            INIpayCancel.SetField(ref intPInst, "mid", instance.Mid);				// 상점아이디
-            INIpayCancel.SetField(ref intPInst, "admin", instance.MidPassword);								// 키패스워드(상점아이디에 따라 변경)
-            INIpayCancel.SetField(ref intPInst, "tid", storePaymentT.Common.Tid);								// 취소할 거래번호
-            INIpayCancel.SetField(ref intPInst, "CancelMsg", "MERCHANT'S DB FAIL");			// 취소 사유
-            INIpayCancel.SetField(ref intPInst, "debug", "true");								// 로그모드(실서비스시에는 "false"로)
-
-            //###############################################################################
-            //# 5. 취소 요청 #
-            //################
-            INIpayCancel.StartAction(ref intPInst);
-
-            //###############################################################################
-            //# 6. 취소 결과 #
-            //################
-            storePaymentT.Common.Resultcode = INIpayCancel.GetResult(ref intPInst, "resultcode"); // 결과코드 ("00"이면 지불성공)
-            storePaymentT.Common.ResultMsg = INIpayCancel.GetResult(ref intPInst, "resultmsg"); // 결과내용
-
-            if (storePaymentT.Common.Resultcode.Equals("00"))
+            foreach(OrderInfo info in OrderInfoList)
             {
-                storePaymentT.Common.Resultcode = "01";
-                storePaymentT.Common.ResultMsg = "지불결과 DB 연동 실패";
+                StoreOrderDetailT item = new StoreOrderDetailT();
+                item.OrderMasterNo = orderMasterNo;
+                item.ProductDetailNo = info.PRODUCT_DETAIL_NO;
+                item.ProductPrice = info.TOTAL_PRICE;
+                item.ShippingPrice = info.SHIPPING_PRICE;
+                item.ProductCnt = info.PRODUCT_CNT;
+                item.OrderStatus = "1";
+                item.RegId = profileModel.UserId;
+                storeOrderDetailList.Add(item);
             }
 
-            //###############################################################################
-            //# 7. 인스턴스 해제 #
-            //####################
-            INIpayCancel.Destroy(ref intPInst);
+            
+            // 주문상세내역 저장
+            if (orderMasterNo > 0)
+            {
+                orderDetailNo = biz.InsertOrderDetailInfo(storeOrderDetailList);
+            }
+            #endregion
+
+            #region 결제 실패시(DB 연결 실패)
+            if (orderDetailNo == 0)
+            {
+                // * 데이터베이스 처리부분 삽입
+                // * 처리 실패시 아래 주석부분을 풀면, 이니시스에 해당 거래를 취소요청합니다
+
+                //###############################################################################
+                //# 1. 객체 생성 #
+                //################
+                INIPAY50Lib.INItx50 INIpayCancel = new INIPAY50Lib.INItx50Class();
+
+                //###############################################################################
+                //# 2. 인스턴스 초기화 /3. 거래 유형 설정 #
+                //######################
+                INIpayCancel.Initialize("cancel");
+                intPInst = INIpay.Initialize(string.Empty);
+
+                INIpay.SetActionType(ref intPInst, "cancel");
+                //###############################################################################
+                //# 4. 정보 설정 #
+                //################
+                INIpay.SetField(ref intPInst, "pgid", "IniTechPG_"); //PG ID (고정)
+                INIpayCancel.SetField(ref intPInst, "mid", instance.Mid);				// 상점아이디
+                INIpayCancel.SetField(ref intPInst, "admin", instance.MidPassword);								// 키패스워드(상점아이디에 따라 변경)
+                INIpayCancel.SetField(ref intPInst, "tid", storePaymentT.Common.Tid);								// 취소할 거래번호
+                INIpayCancel.SetField(ref intPInst, "CancelMsg", "MERCHANT'S DB FAIL");			// 취소 사유
+                INIpayCancel.SetField(ref intPInst, "debug", "true");								// 로그모드(실서비스시에는 "false"로)
+
+                //###############################################################################
+                //# 5. 취소 요청 #
+                //################
+                INIpayCancel.StartAction(ref intPInst);
+
+                //###############################################################################
+                //# 6. 취소 결과 #
+                //################
+                storePaymentT.Common.Resultcode = INIpayCancel.GetResult(ref intPInst, "resultcode"); // 결과코드 ("00"이면 지불성공)
+                storePaymentT.Common.ResultMsg = INIpayCancel.GetResult(ref intPInst, "resultmsg"); // 결과내용
+
+                if (storePaymentT.Common.Resultcode.Equals("00"))
+                {
+                    storePaymentT.Common.Resultcode = "01";
+                    storePaymentT.Common.ResultMsg = "지불결과 DB 연동 실패";
+                }
+
+                //###############################################################################
+                //# 7. 인스턴스 해제 #
+                //####################
+                INIpayCancel.Destroy(ref intPInst);
+            }
+            #endregion
 
             return storePaymentT;
         }
