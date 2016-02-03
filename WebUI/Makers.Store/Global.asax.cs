@@ -1,5 +1,5 @@
-﻿using Makers.Store.App_Start;
-using System;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -14,6 +14,7 @@ namespace Makers.Store
     {
         protected void Application_Start()
         {
+            RemoveWebFormEngines();
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -21,9 +22,28 @@ namespace Makers.Store
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            BundleTable.EnableOptimizations = true;
+            //BundleTable.EnableOptimizations = true;
 
             AuthConfig.RegisterAuth();
+        }
+
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            //foreach (var item in this.Context.Items.Values)
+            //{
+            //    var disposableObj = item as IDisposable;
+            //    if (disposableObj != null) disposableObj.Dispose();
+            //}
+        }
+
+        protected void RemoveWebFormEngines()
+        {
+            var viewEngines = ViewEngines.Engines;
+            var webFormEngines = viewEngines.OfType<WebFormViewEngine>().FirstOrDefault();
+            if (webFormEngines != null)
+            {
+                viewEngines.Remove(webFormEngines);
+            }
         }
     }
 }

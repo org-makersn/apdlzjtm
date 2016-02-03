@@ -10,7 +10,6 @@ namespace Net.Framwork.BizDac
 {
     public class StoreMaterialDac
     {
-
         private static StoreContext dbContext;
         
         /// <summary>
@@ -18,8 +17,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <returns></returns>
         internal List<StoreMaterialT> SelectAllStoreMaterial()
-        { 
-            
+        {
             List<StoreMaterialT> printers = null;
             using (dbContext = new StoreContext())
             {

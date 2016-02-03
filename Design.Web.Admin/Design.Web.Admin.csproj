@@ -1032,9 +1032,9 @@
       <Project>{65c05f9a-ee28-4908-a18d-48a5bf36829d}</Project>
       <Name>Net.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Net.Framwork\Net.Framwork.csproj">
+    <ProjectReference Include="..\Net.Framwork\Net.Framework.csproj">
       <Project>{b5dbd124-8c5a-4b94-97d7-014bd7c97549}</Project>
-      <Name>Net.Framwork</Name>
+      <Name>Net.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

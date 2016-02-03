@@ -9,12 +9,14 @@ namespace Net.Framwork.BizDac
 {
     public class StoreLikesBiz
     {
-        public List<StoreLikesT> getAllStorePrinter() {
+        public List<StoreLikesT> getAllStorePrinter()
+        {
             return new StoreLikesDac().SelectAllStoreLikes();
         }
 
-        public StoreLikesT getStoreLikesById (int memberNo){
-					return new StoreLikesDac().SelectStoreLikesTById(memberNo);
+        public StoreLikesT getStoreLikesById(int memberNo)
+        {
+            return new StoreLikesDac().SelectStoreLikesTById(memberNo);
         }
 
         public int add(StoreLikesT StoreLikes)
@@ -27,34 +29,34 @@ namespace Net.Framwork.BizDac
             return new StoreLikesDac().UpdateStoreLikes(StoreLikes);
         }
 
-				public int del(StoreLikesT StoreLikes)
-				{
-					return new StoreLikesDac().DeleteStoreLikes(StoreLikes);
-				}
+        public int del(StoreLikesT StoreLikes)
+        {
+            return new StoreLikesDac().DeleteStoreLikes(StoreLikes);
+        }
 
-				public int set(StoreLikesT StoreLikes)
-				{
-					StoreLikesT exist = new StoreLikesDac().SelectLikesByProductNoAndMemberNo(StoreLikes.PRODUCT_NO, StoreLikes.MEMBER_NO);
-					if (exist != null)
-					{
-						return new StoreLikesDac().DeleteStoreLikes(StoreLikes);
-					}
-					else
-					{
-						return new StoreLikesDac().InsertStoreLikes(StoreLikes);
-					}
-					
-				}
+        public int set(StoreLikesT StoreLikes)
+        {
+            StoreLikesT exist = new StoreLikesDac().SelectLikesByProductNoAndMemberNo(StoreLikes.PRODUCT_NO, StoreLikes.MEMBER_NO);
+            if (exist != null)
+            {
+                return new StoreLikesDac().DeleteStoreLikes(StoreLikes);
+            }
+            else
+            {
+                return new StoreLikesDac().InsertStoreLikes(StoreLikes);
+            }
 
-				public int countLikesByProductNo(int productNo)
-				{
-					return new StoreLikesDac().SelectStoreLikesTByProductNo(productNo);
-				}
+        }
+
+        public int countLikesByProductNo(int productNo)
+        {
+            return new StoreLikesDac().SelectStoreLikesTByProductNo(productNo);
+        }
 
 
-				public List<StoreLikesT> getLikedProductsByMemberNo(int memberNo)
-				{
-					return new StoreLikesDac().SelectLikesByProductNoAndMemberNo(memberNo);
-				}
-		}
+        public List<StoreLikesT> getLikedProductsByMemberNo(int memberNo)
+        {
+            return new StoreLikesDac().SelectLikesByProductNoAndMemberNo(memberNo);
+        }
+    }
 }

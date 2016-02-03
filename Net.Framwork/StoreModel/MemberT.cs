@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace Net.Framwork.StoreModel
+namespace Net.Framework.StoreModel
 {
     [Table("MEMBER")]
-    public partial class MemberT
+    public partial class MemberExT
     {
         [Key, Column("NO")]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]

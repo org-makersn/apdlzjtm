@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Data.Linq.Mapping;
 
-namespace Net.Framwork.StoreModel
+namespace Net.Framework.StoreModel
 {
     /// <summary>
     /// 

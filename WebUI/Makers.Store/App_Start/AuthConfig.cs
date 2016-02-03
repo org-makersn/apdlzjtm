@@ -1,6 +1,6 @@
 ﻿using Microsoft.Web.WebPages.OAuth;
 
-namespace Makers.Store.App_Start
+namespace Makers.Store
 {
     public static class AuthConfig
     {

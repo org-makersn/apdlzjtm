@@ -1,12 +1,12 @@
-﻿using Net.Framwork.Helper;
-using Net.Framwork.StoreModel;
+﻿using Net.Framework.Helper;
+using Net.Framework.StoreModel;
 using System;
 
 namespace Net.Framwork.BizDac
 {
     public class MemberDac_bak
     {
-        static IRepository<MemberT> _repository = new Repository<MemberT>();
+        static IRepository<MemberExT> _repository = new Repository<MemberExT>();
 
         /// <summary>
         /// 회원 조회 - 로그인
@@ -15,9 +15,9 @@ namespace Net.Framwork.BizDac
         /// <param name="password"></param>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public MemberT GetMemberForLogOn(string membId, string password, string ip)
+        public MemberExT GetMemberForLogOn(string membId, string password, string ip)
         {
-            MemberT member = _repository.First(m => (m.ID == membId && m.PASSWORD == password) && m.LEVEL >= 50 && m.DEL_FLAG == "N");
+            MemberExT member = _repository.First(m => (m.ID == membId && m.PASSWORD == password) && m.LEVEL >= 50 && m.DEL_FLAG == "N");
             if (member != null)
             {
                 member.LOGIN_CNT += 1;
@@ -35,7 +35,7 @@ namespace Net.Framwork.BizDac
         /// <param name="memberId"></param>
         /// <param name="openId"></param>
         /// <returns></returns>
-        public MemberT GetMemberExistById(string memberId, string openId)
+        public MemberExT GetMemberExistById(string memberId, string openId)
         {
             return _repository.First(m => m.ID == memberId && m.SNS_ID == openId && m.SNS_TYPE == "fb" && m.DEL_FLAG == "N");
         }
@@ -45,7 +45,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="member"></param>
         /// <returns></returns>
-        public int RegisterMember(MemberT member)
+        public bool RegisterMember(MemberExT member)
         {
             return _repository.Insert(member);
         }
@@ -58,7 +58,7 @@ namespace Net.Framwork.BizDac
         public bool UpdateMemberEmailCertify(int memberNo)
         {
             bool result = false;
-            MemberT member = _repository.First(m => m.NO == memberNo);
+            MemberExT member = _repository.First(m => m.NO == memberNo);
             if (member != null)
             {
                 member.EMAIL_CERTIFY = "Y";
@@ -79,7 +79,7 @@ namespace Net.Framwork.BizDac
         {
             bool result = false;
 
-            MemberT member = _repository.First(m => m.NO == memberNo);
+            MemberExT member = _repository.First(m => m.NO == memberNo);
 
             if (member != null)
             {
@@ -102,7 +102,7 @@ namespace Net.Framwork.BizDac
         {
             bool result = false;
 
-            MemberT member = _repository.First(m => m.NO == memberNo);
+            MemberExT member = _repository.First(m => m.NO == memberNo);
             if (member != null)
             {
                 member.EMAIL_CERTIFY = "Y";
@@ -124,7 +124,7 @@ namespace Net.Framwork.BizDac
         public bool UpdateTemporaryPassword(string id, string temp)
         {
             bool result = false;
-            MemberT member = _repository.First(m => m.ID == id && m.EMAIL_CERTIFY == "Y" && m.DEL_FLAG == "N");
+            MemberExT member = _repository.First(m => m.ID == id && m.EMAIL_CERTIFY == "Y" && m.DEL_FLAG == "N");
             if (member != null)
             {
                 member.PASSWORD = temp;

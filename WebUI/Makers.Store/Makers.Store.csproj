@@ -175,6 +175,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ModelController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ShippingController.cs" />
@@ -183,7 +184,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\PagenationHelper.cs" />
-    <Compile Include="Helper\UrlHelperExtensions.cs" />
     <Compile Include="Models\SendMailModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthorizeAttribute.cs" />
@@ -312,6 +312,8 @@
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\uploader\dmuploader.js" />
+    <Content Include="Scripts\uploader\dmuploader.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Product\Models.js" />
     <Content Include="Web.config" />
@@ -354,6 +356,7 @@
     <Content Include="Views\Order\INIsecureResult.cshtml" />
     <Content Include="Views\Cart\Grid.cshtml" />
     <Content Include="Views\Shipping\List.cshtml" />
+    <Content Include="Views\Model\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -378,9 +381,9 @@
       <Project>{65c05f9a-ee28-4908-a18d-48a5bf36829d}</Project>
       <Name>Net.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Net.Framwork\Net.Framwork.csproj">
+    <ProjectReference Include="..\..\Net.Framwork\Net.Framework.csproj">
       <Project>{b5dbd124-8c5a-4b94-97d7-014bd7c97549}</Project>
-      <Name>Net.Framwork</Name>
+      <Name>Net.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

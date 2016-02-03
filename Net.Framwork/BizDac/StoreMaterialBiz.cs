@@ -12,13 +12,16 @@ namespace Net.Framwork.BizDac
         public List<StoreMaterialT> getAllStoreMaterial() {
             return new StoreMaterialDac().SelectAllStoreMaterial();
         }
+
         public StoreMaterialT getStoreMaterialById (int no){
             return new StoreMaterialDac().SelectStoreMaterialTById(no);
         }
+
         public int add(StoreMaterialT StoreMaterial)
         {
             return new StoreMaterialDac().InsertStoreMaterial(StoreMaterial);
         }
+
         public int upd(StoreMaterialT StoreMaterial)
         {
             return new StoreMaterialDac().UpdateStoreMaterial(StoreMaterial);

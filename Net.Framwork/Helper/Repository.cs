@@ -5,9 +5,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Net.Framwork.Helper
+namespace Net.Framework.Helper
 {
-    public class Repository<T> : Net.Framwork.Helper.IRepository<T> where T : class, new()
+    public class Repository<T> : Net.Framework.Helper.IRepository<T> where T : class, new()
     {
         //private static readonly object s_lock = new object();
         private string _constr { get; set; }
@@ -70,12 +70,12 @@ namespace Net.Framwork.Helper
             }
         }
 
-        public int Insert(T entity)
+        public bool Insert(T entity)
         {
             using (var dbctx = new AppDbContext<T>(_constr))
             {
                 dbctx.Set<T>().Add(entity);
-                return dbctx.SaveChanges();
+                return dbctx.SaveChanges() > 0;
             }
         }
 

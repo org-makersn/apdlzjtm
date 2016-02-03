@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 
-namespace Net.Framwork
+namespace Net.Framework
 {
     public class AppDbContext<T> : DbContext where T : class
     {

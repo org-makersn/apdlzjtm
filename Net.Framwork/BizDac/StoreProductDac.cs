@@ -1,7 +1,7 @@
 ﻿using Net.Framework;
 using Net.Framework.StoreModel;
-using Net.Framwork.Helper;
-using Net.Framwork.StoreModel;
+using Net.Framework.Helper;
+using Net.Framework.StoreModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +27,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
-        internal StoreProductT SelectStoreProductTById(int no)
+        internal StoreProductT SelectStoreProductTById(long no)
         {
             return _repository.First(m => m.NO == no);
         }
@@ -37,11 +37,16 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public int InsertStoreProduct(StoreProductT data)
+        public long InsertStoreProduct(StoreProductT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
-
-            return _repository.Insert(data);
+            long identity = 0;
+            bool ret = _repository.Insert(data);
+            if (ret)
+            {
+                identity = _repository.First(m => m.VAR_NO == data.VAR_NO).NO;
+            }
+            return identity;
         }
 
         /// <summary>
@@ -84,8 +89,9 @@ namespace Net.Framwork.BizDac
         /// <param name="memberNo"></param>
         /// <param name="codeNo"></param>
         /// <returns></returns>
-        internal IList<StoreProductT> SelectProductsByOption(int memberNo, int codeNo)
+        internal IList<StoreProductT> SelectProductsByOption(int memberNo, int codeNo, int fromIndex, int toIndex)
         {
+            //페이징
             return _repository.Get(p => p.CATEGORY_NO == codeNo).ToList();
         }
 

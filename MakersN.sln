@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.StlParser", "Librar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Common", "Net.Common\Net.Common.csproj", "{65C05F9A-EE28-4908-A18D-48A5BF36829D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Framwork", "Net.Framwork\Net.Framwork.csproj", "{B5DBD124-8C5A-4B94-97D7-014BD7C97549}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Framework", "Net.Framwork\Net.Framework.csproj", "{B5DBD124-8C5A-4B94-97D7-014BD7C97549}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebUI", "WebUI", "{141E0763-DE33-40C6-A331-A09F50A11C0C}"
 EndProject
