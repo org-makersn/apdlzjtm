@@ -178,11 +178,8 @@ namespace Makers.Store.Controllers
                 product.VIDEO_URL = videoUrl;
                 //product.VideoType = "";
 
-                int ret = new StoreProductBiz().setStoreProduct(product);
-                if (ret > 0)
-                {
-                    response.Success = true;
-                }
+                bool ret = new StoreProductBiz().setStoreProduct(product);
+                response.Success = ret;
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -247,8 +244,8 @@ namespace Makers.Store.Controllers
 
                 if (status > 0)
                 {
-                    int ret = new StoreProductBiz().setStoreProduct(product);
-                    if (ret > 0)
+                    bool ret = new StoreProductBiz().setStoreProduct(product);
+                    if (ret)
                     {
                         response.Success = true;
                         response.Result = JsonConvert.SerializeObject(getSize);

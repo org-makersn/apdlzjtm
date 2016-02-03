@@ -8,20 +8,14 @@ namespace Net.Framework
 {
     public class StoreContext : DbContext
     {
-        //static StoreContext()
-        //{
-        //    Database.SetInitializer<StoreContext>(null);
-        //}
-
-        //public StoreContext()
-        //    : base("Name=StoreContext")
-        //{
-        //}
+        static StoreContext()
+        {
+            Database.SetInitializer<StoreContext>(null);
+        }
 
         public StoreContext()
-            : base(ConfigurationManager.ConnectionStrings["StoreContext"].ConnectionString)
+            : base("name=StoreContext")
         {
-            //Database.SetInitializer<StoreContext>(null);
         }
 
         public DbSet<StorePrinterT> StorePrinterT { get; set; }

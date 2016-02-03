@@ -1,48 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace Net.Framwork.StoreModel
 {
-    //나중에
-    class MemberT
+    [Table("MEMBER")]
+    public partial class MemberT
     {
-        //public virtual int No { get; set; }
-        //[Required(ErrorMessage = "ID를 입력해주세요.")]
-        //public virtual string Id { get; set; }
-        //public virtual string BlogUrl { get; set; }
-        //public virtual int Level { get; set; }
-        ////[JsonConverter(typeof(StringEnumConverter))]
-        //public virtual string Status { get; set; }
-        //public virtual string Password { get; set; }
-        //public virtual string Name { get; set; }
-        //public virtual string Email { get; set; }
-        //public virtual string CellPhone { get; set; }
-        //public virtual string Url { get; set; }
-        //public virtual string SnsType { get; set; }
-        //public virtual string SnsId { get; set; }
-        //public virtual string ProfileMsg { get; set; }
-        //public virtual string ProfilePic { get; set; }
-        //public virtual string CoverPic { get; set; }
-        //public virtual string AllIs { get; set; }
-        //public virtual string RepleIs { get; set; }
-        //public virtual string LikeIs { get; set; }
-        //public virtual string NoticeIs { get; set; }
-        //public virtual Nullable<DateTime> UpdPasswordDt { get; set; }
-        //public virtual Nullable<DateTime> LastLoginDt { get; set; }
-        //public virtual string LastLoginIp { get; set; }
-        //public virtual Nullable<int> LoginCnt { get; set; }
-        //public virtual string emailCertify { get; set; }
-        //public virtual Nullable<DateTime> DelDt { get; set; }
-        //public virtual string DropComment { get; set; }
-        //public virtual string DelFlag { get; set; }
-        //public virtual DateTime RegDt { get; set; }
-        //public virtual string RegId { get; set; }
-        //public virtual Nullable<DateTime> UpdDt { get; set; }
-        //public virtual string UpdId { get; set; }
-        //public virtual string FollowIs { get; set; }
+        [Key, Column("NO")]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public int NO { get; set; }
+        public string ID { get; set; }
+        public string BLOG_URL { get; set; }
+        public int LEVEL { get; set; }
+        public string STATUS { get; set; }
+        public string PASSWORD { get; set; }
+        public string NAME { get; set; }
+        public string EMAIL { get; set; }
+        public string CELL_PHONE { get; set; }
+        public string URL { get; set; }
+        public string SNS_TYPE { get; set; }
+        public string SNS_ID { get; set; }
+        public string PROFILE_MSG { get; set; }
+        public string PROFILE_PIC { get; set; }
+        public string COVER_PIC { get; set; }
+        public string ALL_IS { get; set; }
+        public string REPLE_IS { get; set; }
+        public string LIKE_IS { get; set; }
+        public string NOTICE_IS { get; set; }
+        public string FOLLOW_IS { get; set; }
+        public Nullable<System.DateTime> UPD_PASSWORD_DT { get; set; }
+        public Nullable<System.DateTime> LAST_LOGIN_DT { get; set; }
+        public string LAST_LOGIN_IP { get; set; }
+        public Nullable<int> LOGIN_CNT { get; set; }
+        public string EMAIL_CERTIFY { get; set; }
+        public Nullable<System.DateTime> DEL_DT { get; set; }
+        public string DROP_COMMENT { get; set; }
+        public string DEL_FLAG { get; set; }
+        public Nullable<System.DateTime> REG_DT { get; set; }
+        public string REG_ID { get; set; }
+        public Nullable<System.DateTime> UPD_DT { get; set; }
+        public string UPD_ID { get; set; }
     }
 }

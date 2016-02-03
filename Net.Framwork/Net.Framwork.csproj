@@ -51,11 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppDbContext.cs" />
+    <Compile Include="BizDac\MemberDac.cs" />
     <Compile Include="BizDac\StoreShippingBiz.cs" />
     <Compile Include="BizDac\StoreShippingDac.cs" />
     <Compile Include="Helper\DacBase.cs" />
-    <Compile Include="BizDac\MemberTestBiz.cs" />
-    <Compile Include="BizDac\MemberTestDac.cs" />
     <Compile Include="BizDac\StoreCartBiz.cs" />
     <Compile Include="BizDac\StoreCartDac.cs" />
     <Compile Include="BizDac\StoreOrderBiz.cs" />
@@ -86,7 +86,6 @@
     <Compile Include="BizDac\StoreReviewDac.cs" />
     <Compile Include="BizDac\StorePrinterMaterialBiz.cs" />
     <Compile Include="BizDac\StorePrinterMaterialDac.cs" />
-    <Compile Include="Configurations\ApplicationConfiguration.cs" />
     <Compile Include="Helper\DacHelper.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Logging\ILogger.cs" />

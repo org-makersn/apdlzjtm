@@ -10,9 +10,8 @@ namespace Net.Framwork.BizDac
 {
     public class StoreProductDac : DacBase
     {
-        private static readonly StoreContext instance = new StoreContext();
 
-        public static StoreContext dbContext { get; set; }
+        IRepository<StoreProductT> _repository = new Repository<StoreProductT>();
         
         /// <summary>
         /// select multi data
@@ -21,12 +20,7 @@ namespace Net.Framwork.BizDac
         internal IList<StoreProductT> SelectAllStoreProduct()
         {
 
-            IList<StoreProductT> printers = null;
-            using (dbContext = new StoreContext())
-            {
-                printers = dbContext.StoreProductT.ToList();
-            }
-            return printers;
+            return _repository.GetAll().ToList();
         }
 
         /// <summary>
@@ -36,14 +30,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         internal StoreProductT SelectStoreProductTById(int no)
         {
-            StoreProductT printer = null;
-
-            using (dbContext = new StoreContext())
-            {
-                printer = dbContext.StoreProductT.Where(m => m.NO == no).FirstOrDefault();
-            }
-
-            return printer;
+            return _repository.First(m => m.NO == no);
         }
 
         /// <summary>
@@ -51,18 +38,11 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public long InsertStoreProduct(StoreProductT data)
+        public int InsertStoreProduct(StoreProductT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
-            long ret = 0;
 
-            using (dbContext = new StoreContext())
-            {
-                dbContext.StoreProductT.Add(data);
-                dbContext.SaveChanges();
-                ret = data.NO;
-            }
-            return ret;
+            return _repository.Insert(data);
         }
 
         /// <summary>
@@ -70,26 +50,11 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int UpdateStoreProduct(StoreProductT data)
+        internal bool UpdateStoreProduct(StoreProductT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
-            int ret = 0;
-            using (dbContext = new StoreContext())
-            {
-                try
-                {
-                    dbContext.StoreProductT.Attach(data);
-                    dbContext.Entry<StoreProductT>(data).State = System.Data.Entity.EntityState.Modified;
-                    dbContext.SaveChanges();
-                    ret = 1;
-                }
-                catch (Exception)
-                {
-                    ret = -1;
-                }
-            }
-            return ret;
+            return _repository.Update(data);
         }
 
         /// <summary>
@@ -100,12 +65,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         internal List<StoreProductT> SelectProductWithCertification(int certificateStatus,string query)
         {
-            using (dbContext = new StoreContext())
-            {
-                return dbContext.StoreProductT
-                    .Where(p =>( p.CERTIFICATE_YN == certificateStatus) && p.NAME.Contains(query) )
-                    .ToList();
-            }
+            return _repository.Get(m => (m.CERTIFICATE_YN == certificateStatus) && m.NAME.Contains(query)).ToList();
         }
 
         /// <summary>
@@ -116,10 +76,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         internal int SelectTotalCountByOption(int memberNo, int codeNo)
         {
-            using (dbContext = new StoreContext())
-            {
-                return dbContext.StoreProductT.Count(p => p.CATEGORY_NO == codeNo);
-            }
+            return _repository.QueryCount(m => m.CATEGORY_NO == codeNo);
         }
 
         /// <summary>
@@ -130,26 +87,23 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         internal IList<StoreProductT> SelectProductsByOption(int memberNo, int codeNo)
         {
-            using (dbContext = new StoreContext())
-            {
-                return dbContext.StoreProductT.Where(p => p.CATEGORY_NO == codeNo).ToList();
-            }
+            return _repository.Get(p => p.CATEGORY_NO == codeNo).ToList();
         }
 
-
+        /// <summary>
+        /// test
+        /// </summary>
+        /// <returns></returns>
         public IList<StoreProductExT> SelectProductTest()
         {
             string query = DacHelper.GetSqlCommand("StoreProduct.SelectProductList_S");
 
-            var states = dbHelper.ExecuteMultiple<StoreProductExT>(query);
+            IList<StoreProductExT> states = dbHelper.ExecuteMultiple<StoreProductExT>(query).ToList();
 
-            //IEnumerable<StoreProductT> list = states != null ? states.ToList() : null;
-
-            using (dbContext = new StoreContext())
+            using (var dbContext = new StoreContext())
             {
                 IList<StoreProductExT> list = dbContext.Database.SqlQuery<StoreProductExT>(query).ToList();
 
-                //IList<StoreProductExT> list1 = dbContext.StoreProductT.ToList();
                 return list;
             }
         }

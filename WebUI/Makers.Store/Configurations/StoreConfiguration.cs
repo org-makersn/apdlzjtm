@@ -6,13 +6,13 @@ using System.Web;
 
 namespace Makers.Store.Configurations
 {
-    public class StoreConfiguration
+    public class StoreConfiguration_bak
     {
-        private static readonly StoreConfiguration instance = new StoreConfiguration();
+        private static readonly StoreConfiguration_bak instance = new StoreConfiguration_bak();
 
-        public static StoreConfiguration Instance { get { return instance; } }
+        public static StoreConfiguration_bak Instance { get { return instance; } }
 
-        private StoreConfiguration()
+        private StoreConfiguration_bak()
         {
             PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfiles";
             Slic3rDir = ConfigurationManager.AppSettings["Slic3rDir"] ?? @"D:\slic3r";

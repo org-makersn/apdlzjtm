@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
-namespace Net.Framework
+namespace Net.Framwork
 {
-    public interface IRepository<T>
+    interface IRepository<T>
+     where T : class, new()
     {
-        IEnumerable<T> Get(Expression<Func<T, bool>> predicate);
-        T First(Expression<Func<T, bool>> predicate);
-        IEnumerable<T> GetAll();
-        IEnumerable<T> GetAllOrderBy(Func<T, object> keySelector);
-        IEnumerable<T> GetAllOrderByDescending(Func<T, object> keySelector);
-        void Add(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-        void Commit();
-        void Dispose();
+        bool Delete(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
+        bool Delete(object col);
+        T First(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
+        System.Collections.Generic.IEnumerable<T> Get(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
+        System.Collections.Generic.IEnumerable<T> GetAll();
+        System.Collections.Generic.IEnumerable<T> GetAllOrderBy(Func<T, object> keySelector);
+        System.Collections.Generic.IEnumerable<T> GetAllOrderByDescending(Func<T, object> keySelector);
+        int Insert(T entity);
+        System.Collections.Generic.IEnumerable<T> InsertAll(System.Collections.Generic.List<T> inList);
+        int QueryCount(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
+        bool Update(T entityToUpdate);
+        System.Collections.Generic.IEnumerable<T> UpdateAll(System.Collections.Generic.List<T> inList);
     }
 }

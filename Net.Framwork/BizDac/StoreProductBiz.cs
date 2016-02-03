@@ -31,7 +31,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="StoreProduct"></param>
         /// <returns></returns>
-        public long addStoreProduct(StoreProductT StoreProduct)
+        public int addStoreProduct(StoreProductT StoreProduct)
         {
             return new StoreProductDac().InsertStoreProduct(StoreProduct);
         }
@@ -41,7 +41,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="StoreProduct"></param>
         /// <returns></returns>
-        public int setStoreProduct(StoreProductT StoreProduct)
+        public bool setStoreProduct(StoreProductT StoreProduct)
         {
             return new StoreProductDac().UpdateStoreProduct(StoreProduct);
         }
