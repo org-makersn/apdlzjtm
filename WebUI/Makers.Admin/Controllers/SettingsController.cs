@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace Makers.Admin.Controllers
 {
+    [Authorize]
     public class SettingsController : BaseController
     {
         private MenuModel MenuModel(int subIndex)
@@ -35,8 +36,11 @@ namespace Makers.Admin.Controllers
         /// 재질
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         public ActionResult Materials(string mode = "list", int page = 1)
         {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+
             ViewData["Group"] = MenuModel(1);
             if (mode.Contains("add"))
             {
@@ -44,7 +48,7 @@ namespace Makers.Admin.Controllers
 
                 ViewData["cnt"] = models.Count;
 
-                return View("MaterialAdd", models.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
+                return View("MaterialAdd");
             }
             else if (mode.Contains("edit"))
             {
@@ -52,7 +56,7 @@ namespace Makers.Admin.Controllers
 
                 ViewData["cnt"] = models.Count;
 
-                return View("MaterialEdit", models.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
+                return View("MaterialEdit");
             }
             else
             {
@@ -62,6 +66,22 @@ namespace Makers.Admin.Controllers
 
                 return View(models.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
             }
+        }
+
+        [HttpPost]
+        public JsonResult Materials(string mode, string name, string imagename)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            if (mode.Contains("add"))
+            {
+
+            }
+            else
+            {
+
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

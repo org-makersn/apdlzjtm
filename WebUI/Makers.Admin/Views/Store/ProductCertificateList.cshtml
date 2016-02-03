@@ -66,27 +66,27 @@
                 foreach (var p in Model)
                 {
                 <tr>
-                    <td>@p.No</td>
+                    <td>@p.NO</td>
                     @*<td>
                         <p class="memb_img">
                             <a href="javascript:Banner.GoEdit(@p.No)" class="_btn_edit" id="img">
                                 <img src="@Url.Content(ViewBag.BannerUrl+"thumb/"+ b.Image)" /></a>
                         <p>
                     </td>*@
-                    <td class="ta_left"><a href="javascript:Banner.GoEdit(@p.No)" class="_btn_edit" id="title">@p.ProductName</a></td>
-                    <td>@p.FileName</td>
-                    <td>@p.ObjectVolume</td>
-                    <td>@p.MaterialVolume</td>
+                    <td class="ta_left"><a href="javascript:Banner.GoEdit(@p.NO)" class="_btn_edit" id="title">@p.NAME</a></td>
+                    <td>@p.FILE_NAME</td>
+                    <td>@p.OBJECT_VOLUME</td>
+                    <td>@p.MATERIAL_VOLUME</td>
 
                     <td>
                         @if (ViewData["certificateType"].ToString().Equals("1"))
                         {
-                            <button onclick="javascript:accept(@p.No)">승인</button> 
-                            <button onclick="javascript:reject(@p.No)">거부</button>
+                            <button onclick="javascript:accept(@p.NO)">승인</button> 
+                            <button onclick="javascript:reject(@p.NO)">거부</button>
                         }
                         else if (ViewData["certificateType"].ToString().Equals("3"))
                         {
-                            <button onclick="javascript:uploadFinished(@p.No)">업로드 완료</button> 
+                            <button onclick="javascript:uploadFinished(@p.NO)">업로드 완료</button> 
                         }
 
                     </td>

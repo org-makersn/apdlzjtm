@@ -13,7 +13,7 @@
     </div>
 
     <div class="btn_right">
-        <span class="btnWrap medium"><a href="/Store/PrinterInsert" class="_btn_write">등록</a></span>
+        <span class="btnWrap medium"><a href="/Settings/Materials?mode=add" class="_btn_write">등록</a></span>
     </div>
 
     <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
@@ -42,11 +42,11 @@
                 foreach (var material in Model)
                 {
                 <tr>
-                    <td>@material.No</td>
-                    <td>@material.Name</td>
-                    <td>@material.Price</td>
-                    <td>@material.SliceYn</td>
-                    <td>@material.Sort</td>
+                    <td>@material.NO</td>
+                    <td>@material.NAME</td>
+                    <td>@material.PRICE</td>
+                    <td>@material.SLICE_YN</td>
+                    <td>@material.SORT</td>
                     <td></td>
                 </tr>
                 }

@@ -42,9 +42,12 @@ namespace Net.Framework.StoreModel
         [Key, Column("NO")]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int NO { get; set; }
+        [Required(ErrorMessage = "재질명을 입력해주세요.")]
         public string NAME { get; set; }
+        [Required(ErrorMessage = "재질 기본 가격을 입력해주세요.")]
         public int PRICE { get; set; }
         public string SLICE_YN { get; set; }
+        [Required(ErrorMessage = "재질 이미지를 선택해주세요.")]
         public string IMAGE_NAME { get; set; }
         public int SORT { get; set; }
         public System.DateTime REG_DT { get; set; }
