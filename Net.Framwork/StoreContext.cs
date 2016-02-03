@@ -37,6 +37,7 @@ namespace Net.Framework
         public DbSet<StoreOrderT> StoreOrderT { get; set; }
         public DbSet<StoreOrderDetailT> StoreOrderDetailT { get; set; }
         public DbSet<StoreShippingAddrT> StoreShippingAddrT { get; set; }
+        public DbSet<StorePaymentHistoryT> StorePaymentHistoryT { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{

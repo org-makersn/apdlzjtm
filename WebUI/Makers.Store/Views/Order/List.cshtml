@@ -15,6 +15,14 @@
 * 웹SITE 가 https, unicode를 이용하면 https://plugin.inicis.com/pay61_secunissl_cross.js 사용  
 
 -------------------------------------------------------------------------------->
+<style type="text/css">
+.li_table {width: auto; border:1 solid red;border-top:none;border-right:none}
+.li_table ul {clear: left;margin: 0;padding: 0;list-style-type: none;border-top:solid 1px red;} 
+/* list-style-type 블릿표시 padding: 0; 들여쓰기*/
+.li_table .subject {font-weight: bold;text-align: center;}
+.li_table ul li {text-align: center;float: left;margin: 0;padding: 2px, 1px;border-right:solid 1px red;width: auto;}
+.li_table ul .col1 {width: 50px;} /* 표 라인 맞추기기 위해*/
+</style>
 
 <script type="text/javascript" src="http://plugin.inicis.com/pay61_secuni_cross.js"></script>
 <script type="text/javascript" >
@@ -163,22 +171,22 @@
     장바구니번호 <input type="text" value="@Model.StoreCart.CartNo" id="cartNo" name="cartNo" />
     </p>
     <p>
-    받는사람 성명 <input type="text" id="recvname" name="recvname" />
+    받는사람 성명 <input type="text" value="@Model.BuyerName" id="recvname" name="recvname" />
     </p>
     <p>
-    받는사람 이동전화 <input type="text" id="recvtel" name="recvtel" />
+    받는사람 이동전화 <input type="text" value="01011112222" id="recvtel" name="recvtel" />
     </p>
     <p>
     받는사람 이동전화2 <input type="text" id="recvtel2" name="recvtel2" />
     </p>
     <p>
-    전달메시지 <input type="text"  id="recvmsg" name="recvmsg" />
+    전달메시지 <input type="text" value="test" id="recvmsg" name="recvmsg" />
     </p>
     <p>
     주문일자 <input type="text"  id="txtOrderDate" />
     </p>
     <p>
-    느린제작 여부 <label for="rdoSlowMakeY">Y</label><input type="radio" id="rdoSlowMakeY" name="rdoSlowMakeYn" value="Y" />   <label for="rdoSlowMakeN">N</label><input type="radio" id="rdoSlowMakeN" name="rdoSlowMakeYn" value="N" />   
+    느린제작 여부 <label for="rdoSlowMakeY">Y</label><input type="radio" id="rdoSlowMakeY" name="rdoSlowMakeYn" value="Y" />   <label for="rdoSlowMakeN">N</label><input type="radio" checked="checked" id="rdoSlowMakeN" name="rdoSlowMakeYn" value="N" />   
     </p>
     <div id="divShippingAddrList"></div>
     <table style="border:solid 1px red;" border="1">
@@ -232,7 +240,8 @@
     <input type="hidden" id="mid" name="mid" value="@Model.Mid" >
     <input type="hidden" value="@Model.Currency" id="currency" name="currency" />
     <input type="hidden" id="url" name="url" />
-
+    <input type="hidden" id="shippingAddrNo" name="shippingAddrNo" />
+    <input type="hidden" id="shippingPrice" name="shippingPrice" value="3000" />
 </form>
 <script type="text/javascript">
 

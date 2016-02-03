@@ -15,7 +15,6 @@ using System.Text;
 using System.Xml;
 using System.Collections;
 using System.Data;
-
 using Makers.Store.Configurations;
 
 namespace Makers.Store.Controllers
@@ -26,20 +25,6 @@ namespace Makers.Store.Controllers
         // GET: /Order/
 
         private Hashtable hstCode_PayMethod = new Hashtable();
-       
-        /// <summary>
-        /// 플러그인 좌측 상단 상점 로고 이미지 사용
-        /// 플러그인 좌측 상단에 상점 로고 이미지를 사용하실 수 있으며,
-        /// 주석을 풀고 이미지가 있는 URL을 입력하시면 플러그인 상단 부분에 상점 이미지를 삽입할수 있습니다.
-        /// </summary>
-        protected System.Web.UI.HtmlControls.HtmlInputHidden ini_logoimage_url;
-
-        /// <summary>
-        /// 좌측 결제메뉴 위치에 이미지 추가 
-        /// 좌측 결제메뉴 위치에 미미지를 추가하시 위해서는 담당 영업대표에게 사용여부 계약을 하신 후
-        /// 주석을 풀고 이미지가 있는 URL을 입력하시면 플러그인 좌측 결제메뉴 부분에 이미지를 삽입할수 있습니다.
-        /// </summary>
-        protected System.Web.UI.HtmlControls.HtmlInputHidden ini_menuarea_url;
 
         public ActionResult Index()
         {
@@ -87,13 +72,13 @@ namespace Makers.Store.Controllers
                 index++;
             }
 
-            if (index > 0)
+            if (index == 1)
             {
-                master.GoodsName = firstGoodsName + " 외 " + (index - 1) + "건";
+                master.GoodsName = firstGoodsName;                
             }
             else
             {
-                master.GoodsName = firstGoodsName;
+                master.GoodsName = firstGoodsName + " 외 " + (index - 1) + "건";
             }
             master.EncResult = StartChkFake(master.TotalPrice.ToString()); // 페이지 위변조 체크
 
@@ -276,10 +261,10 @@ namespace Makers.Store.Controllers
             //* 결제결과금액 =>원상품가격과  결제결과금액과 비교하여 금액이 동일하지 않다면  
             //* 결제 금액의 위변조가 의심됨으로 정상적인 처리가 되지않도록 처리 바랍니다. (해당 거래 취소 처리) 
             //**********************************************************************************
-            storePaymentT.GoodsPrice = int.Parse(INIpay.GetResult(ref intPInst, "TotPrice"));                 //결제결과금액
+            storePaymentT.Common.TotPrice = int.Parse(INIpay.GetResult(ref intPInst, "TotPrice"));                 //결제결과금액
 
             //원결제금액
-            if (!strprice.Equals(storePaymentT.GoodsPrice.ToString()))
+            if (!strprice.Equals(storePaymentT.Common.TotPrice.ToString()))
             {
                 // 결제금액 위변조가 된것입니다.
                 Response.Write("결재 금액 위변조");
@@ -289,31 +274,30 @@ namespace Makers.Store.Controllers
             //-------------------------------------------------------------------------------
             // 나. 신용카드,ISP,핸드폰, 전화 결제, 은행계좌이체, OK CASH BAG Point 결제시에만 결제 결과 내용  (무통장입금 , 문화 상품권 , 네모 제외) 
             //-------------------------------------------------------------------------------
-            storePaymentT.Appl = new APPL();
-            storePaymentT.Appl.Date = INIpay.GetResult(ref intPInst, "ApplDate");		//이니시스 승인날짜
-            storePaymentT.Appl.Time = INIpay.GetResult(ref intPInst, "ApplTime");		//이니시스 승인시각
+            storePaymentT.Common.ApplDate = INIpay.GetResult(ref intPInst, "ApplDate");		//이니시스 승인날짜
+            storePaymentT.Common.ApplTime = INIpay.GetResult(ref intPInst, "ApplTime");		//이니시스 승인시각
 
             //-------------------------------------------------------------------------------
             // 다. 신용카드  결제수단을 이용시에만  결제결과 내용
             //-------------------------------------------------------------------------------
             storePaymentT.VCard = new VCARD();
-            storePaymentT.VCard.ApplNum = INIpay.GetResult(ref intPInst, "ApplNum");			//신용카드 승인번호
+            storePaymentT.Common.ApplNum = INIpay.GetResult(ref intPInst, "ApplNum");			//신용카드 승인번호
             storePaymentT.VCard.Quota = INIpay.GetResult(ref intPInst, "CARD_Quota");		//할부기간  
             storePaymentT.VCard.Interest = INIpay.GetResult(ref intPInst, "CARD_Interest");	//무이자할부 여부("1"이면 무이자할부)
             storePaymentT.VCard.Num = INIpay.GetResult(ref intPInst, "CARD_Num");			//카드번호 12자리
             storePaymentT.VCard.Code = INIpay.GetResult(ref intPInst, "CARD_Code");		//신용카드사 코드 메뉴얼이나 샘플폴더 안의 //카드사_은행_코드.txt// 파일을 참고하세요
             storePaymentT.VCard.BankCode = INIpay.GetResult(ref intPInst, "CARD_BankCode");	//신용카드 발급사(은행) 코드 (매뉴얼 참조)
             storePaymentT.VCard.AuthType = INIpay.GetResult(ref intPInst, "CARD_AuthType");	//본인인증 수행여부 ("00"이면 수행)
-            storePaymentT.VCard.EventCode = INIpay.GetResult(ref intPInst, "EventCode");		//각종 이벤트 적용 여부
+            storePaymentT.Common.EventCode = INIpay.GetResult(ref intPInst, "EventCode");		//각종 이벤트 적용 여부
 
             //아래 내용은 "신용카드 및 OK CASH BAG 복합결제" 또는"신용카드 지불시에 OK CASH BAG적립"시에 추가되는 내용
             storePaymentT.Ocb = new OCB();
-            storePaymentT.Ocb.ApplTime = INIpay.GetResult(ref intPInst, "OCB_ApplTime");		//OK Cashbag 적립 승인번호
-            storePaymentT.Ocb.SaveApplNum = INIpay.GetResult(ref intPInst, "OCB_SaveApplNum");	//OK Cashbag 적립 승인번호
-            storePaymentT.Ocb.PayApplNum = INIpay.GetResult(ref intPInst, "OCB_PayApplNum");	//OK Cashbag 사용 승인번호
-            storePaymentT.Ocb.ApplDate = INIpay.GetResult(ref intPInst, "OCB_ApplDate");		//OK Cashbag 승인일시
+            storePaymentT.VCard.OcbApplTime = INIpay.GetResult(ref intPInst, "OCB_ApplTime");		//OK Cashbag 적립 승인번호
+            storePaymentT.VCard.OcbSaveApplNum = INIpay.GetResult(ref intPInst, "OCB_SaveApplNum");	//OK Cashbag 적립 승인번호
+            storePaymentT.VCard.OcbPayApplNum = INIpay.GetResult(ref intPInst, "OCB_PayApplNum");	//OK Cashbag 사용 승인번호
+            storePaymentT.VCard.OcbApplDate = INIpay.GetResult(ref intPInst, "OCB_ApplDate");		//OK Cashbag 승인일시
             storePaymentT.Ocb.Num = INIpay.GetResult(ref intPInst, "OCB_Num");			//OK Cashbag 번호
-            storePaymentT.Ocb.CardApplPrice = INIpay.GetResult(ref intPInst, "CARD_ApplPrice");	//OK Cashbag 복합결재시 신용카드 지불금액
+            storePaymentT.VCard.OcbPayPrice = INIpay.GetResult(ref intPInst, "CARD_ApplPrice");	//OK Cashbag 복합결재시 신용카드 지불금액
             storePaymentT.Ocb.PayPrice = INIpay.GetResult(ref intPInst, "OCB_PayPrice");		//OK Cashbag 복합결재시 포인트 지불금액
 
             //-------------------------------------------------------------------------------
@@ -322,19 +306,19 @@ namespace Makers.Store.Controllers
             //-------------------------------------------------------------------------------
             storePaymentT.DirectBank = new DirectBank();
             storePaymentT.DirectBank.AcctBankCode = INIpay.GetResult(ref intPInst, "ACCT_BankCode");	//은행코드
-            storePaymentT.DirectBank.RcashRslt = INIpay.GetResult(ref intPInst, "rcash_rslt");		//현금영주증 결과코드 ("0000"이면 지불성공)
-            storePaymentT.DirectBank.Ruseopt = INIpay.GetResult(ref intPInst, "ruseopt");			//현금영수증 발행구분코드 
+            storePaymentT.DirectBank.CshrResultCode = INIpay.GetResult(ref intPInst, "rcash_rslt");		//현금영주증 결과코드 ("0000"이면 지불성공)
+            storePaymentT.DirectBank.CshrType = INIpay.GetResult(ref intPInst, "ruseopt");			//현금영수증 발행구분코드 
 
             //-------------------------------------------------------------------------------
             // 마. 무통장 입금(가상계좌) 결제수단을 이용시 결과 내용
             //-------------------------------------------------------------------------------
-            storePaymentT.Vact = new VACT();
-            storePaymentT.Vact.Num = INIpay.GetResult(ref intPInst, "VACT_Num"); 		// 입금 계좌 번호
-            storePaymentT.Vact.BankCode = INIpay.GetResult(ref intPInst, "VACT_BankCode"); 	// 입금 은행 코드
-            storePaymentT.Vact.Date = INIpay.GetResult(ref intPInst, "VACT_Date"); 		// 입금 예정 날짜
-            storePaymentT.Vact.Time = INIpay.GetResult(ref intPInst, "VACT_Time"); 		// 입금 예정 시간 [ 20061018 ]
-            storePaymentT.Vact.InputName = INIpay.GetResult(ref intPInst, "VACT_InputName"); 	// 송금자명
-            storePaymentT.Vact.Name = INIpay.GetResult(ref intPInst, "VACT_Name");		// 예금주명
+            storePaymentT.VBank = new VBank();
+            storePaymentT.VBank.VactNum = INIpay.GetResult(ref intPInst, "VACT_Num"); 		// 입금 계좌 번호
+            storePaymentT.VBank.VactBankCode = INIpay.GetResult(ref intPInst, "VACT_BankCode"); 	// 입금 은행 코드
+            storePaymentT.VBank.VactDate = INIpay.GetResult(ref intPInst, "VACT_Date"); 		// 입금 예정 날짜
+            storePaymentT.VBank.VactTime = INIpay.GetResult(ref intPInst, "VACT_Time"); 		// 입금 예정 시간 [ 20061018 ]
+            storePaymentT.VBank.VactInputName = INIpay.GetResult(ref intPInst, "VACT_InputName"); 	// 송금자명
+            storePaymentT.VBank.VactName = INIpay.GetResult(ref intPInst, "VACT_Name");		// 예금주명
 
             //-------------------------------------------------------------------------------
             // 바. 핸드폰, 전화결제시에만  결제 결과 내용 ( "실패 내역 자세히 보기"에서 필요 , 상점에서는 필요없는 정보임)
@@ -367,9 +351,8 @@ namespace Makers.Store.Controllers
             //-------------------------------------------------------------------------------
             // 카. 현금영수증 발급 결과코드 (은행계좌이체시에만 리턴);
             //-------------------------------------------------------------------------------            
-            storePaymentT.Cshr = new CSHR();
-            storePaymentT.Cshr.ResultCode = INIpay.GetResult(ref intPInst, "CSHR_ResultCode");	// 결과코드
-            storePaymentT.Cshr.Type = INIpay.GetResult(ref intPInst, "CSHR_Type");		//발급구분코드
+            storePaymentT.DirectBank.CshrResultCode = INIpay.GetResult(ref intPInst, "CSHR_ResultCode");	// 결과코드
+            storePaymentT.DirectBank.CshrType = INIpay.GetResult(ref intPInst, "CSHR_Type");		//발급구분코드
 
             //-------------------------------------------------------------------------------
             // 파. 틴캐시 결제수단을 이용시에만 결제 결과 내용
@@ -389,6 +372,12 @@ namespace Makers.Store.Controllers
             //-------------------------------------------------------------------------------
             storePaymentT.Bcsh = new BCSH();
             storePaymentT.Bcsh.UserId = INIpay.GetResult(ref intPInst, "BCSH_UserID");		//문화상품권 ID
+
+            //-------------------------------------------------------------------------------
+            // 바우처 결제
+            //-------------------------------------------------------------------------------
+            storePaymentT.Ssvc = new SSVC();
+            
 
             //-------------------------------------------------------------------------------
             // * . 모든 결제 수단에 대해 결제 실패시에만 결제 결과 데이터 				
@@ -429,7 +418,8 @@ namespace Makers.Store.Controllers
             ###############################################################################*/
             
             StoreOrderT storeOrderT = new StoreOrderT();
-            StoreOrderBiz biz = new StoreOrderBiz();
+            StoreOrderBiz orderBiz = new StoreOrderBiz();
+            StoreCartBiz cartBiz = new StoreCartBiz();
             List<OrderInfo> OrderInfoList = new List<OrderInfo>();
             List<StoreOrderDetailT> storeOrderDetailList = new List<StoreOrderDetailT>();
             Int64 orderMasterNo = 0;
@@ -438,7 +428,7 @@ namespace Makers.Store.Controllers
             storeOrderT.Oid = Request.Params["oid"];
             storeOrderT.CartNo = Request.Params["cartNo"];
             storeOrderT.Mid = instance.Mid;
-            storeOrderT.Price = storePaymentT.GoodsPrice;
+            storeOrderT.Price = storePaymentT.Common.TotPrice;
             storeOrderT.GoodName = Request.Params["goodname"];
             storeOrderT.PayMethod = storePaymentT.Common.PayMethod;
             storeOrderT.Type = "chkfake"; // 고정값
@@ -453,15 +443,16 @@ namespace Makers.Store.Controllers
             storeOrderT.OrderDate = DateTime.Now;
             storeOrderT.PaymentStatus = "1"; // 주문완료
             storeOrderT.ShippingAddrNo = Int64.Parse(Request.Params["shippingAddrNo"]);
-            storeOrderT.ShippingPrice = Request.Params["shippingPrice"];
-            storeOrderT.SlowMakeYn = Request.Params["rdoSlowMakeYn"];            
+            storeOrderT.ShippingPrice = int.Parse(Request.Params["shippingPrice"]);
+            storeOrderT.SlowMakeYn = Request.Params["rdoSlowMakeYn"];
+            storeOrderT.RegDt = DateTime.Now;
             storeOrderT.RegId = profileModel.UserId;
 
             // 주문 마스터 저장
-            orderMasterNo = biz.InsertOrderInfo(storeOrderT);
+            orderMasterNo = orderBiz.InsertOrderInfo(storeOrderT);
 
             // 주문상세내역 호출
-            OrderInfoList = biz.GetStoreOrderListByMemberNo(profileModel.UserNo);
+            OrderInfoList = orderBiz.GetStoreOrderListByMemberNo(profileModel.UserNo);
 
             foreach(OrderInfo info in OrderInfoList)
             {
@@ -472,6 +463,7 @@ namespace Makers.Store.Controllers
                 item.ShippingPrice = info.SHIPPING_PRICE;
                 item.ProductCnt = info.PRODUCT_CNT;
                 item.OrderStatus = "1";
+                item.RegDt = DateTime.Now;
                 item.RegId = profileModel.UserId;
                 storeOrderDetailList.Add(item);
             }
@@ -480,7 +472,12 @@ namespace Makers.Store.Controllers
             // 주문상세내역 저장
             if (orderMasterNo > 0)
             {
-                orderDetailNo = biz.InsertOrderDetailInfo(storeOrderDetailList);
+                orderDetailNo = orderBiz.InsertOrderDetailInfo(storeOrderDetailList);
+
+                // 카트 주문상태 업데이트
+                cartBiz.SetCartByCartNo(storeOrderT.CartNo);
+
+                storePaymentT.OrderMasterNo = orderMasterNo;
             }
             #endregion
 
@@ -505,7 +502,7 @@ namespace Makers.Store.Controllers
                 //###############################################################################
                 //# 4. 정보 설정 #
                 //################
-                INIpay.SetField(ref intPInst, "pgid", "IniTechPG_"); //PG ID (고정)
+                INIpay.SetField(ref intPInst, "pgid", instance.PgId); //PG ID (고정)
                 INIpayCancel.SetField(ref intPInst, "mid", instance.Mid);				// 상점아이디
                 INIpayCancel.SetField(ref intPInst, "admin", instance.MidPassword);								// 키패스워드(상점아이디에 따라 변경)
                 INIpayCancel.SetField(ref intPInst, "tid", storePaymentT.Common.Tid);								// 취소할 거래번호
@@ -541,13 +538,82 @@ namespace Makers.Store.Controllers
         #endregion
         
         #region 3. INIsecureResult - 결제결과 컨트롤러
+        /// <summary>
+        /// 결제결과 컨트롤러
+        /// </summary>
+        /// <param name="forms"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult INIsecureResult(FormCollection forms)
         {
+            StorePaymentHistoryT storePaymentHistoryT = new StorePaymentHistoryT();
             StorePaymentT model = new StorePaymentT();
-            HashData();
-
+            StorePaymentBiz biz = new StorePaymentBiz();
+            HashData(); // 결제모듈 보다 먼저 실행되어야함
             model = StartINIsecurePay();
+            
+
+            if (model != null)
+            {
+                storePaymentHistoryT.OrderMasterNo = model.OrderMasterNo;
+                storePaymentHistoryT.Tid = model.Common.Tid;
+                storePaymentHistoryT.ResultCode = model.Common.Resultcode;
+                storePaymentHistoryT.ResultMsg = model.Common.ResultMsg;
+                storePaymentHistoryT.MoId = model.Common.MoId;
+                storePaymentHistoryT.ApplDate = model.Common.ApplDate;
+                storePaymentHistoryT.ApplTime = model.Common.ApplTime;
+                storePaymentHistoryT.ApplNum = model.Common.ApplNum;
+                storePaymentHistoryT.PayMethod = model.Common.PayMethod;
+                storePaymentHistoryT.TotPrice = model.Common.TotPrice;
+                storePaymentHistoryT.EventCode = model.Common.EventCode;
+                storePaymentHistoryT.CardNum = model.VCard.Num;
+                storePaymentHistoryT.CardInterest = model.VCard.Interest;
+                storePaymentHistoryT.CardQuota = model.VCard.Quota;
+                storePaymentHistoryT.CardCode = model.VCard.Code;
+                storePaymentHistoryT.CardBankCode = model.VCard.BankCode;
+                storePaymentHistoryT.OrgCurrency = instance.Currency;
+                storePaymentHistoryT.ExchangeRate = model.VCard.ExchangeRate;
+                storePaymentHistoryT.CardOcbNum = model.VCard.OcbNum;
+                storePaymentHistoryT.CardOcbSaveApplNum = model.VCard.OcbSaveApplNum;
+                storePaymentHistoryT.CardOcbPayApplNum = model.VCard.OcbPayApplNum;
+                storePaymentHistoryT.CardOcbApplDate = model.VCard.OcbApplDate;
+                storePaymentHistoryT.CardOcbPayPrice = model.VCard.OcbPayPrice;
+                storePaymentHistoryT.CardCheckFlag = model.VCard.CheckFlag;
+                storePaymentHistoryT.IspCheckFlag = model.VCard.IspCheckFlag;
+                storePaymentHistoryT.AcctBankCode = model.DirectBank.AcctBankCode;
+                storePaymentHistoryT.CshrResultCode = model.DirectBank.CshrResultCode;
+                storePaymentHistoryT.CshrType = model.DirectBank.CshrType;
+                storePaymentHistoryT.VactNum = model.VBank.VactNum;
+                storePaymentHistoryT.VactBankCode = model.VBank.VactBankCode;
+                storePaymentHistoryT.VactName = model.VBank.VactName;
+                storePaymentHistoryT.VactInputName = model.VBank.VactInputName;
+                storePaymentHistoryT.VactDate = model.VBank.VactDate;
+                storePaymentHistoryT.VactTime = model.VBank.VactTime;
+                storePaymentHistoryT.HppNum = model.Hpp.Num;
+                storePaymentHistoryT.ArsbNum = model.Arsb.Num;
+                storePaymentHistoryT.PhnbNum = model.Phnb.Num;
+                storePaymentHistoryT.OcbNum = model.Ocb.Num;
+                storePaymentHistoryT.OcbSaveApplNum = model.VCard.OcbSaveApplNum;
+                storePaymentHistoryT.OcbPayApplNum = model.VCard.OcbPayApplNum;
+                storePaymentHistoryT.OcbPayPrice = model.VCard.OcbPayPrice;
+                storePaymentHistoryT.CultUserId = model.Cult.UserId;
+                storePaymentHistoryT.TeenRemains = model.Teen.Remains;
+                storePaymentHistoryT.TeenUserId = model.Teen.UserId;
+                storePaymentHistoryT.GamgCnt = model.Gamg.Cnt;
+                storePaymentHistoryT.GamgNum = model.Gamg.Num;
+                storePaymentHistoryT.GamgErrMsg = model.Gamg.ErrMsg;
+                storePaymentHistoryT.BcshUserId = model.Bcsh.UserId;
+                storePaymentHistoryT.CardApplPrice = model.Ssvc.CardApplPrice;
+                storePaymentHistoryT.SsvcApplPrice = model.Ssvc.ApplPrice;
+                storePaymentHistoryT.SsvcCardPrice = model.Ssvc.CardPrice;
+                storePaymentHistoryT.SsvcPointPrice = model.Ssvc.PointPricee;
+                storePaymentHistoryT.RegDt = DateTime.Now;
+                storePaymentHistoryT.RegId = profileModel.UserId;
+
+                // 결과 저장
+                biz.InsertStorePaymentHistory(storePaymentHistoryT);
+            }
+
 
             return View(model);
         }
@@ -643,7 +709,7 @@ namespace Makers.Store.Controllers
         }
         #endregion
 
-        #region HashData
+        #region HashData - 절대 임의로 수정하지 말것
         /// <summary>
         /// 지불수단별로 PGID를 다르게 표시한다 (2003.12.19: ts@inicis.com) 
         /// 하단의 Code_PayMethod 함수는 지불수단별로 TID를 별도로 표시하도록 하며,

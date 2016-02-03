@@ -241,7 +241,7 @@ MM_reloadPage(true);
                       	<br>
                       	<a href="http://www.inicis.com/Help" target=new><img src='http://www.inicis.com/images/inicis_050119_img2.gif' border=0></a>
                       </td>
-                    </tr>00000000000
+                    </tr>
                     <tr> 
                       <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
                     </tr>
@@ -273,7 +273,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
                       <td width="109" height="25">거 래 금 액</td>
-                      <td width="343">@Model.GoodsPrice</td>
+                      <td width="343">@Model.Common.TotPrice</td>
                     </tr>
                     <tr> 
                       <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
@@ -294,7 +294,7 @@ MM_reloadPage(true);
 					<tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>승 인 날 짜</td>
-                      <td width='343'>@Model.Appl.Date</td>
+                      <td width='343'>@Model.Common.ApplDate</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -302,7 +302,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>승 인 시 각</td>
-                      <td width='343'>@Model.Appl.Time</td>
+                      <td width='343'>@Model.Common.ApplTime</td>
                     </tr>                	    
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -310,7 +310,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>승 인 번 호</td>
-                      <td width='343'>@Model.VCard.ApplNum</td>
+                      <td width='343'>@Model.Common.ApplNum</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -349,7 +349,7 @@ MM_reloadPage(true);
                 	<tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>카 드 번 호</td>
-                      <td width='343'>@Model.Ocb.Num</td>
+                      <td width='343'>@Model.VCard.OcbNum</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -357,7 +357,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>적립 승인번호</td>
-                      <td width='343'>@Model.Ocb.SaveApplNum</td>
+                      <td width='343'>@Model.VCard.OcbSaveApplNum</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -365,7 +365,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>사용 승인번호</td>
-                      <td width='343'>@Model.Ocb.PayApplNum</td>
+                      <td width='343'>@Model.VCard.OcbPayApplNum</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -373,7 +373,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>승 인 일 시</td>
-                      <td width='343'>@Model.Ocb.ApplDate</td>
+                      <td width='343'>@Model.VCard.OcbApplDate</td>
                     </tr>
                 	<tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -402,7 +402,7 @@ MM_reloadPage(true);
           			<tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>승 인 날 짜</td>
-                      <td width='343'>@Model.Appl.Date</td>
+                      <td width='343'>@Model.Common.ApplDate</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -410,7 +410,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>승 인 시 각</td>
-                      <td width='343'>@Model.Appl.Time</td>
+                      <td width='343'>@Model.Common.ApplTime</td>
                     </tr>
                     <tr>
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -421,7 +421,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width="18" align="center"><img src="../content/images/payment/icon02.gif" width="7" height="7"></td>
                       <td width="109" height="25">현금영수증 결과</td>
-                      <td width="343">@Model.Cshr.ResultCode</td>
+                      <td width="343">@Model.DirectBank.CshrResultCode</td>
                     </tr>
                    	<tr> 
                       <td height="1" colspan="3" align="center"  background="../content/images/payment/line.gif"></td>
@@ -429,7 +429,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>현금영수증 <br> 발급구분코드</td>
-                      <td width='343'>@Model.Cshr.Type</td>
+                      <td width='343'>@Model.DirectBank.CshrType</td>
                       <font color=red><b>(0 - 소득공제용, 1 - 지출증빙용)</b></font>
                     </tr>
                     <tr> 
@@ -443,7 +443,7 @@ MM_reloadPage(true);
 	                <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>입금계좌번호</td>
-                      <td width='343'>@Model.Vact.Num</td>
+                      <td width='343'>@Model.VBank.VactNum</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -451,7 +451,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>입금 은행코드</td>
-                      <td width='343'>@Model.Vact.BankCode</td>
+                      <td width='343'>@Model.VBank.VactBankCode</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -459,7 +459,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>예금주 명</td>
-                      <td width='343'>@Model.Vact.Name</td>
+                      <td width='343'>@Model.VBank.VactName</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -467,7 +467,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>송금자 명</td>
-                      <td width='343'>@Model.Vact.InputName</td>
+                      <td width='343'>@Model.VBank.VactInputName</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -478,7 +478,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>송금 일시</td>
-                      <td width='343'>@Model.Vact.Date @Model.Vact.Time</td>
+                      <td width='343'>@Model.VBank.VactDate @Model.VBank.VactTime</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -499,7 +499,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>승 인 날 짜</td>
-                      <td width='343'>@Model.Vact.Date</td>
+                      <td width='343'>@Model.Common.ApplDate</td>
                     </tr>
                     <tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>
@@ -507,7 +507,7 @@ MM_reloadPage(true);
                     <tr> 
                       <td width='18' align='center'><img src='../content/images/payment/icon02.gif' width='7' height='7'></td>
                       <td width='109' height='25'>승 인 시 각</td>
-                      <td width='343'>@Model.Vact.Time</td>
+                      <td width='343'>@Model.Common.ApplTime</td>
                     </tr>
 					<tr> 
                       <td height='1' colspan='3' align='center'  background='../content/images/payment/line.gif'></td>

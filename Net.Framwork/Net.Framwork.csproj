@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="AppDbContext.cs" />
     <Compile Include="BizDac\MemberDac.cs" />
+    <Compile Include="BizDac\StorePaymentBiz.cs" />
+    <Compile Include="BizDac\StorePaymentDac.cs" />
     <Compile Include="BizDac\StoreShippingBiz.cs" />
     <Compile Include="BizDac\StoreShippingDac.cs" />
     <Compile Include="Helper\DacBase.cs" />
@@ -87,7 +89,7 @@
     <Compile Include="BizDac\StorePrinterMaterialBiz.cs" />
     <Compile Include="BizDac\StorePrinterMaterialDac.cs" />
     <Compile Include="Helper\DacHelper.cs" />
-    <Compile Include="IRepository.cs" />
+    <Compile Include="Helper\IRepository.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\InterceptorLogging.cs" />
     <Compile Include="Logging\InterceptorTransientErrors.cs" />
@@ -113,7 +115,7 @@
     <Compile Include="StoreModel\StoreMemberT.cs" />
     <Compile Include="StoreModel\StoreNotificationsT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="Helper\Repository.cs" />
     <Compile Include="StoreContext.cs" />
     <Compile Include="StoreModel\StoreShippingT.cs" />
     <Compile Include="Util\EnumHelper.cs" />

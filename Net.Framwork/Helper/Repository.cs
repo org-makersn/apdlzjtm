@@ -5,9 +5,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Net.Framwork
+namespace Net.Framwork.Helper
 {
-    public class Repository<T> : Net.Framwork.IRepository<T> where T : class, new()
+    public class Repository<T> : Net.Framwork.Helper.IRepository<T> where T : class, new()
     {
         //private static readonly object s_lock = new object();
         private string _constr { get; set; }

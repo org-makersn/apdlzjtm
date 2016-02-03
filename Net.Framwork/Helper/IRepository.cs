@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Net.Framwork
+namespace Net.Framwork.Helper
 {
     interface IRepository<T>
      where T : class, new()

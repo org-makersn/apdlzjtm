@@ -152,6 +152,7 @@ namespace Net.Common.Configurations
                 Mid = ConfigurationManager.AppSettings["Mid"] ?? @"INIpayTest";
                 MidPassword = ConfigurationManager.AppSettings["MidPassword"] ?? @"1111";
                 Currency = ConfigurationManager.AppSettings["Currency"] ?? @"WON";
+                PgId = ConfigurationManager.AppSettings["PgId"] ?? @"IniTechPG_";
 
                 PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfiles";
                 Slic3rDir = ConfigurationManager.AppSettings["Slic3rDir"] ?? @"D:\slic3r";
@@ -211,6 +212,11 @@ namespace Net.Common.Configurations
             /// Kg이니시스 통화단위
             /// </summary>
             public string Currency { get; set; }
+
+            /// <summary>
+            /// PG 아이디
+            /// </summary>
+            public string PgId { get; set; }
 
             /// <summary>
             /// 파일저장 

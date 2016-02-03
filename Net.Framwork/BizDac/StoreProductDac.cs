@@ -10,7 +10,6 @@ namespace Net.Framwork.BizDac
 {
     public class StoreProductDac : DacBase
     {
-
         IRepository<StoreProductT> _repository = new Repository<StoreProductT>();
         
         /// <summary>

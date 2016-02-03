@@ -5,47 +5,163 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Net.Framework.StoreModel
 {
+    [Table("STORE_PAYMENT_HISTORY")]
+    public class StorePaymentHistoryT
+    {
+        [Key, Column("NO")]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public virtual Int64 No { get; set; }
+
+        [Column("ORDER_MASTER_NO")]
+        public virtual Int64 OrderMasterNo { get; set; }
+        [Column("TID")]
+        public virtual string Tid { get; set; }
+        [Column("RESULT_CODE")]
+        public virtual string ResultCode { get; set; }
+        [Column("RESULT_MSG")]
+        public virtual string ResultMsg { get; set; }
+        [Column("MOID")]
+        public virtual string MoId { get; set; }
+        [Column("APPL_DATE")]
+        public virtual string ApplDate { get; set; }
+        [Column("APPL_TIME")]
+        public virtual string ApplTime { get; set; }
+        [Column("APPL_NUM")]
+        public virtual string ApplNum { get; set; }
+        [Column("PAY_METHOD")]
+        public virtual string PayMethod { get; set; }
+        [Column("TOT_PRICE")]
+        public virtual int TotPrice { get; set; }
+        [Column("EVENT_CODE")]
+        public virtual string EventCode { get; set; }
+        [Column("CARD_NUM")]
+        public virtual string CardNum { get; set; }
+        [Column("CARD_INTEREST")]
+        public virtual string CardInterest { get; set; }
+        [Column("CARD_QUOTA")]
+        public virtual string CardQuota { get; set; }
+        [Column("CARD_CODE")]
+        public virtual string CardCode { get; set; }
+        [Column("CARD_BANK_CODE")]
+        public virtual string CardBankCode { get; set; }
+        [Column("ORG_CURRENCY")]
+        public virtual string OrgCurrency { get; set; }
+        [Column("EXCHANGE_RATE")]
+        public virtual string ExchangeRate { get; set; }
+        [Column("CARD_OCB_NUM")]
+        public virtual string CardOcbNum { get; set; }
+        [Column("CARD_OCB_SAVE_APPL_NUM")]
+        public virtual string CardOcbSaveApplNum { get; set; }
+        [Column("CARD_OCB_PAY_APPL_NUM")]
+        public virtual string CardOcbPayApplNum { get; set; }
+        [Column("CARD_OCB_APPL_DATE")]
+        public virtual string CardOcbApplDate { get; set; }
+        [Column("CARD_OCB_PAY_PRICE")]
+        public virtual string CardOcbPayPrice { get; set; }
+        [Column("CARD_CHECK_FLAG")]
+        public virtual string CardCheckFlag { get; set; }
+        [Column("ISP_CHECK_FLAG")]
+        public virtual string IspCheckFlag { get; set; }
+        [Column("ACCT_BANK_CODE")]
+        public virtual string AcctBankCode { get; set; }
+        [Column("CSHR_RESULT_CODE")]
+        public virtual string CshrResultCode { get; set; }
+        [Column("CSHR_TYPE")]
+        public virtual string CshrType { get; set; }
+        [Column("VACT_NUM")]
+        public virtual string VactNum { get; set; }
+        [Column("VACT_BANK_CODE")]
+        public virtual string VactBankCode { get; set; }
+        [Column("VACT_NAME")]
+        public virtual string VactName { get; set; }
+        [Column("VACT_INPUT_NAME")]
+        public virtual string VactInputName { get; set; }
+        [Column("VACT_DATE")]
+        public virtual string VactDate { get; set; }
+        [Column("VACT_TIME")]
+        public virtual string VactTime { get; set; }
+        [Column("HPP_NUM")]
+        public virtual string HppNum { get; set; }
+        [Column("ARSB_NUM")]
+        public virtual string ArsbNum { get; set; }
+        [Column("PHNB_NUM")]
+        public virtual string PhnbNum { get; set; }
+        [Column("OCB_NUM")]
+        public virtual string OcbNum { get; set; }
+        [Column("OCB_SAVE_APPL_NUM")]
+        public virtual string OcbSaveApplNum { get; set; }
+        [Column("OCB_PAY_APPL_NUM")]
+        public virtual string OcbPayApplNum { get; set; }
+        [Column("OCB_PAY_PRICE")]
+        public virtual string OcbPayPrice { get; set; }
+        [Column("CULT_USER_ID")]
+        public virtual string CultUserId { get; set; }
+        [Column("TEEN_REMAINS")]
+        public virtual string TeenRemains { get; set; }
+        [Column("TEEN_USER_ID")]
+        public virtual string TeenUserId { get; set; }
+        [Column("GAMG_CNT")]
+        public virtual string GamgCnt { get; set; }
+        [Column("GAMG_NUM")]
+        public virtual string GamgNum { get; set; }
+        [Column("GAMG_REMAINS")]
+        public virtual string GamgRemains { get; set; }
+        [Column("GAMG_ERR_MSG")]
+        public virtual string GamgErrMsg { get; set; }
+        [Column("BCSH_USER_ID")]
+        public virtual string BcshUserId{ get; set; }
+        [Column("CARD_APPL_PRICE")]
+        public virtual int CardApplPrice{ get; set; }
+        [Column("SSVC_APPL_PRICE")]
+        public virtual Nullable<int> SsvcApplPrice{ get; set; }
+        [Column("SSVC_CARD_PRICE")]
+        public virtual Nullable<int> SsvcCardPrice { get; set; }
+        [Column("SSVC_POINT_PRICE")]
+        public virtual Nullable<int> SsvcPointPrice { get; set; }
+        [Column("SSVC_REMAIN")]
+        public virtual Nullable<int> SsvcRemain { get; set; }
+        [Column("REG_DT")]
+        public virtual DateTime RegDt{ get; set; }
+        [Column("REG_ID")]
+        public virtual string RegId{ get; set; }
+    }
+
     public class StorePaymentT
     {
-        public virtual int GoodsPrice { get; set; }
+        public virtual Int64 OrderMasterNo { get; set; }
         public virtual COMMON Common { get; set; }
-        public virtual APPL Appl { get; set; }
         public virtual VCARD VCard { get; set; }
-        public virtual OCB Ocb { get; set; }
         public virtual DirectBank DirectBank { get; set; }
-        public virtual VACT Vact { get; set; }
+        public virtual VBank VBank { get; set; }
         public virtual HPP Hpp { get; set; }
         public virtual ARSB Arsb { get; set; }
         public virtual PHNB Phnb { get; set; }
+        public virtual OCB Ocb { get; set; }
         public virtual CULT Cult { get; set; }
-        public virtual CSHR Cshr { get; set; }
         public virtual TEEN Teen { get; set; }
         public virtual GAMG Gamg { get; set; }
         public virtual BCSH Bcsh { get; set; }
+        public virtual SSVC Ssvc { get; set; }
     }
 
     /// <summary>
     /// 가.모든 결제 수단에 공통되는 결제 결과 내용
     /// </summary>
     public class COMMON
-    {
+    {        
         public virtual string Tid { get; set; }
         public virtual string Resultcode { get; set; }
         public virtual string ResultMsg { get; set; }
-        public virtual string PayMethod { get; set; }
         public virtual string MoId { get; set; }
+        public virtual string ApplDate { get; set; }
+        public virtual string ApplTime { get; set; }
+        public virtual string ApplNum { get; set; }
+        public virtual string PayMethod { get; set; }
+        public virtual int TotPrice { get; set; }        
+        public virtual string EventCode { get; set; }
 
         // 모든 결제 수단에 대해 결제 실패시에만 결제 결과 데이터 			
         public virtual string ResultErrorcode { get; set; }
-    }
-
-    /// <summary>
-    /// 나. 신용카드,ISP,핸드폰, 전화 결제, 은행계좌이체, OK CASH BACK Point 결제시에만 결제 결과 내용  (무통장입금 , 문화 상품권 포함)
-    /// </summary>
-    public class APPL
-    {
-        public virtual string Date { get; set; }
-        public virtual string Time { get; set; }
     }
 
     /// <summary>
@@ -53,28 +169,22 @@ namespace Net.Framework.StoreModel
     /// </summary>
     public class VCARD
     {
-        public virtual string ApplNum { get; set; }
-        public virtual string Quota { get; set; }
+        public virtual string Num { get; set; }
         public virtual string Interest { get; set; }
-        public virtual string Num { get; set; }
-        public virtual string Code { get; set; }
+        public virtual string Quota { get; set; }
+        public virtual string Code { get; set; }                
         public virtual string BankCode { get; set; }
+        public virtual string OrgCurrency { get; set; }
+        public virtual string ExchangeRate { get; set; }
+        public virtual string OcbNum { get; set; }
+        public virtual string OcbSaveApplNum { get; set; }
+        public virtual string OcbPayApplNum { get; set; }
+        public virtual string OcbApplDate { get; set; }
+        public virtual string OcbApplTime { get; set; }
+        public virtual string OcbPayPrice { get; set; }
+        public virtual string CheckFlag { get; set; }
+        public virtual string IspCheckFlag { get; set; }
         public virtual string AuthType { get; set; }
-        public virtual string EventCode { get; set; }
-    }
-
-    /// <summary>
-    /// "신용카드 및 OK CASH BACK 복합결제" 또는"신용카드 지불시에 OK CASH BACK적립"시에 추가되는 내용
-    /// </summary>
-    public class OCB
-    {
-        public virtual string ApplTime { get; set; }
-        public virtual string SaveApplNum { get; set; }
-        public virtual string PayApplNum { get; set; }
-        public virtual string ApplDate { get; set; }
-        public virtual string Num { get; set; }
-        public virtual string CardApplPrice { get; set; }
-        public virtual string PayPrice { get; set; }
     }
 
     /// <summary>
@@ -84,21 +194,21 @@ namespace Net.Framework.StoreModel
     public class DirectBank
     {
         public virtual string AcctBankCode { get; set; }
-        public virtual string RcashRslt { get; set; }
-        public virtual string Ruseopt { get; set; }
+        public virtual string CshrResultCode { get; set; }
+        public virtual string CshrType { get; set; }
     }
 
     /// <summary>
     /// 마.무통장 입금(가상계좌) 결제수단을 이용시 결과 내용
     /// </summary>
-    public class VACT
+    public class VBank
     {
-        public virtual string Num { get; set; }
-        public virtual string BankCode { get; set; }
-        public virtual string Date { get; set; }
-        public virtual string Time { get; set; }
-        public virtual string InputName { get; set; }
-        public virtual string Name { get; set; }
+        public virtual string VactNum { get; set; }
+        public virtual string VactBankCode { get; set; }
+        public virtual string VactName { get; set; }
+        public virtual string VactInputName { get; set; }
+        public virtual string VactDate { get; set; }
+        public virtual string VactTime { get; set; }              
     }
 
     /// <summary>
@@ -107,8 +217,6 @@ namespace Net.Framework.StoreModel
     public class HPP
     {
         public virtual string GWCode { get; set; }
-
-        // 사. 핸드폰 결제수단을 이용시에만  결제 결과 내용
         public virtual string Num { get; set; }
     }
 
@@ -128,21 +236,20 @@ namespace Net.Framework.StoreModel
         public virtual string Num { get; set; }
     }
 
+    public  class OCB
+    {
+        public virtual string Num { get; set; }
+        public virtual string SaveApplNum { get; set; }
+        public virtual string PayApplNum { get; set; }
+        public virtual string PayPrice { get; set; }
+    }
+
     /// <summary>
     /// 차. 문화 상품권 결제수단을 이용시에만  결제 결과 내용
     /// </summary>
     public class CULT
     {
         public virtual string UserId { get; set; }
-    }
-
-    /// <summary>
-    /// 카. 현금영수증 발급 결과코드 (은행계좌이체시에만 리턴)
-    /// </summary>
-    public class CSHR
-    {
-        public virtual string ResultCode { get; set; }
-        public virtual string Type { get; set; }
     }
 
     /// <summary>
@@ -160,6 +267,9 @@ namespace Net.Framework.StoreModel
     public class GAMG
     {
         public virtual string Cnt { get; set; }
+        public virtual string Num { get; set; }
+        public virtual string Remains { get; set; }
+        public virtual string ErrMsg { get; set; }
     }
 
     /// <summary>
@@ -169,4 +279,17 @@ namespace Net.Framework.StoreModel
     {
         public virtual string UserId { get; set; }
     }
+
+    /// <summary>
+    /// 바우처 결제(신용카드 / 신용카드 + 바우처)
+    /// </summary>
+    public class SSVC
+    {
+        public virtual int CardApplPrice { get; set; }
+        public virtual int ApplPrice { get; set; }
+        public virtual int CardPrice { get; set; }
+        public virtual int PointPricee { get; set; }
+        public virtual int Remain { get; set; }
+    }
+
 }
