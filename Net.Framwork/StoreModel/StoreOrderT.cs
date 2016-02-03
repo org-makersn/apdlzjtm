@@ -19,7 +19,7 @@ namespace Net.Framework.StoreModel
         [Column("MID")]
         public virtual string Mid { get; set; }
         [Column("PRICE")]
-        public virtual decimal Price { get; set; }
+        public virtual int Price { get; set; }
         [Column("GOOD_NAME")]
         public virtual string GoodName { get; set; }
         [Column("PAY_METHOD")]
@@ -51,7 +51,7 @@ namespace Net.Framework.StoreModel
         [Column("PAYMENT_STATUS")]
         public virtual string PaymentStatus { get; set; }
         [Column("SHIPPING_PRICE")]
-        public virtual string ShippingPrice { get; set; }
+        public virtual int ShippingPrice { get; set; }
         [Column("SLOW_MAKE_YN")]
         public virtual string SlowMakeYn { get; set; }
         [Column("REG_DT")]
@@ -59,7 +59,7 @@ namespace Net.Framework.StoreModel
         [Column("REG_ID")]
         public virtual string RegId { get; set; }
         [Column("UPD_DT")]
-        public virtual DateTime UpdDt { get; set; }
+        public virtual Nullable<DateTime> UpdDt { get; set; }
         [Column("UPD_ID")]
         public virtual string UpdId { get; set; }
     }
@@ -89,10 +89,8 @@ namespace Net.Framework.StoreModel
         public virtual string CancelYn { get; set; }
         [Column("GIFT_MSG")]
         public virtual string GigtMsg { get; set; }
-        [Column("SLOW_MAKE_YN")]
-        public virtual string SlowMakeYn { get; set; }
         [Column("COMPLETE_DATE")]
-        public virtual DateTime CompleteDate { get; set; }
+        public virtual Nullable<DateTime> CompleteDate { get; set; }
         [Column("REG_DT")]
         public virtual DateTime RegDt { get; set; }
         [Column("REG_ID")]

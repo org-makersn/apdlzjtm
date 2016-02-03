@@ -59,13 +59,6 @@ namespace Net.Framwork.BizDac
         }
         #endregion
 
-        #region InsertPaymentResultInfo - 결제요청결과 저장
-        public void InsertPaymentResultInfo()
-        {
- 
-        }
-        #endregion
-
         #region GetOrderList - 주문상세 리스트
         /// <summary>
         /// 주문상세 리스트

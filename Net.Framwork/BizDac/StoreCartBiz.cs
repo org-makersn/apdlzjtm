@@ -68,7 +68,16 @@ namespace Net.Framwork.BizDac
         }
         #endregion
 
-        #region 장바구니 수정
+        #region SetCartByCartNo - 장바구니 수정(주문완료에 따른 주문상태 업데이트)
+        /// <summary>
+        /// 장바구니 수정
+        /// </summary>
+        /// <param name="cartNo"></param>
+        /// <returns></returns>
+        public int SetCartByCartNo(string cartNo)
+        {
+            return new StoreCartDac().SetCartByCartNo(cartNo);
+        }
         #endregion
     }
 

@@ -45,7 +45,7 @@ namespace Makers.Store.Controllers
         }
 
         [HttpPost]
-        public void AddCart(Int64 productDetailNo, int cnt)
+        public int AddCart(Int64 productDetailNo, int cnt)
         {            
             StoreCartT storeCartT = new StoreCartT();
             storeCartT.MemberNo = profileModel.UserNo;
@@ -54,7 +54,9 @@ namespace Makers.Store.Controllers
             storeCartT.RegDt = DateTime.Now;
             storeCartT.RegId = profileModel.UserId;
 
-            new StoreCartBiz().InsertCart(storeCartT);
+            int result = new StoreCartBiz().InsertCart(storeCartT);
+
+            return result;
         }
 
         [HttpPost]

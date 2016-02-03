@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BizDac\StorePaymentBiz.cs" />
+    <Compile Include="BizDac\StorePaymentDac.cs" />
     <Compile Include="BizDac\StoreShippingBiz.cs" />
     <Compile Include="BizDac\StoreShippingDac.cs" />
     <Compile Include="Helper\DacBase.cs" />

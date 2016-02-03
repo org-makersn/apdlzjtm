@@ -66,11 +66,38 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="dataList"></param>
         /// <returns></returns>
-        internal int updateCartByCondition(List<StoreCartT> dataList)
+        internal int SetCartByCartNo(string cartNo)
         {
-            int result = 0;
+            if (cartNo == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
-            return result;
+            int ret = 0;
+            using (dbContext = new StoreContext())
+            {
+                List<StoreCartT> originDataList = dbContext.StoreCartT.Where(s => s.CartNo == cartNo).ToList();
+
+                foreach (StoreCartT originData in originDataList)
+                {
+                    if (originData != null)
+                    {
+                        try
+                        {
+                            originData.OrderYn = "Y";
+                            dbContext.StoreCartT.Attach(originData);
+                            dbContext.Entry<StoreCartT>(originData).State = System.Data.Entity.EntityState.Modified;
+                            dbContext.SaveChanges();
+                        }
+                        catch (Exception)
+                        { 
+                        }
+                    }
+                    else
+                    {
+                        ret = -2;
+                        throw new NullReferenceException("The expected original Segment data is not here.");
+                    }
+                }
+            }
+            return ret;
         }
         #endregion
 

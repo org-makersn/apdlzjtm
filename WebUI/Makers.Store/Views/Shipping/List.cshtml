@@ -1,33 +1,54 @@
 ﻿@using Net.Framework.StoreModel
 @model List<StoreShippingAddrT>
 
-@if(Model.Count > 0)
-{
-<table style="border:solid 1px green;" border="1">
-    <tr>
-        <td>선택</td>
-        <td>주소지명</td>
-        <td>도로명주소</td>
-        <td>지번주소</td>
-        <td>우편번호</td>
-    </tr>
+<script type="text/javascript">
 
-    @{string chkType = "";}
+    $("input[name='chkShippingAddr']").on("click", function () {
+        var obj = $(this).parent().parent().find("li");
+
+        $("#txtShippingName").val(obj.eq(1).text()); // 주소명
+        $("#recvaddr").val(obj.eq(2).text()); // 도로명주소
+        $("#recvaddr2").val(obj.eq(3).text()); //지번주소
+        $("#recvaddrDetail").val(obj.eq(4).text()); // 상세주소
+        $("#recvpostnum").val(obj.eq(5).text()); // 우편번호
+        $("#shippingAddrNo").val(obj.eq(5).find("input:hidden").val());
+    })
+
+</script>
+
+@if(Model.Count > 0)
+{   
+    <div class="li_table">
+        <ul class="subject">
+		    <li class="col1">선택</li>
+		    <li class="col2">주소명</li>
+		    <li class="col3">도로명주소</li>
+            <li class="col4">지번주소</li>
+            <li class="col5">상세주소</li>
+            <li class="col6">우편번호</li>
+	    </ul>
 
     @foreach (StoreShippingAddrT item in Model)
     {
+        string chkType = "";
+        
         if (item.DefaultYn == "Y")
         {
-            chkType = "checked"; 
+            chkType = "checked";
         }
-        <tr>
-            <td><input type="checkbox" name="chkShippingAddr" /></td>
-            <td>@item.ShippingName</td>
-            <td>@item.Addr1 @item.AddrDetail</td>
-            <td>@item.Addr2 @item.AddrDetail</td>
-            <td>@item.PostNo</td>
-        </tr> 
+        else
+        {
+            chkType = "";
+        }
+        <ul>
+            <li class="col1"><input type="radio" name="chkShippingAddr" checked="@chkType" /></li>
+		    <li class="col2">@item.ShippingName</li>
+		    <li class="col3">@item.Addr1</li>
+            <li class="col4">@item.Addr2</li>
+            <li class="col5">@item.AddrDetail</li>
+            <li class="col6">@item.PostNo <input type="hidden" value="@item.No" /></li>
+        </ul>
     }
-
-</table>
+    </div>
+    
 }
