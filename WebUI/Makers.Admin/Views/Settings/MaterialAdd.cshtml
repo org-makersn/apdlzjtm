@@ -7,44 +7,6 @@
 
 <h2>MaterialAdd</h2>
 
-@*@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>MemberMsgT</legend>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.NAME)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.NAME)
-            @Html.ValidationMessageFor(model => model.NAME)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.IMAGE_NAME)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.IMAGE_NAME)
-            @Html.ValidationMessageFor(model => model.IMAGE_NAME)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.PRICE)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.PRICE)
-            @Html.ValidationMessageFor(model => model.PRICE)
-        </div>
-
-        <p>
-            <input type="submit" value="Create" />
-        </p>
-    </fieldset>
-}*@
-
-
 <div class="contents_zone">
 
     <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
@@ -62,17 +24,17 @@
                 <tr>
                     <th>재질명</th>
                     <td>
-                        @Html.EditorFor(model => model.NAME, new { @class = "input_text", style = "width: 300px;" })
+                        @Html.EditorFor(model => model.NAME, new { @class = "input_text" })
                         @Html.ValidationMessageFor(model => model.NAME)
                     </td>
                 </tr>
-                <tr>
+                @*<tr>
                     <th>이미지</th>
                     <td>
                         @Html.TextBoxFor(model => model.IMAGE_NAME, new { type = "file", id = "image", @class = "input_text", style = "width: 300px;" })
                         @Html.ValidationMessageFor(model => model.IMAGE_NAME)
                     </td>
-                </tr>
+                </tr>*@
                 <tr>
                     <th>기본 가격</th>
                     <td>
@@ -83,17 +45,17 @@
                 <tr>
                     <th>슬라이싱 여부</th>
                     <td>
-                        <input type="radio" name="publish" value="Y" checked="checked" />
+                        <input type="radio" name="SLICE_YN" value="Y" checked="checked" />
                         사용 &nbsp; 
-					<input type="radio" name="publish" value="N" />
+					<input type="radio" name="SLICE_YN" value="N" />
                         미사용&nbsp; 
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">
-                        <label for="sort">우선순위</label></th>
+                        <label for="SORT">우선순위</label></th>
                     <td>
-                        <select id="sort" name="sort" class="input_text" style="width: 120px;">
+                        <select id="SORT" name="SORT" class="input_text" style="width: 120px;">
                             @for (var i = 1; i <= 15; i++)
                             {
                                 <option value="@i">@i</option>
@@ -118,8 +80,11 @@
 <br />
 
 @section Scripts {
+    <link href="@Url.VersionedContent("~/Content/uploadify.css")" rel="stylesheet"/>
+
     @Scripts.Render("~/bundles/jqueryval")
-    <link href="@Url.Content("~/Content/uploadify.css")" rel="stylesheet"/>
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+    
     <style type="text/css">
         .uploadify-queue-item .cancel a {
             background: url('/Content/uploadify-cancel.png') 0 0 no-repeat;
@@ -131,26 +96,39 @@
     </style>
     <script src="@Url.Content("~/Scripts/jquery.uploadify.min.js")"></script>
     <script type="text/javascript">
-        function Write() { }
-        Write.Init = function () {
-
-        }
+        function Material() { }
 
         $("#Add").click(function () {
 
-            var action_url = '/Settings/Materials';
+            var action_url = '/Settings/PostMaterials';
 
-            $("#insert_form").attr('action', action_url);
-            $("#insert_form").submit();
+            var $form_data = $("#insert_form").serialize();
+            var options = {
+                beforeSend: function () {
+
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    //$("#progressbar").find("span").text(percentComplete + "%");
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        window.location.href = "/Settings/Materials/";
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            };
+            console.log($form_data);
+
+            $('#insert_form').attr("action", action_url).ajaxForm(options).submit();
         });
 
         $("#GoLIst").click(function () {
             $(location).attr('href', '/Settings/Materials');
         });
-
-        $(function () {
-            Write.Init();
-
-        });
+    </script>
     </script>
 }

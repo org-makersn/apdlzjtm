@@ -25,7 +25,7 @@ namespace Makers.Store.Controllers
             StoreProductT storeProduct = new StoreProductBiz().getStoreProductById(no);
             ViewBag.AttrYN = storeProduct.MATERIAL_VOLUME == 0 || storeProduct.OBJECT_VOLUME == 0 ? "N" : "Y";
 
-            ViewBag.MaterialList = new StoreMaterialBiz().getAllStoreMaterial();
+            ViewBag.MaterialList = new StoreMaterialBiz().GetAllStoreMaterial();
 
             return View(storeProduct);
         }

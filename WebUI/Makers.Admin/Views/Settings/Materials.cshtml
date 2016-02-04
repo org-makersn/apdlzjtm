@@ -25,6 +25,7 @@
             <col width="15%" />
             <col width="15%" />
             <col width="*" />
+            <col width="8%" />
         </colgroup>
         <thead>
             <tr>
@@ -34,27 +35,34 @@
                 <th>슬라이싱 여부</th>
                 <th>sort</th>
                 <th>이미지</th>
+                <th>action</th>
             </tr>
         </thead>
         <tbody>
             @if ((int)ViewData["cnt"] > 0)
             {
-                foreach (var material in Model)
+                foreach (var item in Model)
                 {
                 <tr>
-                    <td>@material.NO</td>
-                    <td>@material.NAME</td>
-                    <td>@material.PRICE</td>
-                    <td>@material.SLICE_YN</td>
-                    <td>@material.SORT</td>
+                    <td>@item.NO</td>
+                    <td>@item.NAME</td>
+                    <td>@item.PRICE</td>
+                    <td>@item.SLICE_YN</td>
+                    <td>@item.SORT</td>
                     <td></td>
+                    <td>
+
+                        @Html.ActionLink("수정", "Materials", new { no = item.NO, mode = "edit" }) |         
+           
+                        <a href="javascript:void(0);" data-id="@item.NO" class="deleteItem">삭제</a>
+                    </td>
                 </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;"> 제품이 없습니다.</td>
+                    <td colspan="8" style="height: 200px; text-align: center; vertical-align: middle;">제품이 없습니다.</td>
                 </tr>	
             }
         </tbody>

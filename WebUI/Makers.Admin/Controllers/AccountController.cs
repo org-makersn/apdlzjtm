@@ -46,16 +46,12 @@ namespace Makers.Admin.Controllers
                 MemberT member = memberDac.GetMemberForAdminLogOn(model.UserId, model.Password, ip);
                 if (member != null)
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserId, false);
-                    //Member = member;
-
                     ProfileModel profile = new ProfileModel();
                     profile.UserNo = member.No;
                     profile.UserNm = member.Name;
                     profile.UserId = member.Id;
                     profile.UserProfilePic = member.ProfilePic;
                     profile.UserLevel = member.Level;
-                    //string hashAttr = string.Format("{0},{1},{2},{3}", member.No, member.Name, member.Id, member.ProfilePic);
 
                     var hashJson = JsonConvert.SerializeObject(profile);
 
@@ -77,7 +73,7 @@ namespace Makers.Admin.Controllers
         {
             FormsAuthentication.SignOut();
 
-            return RedirectToAction("Index", "DashBoard");
+            return RedirectToAction("LogOn", "Account");
         }
 
         #region 도우미

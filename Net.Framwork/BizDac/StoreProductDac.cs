@@ -1,7 +1,6 @@
 ﻿using Net.Framework;
 using Net.Framework.StoreModel;
 using Net.Framework.Helper;
-using Net.Framework.StoreModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
