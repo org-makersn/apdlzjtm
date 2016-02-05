@@ -189,27 +189,6 @@ function LogOff() {
     $("#logoutForm").submit();
 }
 
-
-////좋아요 기능
-//function SetLikes(val, loginChk) {
-//    if (loginPop(loginChk)) { count = 0; return false; }
-
-//    var onSuccess = function (result) {
-//        if (result.Result == 0) {
-//            $("#likeChk_" + val).text(parseInt($("#likeChk_" + val).text()) - 1);
-//            $("#likeChk_" + val).removeClass("on");
-//            $("#likes").find(".cnt").text(parseInt($("#likes").find(".cnt").text(), 10) - 1);
-//        }
-//        else {
-//            $("#likeChk_" + val).text(parseInt($("#likeChk_" + val).text()) + 1);
-//            $("#likeChk_" + val).addClass("on");
-//            $("#likes").find(".cnt").text(parseInt($("#likes").find(".cnt").text(), 10) + 1);
-//        }
-//        count = 0;
-//    }
-//    Ajax.AjaxResponseModelService(this, "/design/SetLikes", { articleNo: val }, onSuccess);
-//}
-
 //임시 비밀번호 발급
 function TemporaryPw() {
     var email = $("#TemporaryEmail").val();
@@ -240,7 +219,7 @@ $('#searchTxt').focusout(function () {
 });
 
 
-
+//script validation
 function check_msg(element_id, msg, patton) {
     var array_is = /[,]/;
     var val_is;
@@ -269,7 +248,7 @@ function check_msg(element_id, msg, patton) {
 
     if (patton != undefined) {
         var patton_arr = patton.split(":");
-        for (i = 0; i < patton_arr.length; i++) {
+        for (var i = 0; i < patton_arr.length; i++) {
 
             if (patton_arr[i] == 'required') {
                 if (val_is == false) {

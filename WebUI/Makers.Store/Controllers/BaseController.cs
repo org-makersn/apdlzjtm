@@ -15,7 +15,7 @@ namespace Makers.Store.Controllers
 {
     public class BaseController : Controller
     {
-        public ApplicationConfiguration.StoreConfiguration instance = ApplicationConfiguration.StoreConfiguration.Instance;
+        public static ApplicationConfiguration.StoreConfiguration instance = ApplicationConfiguration.StoreConfiguration.Instance;
         public ProfileModel profileModel;
 
         public BaseController()

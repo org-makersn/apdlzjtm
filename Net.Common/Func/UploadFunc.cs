@@ -18,7 +18,7 @@ namespace Common.Func
     {
         FileHelper fileHelper = new FileHelper();
 
-        private static string saveFilePath = "\\\\localhost\\fileupload";
+        private static string saveFilePath = "\\\\192.168.219.120\\fileupload";
 
         public string FileUpload(HttpPostedFileBase fileBase, IList<ResizeImg> imgList, string folder, string fileName)
         {
@@ -129,7 +129,7 @@ namespace Common.Func
             return new List<ResizeImg>()
             {
                 //new ResizeImg(){width = 1000, height = 360, folder = "Banner/fullsize"},
-                new ResizeImg(){width = 100, height = 36, folder = @"Banner\thumb"}
+                new ResizeImg(){width = 100, height = 36, folder = @"banner\thumb"}
             };
         }
 
@@ -141,8 +141,21 @@ namespace Common.Func
         {
             return new List<ResizeImg>()
             {
-                new ResizeImg(){width = 630, height = 470, folder = @"Article\article_img"},
-                new ResizeImg(){width = 160, height = 120, folder = @"Article\article_img\thumb"}
+                new ResizeImg(){width = 630, height = 470, folder = @"design\article_img"},
+                new ResizeImg(){width = 160, height = 120, folder = @"design\article_img\thumb"}
+            };
+        }
+
+        /// <summary>
+        /// 상품 이미지
+        /// </summary>
+        /// <returns></returns>
+        public static IList<ResizeImg> GetStoreResize()
+        {
+            return new List<ResizeImg>()
+            {
+                new ResizeImg(){width = 630, height = 470, folder = @"store\img-files"},
+                new ResizeImg(){width = 160, height = 120, folder = @"store\img-files\thumb"}
             };
         }
 
@@ -150,7 +163,7 @@ namespace Common.Func
         {
             return new List<ResizeImg>()
             {
-                new ResizeImg(){width = 160, height = 90, folder = @"Msg_File\thumb"},
+                new ResizeImg(){width = 160, height = 90, folder = @"msg_File\thumb"},
             };
         }
 
@@ -162,7 +175,7 @@ namespace Common.Func
         {
             return new List<ResizeImg>()
             {
-                new ResizeImg(){width = 160, height = 120, folder = @"Profile\thumb"}
+                new ResizeImg(){width = 160, height = 120, folder = @"profile\thumb"}
             };
         }
 
@@ -174,7 +187,7 @@ namespace Common.Func
         {
             return new List<ResizeImg>()
             {
-                new ResizeImg(){width = 1000, height = 240, folder = @"Profile\cover"}
+                new ResizeImg(){width = 1000, height = 240, folder = @"profile\cover"}
             };
         }
     }

@@ -19,11 +19,11 @@ namespace Makers.Store
             //    defaults: new { controller = "Category", action = "Index", category = UrlParameter.Optional }
             //);
 
-            routes.MapRoute(
-                name: "Model",
-                url: "model/upload-and-buy/{no}",
-                defaults: new { controller = "Model", action = "Index", no = UrlParameter.Optional }
-            );
+            //routes.MapRoute(
+            //    name: "Model",
+            //    url: "model/upload-and-buy/{no}",
+            //    defaults: new { controller = "Model", action = "Index", no = UrlParameter.Optional }
+            //);
 
             routes.MapRoute(
                 name: "Default",

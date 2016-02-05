@@ -13,35 +13,6 @@ $(function () {
         //alert('test2');			
     });
 
-    //$("._search_btn").click(function () {
-    //    //기본
-    //    //alert(0);
-
-
-    //    //var $sfl = $('#sfl').val();
-    //    //var $stx = $('#stx').val();
-    //    //if ($('#stx').val().trim() == '') {
-    //    //    alert('검색어를 입력해 주세요.');
-    //    //    $('#stx').focus();
-    //    //    return false;
-    //    //}
-
-    //    //if ($stx) $stx = '/sfl/' + $sfl + '/stx/' + sEncode($stx);
-
-    //    //location.href = '/items/search/page/1' + $stx;
-    //    //return false;
-    //});
-
-    //$("#stx").keypress(function (event) {
-
-
-    //    if (event.keyCode == 13) {
-    //        event.preventDefault();
-    //        $("._search_btn").trigger('click');
-    //    }
-    //});
-
-
     /* 팝업닫기 실행 */
     $('.popupArea .bgArea').css('opacity', 0.52);
     $('.popupArea .bgArea').css('height', $(document).height());
@@ -109,17 +80,7 @@ function encode(val) {
 
 // 상단 로그인 & 마이페이지 영역 	
 function mypageGo() {
-    //if (mypageIndex == 0) {
-    //    popupClose();
-    //    $('#loginArea').attr("src", "content/images/common/profile_photo.jpg");
-    //    $('.topMypage').show();
-    //    mypageIndex = 1;
-    //}
-    //else {
-    //    popupClose();
-    //    $('.topMypage').hide();
-    //    mypageIndex = 0;
-    //}
+
     popupClose();
     $('#loginArea').attr("src", "content/images/common/profile_photo.jpg");
     if ($('.topMypage').css("display") == 'none') {

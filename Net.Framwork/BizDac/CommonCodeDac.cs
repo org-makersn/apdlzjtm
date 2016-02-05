@@ -7,7 +7,7 @@ namespace Net.Framwork.BizDac
 {
     public class CommonCodeDac
     {
-        static IRepository<CommonCodeT> commoncode_ins = new Repository<CommonCodeT>();
+        private ISimpleRepository<CommonCodeT> _repository = new SimpleRepository<CommonCodeT>();
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@ namespace Net.Framwork.BizDac
         public IList<CommonCodeT> GetCommonCode(string group, string type)
         {
             //IList<CommonCodeT> codes = new List<CommonCodeT>();
-            return commoncode_ins.Get(m => m.CODE_GROUP == group && m.CODE_TYPE == type).OrderBy(m => m.NO).ToList();
+            return _repository.Get(m => m.CODE_GROUP == group && m.CODE_TYPE == type).OrderBy(m => m.NO).ToList();
         }
 
 

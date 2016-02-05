@@ -2,7 +2,7 @@
 
 namespace Net.Framework.Helper
 {
-    interface IRepository<T>
+    interface ISimpleRepository<T>
      where T : class, new()
     {
         bool Delete(System.Linq.Expressions.Expression<Func<T, bool>> predicate);

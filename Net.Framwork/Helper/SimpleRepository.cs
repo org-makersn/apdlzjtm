@@ -7,17 +7,22 @@ using System.Linq.Expressions;
 
 namespace Net.Framework.Helper
 {
-    public class Repository<T> : Net.Framework.Helper.IRepository<T> where T : class, new()
+    /// <summary>
+    /// UnitOfWork 는 나중에 추가
+    /// 로직이 덜 하게
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class SimpleRepository<T> : Net.Framework.Helper.ISimpleRepository<T> where T : class, new()
     {
         //private static readonly object s_lock = new object();
         private string _constr { get; set; }
 
-        public Repository()
+        public SimpleRepository()
         {
             this._constr = "StoreContext";
         }
 
-        public Repository(string constr)
+        public SimpleRepository(string constr)
         {
             this._constr = constr;
         }
@@ -72,6 +77,8 @@ namespace Net.Framework.Helper
 
         public bool Insert(T entity)
         {
+            if (entity == null) throw new ArgumentNullException("The expected Segment entity is not here.");
+            
             using (var dbctx = new AppDbContext<T>(_constr))
             {
                 dbctx.Set<T>().Add(entity);
@@ -81,6 +88,8 @@ namespace Net.Framework.Helper
 
         public IEnumerable<T> InsertAll(List<T> inList)
         {
+            if (inList == null) throw new ArgumentNullException("The expected Segment inList is not here.");
+            
             using (var dbctx = new AppDbContext<T>(_constr))
             {
                 var dbSet = dbctx.Set<T>();
@@ -105,6 +114,8 @@ namespace Net.Framework.Helper
 
         public bool Update(T entityToUpdate)
         {
+            if (entityToUpdate == null) throw new ArgumentNullException("The expected Segment entityToUpdate is not here.");
+            
             using (var dbctx = new AppDbContext<T>(_constr))
             {
                 var dbSet = dbctx.Set<T>();
@@ -116,6 +127,8 @@ namespace Net.Framework.Helper
 
         public IEnumerable<T> UpdateAll(List<T> inList)
         {
+            if (inList == null) throw new ArgumentNullException("The expected Segment inList is not here.");
+            
             using (var db = new AppDbContext<T>(_constr))
             {
                 var dbSet = db.Set<T>();

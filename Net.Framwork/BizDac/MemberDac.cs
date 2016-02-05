@@ -6,7 +6,7 @@ namespace Net.Framwork.BizDac
 {
     public class MemberDac_bak
     {
-        static IRepository<MemberExT> _repository = new Repository<MemberExT>();
+        private ISimpleRepository<MemberExT> _repository = new SimpleRepository<MemberExT>();
 
         /// <summary>
         /// 회원 조회 - 로그인

@@ -9,7 +9,7 @@ namespace Net.Framwork.BizDac
 {
     public class StoreMaterialDac
     {
-        IRepository<StoreMaterialT> _repository = new Repository<StoreMaterialT>();
+        ISimpleRepository<StoreMaterialT> _repository = new SimpleRepository<StoreMaterialT>();
         
         /// <summary>
         /// select multi data

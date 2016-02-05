@@ -15,7 +15,7 @@ namespace Net.Common.Configurations
         {
             FileSeviceDomain = ConfigurationManager.AppSettings["SeviceDomain"] ?? "local.file.makersn.com";
             FileServerHost = string.Format("http://{0}", FileSeviceDomain);
-            FileServerUncPath = ConfigurationManager.AppSettings["FileServerUncPath"] ?? @"\\localhost\fileupload";
+            FileServerUncPath = ConfigurationManager.AppSettings["FileServerUncPath"] ?? @"\\192.168.219.120\fileupload";
 
             ProfileImg = ConfigurationManager.AppSettings["ProfileImg"] ?? "profile/thumb";
             ProfileCover = ConfigurationManager.AppSettings["ProfileCover"] ?? "profile/cover";
@@ -154,7 +154,7 @@ namespace Net.Common.Configurations
                 Currency = ConfigurationManager.AppSettings["Currency"] ?? @"WON";
                 PgId = ConfigurationManager.AppSettings["PgId"] ?? @"IniTechPG_";
 
-                PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfiles";
+                PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfile";
                 Slic3rDir = ConfigurationManager.AppSettings["Slic3rDir"] ?? @"D:\slic3r";
             }
 

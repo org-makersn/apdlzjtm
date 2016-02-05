@@ -9,7 +9,7 @@ namespace Net.Framwork.BizDac
 {
     public class StoreProductDac : DacBase
     {
-        IRepository<StoreProductT> _repository = new Repository<StoreProductT>();
+        private ISimpleRepository<StoreProductT> _repository = new SimpleRepository<StoreProductT>();
         
         /// <summary>
         /// select multi data
@@ -17,7 +17,6 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         internal IList<StoreProductT> SelectAllStoreProduct()
         {
-
             return _repository.GetAll().ToList();
         }
 
@@ -38,7 +37,6 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public long InsertStoreProduct(StoreProductT data)
         {
-            if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
             long identity = 0;
             bool ret = _repository.Insert(data);
             if (ret)
@@ -55,9 +53,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         internal bool UpdateStoreProduct(StoreProductT data)
         {
-            if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
-
-            return _repository.Update(data);
+return _repository.Update(data);
         }
 
         /// <summary>
