@@ -548,9 +548,7 @@
     <Content Include="Scripts\uploader\dmuploader.js" />
     <Content Include="Scripts\uploader\dmuploader.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -589,12 +587,14 @@
     <Content Include="Views\Order\INIsecureResult.cshtml" />
     <Content Include="Views\Cart\Grid.cshtml" />
     <Content Include="Views\Shipping\List.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Order\ContractList.cshtml" />
+=======
     <Content Include="Views\Model\Index.cshtml" />
     <Content Include="Views\Item\Index.cshtml" />
     <Content Include="Views\Item\Upload.cshtml" />
     <Content Include="Views\Item\LoadUploadFiles.cshtml" />
-    <Content Include="Views\Item\Detail.cshtml" />
+>>>>>>> 34cee42273c60c0656f8f9ed35c56a3e373084d8
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

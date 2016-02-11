@@ -46,10 +46,16 @@ namespace Net.Framework.StoreModel
         public virtual string UserId { get; set; }
         [Column("MEMBER_NO")]
         public virtual int MemberNo { get; set; }
+        [Column("SELLER_NO")]
+        public virtual int SellerNo { get; set; }
         [Column("ORDER_DATE")]
         public virtual DateTime OrderDate { get; set; }
+        [Column("ORDER_STATUS")]
+        public virtual string OrderStatus { get; set; }
         [Column("PAYMENT_STATUS")]
         public virtual string PaymentStatus { get; set; }
+        [Column("SHIPPING_STATUS")]
+        public virtual string ShippingStatus { get; set; }
         [Column("SHIPPING_PRICE")]
         public virtual int ShippingPrice { get; set; }
         [Column("SLOW_MAKE_YN")]
@@ -75,22 +81,16 @@ namespace Net.Framework.StoreModel
         public virtual Int64 OrderMasterNo { get; set; }
         [Column("PRODUCT_DETAIL_NO")]
         public virtual Int64 ProductDetailNo { get; set; }
-        [Column("PRINTING_COM_NO")]
-        public virtual Int64 PrintingComNo { get; set; }
         [Column("PRODUCT_PRICE")]
         public virtual int ProductPrice { get; set; }
-        [Column("SHIPPING_PRICE")]
-        public virtual int ShippingPrice { get; set; }
         [Column("PRODUCT_CNT")]
         public virtual int ProductCnt { get; set; }
-        [Column("ORDER_STATUS")]
-        public virtual string OrderStatus { get; set; }
-        [Column("CANCEL_YN")]
-        public virtual string CancelYn { get; set; }
+        [Column("PRINTING_STATUS")]
+        public virtual string PringtingStatus { get; set; }
+        [Column("PRINTING_COMPLETE_DATE")]
+        public virtual Nullable<DateTime> PringtingCompleteDate { get; set; }
         [Column("GIFT_MSG")]
-        public virtual string GigtMsg { get; set; }
-        [Column("COMPLETE_DATE")]
-        public virtual Nullable<DateTime> CompleteDate { get; set; }
+        public virtual string GigtMsg { get; set; }        
         [Column("REG_DT")]
         public virtual DateTime RegDt { get; set; }
         [Column("REG_ID")]
@@ -138,6 +138,8 @@ namespace Net.Framework.StoreModel
         public virtual string IniEncField { get; set; }
     }
 
+    #region 우편번호 API 관련 entity
+
     public class PostAddressInfo
     {
         public virtual CmmMsgHeader CmmMsgHeader { get; set; }
@@ -167,9 +169,30 @@ namespace Net.Framework.StoreModel
 
     public class BoardInfo
     {
-        public int TotalPage { get; set; }
-        public int TotalCount { get; set; }
-        public int CurrentPage { get; set; }
-        public int PageSize { get; set; }
+        public virtual int TotalPage { get; set; }
+        public virtual int TotalCount { get; set; }
+        public virtual int CurrentPage { get; set; }
+        public virtual int PageSize { get; set; }
+    }
+
+    #endregion
+
+    public class ContractDetail
+    {
+        public virtual Int64 NO { get; set; }
+        public virtual string NAME { get; set; }
+        public virtual int PRODUCT_PRICE { get; set; }
+        public virtual int PRODUCT_CNT { get; set; }
+        public virtual int PAY_PRICE { get; set; }               
+        public virtual string PRINTING_STATUS { get; set; }
+    }
+
+    public class CancelOrder
+    {
+        public virtual string ResultCode { get; set; }
+        public virtual string ResultMsg { get; set; }
+        public virtual string CancelDate { get; set; }
+        public virtual string CancelTime { get; set; }
+        public virtual string CshrCancelNum { get; set; }
     }
 }

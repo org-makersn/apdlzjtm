@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Net.Framework.Util;
 
 namespace Net.Framwork.BizDac
 {
@@ -65,6 +66,135 @@ namespace Net.Framwork.BizDac
         public int InsertOrderDetailInfo(List<StoreOrderDetailT> datas)
         {
             return new StoreOrderDac().InsertOrderDetailInfo(datas);
+        }
+        #endregion
+
+        #region GetContractListByCondition - 구매내역
+        /// <summary>
+        /// 구매내역
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="startDt"></param>
+        /// <param name="endDt"></param>
+        /// <returns></returns>
+        public List<StoreOrderT> GetContractListByCondition(int memberNo, DateTime startDt, DateTime endDt)
+        {
+            List<StoreOrderT> list = new StoreOrderDac().GetContractListByCondition(memberNo, startDt, endDt);
+
+            foreach (StoreOrderT item in list)
+            {
+                // 주문상태
+                if(item.OrderStatus.Equals(StringEnum.GetValue(OrderStatus.Complete)))
+                {
+                    item.OrderStatus = StringEnum.GetDescription(OrderStatus.Complete);
+                }
+                else if (item.OrderStatus.Equals(StringEnum.GetValue(OrderStatus.Cancel)))
+                {
+                    item.OrderStatus = StringEnum.GetDescription(OrderStatus.Cancel);
+                }
+
+                // 결제상태
+                if (item.PaymentStatus.Equals(StringEnum.GetValue(PaymentStatus.Complete)))
+                {
+                    item.PaymentStatus = StringEnum.GetDescription(PaymentStatus.Complete);
+                }
+                else if (item.PaymentStatus.Equals(StringEnum.GetValue(PaymentStatus.Cancel)))
+                {
+                    item.PaymentStatus = StringEnum.GetDescription(PaymentStatus.Cancel);
+                }
+                else if (item.PaymentStatus.Equals(StringEnum.GetValue(PaymentStatus.Waiting)))
+                {
+                    item.PaymentStatus = StringEnum.GetDescription(PaymentStatus.Waiting);
+                }
+                else if (item.PaymentStatus.Equals(StringEnum.GetValue(PaymentStatus.InProgress)))
+                {
+                    item.PaymentStatus = StringEnum.GetDescription(PaymentStatus.InProgress);
+                }
+
+                // 배송상태
+                if (item.ShippingStatus != null)
+                {                    
+                    if (item.ShippingStatus.Equals(StringEnum.GetValue(ShippingStatus.Complete)))
+                    {
+                        item.ShippingStatus = StringEnum.GetDescription(ShippingStatus.Complete);
+                    }
+                    else if (item.ShippingStatus.Equals(StringEnum.GetValue(ShippingStatus.Cancel)))
+                    {
+                        item.ShippingStatus = StringEnum.GetDescription(ShippingStatus.Cancel);
+                    }
+                    else if (item.ShippingStatus.Equals(StringEnum.GetValue(ShippingStatus.Waiting)))
+                    {
+                        item.ShippingStatus = StringEnum.GetDescription(ShippingStatus.Waiting);
+                    }
+                    else if (item.ShippingStatus.Equals(StringEnum.GetValue(ShippingStatus.InProgress)))
+                    {
+                        item.ShippingStatus = StringEnum.GetDescription(ShippingStatus.InProgress);
+                    }
+                }
+            }
+
+            return list;
+
+        }
+        #endregion
+
+        #region GetContractInfoListByCondition - 상세구매내역
+        /// <summary>
+        /// 상세구매내역
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="startDt"></param>
+        /// <param name="endDt"></param>
+        /// <returns></returns>
+        public List<ContractDetail> GetContractDetailListByCondition(int memberNo, DateTime startDt, DateTime endDt)
+        {
+            return new StoreOrderDac().GetContractDetailListByCondition(memberNo, startDt, endDt);
+        }
+        #endregion
+
+        #region GetContractDetailListByOid - OID에 따른 구매상세내역
+        /// <summary>
+        /// OID에 따른 구매상세내역
+        /// </summary>
+        /// <param name="OId"></param>
+        /// <returns></returns>
+        public List<ContractDetail> GetContractDetailListByOid(string oId)
+        {
+            List<ContractDetail> list = new StoreOrderDac().GetContractDetailListByOid(oId);
+
+            foreach (ContractDetail item in list)
+            {
+                if (item.PRINTING_STATUS.Equals(StringEnum.GetValue(PrintingStatus.Complete)))
+                {
+                    item.PRINTING_STATUS = StringEnum.GetDescription(PrintingStatus.Complete);
+                }
+                else if (item.PRINTING_STATUS.Equals(StringEnum.GetValue(PrintingStatus.Cancel)))
+                {
+                    item.PRINTING_STATUS = StringEnum.GetDescription(PrintingStatus.Cancel);
+                }
+                else if (item.PRINTING_STATUS.Equals(StringEnum.GetValue(PrintingStatus.Waiting)))
+                {
+                    item.PRINTING_STATUS = StringEnum.GetDescription(PrintingStatus.Waiting);
+                }
+                else if (item.PRINTING_STATUS.Equals(StringEnum.GetValue(PrintingStatus.InProgress)))
+                {
+                    item.PRINTING_STATUS = StringEnum.GetDescription(PrintingStatus.InProgress);
+                }
+            }
+
+            return list;
+        }
+        #endregion
+
+        #region GetTradeId - 거래아이디 Get
+        /// <summary>
+        /// 거래아이디 Get
+        /// </summary>
+        /// <param name="oid"></param>
+        /// <returns></returns>
+        public string GetTradeId(string oid)
+        {          
+            return new StoreOrderDac().GetTradeId(oid);
         }
         #endregion
     }

@@ -108,5 +108,131 @@ namespace Net.Framwork.BizDac
             return newOrderNo[0];
         }
         #endregion
+
+        #region GetOrderMasterListByCondition - 구매내역
+        /// <summary>
+        /// 구매내역
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="startDt"></param>
+        /// <param name="endDt"></param>
+        /// <returns></returns>
+        internal List<StoreOrderT> GetContractListByCondition(int memberNo, DateTime startDt, DateTime endDt)
+        {
+            List<StoreOrderT> storeOrderMasterList = new List<StoreOrderT>();
+
+            using (dbContext = new StoreContext())
+            {
+                storeOrderMasterList = dbContext.StoreOrderT.Where(p => p.MemberNo == memberNo && p.OrderDate >= startDt && p.OrderDate <= endDt).ToList();
+            }
+            return storeOrderMasterList;
+ 
+        }
+        #endregion
+
+        #region GetContractDetailListByCondition - 상세구매내역
+        /// <summary>
+        /// 구매내역
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <param name="startDt"></param>
+        /// <param name="endDt"></param>
+        /// <returns></returns>
+        internal List<ContractDetail> GetContractDetailListByCondition(int memberNo, DateTime startDt, DateTime endDt)
+        {
+            List<ContractDetail> list = new List<ContractDetail>();
+            string query = DacHelper.GetSqlCommand("StoreOrder.SelectContractDetailListByCondition_S");
+
+            using (dbContext = new StoreContext())
+            {
+                list = dbContext.Database.SqlQuery<ContractDetail>(query,
+                    new SqlParameter("MEMBER_NO", memberNo),
+                    new SqlParameter("ST_DT", startDt),
+                    new SqlParameter("ED_DT", endDt)
+                    ).ToList();
+            }
+
+            return list;
+        }
+        #endregion
+
+        #region GetContractDetailListByOid - OID에 따른 구매상세내역
+        /// <summary>
+        /// OID에 따른 구매상세내역
+        /// </summary>
+        /// <param name="oId"></param>
+        /// <returns></returns>
+        internal List<ContractDetail> GetContractDetailListByOid(string oId)
+        {
+            List<ContractDetail> list = new List<ContractDetail>();
+            string query = DacHelper.GetSqlCommand("StoreOrder.SelectContractDetailListByOid_S");
+
+            using (dbContext = new StoreContext())
+            {
+                list = dbContext.Database.SqlQuery<ContractDetail>(query,
+                    new SqlParameter("OID", oId)
+                    ).ToList();
+            }
+
+            return list;
+        }
+        #endregion
+
+        #region GetTradeId - 거래아이디 Get
+        /// <summary>
+        /// 주문취소
+        /// </summary>
+        /// <param name="oId"></param>
+        /// <returns></returns>
+        internal string GetTradeId(string oId)
+        {
+            StorePaymentHistoryT data = new StorePaymentHistoryT();
+            using (dbContext = new StoreContext())
+            {
+                data = dbContext.StorePaymentHistoryT.Where(p => p.MoId == oId).FirstOrDefault();
+            }
+
+            return data.Tid;
+        }
+        #endregion
+
+        #region updateOrderStatus - 주문상태 업데이트
+        /// <summary>
+        /// 주문상태 업데이트
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <returns></returns>
+        internal int updateOrderStatus(string oId, string status)
+        {
+            if (oId == null) throw new ArgumentNullException("The expected Segment data is not here.");
+
+            int ret = 0;
+            using (dbContext = new StoreContext())
+            {
+                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.Oid == oId).FirstOrDefault();
+
+                if (data != null)
+                {
+                    try
+                    {
+                        data.PaymentStatus = status;
+                        dbContext.StoreOrderT.Attach(data);
+                        dbContext.Entry<StoreOrderT>(data).State = System.Data.Entity.EntityState.Modified;
+                        dbContext.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                else
+                {
+                    ret = -2;
+                    throw new NullReferenceException("The expected original Segment data is not here.");
+                }
+
+            }
+            return ret;
+        }
+        #endregion
     }
 }

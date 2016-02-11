@@ -99,7 +99,6 @@
     <Compile Include="Logging\InterceptorTransientErrors.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="StoreModel\CommonCodeT.cs" />
-    <Compile Include="StoreModel\StoreItemDetailT.cs" />
     <Compile Include="StoreModel\StoreItemFileT.cs" />
     <Compile Include="StoreModel\StoreItemT.cs" />
     <Compile Include="StoreModel\MemberMsgT.cs" />
@@ -127,9 +126,12 @@
     <Compile Include="StoreContext.cs" />
     <Compile Include="StoreModel\StoreShippingT.cs" />
     <Compile Include="Util\EnumHelper.cs" />
+<<<<<<< HEAD:Net.Framwork/Net.Framwork.csproj
     <Compile Include="Util\StoreEnumType.cs" />
+=======
     <Compile Include="Util\IPagedList.cs" />
     <Compile Include="Util\PagedList.cs" />
+>>>>>>> 34cee42273c60c0656f8f9ed35c56a3e373084d8:Net.Framwork/Net.Framework.csproj
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -167,11 +169,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SqlCmd\StoreItemDac.SelectStoreItemDetails.sql" />
-    <Content Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
