@@ -2,7 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 
-namespace Makers.Store.Security
+namespace Makers.Store
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : System.Web.Mvc.AuthorizeAttribute

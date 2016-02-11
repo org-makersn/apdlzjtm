@@ -33,7 +33,6 @@ namespace Makers.Admin.Controllers
 
             ViewBag.BannerType = type;
 
-            //Log.Debug("BannerController.Index() called");
             IList<BannerT> list = null;
             if (!string.IsNullOrEmpty(query))
             {

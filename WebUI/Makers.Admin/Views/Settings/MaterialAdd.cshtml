@@ -1,10 +1,134 @@
-﻿@{
+﻿@model Net.Framework.StoreModel.StoreMaterialT
+
+@{
     ViewBag.Title = "MaterialAdd";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="contents_zone" style="width: 1004px;">
-    <h2 class="contents_title">MaterialAdd</h2>
+<h2>MaterialAdd</h2>
 
+<div class="contents_zone">
+
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @Html.Hidden("mode", "add")
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="200x" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+            <tbody>
+                <tr>
+                    <th>재질명</th>
+                    <td>
+                        @Html.EditorFor(model => model.NAME, new { @class = "input_text" })
+                        @Html.ValidationMessageFor(model => model.NAME)
+                    </td>
+                </tr>
+                @*<tr>
+                    <th>이미지</th>
+                    <td>
+                        @Html.TextBoxFor(model => model.IMAGE_NAME, new { type = "file", id = "image", @class = "input_text", style = "width: 300px;" })
+                        @Html.ValidationMessageFor(model => model.IMAGE_NAME)
+                    </td>
+                </tr>*@
+                <tr>
+                    <th>기본 가격</th>
+                    <td>
+                        @Html.EditorFor(model => model.PRICE)
+                        @Html.ValidationMessageFor(model => model.PRICE)
+                    </td>
+                </tr>
+                <tr>
+                    <th>슬라이싱 여부</th>
+                    <td>
+                        <input type="radio" name="SLICE_YN" value="Y" checked="checked" />
+                        사용 &nbsp; 
+					<input type="radio" name="SLICE_YN" value="N" />
+                        미사용&nbsp; 
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="SORT">우선순위</label></th>
+                    <td>
+                        <select id="SORT" name="SORT" class="input_text" style="width: 120px;">
+                            @for (var i = 1; i <= 15; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+
+<!-- btn -->
+<div class="btn_center">
+    <span class="btnWrap medium"><a href="javascript:void(0);" id="Add" class="_btn_reg">등록</a></span>
+    <span class="btnWrap medium"><a href="javascript:void(0);" id="GoList" class="_btn_list">목록</a></span>
 
 </div>
+
+<!-- // btn -->
+<br />
+
+@section Scripts {
+    <link href="@Url.VersionedContent("~/Content/uploadify.css")" rel="stylesheet"/>
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+    
+    <style type="text/css">
+        .uploadify-queue-item .cancel a {
+            background: url('/Content/uploadify-cancel.png') 0 0 no-repeat;
+            float: right;
+            height: 16px;
+            text-indent: -9999px;
+            width: 16px;
+        }
+    </style>
+    <script src="@Url.Content("~/Scripts/jquery.uploadify.min.js")"></script>
+    <script type="text/javascript">
+        function Material() { }
+
+        $("#Add").click(function () {
+
+            var action_url = '/Settings/PostMaterials';
+
+            var $form_data = $("#insert_form").serialize();
+            var options = {
+                beforeSend: function () {
+
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    //$("#progressbar").find("span").text(percentComplete + "%");
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        window.location.href = "/Settings/Materials/";
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            };
+            console.log($form_data);
+
+            $('#insert_form').attr("action", action_url).ajaxForm(options).submit();
+        });
+
+        $("#GoLIst").click(function () {
+            $(location).attr('href', '/Settings/Materials');
+        });
+    </script>
+    </script>
+}

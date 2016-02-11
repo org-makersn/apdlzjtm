@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
 
-namespace Net.Framwork.Helper
+namespace Net.Framework.Helper
 {
     public class DacBase
     {

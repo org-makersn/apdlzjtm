@@ -1,5 +1,9 @@
 ﻿using Makers.Store.Configurations;
+using Net.Common.Configurations;
 using Net.Common.Model;
+using Net.Common.Util;
+using Net.Framwork.BizDac;
+using Net.Framework.StoreModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +15,7 @@ namespace Makers.Store.Controllers
 {
     public class BaseController : Controller
     {
-        public StoreConfiguration instance = StoreConfiguration.Instance;
+        public static ApplicationConfiguration.StoreConfiguration instance = ApplicationConfiguration.StoreConfiguration.Instance;
         public ProfileModel profileModel;
 
         public BaseController()
@@ -46,6 +50,39 @@ namespace Makers.Store.Controllers
 
                 return profileModel;
             }
+        }
+
+        /// <summary>
+        /// 파샬뷰로 빼던지
+        /// </summary>
+        /// <returns></returns>
+        protected IList<CodeModel> GetArticleList()
+        {
+            IList<CommonCodeT> list = null;
+            list = CacheUtil.GetCache("MenuList") as IList<CommonCodeT>;
+
+            if (list == null)
+            {
+                list = new CommonCodeDac().GetCommonCode("STORE", "PRODUCT");
+                CacheUtil.SetCache("MenuList", list);
+            }
+            IList<CodeModel> menulist = new List<CodeModel>();
+            foreach (var menu in list)
+            {
+                CodeModel model = new CodeModel();
+                model.MenuTitle = menu.CODE_NAME;
+                model.MenuCodeNo = menu.NO;
+                if (menu.NO > 0)
+                {
+                    model.MenuUrl = "/catalog/latest-" + menu.CODE_KEY;
+                }
+                else
+                {
+                    model.MenuUrl = "/catalog/latest";
+                }
+                menulist.Add(model);
+            }
+            return menulist;
         }
     }
 }

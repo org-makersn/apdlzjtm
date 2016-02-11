@@ -1,0 +1,374 @@
+﻿@using Net.Framework.StoreModel
+@model StoreProductT
+
+@{
+    ViewBag.Title = "Models";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IList<StoreMaterialT> matList = ViewBag.MaterialList;
+
+    string contents = new HtmlFilter().PunctuationEncode(Model.CONTENTS);
+    contents = new HtmlFilter().ConvertContent(contents);
+
+    string attrSuccess = ViewBag.AttrSuccess;
+}
+
+<h1>
+    @Html.Hidden("pruduct_no", Model.NO)
+    <br>
+    제품 파일 사이즈는: @Model.FILE_SIZE kb
+    <br>
+    제품 SIze X: <span id="size_x">@Model.SIZE_X</span> mm
+    <br>
+    제품 SIze Y: <span id="size_y">@Model.SIZE_Y</span> mm
+    <br>
+    제품 SIze Z: <span id="size_z">@Model.SIZE_Z</span> mm
+    <br>
+    제품 모델 부피는: <span id="objectvolume">@Model.OBJECT_VOLUME</span> cm³
+    <br>
+    제품 슬라이싱된 출력 부피는: <span id="materialvolume">@Model.MATERIAL_VOLUME</span> cm³
+</h1>
+<br>
+
+
+<!-- inputUpload -->
+<div class="inputUpload">
+    <!-- Left -->
+    <div class="left">
+
+        <div class="boxNo1">
+            <p class="headerInput">제목 &amp; 설명</p>
+            <div>
+                <input class="inputTit" type="text" id="product_title" name="product_title" value="@Model.NAME" placeholder="제목을 입력하세요." />
+
+            </div>
+            <div class="textArea">
+                <textarea class="input_content" id="product_contents" name="product_contents" placeholder="내용을 입력하세요.">@Model.CONTENTS</textarea>
+                <textarea class="input_tag" id="product_tags" name="product_tags" placeholder="태그를 입력하세요(태그와 태그 사이는 쉽표로 구분).">@Model.TAG_NAME</textarea>
+
+                <div class="btSet">
+                    <a href="#" id="addVideo" class="addVideo" title="동영상 첨부"></a>
+                </div>
+                @*<p class="noti">※ '#'뒤에 단어를 입력하면 '태그'로 표시됩니다.</p>*@
+            </div>
+            <input type="text" id="video_url" name="video_url" value="@Model.VIDEO_URL" placeholder="동영상 주소" />
+        </div>
+    </div>
+    <!-- //Left -->
+
+    <!-- Right -->
+    <div class="right">
+
+        <div class="boxNo1">
+            <p class="headerInput">카테고리</p>
+            <div class="select">
+                <p class="value pCate"></p>
+                <ul class="lst_value">
+                    <li id="code_all" style="display: none">
+                        <input type="radio" id="lv1" name="lv1" value="" /><label for="lv1">카테고리를 선택해 주세요</label></li>
+                    <li id="code_1007">
+                        <input type="radio" id="lv1_1007" name="lv1" value="10203" /><label for="lv1_1007">컨테스트</label></li>
+                    <li id="code_1001">
+                        <input type="radio" id="lv1_1001" name="lv1" value="1001" /><label for="lv1_1001">아트&데코</label></li>
+                    <li id="code_1002">
+                        <input type="radio" id="lv1_1002" name="lv1" value="1002" /><label for="lv1_1002">패션&악세사리</label></li>
+                    <li id="code_1003">
+                        <input type="radio" id="lv1_1003" name="lv1" value="1003" /><label for="lv1_1003">캐릭터&토이</label></li>
+                    <li id="code_1004">
+                        <input type="radio" id="lv1_1004" name="lv1" value="1004" /><label for="lv1_1004">생활용품</label></li>
+                    <li id="code_1005">
+                        <input type="radio" id="lv1_1005" name="lv1" value="1005" /><label for="lv1_1005">테크&툴</label></li>
+                    <li id="code_1006">
+                        <input type="radio" id="lv1_1006" name="lv1" value="1006" /><label for="lv1_1006">교육&학습도구</label></li>
+                </ul>
+                <input type="hidden" id="category_no" value="" />
+            </div>
+        </div>
+
+        <div class="boxNo2">
+            <p class="headerInput">배송</p>
+            <select>
+                <option value="1">기본배송정책</option>
+                <option value="2">무료 배송</option>
+                <option value="3">상품별 배송비</option>
+                <option value="4">수신자 부담</option>
+            </select>
+            @*<div class="select_delivery">
+                <p class="value_delivery"></p>
+                <ul class="lst_value">
+                    <li id="li_all">
+                        <input type="radio" id="delivery_0" name="delivery" value="0" />
+                        <label for="delivery_0">기본배송정책</label>
+                    </li>
+                    <li id="li_1">
+                        <input type="radio" id="delivery_1" name="delivery" value="1" />
+                        <label for="delivery_1">무료 배송</label>
+                    </li>
+                    <li id="li_2">
+                        <input type="radio" id="delivery_2" name="delivery" value="2" />
+                        <label for="delivery_2">상품별 배송비</label>
+                    </li>
+                    <li id="li_3">
+                        <input type="radio" id="delivery_3" name="delivery" value="3" />
+                        <label for="delivery_3">수신자 부담</label>
+                    </li>
+                </ul>
+                <input type="hidden" id="copy_no" value="" />
+            </div>*@
+        </div>
+    </div>
+    <!-- //Right -->
+</div>
+<!-- //inputUpload -->
+
+
+
+<h1>옵션(재료 및 색상) : 옵션을 설정하면 구매자들이 재료 및 색상을 선택할 수 있습니다.</h1>
+<br>
+@{
+    if (matList != null)
+    {
+        foreach (var material in matList)
+        {
+    <div>
+        &nbsp @material.NAME
+        &nbsp @material.PRICE 원
+    </div>
+    <br>
+        }
+    }
+    else
+    {
+    <h1>등록된 재질이 없습니다. </h1>
+    }
+}
+
+<!-- btnZone -->
+<div class="btnZone2">
+    <button title="임시 저장" class="btnThumbSave _btn_save" onclick="Models.TempUpload();"></button>
+    <button title="업로드" class="btnUpFile _btn_reg" onclick="Models.ProductUpload();"></button>
+    @*<button title="삭제" class="btnTextDel _btn_del">삭제</button>*@
+    <button title="취소" class="btnUpCancel" onclick="Models.UploadCancle();">취소</button>
+</div>
+<!-- //btnZone -->
+
+<!--  임시저장확인 팝업 -->
+<div class="popupArea thumbPop">
+    <div class="bgArea">
+    </div>
+    <div class="popBox">
+        <div class="contactZone">
+            <p class="titleContact">임시저장되었습니다!</p>
+            <p class="bt_st1">
+                <button type="button" onclick="Upload.GoArticle()" title="저장된 페이지로 이동하기" id="btnGoArticle">저장된 페이지로 이동하기</button>
+            </p>
+            <p class="bt_st2">
+                <button type="button" onclick="Upload.GoMain()" title="메인 페이지로 이동하기">메인 페이지로 이동하기</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- // 임시저장확인 팝업 -->
+
+<!--  게시버튼확인 팝업 -->
+<div class="popupArea uploadEnd">
+    <div class="bgArea">
+    </div>
+    <div class="popBox">
+        <div class="contactZone">
+            <p class="titleContact">게시되었습니다!</p>
+            <p class="bt_st1">
+                <button type="button" onclick="Upload.GoArticle()" title="게시된 페이지로 이동하기">게시된 페이지로 이동하기</button>
+            </p>
+            <p class="bt_st2">
+                <button type="button" onclick="Upload.GoMain()" title="메인 페이지로 이동하기">메인 페이지로 이동하기</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- // 게시버튼확인 팝업 -->
+
+
+@section Scripts{
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery-ui.js")"></script>
+
+    @*<script type="text/javascript" src="@Url.VersionedContent("~/Views/Product/Models.js")"></script>*@
+    <script type="text/javascript">
+        function Models() { }
+
+        Models.Init = function () {
+            closet();
+
+            Models.UISelect(".select", ".lst_value", ".pCate", "");
+
+            $('#code_all').addClass('selected');
+
+            $('#li_4').addClass('selected');
+
+            $('.lst_value li').on('click', function () {
+                $('.lst_value li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+            $('.lst_value2 li').on('click', function () {
+                $('.lst_value2 li').removeClass("selected");
+                $(this).addClass("selected");
+            });
+
+            $('.lst_value li').mouseenter(function () {
+                $('.lst_value li').removeClass('selected');
+            })
+
+            $('.lst_value2 li').mouseenter(function () {
+                $('.lst_value2 li').removeClass('selected');
+            })
+            var attr_yn = "@ViewBag.AttrYN";
+            if (attr_yn == "N") {
+                Models.GetModelingAttr();
+            }
+        }
+
+        Models.UISelect = function (obj, valLst, val, check_id) {
+            var set = {
+                ie6: navigator.userAgent.toLowerCase().indexOf("msie 6") != -1,
+                container: $(obj),
+                value: $(val),
+                list: $(valLst),
+                firstVal: $(valLst + "> li:first-child > label").html(),
+                li: $(valLst + "> li"),
+                label: $(valLst + "> li > label")
+            }
+
+            set.list.hide();
+            if (check_id == '') {
+                set.value.append(set.firstVal);
+            }
+            else {
+                set.value.append($("#" + check_id).next().html());
+            }
+            set.value.click(function () {
+                set.list.show();
+                set.list.focusin(function () {
+                    set.list.show();
+                });
+                if (set.ie6) {
+                    set.label.hover(
+                        function () { $(this).parent().addClass("selected"); },
+                        function () { $(this).parent().removeClass("selected"); }
+                    );
+                }
+                function listHide() {
+                    setTimeout(function () { set.list.hide(); }, 300);
+                }
+                set.container.mouseleave(listHide);
+                set.label.click(function () {
+                    set.value.empty().append($(this).html());
+
+                    set.list.hide();
+                });
+            });
+        }
+
+        Models.ProductUpload = function () {
+            //var $form_data = $("#update_form").serialize();
+            //var options = {
+            //    beforeSend: function () {
+            //    },
+            //    uploadProgress: function (event, position, total, percentComplete) {
+            //    },
+            //    success: function (response) {
+            //        if (response.Success) {
+
+            //        }
+            //        else {
+            //            alert(response.Message);
+            //        }
+            //    },
+            //    complete: function (response) {
+            //    },
+            //    error: function (error) {
+            //        var exception = null;
+            //        if (error != null && typeof (error.responseText) != 'undefined') {
+            //            try {
+            //                exception = $.parseJSON(error.responseText);
+            //                if (typeof (exception.ExceptionMessage) != "undefined" && $.trim(exception.ExceptionMessage) != '') {
+            //                    alert(exception.ExceptionMessage);
+            //                }
+            //            } catch (ex) {
+            //                //alert(ex.name); 
+            //            }
+            //        }
+            //    }
+            //};
+
+            //$('#update_form').attr("action", "/product/models").ajaxForm(options).submit();
+
+
+            var data = {
+                productNo: $("#pruduct_no").val(),
+                productName: $("#product_title").val(),
+                categoryNo: "1002",
+                content: $("#product_contents").val(),
+                description: "",
+                tagName: $("#product_tags").val(),
+                videoUrl: $("#video_url").val()
+            }
+
+            console.log(data);
+
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    alert("저장 완료");
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/model/add", data, onSuccess);
+        }
+
+        Models.TempUpload = function () {
+            alert("TempUpload");
+        }
+
+        Models.UploadCancle = function () {
+            alert("UploadCancle");
+        }
+
+        Models.GetModelingAttr = function () {
+
+            var data = {
+                productNo: $("#pruduct_no").val()
+            }
+
+            var onSuccess = function (result) {
+                if (result.Success) {
+                    var modeling = JSON.parse(result.Result);
+                    
+                    $("#size_x").text(modeling.X);
+                    $("#size_y").text(modeling.Y);
+                    $("#size_z").text(modeling.Z);
+                    $("#objectvolume").text(modeling.ObjectVolume);
+                    $("#materialvolume").text(modeling.MaterialVolume);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/model/getmodelingattr", data, onSuccess);
+        }
+
+        function closet() {
+            window.onbeforeunload = function (e) {
+                e = e || window.event;
+                // For IE<8 and Firefox prior to version 4
+                if (e) {
+                    e.returnValue = '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
+                }
+
+                // For Chrome, Safari, IE8+ and Opera 12+
+                return '페이지를 벗어나면 저장되지 않은 \n내용은 사라집니다.';
+            };
+        }
+
+        function uncloset() {
+            window.onbeforeunload = null;
+        }
+
+        Models.Init();
+    </script>
+}

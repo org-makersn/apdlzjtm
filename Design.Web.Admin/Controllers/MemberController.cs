@@ -43,7 +43,7 @@ namespace Design.Web.Admin.Controllers
             //if (startDt == null) { startDt = ""; };
             //if (endDt == null) { endDt = ""; };
             //List<MemberT> list = md.SelectQuery(startDt, endDt);
-            IList<MemberT> list = _memberDac.SelectQuery(startDt, endDt, name, id);
+            IList<Makersn.Models.MemberT> list = _memberDac.SelectQuery(startDt, endDt, name, id);
             ViewData["cnt"] = list.Count;
 
             ViewBag.Gubun = gubun;

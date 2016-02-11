@@ -97,7 +97,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
             ViewData["Group"] = MenuModel(2);
-            IList<StoreMaterialT> matList = new StoreMaterialBiz().getAllStoreMaterial();
+            IList<StoreMaterialT> matList = new StoreMaterialBiz().GetAllStoreMaterial();
             ViewBag.matList = matList;
             return View();
         }

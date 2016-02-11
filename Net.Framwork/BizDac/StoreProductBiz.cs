@@ -22,7 +22,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
-        public StoreProductT getStoreProductById (int no){
+        public StoreProductT getStoreProductById (long no){
             return new StoreProductDac().SelectStoreProductTById(no);
         }
 
@@ -41,7 +41,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="StoreProduct"></param>
         /// <returns></returns>
-        public int setStoreProduct(StoreProductT StoreProduct)
+        public bool setStoreProduct(StoreProductT StoreProduct)
         {
             return new StoreProductDac().UpdateStoreProduct(StoreProduct);
         }
@@ -74,9 +74,9 @@ namespace Net.Framwork.BizDac
         /// <param name="memberNo"></param>
         /// <param name="codeNo"></param>
         /// <returns></returns>
-        public IList<StoreProductT> getProductsByOption(int memberNo, int codeNo)
+        public IList<StoreProductT> getProductsByOption(int memberNo, int codeNo, int fromIndex, int toIndex)
         {
-            return new StoreProductDac().SelectProductsByOption(memberNo, codeNo);
+            return new StoreProductDac().SelectProductsByOption(memberNo, codeNo, fromIndex, toIndex);
         }
     }
 }

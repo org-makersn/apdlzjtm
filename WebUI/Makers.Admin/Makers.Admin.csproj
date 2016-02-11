@@ -872,9 +872,14 @@
     <Content Include="Scripts\jquery-2.2.0.min.map" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.form.min.js" />
+    <Content Include="Scripts\jquery.form.min.js.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.uploadify.js" />
+    <Content Include="Scripts\jquery.uploadify.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -883,6 +888,8 @@
     <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\mask_box.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\uploader\dmuploader.js" />
+    <Content Include="Scripts\uploader\dmuploader.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -979,8 +986,8 @@
     <Content Include="Views\Settings\Materials.cshtml" />
     <Content Include="Views\Settings\Code.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
-    <Content Include="Views\Settings\MaterialAdd.cshtml" />
     <Content Include="Views\Settings\MaterialEdit.cshtml" />
+    <Content Include="Views\Settings\MaterialAdd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -998,9 +1005,9 @@
       <Project>{65c05f9a-ee28-4908-a18d-48a5bf36829d}</Project>
       <Name>Net.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Net.Framwork\Net.Framwork.csproj">
+    <ProjectReference Include="..\..\Net.Framwork\Net.Framework.csproj">
       <Project>{b5dbd124-8c5a-4b94-97d7-014bd7c97549}</Project>
-      <Name>Net.Framwork</Name>
+      <Name>Net.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

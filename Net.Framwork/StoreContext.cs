@@ -8,20 +8,14 @@ namespace Net.Framework
 {
     public class StoreContext : DbContext
     {
-        //static StoreContext()
-        //{
-        //    Database.SetInitializer<StoreContext>(null);
-        //}
-
-        //public StoreContext()
-        //    : base("Name=StoreContext")
-        //{
-        //}
+        static StoreContext()
+        {
+            Database.SetInitializer<StoreContext>(null);
+        }
 
         public StoreContext()
-            : base(ConfigurationManager.ConnectionStrings["StoreContext"].ConnectionString)
+            : base("name=StoreContext")
         {
-            //Database.SetInitializer<StoreContext>(null);
         }
 
         public DbSet<StorePrinterT> StorePrinterT { get; set; }
@@ -44,6 +38,8 @@ namespace Net.Framework
         public DbSet<StoreOrderDetailT> StoreOrderDetailT { get; set; }
         public DbSet<StoreShippingAddrT> StoreShippingAddrT { get; set; }
         public DbSet<StorePaymentHistoryT> StorePaymentHistoryT { get; set; }
+        //public DbSet<StoreItemT> StoreItem { get; set; }
+        //public DbSet<StoreItemFileT> StoreItemFile { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{

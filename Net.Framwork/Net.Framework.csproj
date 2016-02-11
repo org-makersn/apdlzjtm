@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B5DBD124-8C5A-4B94-97D7-014BD7C97549}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Net.Framework</RootNamespace>
+    <AssemblyName>Net.Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppDbContext.cs" />
+    <Compile Include="BizDac\CommonCodeDac.cs" />
+    <Compile Include="BizDac\MemberDac.cs" />
+    <Compile Include="BizDac\StoreItemDac.cs" />
+    <Compile Include="BizDac\StoreItemFileDac.cs" />
+    <Compile Include="BizDac\StorePaymentBiz.cs" />
+    <Compile Include="BizDac\StorePaymentDac.cs" />
+    <Compile Include="BizDac\StoreShippingBiz.cs" />
+    <Compile Include="BizDac\StoreShippingDac.cs" />
+    <Compile Include="Helper\DacBase.cs" />
+    <Compile Include="BizDac\StoreCartBiz.cs" />
+    <Compile Include="BizDac\StoreCartDac.cs" />
+    <Compile Include="BizDac\StoreOrderBiz.cs" />
+    <Compile Include="BizDac\StoreOrderDac.cs" />
+    <Compile Include="BizDac\StorePrinterBiz.cs" />
+    <Compile Include="BizDac\StorePrinterDac.cs" />
+    <Compile Include="BizDac\StorePrintingCompanyPrinterBiz.cs" />
+    <Compile Include="BizDac\StorePrintingCompanyPrinterDac.cs" />
+    <Compile Include="BizDac\StoreLikesBiz.cs" />
+    <Compile Include="BizDac\StoreLikesDac.cs" />
+    <Compile Include="BizDac\StoreMaterialBiz.cs" />
+    <Compile Include="BizDac\StoreMaterialDac.cs" />
+    <Compile Include="BizDac\StoreMemberBiz.cs" />
+    <Compile Include="BizDac\StoreMemberDac.cs" />
+    <Compile Include="BizDac\StoreNotificationsBiz.cs" />
+    <Compile Include="BizDac\StoreNotificationsDac.cs" />
+    <Compile Include="BizDac\StorePrintingCompanyBiz.cs" />
+    <Compile Include="BizDac\StorePrintingCompanyDac.cs" />
+    <Compile Include="BizDac\StorePrintingTypeBiz.cs" />
+    <Compile Include="BizDac\StorePrintingTypeDac.cs" />
+    <Compile Include="BizDac\StoreProductDetailBiz.cs" />
+    <Compile Include="BizDac\StoreProductDetailDac.cs" />
+    <Compile Include="BizDac\StoreProductBiz.cs" />
+    <Compile Include="BizDac\StoreProductDac.cs" />
+    <Compile Include="BizDac\StoreProductUpdateHistoryBiz.cs" />
+    <Compile Include="BizDac\StoreProductUpdateHistoryDac.cs" />
+    <Compile Include="BizDac\StoreReviewBiz.cs" />
+    <Compile Include="BizDac\StoreReviewDac.cs" />
+    <Compile Include="BizDac\StorePrinterMaterialBiz.cs" />
+    <Compile Include="BizDac\StorePrinterMaterialDac.cs" />
+    <Compile Include="Helper\DacHelper.cs" />
+    <Compile Include="Helper\ISimpleRepository.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\InterceptorLogging.cs" />
+    <Compile Include="Logging\InterceptorTransientErrors.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="StoreModel\CommonCodeT.cs" />
+    <Compile Include="StoreModel\StoreItemFileT.cs" />
+    <Compile Include="StoreModel\StoreItemT.cs" />
+    <Compile Include="StoreModel\MemberMsgT.cs" />
+    <Compile Include="StoreModel\MemberT.cs" />
+    <Compile Include="StoreModel\StoreCartT.cs" />
+    <Compile Include="StoreModel\StoreCategoryT.cs" />
+    <Compile Include="StoreModel\StoreOrderT.cs" />
+    <Compile Include="StoreModel\StorePayment.cs" />
+    <Compile Include="StoreModel\StorePrinterMaterialT.cs" />
+    <Compile Include="StoreModel\StorePrinterT.cs" />
+    <Compile Include="StoreModel\StorePrintingCompanyPrinterT.cs" />
+    <Compile Include="StoreModel\StorePrintingCompanyT.cs" />
+    <Compile Include="StoreModel\StorePrintingTypeT.cs" />
+    <Compile Include="StoreModel\StoreProductDetailT.cs" />
+    <Compile Include="StoreModel\StoreProductExT.cs" />
+    <Compile Include="StoreModel\StoreProductT.cs" />
+    <Compile Include="StoreModel\StoreProductUpdateHistoryT.cs" />
+    <Compile Include="StoreModel\StoreReviewT.cs" />
+    <Compile Include="StoreModel\StoreLikesT.cs" />
+    <Compile Include="StoreModel\StoreMaterialT.cs" />
+    <Compile Include="StoreModel\StoreMemberT.cs" />
+    <Compile Include="StoreModel\StoreNotificationsT.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helper\SimpleRepository.cs" />
+    <Compile Include="StoreContext.cs" />
+    <Compile Include="StoreModel\StoreShippingT.cs" />
+    <Compile Include="Util\EnumHelper.cs" />
+    <Compile Include="Util\StoreEnumType.cs" />
+    <Compile Include="Util\IPagedList.cs" />
+    <Compile Include="Util\PagedList.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreProduct.SelectProductList_S.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Net.SqlTools\Net.SqlTools.csproj">
+      <Project>{b86f3a73-4f3b-4a47-b248-0d99d0d4a2d0}</Project>
+      <Name>Net.SqlTools</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreCart.SelectCartList_S.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreCart.GetMaxCartNo.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectOrderList_S.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreOrder.GetNewOrderNo.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

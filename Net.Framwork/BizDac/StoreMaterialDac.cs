@@ -1,31 +1,23 @@
 ﻿using Net.Framework;
 using Net.Framework.StoreModel;
+using Net.Framework.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
     public class StoreMaterialDac
     {
-
-        private static StoreContext dbContext;
+        ISimpleRepository<StoreMaterialT> _repository = new SimpleRepository<StoreMaterialT>();
         
         /// <summary>
         /// select multi data
         /// </summary>
         /// <returns></returns>
-        internal List<StoreMaterialT> SelectAllStoreMaterial()
-        { 
-            
-            List<StoreMaterialT> printers = null;
-            using (dbContext = new StoreContext())
-            {
-                printers = dbContext.StoreMaterialT.ToList();
-            }
-            return printers;
+        public List<StoreMaterialT> GetAllStoreMaterial()
+        {
+            return _repository.GetAll().ToList();
         }
 
         /// <summary>
@@ -33,16 +25,11 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
-        internal StoreMaterialT SelectStoreMaterialTById(int no)
+        public StoreMaterialT GetStoreMaterialById(int no)
         {
-            StoreMaterialT printer = null;
+            if (no <= 0) throw new ArgumentNullException("The expected Segment NO.");
 
-            using (dbContext = new StoreContext())
-            {
-                printer = dbContext.StoreMaterialT.Where(m => m.NO == no).FirstOrDefault();
-            }
-
-            return printer;
+            return _repository.First(m => m.NO == no);
         }
 
         /// <summary>
@@ -50,16 +37,11 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int InsertStoreMaterial(StoreMaterialT data)
+        public bool AddStoreMaterial(StoreMaterialT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
-            int ret = 0;
-            using (dbContext = new StoreContext())
-            {
-                dbContext.StoreMaterialT.Add(data);
-                ret = dbContext.SaveChanges();
-            }
-            return ret;
+
+            return _repository.Insert(data);
         }
 
         /// <summary>
@@ -67,36 +49,11 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        internal int UpdateStoreMaterial(StoreMaterialT data)
+        public bool UpdateStoreMaterial(StoreMaterialT data)
         {
             if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
 
-            int ret = 0;
-            using (dbContext = new StoreContext())
-            {
-                
-                if (dbContext.StoreMaterialT.SingleOrDefault(m => m.NO == data.NO) != null)
-                {
-                    try
-                    {
-                        dbContext.StoreMaterialT.Attach(data);
-                        dbContext.Entry<StoreMaterialT>(data).State = System.Data.Entity.EntityState.Modified;
-                        dbContext.SaveChangesAsync();
-                    }
-                    catch (Exception)
-                    {
-                        ret = -1;
-                    }
-                }
-                else
-                {
-                    ret = -2;
-                    throw new NullReferenceException("The expected original Segment data is not here.");
-                }
-            }
-            return ret;
+            return _repository.Update(data);
         }
-        
-        
     }
 }

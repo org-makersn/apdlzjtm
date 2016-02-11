@@ -9,17 +9,15 @@ namespace Net.Framwork.BizDac
 {
     public class StoreMaterialBiz
     {
-        public List<StoreMaterialT> getAllStoreMaterial() {
-            return new StoreMaterialDac().SelectAllStoreMaterial();
+        public List<StoreMaterialT> GetAllStoreMaterial() {
+            return new StoreMaterialDac().GetAllStoreMaterial();
         }
-        public StoreMaterialT getStoreMaterialById (int no){
-            return new StoreMaterialDac().SelectStoreMaterialTById(no);
+
+        public StoreMaterialT GetStoreMaterialById (int no){
+            return new StoreMaterialDac().GetStoreMaterialById(no);
         }
-        public int add(StoreMaterialT StoreMaterial)
-        {
-            return new StoreMaterialDac().InsertStoreMaterial(StoreMaterial);
-        }
-        public int upd(StoreMaterialT StoreMaterial)
+
+        public bool Update(StoreMaterialT StoreMaterial)
         {
             return new StoreMaterialDac().UpdateStoreMaterial(StoreMaterial);
         }
