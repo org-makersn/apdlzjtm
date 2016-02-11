@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace Net.Framework.Util
 {
@@ -363,4 +365,52 @@ namespace Net.Framework.Util
         public int Category { get; set; }
         public int Order { get; set; }
     }
+
+    public static class StringEnum
+    {
+        public static string GetValue(Enum value)
+        {
+            string output = null;
+
+            Type type = value.GetType();
+
+            FieldInfo fi = type.GetField(value.ToString());
+            StringValue[] attrs = fi.GetCustomAttributes(typeof(StringValue), false) as StringValue[];
+
+            if (attrs.Length > 0)
+            {
+                output = attrs[0].Value;
+            }
+
+            return output;
+        }
+
+        public static string GetDescription(Enum code)
+        {
+            var type = code.GetType();
+            var info = type.GetMember(Enum.GetName(type, code));
+            var attribute = info[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+            var description = ((DescriptionAttribute)attribute[0]).Description;
+
+            return description;
+        }
+    }
+
+    public class StringValue : System.Attribute
+    {
+        private string _value;
+
+        public StringValue(string value)
+        {
+            _value = value;
+        }
+
+        public string Value
+        {
+            get { return _value; }
+        }
+
+    }
+
+
 }

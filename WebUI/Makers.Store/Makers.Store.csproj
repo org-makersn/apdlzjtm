@@ -288,6 +288,7 @@
     <Content Include="Content\css\NanumBarunGothic.eot" />
     <Content Include="Content\css\NanumBarunGothic.woff" />
     <Content Include="Content\css\NanumBarunGothicBold.woff" />
+    <None Include="Properties\PublishProfiles\store.makersn.com.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\ajaxmodel.js" />
     <Content Include="Scripts\common.js" />
@@ -354,6 +355,7 @@
     <Content Include="Views\Order\INIsecureResult.cshtml" />
     <Content Include="Views\Cart\Grid.cshtml" />
     <Content Include="Views\Shipping\List.cshtml" />
+    <Content Include="Views\Order\ContractList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

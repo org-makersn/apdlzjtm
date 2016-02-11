@@ -120,6 +120,7 @@
     <Compile Include="StoreContext.cs" />
     <Compile Include="StoreModel\StoreShippingT.cs" />
     <Compile Include="Util\EnumHelper.cs" />
+    <Compile Include="Util\StoreEnumType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -155,6 +156,12 @@
     <EmbeddedResource Include="SqlCmd\StoreOrder.GetNewOrderNo.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

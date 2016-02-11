@@ -1,0 +1,83 @@
+﻿@using Net.Framework.Util;
+@using Net.Framwork.BizDac;
+@using Net.Framework.StoreModel;
+@model List<StoreOrderT>
+@{
+    ViewBag.Title = "구매내역";
+}
+@section Scripts{
+
+<script type="text/javascript">
+
+    function CancelOrder(orderId) {
+
+        if (!confirm("정말 취소하시겠습니Rl?")) {
+            return false; 
+        }
+
+        var data = {
+            oId: orderId,
+            cancelMsg: "cancel test",
+            cancelReason: "test"
+        }
+
+        var onSuccess = function (result) {
+            alert(result);
+            location.reload();
+        }
+        Ajax.AjaxResponseModelService(this, "/Order/StartINICancel", data, onSuccess);
+    }
+
+</script>
+}
+
+<h2>구매내역</h2>
+
+
+<table style="border:solid 1px red;" border="1">
+    <tr>
+        <td>주문번호</td>
+        <td>상품명</td>
+        <td>배송비</td>
+        <td>주문금액</td>   
+        <td>주문상태</td>   
+        <td>결제상태</td>   
+        <td>배송상태</td>   
+        <td>주문일자</td>        
+        <td>구분</td>
+    </tr>
+    @foreach (StoreOrderT item in Model)
+    {        
+        List<ContractDetail> dataList = new StoreOrderBiz().GetContractDetailListByOid(item.Oid);         
+     <tr>
+        <td>@item.Oid</td>
+        <td>
+            @item.GoodName
+            <table style="border: solid 1px blue;" border="1">
+                <tr>
+                    <td>상품명</td>
+                    <td>가격</td>
+                    <td>갯수</td>
+                    <td>출력상태</td>
+                </tr>
+            @foreach(ContractDetail data in dataList)
+            {
+                <tr>
+                    <td>@data.NAME</td>
+                    <td>@data.PRODUCT_PRICE</td>
+                    <td>@data.PRODUCT_CNT</td>
+                    <td>@data.PRINTING_STATUS</td>
+                </tr>            
+            }
+            </table>
+        </td>
+        <td>@item.ShippingPrice</td>
+        <td>@item.Price</td>        
+        <td>@item.OrderStatus</td>        
+        <td>@item.PaymentStatus</td>        
+        <td>@item.ShippingStatus</td>        
+        <td>@item.OrderDate</td>
+        <td><a href='javascript:CancelOrder("@item.Oid");' >주문취소</a></td>
+     </tr>
+    }
+</table>

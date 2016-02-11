@@ -16,6 +16,7 @@ using System.Xml;
 using System.Collections;
 using System.Data;
 using Makers.Store.Configurations;
+using Net.Framework.Util;
 
 namespace Makers.Store.Controllers
 {
@@ -215,7 +216,7 @@ namespace Makers.Store.Controllers
             INIpay.SetField(ref intPInst, "paymethod", Request.Params["paymethod"]);		// 지불방법
             INIpay.SetField(ref intPInst, "encrypted", Request.Params["encrypted"]);		// 암호문
             INIpay.SetField(ref intPInst, "sessionkey", Request.Params["sessionkey"]);	// 암호문
-            INIpay.SetField(ref intPInst, "url", "http://www.urUrl.com");					// 홈페이지 주소
+            INIpay.SetField(ref intPInst, "url", "http://makersn.com/");					// 홈페이지 주소
             INIpay.SetField(ref intPInst, "debug", "true");								// 로그모드(실서비스시에는 "false"로)
             INIpay.SetField(ref intPInst, "merchantreserved1", "예비1");	                // 예비필드1
             INIpay.SetField(ref intPInst, "merchantreserved2", "예비2");	                // 예비필드2  
@@ -441,7 +442,15 @@ namespace Makers.Store.Controllers
             storeOrderT.UserId = profileModel.UserId;
             storeOrderT.MemberNo = profileModel.UserNo;
             storeOrderT.OrderDate = DateTime.Now;
-            storeOrderT.PaymentStatus = "1"; // 주문완료
+            storeOrderT.OrderStatus = StringEnum.GetValue(OrderStatus.Complete); // 주문완료
+            if (storePaymentT.Common.PayMethod.Equals("VBank"))
+            {
+                storeOrderT.PaymentStatus = StringEnum.GetValue(PaymentStatus.Waiting); // 결제대기
+            }
+            else
+            {
+                storeOrderT.PaymentStatus = StringEnum.GetValue(PaymentStatus.Complete); // 결제완료
+            }
             storeOrderT.ShippingAddrNo = Int64.Parse(Request.Params["shippingAddrNo"]);
             storeOrderT.ShippingPrice = int.Parse(Request.Params["shippingPrice"]);
             storeOrderT.SlowMakeYn = Request.Params["rdoSlowMakeYn"];
@@ -460,9 +469,8 @@ namespace Makers.Store.Controllers
                 item.OrderMasterNo = orderMasterNo;
                 item.ProductDetailNo = info.PRODUCT_DETAIL_NO;
                 item.ProductPrice = info.TOTAL_PRICE;
-                item.ShippingPrice = info.SHIPPING_PRICE;
                 item.ProductCnt = info.PRODUCT_CNT;
-                item.OrderStatus = "1";
+                item.PringtingStatus = StringEnum.GetValue(PrintingStatus.Waiting); // 출력대기
                 item.RegDt = DateTime.Now;
                 item.RegId = profileModel.UserId;
                 storeOrderDetailList.Add(item);
@@ -734,6 +742,110 @@ namespace Makers.Store.Controllers
             hstCode_PayMethod["Culture"] = "CULT";
             hstCode_PayMethod["CMS"] = "CMS_";
             hstCode_PayMethod["AUTH"] = "AUTH";
+        }
+        #endregion
+
+        #region ContractList - 구매내역
+        /// <summary>
+        /// 구매내역
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ContractList()
+        {
+            StoreOrderBiz biz = new StoreOrderBiz();
+            DateTime startDt = DateTime.Today.AddMonths(-1);
+            DateTime endDt = DateTime.Today.AddDays(1);
+
+            List<StoreOrderT> model = biz.GetContractListByCondition(profileModel.UserNo, startDt, endDt);
+
+            return View(model);
+        }
+        #endregion
+
+        #region GetContractDetailList - oId에 따른 구매상세내역
+        /// <summary>
+        /// oId에 따른 구매상세내역
+        /// </summary>
+        /// <param name="oId"></param>
+        /// <returns></returns>
+        public List<ContractDetail> GetContractDetailList(string oId)
+        {
+            List<ContractDetail> list = new List<ContractDetail>();
+            StoreOrderBiz biz = new StoreOrderBiz();
+
+            list = biz.GetContractDetailListByOid(oId);
+
+            return list;
+        }
+        #endregion
+
+        #region StartINICancel - 주문취소
+        /// <summary>
+        /// 주문취소
+        /// </summary>
+        /// <param name="oId"></param>
+        [HttpPost]
+        public string StartINICancel(string oId, string cancelMsg, string cancelReason)
+        {
+            StoreOrderBiz biz = new StoreOrderBiz();
+            string tId = biz.GetTradeId(oId);
+
+            //###############################################################################
+            //# 1. 객체 생성 #
+            //################
+            INIPAY50Lib.INItx50 INIpay = new INIPAY50Lib.INItx50Class();
+
+            //###############################################################################
+            //# 2. 인스턴스 초기화 /3. 거래 유형 설정 #
+            //######################
+
+            int intPInst = INIpay.Initialize(string.Empty);
+
+            INIpay.SetActionType(ref intPInst, "cancel");
+
+
+            //###############################################################################
+            //# 4. 정보 설정 #
+            //################
+            INIpay.SetField(ref intPInst, "pgid", instance.PgId); //PG ID (고정)
+
+            INIpay.SetField(ref intPInst, "mid", instance.Mid);	  // 상점아이디
+
+            /**************************************************************************************************
+            '* admin 은 키패스워드 변수명입니다. 수정하시면 안됩니다. 1111의 부분만 수정해서 사용하시기 바랍니다.
+            '* 키패스워드는 상점관리자 페이지(https://iniweb.inicis.com)의 비밀번호가 아닙니다. 주의해 주시기 바랍니다.
+            '* 키패스워드는 숫자 4자리로만 구성됩니다. 이 값은 키파일 발급시 결정됩니다. 
+            '* 키패스워드 값을 확인하시려면 상점측에 발급된 키파일 안의 readme.txt 파일을 참조해 주십시오.
+            '**************************************************************************************************/
+            INIpay.SetField(ref intPInst, "admin", instance.MidPassword);						// 키패스워드(상점아이디에 따라 변경)
+
+            INIpay.SetField(ref intPInst, "tid", tId);			// 취소할 거래번호
+            INIpay.SetField(ref intPInst, "CancelMsg", cancelMsg);	// 취소 사유
+            INIpay.SetField(ref intPInst, "CancelReason", cancelReason);	// 취소 코드
+            INIpay.SetField(ref intPInst, "debug", "true");						// 로그모드(실서비스시에는 "false"로)
+
+            //###############################################################################
+            //# 5. 취소 요청 #
+            //################
+            INIpay.StartAction(ref intPInst);
+
+            //###############################################################################
+            //# 6. 취소 결과 #
+            //################
+            CancelOrder cancelOrder = new CancelOrder();
+            cancelOrder.ResultCode = INIpay.GetResult(ref intPInst, "resultcode");					// 결과코드 ("00"이면 지불성공)
+            cancelOrder.ResultMsg = INIpay.GetResult(ref intPInst, "resultmsg");					// 결과내용
+            cancelOrder.CancelDate = INIpay.GetResult(ref intPInst, "CancelDate");					// 이니시스 취소날짜
+            cancelOrder.CancelTime = INIpay.GetResult(ref intPInst, "CancelTime");					// 이니시스 취소시각
+            cancelOrder.CshrCancelNum = INIpay.GetResult(ref intPInst, "CSHR_CancelNum");			//현금영수증 취소 승인번호
+
+
+            //###############################################################################
+            //# 7. 인스턴스 해제 #
+            //####################
+            INIpay.Destroy(ref intPInst);
+
+            return cancelOrder.ResultMsg;
         }
         #endregion
     }
