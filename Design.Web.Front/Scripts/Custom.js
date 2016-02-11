@@ -355,10 +355,10 @@ function check_msg(element_id, msg, patton) {
             if (patton_arr[i] == 'contents' && val_is == true) {
                 var pw_error = false;
                 var error_msg = '';
-                if ($('#' + element_id).val().length > 4000) {
-                    error_msg = '내용 4000자 이하로 적어주세요.';
-                    pw_error = true;
-                }
+                //if ($('#' + element_id).val().length > 4000) {
+                //    error_msg = '내용 4000자 이하로 적어주세요.';
+                //    pw_error = true;
+                //}
                 if (pw_error == true) {
                     alert(error_msg);
                     //$('#' + element_id).val('');

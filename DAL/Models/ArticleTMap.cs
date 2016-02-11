@@ -19,7 +19,7 @@ namespace Makersn.Models
             Map(x => x.CodeNo, "CODE_NO");
             Map(x => x.MainImage, "MAIN_IMAGE");
             Map(x => x.Title, "TITLE");
-            Map(x => x.Contents, "CONTENTS");
+            Map(x => x.Contents, "CONTENTS").CustomType("StringClob").CustomSqlType("text");
             Map(x => x.Tag, "TAG");
             Map(x => x.Copyright, "COPYRIGHT");
             Map(x => x.Visibility, "VISIBILITY");
