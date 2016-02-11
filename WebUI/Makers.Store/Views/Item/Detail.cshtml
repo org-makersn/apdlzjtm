@@ -1,0 +1,333 @@
+﻿@model Net.Framework.StoreModel.StoreItemDetailT
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string pageUrl = Request.Url.ToString();
+    string mainImg = ViewBag.MainImg;
+    string No = Base64Helper.Base64Encode(Model.MemberNo.ToString());
+
+    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+
+    IList<Net.Framework.StoreModel.StoreItemFileT> fileList = ViewBag.Files;
+
+    int index = 0;
+    int setNum = 0;
+    int sildeNum = 0;
+}
+
+@section head{
+    <meta name="author" content="@Model.MemberName" />
+    <meta property="og:title" content="@Model.Title" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@pageUrl" />
+    <meta property="og:image" content="@Url.StoreImgFile(mainImg)" />
+    @*<meta property="og:image" content="http://www.makersn.com/FIleUpload/Article/Article_img/thumb/9617498b-af97-4a9c-a382-24cb50c8169a.jpg" />*@
+
+    <meta property="og:image:width" content="200" />
+    <meta property="og:description" content="@ViewBag.MetaDescription" />
+    <meta property="og:article:author" content="MakersN" />
+    <meta property="og:site_name" content="MakersN" />
+}
+
+@section editBtnzone{
+    <ul class="btnSet">
+        @if (Model.MemberNo == ViewBag.VisitorNo || profile.UserLevel > 50)
+        {
+            <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">편집</a></li>
+        }
+    </ul>
+}
+
+<!-- contWrap -->
+<div class="contWrap">
+    <!-- DetailWrap -->
+    <div class="detailWrap">
+
+        <!-- LeftCont -->
+        <div class="leftCont">
+
+            <div class="detailSlide">
+                <div class="mainBigImg">
+                    <ul class="bxslider">
+                        @foreach (Net.Framework.StoreModel.StoreItemFileT file in fileList)
+                        {
+                            <li style="display: none">
+                                <img class="lazy-load" src="@Url.StoreImgFile(file.ReName)" />
+
+                            </li>
+                            setNum++;
+
+                            if (Model.MainImg == file.No)
+                            {
+                                sildeNum = setNum;
+                            }
+                        }
+                    </ul>
+                    <div class="thumb3dImg">
+                        <img src="@Url.Content("~/Content/images/common/loading_bar.gif")" alt="로딩중" />
+                    </div>
+                </div>
+                <input type="hidden" id="sildeNum" value="@(sildeNum - 1)" />
+
+                <div class="thumbArea">
+                    <div id="bx-pager" style="display: none">
+                        @foreach (Net.Framework.StoreModel.StoreItemFileT file in fileList)
+                        {
+                            <a data-slide-index="@index" href="javascript:void(0);">
+                                <img src="@Url.StoreImgFile(file.ReName)" />
+                            </a>
+                            index++;
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- About -->
+            <div class="aboutZone" id="aboutZone">
+                <ul class="title">
+                    <li id="infoTit" class="infoTit on"><a href="javascript:void(0);" onclick="goDesign()">상품 소개</a></li>
+                    <li id="downTit" class="downTit"><a href="javascript:void(0);" onclick="">구매 가이드</a></li>
+                </ul>
+                <div class="txt">
+                    <p style="word-break: break-all">
+                        @Html.Raw(Model.Contents)
+                        @if (Model.VideoSource != null && Model.VideoSource != "")
+                        {
+                            <br />
+                            <iframe width="606" height="340" src="@Model.VideoSource" frameborder="0" allowfullscreen></iframe> 
+                        }
+                    </p>
+                </div>
+
+
+            </div>
+            <!-- //About -->
+
+        </div>
+        <!-- //LeftCont -->
+
+        <!-- RightCont -->
+        <div class="rightCont">
+            <!-- userInfoArea -->
+            <div class="userInfoArea">
+
+                <p class="title">@Model.Title</p>
+                <p class="date">@Model.RegDt.ToString("yyyy.MM.dd")</p>
+                <div class="btnSet">
+                    <p><a href="/Order?articleNo=@Model.No" class="print" title="프린트">프린트</a></p>
+                    <ul class="socialArea2">
+                        @if (Model.UseYn == "Y")
+                        {
+                            <li><a href="javascript:pstFaceBook()" target="_blank" title="페이스북" class="facebook"></a></li>
+                            <li><a href="javascript:pstTwitter()" target="_blank" title="트위터" class="twit"></a></li>
+                            <li><a href="javascript:pstPinterest();" target="_blank" title="P" class="p"></a></li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="licenseZone">
+                    <p class="licenTit">배송관련</p>
+                    <div class="iconZone">
+                    </div>
+                    <div class="repoartBtn">
+                        <a href="javascript:void(0);">
+                            <img src="/content/images/common/btn/btn_report.png" alt="Report" /></a>
+                    </div>
+                </div>
+
+                <div class="reportArea">
+                    <p class="arrowTop">
+                        <img src="/content/images/arrowReport.png" alt="" />
+                    </p>
+                    <div class="reportText">
+                        <form id="report_form" name="report_form" method="post">
+                            <input type="hidden" name="item_no" value="">
+                            <textarea id="txtReport" name="report" placeholder="이 게시물이 부적절하거나 관리자의 확인이 필요할 경우 이유를 적어주시면 검토 및 조치하겠습니다."></textarea>
+                        </form>
+                        <button title="보내기" id="btnSendReport">보내기</button>
+                        <a href="javascript:void(0);" class="closeReport">
+                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+                    </div>
+                    <div class="repoartComplete">
+                        <p>
+                            접수가 완료되었습니다.<br />
+                            빠른 시일 내로 검토 및 조치하겠습니다.
+                        </p>
+                        <a href="javascript:void(0);" class="closeReport">
+                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+                    </div>
+                </div>
+
+                <div class="tagZone">
+                    <p class="tagTit">태그</p>
+                    @{
+                        if (!string.IsNullOrEmpty(Model.Tags))
+                        {
+                            string[] tagList = Model.Tags.Split(',');
+                        <div class="tagText">
+                            @foreach (string tag in tagList)
+                            {
+                                <a href="/design/Search?text=@tag.Trim()&tag=Y">@tag </a>
+                            }
+                        </div>
+                        }
+                    }
+                </div>
+
+                <ul class="countBox" id="ctnList">
+                    @{
+                        string likeclassName = Model.IsLikes > 0 ? "class=on" : "";
+                    }
+
+                    <li class="show"><span title="조회수">@Model.ViewCnt</span></li>
+                    <li class="heart"><a href="javascript:SetLikes('@Model.No','@ViewBag.LogOnChk')" onclick="return !count++"><span @likeclassName id="likeChk_@Model.No" title="좋아요">@Model.LikeCnt</span></a></li>
+
+                    <li class="collect"><span title="리스트">@ViewBag.ListCnt</span></li>
+                    <li class="comment bdR_no"><span id="replyCnt" style="cursor: pointer" title="댓글">@Model.CommentCnt</span></li>
+                </ul>
+
+                <div class="collectArea list">
+                    <p class="arrowTop">
+                        <img src="/content/images/arrowReport.png" alt="" />
+                    </p>
+                    <div class="reportText">
+
+                        <div class="addNewList">
+                            <input id="newListName" placeholder="새로운 리스트 이름을 입력하세요." />
+                            <div class="collectbtns">
+                                <a class="saveListName" title="저장">저장</a>
+                            </div>
+                        </div>
+
+                        <div class="saveToList">
+                            @*<input type="hidden" value="0" id="listNo" />
+                            @if (ViewBag.ListList.Count == 0)
+                            {
+                                <input type="hidden" value="0" id="chkList" />
+                            }
+                            <div class="selPrint">
+                                <p class="valPrint">리스트를 선택해 주세요</p>
+                                <div class="sub">
+                                    <ul class="valuePrint">
+                                        @foreach (Makersn.Models.ListT list in ViewBag.ListList)
+                                        {
+                                            <li class="listName">
+                                                <input type="radio" name="lv1" value="@list.No" /><label onclick="listName(this)">@list.ListName</label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                            <div class="collectbtns">
+                                <a class="NewList" title="새 리스트">새 리스트</a>
+                                <a class="saveList" title="저장">저장</a>
+                            </div>*@
+                        </div>
+
+                        <a href="#" class="closeNewList">
+                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+
+                    </div>
+                </div>
+
+                <div class="profileZone">
+                    <div class="user">
+                        <div class="photo">
+                            <a href="/Profile?no=@No">
+                                <img src="@Url.ProfileImg(Model.MemberProfilePic)" alt="기본프로필" /></a>
+                        </div>
+                        <p class="userId"><span>by <a href="/Profile?no=@No">@Model.MemberName</a></span></p>
+                    </div>
+                    <ul class="profileBtn" id="profileArea">
+                    </ul>
+                </div>
+            </div>
+            <!-- //userInfoArea -->
+
+            <div id="otherArticle">
+            </div>
+        </div>
+        <!-- //RightCont -->
+    </div>
+    <!-- //DetailWrap -->
+</div>
+<!-- //contWrap -->
+
+@section Scripts{
+    @*@Scripts.Render("~/bundles/threejs")
+    <script src="@Url.VersionedContent("~/Scripts/threejs.v71/three.min.js")"></script>
+    @Scripts.Render("~/bundles/thingiview")*@
+
+    <script src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+    <script type="text/javascript">
+        function isIE() { //ie?  
+            if (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject)
+                return true;
+            else
+                return false;
+        };
+
+        $(document).ready(function () {
+            $("#bx-pager").removeAttr("style");
+            slideNumber = $("#sildeNum").val();
+
+            $('.mainBigImg .bxslider').bxSlider({
+                mode: 'fade',
+                pagerCustom: '#bx-pager',
+                speed: 1,
+                startSlide: slideNumber   // 초기 슬라이드 지정번호
+            });
+
+            $('.thumbArea #bx-pager').bxSlider({
+                slideWidth: 80,
+                minSlides: 2,
+                maxSlides: 6,
+                slideMargin: 11,
+                infiniteLoop: !1
+            });
+
+            $('.thumbArea #bx-pager a').on('click', function () {
+                $('#viewer').hide();
+                $('.viewer3d').siblings('img').show();
+                //$('#viewer div').fadeOut();
+            });
+
+            $('#bx-pager a').on('click', function () {
+                thingiview = null;
+
+            })
+            //$(".gnbArea").addClass("bdA_no");
+
+            // 브라우저체크하여 안내
+
+            var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
+            var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+            var heightSafari = 0;
+            if ((is_chrome) && (is_safari)) { is_safari = false; }
+
+            var Browser = {
+                chk: navigator.userAgent.toLowerCase()
+            }
+
+            Browser = {
+                ie: Browser.chk.indexOf('msie') != -1,
+                ie6: Browser.chk.indexOf('msie 6') != -1,
+                ie7: Browser.chk.indexOf('msie 7') != -1,
+                ie8: Browser.chk.indexOf('msie 8') != -1,
+                ie9: Browser.chk.indexOf('msie 9') != -1,
+                ie10: Browser.chk.indexOf('msie 10') != -1,
+                opera: !!window.opera,
+                safari: Browser.chk.indexOf('safari') != -1,
+                safari3: Browser.chk.indexOf('applewebkir/5') != -1,
+                mac: Browser.chk.indexOf('mac') != -1,
+                chrome: Browser.chk.indexOf('chrome') != -1,
+                firefox: Browser.chk.indexOf('firefox') != -1
+            }
+        })
+    </script>
+}
+

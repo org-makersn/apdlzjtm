@@ -99,6 +99,7 @@
     <Compile Include="Logging\InterceptorTransientErrors.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="StoreModel\CommonCodeT.cs" />
+    <Compile Include="StoreModel\StoreItemDetailT.cs" />
     <Compile Include="StoreModel\StoreItemFileT.cs" />
     <Compile Include="StoreModel\StoreItemT.cs" />
     <Compile Include="StoreModel\MemberMsgT.cs" />
@@ -161,6 +162,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SqlCmd\StoreOrder.GetNewOrderNo.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreItemDac.SelectStoreItemDetails.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

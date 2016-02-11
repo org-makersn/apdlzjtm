@@ -131,7 +131,7 @@ Upload.ItemUpload = function () {
     $("#mode").val("upload");
 
     if (check_msg('main_img', '메인이미지를 선택해 주세요.', 'required') == false) return false;
-    console.log('1');
+
     var chkType = false;
 
     $("input[name='chkType']").each(function () {
@@ -140,27 +140,27 @@ Upload.ItemUpload = function () {
         }
     });
 
-    if (!chkType) { alert("stl 혹은 obj 파일을 업로드 해주세요"); return false; }
-    console.log('2');
-    if (check_msg('article_title', '제목을 입력해 주세요.', 'required:articleTitle') == false) return false;
-    console.log('3');
-    if (check_msg('article_contents', '내용을 입력해 주세요.', 'required:contents') == false) return false;
-    console.log('4');
-    if (!$("input:radio[name=lv1]").is(":checked")) {
+    if (check_msg('item_title', '제목을 입력해 주세요.', 'required:articleTitle') == false) return false;
+
+    if (check_msg('item_contents', '내용을 입력해 주세요.', 'required:contents') == false) return false;
+
+    if ($("#category_no").val() == '0') {
         alert("카테고리를 선택해주세요.");
-        $("#article_title").focus();
+        $("#category_no").focus();
         return false;
     }
-    //if ($("#article_title").val().length > 30) {
+    //if ($("#item_title").val().length > 30) {
     //    alert("제목은 30자 내외로 적어주세요");
     //    return false;
     //}
-    //if ($("#article_contents").val().length > 2000) {
+
+    //if ($("#item_contents").val().length > 2000) {
     //    alert("내용은 2000자 내외로 적어주세요");
     //    return false;
     //}
-    return false;
+
     var $form_data = $("#insert_form").serialize();
+    console.log($form_data);
     var options = {
         beforeSend: function () {
         },
@@ -204,12 +204,12 @@ Upload.TempUpload = function () {
 
     $("#mode").val("temp");
     if (check_msg('main_img', '메인이미지를 선택해 주세요.', 'required') == false) return false;
-    //if (check_msg('article_title', '제목을 입력해 주세요.', 'required') == false) return false;
-    //if (check_msg('article_contents', '내용을 입력해 주세요.', 'required') == false) return false;
+    //if (check_msg('item_title', '제목을 입력해 주세요.', 'required') == false) return false;
+    //if (check_msg('item_contents', '내용을 입력해 주세요.', 'required') == false) return false;
 
     //if (!$("input:radio[name=lv1]").is(":checked")) {
     //    alert("카테고리를 선택해주세요.");
-    //    $("#article_title").focus();
+    //    $("#item_title").focus();
     //    return false;
     //}
 

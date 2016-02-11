@@ -15,6 +15,7 @@
     <meta charset="utf-8" />
     <title>@ViewBag.Title</title>
     <link rel="shortcut icon" type="image/x-icon" href="@Url.VersionedContent("~/favicon.ico")">
+    @RenderSection("head", required: false)
 
     <link href="@Url.VersionedContent("~/Content/css/common.css")" rel="stylesheet" media="all" />
 
@@ -26,8 +27,6 @@
             text-align: center;
         }
     </style>
-
-    @RenderSection("head", required: false)
 </head>
 <body>
     <!-- Wrap -->
@@ -104,10 +103,45 @@
                 <!-- //headerBox -->
             </div>
             <!-- //HeaderTop -->
+
             <!-- GnbArea -->
+            @if (ViewBag.ContClass == null)
+            {
+                <div class="gnbArea @ViewBag.Class">
+                    <div class="gnbBox">
+                        <ul class="nav">
+                            @*@if (ViewBag.InfoList != null)
+                            {
+                                IList<CodeModel> infoList = (IList<CodeModel>)ViewBag.InfoList;
+                                foreach (CodeModel code in infoList)
+                                {
+                                <li id="@code.MenuValue"><a href="@code.MenuUrl">@code.MenuTitle</a></li>
+                                }
+                            }
+                            else
+                            {
+                                foreach (CodeModel menu in ViewBag.MenuList)
+                                {
+                                <li id="@menu.MenuCodeNo"><a href="@menu.MenuUrl">@menu.MenuTitle</a></li>
+                                }
+                            }*@
+                        </ul>
 
+                        <div class="uploadArea">
+                            <ul class="btnSet">
+
+                                @RenderSection("editBtnzone", required: false)
+                                <li>
+                                    <a href="javascript:void(0);" title="업로드" id="ArticleUpload" class="upload">업로드</a>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+            }
             <!-- //GnbArea -->
-
         </div>
         <!-- //Header -->
         @RenderSection("designMian", required: false)
@@ -122,7 +156,6 @@
             <div class="footerList">
                 <ul class="footMenu">
                     <li data-ng-class="{active : activeViewPath==='/about'}"><a href='/Info/about'>소개</a></li>
-                    @*<li data-ng-class="{active : activeViewPath==='/blog'}"><a href="/Info/blog">블로그</a></li>*@
                     <li data-ng-class="{active : activeViewPath==='/customer'}"><a href="/Info/customer">고객센터</a></li>
                     <li data-ng-class="{active : activeViewPath==='/notice'}"><a href="/Info/notice">공지사항</a></li>
                     <li data-ng-class="{active : activeViewPath==='/license'}"><a href="/Info/license">라이센스</a></li>

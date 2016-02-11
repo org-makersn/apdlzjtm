@@ -1,4 +1,5 @@
 ﻿using Common.Func;
+using Net.Common.Filter;
 using Net.Common.Helper;
 using Net.Common.Model;
 using Net.Framework.BizDac;
@@ -18,9 +19,66 @@ namespace Makers.Store.Controllers
         StoreItemDac sItemDac = new StoreItemDac();
         StoreItemFileDac sItemFileDac = new StoreItemFileDac();
 
-        public ActionResult Index()
+        public ActionResult Index(long no)
         {
             return View();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public ActionResult Detail(string no)
+        {
+            int articleNo = 0;
+            var visitorNo = profileModel.UserNo;
+            //ViewBag.GoReply = goReply;
+            StoreItemDetailT itemDetail = new StoreItemDetailT();
+            if (Int32.TryParse(no, out articleNo))
+            {
+                //조회수 증가 방지
+                if (Request.Cookies[no] == null)
+                {
+                    Response.Cookies[no].Value = no;
+                    Response.Cookies[no].Expires = DateTime.Now.AddDays(1);
+
+                    //뷰 업데이트
+                }
+
+                itemDetail = sItemDac.GetItemDetailByItemNo(articleNo, visitorNo);
+
+                if ((itemDetail.MemberNo != visitorNo && profileModel.UserLevel < 50) && itemDetail.UseYn.ToUpper() == "N")
+                {
+                    return Content("<script>alert('비공개 처리된 게시물 입니다.'); location.href='/';</script>");
+                }
+            }
+            else
+            {
+
+            }
+
+            string itemContents = itemDetail != null ? itemDetail.Contents : string.Empty;
+            itemDetail.Contents = new HtmlFilter().PunctuationEncode(itemContents);
+            itemDetail.Contents = new HtmlFilter().ConvertContent(itemContents);
+
+            ViewBag.MetaDescription = itemContents;
+
+            ViewBag.MainImg = itemDetail != null ? itemDetail.MainImgName : string.Empty;
+
+            ViewBag.Files = sItemFileDac.GetItemFileByItemNo(articleNo);
+            ViewBag.ListCnt = 5;
+            ViewBag.ListList = null;
+
+            ViewBag.VisitorNo = visitorNo;
+
+            ViewBag.No = no;
+            ViewBag.CodeNo = itemDetail.CodeNo;
+
+            ViewBag.Class = "bdB mgB15";
+            ViewBag.WrapClass = "bgW";
+
+            return View(itemDetail);
         }
 
         /// <summary>
@@ -52,15 +110,15 @@ namespace Makers.Store.Controllers
             string paramTemp = collection["temp"];
             string paramMode = collection["mode"];
             int mainImg = Convert.ToInt32(collection["main_img"]);
-            string paramTitle = collection["article_title"];
-            string paramContents = collection["article_contents"];
-            int paramCodeNo = Convert.ToInt32(collection["lv1"]);
+            string paramTitle = collection["item_title"];
+            string paramContents = collection["item_contents"];
+            int paramCodeNo = Convert.ToInt32(collection["category_no"]);
             //배송코드
-            int paramDeliveryType = Convert.ToInt32(collection["copyright"]);
+            int paramDeliveryType = Convert.ToInt32(collection["delivery_no"]);
             string paramDelNo = collection["del_no"];
             string ParamVideoSource = collection["insertVideoSource"];
 
-            string tags = collection["article_tags"];
+            string tags = collection["item_tags"];
 
             var mulltiSeq = collection["multi[]"];
             string[] seqArray = mulltiSeq.Split(',');
@@ -104,6 +162,7 @@ namespace Makers.Store.Controllers
                 storeItem.RegDt = DateTime.Now;
                 storeItem.RegId = profileModel.UserId;
                 storeItem.RegIp = IPAddressHelper.GetIP(this);
+                storeItem.FeaturedVisibility = "N";
                 storeItem.FeaturedYn = "N";
             }
 
@@ -123,15 +182,15 @@ namespace Makers.Store.Controllers
                 {
                     if (storeItem.No > 0)
                     {
-                        storeItemNo = sItemDac.AddItem(storeItem);
+                        bool ret = sItemDac.UpdateItem(storeItem);
+                        if (ret)
+                        {
+                            storeItemNo = storeItem.No;
+                        }
                     }
                     else
                     {
-                        bool ret = sItemDac.UpdateItem(storeItem);
-                        if (ret) 
-                        {
-                            storeItemNo = storeItem.No; 
-                        }
+                        storeItemNo = sItemDac.AddItem(storeItem);
                     }
 
                     if (storeItemNo <= 0) throw new ArgumentException("실패");
@@ -140,7 +199,7 @@ namespace Makers.Store.Controllers
 
                     foreach (StoreItemFileT file in storeItemFiles)
                     {
-                        file.ItemNo = storeItemNo;
+                        file.StoreItemNo = storeItemNo;
                         bool ret = sItemFileDac.UpdateItemFile(file);
                         if(!ret) throw new ArgumentException("실패");
                     }

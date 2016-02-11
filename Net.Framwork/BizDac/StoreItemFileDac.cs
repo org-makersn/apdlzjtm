@@ -27,11 +27,11 @@ namespace Net.Framework.BizDac
         /// <returns></returns>
         public IList<StoreItemFileT> GetItemFileByItemNo(long itemNo)
         {
-            return _itemFileRepo.Get(m => m.ItemNo == itemNo).ToList();
+            return _itemFileRepo.Get(m => m.StoreItemNo == itemNo).ToList();
         }
 
         /// <summary>
-        /// single by No
+        /// single by ItemNo
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
