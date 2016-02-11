@@ -53,7 +53,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         internal bool UpdateStoreProduct(StoreProductT data)
         {
-return _repository.Update(data);
+            return _repository.Update(data);
         }
 
         /// <summary>

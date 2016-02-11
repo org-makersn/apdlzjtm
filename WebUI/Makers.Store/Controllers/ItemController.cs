@@ -20,11 +20,6 @@ namespace Makers.Store.Controllers
         StoreItemDac sItemDac = new StoreItemDac();
         StoreItemFileDac sItemFileDac = new StoreItemFileDac();
 
-        public ActionResult Index(long no)
-        {
-            return View();
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -213,10 +208,8 @@ namespace Makers.Store.Controllers
                 }
 
                 response.Success = storeItemNo > 0;
-                response.Result = storeItemNo.ToString(); ;
+                response.Result = storeItemNo.ToString();
             }
-
-            //_articleFileDac.UpdateArticleFileSeq(seqArray);
 
             return Json(response, JsonRequestBehavior.AllowGet);
         }

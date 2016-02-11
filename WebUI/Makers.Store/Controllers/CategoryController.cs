@@ -1,5 +1,6 @@
 ﻿using Makers.Store.Helper;
 using Net.Common.Filter;
+using Net.Framework.BizDac;
 using Net.Framework.StoreModel;
 using Net.Framwork.BizDac;
 using System;
@@ -12,6 +13,8 @@ namespace Makers.Store.Controllers
 {
     public class CategoryController : BaseController
     {
+        StoreItemDac sItemDac = new StoreItemDac();
+
         /// <summary>
         /// 
         /// </summary>
@@ -46,11 +49,11 @@ namespace Makers.Store.Controllers
             int fromIndex = ((page - 1) * pageSize) + 1;
             int toIndex = page * pageSize;
 
-            IList<StoreProductT> list = null;
+            IList<StoreItemDetailT> list = null;
 
-            int totalCnt = new StoreProductBiz().getTotalCountByOption(profileModel.UserNo, codeNo);
+            int totalCnt = sItemDac.GetTotalCountByOption(profileModel.UserNo, codeNo, gbn);
 
-            list = new StoreProductBiz().getProductsByOption(profileModel.UserNo, codeNo, fromIndex, toIndex);
+            list = sItemDac.GetStoreItemsByOption(profileModel.UserNo, codeNo, gbn, fromIndex, toIndex);
 
             if (gbn == "featured")
             {
@@ -64,7 +67,7 @@ namespace Makers.Store.Controllers
             pager.CurrentPageIndex = page;
             pager.PageSize = pageSize;
             pager.RecordCount = totalCnt;
-            PagerQuery<PagerInfo, IList<StoreProductT>> model = new PagerQuery<PagerInfo, IList<StoreProductT>>(pager, list);
+            PagerQuery<PagerInfo, IList<StoreItemDetailT>> model = new PagerQuery<PagerInfo, IList<StoreItemDetailT>>(pager, list);
 
             return View(model);
         }

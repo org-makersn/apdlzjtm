@@ -1,7 +1,27 @@
-﻿@model PagerQuery<PagerInfo, IList<Net.Framework.StoreModel.StoreProductT>>
+﻿@model PagerQuery<PagerInfo, IList<Net.Framework.StoreModel.StoreItemDetailT>>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    int index = 1;
+
+    string class1 = "";
+    string class2 = "";
+    string class3 = "";
+    switch ((string)ViewBag.Gubun)
+    {
+        case "FEATURED":
+            class1 = "class=on";
+            break;
+
+        case "POPULAR":
+            class2 = "class=on";
+            break;
+
+        case "LATEST":
+            class3 = "class=on";
+            break;
+    }
 }
 
 <h2>Index</h2>
@@ -9,9 +29,33 @@
 
 <div class="baseList">
     <ul class="item_area">
-    @foreach (var product in Model.EntityList)
+    @foreach (var item in Model.EntityList)
     {
-        <li>@product.NAME</li>
+        string className = index % 4 == 0 ? "class=mgR0" : "";
+        string memberNo = Base64Helper.Base64Encode(@item.MemberNo.ToString());
+        
+        <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/design/Detail/@item.No">
+                            <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@Url.StoreImgFile(item.MainImgName)" alt="@item.Title" /></a>
+                        
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/design/Detail/@item.No">@item.Title</a>
+                        </div>
+                        <div class="by">
+                            @item.BasePrice
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="/Profile?no=@memberNo">@item.MemberName</a></span></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            index++;
     }
     </ul>
 </div>
