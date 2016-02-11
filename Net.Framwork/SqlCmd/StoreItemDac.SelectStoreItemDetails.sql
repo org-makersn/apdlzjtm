@@ -1,6 +1,7 @@
 select 
 		A.[NO]
 		, A.TEMP
+		, A.TITLE
 		, A.MEMBER_NO as MemberNo
 		, A.CODE_NO as CodeNo
 		, A.MAIN_IMG as MainImg
@@ -13,6 +14,7 @@ select
 		, A.FEATURED_YN as FeaturedYn
 		, A.FEATURED_VISIBILITY as FeaturedYisibility
 		, A.USE_YN as UseYn
+		, A.REG_DT as RegDt
 		, B.NAME as MemberName
 		, B.PROFILE_PIC as ProfilePic
 		, C.RENAME as MainImgName

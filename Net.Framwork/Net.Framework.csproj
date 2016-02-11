@@ -114,7 +114,6 @@
     <Compile Include="StoreModel\StorePrintingCompanyT.cs" />
     <Compile Include="StoreModel\StorePrintingTypeT.cs" />
     <Compile Include="StoreModel\StoreProductDetailT.cs" />
-    <Compile Include="StoreModel\StoreProductExT.cs" />
     <Compile Include="StoreModel\StoreProductT.cs" />
     <Compile Include="StoreModel\StoreProductUpdateHistoryT.cs" />
     <Compile Include="StoreModel\StoreReviewT.cs" />
@@ -170,7 +169,7 @@
     <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SqlCmd\StoreItemDac.SelectStoreItemDetails.sql" />
+    <EmbeddedResource Include="SqlCmd\StoreItemDac.SelectStoreItemDetails.sql" />
     <Content Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

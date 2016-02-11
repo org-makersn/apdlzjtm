@@ -89,23 +89,5 @@ return _repository.Update(data);
             //페이징
             return _repository.Get(p => p.CATEGORY_NO == codeNo).ToList();
         }
-
-        /// <summary>
-        /// test
-        /// </summary>
-        /// <returns></returns>
-        public IList<StoreProductExT> SelectProductTest()
-        {
-            string query = DacHelper.GetSqlCommand("StoreProduct.SelectProductList_S");
-
-            IList<StoreProductExT> states = dbHelper.ExecuteMultiple<StoreProductExT>(query).ToList();
-
-            using (var dbContext = new StoreContext())
-            {
-                IList<StoreProductExT> list = dbContext.Database.SqlQuery<StoreProductExT>(query).ToList();
-
-                return list;
-            }
-        }
     }
 }

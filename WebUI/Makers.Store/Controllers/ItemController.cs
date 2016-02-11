@@ -4,6 +4,7 @@ using Net.Common.Helper;
 using Net.Common.Model;
 using Net.Framework.BizDac;
 using Net.Framework.StoreModel;
+using Net.Framework.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,6 +48,8 @@ namespace Makers.Store.Controllers
                 }
 
                 itemDetail = sItemDac.GetItemDetailByItemNo(articleNo, visitorNo);
+
+                itemDetail.DeliveryName = EnumHelper.GetEnumTitle((StoreDeliveryType)itemDetail.DeliveryType);
 
                 if ((itemDetail.MemberNo != visitorNo && profileModel.UserLevel < 50) && itemDetail.UseYn.ToUpper() == "N")
                 {
@@ -110,6 +113,7 @@ namespace Makers.Store.Controllers
             string paramTemp = collection["temp"];
             string paramMode = collection["mode"];
             int mainImg = Convert.ToInt32(collection["main_img"]);
+            int basePrice = Convert.ToInt32(collection["BasePrice"]);
             string paramTitle = collection["item_title"];
             string paramContents = collection["item_contents"];
             int paramCodeNo = Convert.ToInt32(collection["category_no"]);
@@ -170,6 +174,7 @@ namespace Makers.Store.Controllers
             {
                 storeItem.Title = paramTitle;
                 storeItem.CodeNo = paramCodeNo;
+                storeItem.BasePrice = basePrice;
                 storeItem.Tags = tags;
                 storeItem.MainImg = mainImg;
                 storeItem.Contents = paramContents;
@@ -243,7 +248,7 @@ namespace Makers.Store.Controllers
                     string extension = Path.GetExtension(file.FileName).ToLower();
                     if (extType.Contains(extension))
                     {
-                        fileName = new UploadFunc().FileUpload(file, ImageSize.GetStoreResize(), "Store", null);
+                        fileName = new UploadFunc().FileUpload(file, ImageReSize.GetStoreResize(), "Store", null);
 
                         StoreItemFileT storeItemFile = new StoreItemFileT();
 

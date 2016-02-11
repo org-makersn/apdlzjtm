@@ -6,10 +6,10 @@ namespace Net.Framework.StoreModel
 {
     public partial class StoreItemDetailT : StoreItemT
     {
-
+        public string DeliveryName { get; set; }
         //[Column("PROFILE_PIC")]
         public string ProfilePic { get; set; }
-        public virtual string MemberProfilePic { get; set; }
+        public string MemberProfilePic { get; set; }
 
         //[Column("MEMBER_NAME")]
         public string MemberName { get; set; }

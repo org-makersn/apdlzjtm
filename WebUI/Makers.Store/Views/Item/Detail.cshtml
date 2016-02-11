@@ -112,11 +112,13 @@
         <div class="rightCont">
             <!-- userInfoArea -->
             <div class="userInfoArea">
-
+                @Html.Hidden("BasePrice")
                 <p class="title">@Model.Title</p>
-                <p class="date">@Model.RegDt.ToString("yyyy.MM.dd")</p>
+                <p class="date"><span id="txt_base_price">@Model.BasePrice</span> 원</p>
+                <p ><input type="number" id="ItemCnt" name="ItemCnt" value="1" min="1" max="99" maxlength="2" oninput="maxLengthCheck(this)" onkeypress="return isNumeric(event)" style=" width:60px; height:26px; line-height:26px; margin-left:20px; padding-left:10px;" /></p>
                 <div class="btnSet">
-                    <p><a href="/Order?articleNo=@Model.No" class="print" title="프린트">프린트</a></p>
+                    <p><a href="javascript:void(0)" class="print" title="바로구매">바로구매</a></p>
+                    <p><a href="javascript:void(0)" class="print" title="장바구니">장바구니</a></p>
                     <ul class="socialArea2">
                         @if (Model.UseYn == "Y")
                         {
@@ -129,7 +131,8 @@
 
                 <div class="licenseZone">
                     <p class="licenTit">배송관련</p>
-                    <div class="iconZone">
+                    <div class="iconZone" style=" padding-top:7px;">
+                        @Model.DeliveryName
                     </div>
                     <div class="repoartBtn">
                         <a href="javascript:void(0);">
@@ -262,7 +265,7 @@
     <script src="@Url.VersionedContent("~/Scripts/threejs.v71/three.min.js")"></script>
     @Scripts.Render("~/bundles/thingiview")*@
 
-    <script src="@Url.VersionedContent("~/Scripts/jquery.bxslider.min.js")"></script>
+    <script src="@Url.VersionedContent("~/Scripts/bxslider/jquery.bxslider.min.js")"></script>
     <script type="text/javascript">
         function isIE() { //ie?  
             if (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject)
@@ -271,7 +274,24 @@
                 return false;
         };
 
-        $(document).ready(function () {
+        function maxLengthCheck(object) {
+            console.log(object.value.length + "[]" + object.maxLength);
+            if (object.value.length > object.maxLength)
+                object.value = object.value.slice(0, object.maxLength)
+        }
+
+        function isNumeric(evt) {
+            var theEvent = evt || window.event;
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+            var regex = /[0-9]|\./;
+            if (!regex.test(key)) {
+                theEvent.returnValue = false;
+                if (theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+
+        $(function () {
             $("#bx-pager").removeAttr("style");
             slideNumber = $("#sildeNum").val();
 
@@ -279,7 +299,7 @@
                 mode: 'fade',
                 pagerCustom: '#bx-pager',
                 speed: 1,
-                startSlide: slideNumber   // 초기 슬라이드 지정번호
+                startSlide: slideNumber
             });
 
             $('.thumbArea #bx-pager').bxSlider({
@@ -299,8 +319,15 @@
             $('#bx-pager a').on('click', function () {
                 thingiview = null;
 
-            })
-            //$(".gnbArea").addClass("bdA_no");
+            });
+
+            var baseprice = '@Model.BasePrice';
+            $('#ItemCnt').change(function () {
+                var total = parseInt(baseprice) * parseInt($('#ItemCnt').val());
+
+                $('#txt_base_price').text(total);
+                $('#BasePrice').val(total);
+            });
 
             // 브라우저체크하여 안내
 
@@ -327,7 +354,7 @@
                 chrome: Browser.chk.indexOf('chrome') != -1,
                 firefox: Browser.chk.indexOf('firefox') != -1
             }
-        })
+        });
     </script>
 }
 
