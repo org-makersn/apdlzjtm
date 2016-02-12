@@ -1,0 +1,16 @@
+﻿@model IList<CodeModel>
+
+@foreach (CodeModel menu in Model)
+{
+    <li id="@menu.MenuCodeNo">
+
+    @if (menu.MenuCodeNo == 1007)
+    {
+        <strong><a href="@menu.MenuUrl">@menu.MenuTitle</a></strong>
+    }
+    else
+    {
+        <a href="@menu.MenuUrl">@menu.MenuTitle</a>
+    }
+    </li>
+}

@@ -72,8 +72,12 @@ namespace Net.Framework.BizDac
 
             using (var cmd = new SqlCommand(targetCntQuery))
             {
-                cmd.Parameters.Add("@CODE_NO", SqlDbType.Int).Value = codeNo;
-                return dbHelper.ExecuteSingle<int>(cmd);
+                if (codeNo != 0)
+                {
+                    cmd.Parameters.Add("@CODE_NO", SqlDbType.Int).Value = codeNo;
+                }
+                var state = dbHelper.ExecuteSingle<int>(cmd);
+                return 2;
             }
         }
 
@@ -132,7 +136,8 @@ namespace Net.Framework.BizDac
 	                                , A.BASE_PRICE as BasePrice
 	                                , A.VIEW_CNT as ViewCnt
                                     , A.REG_DT
-                                    --, A.FEATURED_PRIORITY 
+									, A.FEATURED_DT
+                                    , A.FEATURED_PRIORITY 
 	                                , B.NAME AS MemberName
                                     , C.RENAME as MainImgName
 	                                --, (SELECT count(0) FROM STORE_COMMENT B with(nolock) WHERE A.NO = B.STORE_ITEM_NO) AS COMMENT_CNT
@@ -153,7 +158,7 @@ namespace Net.Framework.BizDac
                 cmd.Parameters.Add("@FROM_PAGE", SqlDbType.Int).Value = fromIndex;
                 cmd.Parameters.Add("@TO_PAGE", SqlDbType.Int).Value = toIndex;
 
-                var state = dbHelper.ExecuteMultiple<StoreItemDetailT>(cmd).ToList();
+                var state = dbHelper.ExecuteMultiple<StoreItemDetailT>(cmd);
 
                 return state != null ? state.ToList() : null;
             }

@@ -1,5 +1,7 @@
 ﻿using Makers.Store.Helper;
 using Net.Common.Filter;
+using Net.Common.Model;
+using Net.Common.Util;
 using Net.Framework.BizDac;
 using Net.Framework.StoreModel;
 using Net.Framwork.BizDac;
@@ -29,19 +31,22 @@ namespace Makers.Store.Controllers
 
             if (!string.IsNullOrEmpty(category))
             {
-                //latest-fashion-and-accessories
-                string[] strarr = category.Split('-');
-                gbn = strarr.First();
-
-                if (strarr.Length > 1)
+                if (category.ToLower() != "all")
                 {
-                    string codekey = category.Replace(gbn + "-", string.Empty);
+                    //latest-fashion-and-accessories
+                    string[] strarr = category.ToLower().Split('-');
+                    gbn = strarr.First();
 
-                    var categoryT = new CommonCodeDac().GetCommonCode("STORE", "PRODUCT").SingleOrDefault(m => m.CODE_KEY.Equals(codekey, StringComparison.OrdinalIgnoreCase));
-                    if (categoryT != null)
+                    if (strarr.Length > 1)
                     {
-                        ViewBag.Title = categoryT.CODE_NAME;
-                        codeNo = categoryT.NO;
+                        string codekey = category.Replace(gbn + "-", string.Empty);
+
+                        var categoryT = new CommonCodeDac().GetCommonCode("STORE", "ITEM").SingleOrDefault(m => m.CODE_KEY.Equals(codekey, StringComparison.OrdinalIgnoreCase));
+                        if (categoryT != null)
+                        {
+                            ViewBag.Title = categoryT.CODE_NAME;
+                            codeNo = categoryT.NO;
+                        }
                     }
                 }
             }
@@ -70,6 +75,52 @@ namespace Makers.Store.Controllers
             PagerQuery<PagerInfo, IList<StoreItemDetailT>> model = new PagerQuery<PagerInfo, IList<StoreItemDetailT>>(pager, list);
 
             return View(model);
+        }
+
+        /// <summary>
+        /// @Html.Action("showcategory", "category", new{ gbn = "", category = ""})
+        /// </summary>
+        /// <param name="gbn"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        public PartialViewResult ShowCategory(string gbn = "all", string category = "")
+        {
+            IList<CommonCodeT> list = null;
+            list = CacheUtil.GetCache("MenuList") as IList<CommonCodeT>;
+
+            if (list == null)
+            {
+                list = new CommonCodeDac().GetCommonCode("STORE", "ITEM");
+                CacheUtil.SetCache("MenuList", list);
+            }
+
+            IList<CodeModel> menulist = new List<CodeModel>();
+            foreach (var menu in list)
+            {
+                CodeModel model = new CodeModel();
+                model.MenuTitle = menu.CODE_NAME;
+                model.MenuCodeNo = menu.NO;
+
+                switch (gbn.ToLower())
+                {
+                    case "all":
+
+                    default:
+                        break;
+                }
+
+                if (menu.NO > 0)
+                {
+                    model.MenuUrl = "/category/featured-" + menu.CODE_KEY;
+                }
+                else
+                {
+                    model.MenuUrl = "/category/featured";
+                }
+                menulist.Add(model);
+            }
+
+            return PartialView(menulist);
         }
 
         /// <summary>

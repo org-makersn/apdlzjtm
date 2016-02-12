@@ -45,7 +45,8 @@
 
                     <!-- MainMenu -->
                     <ul class="mainMenu">
-                        <li><a href="http://local.makersn.com" class="on">디자인</a></li>
+                        <li><a href="http://local.makersn.com">디자인</a></li>
+                        <li><a href="http://local.store.makersn.com" class="on">스토어</a></li>
                     </ul>
                     <!-- //MainMenu -->
 
@@ -89,8 +90,7 @@
                               }
                             }
                         </a>
-                        <a href="#" class="printing_btn" id="showTop" onclick="chkPopup();" title="알림/메시지/내주문/로그아웃">
-                        </a>
+                        <a href="#" class="printing_btn" id="showTop" onclick="chkPopup();" title="알림/메시지/내주문/로그아웃"></a>
 
                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                         {
@@ -125,6 +125,7 @@
                                 <li id="@menu.MenuCodeNo"><a href="@menu.MenuUrl">@menu.MenuTitle</a></li>
                                 }
                             }*@
+                            @Html.Action("showcategory", "category", new{ gbn = "", category = ""})
                         </ul>
 
                         <div class="uploadArea">
@@ -132,7 +133,7 @@
 
                                 @RenderSection("editBtnzone", required: false)
                                 <li>
-                                    <a href="javascript:void(0);" title="업로드" id="ArticleUpload" class="upload">업로드</a>
+                                    <a href="javascript:void(0);" title="상품등록" id="StoreItemUpload" class="upload">상품등록</a>
                                 </li>
                             </ul>
 
@@ -469,6 +470,46 @@
                 location.href = "/profile";
             };
         }
+
+        function GoMain() {
+            location.href = "/";
+        }
+
+        $(function () {
+            $("#StoreItemUpload").click(function (e) {
+                if (loginPop("@ViewBag.LogOnChk")) return false;
+            $(location).attr("href", "/item/upload");
+        });
+
+        $('body').append('<a href="#" class="back-to-top"></a>');
+
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 250) {
+                $('.back-to-top').fadeIn(100);
+
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - 180) {
+
+                    var marginBottom = 180 - ($(document).height() - $(window).scrollTop() - $(window).height());
+                    $(".back-to-top").css("margin-bottom", marginBottom + "px");
+
+                } else {
+                    $(".back-to-top").css("margin-bottom", "0px");
+                }
+            } else {
+                $('.back-to-top').fadeOut(100);
+            }
+        });
+
+        $('.back-to-top').click(function (event) {
+            event.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, 500);
+        })
+
+            //다른데 클릭 하면 숨김
+        $(document).on('click', function (e) {
+            $('.valueLi').hide();
+        });
+        });
     </script>
 </body>
 
