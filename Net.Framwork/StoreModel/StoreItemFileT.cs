@@ -11,8 +11,8 @@ namespace Net.Framework.StoreModel
         public long No { get; set; }
         [Column("TEMP")]
         public string Temp { get; set; }
-        [Column("MEMBER_NO")]
-        public int MemberNo { get; set; }
+        [Column("STORE_MEMBER_NO")]
+        public int StoreMemberNo { get; set; }
         [Column("STORE_ITEM_NO")]
         public long StoreItemNo { get; set; }
         [Column("FILE_GBN")]

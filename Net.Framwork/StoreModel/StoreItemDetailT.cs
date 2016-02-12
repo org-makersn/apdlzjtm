@@ -10,8 +10,8 @@ namespace Net.Framework.StoreModel
         public long No { get; set; }
         [Column("TEMP")]
         public string Temp { get; set; }
-        [Column("MEMBER_NO")]
-        public int MemberNo { get; set; }
+        [Column("STORE_MEMBER_NO")]
+        public int StoreMemberNo { get; set; }
         [Column("CODE_NO")]
         public int CodeNo { get; set; }
         [Column("MAIN_IMG")]
@@ -52,8 +52,8 @@ namespace Net.Framework.StoreModel
         public string ProfilePic { get; set; }
         public string MemberProfilePic { get; set; }
 
-        //[Column("MEMBER_NAME")]
-        public string MemberName { get; set; }
+        //[Column("STORE_NAME")]
+        public string StoreName { get; set; }
 
         //[Column("MAIN_IMG_NAME")]
         public string MainImgName { get; set; }

@@ -31,7 +31,7 @@
         @foreach (var item in Model.EntityList)
         {
             string className = index % 4 == 0 ? "class=mgR0" : "";
-            string memberNo = Base64Helper.Base64Encode(@item.MemberNo.ToString());
+            string storeMemberNo = Base64Helper.Base64Encode(@item.StoreMemberNo.ToString());
         
             <li @className>
                 <!-- ProductBox -->
@@ -46,7 +46,7 @@
                             <a href="/item/detail/@item.No">@item.Title</a>
                         </div>
                         <div class="by">
-                            <p>by <span class="name"><a href="/profile?no=@memberNo">@item.MemberName</a></span></p>
+                            <p>by <span class="name"><a href="/store?q=@storeMemberNo">@item.StoreName</a></span></p>
                         </div>
                         <div class="by">
                             @item.BasePrice

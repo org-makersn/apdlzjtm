@@ -2,7 +2,7 @@ select
 		A.[NO]
 		, A.TEMP
 		, A.TITLE
-		, A.MEMBER_NO as MemberNo
+		, A.STORE_MEMBER_NO as StoreMemberNo
 		, A.CODE_NO as CodeNo
 		, A.MAIN_IMG as MainImg
 		, A.CONTENTS
@@ -15,13 +15,12 @@ select
 		, A.FEATURED_VISIBILITY as FeaturedYisibility
 		, A.USE_YN as UseYn
 		, A.REG_DT as RegDt
-		, B.NAME as MemberName
-		, B.PROFILE_PIC as ProfilePic
+		, B.STORE_NAME as StoreName
 		, C.RENAME as MainImgName
 		, (SELECT COUNT(0) FROM STORE_LIKES WHERE STORE_ITEM_NO = A.[NO] AND MEMBER_NO = @VISITOR_NO) AS IsLikes
 		, (SELECT COUNT(0) FROM STORE_REVIEW WHERE STORE_ITEM_NO = A.[NO]) AS CommentCnt
 
 	from STORE_ITEM A with(nolock)
-	inner join MEMBER B with(nolock) on A.MEMBER_NO = B.[NO]
+	inner join STORE_MEMBER B with(nolock) on A.STORE_MEMBER_NO = B.[NO]
 	inner join STORE_ITEM_FILE C with(nolock) on A.MAIN_IMG = C.[NO]
 	where A.[NO] = @STORE_ITEM_NO

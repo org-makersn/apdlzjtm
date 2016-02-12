@@ -5,7 +5,7 @@
 
     string pageUrl = Request.Url.ToString();
     string mainImg = ViewBag.MainImg;
-    string No = Base64Helper.Base64Encode(Model.MemberNo.ToString());
+    string No = Base64Helper.Base64Encode(Model.StoreMemberNo.ToString());
 
     ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
 
@@ -17,7 +17,7 @@
 }
 
 @section head{
-    <meta name="author" content="@Model.MemberName" />
+    <meta name="author" content="@Model.StoreName" />
     <meta property="og:title" content="@Model.Title" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="@pageUrl" />
@@ -32,7 +32,7 @@
 
 @section editBtnzone{
     <ul class="btnSet">
-        @if (Model.MemberNo == ViewBag.VisitorNo || profile.UserLevel > 50)
+        @if (Model.StoreMemberNo == ViewBag.VisitorNo || profile.UserLevel > 50)
         {
             <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">편집</a></li>
         }
@@ -243,7 +243,7 @@
                             <a href="/Profile?no=@No">
                                 <img src="@Url.ProfileImg(Model.MemberProfilePic)" alt="기본프로필" /></a>
                         </div>
-                        <p class="userId"><span>by <a href="/Profile?no=@No">@Model.MemberName</a></span></p>
+                        <p class="userId"><span>by <a href="/Profile?no=@No">@Model.StoreName</a></span></p>
                     </div>
                     <ul class="profileBtn" id="profileArea">
                     </ul>

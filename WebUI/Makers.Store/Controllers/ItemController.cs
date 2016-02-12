@@ -46,7 +46,7 @@ namespace Makers.Store.Controllers
 
                 itemDetail.DeliveryName = EnumHelper.GetEnumTitle((StoreDeliveryType)itemDetail.DeliveryType);
 
-                if ((itemDetail.MemberNo != visitorNo && profileModel.UserLevel < 50) && itemDetail.UseYn.ToUpper() == "N")
+                if ((itemDetail.StoreMemberNo != visitorNo && profileModel.UserLevel < 50) && itemDetail.UseYn.ToUpper() == "N")
                 {
                     return Content("<script>alert('비공개 처리된 게시물 입니다.'); location.href='/';</script>");
                 }
@@ -142,7 +142,7 @@ namespace Makers.Store.Controllers
 
                 if (storeItem != null)
                 {
-                    if (storeItem.MemberNo == profileModel.UserNo && storeItem.Temp == paramTemp)
+                    if (storeItem.StoreMemberNo == profileModel.UserNo && storeItem.Temp == paramTemp)
                     {
                         storeItem.UpdDt = DateTime.Now;
                         storeItem.UpdId = profileModel.UserId;
@@ -154,7 +154,7 @@ namespace Makers.Store.Controllers
             {
                 //save
                 storeItem = new StoreItemT();
-                storeItem.MemberNo = profileModel.UserNo;
+                storeItem.StoreMemberNo = profileModel.UserNo;
                 storeItem.Tags = tags;
                 storeItem.Temp = paramTemp;
                 storeItem.ViewCnt = 0;
@@ -247,7 +247,7 @@ namespace Makers.Store.Controllers
 
                         storeItemFile.Temp = temp;
                         storeItemFile.FileGbn = "img";
-                        storeItemFile.MemberNo = profileModel.UserNo;
+                        storeItemFile.StoreMemberNo = profileModel.UserNo;
                         storeItemFile.Name = file.FileName;
                         storeItemFile.ReName = fileName;
                         storeItemFile.FileExt = extension;

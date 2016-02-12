@@ -125,7 +125,7 @@
                                 <li id="@menu.MenuCodeNo"><a href="@menu.MenuUrl">@menu.MenuTitle</a></li>
                                 }
                             }*@
-                            @Html.Action("showcategory", "category", new{ gbn = "", category = ""})
+                            @Html.Action("showcategory", "category", new { gbn = "", category = "" })
                         </ul>
 
                         <div class="uploadArea">
@@ -478,37 +478,43 @@
         $(function () {
             $("#StoreItemUpload").click(function (e) {
                 if (loginPop("@ViewBag.LogOnChk")) return false;
-            $(location).attr("href", "/item/upload");
-        });
-
-        $('body').append('<a href="#" class="back-to-top"></a>');
-
-        $(window).scroll(function () {
-            if ($(this).scrollTop() > 250) {
-                $('.back-to-top').fadeIn(100);
-
-                if ($(window).scrollTop() + $(window).height() > $(document).height() - 180) {
-
-                    var marginBottom = 180 - ($(document).height() - $(window).scrollTop() - $(window).height());
-                    $(".back-to-top").css("margin-bottom", marginBottom + "px");
-
-                } else {
-                    $(".back-to-top").css("margin-bottom", "0px");
+                //스토어 회원인지 체크
+                if (true) {
+                    $(location).attr("href", "/item/upload");
                 }
-            } else {
-                $('.back-to-top').fadeOut(100);
-            }
-        });
+                else {
+                    $(location).attr("href", "/store/regist");
+                }
+            });
 
-        $('.back-to-top').click(function (event) {
-            event.preventDefault();
-            $('html, body').animate({ scrollTop: 0 }, 500);
-        })
+            $('body').append('<a href="#" class="back-to-top"></a>');
+
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 250) {
+                    $('.back-to-top').fadeIn(100);
+
+                    if ($(window).scrollTop() + $(window).height() > $(document).height() - 180) {
+
+                        var marginBottom = 180 - ($(document).height() - $(window).scrollTop() - $(window).height());
+                        $(".back-to-top").css("margin-bottom", marginBottom + "px");
+
+                    } else {
+                        $(".back-to-top").css("margin-bottom", "0px");
+                    }
+                } else {
+                    $('.back-to-top').fadeOut(100);
+                }
+            });
+
+            $('.back-to-top').click(function (event) {
+                event.preventDefault();
+                $('html, body').animate({ scrollTop: 0 }, 500);
+            })
 
             //다른데 클릭 하면 숨김
-        $(document).on('click', function (e) {
-            $('.valueLi').hide();
-        });
+            $(document).on('click', function (e) {
+                $('.valueLi').hide();
+            });
         });
     </script>
 </body>

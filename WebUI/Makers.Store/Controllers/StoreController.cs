@@ -14,10 +14,20 @@ namespace Makers.Store.Controllers
 {
     public class StoreController : BaseController
     {
-        //
-        // GET: /Store/
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index(string q)
+        {
+            return View();
+        }
 
-        public ActionResult Index()
+        /// <summary>
+        /// 스토어 개설
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Regist()
         {
             return View();
         }

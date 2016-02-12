@@ -66,8 +66,8 @@ namespace Net.Framework.BizDac
 
             targetCntQuery += @"SELECT COUNT(1) 
                                 FROM STORE_ITEM A WITH(NOLOCK)  
-                                LEFT OUTER JOIN MEMBER B WITH(NOLOCK) ON B.[NO] = A.MEMBER_NO  
-                                WHERE (B.DEL_FLAG != 'Y' OR B.DEL_FLAG IS NULL) AND A.USE_YN = 'Y' "
+                                LEFT OUTER JOIN STORE_MEMBER B WITH(NOLOCK) ON B.[NO] = A.STORE_MEMBER_NO  
+                                WHERE (B.DEL_YN != 'Y' OR B.DEL_YN IS NULL) AND A.USE_YN = 'Y' "
                                 + whereQuery;
 
             using (var cmd = new SqlCommand(targetCntQuery))
@@ -125,29 +125,29 @@ namespace Net.Framework.BizDac
                 whereQuery += " AND A.CODE_NO = @CODE_NO ";
             }
 
-            targetOptQuery += @" SELECT NO, TITLE, MemberNo, CodeNo, BasePrice, ViewCnt, MemberName, MainImgName, ROW_NUM FROM
-                                (SELECT InQ.NO, InQ.TITLE, InQ.MemberNo, InQ.CodeNo, InQ.BasePrice, InQ.ViewCnt, InQ.MemberName, InQ.MainImgName " 
+            targetOptQuery += @" SELECT NO, TITLE, StoreMemberNo, CodeNo, BasePrice, ViewCnt, StoreName, MainImgName, ROW_NUM FROM
+                                (SELECT InQ.NO, InQ.TITLE, InQ.StoreMemberNo, InQ.CodeNo, InQ.BasePrice, InQ.ViewCnt, InQ.StoreName, InQ.MainImgName "
                                 + rowNumQuery + @" FROM 
                                 (SELECT  
 	                                A.NO
 	                                , A.TITLE
-	                                , A.MEMBER_NO as MemberNo
+	                                , A.STORE_MEMBER_NO as StoreMemberNo
 	                                , A.CODE_NO as CodeNo
 	                                , A.BASE_PRICE as BasePrice
 	                                , A.VIEW_CNT as ViewCnt
                                     , A.REG_DT
 									, A.FEATURED_DT
                                     , A.FEATURED_PRIORITY 
-	                                , B.NAME AS MemberName
+	                                , B.STORE_NAME AS StoreName
                                     , C.RENAME as MainImgName
 	                                --, (SELECT count(0) FROM STORE_COMMENT B with(nolock) WHERE A.NO = B.STORE_ITEM_NO) AS COMMENT_CNT
 	                                --, (SELECT count(1) FROM STORE_LIKES B with(nolock) WHERE A.NO = B.STORE_ITEM_NO) AS LIKE_CNT
 	                                --, (SELECT count(1) FROM STORE_LIKES B with(nolock) WHERE A.NO = B.STORE_ITEM_NO AND B.MEMBER_NO = @MEMBER_NO ) AS IS_LIKES
 	                                
                                 FROM STORE_ITEM A with(nolock)  
-                                LEFT JOIN MEMBER B with(nolock) on A.MEMBER_NO = B.[NO]
+                                LEFT JOIN STORE_MEMBER B with(nolock) on A.STORE_MEMBER_NO = B.[NO]
                                 INNER JOIN STORE_ITEM_FILE C with(nolock) on A.MAIN_IMG = C.[NO]  
-                                WHERE (B.DEL_FLAG != 'Y' OR B.DEL_FLAG IS NULL) AND A.USE_YN = 'Y' "
+                                WHERE (B.DEL_YN != 'Y' OR B.DEL_YN IS NULL) AND A.USE_YN = 'Y' "
                                 + whereQuery + " ) InQ ) OutQ ";
 
             targetOptQuery += @" WHERE ROW_NUM BETWEEN @FROM_PAGE AND @TO_PAGE";
