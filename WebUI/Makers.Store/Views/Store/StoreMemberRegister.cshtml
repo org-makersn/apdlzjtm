@@ -40,34 +40,33 @@
 @{
     foreach (StoreMemberT storeMember in _StoreMemberList)
     {
-    <form id="MemberList_@storeMember.NO" method="post" enctype="multipart/form-data">
+    <form id="MemberList_@storeMember.No" method="post" enctype="multipart/form-data">
         맴버no        
-        <input type="text"     name="memberNo"          value="@storeMember.MEMBER_NO">
+        <input type="text"     name="memberNo"          value="@storeMember.MemberNo">
         스토어명                         
-        <input type="text"    name="StoreName"            value="@storeMember.STORE_NAME">
+        <input type="text"    name="StoreName"            value="@storeMember.StoreName">
         전화 번호                        
-        <input type="text"  name="TelNo"              value="@storeMember.OFFICE_PHONE"/>
+        <input type="text"  name="TelNo"              value="@storeMember.OfficePhone"/>
         휴대폰번호                       
-        <input type="text"    name="CellPhone"           value="@storeMember.CELL_PHONE"/>
+        <input type="text"    name="CellPhone"           value="@storeMember.CellPhone"/>
         스토어프로필메시지               
-        <input type="text"   name="StoreProfileMsg"            value="@storeMember.STORE_PROFILE_MSG"/>
+        <input type="text"   name="StoreProfileMsg"            value="@storeMember.StoreProfileMsg"/>
         스토어 url                       
-        <input type="text"    name="StoreUrl"           value="@storeMember.STORE_URL"/>
+        <input type="text"    name="StoreUrl"           value="@storeMember.StoreUrl"/>
         은해이름                       
-        <input type="text"    name="bankName"            value="@storeMember.BANK_NAME"/>
+        <input type="text"    name="bankName"            value="@storeMember.BankName"/>
         예금주 이름                         
-        <input type="text"     name="bankUserName"          value="@storeMember.BANK_USER_NAME"/>
+        <input type="text"     name="bankUserName"          value="@storeMember.BankUserName"/>
         스토어 페지여부                  
-        <input type="text"   name="delYn"           value="@storeMember.DEL_YN"/>
-        생성자                           
-        <input type="text"   name="RegId"           value="@storeMember.REG_ID"/>
-        <input type="hidden" name="no" value="@storeMember.NO" />
+        <input type="text"   name="delYn"           value="@storeMember.DelYn"/>
 
-        <input type="button" value="수정" onclick="StoreMemberEdit("@storeMember.NO")" />
-        <input type="button" value="삭제" onclick="StoreMemberDelete("@storeMember.NO")" />
+        <input type="hidden" name="no" value="@storeMember.No" />
+
+        <input type="button" value="수정" onclick="StoreMemberEdit("@storeMember.No")" />
+        <input type="button" value="삭제" onclick="StoreMemberDelete("@storeMember.No")" />
         @if (ViewBag.userNo != 0)
         {
-            <input type="button" value="팔러우하기" onclick="Following("@storeMember.MEMBER_NO")" />       
+            <input type="button" value="팔러우하기" onclick="Following("@storeMember.MemberNo")" />       
         }
 
     </form>   

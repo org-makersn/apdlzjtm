@@ -1,6 +1,189 @@
-﻿@{
+﻿@model Net.Framework.StoreModel.StoreMemberT
+
+@{
     ViewBag.Title = "Regist";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Regist</h2>
+<h2>스토어 개설</h2>
+<br />
+
+<form id="insert_form" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+@*<div class="editor-label">
+        @Html.LabelFor(model => model.MEMBER_NO)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.MEMBER_NO)
+        @Html.ValidationMessageFor(model => model.MEMBER_NO)
+    </div>*@
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.StoreName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.StoreName)
+        @Html.ValidationMessageFor(model => model.StoreName)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.OfficePhone)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.OfficePhone)
+        @Html.ValidationMessageFor(model => model.OfficePhone)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.CellPhone)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.CellPhone)
+        @Html.ValidationMessageFor(model => model.CellPhone)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.StoreProfileMsg)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.StoreProfileMsg)
+        @Html.ValidationMessageFor(model => model.StoreProfileMsg)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.StoreUrl)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.StoreUrl)
+        @Html.ValidationMessageFor(model => model.StoreUrl)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.BankName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.BankName)
+        @Html.ValidationMessageFor(model => model.BankName)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.BankUserName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.BankUserName)
+        @Html.ValidationMessageFor(model => model.BankUserName)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.BankAccount)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.BankAccount)
+        @Html.ValidationMessageFor(model => model.BankAccount)
+    </div>
+    
+    <br />
+    <p>
+        <input type="button" onclick="StoreRegist()" name="생성" value="생성" />
+    </p>
+</form>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        function StoreRegist() {
+            //var options = {
+            //    dataType: "json",
+            //    beforeSend: function () {
+            //    },
+            //    success: function (response) {
+            //        if (response.Success) {
+            //            alert("가입 되었습니다." + response.Success);
+            //            $(location).attr("href", "/store");
+            //        }
+            //        else {
+            //            alert("response.Message" + response.Message);
+            //        }
+            //    },
+            //    complete: function (response) {
+            //    },
+            //    error: function (error) {
+            //        alert("error" + error.Message)
+            //    }
+            //};
+            //$('#insert_form').attr("action", "/store/postregist").ajaxForm(options).submit();
+            var onSuccess = function (response) {
+                if (response.Success) {
+                    alert("가입 되었습니다." + response.Success);
+                    $(location).attr("href", "/store");
+                }
+                else {
+                    alert("response.Message" + response.Message);
+                }
+            }
+            Ajax.AjaxFormPostService(this, 'insert_form', '/store/postregist', onSuccess);
+        }
+
+        function StoreMemberEdit(no) {
+            var options = {
+                beforeSend: function () {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        alert("수정 되었습니다." + response.Success);
+                        var action = "/store/StoreMemberRegister";
+                        $(location).attr("href", action);
+                    }
+                    else {
+                        alert("response.Message" + response.Message);
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    alert("error" + error.Message)
+                }
+            };
+
+            $('#MemberList_' + no).attr("action", "/Store/UpdateStoreMember").ajaxForm(options).submit();
+        }
+
+        function StoreMemberDelete(no) {
+            alert(no);
+            var onSuccess = function (result) {
+                alert("삭제 되었습니다." + response.Success);
+                var action = "/Store/DeleteStoreMember";
+                $(location).attr("href", action);
+            }
+            Ajax.AjaxResponseModelService(this, "/Store/DeleteStoreMember", { memberno: no }, onSuccess);
+        }
+
+        function Following(Storeno) {
+            alert(Storeno);
+            var onSuccess = function (result) {
+                alert("팔러우 되었습니다." + response.Success);
+                var action = "/Store/FollowingStore";
+                $(location).attr("href", action);
+            }
+            Ajax.AjaxResponseModelService(this, "/Store/FollowingStore", { StoreMemberNo: Storeno }, onSuccess);
+        }
+        function NotFollowing() {
+            alert(Storeno);
+            var onSuccess = function (result) {
+                alert("팔러우 취소 되었습니다." + response.Success);
+                var action = "/Store/NotFollowingStore";
+                $(location).attr("href", action);
+            }
+            Ajax.AjaxResponseModelService(this, "/Store/NotFollowingStore", { StoreMemberNo: Storeno }, onSuccess);
+        }
+
+    </script>
+
+}

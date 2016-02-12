@@ -120,29 +120,6 @@ namespace Net.Framework.Util
             return ret;
         }
 
-        public static string GetDayOfWeekTitle(DayOfWeek day, Enum language = null)
-        {
-            switch (day)
-            {
-                case DayOfWeek.Monday:
-                    return "월요일";
-                case DayOfWeek.Tuesday:
-                    return "화요일";
-                case DayOfWeek.Wednesday:
-                    return "수요일";
-                case DayOfWeek.Thursday:
-                    return "목요일";
-                case DayOfWeek.Friday:
-                    return "금요일";
-                case DayOfWeek.Saturday:
-                    return "토요일";
-                case DayOfWeek.Sunday:
-                    return "일요일";
-                default:
-                    return "";
-            }
-        }
-
         /// <summary>
         /// 返回键值对，建为枚举的EnumTitle中指定的名称和近义词名称，值为枚举项
         /// </summary>

@@ -45,7 +45,7 @@
 
                     <!-- MainMenu -->
                     <ul class="mainMenu">
-                        <li><a href="http://local.makersn.com">디자인</a></li>
+                        <li><a href="http://local.dev.makersn.com">디자인</a></li>
                         <li><a href="http://local.store.makersn.com" class="on">스토어</a></li>
                     </ul>
                     <!-- //MainMenu -->
@@ -76,7 +76,7 @@
                               }
                               else
                               {
-                                  profile.UserProfilePic = ViewBag.ProfileImgUrl + profile.UserProfilePic;
+                                  profile.UserProfilePic = profile.UserProfilePic;
                               }
                               switch ((int)ViewBag.LogOnChk)
                               {
@@ -85,7 +85,7 @@
                                       break;
 
                                   default:
-                                <img src="@profile.UserProfilePic" style="width:100%;height:100%" alt="Login"id="topProfileImg" />
+                                <img src="@Url.ProfileImg(profile.UserProfilePic)" style="width:100%;height:100%" alt="Login"id="topProfileImg" />
                                       break;
                               }
                             }

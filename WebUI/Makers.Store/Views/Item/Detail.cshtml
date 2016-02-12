@@ -117,7 +117,6 @@
                 <p class="date"><span id="txt_base_price">@Model.BasePrice</span> 원</p>
                 <p ><input type="number" id="ItemCnt" name="ItemCnt" value="1" min="1" max="99" maxlength="2" oninput="maxLengthCheck(this)" onkeypress="return isNumeric(event)" style=" width:60px; height:26px; line-height:26px; margin-left:20px; padding-left:10px;" /></p>
                 <div class="btnSet">
-                    <p><a href="javascript:void(0)" class="print" title="바로구매">바로구매</a></p>
                     <p><a href="javascript:void(0)" class="print" title="장바구니">장바구니</a></p>
                     <ul class="socialArea2">
                         @if (Model.UseYn == "Y")
@@ -132,34 +131,7 @@
                 <div class="licenseZone">
                     <p class="licenTit">배송관련</p>
                     <div class="iconZone" style=" padding-top:7px;">
-                        @Model.DeliveryName
-                    </div>
-                    <div class="repoartBtn">
-                        <a href="javascript:void(0);">
-                            <img src="/content/images/common/btn/btn_report.png" alt="Report" /></a>
-                    </div>
-                </div>
-
-                <div class="reportArea">
-                    <p class="arrowTop">
-                        <img src="/content/images/arrowReport.png" alt="" />
-                    </p>
-                    <div class="reportText">
-                        <form id="report_form" name="report_form" method="post">
-                            <input type="hidden" name="item_no" value="">
-                            <textarea id="txtReport" name="report" placeholder="이 게시물이 부적절하거나 관리자의 확인이 필요할 경우 이유를 적어주시면 검토 및 조치하겠습니다."></textarea>
-                        </form>
-                        <button title="보내기" id="btnSendReport">보내기</button>
-                        <a href="javascript:void(0);" class="closeReport">
-                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
-                    </div>
-                    <div class="repoartComplete">
-                        <p>
-                            접수가 완료되었습니다.<br />
-                            빠른 시일 내로 검토 및 조치하겠습니다.
-                        </p>
-                        <a href="javascript:void(0);" class="closeReport">
-                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
+                        @Model.ShippingName
                     </div>
                 </div>
 
@@ -172,14 +144,14 @@
                         <div class="tagText">
                             @foreach (string tag in tagList)
                             {
-                                <a href="/design/Search?text=@tag.Trim()&tag=Y">@tag </a>
+                                <a href="/item/search?text=@tag.Trim()&tag=Y">@tag </a>
                             }
                         </div>
                         }
                     }
                 </div>
 
-                <ul class="countBox" id="ctnList">
+                @*<ul class="countBox" id="ctnList">
                     @{
                         string likeclassName = Model.IsLikes > 0 ? "class=on" : "";
                     }
@@ -189,61 +161,15 @@
 
                     <li class="collect"><span title="리스트">@ViewBag.ListCnt</span></li>
                     <li class="comment bdR_no"><span id="replyCnt" style="cursor: pointer" title="댓글">@Model.CommentCnt</span></li>
-                </ul>
-
-                <div class="collectArea list">
-                    <p class="arrowTop">
-                        <img src="/content/images/arrowReport.png" alt="" />
-                    </p>
-                    <div class="reportText">
-
-                        <div class="addNewList">
-                            <input id="newListName" placeholder="새로운 리스트 이름을 입력하세요." />
-                            <div class="collectbtns">
-                                <a class="saveListName" title="저장">저장</a>
-                            </div>
-                        </div>
-
-                        <div class="saveToList">
-                            @*<input type="hidden" value="0" id="listNo" />
-                            @if (ViewBag.ListList.Count == 0)
-                            {
-                                <input type="hidden" value="0" id="chkList" />
-                            }
-                            <div class="selPrint">
-                                <p class="valPrint">리스트를 선택해 주세요</p>
-                                <div class="sub">
-                                    <ul class="valuePrint">
-                                        @foreach (Makersn.Models.ListT list in ViewBag.ListList)
-                                        {
-                                            <li class="listName">
-                                                <input type="radio" name="lv1" value="@list.No" /><label onclick="listName(this)">@list.ListName</label>
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                            </div>
-
-
-                            <div class="collectbtns">
-                                <a class="NewList" title="새 리스트">새 리스트</a>
-                                <a class="saveList" title="저장">저장</a>
-                            </div>*@
-                        </div>
-
-                        <a href="#" class="closeNewList">
-                            <img src="/content/images/common/btn/btnReportClose.png" alt="report 닫기" /></a>
-
-                    </div>
-                </div>
+                </ul>*@
 
                 <div class="profileZone">
                     <div class="user">
                         <div class="photo">
-                            <a href="/Profile?no=@No">
-                                <img src="@Url.ProfileImg(Model.MemberProfilePic)" alt="기본프로필" /></a>
+                            <a href="/store?no=@No">
+                                <img src="@Url.ProfileImg(Model.ProfilePic)" alt="기본프로필" /></a>
                         </div>
-                        <p class="userId"><span>by <a href="/Profile?no=@No">@Model.StoreName</a></span></p>
+                        <p class="userId"><span>by <a href="/store?no=@No">@Model.StoreName</a></span></p>
                     </div>
                     <ul class="profileBtn" id="profileArea">
                     </ul>

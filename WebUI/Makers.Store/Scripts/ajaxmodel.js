@@ -191,4 +191,37 @@ Ajax.AjaxAsyncPostGetParialView = function (targetUrl, params, options, placehol
     });
 }
 
+Ajax.AjaxFormPostService = function (srcObj, targetForm, targetAction, onSuccess, onFailure) {
+    var options = {
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (response) {
+            if (typeof (response) != 'undefined') {
+                if ($.isFunction(onSuccess)) {
+                    onSuccess.call(srcObj, response);
+                }
+            }
+        },
+        complete: function (response) {
+        },
+        error: function (error) {
+            var exception = null;
+            if (error != null && typeof (error.responseText) != 'undefined') {
+                try {
+                    exception = $.parseJSON(error.responseText);
+                    if (typeof (exception.ExceptionMessage) != "undefined" && $.trim(exception.ExceptionMessage) != '') {
+                        alert(exception.ExceptionMessage);
+                    }
+                } catch (ex) {
+                }
+            }
+            if ($.isFunction(onFailure)) {
+                onFailure.call(srcObj, exception);
+            }
+        }
+    };
+    $('#' + targetForm).attr("action", targetAction).ajaxForm(options).submit();
+}
+
 

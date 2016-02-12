@@ -55,6 +55,7 @@
     <Compile Include="AppDbContext.cs" />
     <Compile Include="BizDac\CommonCodeDac.cs" />
     <Compile Include="BizDac\MemberDac.cs" />
+    <Compile Include="BizDac\MemberMsgDac.cs" />
     <Compile Include="BizDac\StoreItemDac.cs" />
     <Compile Include="BizDac\StoreItemFileDac.cs" />
     <Compile Include="BizDac\StorePaymentBiz.cs" />

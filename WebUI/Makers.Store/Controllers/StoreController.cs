@@ -14,6 +14,7 @@ namespace Makers.Store.Controllers
 {
     public class StoreController : BaseController
     {
+        StoreMemberBiz storeMembBiz = new StoreMemberBiz();
         /// <summary>
         /// 
         /// </summary>
@@ -23,14 +24,62 @@ namespace Makers.Store.Controllers
             return View();
         }
 
+        #region 스토어 개설
         /// <summary>
         /// 스토어 개설
         /// </summary>
         /// <returns></returns>
+        [StoreRegist]
         public ActionResult Regist()
         {
             return View();
         }
+
+        /// <summary>
+        /// post regist
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult PostRegist(FormCollection collection)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+
+            string paramStoreName = collection["StoreName"];
+            string paramOfficePhone = collection["OfficePhone"];
+            string paramCellPhone = collection["CellPhone"];
+            string paramStoreProfileMsg = collection["StoreProfileMsg"];
+            string paramStoreUrl = collection["StoreUrl"];
+            string paramBankName = collection["bankName"];
+            string paramBankUserName = collection["bankUserName"];
+            string paramBankAccount = collection["bankAccount"];
+            
+            StoreMemberT storeMember = new StoreMemberT();
+
+            storeMember.MemberNo = profileModel.UserNo;
+            storeMember.StoreName = paramStoreName;
+            storeMember.OfficePhone = paramOfficePhone;
+            storeMember.CellPhone = paramCellPhone;
+            storeMember.StoreProfileMsg = paramStoreProfileMsg;
+            storeMember.StoreUrl = paramStoreUrl;
+            storeMember.BankName = paramBankName;
+            storeMember.BankUserName = paramBankUserName;
+            storeMember.BankAccount = paramBankAccount;
+            storeMember.DelYn = "N";
+            storeMember.RegDt = DateTime.Now;
+            storeMember.RegId = profileModel.UserId;
+
+            int ret = storeMembBiz.AddStoreMember(storeMember);
+            if (ret > 0)
+            {
+                response.Success = true;
+                response.Result = ret.ToString();
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        } 
+        #endregion
 
         #region  스토어등록/삭제/업데이트
 
@@ -38,44 +87,12 @@ namespace Makers.Store.Controllers
         public ActionResult StoreMemberRegister()
         {
             ViewBag.userNo = profileModel.UserNo;
-            IList<StoreMemberT> _StoreMemberT = new StoreMemberBiz().getAllMemberList().Where(s => s.DEL_YN.ToLower() == "n").ToList<StoreMemberT>();
+            IList<StoreMemberT> _StoreMemberT = new StoreMemberBiz().GetAllStoreMember().Where(s => s.DelYn.ToLower() == "n").ToList<StoreMemberT>();
             ViewBag.StoreMemberList = _StoreMemberT;
 
             return View();
         }
 
-        /// <summary>
-        /// 스토어 회원입력
-        /// </summary>
-        /// <param name="collection"></param>
-        /// <returns></returns>
-        public JsonResult RegisterStoreMember(FormCollection collection)
-        {
-            AjaxResponseModel response = new AjaxResponseModel();
-
-            StoreMemberBiz _StoreMemberBiz = new StoreMemberBiz();
-            StoreMemberT _StoreMemberT = new StoreMemberT();
-
-            _StoreMemberT.MEMBER_NO = 1;
-            _StoreMemberT.STORE_NAME = collection["StoreName"];
-            _StoreMemberT.OFFICE_PHONE = collection["TelNo"];
-            _StoreMemberT.CELL_PHONE = collection["CellPhone"];
-            _StoreMemberT.STORE_PROFILE_MSG = collection["StoreProfileMsg"];
-            _StoreMemberT.STORE_URL = collection["StoreUrl"];
-            _StoreMemberT.BANK_NAME = collection["bankName"];
-            _StoreMemberT.BANK_USER_NAME = collection["bankUserName"];
-            _StoreMemberT.BANK_ACCOUNT = collection["bankAccount"];
-            _StoreMemberT.DEL_YN = "N";
-            _StoreMemberT.REG_ID = collection["regId"];
-            _StoreMemberT.REG_DT = DateTime.Now;
-
-            _StoreMemberBiz.add(_StoreMemberT);
-
-            response.Success = true;
-
-            response.Result = _StoreMemberT.MEMBER_NO + "";
-            return Json(response, JsonRequestBehavior.AllowGet);
-        }
         /// <summary>
         /// 스토어 회원정보 업데이트
         /// </summary>
@@ -84,29 +101,27 @@ namespace Makers.Store.Controllers
         public JsonResult UpdateStoreMember(FormCollection collection)
         {
             AjaxResponseModel response = new AjaxResponseModel();
-
-            StoreMemberBiz _StoreMemberBiz = new StoreMemberBiz();
-            StoreMemberT _StoreMemberT = _StoreMemberBiz.getStoreMemberById(Convert.ToInt32(collection["no"]));
+            StoreMemberT _StoreMemberT = storeMembBiz.GetStoreMemberByNo(Convert.ToInt32(collection["no"]));
             if (_StoreMemberT != null)
             {
-                _StoreMemberT.MEMBER_NO = 1;
-                _StoreMemberT.STORE_NAME = collection["memberNo"];
-                _StoreMemberT.OFFICE_PHONE = collection["TelNo"];
-                _StoreMemberT.CELL_PHONE = collection["CellPhone"];
-                _StoreMemberT.STORE_PROFILE_MSG = collection["StoreProfileMsg"];
-                _StoreMemberT.STORE_URL = collection["StoreUrl"];
-                _StoreMemberT.BANK_NAME = collection["bankName"];
-                _StoreMemberT.BANK_USER_NAME = collection["bankUserName"];
-                _StoreMemberT.BANK_ACCOUNT = collection["bankAccount"];
+                _StoreMemberT.MemberNo = 1;
+                _StoreMemberT.StoreName = collection["memberNo"];
+                _StoreMemberT.OfficePhone = collection["TelNo"];
+                _StoreMemberT.CellPhone = collection["CellPhone"];
+                _StoreMemberT.StoreProfileMsg = collection["StoreProfileMsg"];
+                _StoreMemberT.StoreUrl = collection["StoreUrl"];
+                _StoreMemberT.BankName = collection["bankName"];
+                _StoreMemberT.BankUserName = collection["bankUserName"];
+                _StoreMemberT.BankAccount = collection["bankAccount"];
                 //_StoreMemberT.DelYn =  collection["delYn"];
-                _StoreMemberT.UPD_ID = profileModel.UserId;
-                _StoreMemberT.UPD_DT = DateTime.Now;
+                _StoreMemberT.UpdId = profileModel.UserId;
+                _StoreMemberT.UpdDt = DateTime.Now;
 
-                _StoreMemberBiz.upd(_StoreMemberT);
+                storeMembBiz.UpdateStoreMember(_StoreMemberT);
             }
             response.Success = true;
 
-            response.Result = _StoreMemberT.NO + "";
+            response.Result = _StoreMemberT.No + "";
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
@@ -118,22 +133,21 @@ namespace Makers.Store.Controllers
         public JsonResult DeleteStoreMember(int memberno)
         {
             AjaxResponseModel response = new AjaxResponseModel();
-            int result = 0;
-            StoreMemberBiz _StoreMemberBiz = new StoreMemberBiz();
+
             StoreMemberT _StoreMemberT =
-            _StoreMemberBiz.getStoreMemberById(memberno);
+            storeMembBiz.GetStoreMemberByNo(memberno);
             if (_StoreMemberT != null)
             {
-                _StoreMemberT.DEL_YN = "Y";
-                result = _StoreMemberBiz.upd(_StoreMemberT);
+                _StoreMemberT.DelYn = "Y";
+                bool ret = storeMembBiz.UpdateStoreMember(_StoreMemberT);
             }
             else
             {
 
             }
             response.Success = true;
-            response.Result = _StoreMemberT.MEMBER_NO + "";
-            return Json(new { Success = true, Result = result });
+            response.Result = _StoreMemberT.MemberNo + "";
+            return Json(new { Success = true});
         }
         #endregion
 

@@ -346,25 +346,25 @@ namespace Design.Web.Admin.Controllers
             ViewData["option"] = "name";
             if (id != "") { ViewData["option"] = "id"; };
             ViewData["text"] = name + id;
-            IList<StoreMemberT> list = new StoreMemberBiz().getAllMemberList();
-            list = list.Where(w => w.STORE_NAME.Contains(name)).ToList();
+            IList<StoreMemberT> list = new StoreMemberBiz().GetAllStoreMember();
+            list = list.Where(w => w.StoreName.Contains(name)).ToList();
             DateTime dateStart;
             DateTime dateEnd;
             try
             {
                 dateStart = Convert.ToDateTime(startDt);
-                list = list.Where(w => w.REG_DT > dateStart).ToList();
+                list = list.Where(w => w.RegDt > dateStart).ToList();
             }
             catch (Exception e) { } 
             try
             {
                 dateEnd = Convert.ToDateTime(endDt);
-                list = list.Where(w => w.REG_DT > dateEnd).ToList();
+                list = list.Where(w => w.RegDt > dateEnd).ToList();
             }
             catch (Exception e) { }
             ViewData["cnt"] = list.Count;
             ViewData["listCnt"] = listCnt;
-            return View(list.OrderByDescending(o => o.NO).ToPagedList(page, listCnt));
+            return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
         }
         #endregion
 

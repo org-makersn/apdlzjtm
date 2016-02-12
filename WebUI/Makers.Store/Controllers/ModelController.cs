@@ -12,7 +12,6 @@ using System.Web.Mvc;
 
 namespace Makers.Store.Controllers
 {
-    [Authorize]
     public class ModelController : BaseController
     {
         /// <summary>

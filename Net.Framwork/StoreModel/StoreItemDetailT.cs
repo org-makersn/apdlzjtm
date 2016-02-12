@@ -22,8 +22,12 @@ namespace Net.Framework.StoreModel
         public string Contents { get; set; }
         [Column("BASE_PRICE")]
         public int BasePrice { get; set; }
-        [Column("DELIVERY_TYPE")]
-        public int DeliveryType { get; set; }
+        [Column("SHIPPING_TYPE")]
+        public int ShippingType { get; set; }
+        [Column("SHIPPING_COST")]
+        public int ShippingCost { get; set; }
+        [Column("STOCK_CNT")]
+        public int StockCnt { get; set; }
         [Column("TAGS")]
         public string Tags { get; set; }
         [Column("VIEW_CNT")]
@@ -47,10 +51,9 @@ namespace Net.Framework.StoreModel
         [Column("REG_ID")]
         public string RegId { get; set; }
 
-        public string DeliveryName { get; set; }
+        public string ShippingName { get; set; }
         //[Column("PROFILE_PIC")]
         public string ProfilePic { get; set; }
-        public string MemberProfilePic { get; set; }
 
         //[Column("STORE_NAME")]
         public string StoreName { get; set; }

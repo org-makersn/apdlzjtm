@@ -602,8 +602,8 @@
     <Content Include="Views\Item\LoadUploadFiles.cshtml" />
     <Content Include="Views\Item\Detail.cshtml" />
     <Content Include="Views\Category\ShowCategory.cshtml" />
-    <Content Include="Views\Store\Regist.cshtml" />
     <Content Include="Views\Store\Index.cshtml" />
+    <Content Include="Views\Store\Regist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

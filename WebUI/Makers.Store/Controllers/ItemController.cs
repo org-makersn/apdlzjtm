@@ -44,7 +44,7 @@ namespace Makers.Store.Controllers
 
                 itemDetail = sItemDac.GetItemDetailByItemNo(articleNo, visitorNo);
 
-                itemDetail.DeliveryName = EnumHelper.GetEnumTitle((StoreDeliveryType)itemDetail.DeliveryType);
+                itemDetail.ShippingName = EnumHelper.GetEnumTitle((StoreShippingType)itemDetail.ShippingType);
 
                 if ((itemDetail.StoreMemberNo != visitorNo && profileModel.UserLevel < 50) && itemDetail.UseYn.ToUpper() == "N")
                 {
@@ -113,7 +113,7 @@ namespace Makers.Store.Controllers
             string paramContents = collection["item_contents"];
             int paramCodeNo = Convert.ToInt32(collection["category_no"]);
             //배송코드
-            int paramDeliveryType = Convert.ToInt32(collection["delivery_no"]);
+            int paramShippingType = Convert.ToInt32(collection["shipping_type"]);
             string paramDelNo = collection["del_no"];
             string ParamVideoSource = collection["insertVideoSource"];
 
@@ -175,7 +175,7 @@ namespace Makers.Store.Controllers
                 storeItem.Contents = paramContents;
                 storeItem.VideoSource = ParamVideoSource;
                 //배송코드
-                storeItem.DeliveryType = paramDeliveryType;
+                storeItem.ShippingType = paramShippingType;
                 storeItem.UseYn = paramMode == "upload" ? "Y" : "N";
 
                 using (var transaction = new TransactionScope())

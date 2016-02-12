@@ -103,6 +103,7 @@
             var action_url = '/Settings/PostMaterials';
 
             var $form_data = $("#insert_form").serialize();
+            console.log($form_data);
             var options = {
                 beforeSend: function () {
 
@@ -129,6 +130,5 @@
         $("#GoLIst").click(function () {
             $(location).attr('href', '/Settings/Materials');
         });
-    </script>
     </script>
 }

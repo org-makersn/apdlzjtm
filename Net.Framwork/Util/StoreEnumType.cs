@@ -102,7 +102,8 @@ namespace Net.Framework.Util
       InProgress,
   }
 
-  public enum StoreDeliveryType
+    
+  public enum StoreShippingType
   {
       [EnumTitle("무료배송")]
       무료배송 = 1,
