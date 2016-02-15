@@ -1,5 +1,6 @@
 ﻿using Net.Framework.Helper;
 using Net.Framework.StoreModel;
+using Net.SqlTools;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,14 +32,15 @@ namespace Net.Framework.BizDac
         /// <returns></returns>
         public StoreItemDetailT GetItemDetailByItemNo(long itemNo, int visitorNo)
         {
+            dbHelper = new SqlDbHelper(connectionString);
+
             string query = DacHelper.GetSqlCommand("StoreItemDac.SelectStoreItemDetails");
             using (var cmd = new SqlCommand(query))
             {
                 cmd.Parameters.Add("@STORE_ITEM_NO", SqlDbType.BigInt).Value = itemNo;
                 cmd.Parameters.Add("@VISITOR_NO", SqlDbType.Int).Value = visitorNo;
 
-                var state = dbHelper.ExecuteSingle<StoreItemDetailT>(cmd);
-                return state;
+                return dbHelper.ExecuteSingle<StoreItemDetailT>(cmd);
             }
         }
 
@@ -50,6 +52,8 @@ namespace Net.Framework.BizDac
         /// <returns></returns>
         public int GetTotalCountByOption(int memberNo, int codeNo, string gbn)
         {
+            dbHelper = new SqlDbHelper(connectionString);
+
             string targetCntQuery = string.Empty;
             string whereQuery = string.Empty;
             string addQuery = string.Empty;
@@ -76,8 +80,7 @@ namespace Net.Framework.BizDac
                 {
                     cmd.Parameters.Add("@CODE_NO", SqlDbType.Int).Value = codeNo;
                 }
-                var state = dbHelper.ExecuteSingle<int>(cmd);
-                return 2;
+                return dbHelper.ExecuteScalar<int>(cmd);
             }
         }
 

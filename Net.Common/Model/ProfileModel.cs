@@ -13,5 +13,6 @@ namespace Net.Common.Model
         public virtual string UserId { get; set; }
         public virtual string UserProfilePic { get; set; }
         public virtual int UserLevel { get; set; }
+        //public virtual bool IsStoreMember { get; set; }
     }
 }

@@ -9,13 +9,14 @@ namespace Net.Framwork.BizDac
 {
     public class StoreMemberBiz
     {
+        StoreMemberDac sMemberDac = new StoreMemberDac();
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public List<StoreMemberT> GetAllStoreMember()
         {
-            return new StoreMemberDac().SelectAllStoreMember();
+            return sMemberDac.SelectAllStoreMember();
         }
 
         /// <summary>
@@ -25,7 +26,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public StoreMemberT GetStoreMemberByNo(int no)
         {
-            return new StoreMemberDac().SelectStoreMemberByNo(no);
+            return sMemberDac.SelectStoreMemberByNo(no);
         }
 
         /// <summary>
@@ -35,7 +36,17 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public StoreMemberT GetStoreMemberByMemberNO(int memberNo)
         {
-            return new StoreMemberDac().SelectStoreMemberByMemberNo(memberNo);
+            return sMemberDac.SelectStoreMemberByMemberNo(memberNo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
+        public bool GetStoreMemberExists(int memberNo)
+        {
+            return sMemberDac.SelectStoreMemberExists(memberNo);
         }
 
         /// <summary>
@@ -45,7 +56,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public int AddStoreMember(StoreMemberT StoreMember)
         {
-            return new StoreMemberDac().InsertStoreMember(StoreMember);
+            return sMemberDac.InsertStoreMember(StoreMember);
         }
 
         /// <summary>
@@ -55,7 +66,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public bool UpdateStoreMember(StoreMemberT StoreMember)
         {
-            return new StoreMemberDac().UpdateStoreMember(StoreMember);
+            return sMemberDac.UpdateStoreMember(StoreMember);
         }
 
         /// <summary>
@@ -65,7 +76,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public List<MemberMsgT> getReceivedNoteListByMemberNo(int memberNo)
         {
-            return new StoreMemberDac().SelectReceivedNoteListByMemberNo(memberNo);
+            return sMemberDac.SelectReceivedNoteListByMemberNo(memberNo);
         }
 
         /// <summary>
@@ -75,7 +86,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public List<MemberMsgT> getSentNoteListByMemberNo(int memberNo)
         {
-            return new StoreMemberDac().SelectSentNoteListByMemberNo(memberNo);
+            return sMemberDac.SelectSentNoteListByMemberNo(memberNo);
         }
 
         /// <summary>
@@ -85,7 +96,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public int sendNote(MemberMsgT msg)
         {
-            return new StoreMemberDac().CreateNote(msg);
+            return sMemberDac.CreateNote(msg);
         }
 
         /// <summary>
@@ -95,7 +106,7 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public int deleteNote(int SeqNo)
         {
-            return new StoreMemberDac().DeleteNote(SeqNo);
+            return sMemberDac.DeleteNote(SeqNo);
         }
     }
 }

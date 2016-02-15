@@ -1,5 +1,6 @@
 ﻿@{
-    ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
+    ProfileModel profile = ViewBag.LogOnMemner as ProfileModel;
+    string menuCode = ViewBag.CodeNo as string;
 }
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -27,6 +28,9 @@
             text-align: center;
         }
     </style>
+    <script type="text/javascript">
+        var common_val = {};
+    </script>
 </head>
 <body>
     <!-- Wrap -->
@@ -63,9 +67,9 @@
                         </div>
                         <!-- //SearchArea -->
 
-                        @if (ViewBag.SpotChk != null)
+                        @if (ViewBag.HasStore)
                         {
-                            <a href="/order/mnghome" class="printingSpot_btn" title="스팟관리"></a>
+                            <a href="/store" class="printingSpot_btn" title="스토어관리"></a>
                         }
 
                         <!-- MemberArea -->
@@ -125,7 +129,7 @@
                                 <li id="@menu.MenuCodeNo"><a href="@menu.MenuUrl">@menu.MenuTitle</a></li>
                                 }
                             }*@
-                            @Html.Action("showcategory", "category", new { gbn = "", category = "" })
+                            @Html.Action("showcategory", "category", new { gbn = "", strCode = menuCode })
                         </ul>
 
                         <div class="uploadArea">
@@ -134,6 +138,7 @@
                                 @RenderSection("editBtnzone", required: false)
                                 <li>
                                     <a href="javascript:void(0);" title="상품등록" id="StoreItemUpload" class="upload">상품등록</a>
+                                    <a href="javascript:void(0);" title="장바구니" id="StoreCart" class="upload">장바구니(<span id="cart-cnt">0</span>)</a>
                                 </li>
                             </ul>
 

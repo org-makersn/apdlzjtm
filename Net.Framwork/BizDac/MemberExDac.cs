@@ -4,7 +4,7 @@ using System;
 
 namespace Net.Framwork.BizDac
 {
-    public class MemberDac_bak
+    public class MemberExDac
     {
         private ISimpleRepository<MemberExT> _repository = new SimpleRepository<MemberExT>();
 
@@ -17,12 +17,12 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public MemberExT GetMemberForLogOn(string membId, string password, string ip)
         {
-            MemberExT member = _repository.First(m => (m.ID == membId && m.PASSWORD == password) && m.LEVEL >= 50 && m.DEL_FLAG == "N");
+            MemberExT member = _repository.First(m => (m.Id == membId && m.Password == password) && m.Level >= 50 && m.DelFlag == "N");
             if (member != null)
             {
-                member.LOGIN_CNT += 1;
-                member.LAST_LOGIN_IP = ip;
-                member.LAST_LOGIN_DT = DateTime.Now;
+                member.LoginCnt += 1;
+                member.LastLoginIp = ip;
+                member.LastLoginDt = DateTime.Now;
 
                 _repository.Update(member);
             }
@@ -37,7 +37,17 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public MemberExT GetMemberExistById(string memberId, string openId)
         {
-            return _repository.First(m => m.ID == memberId && m.SNS_ID == openId && m.SNS_TYPE == "fb" && m.DEL_FLAG == "N");
+            return _repository.First(m => m.Id == memberId && m.SnsId == openId && m.SnsType == "fb" && m.DelFlag == "N");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public MemberExT GetMemberByNo(int no)
+        {
+            return _repository.First(m => m.No == no);
         }
 
         /// <summary>
@@ -58,12 +68,12 @@ namespace Net.Framwork.BizDac
         public bool UpdateMemberEmailCertify(int memberNo)
         {
             bool result = false;
-            MemberExT member = _repository.First(m => m.NO == memberNo);
+            MemberExT member = _repository.First(m => m.No == memberNo);
             if (member != null)
             {
-                member.EMAIL_CERTIFY = "Y";
-                member.UPD_DT = DateTime.Now;
-                member.UPD_ID = member.EMAIL;
+                member.EmailCertify = "Y";
+                member.UpdDt = DateTime.Now;
+                member.UpdId = member.Email;
 
                 result = _repository.Update(member);
             }
@@ -79,14 +89,14 @@ namespace Net.Framwork.BizDac
         {
             bool result = false;
 
-            MemberExT member = _repository.First(m => m.NO == memberNo);
+            MemberExT member = _repository.First(m => m.No == memberNo);
 
             if (member != null)
             {
-                member.EMAIL_CERTIFY = "Y";
-                member.ID = member.EMAIL;
-                member.UPD_DT = DateTime.Now;
-                member.UPD_ID = member.EMAIL;
+                member.EmailCertify = "Y";
+                member.Id = member.Email;
+                member.UpdDt = DateTime.Now;
+                member.UpdId = member.Email;
 
                 result = _repository.Update(member);
             }
@@ -102,13 +112,13 @@ namespace Net.Framwork.BizDac
         {
             bool result = false;
 
-            MemberExT member = _repository.First(m => m.NO == memberNo);
+            MemberExT member = _repository.First(m => m.No == memberNo);
             if (member != null)
             {
-                member.EMAIL_CERTIFY = "Y";
-                member.EMAIL = member.ID;
-                member.UPD_DT = DateTime.Now;
-                member.UPD_ID = member.EMAIL;
+                member.EmailCertify = "Y";
+                member.Email = member.Id;
+                member.UpdDt = DateTime.Now;
+                member.UpdId = member.Email;
 
                 result = _repository.Update(member);
             }
@@ -124,12 +134,12 @@ namespace Net.Framwork.BizDac
         public bool UpdateTemporaryPassword(string id, string temp)
         {
             bool result = false;
-            MemberExT member = _repository.First(m => m.ID == id && m.EMAIL_CERTIFY == "Y" && m.DEL_FLAG == "N");
+            MemberExT member = _repository.First(m => m.Id == id && m.EmailCertify == "Y" && m.DelFlag == "N");
             if (member != null)
             {
-                member.PASSWORD = temp;
-                member.UPD_DT = DateTime.Now;
-                member.UPD_ID = "system";
+                member.Password = temp;
+                member.UpdDt = DateTime.Now;
+                member.UpdId = "system";
 
                 result = _repository.Update(member);
             }

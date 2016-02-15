@@ -1,15 +1,18 @@
 ﻿using Net.Framework;
 using Net.Framework.Helper;
 using Net.Framework.StoreModel;
+using Net.SqlTools;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Net.Framwork.BizDac
 {
-    public class StoreMemberDac
+    public class StoreMemberDac : DacBase
     {
         private StoreContext dbContext { get; set; }
 
@@ -44,6 +47,24 @@ namespace Net.Framwork.BizDac
         internal StoreMemberT SelectStoreMemberByMemberNo(int memberNo)
         {
             return _sMembRepo.First(m => m.MemberNo == memberNo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
+        internal bool SelectStoreMemberExists(int memberNo)
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string query = "SELECT count(1) FROM STORE_MEMBER with(nolock) where MEMBER_NO = @MEMBER_NO";
+
+            using (var cmd = new SqlCommand(query))
+            {
+                cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
+                int cnt = dbHelper.ExecuteScalar<int>(cmd);
+                return cnt > 0;
+            }
         }
 
         /// <summary>

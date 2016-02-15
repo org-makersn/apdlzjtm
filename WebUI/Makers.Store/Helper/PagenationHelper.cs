@@ -86,13 +86,19 @@ namespace Makers.Store.Helper
                 output.Append(" ");
                 if (currentPage != totalPages)
                 {
-                    //output.AppendFormat("<a href='{0}page={1}{2}' class='last_page'>마지막 페이지</a>", redirectTo, totalPages, segment);
                     int tenNext = currentPage + 10 > totalPages ? totalPages : currentPage + 10;
                     output.AppendFormat("<a href='{0}page={1}{2}' class='last_page'>마지막 페이지</a>", redirectTo, tenNext, segment);
                 }
                 output.Append(" ");
             }
-            //output.AppendFormat("<label>第{0}页 / 共{1}页</label>", currentPage, totalPages);
+            else
+            {
+                //output.AppendFormat("<a class='first_page'>처음 페이지</a>");
+                //output.AppendFormat("<a rel='prev' class='prev_page'>이전 페이지</a>");
+                //output.AppendFormat("<a class='paging_no on'>{0}</a>", currentPage);
+                //output.AppendFormat("<a rel='next' class='next_page'>다음 페이지</a>");
+                //output.AppendFormat("<a class='last_page'>마지막 페이지</a>");
+            }
 
             output.Append("</div>");
             return new HtmlString(output.ToString());

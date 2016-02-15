@@ -71,7 +71,7 @@ namespace Makers.Store.Controllers
             ViewBag.VisitorNo = visitorNo;
 
             ViewBag.No = no;
-            ViewBag.CodeNo = itemDetail.CodeNo;
+            ViewBag.CodeNo = itemDetail.CodeNo.ToString();
 
             ViewBag.Class = "bdB mgB15";
             ViewBag.WrapClass = "bgW";
@@ -83,7 +83,7 @@ namespace Makers.Store.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        [StoreAuthorize]
         public ActionResult Upload()
         {
             ViewBag.Temp = new DateTimeHelper().ConvertToUnixTime(DateTime.Now);

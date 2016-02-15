@@ -19,7 +19,7 @@
 @section head{
     <meta name="author" content="@Model.StoreName" />
     <meta property="og:title" content="@Model.Title" />
-    <meta property="og:type" content="article" />
+    <meta property="og:type" content="item" />
     <meta property="og:url" content="@pageUrl" />
     <meta property="og:image" content="@Url.StoreImgFile(mainImg)" />
     @*<meta property="og:image" content="http://www.makersn.com/FIleUpload/Article/Article_img/thumb/9617498b-af97-4a9c-a382-24cb50c8169a.jpg" />*@
@@ -166,10 +166,10 @@
                 <div class="profileZone">
                     <div class="user">
                         <div class="photo">
-                            <a href="/store?no=@No">
+                            <a href="/store?q=@No">
                                 <img src="@Url.ProfileImg(Model.ProfilePic)" alt="기본프로필" /></a>
                         </div>
-                        <p class="userId"><span>by <a href="/store?no=@No">@Model.StoreName</a></span></p>
+                        <p class="userId"><span>by <a href="/store?q=@No">@Model.StoreName</a></span></p>
                     </div>
                     <ul class="profileBtn" id="profileArea">
                     </ul>
@@ -247,13 +247,13 @@
 
             });
 
-            var baseprice = '@Model.BasePrice';
+            @*var baseprice = '@Model.BasePrice';
             $('#ItemCnt').change(function () {
                 var total = parseInt(baseprice) * parseInt($('#ItemCnt').val());
 
                 $('#txt_base_price').text(total);
                 $('#BasePrice').val(total);
-            });
+            });*@
 
             // 브라우저체크하여 안내
 
@@ -281,6 +281,45 @@
                 firefox: Browser.chk.indexOf('firefox') != -1
             }
         });
+
+        //트위터 공유
+        function pstTwitter() {
+            var url = $("meta[property='og:url']").attr('content');
+            var msg = $("meta[property='og:title']").attr('content');
+
+            var href = "http://twitter.com/home?status=" + encodeURIComponent(msg) + " " + encodeURIComponent(url);
+            var a = window.open(href, 'twitter', 'width=800, height=500');
+            if (a) {
+                a.focus();
+            }
+        }
+
+        //페이스북 공유
+        function pstFaceBook() {
+            var url = $("meta[property='og:url']").attr('content');
+            var msg = $("meta[property='og:title']").attr('content');
+            var img = $("meta[property='og:image']").attr('content');
+            var href = "http://www.facebook.com/sharer.php?u=" + encodeURIComponent(url) + "&t=" + encodeURIComponent(msg);
+
+            var a = window.open(href, 'facebook', 'width=800, height=500');
+            if (a) {
+                a.focus();
+            }
+        }
+
+        //핀터레스트 공유
+        function pstPinterest() {
+            var url = $("meta[property='og:url']").attr('content');
+            var media = $("meta[property='og:image']").attr('content');
+            var description = $("meta[property='og:title']").attr('content');
+
+            var href = "http://pinterest.com/pin/create/button/?url=" + encodeURIComponent(url) + "&media=" + encodeURIComponent(media) + "&description=" + encodeURIComponent(description);
+
+            var a = window.open(href, 'pinterest', 'width=800, height=500');
+            if (a) {
+                a.focus();
+            }
+        }
     </script>
 }
 

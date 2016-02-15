@@ -584,7 +584,6 @@
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Store\FollewingList.cshtml" />
     <Content Include="Views\Store\PaymentRequest.cshtml" />
-    <Content Include="Views\Store\StoreMemberRegister.cshtml" />
     <Content Include="Views\Cart\List.cshtml" />
     <Content Include="Views\Order\List.cshtml" />
     <Content Include="Views\Cart\plugin_check.cshtml" />

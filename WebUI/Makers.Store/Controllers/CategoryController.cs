@@ -46,6 +46,7 @@ namespace Makers.Store.Controllers
                         {
                             ViewBag.Title = categoryT.CODE_NAME;
                             codeNo = categoryT.NO;
+                            ViewBag.CodeNo = codeNo.ToString();
                         }
                     }
                 }
@@ -83,7 +84,7 @@ namespace Makers.Store.Controllers
         /// <param name="gbn"></param>
         /// <param name="category"></param>
         /// <returns></returns>
-        public PartialViewResult ShowCategory(string gbn = "all", string category = "")
+        public PartialViewResult ShowCategory(string gbn = "all", string strCode = "")
         {
             IList<CommonCodeT> list = null;
             list = CacheUtil.GetCache("MenuList") as IList<CommonCodeT>;
@@ -119,6 +120,7 @@ namespace Makers.Store.Controllers
                 }
                 menulist.Add(model);
             }
+            ViewBag.CodeNo = strCode;
 
             return PartialView(menulist);
         }

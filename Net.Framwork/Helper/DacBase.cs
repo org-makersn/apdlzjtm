@@ -11,11 +11,12 @@ namespace Net.Framework.Helper
     public class DacBase
     {
         public IDbHelper dbHelper;
+        public static string connectionString = string.Empty;
 
         public DacBase()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["StoreContext"].ConnectionString;
-            this.dbHelper = new SqlDbHelper(connectionString);
+            connectionString = ConfigurationManager.ConnectionStrings["StoreContext"].ConnectionString;
+            //this.dbHelper = new SqlDbHelper(connectionString);
         }
     }
 }

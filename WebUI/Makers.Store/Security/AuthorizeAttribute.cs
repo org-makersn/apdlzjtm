@@ -9,6 +9,9 @@ using System.Web.Mvc;
 
 namespace Makers.Store
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : System.Web.Mvc.AuthorizeAttribute
     {
@@ -37,6 +40,9 @@ namespace Makers.Store
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class StoreRegist : AuthorizeAttribute
     {
@@ -46,15 +52,44 @@ namespace Makers.Store
 
             var user = System.Web.HttpContext.Current.User;
             ProfileModel profileModel = JsonConvert.DeserializeObject<ProfileModel>(user.Identity.Name);
-
-            StoreMemberT storeMember = new StoreMemberBiz().GetStoreMemberByMemberNO(profileModel.UserNo);
-
-            if (storeMember != null)
+            if (profileModel != null)
             {
-                string sHtml = string.Format("<script type='text/javascript'>alert('스토어 회원 입니다.'); location.href = '{0}';</script>", "/store");
+                StoreMemberT storeMember = new StoreMemberBiz().GetStoreMemberByMemberNO(profileModel.UserNo);
 
-                filterContext.Result = new ContentResult { Content = sHtml, ContentType = "text/html", ContentEncoding = System.Text.Encoding.UTF8 };
+                if (storeMember != null)
+                {
+                    string sHtml = string.Format("<script type='text/javascript'>alert('스토어 회원 입니다.'); location.href = '{0}';</script>", "/store");
+
+                    filterContext.Result = new ContentResult { Content = sHtml, ContentType = "text/html", ContentEncoding = System.Text.Encoding.UTF8 };
+                }
             }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class StoreAuthorize : AuthorizeAttribute
+    {
+        public override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            base.OnAuthorization(filterContext);
+            
+            
+                var user = System.Web.HttpContext.Current.User;
+                ProfileModel profileModel = JsonConvert.DeserializeObject<ProfileModel>(user.Identity.Name);
+                if (profileModel != null)
+                {
+                    StoreMemberT storeMember = new StoreMemberBiz().GetStoreMemberByMemberNO(profileModel.UserNo);
+
+                    if (storeMember == null)
+                    {
+                        string sHtml = string.Format("<script type='text/javascript'>alert('스토어 회원만 가능한 서비스 입니다.'); location.href = '{0}';</script>", "/store/regist");
+
+                        filterContext.Result = new ContentResult { Content = sHtml, ContentType = "text/html", ContentEncoding = System.Text.Encoding.UTF8 };
+                    }
+                }
         }
     }
 }

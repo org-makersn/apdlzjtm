@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="AppDbContext.cs" />
     <Compile Include="BizDac\CommonCodeDac.cs" />
-    <Compile Include="BizDac\MemberDac.cs" />
+    <Compile Include="BizDac\MemberExDac.cs" />
     <Compile Include="BizDac\MemberMsgDac.cs" />
     <Compile Include="BizDac\StoreItemDac.cs" />
     <Compile Include="BizDac\StoreItemFileDac.cs" />
@@ -107,6 +107,7 @@
     <Compile Include="StoreModel\MemberT.cs" />
     <Compile Include="StoreModel\StoreCartT.cs" />
     <Compile Include="StoreModel\StoreCategoryT.cs" />
+    <Compile Include="StoreModel\StoreMemberExT.cs" />
     <Compile Include="StoreModel\StoreOrderT.cs" />
     <Compile Include="StoreModel\StorePayment.cs" />
     <Compile Include="StoreModel\StorePrinterMaterialT.cs" />

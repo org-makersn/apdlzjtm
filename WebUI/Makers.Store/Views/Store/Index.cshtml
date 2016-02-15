@@ -1,6 +1,88 @@
-﻿@{
+﻿@model Net.Framework.StoreModel.StoreMemberT
+
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ProfileModel profile = ViewBag.LogOnMemner as ProfileModel;
+    
+    bool changeAble = ViewBag.VisitorNo == Model.No || profile.UserLevel > 50;
+    string profilePic = "";
 }
 
-<h2>스토어 페이지</h2>
+
+<div class="profInfo">
+    <div class="infoWrap">
+
+        @*<a name="uploaded"></a>*@
+        <div class="profileBox">
+            <div id="_memb_pic" class="profileImg">
+                <img alt="기본프로필" id="defPhoto" class="defPhoto" src="@profilePic">
+                @if (profile.UserNo != 0 && changeAble)
+                {
+                    <form id="profile_form" name="insert_form" method="post" enctype="multipart/form-data">
+                        <div class="btnProfileGo">
+                            <a class="editProfile">
+                                <img alt="프로필편집" src="/content/images/common/profile_photo_over.png"></a>
+                            <div class="photoUpZone">
+                                @if (profile.UserNo != 0 && profile.UserNo == Model.No)
+                                {
+                                    <div class="photoUp">
+                                        <button class="file_input_button" title="사진 업로드"></button>
+                                        <input type="file" id="memb_pic" name="memb_pic" class="file_input_hidden" title="사진 업로드">
+                                    </div>
+                                    <input type="button" id="memb_pic_del" class="btnPhotoDel" title="사진 삭제" onclick="DeleteProfileImg()">
+                                }
+                                else
+                                {
+                                    <div class="photoUp">
+                                    </div>
+                                    <input type="button" id="memb_pic_del" class="btnPhotoDel" title="사진 삭제" onclick="DeleteProfileImg()">
+                                }
+
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.form.min.js")"></script>
+                    <script type="text/javascript">
+                        $(function () {
+                            $("#memb_pic").on("change", function (e) {
+                                e.preventDefault();
+
+                                @*var options = {
+                                    beforeSend: function () {
+                                    },
+                                    uploadProgress: function (event, position, total, percentComplete) {
+
+                                    },
+                                    success: function (response) {
+                                        d = new Date();
+                                        $("#_memb_pic > img").attr("src", "@ViewBag.ProfileImgUrl" + response.Result + "?" + d.getTime());
+                                        if ("@ViewBag.CheckSelf" == 1) {
+                                            $("#topProfileImg").attr("src", "@ViewBag.ProfileImgUrl" + response.Result + "?" + d.getTime());
+                                        }
+                                    },
+                                    complete: function (response) {
+                                    },
+                                    error: function () {
+                                    }
+                                };
+
+                                $('#profile_form').attr("action", "/Profile/ProfileImgUpload").ajaxForm(options).submit();
+
+                                $(this).val('');*@
+                            });
+                        });
+                    </script>
+                }
+            </div>
+        </div>
+
+        <p class="tit1">@Model.StoreName</p>
+
+        <p class="txt1" id="profileMsgZone">
+            @Html.Raw(Model.StoreProfileMsg)
+        </p>
+    </div>
+</div>

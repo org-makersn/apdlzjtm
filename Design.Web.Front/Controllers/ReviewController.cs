@@ -22,7 +22,7 @@ namespace Design.Web.Front.Controllers
             Net.Framwork.BizDac.StoreReviewBiz _reviewBiz = new Net.Framwork.BizDac.StoreReviewBiz();
             List<Net.Framework.StoreModel.StoreReviewT> _review = new List<Net.Framework.StoreModel.StoreReviewT>();
 
-            _review = _reviewBiz.SelectAllStoreReview().Where(m => m.VISIBILITY_YN.ToString() == "Y" && m.DEPTH == 0).ToList<Net.Framework.StoreModel.StoreReviewT>();
+            _review = _reviewBiz.SelectAllStoreReview().Where(m => m.UseYn.ToString() == "Y" && m.Depth == 0).ToList<Net.Framework.StoreModel.StoreReviewT>();
            
             return PartialView(_review);
         }
@@ -40,15 +40,15 @@ namespace Design.Web.Front.Controllers
                 //첫글
                 try
                 {
-                    _review.PRODUCT_NO = 1234;
-                    _review.COMMENT = comment;
-                    _review.SCORE = 100;
-                    _review.IMAGE_NAME = "test";
-                    _review.VISIBILITY_YN = "Y";
-                    _review.MEMBER_NO = 1234;
-                    _review.REG_IP = IPAddressHelper.GetIP(this);
-                    _review.REG_DT = DateTime.Now;
-                    _review.REG_ID = profileModel.UserId;
+                    _review.StoreItemNo = 1234;
+                    _review.Comment = comment;
+                    _review.Score = 100;
+                    _review.ImageName = "test";
+                    _review.UseYn = "Y";
+                    _review.MemberNo = 1234;
+                    _review.RegIp = IPAddressHelper.GetIP(this);
+                    _review.RegDt = DateTime.Now;
+                    _review.RegId = profileModel.UserId;
 
                     _reviewBiz.add(_review);
 
@@ -66,17 +66,17 @@ namespace Design.Web.Front.Controllers
                 //댓글
                 try
                 {
-                    _review.PRODUCT_NO = 1234;
-                    _review.COMMENT = comment;
-                    _review.SCORE = 100;
-                    _review.IMAGE_NAME = "test";
-                    _review.VISIBILITY_YN = "Y";
-                    _review.MEMBER_NO = 1234;
-                    _review.REG_IP = IPAddressHelper.GetIP(this);
-                    _review.REG_DT = DateTime.Now;
-                    _review.REG_ID = profileModel.UserId;
-                    _review.DEPTH = depth;
-                    _review.PARENT_NO = no;
+                    _review.StoreItemNo = 1234;
+                    _review.Comment = comment;
+                    _review.Score = 100;
+                    _review.ImageName = "test";
+                    _review.UseYn = "Y";
+                    _review.MemberNo = 1234;
+                    _review.RegIp = IPAddressHelper.GetIP(this);
+                    _review.RegDt = DateTime.Now;
+                    _review.RegId = profileModel.UserId;
+                    _review.Depth = depth;
+                    _review.ParentNo = no;
 
                     _reviewBiz.add(_review);
 
@@ -103,7 +103,7 @@ namespace Design.Web.Front.Controllers
             _review = _reviewBiz.getStoreReviewById(no);
             if (_review != null)
             {
-                _review.COMMENT = comment;
+                _review.Comment = comment;
                 _reviewBiz.upd(_review);
 
                 result = true;
@@ -129,7 +129,7 @@ namespace Design.Web.Front.Controllers
             _review = _reviewBiz.getStoreReviewById(no);
             if (_review != null)
             {
-                _review.VISIBILITY_YN = "N";
+                _review.UseYn = "N";
                 _reviewBiz.upd(_review);
 
                 result = true;
