@@ -194,7 +194,82 @@ namespace Net.Framwork.BizDac
         /// <returns></returns>
         public string GetTradeId(string oid)
         {          
-            return new StoreOrderDac().GetTradeId(oid);
+            return new StoreOrderDac().GetTradeIdByOid(oid);
+        }
+        #endregion
+
+        #region UpdateOrderStatus - 주문상태 업데이트
+        /// <summary>
+        /// 주문상태 업데이트
+        /// </summary>
+        /// <param name="oId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateOrderStatus(string oId, string status)
+        {
+            return new StoreOrderDac().updateOrderStatus(oId, status);
+        }
+        #endregion
+
+        #region UpdatePaymentStatus - 결제상태 업데이트
+        /// <summary>
+        /// 결제상태 업데이트
+        /// </summary>
+        /// <param name="oId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdatePaymentStatus(string oId, string status)
+        {
+            return new StoreOrderDac().updatePaymentStatus(oId, status);
+        }
+        #endregion
+
+        #region UpdatePrintingStatus - 출력상태 업데이트
+        /// <summary>
+        /// 출력상태 업데이트
+        /// </summary>
+        /// <param name="orderDetailNo"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdatePrintingStatus(Int64 orderDetailNo, string status)
+        {
+            return new StoreOrderDac().updatePrintingStatus(orderDetailNo, status);
+        }
+        #endregion
+
+        #region UpdateShippingStatus - 배송상태 업데이트
+        /// <summary>
+        /// 배송상태 업데이트
+        /// </summary>
+        /// <param name="oId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateShippingStatus(string oId, string status)
+        {
+            return new StoreOrderDac().updateShippingStatus(oId, status);
+        }
+        #endregion
+
+        #region InsertOrderCancelInfo - 주문취소 저장
+        /// <summary>
+        /// 주문취소 저장
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public Int64 InsertOrderCancelInfo(StorePaymentCancelT data)
+        {
+            return new StoreOrderDac().InsertOrderCancelInfo(data);
+        }
+        #endregion
+
+        #region GetOrderListForPaymentWaiting - 결제대기건 조회
+        /// <summary>
+        /// 결제대기건 조회
+        /// </summary>
+        /// <returns></returns>
+        public List<StoreOrderT> GetOrderListForPaymentWaiting()
+        {
+            return new StoreOrderDac().GetOrderListForPaymentWaiting();
         }
         #endregion
     }

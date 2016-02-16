@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Net.SqlTools;
+using Net.Framework.Util;
 
 namespace Net.Framwork.BizDac
 {
@@ -184,7 +185,7 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="oId"></param>
         /// <returns></returns>
-        internal string GetTradeId(string oId)
+        internal string GetTradeIdByOid(string oId)
         {
             StorePaymentHistoryT data = new StorePaymentHistoryT();
             using (dbContext = new StoreContext())
@@ -215,6 +216,45 @@ namespace Net.Framwork.BizDac
                 {
                     try
                     {
+                        data.OrderStatus = status;
+                        dbContext.StoreOrderT.Attach(data);
+                        dbContext.Entry<StoreOrderT>(data).State = System.Data.Entity.EntityState.Modified;
+                        dbContext.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                else
+                {
+                    ret = -2;
+                    throw new NullReferenceException("The expected original Segment data is not here.");
+                }
+
+            }
+            return ret;
+        }
+        #endregion
+
+        #region updatePaymentStatus - 결제상태 업데이트
+        /// <summary>
+        /// 결제상태 업데이트
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <returns></returns>
+        internal int updatePaymentStatus(string oId, string status)
+        {
+            if (oId == null) throw new ArgumentNullException("The expected Segment data is not here.");
+
+            int ret = 0;
+            using (dbContext = new StoreContext())
+            {
+                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.Oid == oId).FirstOrDefault();
+
+                if (data != null)
+                {
+                    try
+                    {
                         data.PaymentStatus = status;
                         dbContext.StoreOrderT.Attach(data);
                         dbContext.Entry<StoreOrderT>(data).State = System.Data.Entity.EntityState.Modified;
@@ -232,6 +272,125 @@ namespace Net.Framwork.BizDac
 
             }
             return ret;
+        }
+        #endregion
+
+        #region updatePrintingStatus - 출력상태 업데이트
+        /// <summary>
+        /// 출력상태 업데이트
+        /// </summary>
+        /// <param name="orderDetailNo"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        internal int updatePrintingStatus(Int64 orderDetailNo, string status)
+        {
+            if (orderDetailNo == null) throw new ArgumentNullException("The expected Segment data is not here.");
+
+            int ret = 0;
+            using (dbContext = new StoreContext())
+            {
+                StoreOrderDetailT data = dbContext.StoreOrderDetailT.Where(p => p.No == orderDetailNo).FirstOrDefault();
+
+                if (data != null)
+                {
+                    try
+                    {
+                        data.PringtingStatus = status;
+                        dbContext.StoreOrderDetailT.Attach(data);
+                        dbContext.Entry<StoreOrderDetailT>(data).State = System.Data.Entity.EntityState.Modified;
+                        dbContext.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                else
+                {
+                    ret = -2;
+                    throw new NullReferenceException("The expected original Segment data is not here.");
+                }
+
+            }
+            return ret;
+        }
+        #endregion
+
+        #region updateShippingStatus - 배송상태 업데이트
+        /// <summary>
+        /// 배송상태 업데이트
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <returns></returns>
+        internal int updateShippingStatus(string oId, string status)
+        {
+            if (oId == null) throw new ArgumentNullException("The expected Segment data is not here.");
+
+            int ret = 0;
+            using (dbContext = new StoreContext())
+            {
+                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.Oid == oId).FirstOrDefault();
+
+                if (data != null)
+                {
+                    try
+                    {
+                        data.ShippingStatus = status;
+                        dbContext.StoreOrderT.Attach(data);
+                        dbContext.Entry<StoreOrderT>(data).State = System.Data.Entity.EntityState.Modified;
+                        dbContext.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                else
+                {
+                    ret = -2;
+                    throw new NullReferenceException("The expected original Segment data is not here.");
+                }
+
+            }
+            return ret;
+        }
+        #endregion
+
+        #region InsertOrderCancelInfo - 주문취소 저장
+        /// <summary>
+        /// 주문취소 저장
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        internal Int64 InsertOrderCancelInfo(StorePaymentCancelT data)
+        {
+            if (data == null) throw new ArgumentNullException("The expected Segment data is not here.");
+            using (dbContext = new StoreContext())
+            {
+                dbContext.StorePaymentCancelT.Add(data);
+                dbContext.SaveChanges();
+                dbContext.Entry(data).GetDatabaseValues();
+            }
+
+            return data.No;
+        }
+        #endregion
+
+        #region GetOrderListForPaymentWaiting - 결제대기건 조회
+        /// <summary>
+        /// 결제대기건 조회
+        /// </summary>
+        /// <returns></returns>
+        internal List<StoreOrderT> GetOrderListForPaymentWaiting()
+        {
+            List<StoreOrderT> data = new List<StoreOrderT>();
+
+            using (dbContext = new StoreContext())
+            {
+                data = dbContext.StoreOrderT.Where(p => p.OrderStatus.Equals("00") && 
+                                                        p.PaymentStatus.Equals("02")
+                                                   ).ToList();
+            }
+
+            return data;
         }
         #endregion
     }

@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "가상계좌 입금확인 테스트";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+@section Scripts{
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#form1").on("click", function () {
+            GoVacctTest();
+        })
+    })
+
+    function GoVacctTest() {
+        var url = "GetVirtualBankPaymentCheckData";
+        var f = document.forms.form1;
+
+        f.action = url;
+        f.submit();
+    }
+
+</script>    
+}
+<body>
+    <form id="form1" name="form1" method="post">
+        <input type="button" id="btnTest" value="테스트실행" />
+        <input type="hidden" value="test1" name="NO_TID" />
+        <input type="hidden" value="test2" name="NO_OID" />
+        <input type="hidden" value="test3" name="ID_MERCHANT" />
+        <input type="hidden" value="test4" name="CD_BANK" />
+        <input type="hidden" value="test5" name="CD_DEAL" />
+        <input type="hidden" value="test6" name="DT_TRANS" />
+        <input type="hidden" value="test7" name="TM_TRANS" />
+        <input type="hidden" value="test8" name="NO_MSGSEQ" />
+        <input type="hidden" value="test9" name="CD_JOINORG" />
+        <input type="hidden" value="test10" name="DT_TRANSBASE" />
+        <input type="hidden" value="test11" name="NO_TRANSEQ" />
+        <input type="hidden" value="test12" name="TYPE_MSG" />
+        <input type="hidden" value="test13" name="CL_CLOSE" />
+        <input type="hidden" value="test14" name="CL_KOR" />
+        <input type="hidden" value="test15" name="NO_MSGMANAGE" />
+        <input type="hidden" value="test16" name="NO_VACCT" />
+        <input type="hidden" value="test17" name="AMT_INPUT" />
+        <input type="hidden" value="test18" name="AMT_CHECK" />
+        <input type="hidden" value="test19" name="NM_INPUTBANK" />
+        <input type="hidden" value="test20" name="NM_INPUT" />
+        <input type="hidden" value="test21" name="DT_INPUTSTD" />
+        <input type="hidden" value="test22" name="DT_CALCULSTD" />
+        <input type="hidden" value="test23" name="FLG_CLOSE" />
+        <input type="hidden" value="test24" name="DT_CSHR" />
+        <input type="hidden" value="test25" name="TM_CSHR" />
+        <input type="hidden" value="test26" name="NO_CSHR_APPL" />
+        <input type="hidden" value="test27" name="NO_CSHR_TID" />
+    </form>                  
+</body>
+</html>

@@ -153,6 +153,7 @@ namespace Net.Common.Configurations
                 MidPassword = ConfigurationManager.AppSettings["MidPassword"] ?? @"1111";
                 Currency = ConfigurationManager.AppSettings["Currency"] ?? @"WON";
                 PgId = ConfigurationManager.AppSettings["PgId"] ?? @"IniTechPG_";
+                PgIp = ConfigurationManager.AppSettings["PgIp"] ?? @"203.238.37";
 
                 PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfile";
                 Slic3rDir = ConfigurationManager.AppSettings["Slic3rDir"] ?? @"D:\slic3r";
@@ -217,6 +218,11 @@ namespace Net.Common.Configurations
             /// PG 아이디
             /// </summary>
             public string PgId { get; set; }
+
+            /// <summary>
+            /// PG 아이피
+            /// </summary>
+            public string PgIp { get; set; }
 
             /// <summary>
             /// 파일저장 

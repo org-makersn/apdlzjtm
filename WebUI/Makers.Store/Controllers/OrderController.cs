@@ -7,14 +7,16 @@ using System.Linq;
 using System.Web;
 using System.Net;
 using System.Web.Mvc;
-using Net.Common.Model;
-using Newtonsoft.Json;
-using Makersn.Models;
 using System.Web.Util;
 using System.Text;
 using System.Xml;
 using System.Collections;
 using System.Data;
+using Net.Common.Model;
+using Newtonsoft.Json;
+using Makers.Store.Models;
+using Makersn.Models;
+
 using Makers.Store.Configurations;
 using Net.Framework.Util;
 
@@ -832,20 +834,92 @@ namespace Makers.Store.Controllers
             //###############################################################################
             //# 6. 취소 결과 #
             //################
-            CancelOrder cancelOrder = new CancelOrder();
-            cancelOrder.ResultCode = INIpay.GetResult(ref intPInst, "resultcode");					// 결과코드 ("00"이면 지불성공)
-            cancelOrder.ResultMsg = INIpay.GetResult(ref intPInst, "resultmsg");					// 결과내용
-            cancelOrder.CancelDate = INIpay.GetResult(ref intPInst, "CancelDate");					// 이니시스 취소날짜
-            cancelOrder.CancelTime = INIpay.GetResult(ref intPInst, "CancelTime");					// 이니시스 취소시각
-            cancelOrder.CshrCancelNum = INIpay.GetResult(ref intPInst, "CSHR_CancelNum");			//현금영수증 취소 승인번호
-
+            StorePaymentCancelT storePaymentCancelT = new StorePaymentCancelT();
+            storePaymentCancelT.ResultCode = INIpay.GetResult(ref intPInst, "resultcode");					// 결과코드 ("00"이면 지불성공)
+            storePaymentCancelT.ResultMsg = INIpay.GetResult(ref intPInst, "resultmsg");					// 결과내용
+            storePaymentCancelT.CancelDate = INIpay.GetResult(ref intPInst, "CancelDate");					// 이니시스 취소날짜
+            storePaymentCancelT.CancelTime = INIpay.GetResult(ref intPInst, "CancelTime");					// 이니시스 취소시각
+            storePaymentCancelT.CshrCancelNum = INIpay.GetResult(ref intPInst, "CSHR_CancelNum");			//현금영수증 취소 승인번호
 
             //###############################################################################
             //# 7. 인스턴스 해제 #
             //####################
             INIpay.Destroy(ref intPInst);
 
-            return cancelOrder.ResultMsg;
+            if (storePaymentCancelT.ResultCode.Equals("00"))
+            {
+                // 결제취소 테이블 저장
+                biz.InsertOrderCancelInfo(storePaymentCancelT);
+
+                // 주문취소 상태값 업데이트
+                //biz.UpdateOrderStatus(oId, StringEnum.GetValue(OrderStatus.Cancel));
+
+                // 결제취소 상태값 업데이트
+                biz.UpdatePaymentStatus(oId, StringEnum.GetValue(PaymentStatus.Cancel));
+
+                string email = "sslee@makersi.com";
+                string title = "결제취소";
+                string comment = "주문에 대해 결제 취소 처리";
+                string Subject = "주문에 대해서 결제취소 처리 되었습니다.";
+
+                SendMailModels oMail = new SendMailModels();
+                oMail.SendMail("PaymentCancel", email, new String[] { Subject, title, comment });
+                
+            }
+
+            return storePaymentCancelT.ResultMsg;
+        }
+        #endregion
+
+        #region GetVirtualBankPaymentCheckData - 가상계좌 입금확인
+
+        public ActionResult VacctinputConfirmTest()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 가상계좌 입금확인
+        /// </summary>
+        /// <param name="forms"></param>
+        [HttpPost]
+        public void GetVirtualBankPaymentCheckData(FormCollection forms)
+        {
+            VacctInputData data = new VacctInputData();
+            string requestIp = Request.UserHostAddress;
+            string pgIp = instance.PgIp.Substring(0,10);
+
+            // pg에서 보냈는지 ip로 체크
+            if (requestIp.Equals(pgIp))
+            {
+                data.noTid = forms["NO_TID"];
+                data.noOid = forms["NO_OID"];
+                data.cdBank = forms["CD_BANK"];
+                data.cdDeal = forms["CD_DEAL"];
+                data.dtTrans = forms["DT_TRANS"];
+                data.tmTrans = forms["TM_TRANS"];
+                data.noVacct = forms["NO_VACCT"];
+                data.amtInput = forms["AMT_INPUT"];
+                data.amtCheck = forms["AMT_CHECK"];
+                data.flgClose = forms["FLG_CLOSE"];
+                data.clClose = forms["CL_CLOSE"];
+                data.typeMsg = forms["TYPE_MSG"];
+                data.nmInputBank = forms["NM_INPUTBANK"];
+                data.nmInput = forms["NM_INPUT"];
+                data.dtInputStd = forms["DT_INPUTSTD"];
+                data.dtCalculStd = forms["DT_CALCULSTD"];
+                data.dtTransBase = forms["DT_TRANSBASE"];
+                data.clTrans = forms["CL_TRANS"];
+                data.clKor = forms["CL_KOR"];
+                data.dtCshr = forms["DT_CSHR"];
+                data.tmCshr = forms["TM_CSHR"];
+                data.noCshrAppl = forms["NO_CSHR_APPL"];
+                data.noCshrTid = forms["NO_CSHR_TID"];
+            }
+
+            var jsonData = JsonConvert.SerializeObject(data);
+
+            Response.Write(jsonData);
         }
         #endregion
     }

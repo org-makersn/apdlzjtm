@@ -36,6 +36,5 @@ namespace Net.Framwork.BizDac
         }
         #endregion
 
-
     }
 }

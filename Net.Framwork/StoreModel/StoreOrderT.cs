@@ -187,7 +187,7 @@ namespace Net.Framework.StoreModel
         public virtual string PRINTING_STATUS { get; set; }
     }
 
-    public class CancelOrder
+    public class OrderCancel
     {
         public virtual string ResultCode { get; set; }
         public virtual string ResultMsg { get; set; }

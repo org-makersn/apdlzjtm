@@ -183,7 +183,7 @@
     전달메시지 <input type="text" value="test" id="recvmsg" name="recvmsg" />
     </p>
     <p>
-    주문일자 <input type="text"  id="txtOrderDate" />
+    주문일자 <input type="text" value="@DateTime.Now.ToShortDateString()"  id="txtOrderDate" />
     </p>
     <p>
     느린제작 여부 <label for="rdoSlowMakeY">Y</label><input type="radio" id="rdoSlowMakeY" name="rdoSlowMakeYn" value="Y" />   <label for="rdoSlowMakeN">N</label><input type="radio" checked="checked" id="rdoSlowMakeN" name="rdoSlowMakeYn" value="N" />   

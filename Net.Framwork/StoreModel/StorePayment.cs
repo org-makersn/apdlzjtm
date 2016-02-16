@@ -126,6 +126,32 @@ namespace Net.Framework.StoreModel
         public virtual string RegId{ get; set; }
     }
 
+    /// <summary>
+    /// 결제취소 테이블
+    /// </summary>
+    [Table("STORE_PAYMENT_CANCEL")]
+    public class StorePaymentCancelT
+    {
+        [Key, Column("NO")]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public virtual Int64 No { get; set; }
+
+        [Column("RESULT_CODE")]
+        public virtual string ResultCode { get; set; }
+        [Column("RESULT_MSG")]
+        public virtual string ResultMsg { get; set; }
+        [Column("CANCEL_DATE")]
+        public virtual string CancelDate { get; set; }
+        [Column("CANCEL_TIME")]
+        public virtual string CancelTime { get; set; }
+        [Column("CSHR_CANCEL_NUM")]
+        public virtual string CshrCancelNum { get; set; }
+        [Column("REG_DT")]
+        public virtual DateTime RegDt { get; set; }
+        [Column("REG_ID")]
+        public virtual string RegId { get; set; }
+    }
+
     public class StorePaymentT
     {
         public virtual Int64 OrderMasterNo { get; set; }
@@ -142,6 +168,36 @@ namespace Net.Framework.StoreModel
         public virtual GAMG Gamg { get; set; }
         public virtual BCSH Bcsh { get; set; }
         public virtual SSVC Ssvc { get; set; }
+    }
+
+    /// <summary>
+    /// 가상계좌 입금확인
+    /// </summary>
+    public class VacctInputData
+    {
+        public virtual string noTid { get; set; }
+        public virtual string noOid { get; set; }
+        public virtual string cdBank { get; set; }
+        public virtual string cdDeal { get; set; }
+        public virtual string dtTrans { get; set; }
+        public virtual string tmTrans { get; set; }
+        public virtual string noVacct { get; set; }
+        public virtual string amtInput { get; set; }
+        public virtual string amtCheck { get; set; }
+        public virtual string flgClose { get; set; }
+        public virtual string clClose { get; set; }
+        public virtual string typeMsg { get; set; }
+        public virtual string nmInputBank { get; set; }
+        public virtual string nmInput { get; set; }
+        public virtual string dtInputStd { get; set; }
+        public virtual string dtCalculStd { get; set; }
+        public virtual string dtTransBase { get; set; }
+        public virtual string clTrans { get; set; }
+        public virtual string clKor { get; set; }
+        public virtual string dtCshr { get; set; }
+        public virtual string tmCshr { get; set; }
+        public virtual string noCshrAppl { get; set; }
+        public virtual string noCshrTid { get; set; }
     }
 
     /// <summary>

@@ -38,6 +38,7 @@ namespace Net.Framework
         public DbSet<StoreOrderDetailT> StoreOrderDetailT { get; set; }
         public DbSet<StoreShippingAddrT> StoreShippingAddrT { get; set; }
         public DbSet<StorePaymentHistoryT> StorePaymentHistoryT { get; set; }
+        public DbSet<StorePaymentCancelT> StorePaymentCancelT { get; set; }
         //public DbSet<StoreItemT> StoreItem { get; set; }
         //public DbSet<StoreItemFileT> StoreItemFile { get; set; }
 
