@@ -406,6 +406,7 @@ namespace Makersn.Util
             [EnumTitle("픽업, 택배")]
             픽업택배 = 3
         }
+
         public enum PrinterPostType
         {
             [EnumTitle("무료배송")]
@@ -417,6 +418,7 @@ namespace Makersn.Util
             [EnumTitle("수신자 부담")]
             수신자_부담 = 2
         }
+
         public enum PrinterNoticeType
         {
 

@@ -11,37 +11,99 @@ namespace Net.Framework.StoreModel
     {
         [Key, Column("NO")]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int NO { get; set; }
-        public string ID { get; set; }
-        public string BLOG_URL { get; set; }
-        public int LEVEL { get; set; }
-        public string STATUS { get; set; }
-        public string PASSWORD { get; set; }
-        public string NAME { get; set; }
-        public string EMAIL { get; set; }
-        public string CELL_PHONE { get; set; }
-        public string URL { get; set; }
-        public string SNS_TYPE { get; set; }
-        public string SNS_ID { get; set; }
-        public string PROFILE_MSG { get; set; }
-        public string PROFILE_PIC { get; set; }
-        public string COVER_PIC { get; set; }
-        public string ALL_IS { get; set; }
-        public string REPLE_IS { get; set; }
-        public string LIKE_IS { get; set; }
-        public string NOTICE_IS { get; set; }
-        public string FOLLOW_IS { get; set; }
-        public Nullable<System.DateTime> UPD_PASSWORD_DT { get; set; }
-        public Nullable<System.DateTime> LAST_LOGIN_DT { get; set; }
-        public string LAST_LOGIN_IP { get; set; }
-        public Nullable<int> LOGIN_CNT { get; set; }
-        public string EMAIL_CERTIFY { get; set; }
-        public Nullable<System.DateTime> DEL_DT { get; set; }
-        public string DROP_COMMENT { get; set; }
-        public string DEL_FLAG { get; set; }
-        public Nullable<System.DateTime> REG_DT { get; set; }
-        public string REG_ID { get; set; }
-        public Nullable<System.DateTime> UPD_DT { get; set; }
-        public string UPD_ID { get; set; }
+        public int No { get; set; }
+
+        [Column("ID")]
+        public string Id { get; set; }
+
+        [Column("BLOG_URL")]
+        public string BlogUrl { get; set; }
+
+        [Column("LEVEL")]
+        public int Level { get; set; }
+
+        [Column("STATUS")]
+        public string Status { get; set; }
+
+        [Column("PASSWORD")]
+        public string Password { get; set; }
+
+        [Column("NAME")]
+        public string Name { get; set; }
+
+        [Column("EMAIL")]
+        public string Email { get; set; }
+
+        [Column("CELL_PHONE")]
+        public string CellPhone { get; set; }
+
+        [Column("URL")]
+        public string Url { get; set; }
+
+        [Column("SNS_TYPE")]
+        public string SnsType { get; set; }
+
+        [Column("SNS_ID")]
+        public string SnsId { get; set; }
+
+        [Column("PROFILE_MSG")]
+        public string ProfileMsg { get; set; }
+
+        [Column("PROFILE_PIC")]
+        public string ProfilePic { get; set; }
+
+        [Column("COVER_PIC")]
+        public string CoverPic { get; set; }
+
+        [Column("ALL_IS")]
+        public string Allis { get; set; }
+
+        [Column("REPLE_IS")]
+        public string Repleis { get; set; }
+
+        [Column("LIKE_IS")]
+        public string Likeis { get; set; }
+
+        [Column("NOTICE_IS")]
+        public string Noticeis { get; set; }
+
+        [Column("FOLLOW_IS")]
+        public string Followis { get; set; }
+
+        [Column("UPD_PASSWORD_DT")]
+        public Nullable<System.DateTime> UpdPasswordDt { get; set; }
+
+        [Column("LAST_LOGIN_DT")]
+        public Nullable<System.DateTime> LastLoginDt { get; set; }
+
+        [Column("LAST_LOGIN_IP")]
+        public string LastLoginIp { get; set; }
+
+        [Column("LOGIN_CNT")]
+        public Nullable<int> LoginCnt { get; set; }
+
+        [Column("EMAIL_CERTIFY")]
+        public string EmailCertify { get; set; }
+
+        [Column("DEL_DT")]
+        public Nullable<System.DateTime> DelDt { get; set; }
+
+        [Column("DROP_COMMENT")]
+        public string DropComment { get; set; }
+
+        [Column("DEL_FLAG")]
+        public string DelFlag { get; set; }
+
+        [Column("REG_DT")]
+        public Nullable<System.DateTime> RegDt { get; set; }
+
+        [Column("REG_ID")]
+        public string RegId { get; set; }
+
+        [Column("UPD_DT")]
+        public Nullable<System.DateTime> UpdDt { get; set; }
+
+        [Column("UPD_ID")]
+        public string UpdId { get; set; }
     }
 }

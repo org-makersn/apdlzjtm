@@ -102,5 +102,16 @@ namespace Net.Framework.Util
       InProgress,
   }
 
+    
+  public enum StoreShippingType
+  {
+      [EnumTitle("무료배송")]
+      무료배송 = 1,
+      [EnumTitle("상품별 배송비")]
+      상품별배송비 = 2,
+      [EnumTitle("수신자 부담")]
+      수신자부담 = 3
+  }
+
 
 }

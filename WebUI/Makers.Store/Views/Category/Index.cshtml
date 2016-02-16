@@ -1,18 +1,61 @@
-﻿@model PagerQuery<PagerInfo, IList<Net.Framework.StoreModel.StoreProductT>>
+﻿@model PagerQuery<PagerInfo, IList<Net.Framework.StoreModel.StoreItemDetailT>>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "상품 리스트";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int index = 1;
+
+    //string class1 = "";
+    //string class2 = "";
+    //string class3 = "";
+    //switch ((string)ViewBag.Gubun)
+    //{
+    //    case "FEATURED":
+    //        class1 = "class=on";
+    //        break;
+
+    //    case "POPULAR":
+    //        class2 = "class=on";
+    //        break;
+
+    //    case "LATEST":
+    //        class3 = "class=on";
+    //        break;
+    //}
 }
 
 <h2>Index</h2>
 
-
 <div class="baseList">
     <ul class="item_area">
-    @foreach (var product in Model.EntityList)
-    {
-        <li>@product.NAME</li>
-    }
+        @foreach (var item in Model.EntityList)
+        {
+            string className = index % 4 == 0 ? "class=mgR0" : "";
+            string storeMemberNo = Base64Helper.Base64Encode(@item.StoreMemberNo.ToString());
+        
+            <li @className>
+                <!-- ProductBox -->
+                <div class="productBox">
+                    <div class="productImg">
+                        <a href="/item/detail/@item.No">
+                            <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@Url.StoreImgFile(item.MainImgName)" alt="@item.Title" /></a>
+
+                    </div>
+                    <div class="detailBox">
+                        <div class="productText">
+                            <a href="/item/detail/@item.No">@item.Title</a>
+                        </div>
+                        <div class="by">
+                            <p>by <span class="name"><a href="/store?q=@storeMemberNo">@item.StoreName</a></span></p>
+                        </div>
+                        <div class="by">
+                            @item.BasePrice
+                        </div>
+                    </div>
+                </div>
+            </li>
+            index++;
+        }
     </ul>
 </div>
 
@@ -20,3 +63,22 @@
 <div class="pagination-container">
     @Html.PageNavigate(Model.Pager.CurrentPageIndex, Model.Pager.PageSize, Model.Pager.RecordCount)
 </div>
+
+@section Scripts{
+    <style>
+        .ulClass
+        {
+            list-style-type: none;
+        }
+
+        .liClass
+        {
+            display: inline;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //TODO
+        });
+    </script>
+}

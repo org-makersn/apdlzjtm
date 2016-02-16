@@ -9,10 +9,9 @@ namespace Makers.Store.Helper
     {
         public static HtmlString PageNavigate(this HtmlHelper htmlHelper, int currentPage, int pageSize, int totalCount)
         {
-            //Uri requestUrl = HttpContext.Current.Request.Url;
+            Uri requestUrl = HttpContext.Current.Request.Url;
             string code = HttpContext.Current.Request.QueryString["codeNo"];
             string gbn = HttpContext.Current.Request.QueryString["pageGubun"];
-            string globleType = HttpContext.Current.Request.QueryString["gl"];
 
             var redirectTo = HttpContext.Current.Request.Url.AbsolutePath + "?";
 
@@ -34,11 +33,6 @@ namespace Makers.Store.Helper
                 segment += "&pageGubun=" + gbn;
             }
 
-            if (!string.IsNullOrEmpty(globleType))
-            {
-                segment += "&globleType=" + globleType;
-            }
-
             pageSize = pageSize == 0 ? 3 : pageSize;
             var totalPages = Math.Max((totalCount + pageSize - 1) / pageSize, 1);
             var output = new StringBuilder();
@@ -47,7 +41,6 @@ namespace Makers.Store.Helper
             {
                 if (currentPage != 1)
                 {
-                    //output.AppendFormat("<a href='{0}page=1{1}' class='first_page'>처음 페이지</a>", redirectTo, segment);
                     int tenPre = currentPage - 10 <= 0 ? 1 : currentPage - 10;
                     output.AppendFormat("<a href='{0}page={1}{2}' class='first_page'>처음 페이지</a>", redirectTo, tenPre, segment);
                 }
@@ -58,14 +51,14 @@ namespace Makers.Store.Helper
 
                 output.Append(" ");
                 int currint = 5;
-                int loopTime = 10; // loop time of paging
+                int loopTime = 10;
 
-                if ((currentPage - currint) < 1) // special proceed at begining
+                if ((currentPage - currint) < 1)
                 {
                     loopTime = loopTime + currint - currentPage;
                 }
                 if ((currentPage + currint) > totalPages)
-                { // special preceed at the end
+                {
                     currint = currint + currint - totalPages + currentPage;
                 }
 
@@ -93,13 +86,19 @@ namespace Makers.Store.Helper
                 output.Append(" ");
                 if (currentPage != totalPages)
                 {
-                    //output.AppendFormat("<a href='{0}page={1}{2}' class='last_page'>마지막 페이지</a>", redirectTo, totalPages, segment);
                     int tenNext = currentPage + 10 > totalPages ? totalPages : currentPage + 10;
                     output.AppendFormat("<a href='{0}page={1}{2}' class='last_page'>마지막 페이지</a>", redirectTo, tenNext, segment);
                 }
                 output.Append(" ");
             }
-            //output.AppendFormat("<label>第{0}页 / 共{1}页</label>", currentPage, totalPages);
+            else
+            {
+                //output.AppendFormat("<a class='first_page'>처음 페이지</a>");
+                //output.AppendFormat("<a rel='prev' class='prev_page'>이전 페이지</a>");
+                //output.AppendFormat("<a class='paging_no on'>{0}</a>", currentPage);
+                //output.AppendFormat("<a rel='next' class='next_page'>다음 페이지</a>");
+                //output.AppendFormat("<a class='last_page'>마지막 페이지</a>");
+            }
 
             output.Append("</div>");
             return new HtmlString(output.ToString());

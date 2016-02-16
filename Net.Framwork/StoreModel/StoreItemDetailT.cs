@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Net.Framework.StoreModel
 {
-    [Table("STORE_ITEM")]
-    public partial class StoreItemT
+    public partial class StoreItemDetailT
     {
         [Key, Column("NO")]
         public long No { get; set; }
@@ -51,9 +50,24 @@ namespace Net.Framework.StoreModel
         public System.DateTime RegDt { get; set; }
         [Column("REG_ID")]
         public string RegId { get; set; }
-        [Column("UPD_DT")]
-        public Nullable<System.DateTime> UpdDt { get; set; }
-        [Column("UPD_ID")]
-        public string UpdId { get; set; }
+
+        public string ShippingName { get; set; }
+        //[Column("PROFILE_PIC")]
+        public string ProfilePic { get; set; }
+
+        //[Column("STORE_NAME")]
+        public string StoreName { get; set; }
+
+        //[Column("MAIN_IMG_NAME")]
+        public string MainImgName { get; set; }
+
+        //[Column("LIKE_CNT")]
+        public virtual int LikeCnt { get; set; }
+
+        //[Column("COMMENT_CNT")]
+        public int CommentCnt { get; set; }
+
+        //[Column("IS_LIKES")]
+        public int IsLikes { get; set; }
     }
 }

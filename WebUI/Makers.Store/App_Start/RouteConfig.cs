@@ -13,11 +13,11 @@ namespace Makers.Store
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            //routes.MapRoute(
-            //    name: "Category",
-            //    url: "category/{category}",
-            //    defaults: new { controller = "Category", action = "Index", category = UrlParameter.Optional }
-            //);
+            routes.MapRoute(
+                name: "Category",
+                url: "category/{category}",
+                defaults: new { controller = "Category", action = "Index", category = UrlParameter.Optional }
+            );
 
             //routes.MapRoute(
             //    name: "Model",

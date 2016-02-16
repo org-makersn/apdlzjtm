@@ -89,6 +89,7 @@
     <Compile Include="Model\AccountModels.cs" />
     <Compile Include="Model\AjaxResponseModel.cs" />
     <Compile Include="Model\CodeModel.cs" />
+    <Compile Include="Model\CommonValModel.cs" />
     <Compile Include="Model\ProfileModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\CacheUtil.cs" />

@@ -38,7 +38,7 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                printer = dbContext.StoreReviewT.Where(m => m.NO == no).FirstOrDefault();
+                printer = dbContext.StoreReviewT.Where(m => m.No == no).FirstOrDefault();
             }
 
             return printer;
@@ -55,7 +55,7 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                printers = dbContext.StoreReviewT.Where(m => m.PARENT_NO == no).ToList();
+                printers = dbContext.StoreReviewT.Where(m => m.ParentNo == no).ToList();
             }
 
             return printers;

@@ -17,12 +17,16 @@ namespace Makers.Store.Controllers
     {
         public static ApplicationConfiguration.StoreConfiguration instance = ApplicationConfiguration.StoreConfiguration.Instance;
         public ProfileModel profileModel;
+        //public CommonValModel commonValModel = new CommonValModel();
 
         public BaseController()
         {
+            //ViewBag.CommonValJoson = JsonConvert.SerializeObject(commonValModel);
             profileModel = Profile;
             ViewBag.LogOnMemner = profileModel;
             ViewBag.LogOnChk = profileModel.UserNo == 0 ? 0 : 1;
+
+            ViewBag.HasStore = profileModel.UserNo > 0 ? new StoreMemberBiz().GetStoreMemberExists(profileModel.UserNo) : false;
 
             ViewBag.IsMain = "N";
         }
@@ -56,33 +60,33 @@ namespace Makers.Store.Controllers
         /// 파샬뷰로 빼던지
         /// </summary>
         /// <returns></returns>
-        protected IList<CodeModel> GetArticleList()
-        {
-            IList<CommonCodeT> list = null;
-            list = CacheUtil.GetCache("MenuList") as IList<CommonCodeT>;
+        //protected IList<CodeModel> GetArticleList()
+        //{
+        //    IList<CommonCodeT> list = null;
+        //    list = CacheUtil.GetCache("MenuList") as IList<CommonCodeT>;
 
-            if (list == null)
-            {
-                list = new CommonCodeDac().GetCommonCode("STORE", "PRODUCT");
-                CacheUtil.SetCache("MenuList", list);
-            }
-            IList<CodeModel> menulist = new List<CodeModel>();
-            foreach (var menu in list)
-            {
-                CodeModel model = new CodeModel();
-                model.MenuTitle = menu.CODE_NAME;
-                model.MenuCodeNo = menu.NO;
-                if (menu.NO > 0)
-                {
-                    model.MenuUrl = "/catalog/latest-" + menu.CODE_KEY;
-                }
-                else
-                {
-                    model.MenuUrl = "/catalog/latest";
-                }
-                menulist.Add(model);
-            }
-            return menulist;
-        }
+        //    if (list == null)
+        //    {
+        //        list = new CommonCodeDac().GetCommonCode("STORE", "PRODUCT");
+        //        CacheUtil.SetCache("MenuList", list);
+        //    }
+        //    IList<CodeModel> menulist = new List<CodeModel>();
+        //    foreach (var menu in list)
+        //    {
+        //        CodeModel model = new CodeModel();
+        //        model.MenuTitle = menu.CODE_NAME;
+        //        model.MenuCodeNo = menu.NO;
+        //        if (menu.NO > 0)
+        //        {
+        //            model.MenuUrl = "/catalog/latest-" + menu.CODE_KEY;
+        //        }
+        //        else
+        //        {
+        //            model.MenuUrl = "/catalog/latest";
+        //        }
+        //        menulist.Add(model);
+        //    }
+        //    return menulist;
+        //}
     }
 }

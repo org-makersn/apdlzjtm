@@ -1,0 +1,23 @@
+﻿@model IList<CodeModel>
+@{
+    string classOn = "";
+    string codeNo = (string)ViewBag.CodeNo;
+    classOn = string.IsNullOrEmpty(codeNo) ? "class=on" : "";
+}
+
+<li @classOn><a href="/category">전체</a></li>
+@foreach (CodeModel menu in Model)
+{
+    classOn = menu.MenuCodeNo.ToString() == codeNo ? "class=on" : "";
+      
+    <li id="@menu.MenuCodeNo" @classOn>
+        @if (menu.MenuCodeNo == 1007)
+        {
+            <strong><a href="@menu.MenuUrl">@menu.MenuTitle</a></strong>
+        }
+        else
+        {
+            <a href="@menu.MenuUrl">@menu.MenuTitle</a>
+        }
+    </li>
+}

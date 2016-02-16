@@ -118,7 +118,7 @@ namespace Common.Func
     /// <summary>
     /// 
     /// </summary>
-    public static class ImageSize
+    public static class ImageReSize
     {
         /// <summary>
         /// 배너 이미지 사이즈

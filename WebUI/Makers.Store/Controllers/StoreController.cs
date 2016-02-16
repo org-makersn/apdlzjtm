@@ -1,104 +1,127 @@
-﻿using Makersn.BizDac;
+﻿using Net.Common.Filter;
+using Net.Common.Helper;
+using Net.Common.Model;
 using Net.Framework.StoreModel;
 using Net.Framwork.BizDac;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Net.Common.Model;
-using Newtonsoft.Json;
-using Makersn.Models;
 
 namespace Makers.Store.Controllers
 {
     public class StoreController : BaseController
     {
-        //
-        // GET: /Store/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        #region  스토어등록/삭제/업데이트
-
-
-        public ActionResult StoreMemberRegister()
-        {
-            ViewBag.userNo = profileModel.UserNo;
-            IList<StoreMemberT> _StoreMemberT = new StoreMemberBiz().getAllMemberList().Where(s => s.DEL_YN.ToLower() == "n").ToList<StoreMemberT>();
-            ViewBag.StoreMemberList = _StoreMemberT;
-
-            return View();
-        }
+        StoreMemberBiz storeMembBiz = new StoreMemberBiz();
 
         /// <summary>
-        /// 스토어 회원입력
+        /// 스토어 프로필 페이지
         /// </summary>
-        /// <param name="collection"></param>
+        /// <param name="q">스토어멤머 no</param>
+        /// <param name="url">짧은 주소</param>
+        /// <param name="gbn">구분값 => 상품 리스트, 임시저장, 좋아요, 팔로잉, 팔로워 등등</param>
+        /// <param name="page"></param>
         /// <returns></returns>
-        public JsonResult RegisterStoreMember(FormCollection collection)
+        public ActionResult Index(string q = "", string url = "", string gbn = "U", int page = 1)
         {
-            AjaxResponseModel response = new AjaxResponseModel();
+            if (q == "" && profileModel.UserNo == 0 && url == "") return Redirect("/");
 
-            StoreMemberBiz _StoreMemberBiz = new StoreMemberBiz();
-            StoreMemberT _StoreMemberT = new StoreMemberT();
+            int sMembNo = 0;
+            if (q == "") { q = Base64Helper.Base64Encode(profileModel.UserNo.ToString()); }
+            sMembNo = int.Parse(Base64Helper.Base64Decode(q));
 
-            _StoreMemberT.MEMBER_NO = 1;
-            _StoreMemberT.STORE_NAME = collection["StoreName"];
-            _StoreMemberT.OFFICE_PHONE = collection["TelNo"];
-            _StoreMemberT.CELL_PHONE = collection["CellPhone"];
-            _StoreMemberT.STORE_PROFILE_MSG = collection["StoreProfileMsg"];
-            _StoreMemberT.STORE_URL = collection["StoreUrl"];
-            _StoreMemberT.BANK_NAME = collection["bankName"];
-            _StoreMemberT.BANK_USER_NAME = collection["bankUserName"];
-            _StoreMemberT.BANK_ACCOUNT = collection["bankAccount"];
-            _StoreMemberT.DEL_YN = "N";
-            _StoreMemberT.REG_ID = collection["regId"];
-            _StoreMemberT.REG_DT = DateTime.Now;
-
-            _StoreMemberBiz.add(_StoreMemberT);
-
-            response.Success = true;
-
-            response.Result = _StoreMemberT.MEMBER_NO + "";
-            return Json(response, JsonRequestBehavior.AllowGet);
-        }
-        /// <summary>
-        /// 스토어 회원정보 업데이트
-        /// </summary>
-        /// <param name="collection"></param>
-        /// <returns></returns>
-        public JsonResult UpdateStoreMember(FormCollection collection)
-        {
-            AjaxResponseModel response = new AjaxResponseModel();
-
-            StoreMemberBiz _StoreMemberBiz = new StoreMemberBiz();
-            StoreMemberT _StoreMemberT = _StoreMemberBiz.getStoreMemberById(Convert.ToInt32(collection["no"]));
-            if (_StoreMemberT != null)
+            StoreMemberT storeMember = new StoreMemberT();
+            if (url != "")
             {
-                _StoreMemberT.MEMBER_NO = 1;
-                _StoreMemberT.STORE_NAME = collection["memberNo"];
-                _StoreMemberT.OFFICE_PHONE = collection["TelNo"];
-                _StoreMemberT.CELL_PHONE = collection["CellPhone"];
-                _StoreMemberT.STORE_PROFILE_MSG = collection["StoreProfileMsg"];
-                _StoreMemberT.STORE_URL = collection["StoreUrl"];
-                _StoreMemberT.BANK_NAME = collection["bankName"];
-                _StoreMemberT.BANK_USER_NAME = collection["bankUserName"];
-                _StoreMemberT.BANK_ACCOUNT = collection["bankAccount"];
-                //_StoreMemberT.DelYn =  collection["delYn"];
-                _StoreMemberT.UPD_ID = profileModel.UserId;
-                _StoreMemberT.UPD_DT = DateTime.Now;
-
-                _StoreMemberBiz.upd(_StoreMemberT);
+                //짧은 주소
             }
-            response.Success = true;
+            else
+            {
+                storeMember = storeMembBiz.GetStoreMemberByMemberNO(sMembNo);
+            }
 
-            response.Result = _StoreMemberT.NO + "";
+            if (storeMember.DelYn == "Y") return Redirect("/");
+
+            if (!string.IsNullOrEmpty(storeMember.StoreProfileMsg))
+            {
+                storeMember.StoreProfileMsg = new HtmlFilter().PunctuationEncode(storeMember.StoreProfileMsg);
+                storeMember.StoreProfileMsg = new HtmlFilter().ConvertContent(storeMember.StoreProfileMsg);
+            }
+
+            int visitorNo = profileModel.UserNo;
+
+            return View(storeMember);
+        }
+
+        #region 스토어 개설
+        /// <summary>
+        /// 스토어 개설
+        /// </summary>
+        /// <returns></returns>
+        [StoreRegist]
+        public ActionResult Regist()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// post regist
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult PostRegist(FormCollection collection)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+
+            string paramStoreName = collection["StoreName"];
+            string paramOfficePhone = collection["OfficePhone"];
+            string paramCellPhone = collection["CellPhone"];
+            string paramStoreProfileMsg = collection["StoreProfileMsg"];
+            string paramStoreUrl = collection["StoreUrl"];
+            string paramBankName = collection["bankName"];
+            string paramBankUserName = collection["bankUserName"];
+            string paramBankAccount = collection["bankAccount"];
+            
+            StoreMemberT storeMember = new StoreMemberT();
+
+            storeMember.MemberNo = profileModel.UserNo;
+            storeMember.StoreName = paramStoreName;
+            storeMember.OfficePhone = paramOfficePhone;
+            storeMember.CellPhone = paramCellPhone;
+            storeMember.StoreProfileMsg = paramStoreProfileMsg;
+            storeMember.StoreUrl = paramStoreUrl;
+            storeMember.BankName = paramBankName;
+            storeMember.BankUserName = paramBankUserName;
+            storeMember.BankAccount = paramBankAccount;
+            storeMember.DelYn = "N";
+            storeMember.RegDt = DateTime.Now;
+            storeMember.RegId = profileModel.UserId;
+
+            int smRet = storeMembBiz.AddStoreMember(storeMember);
+            MemberExT member = new MemberExDac().GetMemberByNo(profileModel.UserNo);
+            member.Level = 60;
+            if (smRet > 0)
+            {
+                response.Success = true;
+                response.Result = smRet.ToString();
+            }
+
             return Json(response, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        /// <summary>
+        /// 스토어 정보 수정
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Setting()
+        {
+            return View();
+        }
+
+        #region 스토어 회원 삭제
 
         /// <summary>
         /// 스토어 회원 삭제
@@ -108,22 +131,21 @@ namespace Makers.Store.Controllers
         public JsonResult DeleteStoreMember(int memberno)
         {
             AjaxResponseModel response = new AjaxResponseModel();
-            int result = 0;
-            StoreMemberBiz _StoreMemberBiz = new StoreMemberBiz();
+
             StoreMemberT _StoreMemberT =
-            _StoreMemberBiz.getStoreMemberById(memberno);
+            storeMembBiz.GetStoreMemberByNo(memberno);
             if (_StoreMemberT != null)
             {
-                _StoreMemberT.DEL_YN = "Y";
-                result = _StoreMemberBiz.upd(_StoreMemberT);
+                _StoreMemberT.DelYn = "Y";
+                bool ret = storeMembBiz.UpdateStoreMember(_StoreMemberT);
             }
             else
             {
 
             }
             response.Success = true;
-            response.Result = _StoreMemberT.MEMBER_NO + "";
-            return Json(new { Success = true, Result = result });
+            response.Result = _StoreMemberT.MemberNo + "";
+            return Json(new { Success = true});
         }
         #endregion
 
@@ -135,13 +157,13 @@ namespace Makers.Store.Controllers
         public ActionResult FollewingList(int storeNo)
         {
 
-            int memberUserno = profileModel.UserNo == 0 ? 182 : profileModel.UserNo; // 로그인 되어 있는 회원아이디
-            IList<FollowerT> _follerList = new FollowerDac().GetFollowerLIst(storeNo, memberUserno).Where(s => s.SiteGubun == "Store").ToList<FollowerT>();
+            //int memberUserno = profileModel.UserNo == 0 ? 182 : profileModel.UserNo; // 로그인 되어 있는 회원아이디
+            //IList<FollowerT> _follerList = new FollowerDac().GetFollowerLIst(storeNo, memberUserno).Where(s => s.SiteGubun == "Store").ToList<FollowerT>();
 
-            if (_follerList.Count > 0)
-            {
-                ViewBag.follerList = _follerList;
-            }
+            //if (_follerList.Count > 0)
+            //{
+            //    ViewBag.follerList = _follerList;
+            //}
 
             return View();
         }
@@ -157,23 +179,23 @@ namespace Makers.Store.Controllers
 
             int result = 0;
 
-            FollowerT follow = new FollowerT();
+            //FollowerT follow = new FollowerT();
 
-            follow.SiteGubun = "Store";
-            follow.MemberNoRef = StoreMemberNo;
-            follow.MemberNo = profileModel.UserNo;
-            follow.IsNew = "Y";
-            follow.RegId = "admin";
-            follow.RegDt = DateTime.Now;
+            //follow.SiteGubun = "Store";
+            //follow.MemberNoRef = StoreMemberNo;
+            //follow.MemberNo = profileModel.UserNo;
+            //follow.IsNew = "Y";
+            //follow.RegId = "admin";
+            //follow.RegDt = DateTime.Now;
 
-            if (profileModel.UserNo == 0)
-            {
+            //if (profileModel.UserNo == 0)
+            //{
 
-            }
-            else
-            {
-                result = new FollowerDac().SetFollow(follow);
-            }
+            //}
+            //else
+            //{
+            //    result = new FollowerDac().SetFollow(follow);
+            //}
 
             response.Result = result + "";
             return Json(new { Success = true, Result = result });
@@ -190,48 +212,26 @@ namespace Makers.Store.Controllers
 
             int result = 0;
 
-            FollowerT follow = new FollowerT();
+            //FollowerT follow = new FollowerT();
 
-            follow.SiteGubun = "Store";
-            follow.MemberNoRef = StoreMemberNo;
-            follow.MemberNo = profileModel.UserNo;
-            follow.IsNew = "Y";
-            follow.RegId = "admin";
-            follow.RegDt = DateTime.Now;
+            //follow.SiteGubun = "Store";
+            //follow.MemberNoRef = StoreMemberNo;
+            //follow.MemberNo = profileModel.UserNo;
+            //follow.IsNew = "Y";
+            //follow.RegId = "admin";
+            //follow.RegDt = DateTime.Now;
 
-            if (profileModel.UserNo == 0)
-            {
+            //if (profileModel.UserNo == 0)
+            //{
 
-            }
-            else
-            {
-                result = new FollowerDac().CheckFollow(profileModel.UserNo, StoreMemberNo);
-            }
+            //}
+            //else
+            //{
+            //    result = new FollowerDac().CheckFollow(profileModel.UserNo, StoreMemberNo);
+            //}
             return result;
         }
 
         #endregion
-
-
-        public string test3()
-        {
-            Net.Framwork.BizDac.StoreLikesBiz testBiz = new Net.Framwork.BizDac.StoreLikesBiz();
-            Net.Framework.StoreModel.StoreLikesT like = new Net.Framework.StoreModel.StoreLikesT();
-            //like.MemberNo = 1;
-            //like.ProductNo = 2;
-            //like.RegDt = DateTime.Now;
-            //like.RegId = "TEST";
-            //like.RegIp = "192.168.219.121";
-            //testBiz.add(like);
-
-            //IList<Net.Framework.StoreModel.StoreLikesT > test = testBiz.getAllStorePrinter();
-
-            like.NO = 2;
-            like.PRODUCT_NO = 50500;
-
-            testBiz.upd(like);
-
-            return "dd";
-        }
     }
 }

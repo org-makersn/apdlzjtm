@@ -58,7 +58,8 @@
   <ItemGroup>
     <Compile Include="AppDbContext.cs" />
     <Compile Include="BizDac\CommonCodeDac.cs" />
-    <Compile Include="BizDac\MemberDac.cs" />
+    <Compile Include="BizDac\MemberExDac.cs" />
+    <Compile Include="BizDac\MemberMsgDac.cs" />
     <Compile Include="BizDac\StoreItemDac.cs" />
     <Compile Include="BizDac\StoreItemFileDac.cs" />
     <Compile Include="BizDac\StorePaymentBiz.cs" />
@@ -103,12 +104,14 @@
     <Compile Include="Logging\InterceptorTransientErrors.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="StoreModel\CommonCodeT.cs" />
+    <Compile Include="StoreModel\StoreItemDetailT.cs" />
     <Compile Include="StoreModel\StoreItemFileT.cs" />
     <Compile Include="StoreModel\StoreItemT.cs" />
     <Compile Include="StoreModel\MemberMsgT.cs" />
     <Compile Include="StoreModel\MemberT.cs" />
     <Compile Include="StoreModel\StoreCartT.cs" />
     <Compile Include="StoreModel\StoreCategoryT.cs" />
+    <Compile Include="StoreModel\StoreMemberExT.cs" />
     <Compile Include="StoreModel\StoreOrderT.cs" />
     <Compile Include="StoreModel\StorePayment.cs" />
     <Compile Include="StoreModel\StorePrinterMaterialT.cs" />
@@ -117,7 +120,6 @@
     <Compile Include="StoreModel\StorePrintingCompanyT.cs" />
     <Compile Include="StoreModel\StorePrintingTypeT.cs" />
     <Compile Include="StoreModel\StoreProductDetailT.cs" />
-    <Compile Include="StoreModel\StoreProductExT.cs" />
     <Compile Include="StoreModel\StoreProductT.cs" />
     <Compile Include="StoreModel\StoreProductUpdateHistoryT.cs" />
     <Compile Include="StoreModel\StoreReviewT.cs" />
@@ -170,10 +172,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
+    <EmbeddedResource Include="SqlCmd\StoreItemDac.SelectStoreItemDetails.sql" />
+    <Content Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

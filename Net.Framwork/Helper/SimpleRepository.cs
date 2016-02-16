@@ -128,17 +128,17 @@ namespace Net.Framework.Helper
         public IEnumerable<T> UpdateAll(List<T> inList)
         {
             if (inList == null) throw new ArgumentNullException("The expected Segment inList is not here.");
-            
-            using (var db = new AppDbContext<T>(_constr))
+
+            using (var dbctx = new AppDbContext<T>(_constr))
             {
-                var dbSet = db.Set<T>();
+                var dbSet = dbctx.Set<T>();
                 List<T> outList = new List<T>();
                 foreach (var item in inList)
                 {
                     try
                     {
                         var entity = dbSet.Attach(item);
-                        db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                        dbctx.Entry(item).State = System.Data.Entity.EntityState.Modified;
                     }
                     catch (Exception)
                     {
@@ -147,7 +147,7 @@ namespace Net.Framework.Helper
                     }
 
                 }
-                db.SaveChanges();
+                dbctx.SaveChanges();
                 return outList;
             }
         }

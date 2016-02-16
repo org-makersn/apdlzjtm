@@ -210,7 +210,6 @@
     </Compile>
     <Compile Include="Helper\PagenationHelper.cs" />
     <Compile Include="Helper\STLHelper.cs" />
-    <Compile Include="Helper\UrlHelperExtensions.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AjaxResponseModel.cs" />
     <Compile Include="Models\CodeModel.cs" />
