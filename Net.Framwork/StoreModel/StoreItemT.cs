@@ -17,8 +17,8 @@ namespace Net.Framework.StoreModel
         public int CodeNo { get; set; }
         [Column("MAIN_IMG")]
         public int MainImg { get; set; }
-        [Column("TITLE")]
-        public string Title { get; set; }
+        [Column("ITEM_NAME")]
+        public string ItemName { get; set; }
         [Column("CONTENTS")]
         public string Contents { get; set; }
         [Column("BASE_PRICE")]

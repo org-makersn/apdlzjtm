@@ -17,10 +17,13 @@ namespace Net.Framework.StoreModel
         public int MemberNo { get; set; }
         
         //[Column("MEMBER_NAME")]
-        public int MemberName { get; set; }
+        public string MemberName { get; set; }
 
         //[Column("MAIN_IMG")]
         public string ProfilePic { get; set; }
+
+        //[Column("MAIN_IMG")]
+        public string CoverPic { get; set; }
 
         //[Column("STORE_NAME")]
         public string StoreName { get; set; }
@@ -53,6 +56,6 @@ namespace Net.Framework.StoreModel
         public string RegId { get; set; }
 
         //[Column("REG_DT")]
-        public string RegDt { get; set; }
+        public DateTime RegDt { get; set; }
     }
 }

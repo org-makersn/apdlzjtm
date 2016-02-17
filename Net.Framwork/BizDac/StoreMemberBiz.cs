@@ -44,6 +44,26 @@ namespace Net.Framwork.BizDac
         /// </summary>
         /// <param name="memberNo"></param>
         /// <returns></returns>
+        public StoreMemberExT GetFullStoreMemberByMemberNo(int memberNo)
+        {
+            return sMemberDac.SelectFullStoreMemberByMemberNo(memberNo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
+        public int GetStoreMemberNoByMemberNo(int memberNo)
+        {
+            return sMemberDac.SelectStoreMemberNoByMemberNo(memberNo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
         public bool GetStoreMemberExists(int memberNo)
         {
             return sMemberDac.SelectStoreMemberExists(memberNo);

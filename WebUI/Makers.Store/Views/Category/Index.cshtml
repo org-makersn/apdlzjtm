@@ -38,12 +38,12 @@
                 <div class="productBox">
                     <div class="productImg">
                         <a href="/item/detail/@item.No">
-                            <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@Url.StoreImgFile(item.MainImgName)" alt="@item.Title" /></a>
+                            <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@Url.StoreImgFile(item.MainImgName)" alt="@item.ItemName" /></a>
 
                     </div>
                     <div class="detailBox">
                         <div class="productText">
-                            <a href="/item/detail/@item.No">@item.Title</a>
+                            <a href="/item/detail/@item.No">@item.ItemName</a>
                         </div>
                         <div class="by">
                             <p>by <span class="name"><a href="/store?q=@storeMemberNo">@item.StoreName</a></span></p>

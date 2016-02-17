@@ -34,7 +34,7 @@ namespace Net.Framework.BizDac
         {
             dbHelper = new SqlDbHelper(connectionString);
 
-            string query = DacHelper.GetSqlCommand("StoreItemDac.SelectStoreItemDetails");
+            string query = DacHelper.GetSqlCommand("StoreItemDac.GetItemDetailByItemNo");
             using (var cmd = new SqlCommand(query))
             {
                 cmd.Parameters.Add("@STORE_ITEM_NO", SqlDbType.BigInt).Value = itemNo;
@@ -128,12 +128,12 @@ namespace Net.Framework.BizDac
                 whereQuery += " AND A.CODE_NO = @CODE_NO ";
             }
 
-            targetOptQuery += @" SELECT NO, TITLE, StoreMemberNo, CodeNo, BasePrice, ViewCnt, StoreName, MainImgName, ROW_NUM FROM
-                                (SELECT InQ.NO, InQ.TITLE, InQ.StoreMemberNo, InQ.CodeNo, InQ.BasePrice, InQ.ViewCnt, InQ.StoreName, InQ.MainImgName "
+            targetOptQuery += @" SELECT NO, ItemName, StoreMemberNo, CodeNo, BasePrice, ViewCnt, StoreName, MainImgName, ROW_NUM FROM
+                                (SELECT InQ.NO, InQ.ItemName, InQ.StoreMemberNo, InQ.CodeNo, InQ.BasePrice, InQ.ViewCnt, InQ.StoreName, InQ.MainImgName "
                                 + rowNumQuery + @" FROM 
                                 (SELECT  
 	                                A.NO
-	                                , A.TITLE
+	                                , A.ITEM_NAME as ItemName
 	                                , A.STORE_MEMBER_NO as StoreMemberNo
 	                                , A.CODE_NO as CodeNo
 	                                , A.BASE_PRICE as BasePrice
