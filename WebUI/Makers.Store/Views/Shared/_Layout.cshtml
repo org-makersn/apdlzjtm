@@ -476,6 +476,12 @@
             };
         }
 
+        $("#StoreCart").click(function () {
+            if (!loginPop("@ViewBag.LogOnChk")) {
+                location.href = "/cart/list";
+            };
+        });
+
         function GoMain() {
             location.href = "/";
         }
