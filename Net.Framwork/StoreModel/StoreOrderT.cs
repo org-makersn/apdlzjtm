@@ -12,62 +12,34 @@ namespace Net.Framework.StoreModel
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public virtual Int64 No { get; set; }
 
-        [Column("OID")]
-        public virtual string Oid { get; set; }
-        [Column("CART_NO")]
-        public virtual string CartNo { get; set; }
-        [Column("MID")]
-        public virtual string Mid { get; set; }
-        [Column("PRICE")]
-        public virtual int Price { get; set; }
-        [Column("GOOD_NAME")]
-        public virtual string GoodName { get; set; }
-        [Column("PAY_METHOD")]
-        public virtual string PayMethod { get; set; }
-        [Column("TYPE")]
-        public virtual string Type { get; set; }
-        [Column("BUYER_NAME")]
-        public virtual string BuyerName { get; set; }
-        [Column("BUYER_TEL")]
-        public virtual string BuyerTel { get; set; }
-        [Column("BUYER_EMAIL")]
-        public virtual string BuyerEmail { get; set; }
-        [Column("RECV_NAME")]
-        public virtual string RecvName { get; set; }
-        [Column("RECV_TEL")]
-        public virtual string RecvTel { get; set; }
-        [Column("RECV_TEL2")]
-        public virtual string RecvTel2 { get; set; }
-        [Column("SHIPPING_ADDR_NO")]
-        public virtual Int64 ShippingAddrNo { get; set; }
-        [Column("RECV_MSG")]
-        public virtual string RecvMsg { get; set; }
-        [Column("USER_ID")]
-        public virtual string UserId { get; set; }
-        [Column("MEMBER_NO")]
-        public virtual int MemberNo { get; set; }
-        [Column("SELLER_NO")]
-        public virtual int SellerNo { get; set; }
-        [Column("ORDER_DATE")]
-        public virtual DateTime OrderDate { get; set; }
-        [Column("ORDER_STATUS")]
-        public virtual string OrderStatus { get; set; }
-        [Column("PAYMENT_STATUS")]
-        public virtual string PaymentStatus { get; set; }
-        [Column("SHIPPING_STATUS")]
-        public virtual string ShippingStatus { get; set; }
-        [Column("SHIPPING_PRICE")]
-        public virtual int ShippingPrice { get; set; }
-        [Column("SLOW_MAKE_YN")]
-        public virtual string SlowMakeYn { get; set; }
-        [Column("REG_DT")]
-        public virtual DateTime RegDt { get; set; }
-        [Column("REG_ID")]
-        public virtual string RegId { get; set; }
-        [Column("UPD_DT")]
-        public virtual Nullable<DateTime> UpdDt { get; set; }
-        [Column("UPD_ID")]
-        public virtual string UpdId { get; set; }
+        public virtual string OID { get; set; }
+        public virtual string CART_NO { get; set; }
+        public virtual string MID { get; set; }
+        public virtual int PRICE { get; set; }
+        public virtual string GOOD_NAME { get; set; }
+        public virtual string PAY_METHOD { get; set; }
+        public virtual string TYPE { get; set; }
+        public virtual string BUYER_NAME { get; set; }
+        public virtual string BUYER_TEL { get; set; }
+        public virtual string BUYER_EMAIL { get; set; }
+        public virtual string RECV_NAME { get; set; }
+        public virtual string RECV_TEL { get; set; }
+        public virtual string RECV_TEL2 { get; set; }
+        public virtual Int64 SHIPPING_ADDR_NO { get; set; }
+        public virtual string RECV_MSG { get; set; }
+        public virtual string USER_ID { get; set; }
+        public virtual int MEMBER_NO { get; set; }
+        public virtual int SELLER_NO { get; set; }
+        public virtual DateTime ORDER_DATE { get; set; }
+        public virtual string ORDER_STATUS { get; set; }
+        public virtual string PAYMENT_STATUS { get; set; }
+        public virtual string SHIPPING_STATUS { get; set; }
+        public virtual int SHIPPING_PRICE { get; set; }
+        public virtual string SLOW_MAKE_YN { get; set; }
+        public virtual DateTime REG_DT { get; set; }
+        public virtual string REG_ID { get; set; }
+        public virtual Nullable<DateTime> UPD_DT { get; set; }
+        public virtual string UPD_ID { get; set; }
     }
 
     [Table("STORE_ORDER_DETAIL")]
@@ -77,24 +49,15 @@ namespace Net.Framework.StoreModel
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public virtual Int64 No { get; set; }
 
-        [Column("ORDER_MASTER_NO")]
-        public virtual Int64 OrderMasterNo { get; set; }
-        [Column("PRODUCT_DETAIL_NO")]
-        public virtual Int64 ProductDetailNo { get; set; }
-        [Column("PRODUCT_PRICE")]
-        public virtual int ProductPrice { get; set; }
-        [Column("PRODUCT_CNT")]
-        public virtual int ProductCnt { get; set; }
-        [Column("PRINTING_STATUS")]
-        public virtual string PringtingStatus { get; set; }
-        [Column("PRINTING_COMPLETE_DATE")]
-        public virtual Nullable<DateTime> PringtingCompleteDate { get; set; }
-        [Column("GIFT_MSG")]
-        public virtual string GigtMsg { get; set; }        
-        [Column("REG_DT")]
-        public virtual DateTime RegDt { get; set; }
-        [Column("REG_ID")]
-        public virtual string RegId { get; set; }
+        public virtual Int64 ORDER_MASTER_NO { get; set; }
+        public virtual Int64 ITEM_NO { get; set; }
+        public virtual int ITEM_PRICE { get; set; }
+        public virtual int ITEM_CNT { get; set; }
+        public virtual string PRINTING_STATUS { get; set; }
+        public virtual Nullable<DateTime> PRINTING_COMPLETE_DATE { get; set; }
+        public virtual string GIFT_MSG { get; set; }        
+        public virtual DateTime REG_DT { get; set; }
+        public virtual string REG_ID { get; set; }
     }
 
     public class OrderMaster
@@ -113,19 +76,13 @@ namespace Net.Framework.StoreModel
     public class OrderInfo
     {
         public virtual string CART_NO { get; set; }
-        public virtual Int64 PRODUCT_DETAIL_NO { get; set; }
-        public virtual string PRODUCT_NAME { get; set; }
+        public virtual Int64 ITEM_NO { get; set; }
+        public virtual string ITEM_NAME { get; set; }
         public virtual string NAME { get; set; }
-        public virtual double FILE_SIZE { get; set; }
-        public virtual double MATERIAL_VOLUME { get; set; }
-        public virtual double OBJECT_VOLUME { get; set; }
-        public virtual double SIZE_X { get; set; }
-        public virtual double SIZE_Y { get; set; }
-        public virtual double SIZE_Z { get; set; }
-        public virtual int TOTAL_PRICE { get; set; }
-        public virtual int PRODUCT_CNT { get; set; }
+        public virtual int BASE_PRICE { get; set; }
+        public virtual int ITEM_CNT { get; set; }
         public virtual int PAYMENT_PRICE { get; set; }
-        public virtual int SHIPPING_PRICE { get; set; }    
+        public virtual Nullable<int> SHIPPING_COST { get; set; }    
     }
 
     public class EncResult
@@ -180,9 +137,9 @@ namespace Net.Framework.StoreModel
     public class ContractDetail
     {
         public virtual Int64 NO { get; set; }
-        public virtual string NAME { get; set; }
-        public virtual int PRODUCT_PRICE { get; set; }
-        public virtual int PRODUCT_CNT { get; set; }
+        public virtual string ITEM_NAME { get; set; }
+        public virtual int BASE_PRICE { get; set; }
+        public virtual int ITEM_CNT { get; set; }
         public virtual int PAY_PRICE { get; set; }               
         public virtual string PRINTING_STATUS { get; set; }
     }

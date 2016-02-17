@@ -10,12 +10,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using log4net;
+using log4net.Config;
 
 namespace Makers.Store.Controllers
 {
     public class BaseController : Controller
     {
         public static ApplicationConfiguration.StoreConfiguration instance = ApplicationConfiguration.StoreConfiguration.Instance;
+        protected static readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public ProfileModel profileModel;
         //public CommonValModel commonValModel = new CommonValModel();
 

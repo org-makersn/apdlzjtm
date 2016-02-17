@@ -6,20 +6,20 @@ using System.Reflection;
 namespace Net.Framework.Util
 {
 
-  public enum OrderStatus
-  {
-    /// <summary>
-    /// 주문완료
-    /// </summary>
-    [StringValue("00"), Description("주문완료")]
-    Complete,
+    public enum OrderStatus
+    {
+        /// <summary>
+        /// 주문완료
+        /// </summary>
+        [StringValue("00"), Description("주문완료")]
+        Complete,
 
-    /// <summary>
-    /// 주문취소
-    /// </summary>
-    [StringValue("01"), Description("주문취소")]
-    Cancel
-  }
+        /// <summary>
+        /// 주문취소
+        /// </summary>
+        [StringValue("01"), Description("주문취소")]
+        Cancel
+    }
 
   public enum PaymentStatus
   {
@@ -32,7 +32,7 @@ namespace Net.Framework.Util
       /// <summary>
       /// 결제취소
       /// </summary>
-      [StringValue("01"), Description("결제취소(실패)")]
+      [StringValue("01"), Description("결제취소")]
       Cancel,
 
       /// <summary>

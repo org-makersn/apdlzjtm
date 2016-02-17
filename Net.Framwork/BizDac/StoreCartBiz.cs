@@ -19,18 +19,18 @@ namespace Net.Framwork.BizDac
         {
             // 장바구니에 미 주문 상품이 있는지 체크
             List<StoreCartInfo> storeCartList = new List<StoreCartInfo>();
-            storeCartList = new StoreCartDac().GetStoreCartByMemberNo(data.MemberNo);
+            storeCartList = new StoreCartDac().GetStoreCartByMemberNo(data.MEMBER_NO);
             int cartGoodsCnt = storeCartList.Count;
             int result = 0;
 
             // 미 주문 상품이 없으면 장바구니번호 생성
             if (cartGoodsCnt == 0)
             {
-                data.CartNo = new StoreCartDac().GetCreateCartNo();
+                data.CART_NO = new StoreCartDac().GetCreateCartNo();
             }
             else
             {
-                data.CartNo = storeCartList[0].CART_NO;
+                data.CART_NO = storeCartList[0].CART_NO;
             }
 
             result = new StoreCartDac().InsertStoreCart(data);

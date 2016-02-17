@@ -13,12 +13,13 @@ using System.Xml;
 using System.Collections;
 using System.Data;
 using Net.Common.Model;
+using Net.Framework.Util;
 using Newtonsoft.Json;
 using Makers.Store.Models;
 using Makersn.Models;
-
 using Makers.Store.Configurations;
-using Net.Framework.Util;
+using log4net;
+using log4net.Config;
 
 namespace Makers.Store.Controllers
 {
@@ -27,7 +28,7 @@ namespace Makers.Store.Controllers
         //
         // GET: /Order/
 
-        private Hashtable hstCode_PayMethod = new Hashtable();
+        private Hashtable hstCode_PayMethod = new Hashtable();        
 
         public ActionResult Index()
         {
@@ -56,7 +57,7 @@ namespace Makers.Store.Controllers
             master.Oid = biz.GetNewOrderNo();
             master.Currency = instance.Currency;
             master.BuyerName = profileModel.UserNm;
-            master.StoreCart.CartNo = forms["cartNo"];
+            master.StoreCart.CART_NO = forms["cartNo"];
             master.OrderInfoList = biz.GetStoreOrderListByMemberNo(profileModel.UserNo); // admin으로 조회     
 
             int index = 0;
@@ -65,8 +66,8 @@ namespace Makers.Store.Controllers
             {
                 if (index == 0)
                 {
-                    master.TotalPrice += item.PAYMENT_PRICE + item.SHIPPING_PRICE;
-                    firstGoodsName = item.PRODUCT_NAME;
+                    master.TotalPrice += item.PAYMENT_PRICE;
+                    firstGoodsName = item.ITEM_NAME;
                 }
                 else
                 {
@@ -428,36 +429,36 @@ namespace Makers.Store.Controllers
             Int64 orderMasterNo = 0;
             int orderDetailNo = 0;
 
-            storeOrderT.Oid = Request.Params["oid"];
-            storeOrderT.CartNo = Request.Params["cartNo"];
-            storeOrderT.Mid = instance.Mid;
-            storeOrderT.Price = storePaymentT.Common.TotPrice;
-            storeOrderT.GoodName = Request.Params["goodname"];
-            storeOrderT.PayMethod = storePaymentT.Common.PayMethod;
-            storeOrderT.Type = "chkfake"; // 고정값
-            storeOrderT.BuyerName = Request.Params["buyername"];
-            storeOrderT.BuyerEmail = Request.Params["buyeremail"];
-            storeOrderT.BuyerTel = Request.Params["buyertel"];
-            storeOrderT.RecvName = Request.Params["recvname"];
-            storeOrderT.RecvTel = Request.Params["recvtel"];
-            storeOrderT.RecvMsg = Request.Params["recvmsg"];
-            storeOrderT.UserId = profileModel.UserId;
-            storeOrderT.MemberNo = profileModel.UserNo;
-            storeOrderT.OrderDate = DateTime.Now;
-            storeOrderT.OrderStatus = StringEnum.GetValue(OrderStatus.Complete); // 주문완료
+            storeOrderT.OID = Request.Params["oid"];
+            storeOrderT.CART_NO = Request.Params["cartNo"];
+            storeOrderT.MID = instance.Mid;
+            storeOrderT.PRICE = storePaymentT.Common.TotPrice;
+            storeOrderT.GOOD_NAME = Request.Params["goodname"];
+            storeOrderT.PAY_METHOD = storePaymentT.Common.PayMethod;
+            storeOrderT.TYPE = "chkfake"; // 고정값
+            storeOrderT.BUYER_NAME = Request.Params["buyername"];
+            storeOrderT.BUYER_EMAIL = Request.Params["buyeremail"];
+            storeOrderT.BUYER_TEL = Request.Params["buyertel"];
+            storeOrderT.RECV_NAME = Request.Params["recvname"];
+            storeOrderT.RECV_TEL = Request.Params["recvtel"];
+            storeOrderT.RECV_MSG = Request.Params["recvmsg"];
+            storeOrderT.USER_ID = profileModel.UserId;
+            storeOrderT.MEMBER_NO = profileModel.UserNo;
+            storeOrderT.ORDER_DATE = DateTime.Now;
+            storeOrderT.ORDER_STATUS = StringEnum.GetValue(OrderStatus.Complete); // 주문완료
             if (storePaymentT.Common.PayMethod.Equals("VBank"))
             {
-                storeOrderT.PaymentStatus = StringEnum.GetValue(PaymentStatus.Waiting); // 결제대기
+                storeOrderT.PAYMENT_STATUS = StringEnum.GetValue(PaymentStatus.Waiting); // 결제대기
             }
             else
             {
-                storeOrderT.PaymentStatus = StringEnum.GetValue(PaymentStatus.Complete); // 결제완료
+                storeOrderT.PAYMENT_STATUS = StringEnum.GetValue(PaymentStatus.Complete); // 결제완료
             }
-            storeOrderT.ShippingAddrNo = Int64.Parse(Request.Params["shippingAddrNo"]);
-            storeOrderT.ShippingPrice = int.Parse(Request.Params["shippingPrice"]);
-            storeOrderT.SlowMakeYn = Request.Params["rdoSlowMakeYn"];
-            storeOrderT.RegDt = DateTime.Now;
-            storeOrderT.RegId = profileModel.UserId;
+            storeOrderT.SHIPPING_ADDR_NO = Int64.Parse(Request.Params["shippingAddrNo"]);
+            storeOrderT.SHIPPING_PRICE = int.Parse(Request.Params["shippingPrice"]);
+            storeOrderT.SLOW_MAKE_YN = Request.Params["rdoSlowMakeYn"];
+            storeOrderT.REG_DT = DateTime.Now;
+            storeOrderT.REG_ID = profileModel.UserId;
 
             // 주문 마스터 저장
             orderMasterNo = orderBiz.InsertOrderInfo(storeOrderT);
@@ -468,13 +469,13 @@ namespace Makers.Store.Controllers
             foreach(OrderInfo info in OrderInfoList)
             {
                 StoreOrderDetailT item = new StoreOrderDetailT();
-                item.OrderMasterNo = orderMasterNo;
-                item.ProductDetailNo = info.PRODUCT_DETAIL_NO;
-                item.ProductPrice = info.TOTAL_PRICE;
-                item.ProductCnt = info.PRODUCT_CNT;
-                item.PringtingStatus = StringEnum.GetValue(PrintingStatus.Waiting); // 출력대기
-                item.RegDt = DateTime.Now;
-                item.RegId = profileModel.UserId;
+                item.ORDER_MASTER_NO = orderMasterNo;
+                item.ITEM_NO = info.ITEM_NO;
+                item.ITEM_PRICE = info.BASE_PRICE;
+                item.ITEM_CNT = info.ITEM_CNT;
+                item.PRINTING_STATUS = StringEnum.GetValue(PrintingStatus.Waiting); // 출력대기
+                item.REG_DT = DateTime.Now;
+                item.REG_ID = profileModel.UserId;
                 storeOrderDetailList.Add(item);
             }
 
@@ -485,7 +486,7 @@ namespace Makers.Store.Controllers
                 orderDetailNo = orderBiz.InsertOrderDetailInfo(storeOrderDetailList);
 
                 // 카트 주문상태 업데이트
-                cartBiz.SetCartByCartNo(storeOrderT.CartNo);
+                cartBiz.SetCartByCartNo(storeOrderT.CART_NO);
 
                 storePaymentT.OrderMasterNo = orderMasterNo;
             }
@@ -565,60 +566,60 @@ namespace Makers.Store.Controllers
 
             if (model != null)
             {
-                storePaymentHistoryT.OrderMasterNo = model.OrderMasterNo;
-                storePaymentHistoryT.Tid = model.Common.Tid;
-                storePaymentHistoryT.ResultCode = model.Common.Resultcode;
-                storePaymentHistoryT.ResultMsg = model.Common.ResultMsg;
-                storePaymentHistoryT.MoId = model.Common.MoId;
-                storePaymentHistoryT.ApplDate = model.Common.ApplDate;
-                storePaymentHistoryT.ApplTime = model.Common.ApplTime;
-                storePaymentHistoryT.ApplNum = model.Common.ApplNum;
-                storePaymentHistoryT.PayMethod = model.Common.PayMethod;
-                storePaymentHistoryT.TotPrice = model.Common.TotPrice;
-                storePaymentHistoryT.EventCode = model.Common.EventCode;
-                storePaymentHistoryT.CardNum = model.VCard.Num;
-                storePaymentHistoryT.CardInterest = model.VCard.Interest;
-                storePaymentHistoryT.CardQuota = model.VCard.Quota;
-                storePaymentHistoryT.CardCode = model.VCard.Code;
-                storePaymentHistoryT.CardBankCode = model.VCard.BankCode;
-                storePaymentHistoryT.OrgCurrency = instance.Currency;
-                storePaymentHistoryT.ExchangeRate = model.VCard.ExchangeRate;
-                storePaymentHistoryT.CardOcbNum = model.VCard.OcbNum;
-                storePaymentHistoryT.CardOcbSaveApplNum = model.VCard.OcbSaveApplNum;
-                storePaymentHistoryT.CardOcbPayApplNum = model.VCard.OcbPayApplNum;
-                storePaymentHistoryT.CardOcbApplDate = model.VCard.OcbApplDate;
-                storePaymentHistoryT.CardOcbPayPrice = model.VCard.OcbPayPrice;
-                storePaymentHistoryT.CardCheckFlag = model.VCard.CheckFlag;
-                storePaymentHistoryT.IspCheckFlag = model.VCard.IspCheckFlag;
-                storePaymentHistoryT.AcctBankCode = model.DirectBank.AcctBankCode;
-                storePaymentHistoryT.CshrResultCode = model.DirectBank.CshrResultCode;
-                storePaymentHistoryT.CshrType = model.DirectBank.CshrType;
-                storePaymentHistoryT.VactNum = model.VBank.VactNum;
-                storePaymentHistoryT.VactBankCode = model.VBank.VactBankCode;
-                storePaymentHistoryT.VactName = model.VBank.VactName;
-                storePaymentHistoryT.VactInputName = model.VBank.VactInputName;
-                storePaymentHistoryT.VactDate = model.VBank.VactDate;
-                storePaymentHistoryT.VactTime = model.VBank.VactTime;
-                storePaymentHistoryT.HppNum = model.Hpp.Num;
-                storePaymentHistoryT.ArsbNum = model.Arsb.Num;
-                storePaymentHistoryT.PhnbNum = model.Phnb.Num;
-                storePaymentHistoryT.OcbNum = model.Ocb.Num;
-                storePaymentHistoryT.OcbSaveApplNum = model.VCard.OcbSaveApplNum;
-                storePaymentHistoryT.OcbPayApplNum = model.VCard.OcbPayApplNum;
-                storePaymentHistoryT.OcbPayPrice = model.VCard.OcbPayPrice;
-                storePaymentHistoryT.CultUserId = model.Cult.UserId;
-                storePaymentHistoryT.TeenRemains = model.Teen.Remains;
-                storePaymentHistoryT.TeenUserId = model.Teen.UserId;
-                storePaymentHistoryT.GamgCnt = model.Gamg.Cnt;
-                storePaymentHistoryT.GamgNum = model.Gamg.Num;
-                storePaymentHistoryT.GamgErrMsg = model.Gamg.ErrMsg;
-                storePaymentHistoryT.BcshUserId = model.Bcsh.UserId;
-                storePaymentHistoryT.CardApplPrice = model.Ssvc.CardApplPrice;
-                storePaymentHistoryT.SsvcApplPrice = model.Ssvc.ApplPrice;
-                storePaymentHistoryT.SsvcCardPrice = model.Ssvc.CardPrice;
-                storePaymentHistoryT.SsvcPointPrice = model.Ssvc.PointPricee;
-                storePaymentHistoryT.RegDt = DateTime.Now;
-                storePaymentHistoryT.RegId = profileModel.UserId;
+                storePaymentHistoryT.ORDER_MASTER_NO = model.OrderMasterNo;
+                storePaymentHistoryT.TID = model.Common.Tid;
+                storePaymentHistoryT.RESULT_CODE = model.Common.Resultcode;
+                storePaymentHistoryT.RESULT_MSG = model.Common.ResultMsg;
+                storePaymentHistoryT.M_OID = model.Common.MoId;
+                storePaymentHistoryT.APPL_DATE = model.Common.ApplDate;
+                storePaymentHistoryT.APPL_TIME = model.Common.ApplTime;
+                storePaymentHistoryT.APPL_NUM = model.Common.ApplNum;
+                storePaymentHistoryT.PAY_METHOD = model.Common.PayMethod;
+                storePaymentHistoryT.TOT_PRICE = model.Common.TotPrice;
+                storePaymentHistoryT.EVENT_CODE = model.Common.EventCode;
+                storePaymentHistoryT.CARD_NUM = model.VCard.Num;
+                storePaymentHistoryT.CARD_INTEREST = model.VCard.Interest;
+                storePaymentHistoryT.CARD_QUOTA = model.VCard.Quota;
+                storePaymentHistoryT.CARD_CODE = model.VCard.Code;
+                storePaymentHistoryT.CARD_BANK_CODE = model.VCard.BankCode;
+                storePaymentHistoryT.ORG_CURRENCY = instance.Currency;
+                storePaymentHistoryT.EXCHANGE_RATE = model.VCard.ExchangeRate;
+                storePaymentHistoryT.CARD_OCB_NUM = model.VCard.OcbNum;
+                storePaymentHistoryT.CARD_OCB_SAVE_APPL_NUM = model.VCard.OcbSaveApplNum;
+                storePaymentHistoryT.CARD_OCB_PAY_APPL_NUM = model.VCard.OcbPayApplNum;
+                storePaymentHistoryT.CARD_OCB_APPL_DATE = model.VCard.OcbApplDate;
+                storePaymentHistoryT.CARD_OCB_PAY_PRICE = model.VCard.OcbPayPrice;
+                storePaymentHistoryT.CARD_CHECK_FLAG = model.VCard.CheckFlag;
+                storePaymentHistoryT.ISP_CHECK_FLAG = model.VCard.IspCheckFlag;
+                storePaymentHistoryT.ACCT_BANK_CODE = model.DirectBank.AcctBankCode;
+                storePaymentHistoryT.CSHR_RESULT_CODE = model.DirectBank.CshrResultCode;
+                storePaymentHistoryT.CSHR_TYPE = model.DirectBank.CshrType;
+                storePaymentHistoryT.VACT_NUM = model.VBank.VactNum;
+                storePaymentHistoryT.VACT_BANK_CODE = model.VBank.VactBankCode;
+                storePaymentHistoryT.VACT_NAME = model.VBank.VactName;
+                storePaymentHistoryT.VACT_INPUT_NAME = model.VBank.VactInputName;
+                storePaymentHistoryT.VACT_DATE = model.VBank.VactDate;
+                storePaymentHistoryT.VACT_TIME = model.VBank.VactTime;
+                storePaymentHistoryT.HPP_NUM = model.Hpp.Num;
+                storePaymentHistoryT.ARSB_NUM = model.Arsb.Num;
+                storePaymentHistoryT.PHNB_NUM = model.Phnb.Num;
+                storePaymentHistoryT.OCB_NUM = model.Ocb.Num;
+                storePaymentHistoryT.OCB_SAVE_APPL_NUM = model.VCard.OcbSaveApplNum;
+                storePaymentHistoryT.OCB_PAY_APPL_NUM = model.VCard.OcbPayApplNum;
+                storePaymentHistoryT.OCB_PAY_PRICE = model.VCard.OcbPayPrice;
+                storePaymentHistoryT.CULT_USER_ID = model.Cult.UserId;
+                storePaymentHistoryT.TEEN_REMAINS = model.Teen.Remains;
+                storePaymentHistoryT.TEEN_USER_ID = model.Teen.UserId;
+                storePaymentHistoryT.GAMG_CNT = model.Gamg.Cnt;
+                storePaymentHistoryT.GAMG_NUM = model.Gamg.Num;
+                storePaymentHistoryT.GAMG_ERR_MSG = model.Gamg.ErrMsg;
+                storePaymentHistoryT.BCSH_USER_ID = model.Bcsh.UserId;
+                storePaymentHistoryT.CARD_APPL_PRICE = model.Ssvc.CardApplPrice;
+                storePaymentHistoryT.SSVC_APPL_PRICE = model.Ssvc.ApplPrice;
+                storePaymentHistoryT.SSVC_CARD_PRICE = model.Ssvc.CardPrice;
+                storePaymentHistoryT.SSVC_POINT_PRICE = model.Ssvc.PointPricee;
+                storePaymentHistoryT.REG_DT = DateTime.Now;
+                storePaymentHistoryT.REG_ID = profileModel.UserId;
 
                 // 결과 저장
                 biz.InsertStorePaymentHistory(storePaymentHistoryT);
@@ -787,8 +788,9 @@ namespace Makers.Store.Controllers
         /// </summary>
         /// <param name="oId"></param>
         [HttpPost]
-        public string StartINICancel(string oId, string cancelMsg, string cancelReason)
+        public JsonResult StartINICancel(string oId, string cancelMsg, string cancelReason)
         {
+            AjaxResponseModel response = new AjaxResponseModel();            
             StoreOrderBiz biz = new StoreOrderBiz();
             string tId = biz.GetTradeId(oId);
 
@@ -835,18 +837,20 @@ namespace Makers.Store.Controllers
             //# 6. 취소 결과 #
             //################
             StorePaymentCancelT storePaymentCancelT = new StorePaymentCancelT();
-            storePaymentCancelT.ResultCode = INIpay.GetResult(ref intPInst, "resultcode");					// 결과코드 ("00"이면 지불성공)
-            storePaymentCancelT.ResultMsg = INIpay.GetResult(ref intPInst, "resultmsg");					// 결과내용
-            storePaymentCancelT.CancelDate = INIpay.GetResult(ref intPInst, "CancelDate");					// 이니시스 취소날짜
-            storePaymentCancelT.CancelTime = INIpay.GetResult(ref intPInst, "CancelTime");					// 이니시스 취소시각
-            storePaymentCancelT.CshrCancelNum = INIpay.GetResult(ref intPInst, "CSHR_CancelNum");			//현금영수증 취소 승인번호
+            storePaymentCancelT.RESULT_CODE = INIpay.GetResult(ref intPInst, "resultcode");					// 결과코드 ("00"이면 지불성공)
+            storePaymentCancelT.RESULT_MSG = INIpay.GetResult(ref intPInst, "resultmsg");					// 결과내용
+            storePaymentCancelT.CANCEL_DATE = INIpay.GetResult(ref intPInst, "CancelDate");					// 이니시스 취소날짜
+            storePaymentCancelT.CANCEL_TIME = INIpay.GetResult(ref intPInst, "CancelTime");					// 이니시스 취소시각
+            storePaymentCancelT.CSHR_CANCEL_NUM = INIpay.GetResult(ref intPInst, "CSHR_CancelNum");			//현금영수증 취소 승인번호
+            storePaymentCancelT.REG_DT = DateTime.Now;
+            storePaymentCancelT.REG_ID = profileModel.UserId;
 
             //###############################################################################
             //# 7. 인스턴스 해제 #
             //####################
             INIpay.Destroy(ref intPInst);
 
-            if (storePaymentCancelT.ResultCode.Equals("00"))
+            if (storePaymentCancelT.RESULT_CODE.Equals("00"))
             {
                 // 결제취소 테이블 저장
                 biz.InsertOrderCancelInfo(storePaymentCancelT);
@@ -859,7 +863,7 @@ namespace Makers.Store.Controllers
 
                 string email = "sslee@makersi.com";
                 string title = "결제취소";
-                string comment = "주문에 대해 결제 취소 처리";
+                string comment = storePaymentCancelT.RESULT_MSG;
                 string Subject = "주문에 대해서 결제취소 처리 되었습니다.";
 
                 SendMailModels oMail = new SendMailModels();
@@ -867,7 +871,10 @@ namespace Makers.Store.Controllers
                 
             }
 
-            return storePaymentCancelT.ResultMsg;
+            response.Success = true;
+            response.Result = storePaymentCancelT.RESULT_MSG;
+
+            return Json(response, JsonRequestBehavior.AllowGet); ;
         }
         #endregion
 
@@ -887,7 +894,7 @@ namespace Makers.Store.Controllers
         {
             VacctInputData data = new VacctInputData();
             string requestIp = Request.UserHostAddress;
-            string pgIp = instance.PgIp.Substring(0,10);
+            string pgIp = instance.PgIp.Substring(0, 10);
 
             // pg에서 보냈는지 ip로 체크
             if (requestIp.Equals(pgIp))
@@ -915,11 +922,20 @@ namespace Makers.Store.Controllers
                 data.tmCshr = forms["TM_CSHR"];
                 data.noCshrAppl = forms["NO_CSHR_APPL"];
                 data.noCshrTid = forms["NO_CSHR_TID"];
+
             }
 
             var jsonData = JsonConvert.SerializeObject(data);
+            
+            // 로그 남기기
+            log4net.Config.XmlConfigurator.Configure();
+            logger.Debug(Environment.NewLine + jsonData);
 
-            Response.Write(jsonData);
+            // 입금확인 성공시 출력
+            Response.Write("OK");
+
+
+
         }
         #endregion
     }
