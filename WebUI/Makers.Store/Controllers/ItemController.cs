@@ -99,26 +99,6 @@ namespace Makers.Store.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="group"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public IList<CommonCodeT> GetCommonCodes(string group, string type)
-        {
-            IList<CommonCodeT> list = null;
-            list = CacheUtil.GetCache("MenuList") as IList<CommonCodeT>;
-
-            if (list == null)
-            {
-                list = new CommonCodeDac().GetCommonCode(group, type);
-                CacheUtil.SetCache("MenuList", list);
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
         [HttpPost]
@@ -134,7 +114,7 @@ namespace Makers.Store.Controllers
             string paramMode = collection["mode"];
             int mainImg = Convert.ToInt32(collection["main_img"]);
             int basePrice = Convert.ToInt32(collection["BasePrice"]);
-            string paramTitle = collection["item_title"];
+            string paramItemName = collection["item_name"];
             string paramContents = collection["item_contents"];
             int paramCodeNo = Convert.ToInt32(collection["category_no"]);
             //배송코드
@@ -256,6 +236,26 @@ namespace Makers.Store.Controllers
             ViewData["shipping_type"] = new SelectList(EnumHelper.GetEnumDictionary<StoreShippingType>(), "Key", "Value", itemDetail.ShippingType);
 
             return View(itemDetail);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IList<CommonCodeT> GetCommonCodes(string group, string type)
+        {
+            IList<CommonCodeT> list = null;
+            list = CacheUtil.GetCache("MenuList") as IList<CommonCodeT>;
+
+            if (list == null)
+            {
+                list = new CommonCodeDac().GetCommonCode(group, type);
+                CacheUtil.SetCache("MenuList", list);
+            }
+
+            return list;
         }
 
         #region img upload

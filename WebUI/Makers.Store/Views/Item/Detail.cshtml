@@ -34,7 +34,7 @@
     <ul class="btnSet">
         @if (Model.StoreMemberNo == ViewBag.VisitorNo || profile.UserLevel > 50)
         {
-            <li><a href="javascript:void(0);" id="editBtn" data-val="@Model.No">편집</a></li>
+            <li><a href="javascript:void(0);" id="editBtn" data-itemno="@Model.No">편집</a></li>
         }
     </ul>
 }
@@ -117,7 +117,7 @@
                 <p class="date"><span id="txt_base_price">@Model.BasePrice</span> 원</p>
                 <p ><input type="number" id="ItemCnt" name="ItemCnt" value="1" min="1" max="99" maxlength="2" oninput="maxLengthCheck(this)" onkeypress="return isNumeric(event)" style=" width:60px; height:26px; line-height:26px; margin-left:20px; padding-left:10px;" /></p>
                 <div class="btnSet">
-                    <p><a href="javascript:void(0)" class="print" title="장바구니">장바구니</a></p>
+                    <p><a href="javascript:void(0)" class="print" title="장바구니" id="add-to-cart" data-itemno="@Model.No">장바구니</a></p>
                     <ul class="socialArea2">
                         @if (Model.UseYn == "Y")
                         {
@@ -284,9 +284,15 @@
 
         //수정 버튼
         $("#editBtn").click(function () {
-            var itemNo = $(this).data("val");
+            var itemNo = $(this).data("itemno");
             $(location).attr("href", "/item/edit/" + itemNo);
         });
+
+        $("#add-to-cart").click(function () {
+            var itemNo = $(this).data("itemno");
+            var itemcnt = $("#ItemCnt").val();
+        });
+        
 
         //트위터 공유
         function pstTwitter() {
