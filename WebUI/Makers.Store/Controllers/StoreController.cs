@@ -27,28 +27,34 @@ namespace Makers.Store.Controllers
             if (q == "" && profileModel.UserNo == 0 && url == "") return Redirect("/");
 
             int sMembNo = 0;
-            if (q == "") { q = Base64Helper.Base64Encode(profileModel.UserNo.ToString()); }
+            if (string.IsNullOrEmpty(q)) {
+                int sMemberNo = storeMembBiz.GetStoreMemberNoByMemberNo(profileModel.UserNo);
+                q = Base64Helper.Base64Encode(sMemberNo.ToString()); 
+            }
             sMembNo = int.Parse(Base64Helper.Base64Decode(q));
 
-            StoreMemberT storeMember = new StoreMemberT();
-            if (url != "")
+            StoreMemberExT storeMember = new StoreMemberExT();
+            if (!string.IsNullOrEmpty(url))
             {
                 //짧은 주소
             }
             else
             {
-                storeMember = storeMembBiz.GetStoreMemberByMemberNO(sMembNo);
+                storeMember = storeMembBiz.GetFullStoreMemberByMemberNo(sMembNo);
             }
 
-            if (storeMember.DelYn == "Y") return Redirect("/");
-
-            if (!string.IsNullOrEmpty(storeMember.StoreProfileMsg))
+            if (storeMember != null)
             {
-                storeMember.StoreProfileMsg = new HtmlFilter().PunctuationEncode(storeMember.StoreProfileMsg);
-                storeMember.StoreProfileMsg = new HtmlFilter().ConvertContent(storeMember.StoreProfileMsg);
+                if (storeMember.DelYn == "Y") return Redirect("/");
+
+                if (!string.IsNullOrEmpty(storeMember.StoreProfileMsg))
+                {
+                    storeMember.StoreProfileMsg = new HtmlFilter().PunctuationEncode(storeMember.StoreProfileMsg);
+                    storeMember.StoreProfileMsg = new HtmlFilter().ConvertContent(storeMember.StoreProfileMsg);
+                }
             }
 
-            int visitorNo = profileModel.UserNo;
+            //int visitorNo = profileModel.UserNo;
 
             return View(storeMember);
         }

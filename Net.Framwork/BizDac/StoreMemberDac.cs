@@ -68,6 +68,41 @@ namespace Net.Framwork.BizDac
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
+        internal StoreMemberExT SelectFullStoreMemberByMemberNo(int memberNo)
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+
+            string query = DacHelper.GetSqlCommand("StoreMemberDac.SelectFullStoreMemberByMemberNo");
+            using (var cmd = new SqlCommand(query))
+            {
+                cmd.Parameters.Add("@STORE_MEMBER_NO", SqlDbType.Int).Value = memberNo;
+
+                return dbHelper.ExecuteSingle<StoreMemberExT>(cmd);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
+        internal int SelectStoreMemberNoByMemberNo(int memberNo)
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string query = "SELECT NO FROM STORE_MEMBER with(nolock) where MEMBER_NO = @MEMBER_NO";
+
+            using (var cmd = new SqlCommand(query))
+            {
+                cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
+                return dbHelper.ExecuteScalar<int>(cmd);
+            }
+        }
+
+        /// <summary>
         /// Insert StoreMember
         /// </summary>
         /// <param name="data"></param>

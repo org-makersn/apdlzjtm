@@ -105,6 +105,8 @@ namespace Net.Framework.Util
     
   public enum StoreShippingType
   {
+      [EnumTitle("기본배송정책")]
+      기본배송정책 = 0,
       [EnumTitle("무료배송")]
       무료배송 = 1,
       [EnumTitle("상품별 배송비")]

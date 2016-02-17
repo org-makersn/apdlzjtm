@@ -202,6 +202,7 @@
     <Content Include="Content\css\group.css" />
     <Content Include="Content\css\layout.css" />
     <Content Include="Content\css\nanumbarungothic.css" />
+    <Content Include="Content\images\arrowReport.png" />
     <Content Include="Content\images\bg_drag.gif" />
     <Content Include="Content\images\common\arrowNotice.png" />
     <Content Include="Content\images\common\arrow_trans.png" />
@@ -462,6 +463,7 @@
     <Content Include="Content\images\common\top_img_print01.png" />
     <Content Include="Content\images\common\top_txt_print01.png" />
     <Content Include="Content\images\common\top_txt_print02.png" />
+    <Content Include="Content\images\placeholder-image.png" />
     <Content Include="favicon.ico" />
     <Content Include="Content\images\payment\ANI.GIF" />
     <Content Include="Content\images\payment\BANK.GIF" />
@@ -520,12 +522,16 @@
     <Content Include="Content\images\payment\TITLE_02.GIF" />
     <Content Include="Content\images\payment\TITLE_04.GIF" />
     <Content Include="Global.asax" />
-    <Content Include="Content\css\NanumBarunGothic.eot" />
-    <Content Include="Content\css\NanumBarunGothic.woff" />
-    <Content Include="Content\css\NanumBarunGothicBold.woff" />
+    <Content Include="Content\css\font\NanumBarunGothic.eot" />
+    <Content Include="Content\css\font\NanumBarunGothic.woff" />
+    <Content Include="Content\css\font\NanumBarunGothicBold.woff" />
     <None Include="Properties\PublishProfiles\store.makersn.com.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\ajaxmodel.js" />
+    <Content Include="Scripts\bxslider\jquery.bxslider.css" />
+    <Content Include="Scripts\bxslider\jquery.bxslider.js" />
+    <Content Include="Scripts\bxslider\jquery.bxslider.min.css" />
+    <Content Include="Scripts\bxslider\jquery.bxslider.min.js" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\item\upload.js" />
@@ -599,6 +605,13 @@
     <Content Include="Views\Item\Upload.cshtml" />
     <Content Include="Views\Item\LoadUploadFiles.cshtml" />
     <Content Include="Views\Order\VacctInputConfirmTest.cshtml" />
+    <Content Include="Views\Item\Detail.cshtml" />
+    <Content Include="Views\Category\ShowCategory.cshtml" />
+    <Content Include="Views\Store\Index.cshtml" />
+    <Content Include="Views\Store\Regist.cshtml" />
+    <Content Include="Views\Item\Edit.cshtml">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

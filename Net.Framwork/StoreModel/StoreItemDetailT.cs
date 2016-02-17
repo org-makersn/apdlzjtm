@@ -6,49 +6,49 @@ namespace Net.Framework.StoreModel
 {
     public partial class StoreItemDetailT
     {
-        [Key, Column("NO")]
+        //[Key, Column("NO")]
         public long No { get; set; }
-        [Column("TEMP")]
+        //[Column("TEMP")]
         public string Temp { get; set; }
-        [Column("STORE_MEMBER_NO")]
+        //[Column("STORE_MEMBER_NO")]
         public int StoreMemberNo { get; set; }
-        [Column("CODE_NO")]
+        //[Column("CODE_NO")]
         public int CodeNo { get; set; }
-        [Column("MAIN_IMG")]
+        //[Column("MAIN_IMG")]
         public int MainImg { get; set; }
-        [Column("TITLE")]
-        public string Title { get; set; }
-        [Column("CONTENTS")]
+        //[Column("ITEM_NAME")]
+        public string ItemName { get; set; }
+        //[Column("CONTENTS")]
         public string Contents { get; set; }
-        [Column("BASE_PRICE")]
+        //[Column("BASE_PRICE")]
         public int BasePrice { get; set; }
-        [Column("SHIPPING_TYPE")]
+        //[Column("SHIPPING_TYPE")]
         public int ShippingType { get; set; }
-        [Column("SHIPPING_COST")]
+        //[Column("SHIPPING_COST")]
         public int ShippingCost { get; set; }
-        [Column("STOCK_CNT")]
+        //[Column("STOCK_CNT")]
         public int StockCnt { get; set; }
-        [Column("TAGS")]
+        //[Column("TAGS")]
         public string Tags { get; set; }
-        [Column("VIEW_CNT")]
+        //[Column("VIEW_CNT")]
         public int ViewCnt { get; set; }
-        [Column("VIDEO_SOURCE")]
+        //[Column("VIDEO_SOURCE")]
         public string VideoSource { get; set; }
-        [Column("USE_YN")]
+        //[Column("USE_YN")]
         public string UseYn { get; set; }
-        [Column("FEATURED_YN")]
+        //[Column("FEATURED_YN")]
         public string FeaturedYn { get; set; }
-        [Column("FEATURED_DT")]
+        //[Column("FEATURED_DT")]
         public Nullable<System.DateTime> FeaturedDt { get; set; }
-        [Column("FEATURED_VISIBILITY")]
+        //[Column("FEATURED_VISIBILITY")]
         public string FeaturedVisibility { get; set; }
-        [Column("FEATURED_PRIORITY")]
+        //[Column("FEATURED_PRIORITY")]
         public Nullable<int> FeaturedPriority { get; set; }
-        [Column("REG_IP")]
+        //[Column("REG_IP")]
         public string RegIp { get; set; }
-        [Column("REG_DT")]
+        //[Column("REG_DT")]
         public System.DateTime RegDt { get; set; }
-        [Column("REG_ID")]
+        //[Column("REG_ID")]
         public string RegId { get; set; }
 
         public string ShippingName { get; set; }

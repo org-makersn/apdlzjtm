@@ -2,9 +2,11 @@
 using Net.Common.Filter;
 using Net.Common.Helper;
 using Net.Common.Model;
+using Net.Common.Util;
 using Net.Framework.BizDac;
 using Net.Framework.StoreModel;
 using Net.Framework.Util;
+using Net.Framwork.BizDac;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,11 +29,10 @@ namespace Makers.Store.Controllers
         /// <returns></returns>
         public ActionResult Detail(string no)
         {
-            int articleNo = 0;
-            var visitorNo = profileModel.UserNo;
+            int sItemNo = 0;
             //ViewBag.GoReply = goReply;
             StoreItemDetailT itemDetail = new StoreItemDetailT();
-            if (Int32.TryParse(no, out articleNo))
+            if (Int32.TryParse(no, out sItemNo))
             {
                 //조회수 증가 방지
                 if (Request.Cookies[no] == null)
@@ -42,13 +43,13 @@ namespace Makers.Store.Controllers
                     //뷰 업데이트
                 }
 
-                itemDetail = sItemDac.GetItemDetailByItemNo(articleNo, visitorNo);
-
+                itemDetail = sItemDac.GetItemDetailByItemNo(sItemNo, profileModel.UserNo);
+                if (itemDetail == null) return Content("<script>alert('잘못된 상품 입니다.'); location.href='/';</script>");
                 itemDetail.ShippingName = EnumHelper.GetEnumTitle((StoreShippingType)itemDetail.ShippingType);
 
-                if ((itemDetail.StoreMemberNo != visitorNo && profileModel.UserLevel < 50) && itemDetail.UseYn.ToUpper() == "N")
+                if ((itemDetail.StoreMemberNo != profileModel.UserNo && profileModel.UserLevel < 50) && itemDetail.UseYn.ToUpper() == "N")
                 {
-                    return Content("<script>alert('비공개 처리된 게시물 입니다.'); location.href='/';</script>");
+                    return Content("<script>alert('비공개 처리된 상품 입니다.'); location.href='/';</script>");
                 }
             }
             else
@@ -64,11 +65,11 @@ namespace Makers.Store.Controllers
 
             ViewBag.MainImg = itemDetail != null ? itemDetail.MainImgName : string.Empty;
 
-            ViewBag.Files = sItemFileDac.GetItemFileByItemNo(articleNo);
+            ViewBag.Files = sItemFileDac.GetItemFileByItemNo(sItemNo);
             ViewBag.ListCnt = 5;
             ViewBag.ListList = null;
 
-            ViewBag.VisitorNo = visitorNo;
+            ViewBag.VisitorNo = new StoreMemberBiz().GetStoreMemberNoByMemberNo(profileModel.UserNo);
 
             ViewBag.No = no;
             ViewBag.CodeNo = itemDetail.CodeNo.ToString();
@@ -88,7 +89,31 @@ namespace Makers.Store.Controllers
         {
             ViewBag.Temp = new DateTimeHelper().ConvertToUnixTime(DateTime.Now);
 
+            ViewData["category_no"] = new SelectList(GetCommonCodes("STORE", "ITEM"), "NO", "CODE_NAME", 0);
+
+            ViewData["shipping_type"] = new SelectList(EnumHelper.GetEnumDictionary<StoreShippingType>(), "Key", "Value", 0);
+
             return View();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IList<CommonCodeT> GetCommonCodes(string group, string type)
+        {
+            IList<CommonCodeT> list = null;
+            list = CacheUtil.GetCache("MenuList") as IList<CommonCodeT>;
+
+            if (list == null)
+            {
+                list = new CommonCodeDac().GetCommonCode(group, type);
+                CacheUtil.SetCache("MenuList", list);
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -167,7 +192,7 @@ namespace Makers.Store.Controllers
 
             if (storeItem != null)
             {
-                storeItem.Title = paramTitle;
+                storeItem.ItemName = paramTitle;
                 storeItem.CodeNo = paramCodeNo;
                 storeItem.BasePrice = basePrice;
                 storeItem.Tags = tags;
@@ -212,6 +237,25 @@ namespace Makers.Store.Controllers
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 상품 수정
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public ActionResult Edit(long no)
+        {
+            var visitorNo = profileModel.UserNo;
+            StoreItemDetailT itemDetail = new StoreItemDetailT();
+
+            itemDetail = sItemDac.GetItemDetailByItemNo(no, visitorNo);
+
+            ViewData["category_no"] = new SelectList(GetCommonCodes("STORE", "ITEM"), "NO", "CODE_NAME", itemDetail.CodeNo);
+
+            ViewData["shipping_type"] = new SelectList(EnumHelper.GetEnumDictionary<StoreShippingType>(), "Key", "Value", itemDetail.ShippingType);
+
+            return View(itemDetail);
         }
 
         #region img upload

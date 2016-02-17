@@ -141,11 +141,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SqlCmd\StoreProduct.SelectProductList_S.sql">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Net.SqlTools\Net.SqlTools.csproj">
       <Project>{b86f3a73-4f3b-4a47-b248-0d99d0d4a2d0}</Project>
       <Name>Net.SqlTools</Name>
@@ -175,7 +170,8 @@
     <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SqlCmd\StoreItemDac.SelectStoreItemDetails.sql" />
+    <EmbeddedResource Include="SqlCmd\StoreMemberDac.SelectFullStoreMemberByMemberNo.sql" />
+    <EmbeddedResource Include="SqlCmd\StoreItemDac.GetItemDetailByItemNo.sql" />
     <Content Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -31,7 +31,7 @@ namespace Net.Common.Helper
         /// <returns></returns>
         public static string ProfileImg(this UrlHelper urlHelper, string data)
         {
-            string fullPath = string.Format("{0}/{1}/{2}", instance.FileServerHost, instance.ProfileImg, data);
+            string fullPath = !string.IsNullOrEmpty(data) ? string.Format("{0}/{1}/{2}", instance.FileServerHost, instance.ProfileImg, data) : "/Content/image/default.png";
             return urlHelper.Content(fullPath);
         }
 

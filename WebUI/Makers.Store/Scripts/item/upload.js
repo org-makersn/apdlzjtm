@@ -159,8 +159,8 @@ Upload.ItemUpload = function () {
     //    return false;
     //}
 
-    var $form_data = $("#insert_form").serialize();
-    console.log($form_data);
+    //var $form_data = $("#insert_form").serialize();
+    //console.log($form_data);
     var options = {
         beforeSend: function () {
         },
@@ -501,6 +501,6 @@ Upload.GoMain = function () {
 Upload.GoArticle = function () {
     //window.onbeforeunload = null; 동작안함
     var no = $("#No").val();
-    var codeNo = $('input[name=lv1]:checked').val()
-    location.href = "/Item/Detail?no=" + no + "&codeNo=" + codeNo;
+    //var codeNo = $('input[name=lv1]:checked').val()
+    location.href = "/Item/Detail/" + no;
 }
