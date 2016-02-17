@@ -84,51 +84,51 @@ namespace Net.Framwork.BizDac
             foreach (StoreOrderT item in list)
             {
                 // 주문상태
-                if(item.OrderStatus.Equals(StringEnum.GetValue(OrderStatus.Complete)))
+                if(item.ORDER_STATUS.Equals(StringEnum.GetValue(OrderStatus.Complete)))
                 {
-                    item.OrderStatus = StringEnum.GetDescription(OrderStatus.Complete);
+                    item.ORDER_STATUS = StringEnum.GetDescription(OrderStatus.Complete);
                 }
-                else if (item.OrderStatus.Equals(StringEnum.GetValue(OrderStatus.Cancel)))
+                else if (item.ORDER_STATUS.Equals(StringEnum.GetValue(OrderStatus.Cancel)))
                 {
-                    item.OrderStatus = StringEnum.GetDescription(OrderStatus.Cancel);
+                    item.ORDER_STATUS = StringEnum.GetDescription(OrderStatus.Cancel);
                 }
 
                 // 결제상태
-                if (item.PaymentStatus.Equals(StringEnum.GetValue(PaymentStatus.Complete)))
+                if (item.PAYMENT_STATUS.Equals(StringEnum.GetValue(PaymentStatus.Complete)))
                 {
-                    item.PaymentStatus = StringEnum.GetDescription(PaymentStatus.Complete);
+                    item.PAYMENT_STATUS = StringEnum.GetDescription(PaymentStatus.Complete);
                 }
-                else if (item.PaymentStatus.Equals(StringEnum.GetValue(PaymentStatus.Cancel)))
+                else if (item.PAYMENT_STATUS.Equals(StringEnum.GetValue(PaymentStatus.Cancel)))
                 {
-                    item.PaymentStatus = StringEnum.GetDescription(PaymentStatus.Cancel);
+                    item.PAYMENT_STATUS = StringEnum.GetDescription(PaymentStatus.Cancel);
                 }
-                else if (item.PaymentStatus.Equals(StringEnum.GetValue(PaymentStatus.Waiting)))
+                else if (item.PAYMENT_STATUS.Equals(StringEnum.GetValue(PaymentStatus.Waiting)))
                 {
-                    item.PaymentStatus = StringEnum.GetDescription(PaymentStatus.Waiting);
+                    item.PAYMENT_STATUS = StringEnum.GetDescription(PaymentStatus.Waiting);
                 }
-                else if (item.PaymentStatus.Equals(StringEnum.GetValue(PaymentStatus.InProgress)))
+                else if (item.PAYMENT_STATUS.Equals(StringEnum.GetValue(PaymentStatus.InProgress)))
                 {
-                    item.PaymentStatus = StringEnum.GetDescription(PaymentStatus.InProgress);
+                    item.PAYMENT_STATUS = StringEnum.GetDescription(PaymentStatus.InProgress);
                 }
 
                 // 배송상태
-                if (item.ShippingStatus != null)
+                if (item.SHIPPING_STATUS != null)
                 {                    
-                    if (item.ShippingStatus.Equals(StringEnum.GetValue(ShippingStatus.Complete)))
+                    if (item.SHIPPING_STATUS.Equals(StringEnum.GetValue(ShippingStatus.Complete)))
                     {
-                        item.ShippingStatus = StringEnum.GetDescription(ShippingStatus.Complete);
+                        item.SHIPPING_STATUS = StringEnum.GetDescription(ShippingStatus.Complete);
                     }
-                    else if (item.ShippingStatus.Equals(StringEnum.GetValue(ShippingStatus.Cancel)))
+                    else if (item.SHIPPING_STATUS.Equals(StringEnum.GetValue(ShippingStatus.Cancel)))
                     {
-                        item.ShippingStatus = StringEnum.GetDescription(ShippingStatus.Cancel);
+                        item.SHIPPING_STATUS = StringEnum.GetDescription(ShippingStatus.Cancel);
                     }
-                    else if (item.ShippingStatus.Equals(StringEnum.GetValue(ShippingStatus.Waiting)))
+                    else if (item.SHIPPING_STATUS.Equals(StringEnum.GetValue(ShippingStatus.Waiting)))
                     {
-                        item.ShippingStatus = StringEnum.GetDescription(ShippingStatus.Waiting);
+                        item.SHIPPING_STATUS = StringEnum.GetDescription(ShippingStatus.Waiting);
                     }
-                    else if (item.ShippingStatus.Equals(StringEnum.GetValue(ShippingStatus.InProgress)))
+                    else if (item.SHIPPING_STATUS.Equals(StringEnum.GetValue(ShippingStatus.InProgress)))
                     {
-                        item.ShippingStatus = StringEnum.GetDescription(ShippingStatus.InProgress);
+                        item.SHIPPING_STATUS = StringEnum.GetDescription(ShippingStatus.InProgress);
                     }
                 }
             }

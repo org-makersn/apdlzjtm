@@ -39,7 +39,7 @@ namespace Makers.Store.Controllers
         public PartialViewResult plugin_check(FormCollection forms)
         {
             StoreCartT storeCartT = new StoreCartT();
-            storeCartT.CartNo = forms["cartNo"];
+            storeCartT.CART_NO = forms["cartNo"];
 
             return PartialView(storeCartT);
         }
@@ -48,11 +48,11 @@ namespace Makers.Store.Controllers
         public int AddCart(Int64 productDetailNo, int cnt)
         {            
             StoreCartT storeCartT = new StoreCartT();
-            storeCartT.MemberNo = profileModel.UserNo;
-            storeCartT.ProductCnt = cnt;
-            storeCartT.ProductDetailNo = productDetailNo;
-            storeCartT.RegDt = DateTime.Now;
-            storeCartT.RegId = profileModel.UserId;
+            storeCartT.MEMBER_NO = profileModel.UserNo;
+            storeCartT.ITEM_CNT = cnt;
+            storeCartT.ITEM_NO = productDetailNo;
+            storeCartT.REG_DT = DateTime.Now;
+            storeCartT.REG_ID = profileModel.UserId;
 
             int result = new StoreCartBiz().InsertCart(storeCartT);
 

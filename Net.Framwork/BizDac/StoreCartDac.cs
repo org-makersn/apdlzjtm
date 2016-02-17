@@ -29,8 +29,6 @@ namespace Net.Framwork.BizDac
             List<StoreCartInfo> list = new List<StoreCartInfo>();
             string query = DacHelper.GetSqlCommand("StoreCart.SelectCartList_S");
 
-            //var states = dbHelper.ExecuteMultiple<StoreCartInfo>(query);
-
             using (dbContext = new StoreContext())
             {
                 list = dbContext.Database.SqlQuery<StoreCartInfo>(query,
@@ -73,7 +71,7 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                List<StoreCartT> originDataList = dbContext.StoreCartT.Where(s => s.CartNo == cartNo).ToList();
+                List<StoreCartT> originDataList = dbContext.StoreCartT.Where(s => s.CART_NO == cartNo).ToList();
 
                 foreach (StoreCartT originData in originDataList)
                 {
@@ -81,7 +79,7 @@ namespace Net.Framwork.BizDac
                     {
                         try
                         {
-                            originData.OrderYn = "Y";
+                            originData.ORDER_YN = "Y";
                             dbContext.StoreCartT.Attach(originData);
                             dbContext.Entry<StoreCartT>(originData).State = System.Data.Entity.EntityState.Modified;
                             dbContext.SaveChanges();
@@ -115,7 +113,7 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                StoreCartT originData = dbContext.StoreCartT.SingleOrDefault(s => s.No == productDetailNo && s.MemberNo == memberNo);
+                StoreCartT originData = dbContext.StoreCartT.SingleOrDefault(s => s.No == productDetailNo && s.MEMBER_NO == memberNo);
                 if (originData != null)
                 {
                     try

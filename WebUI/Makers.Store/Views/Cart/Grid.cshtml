@@ -15,14 +15,14 @@
 @foreach (StoreCartInfo data in Model)
 {
 <tr>
-    <td>@data.PRODUCT_NAME</td>
-    <td>@data.TOTAL_PRICE</td>
-    <td>@data.PRODUCT_CNT</td>
+    <td>@data.ITEM_NAME</td>
+    <td>@data.BASE_PRICE</td>
+    <td>@data.ITEM_CNT</td>
     <td>@data.ORDER_YN</td>
-    <td><a href="javascript:CartDelete(@data.No);">삭제</a></td>
+    <td><a href="javascript:CartDelete(@data.NO);">삭제</a></td>
 </tr>
 cartNo = data.CART_NO;
-totPaymoney += (data.TOTAL_PRICE * data.PRODUCT_CNT); // total price
+totPaymoney += (data.BASE_PRICE * data.ITEM_CNT); // total price
 }
 </table>
 <form id="cartInfo" method="post">

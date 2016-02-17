@@ -110,12 +110,6 @@
                 <td>상품상세번호</td>
                 <td>상품명</td>
                 <td>구매자</td>
-                <td>파일사이즈</td>
-                <td>MATERIAL_VOLUME</td>
-                <td>OBJECT_VOLUME</td>
-                <td>SIZE_X</td>
-                <td>SIZE_Y</td>
-                <td>SIZE_Z</td>
                 <td>판매가</td>    
                 <td>갯수</td>      
                 <td>결제비용</td>  
@@ -125,19 +119,13 @@
         @foreach (OrderInfo data in m.OrderInfoList)
         {
             <tr>
-                <td>@data.PRODUCT_DETAIL_NO</td>
-                <td>@data.PRODUCT_NAME</td>
+                <td>@data.ITEM_NO</td>
+                <td>@data.ITEM_NAME</td>
                 <td>@data.NAME</td>
-                <td>@data.FILE_SIZE</td>
-                <td>@data.MATERIAL_VOLUME</td>
-                <td>@data.OBJECT_VOLUME</td>
-                <td>@data.SIZE_X</td>
-                <td>@data.SIZE_Y</td>
-                <td>@data.SIZE_Z</td>
-                <td>@data.TOTAL_PRICE</td>
-                <td>@data.PRODUCT_CNT</td>
+                <td>@data.BASE_PRICE</td>
+                <td>@data.ITEM_CNT</td>
                 <td>@data.PAYMENT_PRICE</td>
-                <td>@data.SHIPPING_PRICE</td>
+                <td>@data.SHIPPING_COST</td>
             </tr>
         }
     </table>
@@ -168,7 +156,7 @@
     결제금액 <input type="text" value="@Model.TotalPrice" id="price" name="price" />
     </p>
     <p>
-    장바구니번호 <input type="text" value="@Model.StoreCart.CartNo" id="cartNo" name="cartNo" />
+    장바구니번호 <input type="text" value="@Model.StoreCart.CART_NO" id="cartNo" name="cartNo" />
     </p>
     <p>
     받는사람 성명 <input type="text" value="@Model.BuyerName" id="recvname" name="recvname" />

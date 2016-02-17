@@ -12,118 +12,62 @@ namespace Net.Framework.StoreModel
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public virtual Int64 No { get; set; }
 
-        [Column("ORDER_MASTER_NO")]
-        public virtual Int64 OrderMasterNo { get; set; }
-        [Column("TID")]
-        public virtual string Tid { get; set; }
-        [Column("RESULT_CODE")]
-        public virtual string ResultCode { get; set; }
-        [Column("RESULT_MSG")]
-        public virtual string ResultMsg { get; set; }
-        [Column("MOID")]
-        public virtual string MoId { get; set; }
-        [Column("APPL_DATE")]
-        public virtual string ApplDate { get; set; }
-        [Column("APPL_TIME")]
-        public virtual string ApplTime { get; set; }
-        [Column("APPL_NUM")]
-        public virtual string ApplNum { get; set; }
-        [Column("PAY_METHOD")]
-        public virtual string PayMethod { get; set; }
-        [Column("TOT_PRICE")]
-        public virtual int TotPrice { get; set; }
-        [Column("EVENT_CODE")]
-        public virtual string EventCode { get; set; }
-        [Column("CARD_NUM")]
-        public virtual string CardNum { get; set; }
-        [Column("CARD_INTEREST")]
-        public virtual string CardInterest { get; set; }
-        [Column("CARD_QUOTA")]
-        public virtual string CardQuota { get; set; }
-        [Column("CARD_CODE")]
-        public virtual string CardCode { get; set; }
-        [Column("CARD_BANK_CODE")]
-        public virtual string CardBankCode { get; set; }
-        [Column("ORG_CURRENCY")]
-        public virtual string OrgCurrency { get; set; }
-        [Column("EXCHANGE_RATE")]
-        public virtual string ExchangeRate { get; set; }
-        [Column("CARD_OCB_NUM")]
-        public virtual string CardOcbNum { get; set; }
-        [Column("CARD_OCB_SAVE_APPL_NUM")]
-        public virtual string CardOcbSaveApplNum { get; set; }
-        [Column("CARD_OCB_PAY_APPL_NUM")]
-        public virtual string CardOcbPayApplNum { get; set; }
-        [Column("CARD_OCB_APPL_DATE")]
-        public virtual string CardOcbApplDate { get; set; }
-        [Column("CARD_OCB_PAY_PRICE")]
-        public virtual string CardOcbPayPrice { get; set; }
-        [Column("CARD_CHECK_FLAG")]
-        public virtual string CardCheckFlag { get; set; }
-        [Column("ISP_CHECK_FLAG")]
-        public virtual string IspCheckFlag { get; set; }
-        [Column("ACCT_BANK_CODE")]
-        public virtual string AcctBankCode { get; set; }
-        [Column("CSHR_RESULT_CODE")]
-        public virtual string CshrResultCode { get; set; }
-        [Column("CSHR_TYPE")]
-        public virtual string CshrType { get; set; }
-        [Column("VACT_NUM")]
-        public virtual string VactNum { get; set; }
-        [Column("VACT_BANK_CODE")]
-        public virtual string VactBankCode { get; set; }
-        [Column("VACT_NAME")]
-        public virtual string VactName { get; set; }
-        [Column("VACT_INPUT_NAME")]
-        public virtual string VactInputName { get; set; }
-        [Column("VACT_DATE")]
-        public virtual string VactDate { get; set; }
-        [Column("VACT_TIME")]
-        public virtual string VactTime { get; set; }
-        [Column("HPP_NUM")]
-        public virtual string HppNum { get; set; }
-        [Column("ARSB_NUM")]
-        public virtual string ArsbNum { get; set; }
-        [Column("PHNB_NUM")]
-        public virtual string PhnbNum { get; set; }
-        [Column("OCB_NUM")]
-        public virtual string OcbNum { get; set; }
-        [Column("OCB_SAVE_APPL_NUM")]
-        public virtual string OcbSaveApplNum { get; set; }
-        [Column("OCB_PAY_APPL_NUM")]
-        public virtual string OcbPayApplNum { get; set; }
-        [Column("OCB_PAY_PRICE")]
-        public virtual string OcbPayPrice { get; set; }
-        [Column("CULT_USER_ID")]
-        public virtual string CultUserId { get; set; }
-        [Column("TEEN_REMAINS")]
-        public virtual string TeenRemains { get; set; }
-        [Column("TEEN_USER_ID")]
-        public virtual string TeenUserId { get; set; }
-        [Column("GAMG_CNT")]
-        public virtual string GamgCnt { get; set; }
-        [Column("GAMG_NUM")]
-        public virtual string GamgNum { get; set; }
-        [Column("GAMG_REMAINS")]
-        public virtual string GamgRemains { get; set; }
-        [Column("GAMG_ERR_MSG")]
-        public virtual string GamgErrMsg { get; set; }
-        [Column("BCSH_USER_ID")]
-        public virtual string BcshUserId{ get; set; }
-        [Column("CARD_APPL_PRICE")]
-        public virtual int CardApplPrice{ get; set; }
-        [Column("SSVC_APPL_PRICE")]
-        public virtual Nullable<int> SsvcApplPrice{ get; set; }
-        [Column("SSVC_CARD_PRICE")]
-        public virtual Nullable<int> SsvcCardPrice { get; set; }
-        [Column("SSVC_POINT_PRICE")]
-        public virtual Nullable<int> SsvcPointPrice { get; set; }
-        [Column("SSVC_REMAIN")]
-        public virtual Nullable<int> SsvcRemain { get; set; }
-        [Column("REG_DT")]
-        public virtual DateTime RegDt{ get; set; }
-        [Column("REG_ID")]
-        public virtual string RegId{ get; set; }
+        public virtual Int64 ORDER_MASTER_NO { get; set; }
+        public virtual string TID { get; set; }
+        public virtual string RESULT_CODE { get; set; }
+        public virtual string RESULT_MSG { get; set; }
+        public virtual string M_OID { get; set; }
+        public virtual string APPL_DATE { get; set; }
+        public virtual string APPL_TIME { get; set; }
+        public virtual string APPL_NUM { get; set; }
+        public virtual string PAY_METHOD { get; set; }
+        public virtual int TOT_PRICE { get; set; }
+        public virtual string EVENT_CODE { get; set; }
+        public virtual string CARD_NUM { get; set; }
+        public virtual string CARD_INTEREST { get; set; }
+        public virtual string CARD_QUOTA { get; set; }
+        public virtual string CARD_CODE { get; set; }
+        public virtual string CARD_BANK_CODE { get; set; }
+        public virtual string ORG_CURRENCY { get; set; }
+        public virtual string EXCHANGE_RATE { get; set; }
+        public virtual string CARD_OCB_NUM { get; set; }
+        public virtual string CARD_OCB_SAVE_APPL_NUM { get; set; }
+        public virtual string CARD_OCB_PAY_APPL_NUM { get; set; }
+        public virtual string CARD_OCB_APPL_DATE { get; set; }
+        public virtual string CARD_OCB_PAY_PRICE { get; set; }
+        public virtual string CARD_CHECK_FLAG { get; set; }
+        public virtual string ISP_CHECK_FLAG { get; set; }
+        public virtual string ACCT_BANK_CODE { get; set; }
+        public virtual string CSHR_RESULT_CODE { get; set; }
+        public virtual string CSHR_TYPE { get; set; }
+        public virtual string VACT_NUM { get; set; }
+        public virtual string VACT_BANK_CODE { get; set; }
+        public virtual string VACT_NAME { get; set; }
+        public virtual string VACT_INPUT_NAME { get; set; }
+        public virtual string VACT_DATE { get; set; }
+        public virtual string VACT_TIME { get; set; }
+        public virtual string HPP_NUM { get; set; }
+        public virtual string ARSB_NUM { get; set; }
+        public virtual string PHNB_NUM { get; set; }
+        public virtual string OCB_NUM { get; set; }
+        public virtual string OCB_SAVE_APPL_NUM { get; set; }
+        public virtual string OCB_PAY_APPL_NUM { get; set; }
+        public virtual string OCB_PAY_PRICE { get; set; }
+        public virtual string CULT_USER_ID { get; set; }
+        public virtual string TEEN_REMAINS { get; set; }
+        public virtual string TEEN_USER_ID { get; set; }
+        public virtual string GAMG_CNT { get; set; }
+        public virtual string GAMG_NUM { get; set; }
+        public virtual string GAMG_REMAINS { get; set; }
+        public virtual string GAMG_ERR_MSG { get; set; }
+        public virtual string BCSH_USER_ID { get; set; }
+        public virtual int CARD_APPL_PRICE { get; set; }
+        public virtual Nullable<int> SSVC_APPL_PRICE { get; set; }
+        public virtual Nullable<int> SSVC_CARD_PRICE { get; set; }
+        public virtual Nullable<int> SSVC_POINT_PRICE { get; set; }
+        public virtual Nullable<int> SSVC_REMAIN { get; set; }
+        public virtual DateTime REG_DT { get; set; }
+        public virtual string REG_ID { get; set; }
     }
 
     /// <summary>
@@ -136,20 +80,13 @@ namespace Net.Framework.StoreModel
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public virtual Int64 No { get; set; }
 
-        [Column("RESULT_CODE")]
-        public virtual string ResultCode { get; set; }
-        [Column("RESULT_MSG")]
-        public virtual string ResultMsg { get; set; }
-        [Column("CANCEL_DATE")]
-        public virtual string CancelDate { get; set; }
-        [Column("CANCEL_TIME")]
-        public virtual string CancelTime { get; set; }
-        [Column("CSHR_CANCEL_NUM")]
-        public virtual string CshrCancelNum { get; set; }
-        [Column("REG_DT")]
-        public virtual DateTime RegDt { get; set; }
-        [Column("REG_ID")]
-        public virtual string RegId { get; set; }
+        public virtual string RESULT_CODE { get; set; }
+        public virtual string RESULT_MSG { get; set; }
+        public virtual string CANCEL_DATE { get; set; }
+        public virtual string CANCEL_TIME { get; set; }
+        public virtual string CSHR_CANCEL_NUM { get; set; }
+        public virtual DateTime REG_DT { get; set; }
+        public virtual string REG_ID { get; set; }
     }
 
     public class StorePaymentT

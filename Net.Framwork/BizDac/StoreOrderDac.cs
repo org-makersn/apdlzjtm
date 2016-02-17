@@ -124,7 +124,8 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                storeOrderMasterList = dbContext.StoreOrderT.Where(p => p.MemberNo == memberNo && p.OrderDate >= startDt && p.OrderDate <= endDt).ToList();
+                storeOrderMasterList = dbContext.StoreOrderT.Where(p => p.MEMBER_NO == memberNo && p.ORDER_DATE >= startDt && p.ORDER_DATE <= endDt).ToList();
+                storeOrderMasterList = storeOrderMasterList.OrderByDescending(p => p.ORDER_DATE).ToList();
             }
             return storeOrderMasterList;
  
@@ -190,10 +191,10 @@ namespace Net.Framwork.BizDac
             StorePaymentHistoryT data = new StorePaymentHistoryT();
             using (dbContext = new StoreContext())
             {
-                data = dbContext.StorePaymentHistoryT.Where(p => p.MoId == oId).FirstOrDefault();
+                data = dbContext.StorePaymentHistoryT.Where(p => p.M_OID == oId).FirstOrDefault();
             }
 
-            return data.Tid;
+            return data.TID;
         }
         #endregion
 
@@ -210,13 +211,13 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.Oid == oId).FirstOrDefault();
+                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.OID == oId).FirstOrDefault();
 
                 if (data != null)
                 {
                     try
                     {
-                        data.OrderStatus = status;
+                        data.ORDER_STATUS = status;
                         dbContext.StoreOrderT.Attach(data);
                         dbContext.Entry<StoreOrderT>(data).State = System.Data.Entity.EntityState.Modified;
                         dbContext.SaveChanges();
@@ -249,13 +250,13 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.Oid == oId).FirstOrDefault();
+                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.OID == oId).FirstOrDefault();
 
                 if (data != null)
                 {
                     try
                     {
-                        data.PaymentStatus = status;
+                        data.PAYMENT_STATUS = status;
                         dbContext.StoreOrderT.Attach(data);
                         dbContext.Entry<StoreOrderT>(data).State = System.Data.Entity.EntityState.Modified;
                         dbContext.SaveChanges();
@@ -295,7 +296,7 @@ namespace Net.Framwork.BizDac
                 {
                     try
                     {
-                        data.PringtingStatus = status;
+                        data.PRINTING_STATUS = status;
                         dbContext.StoreOrderDetailT.Attach(data);
                         dbContext.Entry<StoreOrderDetailT>(data).State = System.Data.Entity.EntityState.Modified;
                         dbContext.SaveChanges();
@@ -328,13 +329,13 @@ namespace Net.Framwork.BizDac
             int ret = 0;
             using (dbContext = new StoreContext())
             {
-                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.Oid == oId).FirstOrDefault();
+                StoreOrderT data = dbContext.StoreOrderT.Where(p => p.OID == oId).FirstOrDefault();
 
                 if (data != null)
                 {
                     try
                     {
-                        data.ShippingStatus = status;
+                        data.SHIPPING_STATUS = status;
                         dbContext.StoreOrderT.Attach(data);
                         dbContext.Entry<StoreOrderT>(data).State = System.Data.Entity.EntityState.Modified;
                         dbContext.SaveChanges();
@@ -385,8 +386,8 @@ namespace Net.Framwork.BizDac
 
             using (dbContext = new StoreContext())
             {
-                data = dbContext.StoreOrderT.Where(p => p.OrderStatus.Equals("00") && 
-                                                        p.PaymentStatus.Equals("02")
+                data = dbContext.StoreOrderT.Where(p => p.ORDER_STATUS.Equals("00") && 
+                                                        p.PAYMENT_STATUS.Equals("02")
                                                    ).ToList();
             }
 
