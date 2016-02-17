@@ -291,6 +291,18 @@
         $("#add-to-cart").click(function () {
             var itemNo = $(this).data("itemno");
             var itemcnt = $("#ItemCnt").val();
+
+            var data = {
+                itemno: itemNo,
+                cnt: itemcnt
+            }
+
+            var onSuccess = function (result) {
+                if (result > 0) {
+                    $(location).attr("href", "/cart/list");
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/cart/addcart", data, onSuccess);
         });
         
 

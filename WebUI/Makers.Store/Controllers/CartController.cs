@@ -45,12 +45,12 @@ namespace Makers.Store.Controllers
         }
 
         [HttpPost]
-        public int AddCart(Int64 productDetailNo, int cnt)
+        public int AddCart(Int64 itemno, int cnt)
         {            
             StoreCartT storeCartT = new StoreCartT();
             storeCartT.MEMBER_NO = profileModel.UserNo;
             storeCartT.ITEM_CNT = cnt;
-            storeCartT.ITEM_NO = productDetailNo;
+            storeCartT.ITEM_NO = itemno;
             storeCartT.REG_DT = DateTime.Now;
             storeCartT.REG_ID = profileModel.UserId;
 

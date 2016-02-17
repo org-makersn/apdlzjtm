@@ -112,8 +112,8 @@ namespace Makers.Store.Controllers
             string paramNo = collection["No"];
             string paramTemp = collection["temp"];
             string paramMode = collection["mode"];
-            int mainImg = Convert.ToInt32(collection["main_img"]);
-            int basePrice = Convert.ToInt32(collection["BasePrice"]);
+            int paramMainImg = Convert.ToInt32(collection["main_img"]);
+            int paramBasePrice = Convert.ToInt32(collection["BasePrice"]);
             string paramItemName = collection["item_name"];
             string paramContents = collection["item_contents"];
             int paramCodeNo = Convert.ToInt32(collection["category_no"]);
@@ -121,13 +121,12 @@ namespace Makers.Store.Controllers
             int paramShippingType = Convert.ToInt32(collection["shipping_type"]);
             string paramDelNo = collection["del_no"];
             string ParamVideoSource = collection["insertVideoSource"];
-
-            string tags = collection["item_tags"];
+            string paramTags = collection["item_tags"];
 
             var mulltiSeq = collection["multi[]"];
             string[] seqArray = mulltiSeq.Split(',');
 
-            if (tags.Length > 1000)
+            if (paramTags.Length > 1000)
             {
                 response.Message = "태그는 1000자 이하로 가능합니다.";
                 return Json(response, JsonRequestBehavior.AllowGet);
@@ -160,7 +159,7 @@ namespace Makers.Store.Controllers
                 //save
                 storeItem = new StoreItemT();
                 storeItem.StoreMemberNo = profileModel.UserNo;
-                storeItem.Tags = tags;
+                storeItem.Tags = paramTags;
                 storeItem.Temp = paramTemp;
                 storeItem.ViewCnt = 0;
                 storeItem.RegDt = DateTime.Now;
@@ -172,11 +171,11 @@ namespace Makers.Store.Controllers
 
             if (storeItem != null)
             {
-                storeItem.ItemName = paramTitle;
+                storeItem.ItemName = paramItemName;
                 storeItem.CodeNo = paramCodeNo;
-                storeItem.BasePrice = basePrice;
-                storeItem.Tags = tags;
-                storeItem.MainImg = mainImg;
+                storeItem.BasePrice = paramBasePrice;
+                storeItem.Tags = paramTags;
+                storeItem.MainImg = paramMainImg;
                 storeItem.Contents = paramContents;
                 storeItem.VideoSource = ParamVideoSource;
                 //배송코드
