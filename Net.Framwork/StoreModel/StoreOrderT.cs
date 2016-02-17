@@ -34,7 +34,7 @@ namespace Net.Framework.StoreModel
         public virtual string ORDER_STATUS { get; set; }
         public virtual string PAYMENT_STATUS { get; set; }
         public virtual string SHIPPING_STATUS { get; set; }
-        public virtual int SHIPPING_PRICE { get; set; }
+        public virtual int SHIPPING_COST { get; set; }
         public virtual string SLOW_MAKE_YN { get; set; }
         public virtual DateTime REG_DT { get; set; }
         public virtual string REG_ID { get; set; }

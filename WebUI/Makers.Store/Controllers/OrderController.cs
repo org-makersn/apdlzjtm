@@ -455,7 +455,7 @@ namespace Makers.Store.Controllers
                 storeOrderT.PAYMENT_STATUS = StringEnum.GetValue(PaymentStatus.Complete); // 결제완료
             }
             storeOrderT.SHIPPING_ADDR_NO = Int64.Parse(Request.Params["shippingAddrNo"]);
-            storeOrderT.SHIPPING_PRICE = int.Parse(Request.Params["shippingPrice"]);
+            storeOrderT.SHIPPING_COST = int.Parse(Request.Params["shippingCost"]);
             storeOrderT.SLOW_MAKE_YN = Request.Params["rdoSlowMakeYn"];
             storeOrderT.REG_DT = DateTime.Now;
             storeOrderT.REG_ID = profileModel.UserId;
