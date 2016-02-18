@@ -17,13 +17,13 @@ namespace Makers.Store
             //    consumerKey: "",
             //    consumerSecret: "");
 
-            //OAuthWebSecurity.RegisterFacebookClient(
-            //    appId: "1521025591535279",
-            //    appSecret: "232565270202f702191107369b1de5d0");
-
             OAuthWebSecurity.RegisterFacebookClient(
-                appId: "426712864183755",
-                appSecret: "b7061e193583148eb518b313d78b9983");
+                appId: "1521025591535279",
+                appSecret: "232565270202f702191107369b1de5d0");
+
+            //OAuthWebSecurity.RegisterFacebookClient(
+            //    appId: "426712864183755",
+            //    appSecret: "b7061e193583148eb518b313d78b9983");
 
             //OAuthWebSecurity.RegisterGoogleClient();
         }

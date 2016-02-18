@@ -289,6 +289,7 @@
         });
 
         $("#add-to-cart").click(function () {
+            if (loginPop("@ViewBag.LogOnChk")) return false;
             var itemNo = $(this).data("itemno");
             var itemcnt = $("#ItemCnt").val();
 
