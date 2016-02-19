@@ -2,8 +2,6 @@
 @model OrderMaster
 @{
     ViewBag.Title = "주문상세";
-    OrderMaster m = new OrderMaster();
-    m.OrderInfoList = Model.OrderInfoList;
 }
 @section Scripts{
 <!-------------------------------------------------------------------------------                                        
@@ -49,7 +47,17 @@
 		    {
 			    alert("상품명이 빠졌습니다. 필수항목입니다.");
 			    return false;
-		    }
+            }
+            else if ($("#gopaymethod").val() == "")  // 필수항목 체크 (결제수단)
+            {
+                alert("결제수단을 선택해주세요.");
+                return false;
+            }
+            else if ($("#recvpostnum").val() == "")  // 필수항목 체크 (배송정보)
+            {
+                alert("배송지를 선택해주세요.");
+                return false;
+            }
 		    else if(ini_IsInstalledPlugin() == false)
 		    {
         		    alert("\n이니페이 플러그인 128이 설치되지 않았습니다. \n\n안전한 결제를 위하여 이니페이 플러그인 128의 설치가 필요합니다. \n\n다시 설치하시려면 Ctrl + F5키를 누르시거나 메뉴의 [보기/새로고침]을 선택하여 주십시오.");
@@ -105,35 +113,54 @@
 
 <h2>List</h2>
 
-<table style="border:solid 1px blue;" border="1">        
-            <tr>
-                <td>상품상세번호</td>
-                <td>상품명</td>
-                <td>구매자</td>
-                <td>판매가</td>    
-                <td>갯수</td>      
-                <td>결제비용</td>  
-                <td>배송비</td>  
-            </tr>
+<table style="border:solid 1px blue;" border="1">
+    <tr>
+        <td>판매자</td>
+        <td>상품</td>
+        <td>결제가</td>
+        <td>배송비</td>
+    </tr>
 
-        @foreach (OrderInfo data in m.OrderInfoList)
-        {
-            <tr>
-                <td>@data.ITEM_NO</td>
-                <td>@data.ITEM_NAME</td>
-                <td>@data.NAME</td>
-                <td>@data.BASE_PRICE</td>
-                <td>@data.ITEM_CNT</td>
-                <td>@data.PAYMENT_PRICE</td>
-                <td>@data.SHIPPING_COST</td>
-            </tr>
-        }
-    </table>
+     @foreach (OrderGroupItem groupItem in Model.OrderGroupItemList)
+     {
+        List<OrderInfo> list = Model.OrderInfoList.Where(p => p.STORE_NO == groupItem.STORE_NO).ToList();
+             
+        <tr>
+            <td>@groupItem.STORE_NAME</td>
+            <td>
+                <table style="border:solid 1px blue;" border="1">
+                    <tr>
+                        <td>상품상세번호</td>
+                        <td>이미지</td>
+                        <td>상품명</td>
+                        <td>구매자</td>
+                        <td>판매가</td>    
+                        <td>갯수</td>      
+                    </tr>
+                    @foreach (OrderInfo data in list)
+                    {
+                    <tr>
+                        <td>@data.ITEM_NO</td>
+                        <td><a href="../item/detail/@data.ITEM_NO"><img src="@data.RENAME" /></a></td>
+                        <td>@data.ITEM_NAME</td>
+                        <td>@data.NAME</td>
+                        <td>@data.BASE_PRICE</td>
+                        <td>@data.ITEM_CNT</td>
+                    </tr>
+                    }
+                </table>
+            </td>
+            <td>@groupItem.PAY_PRICE</td>
+            <td>무료</td>
+        </tr>
+     }
+</table>
+
 
 <form id="ini" onsubmit="return pay(this)" method="post">
     <p>
         <select id="gopaymethod" name="gopaymethod">
-            <option >선택</option>
+            <option value="" >선택</option>
             <option value="Card">신용카드</option>
             <option value="DirectBank">실시간 은행계좌이체</option>
             <option value="VBank">무통장 입금 </option>
@@ -186,7 +213,7 @@
         <tr>
             <td colspan="3">
                 <p>
-                    배송지명 <input type="text" id="txtShippingName" />
+                배송지명 <input type="text" id="txtShippingName" />
                 </p>
                 <p>
                 배송주소(도로명) <input type="text" size="50" readonly="readonly" id="recvaddr" name="recvaddr" />
@@ -195,20 +222,21 @@
                 배송주소(지번) <input type="text" size="50" readonly="readonly" id="recvaddr2" name="recvaddr2" />
                 </p>
                 <p>
-                배송주소 상세 <input type="text" id="recvaddrDetail" name="recvaddrDetail" /> <input type="button" id="btnAddShippingInfo" value="추가" />
+                배송주소 상세 <input type="text" id="recvaddrDetail" name="recvaddrDetail" />
                 </p>
                 <p>
-                우편번호 <input type="text" readonly="readonly" id="recvpostnum" /> <input type="button" value="검색" id="btnSchPostNo" />
+                우편번호 <input type="text" readonly="readonly" id="recvpostnum" name="recvpostnum" /> <input type="button" value="검색" id="btnSchPostNo" />
                 </p>
             </td>
         </tr>
     </table>
+    <input type="button" id="btnAddShippingInfo" value="배송지추가" />
     <p>
         <input type="button" id="btnPay" name="btnPay" value="결제하기" />
     </p>
     <!-- <input type=hidden name=ini_logoimage_url  value="http://[사용할 이미지주소] "/> -->
     <!-- <input type=hidden name=ini_menuarea_url value="http://[사용할 이미지주소]" /> -->
-    <input type="hidden" id="acceptmethod" name="acceptmethod" value="VERIFY(1056313):SKIN(ORIGINAL):HPP(1):VBANK(@DateTime.Now.AddDays(7).ToShortDateString().Replace("-",""))"> 
+    <input type="hidden" id="acceptmethod" name="acceptmethod" value="VERIFY(1056313):SKIN(ORIGINAL):HPP(1):VBANK(@DateTime.Now.AddDays(7).ToShortDateString().Replace("-", ""))"> 
     <input type="hidden" id="oid" name="oid" value="@Model.Oid" >
 	<input type="hidden" id="INIregno" name="INIregno" > 
     <input type="hidden" id="ini_encfield" name="ini_encfield" value="@Model.EncResult.IniEncField" > 
@@ -229,7 +257,7 @@
     <input type="hidden" value="@Model.Currency" id="currency" name="currency" />
     <input type="hidden" id="url" name="url" />
     <input type="hidden" id="shippingAddrNo" name="shippingAddrNo" />
-    <input type="hidden" id="shippingPrice" name="shippingPrice" value="3000" />
+    <input type="hidden" id="shippingCost" name="shippingCost" value="3000" />
 </form>
 <script type="text/javascript">
 
@@ -251,6 +279,7 @@
         }
     })
 
+    // 배송지 추가
     $("#btnAddShippingInfo").on("click", function () {
 
         var chkVal = $("input:checkbox[name=chkDefaultAddr]").is(":checked");

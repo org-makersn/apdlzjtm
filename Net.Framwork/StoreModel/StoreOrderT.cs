@@ -34,7 +34,7 @@ namespace Net.Framework.StoreModel
         public virtual string ORDER_STATUS { get; set; }
         public virtual string PAYMENT_STATUS { get; set; }
         public virtual string SHIPPING_STATUS { get; set; }
-        public virtual int SHIPPING_PRICE { get; set; }
+        public virtual int SHIPPING_COST { get; set; }
         public virtual string SLOW_MAKE_YN { get; set; }
         public virtual DateTime REG_DT { get; set; }
         public virtual string REG_ID { get; set; }
@@ -69,6 +69,7 @@ namespace Net.Framework.StoreModel
         public virtual string BuyerName { get; set; }
         public virtual string GoodsName { get; set; }
         public virtual List<OrderInfo> OrderInfoList { get; set; }
+        public virtual List<OrderGroupItem> OrderGroupItemList { get; set; }
         public virtual StoreCartT StoreCart{get; set;}
         public virtual EncResult EncResult{get; set;}
     }
@@ -82,7 +83,19 @@ namespace Net.Framework.StoreModel
         public virtual int BASE_PRICE { get; set; }
         public virtual int ITEM_CNT { get; set; }
         public virtual int PAYMENT_PRICE { get; set; }
-        public virtual Nullable<int> SHIPPING_COST { get; set; }    
+        public virtual Nullable<int> SHIPPING_COST { get; set; }
+        public virtual string RENAME { get; set; }
+        public virtual string STORE_URL { get; set; }
+        public virtual string STORE_NAME { get; set; }
+        public virtual string STORE_PROFILE_MSG { get; set; }
+        public virtual int STORE_NO { get; set; }
+    }
+
+    public class OrderGroupItem
+    {
+        public virtual int STORE_NO { get; set; }
+        public virtual string STORE_NAME { get; set; }
+        public virtual int PAY_PRICE { get; set; }
     }
 
     public class EncResult

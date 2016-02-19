@@ -25,7 +25,27 @@ namespace Net.Framwork.BizDac
         }
         #endregion
 
-        #region 
+        #region GetStoreOrderGroupItemlListByMemberNo - 판매자별 카트 주문 리스트
+        /// <summary>
+        /// 판매자별 카트 주문 리스트
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
+        public List<OrderGroupItem> GetStoreOrderGroupItemlListByMemberNo(int memberNo)
+        {
+            List<OrderGroupItem> data = new List<OrderGroupItem>();
+            data = new StoreOrderDac().GetOrderGroupItemListByMemberNo(memberNo);
+
+            return data;
+        }
+        #endregion
+
+        #region GetStoreOrderDetailListByCartNo
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cartNo"></param>
+        /// <returns></returns>
         public List<StoreOrderDetailT> GetStoreOrderDetailListByCartNo(string cartNo)
         {
             List<StoreOrderDetailT> data = new List<StoreOrderDetailT>();
