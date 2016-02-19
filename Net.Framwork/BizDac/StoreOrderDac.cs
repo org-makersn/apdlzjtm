@@ -81,6 +81,27 @@ namespace Net.Framwork.BizDac
         }
         #endregion
 
+        #region GetOrderItemListByMemberNo - 판매자별 카트 주문 리스트
+        /// <summary>
+        /// 판매자별 카트 주문 리스트
+        /// </summary>
+        /// <param name="memberNo"></param>
+        /// <returns></returns>
+        internal List<OrderGroupItem> GetOrderGroupItemListByMemberNo(int memberNo)
+        {
+            List<OrderGroupItem> orderGroupItemList = new List<OrderGroupItem>();
+            string query = DacHelper.GetSqlCommand("StoreOrder.SelectOrderListGroupByMemberNo");
+
+            using (dbContext = new StoreContext())
+            {
+                orderGroupItemList = dbContext.Database.SqlQuery<OrderGroupItem>(query,
+                    new SqlParameter("MEMBER_NO", memberNo)).ToList();
+            }
+
+            return orderGroupItemList;
+        }
+        #endregion
+
         #region GetOrderInfo - 주문서 확인
         public StoreOrderT GetOrderInfo()
         {

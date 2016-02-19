@@ -170,6 +170,9 @@
     <EmbeddedResource Include="SqlCmd\StoreOrder.SelectContractDetailListByOid_S.sql" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="SqlCmd\StoreOrder.SelectOrderListGroupByMemberNo.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SqlCmd\StoreMemberDac.SelectFullStoreMemberByMemberNo.sql" />
     <EmbeddedResource Include="SqlCmd\StoreItemDac.GetItemDetailByItemNo.sql" />
     <Content Include="SqlCmd\StoreOrder.SelectContractDetailListByCondition_S.sql" />

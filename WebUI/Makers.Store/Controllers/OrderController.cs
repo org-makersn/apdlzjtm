@@ -52,13 +52,15 @@ namespace Makers.Store.Controllers
             OrderMaster master = new OrderMaster();
             StoreOrderBiz biz = new StoreOrderBiz();
             master.OrderInfoList = new List<OrderInfo>();
+            master.OrderGroupItemList = new List<OrderGroupItem>();
             master.StoreCart = new StoreCartT();
             master.Mid = instance.Mid;
             master.Oid = biz.GetNewOrderNo();
             master.Currency = instance.Currency;
             master.BuyerName = profileModel.UserNm;
             master.StoreCart.CART_NO = forms["cartNo"];
-            master.OrderInfoList = biz.GetStoreOrderListByMemberNo(profileModel.UserNo); // admin으로 조회     
+            master.OrderInfoList = biz.GetStoreOrderListByMemberNo(profileModel.UserNo);
+            master.OrderGroupItemList = biz.GetStoreOrderGroupItemlListByMemberNo(profileModel.UserNo);
 
             int index = 0;
             string firstGoodsName = "";
@@ -73,6 +75,10 @@ namespace Makers.Store.Controllers
                 {
                     master.TotalPrice += item.PAYMENT_PRICE;
                 }
+
+                // 제품 이미지 경로
+                item.RENAME = instance.MsgImgThumb + item.RENAME;
+
                 index++;
             }
 
