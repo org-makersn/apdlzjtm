@@ -146,7 +146,7 @@ namespace Makers.Store.Controllers
 
                 if (storeItem != null)
                 {
-                    if (storeItem.StoreMemberNo == profileModel.UserNo && storeItem.Temp == paramTemp)
+                    if (storeItem.StoreMemberNo == new StoreMemberBiz().GetStoreMemberNoByMemberNo(profileModel.UserNo) && storeItem.Temp == paramTemp)
                     {
                         storeItem.UpdDt = DateTime.Now;
                         storeItem.UpdId = profileModel.UserId;

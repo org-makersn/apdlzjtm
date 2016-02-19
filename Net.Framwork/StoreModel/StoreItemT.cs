@@ -26,9 +26,9 @@ namespace Net.Framework.StoreModel
         [Column("SHIPPING_TYPE")]
         public int ShippingType { get; set; }
         [Column("SHIPPING_COST")]
-        public int ShippingCost { get; set; }
+        public Nullable<int> ShippingCost { get; set; }
         [Column("STOCK_CNT")]
-        public int StockCnt { get; set; }
+        public Nullable<int> StockCnt { get; set; }
         [Column("TAGS")]
         public string Tags { get; set; }
         [Column("VIEW_CNT")]

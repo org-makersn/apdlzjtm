@@ -140,7 +140,7 @@ Upload.ItemUpload = function () {
         }
     });
 
-    if (check_msg('item_title', '제목을 입력해 주세요.', 'required:articleTitle') == false) return false;
+    if (check_msg('item_name', '제목을 입력해 주세요.', 'required:articleTitle') == false) return false;
 
     if (check_msg('item_contents', '내용을 입력해 주세요.', 'required:contents') == false) return false;
 

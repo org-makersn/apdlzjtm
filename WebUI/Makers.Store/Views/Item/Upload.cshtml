@@ -427,6 +427,7 @@
 
             $("#addVideoSource").click(function () {
                 var text = $("#videoSource").val();
+                alert(text);
                 var char = "";
                 var fristIndex = text.indexOf("http");
                 char = text.substring(fristIndex - 1, fristIndex);
@@ -440,6 +441,7 @@
 
             $("#addVideoLink").click(function () {
                 var text = $("#videoLink").val();
+                alert(text);
                 if (text.indexOf("<") == -1) {
                     $("#item_contents").val($("#item_contents").val() + "\r\n" + text + "\r\n");
                     $("#videoLink").val("");
