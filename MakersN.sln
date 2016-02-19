@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.SqlTools", "Net.SqlTool
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.SqlTools.Tests", "Net.SqlTools.Tests\Net.SqlTools.Tests.csproj", "{8FE9B744-AE64-46F7-97FA-6EE515BBF981}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Makers.Bus", "WebUI\Makers.Bus\Makers.Bus.csproj", "{4195685B-7445-41B3-B8DC-03CE8E089E5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -238,6 +240,24 @@ Global
 		{8FE9B744-AE64-46F7-97FA-6EE515BBF981}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8FE9B744-AE64-46F7-97FA-6EE515BBF981}.Release|x64.ActiveCfg = Release|Any CPU
 		{8FE9B744-AE64-46F7-97FA-6EE515BBF981}.Release|x86.ActiveCfg = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.MacOSX|Any CPU.ActiveCfg = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.MacOSX|Any CPU.Build.0 = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.MacOSX|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.MacOSX|Mixed Platforms.Build.0 = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.MacOSX|x64.ActiveCfg = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.MacOSX|x86.ActiveCfg = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Release|x64.ActiveCfg = Release|Any CPU
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -245,5 +265,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AAE83324-8419-405A-913F-1C05B633EDDC} = {141E0763-DE33-40C6-A331-A09F50A11C0C}
 		{5BB5F439-00C9-4D8B-84AD-24779F6DF163} = {141E0763-DE33-40C6-A331-A09F50A11C0C}
+		{4195685B-7445-41B3-B8DC-03CE8E089E5F} = {141E0763-DE33-40C6-A331-A09F50A11C0C}
 	EndGlobalSection
 EndGlobal

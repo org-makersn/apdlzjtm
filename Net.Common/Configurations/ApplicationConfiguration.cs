@@ -236,5 +236,22 @@ namespace Net.Common.Configurations
             public string Slic3rDir { get; set; }
         }
         #endregion
+
+        #region 메이커버스 Configuration
+        /// <summary>
+        /// 메이커버스
+        /// </summary>
+        public class BusConfiguration
+        {
+            private static readonly BusConfiguration instance = new BusConfiguration();
+
+            public static BusConfiguration Instance { get { return instance; } }
+
+            private BusConfiguration()
+            {
+                // 추가
+            }
+        }
+        #endregion
     }
 }

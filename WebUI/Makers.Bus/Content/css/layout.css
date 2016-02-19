@@ -1,0 +1,116 @@
+﻿@charset "utf-8";
+
+/**
+* =================================================================================
+* INFORMATION
+* ---------------------------------------------------------------------------------
+* @Author : Lee, Jiyoung (jiyoung.april.lee@gmail.com)
+* @File Name : common.css
+* @Description : Style Sheet
+* @Version : 1.0
+* @Create Date : 2016.01.11
+* @Update Date : N/A
+* @History : N/A
+===================================================================================
+*/
+
+
+/* Wrap */
+.wrap { width:100%; min-height:100%; overflow-x: hidden; position: relative; background: #fff; }
+
+/* Header */
+.header { width:100%; overflow: hidden; position: relative; }
+.header .headerTop { top:0; left:0; width:100%; background: #ffffff; overflow: hidden; z-index:2; }
+.header .headerBox { width:1025px; height: 60px; margin:0 auto; overflow: hidden; }
+.header .headerBox h1 { text-align: left; margin: 13px 0  10px 0 ; }
+.header .headerBox .mainMenu { float: right; margin-top: -42px;}
+.header .headerBox .mainMenu li { float: left; color: #000; font-weight: bold; font-size: 14px}
+.header .headerBox .mainMenu li a { color: #000; font-weight: bold;}
+.header .headerBox .mainMenu li.facebook{cursor:pointer;display:inline-block;width:28px;height:28px;background:url(../images/bt_facebook.png) no-repeat;}
+.header .headerBox .mainMenu li.facebook a{display:block;width:28px;height:28px; }
+.header .headerBox .mainMenu li.facebook:hover{background-position:-32px 0}
+.header .headerBox .mainMenu li a:hover { color: #ff7f10; font-weight: bold; }
+.header .headerBox .mainMenu li .on { color: #ff7f10; font-weight: bold; }
+
+
+
+/* TopVisual */
+.topVisu { position:relative; width:100%; height:520px; margin-bottom: 15px;}
+.topVisu .top_btn_apply{position:absolute;top:140%;left:50%;width:262px;height:52px;background-color:#fb810e;color:#fff;font-size:18px;line-height:52px;font-weight:bold;text-align:center;margin-left:-285px;border-radius:9px;-ms-border-radius:9px;-webkit-border-radius:9px;}
+.topVisu .top_btn_apply:hover{background-color:#e86e00}
+.topVisu .top_btn_inquire{position:absolute;top:140%;left:50%;width:262px;height:52px;background-color:#fb810e;color:#fff;font-size:18px;line-height:52px;font-weight:bold;text-align:center;margin-left:10px;border-radius:9px;-ms-border-radius:9px;-webkit-border-radius:9px;}
+.topVisu .top_btn_inquire:hover{background-color:#e86e00}
+
+.topVisu .top_txt{position:absolute;top:32%;left:50%;margin-left:-230px;display:block;width:469px;height:123px;background:url(../images/txt_main.png) no-repeat}
+
+.topVisu .top_cover_img{position:absolute;top:15%;left:50%;margin-left:-420px;display:block;width:834px;height:275px;background:url(../images/main_cover_3d_txt.png) no-repeat}
+
+.mainButtons .top_txt{z-index:201;position:absolute;top:15%;left:50%;margin-left:-225px;display:block;width:469px;height:123px;background:url(../images/txt_main.png) no-repeat}
+.mainButtons .top_btn_apply{z-index:201;position:absolute;top:138%;left:50%;width:262px;height:52px;background-color:#fb810e;color:#fff;font-size:18px;line-height:52px;font-weight:bold;text-align:center;margin-left:-288px;border-radius:9px;-ms-border-radius:9px;-webkit-border-radius:9px;}
+.mainButtons .top_btn_apply:hover{background-color:#e86e00}
+.mainButtons .top_btn_inquire{z-index:201;position:absolute;top:138%;left:50%;width:262px;height:52px;background-color:#fb810e;color:#fff;font-size:18px;line-height:52px;font-weight:bold;text-align:center;margin-left:10px;border-radius:9px;-ms-border-radius:9px;-webkit-border-radius:9px;}
+.mainButtons .top_btn_inquire:hover{background-color:#e86e00}
+
+
+/* MainSlide */
+.unslider-carousel	{position:relative;overflow:hidden;background:#000;display:block;height:520px;width:100%; }
+.unslider-carousel ul	{list-style:none;margin:0;width:100%}
+.unslider-carousel ul li	{float:left; height:520px;width:100%;padding:0;margin:0;display:block;position:relative}
+.unslider-carousel .container	{margin:0 auto;position:relative;top:80%;-webkit-transform:translateY(-80%);-ms-transform:translateY(-80%);transform:translateY(-80%)}
+.unslider-carousel .container p.txt1 { font-family: Roboto; font-size: 42px; color:#fff; text-align: center; }
+.unslider-carousel .dots {position:absolute; left:0; right:0; bottom:20px; margin:0; text-align:center; line-height:1em}
+.unslider-carousel .dots li{display:inline-block; width:13px; height:13px; margin:0 4px; text-indent:-999em; border-radius:10px;-ms-border-radius:10px;-webkit-border-radius:10px; cursor:pointer; opacity:1; background:#fff; }
+.unslider-carousel .dots li.active{background:#ff7900; opacity:1}
+.attribution	{position:absolute;z-index:5;bottom:17px;right:20px;color:#edeff0;color:rgba(255,255,255,0.7);font-size:11px;text-decoration:none}
+.attribution a{text-rendering:optimizeLegibility;color:rgba(255,255,255,0.7)}
+.attribution a:hover,.attribution a:active{color:#fff}
+*{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+
+/* Main */
+.wrap{padding-bottom:180px;}
+.contWrap { width:1025px; margin:0 auto;  }
+.numWrap{display:block;padding-top:20px;padding-bottom:30px;width:100%;height:150px;text-align:center;border-bottom:1px solid #d9d9d9}
+.current_num{display:block;margin:0 auto;width:1025px;height:150px;text-align:center;}
+.current_num .school{float:left;display:inline-block;margin-left:43px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat;text-align:center;}
+.current_num .line{float:left;display:block;margin-left:55px;width:1px;height:91px;background-color:#d9d9d9}
+.current_num .printer{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -113px 0;text-align:center;}
+.current_num .student{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -226px 0;text-align:center;}
+.current_num .modeling{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -339px 0;text-align:center;}
+.current_num .num{display:block;margin-left:110px;padding-top:10px;width:100px;font-size:33px;color:#fb810e;font-weight:bold;text-align:center;letter-spacing:-1px}
+.current_num .title{display:block;margin-left:90px;width:100px;font-size:15px;color:#fb810e;text-align:center}
+.current_num .school .num{margin-left:90px}
+.current_num .school .title{margin-left:91px;padding-top:5px}
+.current_num .printer .num{margin-left:96px}
+.current_num .printer .title{margin-left:97px}
+.current_num .student .num{margin-left:100px}
+.current_num .student .title{margin-left:101px}
+.current_num .modeling .num{margin-left:100px}
+.current_num .modeling .title{margin-left:101px}
+
+.contWrap.line{position:absolute;top:700px;display:block;width:100%;height:1px;background:#000;}
+
+ 
+.contWrap .mainTitle { margin: 60px 0 20px 0; overflow:hidden; }
+.contWrap .mainTitle h2 { color: #474747; font-size: 30px;text-align:center;font-family: 'Roboto', sans-serif;font-weight:400 }
+.contWrap .mainDesc h3{color:#515151;font-size:14px;text-align:center;line-height:26px}
+
+.contWrap .intro{display:block;padding-top:40px;padding-left:30px;width:1025px;height:340px;text-align:center}
+.contWrap .intro .workshop{float:left;display:inline-block;margin:0 60px;width:200px;height:200px;background:url(../images/sp_ico_main.png) no-repeat 0 -111px;}
+.contWrap .intro .lecturer{float:left;display:inline-block;margin:0 60px;width:200px;height:200px;background:url(../images/sp_ico_main.png) no-repeat -226px -111px;}
+.contWrap .intro .printer{float:left;display:inline-block;margin:0 60px;width:200px;height:200px;background:url(../images/sp_ico_main.png) no-repeat -452px -111px;}
+.contWrap .intro .introDesc{margin-top:220px;font-size:14px;font-weight:bold;font-color:#666}
+
+ 
+/* Footer */
+.footer { position:absolute;bottom:0;background:#fb810e; width:100%; height:100px;overflow:hidden; margin-top: 55px;}
+.footer .footerList { position:relative;width:1000px;height:150px; margin:0 auto; text-align:left; background:url('../images/common/foot_logo.gif') no-repeat 950px 80px; }
+.footer .footerList .footMenu { float:right; overflow:hidden; margin: 26px 0 0 0; }
+.footer .footerList .footMenu li { float:left; margin-right:35px; margin-bottom: 25px}
+.footer .footerList .footMenu li:last-child{margin-right:0}
+.footer .footerList .footMenu li a { font-size:13px; color:#fff; }
+.footer .footerList .footSns { display:block;margin: 20px 20px 0 0;clear:both; overflow:hidden; padding-top:27px }
+.footer .footerList .footSns li { float:left; margin-right:15px; }
+.footer .footerList .footSns li a { font-size:13px; color:#fff; }
+.footer .copyRight { clear:both; padding:0 0 5px 0; text-align:right; font-size:11px; color:#fff;padding:0 65px 13px 0;position:absolute;top:114px;right:2px}
+
+

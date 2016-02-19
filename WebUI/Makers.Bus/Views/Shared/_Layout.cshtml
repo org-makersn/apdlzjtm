@@ -1,0 +1,47 @@
+﻿<!DOCTYPE HTML>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="ko">
+<head>
+	<meta name="title" content="makerbus">
+	<meta name="description" content="메이커스앤은 메이커들의 플랫폼이에요. 원하는 3D 모델을 찾고, 만들고, 나눌 수 있어요. 메이커스앤을 통해 당신의 상상을 현실로 만들어보세요!">
+	<meta name="twitter:title" content="makerbus">
+	<meta name="twitter:description" content="메이커스앤은 메이커들의 플랫폼이에요. 원하는 3D 모델을 찾고, 만들고, 나눌 수 있어요. 메이커스앤을 통해 당신의 상상을 현실로 만들어보세요!">
+	<meta property="og:title" content="makerbus">
+	<meta property="og:description" content="메이커스앤은 메이커들의 플랫폼이에요. 원하는 3D 모델을 찾고, 만들고, 나눌 수 있어요. 메이커스앤을 통해 당신의 상상을 현실로 만들어보세요!">
+	<meta property="og:url" content="http://www.makerbus.com">
+	<meta property="og:type" content="website">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta charset="UTF-8">
+	<title>@ViewBag.Title</title>	
+	<link rel="shortcut icon" type="image/x-icon" href="@Url.VersionedContent("~/favicon.ico")">
+    <link rel="stylesheet" type="text/css" href="content/css/common.css"  media="all" />
+	<link rel="stylesheet" type="text/css" href="content/css/font.css"  media="all" />
+    <link rel="stylesheet" type="text/css" href="content/css/default.css"  media="all" />
+    <link rel="stylesheet" type="text/css" href="content/css/jquery-ui-1.8.18.custom.css"/>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.1.min.js"></script>  
+    <script type="text/javascript" src="content/script/shared.jquery.js"></script>  
+
+</head>
+<body>
+	
+	<!-- Wrap -->
+	<div class="contWrap @ViewBag.ContClass">
+        @RenderBody()
+    </div>
+	<!-- //Wrap -->
+
+</body>
+ <script type="text/javascript">
+     function index() { };
+
+     index.GoBannerPage = function (link, name) {
+
+         window.open(link, name, "width=700, height=800, menubar=no, status=no, toolbar=no");
+     }
+</script>
+</html>
+
+
