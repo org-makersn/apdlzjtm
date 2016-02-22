@@ -1,5 +1,5 @@
-﻿using Net.Framework.Helper;
-using Net.Framework.StoreModel;
+﻿using Net.Framework.Entity;
+using Net.Framework.Helper;
 using Net.SqlTools;
 using System;
 using System.Collections.Generic;
@@ -46,7 +46,12 @@ namespace Net.Framework.BizDac
 
             string[] queryList = query.Split(' ');
             string searchQuery = @"select 
-	                                    NO, TYPE, TITLE, PUBLISH_YN, OPENER_YN, LINK, SOURCE, TERM, IMAGE, PRIORITY, REG_DT, REG_ID   
+	                                    NO, TYPE, TITLE
+                                        , PUBLISH_YN as PublishYn
+                                        , OPENER_YN as OpenerYn
+                                        , LINK, SOURCE, TERM, IMAGE, PRIORITY
+                                        , REG_DT as RegDt
+                                        , REG_ID as RegId 
                                     from BANNER with(nolock) 
                                     where 1=1 ";
             if (type > 0)
