@@ -50,20 +50,6 @@ namespace Net.Framework.Entity
         public string REG_ID { get; set; }
     }
 
-    [Table("BUS_QNA")]
-    public class BusQna
-    {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int NO { get; set; }
-        
-        public string CATEGORY { get; set; }
-        public string EMAIL { get; set; }
-        public string TITLE { get; set; }
-        public string CONTENTS { get; set; }
-        public DateTime REG_DT { get; set; }
-        public string REG_ID { get; set; }
-    }
     [Table("BUS_PARTNERSHIP_QNA")]
     public class BusPartnershipQna
     {
