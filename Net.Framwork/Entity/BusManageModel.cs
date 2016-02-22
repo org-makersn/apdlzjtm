@@ -30,6 +30,7 @@ namespace Net.Framework.Entity
         [Required(ErrorMessage = "진행현황 일자를 입력해주세요.")]
         public string PROGRESS_DT { get; set; }
 
+        public string USE_YN { get; set; }
         public virtual DateTime REG_DT { get; set; }
         public virtual string REG_ID { get; set; }
         public virtual Nullable<DateTime> UPD_DT { get; set; }
@@ -55,6 +56,7 @@ namespace Net.Framework.Entity
         public string THUMB_RENAME { get; set; }
         public int VIEW_CNT { get; set; }
         public int AUTHOR { get; set; }
+        public string USE_YN { get; set; }
         public virtual DateTime REG_DT { get; set; }
         public virtual string REG_ID { get; set; }
         public virtual Nullable<DateTime> UPD_DT { get; set; }

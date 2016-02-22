@@ -1,0 +1,54 @@
+﻿@model PagedList.IPagedList<BUS_BLOG>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "블로그";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="contents_zone">
+    <h2 class="contents_title">블로그</h2>
+
+    <!-- list_search_zone -->
+    <div class="right_float_wrap">
+        <div class="left"><strong>@ViewData["cnt"]</strong> 의 게시물</div>
+    </div>
+    <!-- // list_search_zone -->
+    @*</form>*@
+
+    <div class="faq_wrap">
+        @if ((int)ViewData["cnt"] > 0)
+        {
+            foreach (var blog in Model)
+            {
+            <div class="q_low">
+                <div class="lowin"><a href="#" class="_btn_view" rel="@blog.NO">@blog.BLOG_TITLE </a>&nbsp;[@blog.REG_DT.ToString("yyyy-MM-dd")]</div>
+            </div>
+            <div class="a_low">
+                <div class="lowin">
+
+                    @Html.Raw(new HtmlFilter().PunctuationDecode(blog.BLOG_CONTENTS))
+                </div>
+            </div>
+            }
+        }
+        else
+        {
+            <div style="height: 200px; line-height:200px; text-align: center;">
+                등록된 블로그가 없습니다.
+            </div>
+        }
+    </div>
+    <!-- // faq_wrap -->
+
+    <!-- page_navi -->
+    <div class="page_navi" style="padding-bottom: 0;">
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+    </div>
+    <!-- // page_navi -->
+    <!-- btn -->
+    <div class="btn_right">
+        <span class="btnWrap medium"><a href="/bus/addblog" class="_btn_write">등록</a></span>
+    </div>
+    <!-- // btn -->
+
+</div>

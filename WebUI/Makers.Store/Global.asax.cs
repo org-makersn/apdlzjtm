@@ -14,7 +14,6 @@ namespace Makers.Store
     {
         protected void Application_Start()
         {
-            RemoveWebFormEngines();
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -25,6 +24,7 @@ namespace Makers.Store
             //BundleTable.EnableOptimizations = true;
 
             AuthConfig.RegisterAuth();
+            RemoveWebFormEngines();
         }
 
         protected void Application_EndRequest(object sender, EventArgs e)

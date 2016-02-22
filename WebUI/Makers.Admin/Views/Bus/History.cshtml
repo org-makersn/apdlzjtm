@@ -1,0 +1,60 @@
+﻿@model PagedList.IPagedList<BUS_HISTORY>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "진행현황";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="contents_zone">
+    <h2 class="contents_title">진행현황</h2>
+
+    
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="8%" />
+            <col width="10%" />
+            <col width="*" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>진행일자</th>
+                <th>제목(수정)</th>
+                <th>노출여부</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if ((int)ViewData["cnt"] > 0)
+            {
+                foreach (var history in Model)
+                {
+                <tr>
+                    <td>@history.NO</td>
+                    <td>@history.PROGRESS_DT</td>
+                    <td class="ta_left"><a href="javascript:Banner.GoEdit(@history.NO)" class="_btn_edit" id="title">@history.TITLE</a></td>
+                    <td>@history.USE_YN</td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;">진행현황이 없습니다.</td>
+                </tr>	
+            }
+        </tbody>
+    </table>
+    
+    <!-- page_navi -->
+    <div class="page_navi">
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page = page, query = ViewData["query"] }))
+    </div>
+    <!-- // page_navi -->
+    <!-- btn -->
+    <div class="btn_right">
+        <span class="btnWrap medium"><a href="/bus/addhistory" id="AddHistory" class="_btn_write">등록</a></span>
+    </div>
+    <!-- // btn -->
+</div>

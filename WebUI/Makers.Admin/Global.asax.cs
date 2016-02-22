@@ -22,6 +22,18 @@ namespace Makers.Admin
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            RemoveWebFormEngines();
+        }
+
+        protected void RemoveWebFormEngines()
+        {
+            var viewEngines = ViewEngines.Engines;
+            var webFormEngines = viewEngines.OfType<WebFormViewEngine>().FirstOrDefault();
+            if (webFormEngines != null)
+            {
+                viewEngines.Remove(webFormEngines);
+            }
         }
     }
 }
