@@ -35,6 +35,7 @@ namespace Net.Framework.Entity
         public string CHG_ID { get; set; }
     }
 
+<<<<<<< HEAD
     [Table("BUS_QNA")]
     public class BusQna
     {
@@ -50,20 +51,19 @@ namespace Net.Framework.Entity
         public string REG_ID { get; set; }
     }
 
-    [Table("BUS_QNA")]
-    public class BusQna
+    [Table("BUS_FAQ")]
+    public class BusFaq
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int NO { get; set; }
-        
-        public string CATEGORY { get; set; }
-        public string EMAIL { get; set; }
+
         public string TITLE { get; set; }
         public string CONTENTS { get; set; }
         public DateTime REG_DT { get; set; }
         public string REG_ID { get; set; }
     }
+
     [Table("BUS_PARTNERSHIP_QNA")]
     public class BusPartnershipQna
     {
@@ -89,9 +89,10 @@ namespace Net.Framework.Entity
         public DateTime REG_DT { get; set; }
         public string REG_ID { get; set; }
     }
-    
+
+=======
     /// <summary>
-        /// 진행현황
+    /// 진행현황
     /// </summary>
     //[Table("BUS_HISTORY")]
     public partial class BUS_HISTORY
@@ -110,9 +111,9 @@ namespace Net.Framework.Entity
         public virtual Nullable<DateTime> UPD_DT { get; set; }
         public virtual string UPD_ID { get; set; }
     }
-    
+
     /// <summary>
-        /// 블로그
+    /// 블로그
     /// </summary>
     //[Table("BUS_BLOG")]
     public partial class BUS_BLOG
@@ -135,6 +136,5 @@ namespace Net.Framework.Entity
         public virtual Nullable<DateTime> UPD_DT { get; set; }
         public virtual string UPD_ID { get; set; }
     }
-
-
+>>>>>>> 5cbaeb8f58b79c8246d8ccf46e89fbcff6271a6c
 }

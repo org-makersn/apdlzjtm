@@ -106,7 +106,7 @@
     <Compile Include="Logging\InterceptorLogging.cs" />
     <Compile Include="Logging\InterceptorTransientErrors.cs" />
     <Compile Include="Logging\Logger.cs" />
-    <Compile Include="StoreModel\BannerExT.cs" />
+    <Compile Include="Entity\BannerExT.cs" />
     <Compile Include="StoreModel\CommonCodeT.cs" />
     <Compile Include="StoreModel\StoreItemDetailT.cs" />
     <Compile Include="StoreModel\StoreItemFileT.cs" />

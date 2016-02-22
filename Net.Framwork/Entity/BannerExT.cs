@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Net.Framework.StoreModel
+namespace Net.Framework.Entity
 {
     [Table("BANNER")]
     public partial class BannerExT
