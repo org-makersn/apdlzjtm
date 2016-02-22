@@ -20,7 +20,7 @@ namespace Net.Framework.BizDac
         /// <returns></returns>
         public IList<BannerExT> GetAllBannerList(int type)
         {
-            IEnumerable<BannerExT> state = new List<BannerExT>();
+            IEnumerable<BannerExT> state = null;
             if (type > 0)
             {
                 state = _bannerRepo.Get(m => m.Type == type);
@@ -30,7 +30,7 @@ namespace Net.Framework.BizDac
                 state = _bannerRepo.GetAll();
             }
 
-            return state == null ? null : state.OrderByDescending(m => m.No).ToList();
+            return state == null ? new List<BannerExT>() : state.OrderByDescending(m => m.No).ToList();
         }
 
         /// <summary>

@@ -17,6 +17,8 @@ namespace Makers.Admin.Controllers
 {
     public class BusController : BaseController
     {
+        BusManageDac busManageDac = new BusManageDac();
+
         private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Bus";
@@ -43,23 +45,29 @@ namespace Makers.Admin.Controllers
         /// </summary>
         /// <param name="page"></param>
         /// <returns></returns>
-        public ActionResult History(int page = 1)
+        public ActionResult History(int no = 0, int page = 1, string mode = "list")
         {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+
             ViewData["Group"] = MenuModel(1);
 
-            IList<BUS_HISTORY> list = new List<BUS_HISTORY>();
-            ViewData["cnt"] = 0;
-            return View(list.ToPagedList(page, 20));
-        }
+            if (mode.Contains("add"))
+            {
+                return View("AddHistory");
+            }
+            else if (mode.Contains("edit"))
+            {
+                BusHistory history = busManageDac.GetBusHistoryByNo(no);
+                return View("UpdateHistory", history);
+            }
+            else
+            {
+                IList<BusHistory> list = busManageDac.GetBusHistoryList();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult AddHistory()
-        {
-            ViewData["Group"] = MenuModel(1);
-            return View();
+                ViewData["cnt"] = list.Count;
+
+                return View(list.ToPagedList(page, 30));
+            }
         }
 
         /// <summary>
@@ -68,20 +76,56 @@ namespace Makers.Admin.Controllers
         /// <param name="collection"></param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult AddPostHistory(FormCollection collection)
+        public JsonResult PostHistory(FormCollection collection)
         {
-            return Json(true);
-        }
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="no"></param>
-        /// <returns></returns>
-        public ActionResult UpdateHistory(int no)
-        {
-            ViewData["Group"] = MenuModel(1);
-            return View();
+            string paramMode = collection["mode"];
+
+            string paramTitle = collection["TITLE"];
+            string paramProgressDt = collection["PROGRESS_DT"];
+            string paramUseYn = collection["USE_YN"];
+
+            if (paramMode.Contains("add"))
+            {
+                BusHistory history = new BusHistory();
+                history.TITLE = paramTitle;
+                history.PROGRESS_DT = paramProgressDt;
+                history.USE_YN = paramUseYn;
+                history.REG_DT = DateTime.Now;
+                history.REG_ID = Profile.UserNm;
+
+                int ret = busManageDac.AddHistory(history);
+                if (ret > 0)
+                {
+                    response.Success = true;
+                    response.Result = ret.ToString();
+                }
+            }
+
+            if (paramMode.Contains("edit"))
+            {
+                int no = Convert.ToInt32(collection["NO"]);
+                BusHistory history = busManageDac.GetBusHistoryByNo(no);
+                if (history != null)
+                {
+                    history.TITLE = paramTitle;
+                    history.PROGRESS_DT = paramProgressDt;
+                    history.USE_YN = paramUseYn;
+                    history.UPD_DT = DateTime.Now;
+                    history.UPD_ID = Profile.UserNm;
+
+                    bool ret = busManageDac.UpdateHistory(history);
+                    if (ret)
+                    {
+                        response.Success = true;
+                        response.Result = history.NO.ToString();
+                    }
+                }
+            }
+
+            return Json(response);
         }
 
         /// <summary>
@@ -105,7 +149,7 @@ namespace Makers.Admin.Controllers
         {
             ViewData["Group"] = MenuModel(2);
 
-            IList<BUS_BLOG> list = new List<BUS_BLOG>();
+            IList<BusBlog> list = new List<BusBlog>();
             ViewData["cnt"] = 0;
             return View(list.ToPagedList(page, 20));
         }

@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<BUS_HISTORY>
+﻿@model PagedList.IPagedList<BusHistory>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "진행현황";
@@ -33,7 +33,7 @@
                 <tr>
                     <td>@history.NO</td>
                     <td>@history.PROGRESS_DT</td>
-                    <td class="ta_left"><a href="javascript:Banner.GoEdit(@history.NO)" class="_btn_edit" id="title">@history.TITLE</a></td>
+                    <td class="ta_left"><a href="javascript:History.GoEdit(@history.NO)" class="_btn_edit" id="title">@history.TITLE</a></td>
                     <td>@history.USE_YN</td>
                 </tr>
                 }
@@ -54,7 +54,23 @@
     <!-- // page_navi -->
     <!-- btn -->
     <div class="btn_right">
-        <span class="btnWrap medium"><a href="/bus/addhistory" id="AddHistory" class="_btn_write">등록</a></span>
+        <span class="btnWrap medium"><a href="/bus/history?mode=add" id="AddHistory" class="_btn_write">등록</a></span>
     </div>
     <!-- // btn -->
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function History() { }
+        History.Init = function () {
+        }
+
+        History.GoEdit = function (val) {
+            location.replace("/bus/history?no=" + val + "&mode=edit");
+        }
+
+        $(document).ready(function () {
+            History.Init();
+        });
+    </script>
+}

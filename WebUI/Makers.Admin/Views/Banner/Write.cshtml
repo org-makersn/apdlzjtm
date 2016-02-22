@@ -151,8 +151,7 @@
                 $("#Title").focus();
                 return false;
             }
-            alert($("#Image").val());
-            return false;
+
             if ($("#Image").val() == '') {
                 alert("배너 이미지를 선택해 주세요.");
                 $("#Image").focus();
@@ -166,7 +165,7 @@
             }
 
             $("#insert_form").attr('action', action_url);
-            //$("#insert_form").submit();
+            $("#insert_form").submit();
 
         });
 

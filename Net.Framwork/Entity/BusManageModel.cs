@@ -77,10 +77,10 @@ namespace Net.Framework.Entity
     }
     
     /// <summary>
-        /// 진행현황
+    /// 진행현황
     /// </summary>
-    //[Table("BUS_HISTORY")]
-    public partial class BUS_HISTORY
+    [Table("BUS_HISTORY")]
+    public partial class BusHistory
     {
         [Key]
         public int NO { get; set; }
@@ -102,7 +102,7 @@ namespace Net.Framework.Entity
         /// 블로그
     /// </summary>
     //[Table("BUS_BLOG")]
-    public partial class BUS_BLOG
+    public partial class BusBlog
     {
         [Key]
         public int NO { get; set; }

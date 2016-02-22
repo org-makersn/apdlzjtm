@@ -1,6 +1,6 @@
 ﻿@model BusHistory
 @{
-    ViewBag.Title = "AddHistory";
+    ViewBag.Title = "진행현황 수정";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,7 +10,8 @@
     <form id="insert_form" name="insert_form" method="post">
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-        @Html.Hidden("mode", "add")
+        @Html.Hidden("mode", "edit")
+        @Html.Hidden("NO", Model.NO)
         <table class="tbl_style1" summary="게시판 테이블">
             <colgroup>
                 <col width="200x" />
@@ -49,9 +50,9 @@
 
     <!-- btn -->
     <div class="btn_center">
-        <span class="btnWrap medium"><a href="javascript:void(0);" id="Add" class="_btn_reg">등록</a></span>
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="Update" class="_btn_reg">수정</a></span>
         <span class="btnWrap medium"><a href="javascript:void(0);" id="GoList" class="_btn_list">목록</a></span>
-
+        @*<span class="btnWrap medium"><a href="javascript:void(0);" id="Delete" class="_btn_delete">삭제</a></span>*@
     </div>
 
     <!-- // btn -->
@@ -80,7 +81,7 @@
         Add.Init = function () {
         }
 
-        $("#Add").click(function () {
+        $("#Update").click(function () {
 
             var action_url = '/Bus/PostHistory';
             var options = {
@@ -107,6 +108,19 @@
         $("#GoList").click(function () {
             $(location).attr("href", "/bus/history");
         });
+
+        //$("#Delete").click(function () {
+        //    if (!confirm("진행현황을 삭제 하시겠습니까?")) return false;
+        //    var no = $("#NO").val();
+        //    var data = {
+        //        history: no
+        //    }
+        //    console.log(data);
+        //    var onSuccess = function (result) {
+        //        location.replace("/bus/history");
+        //    }
+        //    Ajax.AjaxResponseModelService(this, "/bus/deletehistory", data, onSuccess);
+        //})
 
         $(function () {
             Add.Init();

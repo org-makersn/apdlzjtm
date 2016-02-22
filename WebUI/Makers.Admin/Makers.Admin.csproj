@@ -994,6 +994,7 @@
     <Content Include="Views\Bus\Blog.cshtml" />
     <Content Include="Views\Bus\AddBlog.cshtml" />
     <Content Include="Views\Bus\AddHistory.cshtml" />
+    <Content Include="Views\Bus\UpdateHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
