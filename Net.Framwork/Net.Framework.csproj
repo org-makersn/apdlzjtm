@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AppDbContext.cs" />
     <Compile Include="BizDac\BannerExDac.cs" />
+    <Compile Include="BizDac\BusManageDac.cs" />
     <Compile Include="BizDac\CommonCodeDac.cs" />
     <Compile Include="BizDac\MemberExDac.cs" />
     <Compile Include="BizDac\MemberMsgDac.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="BizDac\StorePaymentDac.cs" />
     <Compile Include="BizDac\StoreShippingBiz.cs" />
     <Compile Include="BizDac\StoreShippingDac.cs" />
+    <Compile Include="Entity\BusManageModel.cs" />
     <Compile Include="Helper\DacBase.cs" />
     <Compile Include="BizDac\StoreCartBiz.cs" />
     <Compile Include="BizDac\StoreCartDac.cs" />

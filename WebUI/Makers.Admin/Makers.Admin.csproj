@@ -145,6 +145,7 @@
     <Compile Include="Controllers\ArticleRecommendRequestController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BusController.cs" />
     <Compile Include="Controllers\CommonRequestController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
