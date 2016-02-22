@@ -19,7 +19,7 @@ namespace Net.Framework.Helper
 
         public SimpleRepository()
         {
-            this._constr = "StoreContext";
+            this._constr = "MakersNContext";
         }
 
         public SimpleRepository(string constr)
@@ -159,7 +159,8 @@ namespace Net.Framework.Helper
                 T entityToDelete = dbctx.Set<T>().Find(col);
                 if (entityToDelete != null)
                 {
-                    return Delete(entityToDelete);
+                    dbctx.Set<T>().Remove(entityToDelete);
+                    return dbctx.SaveChanges() > 0;
                 }
                 else
                 {

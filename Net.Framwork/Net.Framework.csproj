@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDbContext.cs" />
+    <Compile Include="BizDac\BannerExDac.cs" />
     <Compile Include="BizDac\CommonCodeDac.cs" />
     <Compile Include="BizDac\MemberExDac.cs" />
     <Compile Include="BizDac\MemberMsgDac.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Logging\InterceptorLogging.cs" />
     <Compile Include="Logging\InterceptorTransientErrors.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="StoreModel\BannerExT.cs" />
     <Compile Include="StoreModel\CommonCodeT.cs" />
     <Compile Include="StoreModel\StoreItemDetailT.cs" />
     <Compile Include="StoreModel\StoreItemFileT.cs" />

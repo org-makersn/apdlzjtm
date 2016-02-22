@@ -80,5 +80,6 @@ span.sm_text_red{color:red}
 #mask_body {z-index: 1; position:absolute; top:0; left:0;}
 
 /*개발자 추가사항*/
-.bannerCate { padding-bottom: 50px; font-size: large; font-weight: bolder; }
+.bannerCate { padding-bottom: 50px; }
+.bannerCate .on { font-weight:bold; color:#098ecf !important;}
 .bannerCate a { cursor: pointer; margin: 0px 5px 0px 5px; }

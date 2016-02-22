@@ -29,13 +29,6 @@ namespace Makers.Admin.Controllers
         }
 
 
-        //Edit recommandation
-        //public JsonResult SetVisibiliy(string no = "", string setVisi = "")
-        //{
-        //    printerDac.UpdateVisibility(no, setVisi);
-        //    return Json(new { result = 1 });
-        //}
-
         public JsonResult SetRecommend(string no = "", string setNo = "")
         {
             printerDac.UpdateRecommend(no, setNo);

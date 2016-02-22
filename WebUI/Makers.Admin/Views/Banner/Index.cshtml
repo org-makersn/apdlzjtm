@@ -1,16 +1,54 @@
-﻿@model PagedList.IPagedList<Makersn.Models.BannerT>
+﻿@model PagedList.IPagedList<BannerExT>
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Banner";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+    int bannerType = ViewBag.BannerType;
 
+    string banner0 = string.Empty;
+    string banner1 = string.Empty;
+    string banner2 = string.Empty;
+    string banner3 = string.Empty;
+    string banner4 = string.Empty;
+    
+    switch (bannerType)
+    {
+        case 0:
+            banner0 = "on";
+            break;
+        case 1:
+            banner1 = "on";
+            break;
+        case 2:
+            banner2 = "on";
+            break;
+        case 3:
+            banner3 = "on";
+            break;
+        case 4:
+            banner4 = "on";
+            break;
+        default:
+            banner0 = "on";
+            break;
+    }
+
+    string query = ViewData["query"] as string;
+    if (!string.IsNullOrEmpty(query))
+    {
+        query = "&sfl=" + ViewData["sfl"] + "&query=" + query;
+    }
+}
 
 <div class="contents_zone">
     <h2 class="contents_title">배너 관리</h2>
 
     <div class="bannerCate">
-        <a href="/banner">메인</a>l<a href="/banner?type=1">디자인</a>l<a href="/banner?type=2">프린팅</a>
+        <a href="@string.Format("?{0}", query)" class="@banner0">전체</a>l
+        <a href="@string.Format("?type=1{0}", query)" class="@banner1">디자인</a>l
+        <a href="@string.Format("?type=2{0}", query)" class="@banner2">프린팅</a>|
+        <a href="@string.Format("?type=3{0}", query)" class="@banner3">스토어</a>|
+        <a href="@string.Format("?type=4{0}", query)" class="@banner4">메이커버스</a>
     </div>
     <!-- list_search_zone -->
     <form id="search" name="search">
@@ -70,7 +108,7 @@
                     <td>
                         <p class="memb_img">
                             <a href="javascript:Banner.GoEdit(@b.No)" class="_btn_edit" id="img">
-                                <img src="@Url.Content(ViewBag.BannerUrl+"thumb/"+ b.Image)" /></a>
+                                <img src="@Url.BannerThumbnail(b.Image)" /></a>
                         <p>
                     </td>
                     <td class="ta_left"><a href="javascript:Banner.GoEdit(@b.No)" class="_btn_edit" id="title">@b.Title</a></td>
@@ -91,7 +129,7 @@
     </table>
     <!-- page_navi -->
     <div class="page_navi">
-        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+        @Html.PagedListPager(Model, page => Url.Action("/", new { page = page, query = ViewData["query"] }))
     </div>
     <!-- // page_navi -->
     <!-- btn -->

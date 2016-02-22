@@ -22,11 +22,11 @@
                     <li><span>@Html.ActionLink("회원관리", "State", "Member")</span></li>
                     <li><span>@Html.ActionLink("디자인", "State", "Article")</span></li>
                     <li><span>@Html.ActionLink("프린팅", "State", "Printing")</span></li>
-                    <li><span>@Html.ActionLink("스토어", "Index", "Store")</span></li>
+                    @*<li><span>@Html.ActionLink("스토어", "Index", "Store")</span></li>*@
                     <li><span>@Html.ActionLink("일반", "Index", "Banner")</span></li>
                     <li><span>@Html.ActionLink("번역", "Index", "Translation")</span></li>
                     <li><span>@Html.ActionLink("관리자", "admin_auth", "Admin")</span></li>
-                    <li><span>@Html.ActionLink("Settings", "Index", "Settings")</span></li>
+                    @*<li><span>@Html.ActionLink("Settings", "Index", "Settings")</span></li>*@
                 </ul>
             </div>
             <!-- // -->
@@ -55,7 +55,7 @@
                             <li><span class="one">@Html.ActionLink("회원현황", "State", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("회원정보", "Index", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("스팟회원정보", "PrinterMember", "Member")</span></li>
-                            <li><span class="one">@Html.ActionLink("스토어회원정보", "StoreMember", "Member")</span></li>
+                            @*<li><span class="one">@Html.ActionLink("스토어회원정보", "StoreMember", "Member")</span></li>*@
                             <li><span class="one">@Html.ActionLink("프린팅업체정보", "StorePrintingCom", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("탈퇴회원", "DropMember", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("전체알림", "AllNotice", "Member")</span></li>
@@ -100,7 +100,7 @@
                             <li><span class="one">@Html.ActionLink("직접 번역", "TranslationDirectState", "Translation")</span></li>
                         }
                         
-                        @if (menu.Group == "_Store")
+                        @*@if (menu.Group == "_Store")
                         {
                             <li><span class="one">@Html.ActionLink("주문 리스트", "index", "Store")</span></li>
                             <li><span class="one">@Html.ActionLink("ShapeWays 업로드", "ProductCertificateList", "Store")</span></li>
@@ -112,7 +112,7 @@
                             <li><span class="one">@Html.ActionLink("기초 데이터", "Index", "Settings")</span></li>
                             <li><span class="one">@Html.ActionLink("재질", "Materials", "Settings")</span></li>
                             <li><span class="one">@Html.ActionLink("코드", "Code", "Settings")</span></li>
-                        }
+                        }*@
                     </ul>
                 </div>
                 <!-- // menu_wrap -->

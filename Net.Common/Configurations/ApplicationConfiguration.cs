@@ -19,6 +19,10 @@ namespace Net.Common.Configurations
 
             ProfileImg = ConfigurationManager.AppSettings["ProfileImg"] ?? "profile/thumb";
             ProfileCover = ConfigurationManager.AppSettings["ProfileCover"] ?? "profile/cover";
+
+            BannerThumbnail = ConfigurationManager.AppSettings["BannerThumbnail"] ?? "banner/thumb";
+            BannerFullImg = ConfigurationManager.AppSettings["BannerFullImg"] ?? "banner/fullsize";
+            BannerBackup = ConfigurationManager.AppSettings["BannerBackup"] ?? "banner/backup";
         }
 
         /// <summary>
@@ -50,6 +54,21 @@ namespace Net.Common.Configurations
         /// 
         /// </summary>
         public string ProfileCover { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string BannerThumbnail { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string BannerFullImg { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string BannerBackup { get; private set; }
 
 
         #region 디자인 Configurations

@@ -180,7 +180,7 @@ namespace Net.Framework.BizDac
             
             if (ret)
             {
-                identity = _itemRepo.First(m => m.Temp == data.Temp).No;
+                identity = data.No;
             }
             return identity;
         }

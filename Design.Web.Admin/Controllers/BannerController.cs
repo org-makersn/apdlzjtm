@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Design.Web.Admin.Models;
+using Makersn.Util;
+using Net.Framework.BizDac;
+using Net.Framework.StoreModel;
+using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Makersn.BizDac;
-using Makersn.Models;
-using PagedList;
-using Makersn.Util;
-using Design.Web.Admin.Models;
-using Net.Framework.StoreModel;
 
 
 namespace Design.Web.Admin.Controllers
@@ -16,7 +15,7 @@ namespace Design.Web.Admin.Controllers
     [Authorize]
     public class BannerController : BaseController
     {
-        BannerDac bannerDac = new BannerDac();
+        BannerExDac bannerDac = new BannerExDac();
 
         private MenuModel menuModel = new MenuModel();
 
@@ -28,6 +27,14 @@ namespace Design.Web.Admin.Controllers
             return menuModel;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sfl"></param>
+        /// <param name="query"></param>
+        /// <param name="page"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public ActionResult Index(string sfl = null, string query = null, int page = 1, int type = 0)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
@@ -37,14 +44,14 @@ namespace Design.Web.Admin.Controllers
             ViewBag.BannerType = type;
 
             //Log.Debug("BannerController.Index() called");
-            IList<BannerT> list = null;
+            IList<BannerExT> list = null;
             if (!string.IsNullOrEmpty(query))
             {
-                list = bannerDac.GetBannerLstByQuery(sfl, query.Trim(), type);
+                list = bannerDac.GetBannerListByQuery(sfl, query.Trim(), type);
             }
             else
             {
-                list = bannerDac.GetAllBannerLst(type);
+                list = bannerDac.GetAllBannerList(type);
             }
 
             ViewData["query"] = query;
@@ -53,6 +60,11 @@ namespace Design.Web.Admin.Controllers
             return View(list.OrderByDescending(o => o.No).ToPagedList(page, 20));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public ActionResult Write(int type)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
@@ -62,6 +74,17 @@ namespace Design.Web.Admin.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="publish"></param>
+        /// <param name="opener"></param>
+        /// <param name="link"></param>
+        /// <param name="priority"></param>
+        /// <param name="bannerType"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult BannerAdd(string title, string publish, string opener, string link, int priority, int bannerType, HttpPostedFileBase image)
         {
@@ -74,7 +97,7 @@ namespace Design.Web.Admin.Controllers
                 fileName = FileUpload.UploadFile(image, new ImageSize().GetBannerResize(), "Banner", null);
             }
 
-            BannerT bannerT = new BannerT();
+            BannerExT bannerT = new BannerExT();
             bannerT.Type = bannerType;
             bannerT.Title = title;
             bannerT.PublishYn = publish;
@@ -86,28 +109,46 @@ namespace Design.Web.Admin.Controllers
             bannerT.Priority = priority;
             bannerT.RegId = "admin";
             bannerT.RegDt = DateTime.Now;
-            var result = bannerDac.InsertBanner(bannerT);
+            var result = bannerDac.AddBanner(bannerT);
             
             return Redirect("/banner?type=" + bannerType);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
         public ActionResult Edit(int no)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             ViewData["Group"] = MenuModel(0);
-            BannerT bannerT = bannerDac.GetBannerByNo(no);
+            BannerExT bannerT = bannerDac.GetBannerByNo(no);
             ViewBag.BannerType = bannerT.Type;
             return View(bannerT);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bannerNo"></param>
+        /// <param name="title"></param>
+        /// <param name="publish"></param>
+        /// <param name="opener"></param>
+        /// <param name="link"></param>
+        /// <param name="priority"></param>
+        /// <param name="bannerType"></param>
+        /// <param name="image"></param>
+        /// <param name="up_image_del"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult BannerUpdate(int bannerNo, string title, string publish, string opener, string link, int priority,int bannerType, HttpPostedFileBase image, string up_image_del)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             ViewData["Group"] = MenuModel(0);
-            BannerT bannerT = new BannerT();
+            BannerExT bannerT = new BannerExT();
             bannerT.No = bannerNo;
             bannerT.Type = bannerType;
             bannerT.Title = title;
@@ -137,16 +178,28 @@ namespace Design.Web.Admin.Controllers
             bannerT.UpdId = "admin";
             bannerT.UpdDt = DateTime.Now;
 
-            bannerDac.UpdateBannerById(bannerT);
+            bannerDac.UpdateBanner(bannerT);
 
             return Redirect("/banner?type=" + bannerType);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bannerNo"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult BannerDelete(int bannerNo)
         {
-            bannerDac.DeleteBannerByNo(bannerNo);
-            return Json(new AjaxResponseModel { Success = true, Message = "수정 되었습니다." });
+            AjaxResponseModel response = new AjaxResponseModel();
+            bool ret = bannerDac.DeleteBanner(bannerNo);
+
+            response.Success = ret;
+            if (ret)
+            {
+                response.Message = "수정 되었습니다.";
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
     }

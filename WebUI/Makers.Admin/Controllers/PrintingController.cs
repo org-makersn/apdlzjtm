@@ -33,10 +33,7 @@ namespace Makers.Admin.Controllers
             menuModel.SubIndex = subIndex;
             return menuModel;
         }
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
+
         public ActionResult Listing(int page = 1, string dateGubun = "", string start = "", string end = "", string txtGubun = "", string text = "", int state = 0)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }

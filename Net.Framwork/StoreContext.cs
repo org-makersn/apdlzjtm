@@ -14,7 +14,7 @@ namespace Net.Framework
         }
 
         public StoreContext()
-            : base("name=StoreContext")
+            : base("name=MakersNContext")
         {
         }
 

@@ -15,7 +15,7 @@ namespace Net.Framework.Helper
 
         public DacBase()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["StoreContext"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["MakersNContext"].ConnectionString;
             //this.dbHelper = new SqlDbHelper(connectionString);
         }
     }

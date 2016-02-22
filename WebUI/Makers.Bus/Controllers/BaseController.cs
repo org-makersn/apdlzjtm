@@ -28,7 +28,8 @@ namespace Makers.Bus.Controllers
             ViewBag.LogOnMemner = profileModel;
             ViewBag.LogOnChk = profileModel.UserNo == 0 ? 0 : 1;
 
-            ViewBag.HasStore = profileModel.UserNo > 0 ? new StoreMemberBiz().GetStoreMemberExists(profileModel.UserNo) : false;
+            //ViewBag.HasStore = profileModel.UserNo > 0 ? new StoreMemberBiz().GetStoreMemberExists(profileModel.UserNo) : false;
+            ViewBag.HasStore = false;
 
             ViewBag.IsMain = "N";
         }

@@ -512,5 +512,19 @@ namespace Makersn.Util
             [EnumTitle("업로드 완료")]
             UploadFinished =4
         }
+
+        public enum BannerType
+        {
+            [EnumTitle("전체")]
+            All = 0,
+            [EnumTitle("디자인")]
+            Design = 1,
+            [EnumTitle("프린팅")]
+            Printing = 2,
+            [EnumTitle("스토어")]
+            Store = 3,
+            [EnumTitle("메이커버스")]
+            Bus = 4,
+        }
     }
 }

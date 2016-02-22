@@ -53,7 +53,7 @@ namespace Net.Framework.BizDac
 
             if (ret)
             {
-                identity = _itemFileRepo.First(m => m.Temp == data.Temp).No;
+                identity = data.No;
             }
             return identity;
         }

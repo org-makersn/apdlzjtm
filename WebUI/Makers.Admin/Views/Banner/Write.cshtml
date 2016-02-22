@@ -1,10 +1,50 @@
-﻿@model Makersn.Models.BannerT
+﻿@model BannerExT
 @{
     ViewBag.Title = "Write";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int bannerType = ViewBag.BannerType;
+
+    string banner0 = string.Empty;
+    string banner1 = string.Empty;
+    string banner2 = string.Empty;
+    string banner3 = string.Empty;
+    string banner4 = string.Empty;
+
+    switch (bannerType)
+    {
+        case 0:
+            banner0 = "on";
+            break;
+        case 1:
+            banner1 = "on";
+            break;
+        case 2:
+            banner2 = "on";
+            break;
+        case 3:
+            banner3 = "on";
+            break;
+        case 4:
+            banner4 = "on";
+            break;
+        default:
+            banner0 = "on";
+            break;
+    }
 }
 
 <div class="contents_zone">
+    
+    <h2 class="contents_title">배너 관리</h2>
+
+    <div class="bannerCate">
+        <a href="/banner" class="@banner0">전체</a>l
+        <a href="/banner?type=1" class="@banner1">디자인</a>l
+        <a href="/banner?type=2" class="@banner2">프린팅</a>|
+        <a href="/banner?type=3" class="@banner3">스토어</a>|
+        <a href="/banner?type=4" class="@banner4">메이커버스</a>|
+    </div>
 
     <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
@@ -28,7 +68,7 @@
                 <tr>
                     <th>이미지</th>
                     <td>
-                        @Html.TextBoxFor(model => model.Image, new { type = "file", id="image", @class = "input_text",style="width: 75%;" })
+                        @Html.TextBoxFor(model => model.Image, new { type = "file", @class = "input_text",style="width: 75%;" })
                         @Html.ValidationMessageFor(model => model.Image)
                     </td>
                 </tr>
@@ -106,27 +146,28 @@
 
             var action_url = '/Banner/BannerAdd';
 
-            $("#insert_form").attr('action', action_url);
-            $("#insert_form").submit();
-            //var title = $("#title").val();
-            //var img = ""; // 이미지 제외하고 함
-            //var link = $("#url").val();
-            //var opener = $(":input:radio[name='opener']:checked").val()
-            //var publish = $(":input:radio[name='publish']:checked").val()
-            //var priority = $("#priority").val();
+            if ($("#Title").val() == '') {
+                alert("제목을 입력해 주세요.");
+                $("#Title").focus();
+                return false;
+            }
+            alert($("#Image").val());
+            return false;
+            if ($("#Image").val() == '') {
+                alert("배너 이미지를 선택해 주세요.");
+                $("#Image").focus();
+                return false;
+            }
 
-            //var data = {
-            //    title: title,
-            //    publish: publish,
-            //    opener: opener,
-            //    link: link,
-            //    priority: priority
-            //}
-            //var onSuccess = function (result) {
-            //    console.log(result);
-            //    location.replace("/Banner");
-            //}
-            //Ajax.AjaxResponseModelService(this, "/Banner/BannerAdd", data, "up_image", onSuccess);
+            if ($("#Link").val() == '') {
+                alert("배너 링크주소를 입력해 주세요.");
+                $("#Image").focus();
+                return false;
+            }
+
+            $("#insert_form").attr('action', action_url);
+            //$("#insert_form").submit();
+
         });
 
         $("#GoLIst").click(function () {
