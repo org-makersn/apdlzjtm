@@ -122,5 +122,11 @@ namespace Net.Framework.Entity
         public virtual string UPD_ID { get; set; }
     }
 
-
+    public partial class MakerBusState
+    {
+        public int SchoolCnt { get; set; }
+        public int StudentCnt { get; set; }
+        public int ModelingCnt { get; set; }
+        public int PrinterCnt { get; set; }
+    }
 }
