@@ -258,5 +258,28 @@ namespace Makers.Admin.Controllers
         } 
         #endregion
 
+        public ActionResult Apply(int no = 0, int page = 1, string mode = "list")
+        {
+            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+
+            ViewData["Group"] = MenuModel(1);
+
+            if (mode.Contains("edit"))
+            {
+               List<BusApplySchoolT> list = busManageDac.GetMakerbusList();
+               list = list.OrderByDescending(p => p.EVENT_DATE).ToList();
+                return View("UpdateApplyMakerBus", list);
+            }
+            else
+            {
+                IList<BusApplySchoolT> list = busManageDac.GetMakerbusList();
+                list = list.OrderByDescending(p => p.EVENT_DATE).ToList();
+
+                ViewData["cnt"] = list.Count;
+
+                return View(list.ToPagedList(page, 30));
+            }
+        }
+
     }
 }

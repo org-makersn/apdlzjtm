@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
+using Common.Func;
 using Net.Common.Filter;
 using Net.Common.Define;
 using Net.Common.Helper;
@@ -48,23 +49,22 @@ namespace Makers.Bus.Controllers
         {
             BusManageBiz biz = new BusManageBiz();
             BusApplySchoolT busApplySchoolT = new BusApplySchoolT();
+            string fileName = "";
 
-            string fileDir = Constant.StoreUploadDir.ModelingDir;
-            string savePath = string.Format(@"{0}\{1}", instance.PhysicalDir, fileDir);
-            string extension = Path.GetExtension(applyFile.FileName);
+            fileName = new UploadFunc().FileUpload(applyFile, null, "Apply", null);
 
             busApplySchoolT.SCHOOL_NAME = schoolName;
             busApplySchoolT.SCHOOL_ADDR = schoolAddr;
             busApplySchoolT.MANAGER = managerName;
             busApplySchoolT.MANAGER_EMAIL = managerEmail;
             busApplySchoolT.MANAGER_TEL = ManagerTel;
-            busApplySchoolT.APPLY_PATH = savePath;
+            busApplySchoolT.APPLY_PATH = fileName;
             busApplySchoolT.REG_DT = DateTime.Now;
             busApplySchoolT.REG_ID = profileModel.UserId;
 
             biz.AddApplyMakerBus(busApplySchoolT);
 
-
+            Response.Redirect("Apply");
         }
 
     }

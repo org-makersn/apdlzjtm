@@ -22,7 +22,7 @@ namespace Net.Framework.BizDac
         /// </summary>
         /// <param name="banner"></param>
         /// <returns></returns>
-        internal int AddApplyMakerbus(BusApplySchoolT data)
+        public int AddApplyMakerbus(BusApplySchoolT data)
         {
             int identity = 0;
             bool ret = _makerbusApplyRepo.Insert(data);
@@ -40,7 +40,7 @@ namespace Net.Framework.BizDac
         /// 메이커버스 전체 리스트
         /// </summary>
         /// <returns></returns>
-        internal List<BusApplySchoolT> GetMakerbusList()
+        public List<BusApplySchoolT> GetMakerbusList()
         {
             IEnumerable<BusApplySchoolT> state = new List<BusApplySchoolT>();
 

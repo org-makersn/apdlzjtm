@@ -1,0 +1,55 @@
+﻿@model PagedList.IPagedList<BusApplySchoolT>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Apply";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="contents_zone">
+    <h2 class="contents_title">신청</h2>
+
+    
+    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
+        <caption>리스트 게시판</caption>
+        <colgroup>
+            <col width="8%" />
+            <col width="10%" />
+            <col width="*" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>진행일자</th>
+                <th>학교명</th>
+                <th>진행여부</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if ((int)ViewData["cnt"] > 0)
+            {
+                foreach (var data in Model)
+                {
+                <tr>
+                    <td>@data.NO</td>
+                    <td>@data.EVENT_DATE.ToString().Substring(0,10)</td>
+                    <td class="ta_left"><a href="javascript:History.GoEdit(@data.NO)" class="_btn_edit" id="title">@data.SCHOOL_NAME</a></td>
+                    <td>@data.MAKERBUS_YN</td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;">진행현황이 없습니다.</td>
+                </tr>	
+            }
+        </tbody>
+    </table>
+    
+    <!-- page_navi -->
+    <div class="page_navi">
+        @Html.PagedListPager(Model, page => Url.Action("/apply", new { page = page, query = ViewData["query"] }))
+    </div>
+    <!-- // page_navi -->
+</div>

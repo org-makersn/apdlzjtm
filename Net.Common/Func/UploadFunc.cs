@@ -33,7 +33,7 @@ namespace Common.Func
                 fileName = Guid.NewGuid().ToString() + extension;
             }
 
-            string[] modelingExt = { ".stl", ".obj" };
+            string[] modelingExt = { ".stl", ".obj"};
 
             string saveDir = string.Empty;
 
