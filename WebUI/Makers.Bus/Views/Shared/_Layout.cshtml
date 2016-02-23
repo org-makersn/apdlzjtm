@@ -17,13 +17,13 @@
 	<meta charset="UTF-8">
 	<title>@ViewBag.Title</title>	
 	<link rel="shortcut icon" type="image/x-icon" href="@Url.VersionedContent("~/favicon.ico")">
+    @RenderSection("head", required: false)
     <link rel="stylesheet" type="text/css" href="~/content/css/common.css"  media="all" />
 	<link rel="stylesheet" type="text/css" href="~/content/css/font.css"  media="all" />
     <link rel="stylesheet" type="text/css" href="~/content/css/default.css"  media="all" />
     <link rel="stylesheet" type="text/css" href="~/content/css/jquery-ui-1.8.18.custom.css"/>
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.1.min.js"></script>  
     <script type="text/javascript" src="~/content/script/shared.jquery.js"></script>  
-
 </head>
 <body>
 <!-- Wrap -->
@@ -77,6 +77,7 @@
 <!-- //Wrap -->
 
 </body>
+@RenderSection("scripts", required: false)
  <script type="text/javascript">
      function index() { };
 

@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AppDbContext.cs" />
     <Compile Include="BizDac\BannerExDac.cs" />
+    <Compile Include="BizDac\BusManageBiz.cs" />
     <Compile Include="BizDac\BusManageDac.cs" />
     <Compile Include="BizDac\CommonCodeDac.cs" />
     <Compile Include="BizDac\MemberExDac.cs" />

@@ -1,11 +1,57 @@
 ﻿@{
     ViewBag.Title = "신청";
 }
+@section scripts{
+<script type="text/javascript">
+
+    $("#bigButton").on("click", function () {
+
+        var sName = $("#txtSchoolName").val();
+        var sAddr = $("#txtSchoolAddr").val();
+        var mName = $("#txtManagerName").val();
+        var mEmail = $("#txtManagerEmail").val();
+        var mTel = $("#txtManagerTel").val();
+        var applyFile = $("#fApplyFile").val();
+
+        if (sName == "") {
+            alert("학교명을 입력하세요");
+            return false;
+        }
+        if (sAddr == "") {
+            alert("학교주소를 입력하세요");
+            return false;
+        }
+        if (mName == "") {
+            alert("담당교사 성함을 입력하세요");
+            return false;
+        }
+        if (mEmail == "") {
+            alert("담당교사 이메일을 입력하세요");
+            return false;
+        }
+        if (mTel == "") {
+            alert("담당교사 연락처를 입력하세요");
+            return false;
+        }
+        if (applyFile == "") {
+            alert("신청서를 업로드해주세요");
+            return false;
+        }
+
+        var url = "AddApplyMakerBus";
+
+        $("#applyForm").attr('action', url);
+        $("#applyForm").submit();
+    })
+
+</script>    
+}
 
 <!-- ContWrap -->
 <!-- Event -->
 <div class="subPage">
     @Html.Action("SubHeader","Bus")
+    <form id="applyForm" name="applyForm" method="post" enctype="multipart/form-data">
     <div class="subCont">
         <div class="disc">
             1. 신청서를 다운받아 작성합니다. <br> 
@@ -17,27 +63,30 @@
             <li>
                 <div class="title">신청학교</div>
                 <div class="headerInput">학교명</div>
-                <div class="inputZone"><input name="name" type="text"></div><br>
+                <div class="inputZone"><input type="text" id="txtSchoolName" name="schoolName"></div><br>
                 <div class="headerInput">학교주소</div>
-                <div class="inputZone address"><input name="name" type="text" ></div>
+                <div class="inputZone address"><input  type="text" id="txtSchoolAddr" name="schoolAddr"></div>
             </li>
             <li>
                 <div class="title mgT30">담당교사</div>
                 <div class="headerInput">성함</div>
-                <div class="inputZone name"><input name="name" type="text"></div><br>
+                <div class="inputZone name"><input  type="text" id="txtManagerName" name="managerName"></div><br>
                 <div class="headerInput">이메일</div>
-                <div class="inputZone"><input name="name" type="text"></div><br>
+                <div class="inputZone"><input  type="text" id="txtManagerEmail" name="managerEmail"></div><br>
                 <div class="headerInput">전화번호</div>
-                <div class="inputZone address"><input name="name" type="text" value=""></div>
+                <div class="inputZone address"><input  type="text" id="txtManagerTel" name="ManagerTel"></div>
                 </li>
             <li>
                 <div class="title  mgT30">신청서</div>
-                <a class="addFile">파일 추가</a>
+                @*<a class="addFile">파일 추가</a>*@
+                <input type="file" id="fApplyFile" name="applyFile" title="파일추가">
                 <span class="subDisc">*파일타입 : PDF, hwp / 최대 사이즈 : 개당 100mb</span>
+                
             </li>
         </ul>
-        <a class="bigButton">신청하기</a>  
+        <a class="bigButton" id="bigButton">신청하기</a>  
     </div>
+    </form>
 </div> 
 	
 <!-- //contWrap -->
