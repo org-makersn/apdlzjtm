@@ -1,12 +1,12 @@
-﻿@model PagedList.IPagedList<BusApplySchoolT>
+﻿@model PagedList.IPagedList<BusFaqT>
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "신청";
+    ViewBag.Title = "Faq";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="contents_zone">
-    <h2 class="contents_title">신청</h2>
+    <h2 class="contents_title">자주묻는질문</h2>
 
     
     <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
@@ -19,10 +19,10 @@
         </colgroup>
         <thead>
             <tr>
-                <th>No</th>
-                <th>진행일자</th>
-                <th>학교명</th>
-                <th>진행여부</th>
+                <th>No</th>                
+                <th>제목</th>
+                <th>등록일</th>
+                <th>등록자</th>
             </tr>
         </thead>
         <tbody>
@@ -32,20 +32,26 @@
                 {
                 <tr>
                     <td>@data.NO</td>
-                    <td>@data.EVENT_DATE.ToString().Substring(0,10)</td>
-                    <td class="ta_left"><a href="javascript:History.GoEdit(@data.NO)" class="_btn_edit" id="title">@data.SCHOOL_NAME</a></td>
-                    <td>@data.MAKERBUS_YN</td>
+                    <td class="ta_left"><a href="javascript:History.GoEdit(@data.NO)" class="_btn_edit" id="title">@data.TITLE</a></td>
+                    <td>@data.REG_DT.ToString().Substring(0,10)</td>
+                    <td>@data.REG_ID</td>
                 </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;">진행현황이 없습니다.</td>
+                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;">등록된 내용이 없습니다.</td>
                 </tr>	
             }
         </tbody>
     </table>
+
+    <!-- btn -->
+    <div class="btn_right">
+        <span class="btnWrap medium"><a href="/bus/Faq?mode=add" class="_btn_write">등록</a></span>
+    </div>
+    <!-- // btn -->
     
     <!-- page_navi -->
     <div class="page_navi">

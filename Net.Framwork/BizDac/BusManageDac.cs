@@ -13,6 +13,9 @@ namespace Net.Framework.BizDac
     {
         private ISimpleRepository<BusApplySchoolT> _makerbusApplyRepo = new SimpleRepository<BusApplySchoolT>();
         private ISimpleRepository<BusQnaT> _makerbusQnaRepo = new SimpleRepository<BusQnaT>();
+        private ISimpleRepository<BusFaqT> _makerbusFaqRepo = new SimpleRepository<BusFaqT>();
+        private ISimpleRepository<BusPartnershipQnaT> _makerbusPartnershipQnaRepo = new SimpleRepository<BusPartnershipQnaT>();
+        private ISimpleRepository<BusPartnerT> _makersPartnerRepo = new SimpleRepository<BusPartnerT>();
         private ISimpleRepository<BusHistory> _historyRepo = new SimpleRepository<BusHistory>();
         private ISimpleRepository<BusBlog> _blogRepo = new SimpleRepository<BusBlog>();
 
@@ -213,6 +216,66 @@ namespace Net.Framework.BizDac
                 return dbHelper.ExecuteSingle<MakerBusState>(cmd);
             }
         } 
+        #endregion
+
+        #region GetMakerbusQnaList - 메이커버스 문의사항 리스트
+        /// <summary>
+        /// 메이커버스 문의사항 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusQnaT> GetMakerbusQnaList()
+        {
+            IEnumerable<BusQnaT> state = new List<BusQnaT>();
+
+            state = _makerbusQnaRepo.GetAll();
+
+            return state.ToList();
+        }
+        #endregion
+
+        #region GetMakersbusFaqList - 메이커버스 자주묻는질문 리스트
+        /// <summary>
+        /// 메이커버스 자주묻는질문 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusFaqT> GetMakersbusFaqList()
+        {
+            IEnumerable<BusFaqT> state = new List<BusFaqT>();
+
+            state = _makerbusFaqRepo.GetAll();
+
+            return state.ToList();
+        }
+        #endregion
+
+        #region GetMakersbusPartnershipQnaList - 메이커버스 파트너쉽 문의사항 리스트
+        /// <summary>
+        /// 메이커버스 파트너쉽 문의사항 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusPartnershipQnaT> GetMakersbusPartnershipQnaList()
+        {
+            IEnumerable<BusPartnershipQnaT> state = new List<BusPartnershipQnaT>();
+
+            state = _makerbusPartnershipQnaRepo.GetAll();
+
+            return state.ToList();
+        }
+        #endregion
+
+        #region GetMakersPartnerList - 메이커스 파트너 리스트
+        /// <summary>
+        /// 메이커버스 파트너쉽 문의사항 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusPartnerT> GetMakersPartnerList()
+        {
+            IEnumerable<BusPartnerT> state = new List<BusPartnerT>();
+
+            state = _makersPartnerRepo.GetAll();
+
+            return state.ToList();
+        }
         #endregion
 
     }

@@ -48,8 +48,8 @@ namespace Net.Framework.Entity
         public string REG_ID { get; set; }
     }
 
-    [Table("BUS_PARTNERSHIP_QNA")]
-    public partial class BusPartnershipQnaT
+    [Table("BUS_FAQ")]
+    public partial class BusFaqT
     {
         [Key]
         public int NO { get; set; }
@@ -58,18 +58,35 @@ namespace Net.Framework.Entity
         public string CONTENTS { get; set; }
         public DateTime REG_DT { get; set; }
         public string REG_ID { get; set; }
+        public Nullable<DateTime> CHG_DT { get; set; }
+        public string CHG_ID { get; set; }
     }
 
-    [Table("BUS_PARTNERSHIP_FAQ")]
-    public partial class BusPartnershipFaqT
+    [Table("BUS_PARTNERSHIP_QNA")]
+    public partial class BusPartnershipQnaT
     {
         [Key]
-        public int SEQ { get; set; }
+        public int NO { get; set; }
 
+        public string EMAIL { get; set; }
         public string TITLE { get; set; }
         public string CONTENTS { get; set; }
         public DateTime REG_DT { get; set; }
         public string REG_ID { get; set; }
+    }
+
+    [Table("BUS_PARTNER")]
+    public partial class BusPartnerT
+    {
+        [Key]
+        public int NO { get; set; }
+
+        public string PARTNER_NAME { get; set; }
+        public string LOGO_IMAGE { get; set; }
+        public DateTime REG_DT { get; set; }
+        public string REG_ID { get; set; }
+        public Nullable<DateTime> CHG_DT { get; set; }
+        public string CHG_ID { get; set; }
     }
     
     /// <summary>
