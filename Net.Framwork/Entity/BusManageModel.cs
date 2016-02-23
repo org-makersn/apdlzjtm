@@ -10,36 +10,34 @@ namespace Net.Framework.Entity
     }
 
     [Table("BUS_APPLY_SCHOOL")]
-    public class BusApplySchool
+    public partial class BusApplySchoolT
     {
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int NO { get; set; }
+        public virtual int NO { get; set; }
 
-        public string SCHOOL_NAME { get; set; }
-        public string SCHOOL_ADDR { get; set; }
-        public string MANAGER { get; set; }
-        public string MANAGER_EMAIL { get; set; }
-        public string MANAGER_TEL { get; set; }
-        public string APPLY_PATH { get; set; }
-        public string MAKERBUS_YN { get; set; }
-        public Nullable<int> PARTICIPATION_COUNT { get; set; }
-        public Nullable<int> MODELING_COUNT { get; set; }
-        public Nullable<int> SUPPORT_PRINTER_COUNT { get; set; }
-        public Nullable<DateTime> EVENT_DATE { get; set; }
-        public string START_TIME { get; set; }
-        public string MEMO { get; set; }
-        public DateTime REG_DT { get; set; }
-        public string REG_ID { get; set; }
-        public Nullable<DateTime> CHG_DT { get; set; }
-        public string CHG_ID { get; set; }
+        public virtual string SCHOOL_NAME { get; set; }
+        public virtual string SCHOOL_ADDR { get; set; }
+        public virtual string MANAGER { get; set; }
+        public virtual string MANAGER_EMAIL { get; set; }
+        public virtual string MANAGER_TEL { get; set; }
+        public virtual string APPLY_PATH { get; set; }
+        public virtual string MAKERBUS_YN { get; set; }
+        public virtual Nullable<int> PARTICIPATION_COUNT { get; set; }
+        public virtual Nullable<int> MODELING_COUNT { get; set; }
+        public virtual Nullable<int> SUPPORT_PRINTER_COUNT { get; set; }
+        public virtual Nullable<DateTime> EVENT_DATE { get; set; }
+        public virtual string START_TIME { get; set; }
+        public virtual string MEMO { get; set; }
+        public virtual DateTime REG_DT { get; set; }
+        public virtual string REG_ID { get; set; }
+        public virtual Nullable<DateTime> CHG_DT { get; set; }
+        public virtual string CHG_ID { get; set; }
     }
 
     [Table("BUS_QNA")]
-    public class BusQna
+    public partial class BusQnaT
     {
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int NO { get; set; }
         
         public string CATEGORY { get; set; }
@@ -51,10 +49,9 @@ namespace Net.Framework.Entity
     }
 
     [Table("BUS_PARTNERSHIP_QNA")]
-    public class BusPartnershipQna
+    public partial class BusPartnershipQnaT
     {
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int NO { get; set; }
 
         public string TITLE { get; set; }
@@ -64,10 +61,9 @@ namespace Net.Framework.Entity
     }
 
     [Table("BUS_PARTNERSHIP_FAQ")]
-    public class BusPartnershipFaq
+    public partial class BusPartnershipFaqT
     {
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int SEQ { get; set; }
 
         public string TITLE { get; set; }

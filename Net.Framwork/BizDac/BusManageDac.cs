@@ -11,7 +11,8 @@ namespace Net.Framework.BizDac
 {
     public class BusManageDac : DacBase
     {
-        private ISimpleRepository<BusApplySchool> _makerbusApplyRepo = new SimpleRepository<BusApplySchool>();
+        private ISimpleRepository<BusApplySchoolT> _makerbusApplyRepo = new SimpleRepository<BusApplySchoolT>();
+        private ISimpleRepository<BusQnaT> _makerbusQnaRepo = new SimpleRepository<BusQnaT>();
         private ISimpleRepository<BusHistory> _historyRepo = new SimpleRepository<BusHistory>();
         private ISimpleRepository<BusBlog> _blogRepo = new SimpleRepository<BusBlog>();
 
@@ -21,7 +22,7 @@ namespace Net.Framework.BizDac
         /// </summary>
         /// <param name="banner"></param>
         /// <returns></returns>
-        internal int AddApplyMakerbus(BusApplySchool data)
+        internal int AddApplyMakerbus(BusApplySchoolT data)
         {
             int identity = 0;
             bool ret = _makerbusApplyRepo.Insert(data);
@@ -39,9 +40,9 @@ namespace Net.Framework.BizDac
         /// 메이커버스 전체 리스트
         /// </summary>
         /// <returns></returns>
-        internal List<BusApplySchool> GetMakerbusList()
+        internal List<BusApplySchoolT> GetMakerbusList()
         {
-            IEnumerable<BusApplySchool> state = new List<BusApplySchool>();
+            IEnumerable<BusApplySchoolT> state = new List<BusApplySchoolT>();
 
             state = _makerbusApplyRepo.GetAll();
 
@@ -125,6 +126,25 @@ namespace Net.Framework.BizDac
         public bool UpdateBlog(BusBlog blog)
         {
             return _blogRepo.Update(blog);
+        }
+        #endregion
+
+        #region AddMakerBusQna - 메이커버스 문의사항 저장
+        /// <summary>
+        /// 메이커버스 문의사항 저장
+        /// </summary>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        internal int AddMakerBusQna(BusQnaT data)
+        {
+            int identity = 0;
+            bool ret = _makerbusQnaRepo.Insert(data);
+
+            if (ret)
+            {
+                identity = data.NO;
+            }
+            return identity;
         }
         #endregion
 

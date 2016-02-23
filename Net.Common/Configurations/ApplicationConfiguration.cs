@@ -269,7 +269,13 @@ namespace Net.Common.Configurations
             private BusConfiguration()
             {
                 // 추가
+                PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfile";
             }
+
+            /// <summary>
+            /// 파일저장 
+            /// </summary>
+            public string PhysicalDir { get; private set; }
         }
         #endregion
     }
