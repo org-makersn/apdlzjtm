@@ -1,11 +1,80 @@
-﻿@{
+﻿@model MakerBusState
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="contents_zone">
-    <h2 class="contents_title">진행현황</h2>
+    <h2 class="contents_title">메이커버스</h2>
 
+    <div>
+        <h4>1. 통계</h4>
+        <br />
+        <span>학교 : @Model.SchoolCnt</span> &nbsp;
+        <span>참여학생 : @Model.StudentCnt</span> &nbsp;
+        <span>모델링 작품 : @Model.ModelingCnt</span> &nbsp;
+        <span>프린터 지원 : @Model.PrinterCnt</span> &nbsp;
+    </div>
+    <br />
+    <div>
+        <h4>2. 진행현황</h4>
+        <br />
+        <span>횟수 : 35</span>
+    </div>
+    <br />
+    <div>
+        <h4>3. 블로그수</h4>
+        <br />
+        <span>횟수 : 35</span>
+    </div>
 
+    <br />
+    <br />
+    <div>
+        <h3>n. 교재관리</h3>
+        <br />
+        <div><a href="javascript:void(0)">사용하고 있는 교재</a></div>
+        <br />
+        <div>
+            <form id="textbook_form" name="textbook_form" method="post" enctype="multipart/form-data">
+                교재 새로 업로드 하기<span id="progress"></span>:
+                <input type="file" id="textbook" name="textbook" />
+            </form>
+        </div>
+    </div>
 
 </div>
+
+@section Scripts{
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+    <script type="text/javascript">
+        $("#textbook").change(function () {
+            var action_url = '/Bus/PostTextbook';
+            //pdf 파일만 업로드 가능하게 체크
+
+            var options = {
+                beforeSend: function () {
+
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    $("#progress").text("(" + percentComplete + "%)");
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        $("#progress").text("완료");
+                        alert("업로드 완료!");
+                        window.location.href = "/bus";
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            };
+
+            $('#textbook_form').attr("action", action_url).ajaxForm(options).submit();
+        });
+    </script>
+}
+

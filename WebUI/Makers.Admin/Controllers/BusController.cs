@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace Makers.Admin.Controllers
 {
+    [Authorize]
     public class BusController : BaseController
     {
         BusManageDac busManageDac = new BusManageDac();
@@ -36,8 +37,28 @@ namespace Makers.Admin.Controllers
         public ActionResult Index()
         {
             ViewData["Group"] = MenuModel(0);
-            return View();
-        } 
+            MakerBusState state = busManageDac.GetMakerbusState();
+
+
+            return View(state);
+        }
+
+        /// <summary>
+        /// 교재 업로드
+        /// </summary>
+        /// <param name="textbook"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult PostTextbook(HttpPostedFileBase textbook)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            string filename = string.Empty;
+            if (textbook != null)
+            {
+                response.Success = true;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region History

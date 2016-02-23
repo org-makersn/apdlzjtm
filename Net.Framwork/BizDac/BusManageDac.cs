@@ -51,6 +51,17 @@ namespace Net.Framework.BizDac
 
         #region 진행현황 관리
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="useYn"></param>
+        /// <returns></returns>
+        public IList<BusHistory> getBusHistoryListByUseYn(string useYn)
+        {
+            var state = _historyRepo.Get(m => m.USE_YN == useYn);
+            return state == null ? new List<BusHistory>() : state.OrderByDescending(m => m.NO).ToList();
+        }
+
+        /// <summary>
         /// get all
         /// </summary>
         /// <param name="no"></param>
@@ -103,6 +114,17 @@ namespace Net.Framework.BizDac
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="useYn"></param>
+        /// <returns></returns>
+        public IList<BusBlog> GetBusBlogListByUseYn(string useYn)
+        {
+            var state = _blogRepo.Get(m => m.USE_YN == useYn);
+            return state == null ? new List<BusBlog>() : state.OrderByDescending(m => m.NO).ToList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public IList<BusBlog> GetBusBlogList()
         {
@@ -147,6 +169,29 @@ namespace Net.Framework.BizDac
             return _blogRepo.Update(blog);
         }
         #endregion
+
+        /// <summary>
+        /// 통계
+        /// </summary>
+        /// <returns></returns>
+        public MakerBusState GetMakerbusState()
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string query = @"select
+	                            (select sum(cnt) from (
+	                            select count(distinct SCHOOL_NAME) as cnt from BUS_APPLY_SCHOOL with(nolock)
+	                            where MAKERBUS_YN = 'Y'
+	                            group by SCHOOL_NAME) as s) as SchoolCnt
+	                            , sum(isnull(PARTICIPATION_COUNT, 0)) as StudentCnt
+	                            , sum(isnull(MODELING_COUNT, 0)) as ModelingCnt
+	                            , sum(isnull(SUPPORT_PRINTER_COUNT, 0)) as PrinterCnt
+                            from BUS_APPLY_SCHOOL with(nolock) where MAKERBUS_YN = 'Y' ";
+
+            using (var cmd = new SqlCommand(query))
+            {
+                return dbHelper.ExecuteSingle<MakerBusState>(cmd);
+            }
+        }
 
     }
 }
