@@ -23,6 +23,9 @@ namespace Net.Common.Configurations
             BannerThumbnail = ConfigurationManager.AppSettings["BannerThumbnail"] ?? "banner/thumb";
             BannerFullImg = ConfigurationManager.AppSettings["BannerFullImg"] ?? "banner/fullsize";
             BannerBackup = ConfigurationManager.AppSettings["BannerBackup"] ?? "banner/backup";
+
+            BlogThumbnail = ConfigurationManager.AppSettings["BlogThumbnail"] ?? "blog/thumb";
+            BlogBackupImg = ConfigurationManager.AppSettings["BlogBackupImg"] ?? "blog/backup";
         }
 
         /// <summary>
@@ -69,6 +72,16 @@ namespace Net.Common.Configurations
         /// 
         /// </summary>
         public string BannerBackup { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string BlogThumbnail { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string BlogBackupImg { get; private set; }
 
 
         #region 디자인 Configurations

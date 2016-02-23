@@ -1,6 +1,6 @@
 ﻿@model BusBlog
 @{
-    ViewBag.Title = "AddBlog";
+    ViewBag.Title = "UpdateBlog";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,7 +8,8 @@
     <h2 class="contents_title">블로드 등록</h2>
 
     <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
-        @Html.Hidden("mode", "add")
+        @Html.Hidden("mode", "edit")
+        @Html.HiddenFor(model => model.NO)
 
         <table class="tbl_style1" summary="게시판 테이블">
             <colgroup>
@@ -29,8 +30,8 @@
                     <th scope="row">
                         <label for="BLOG_CONTENTS">내용</label></th>
                     <td>
-                        @Html.TextAreaFor(model => model.BLOG_CONTENTS, new { style = "height:350px" })
-                        @Html.ValidationMessageFor(model => model.BLOG_CONTENTS)
+                        @Html.TextAreaFor(model => model.BLOG_CONTENTS, new { style = "height:369px" })
+                        @*@Html.ValidationMessageFor(model => model.BLOG_CONTENTS)*@
                     </td>
                 </tr>
                 <tr>
@@ -39,15 +40,23 @@
                     <td>
                         @Html.TextBoxFor(model => model.THUMB_NAME, new { type = "file", @class = "input_text", style = "width:50%;" })
                         @Html.ValidationMessageFor(model => model.THUMB_NAME)
+                        @if (!String.IsNullOrEmpty(Model.THUMB_RENAME))
+                        {
+                            <p>
+                                <img src="@Url.BlogThumbnail(Model.THUMB_RENAME)" height="36">
+                                <input type="checkbox" id="up_thumb_del" name="up_thumb_del" value="true" /><label for="up_thumb_del">파일삭제</label>
+                                @*@Html.CheckBox("up_thumb_del", false) @Html.Label("up_thumb_del", "파일삭제")*@
+                            </p>
+                        }
                     </td>
                 </tr>
                 <tr>
                     <th>노출여부</th>
-                    <td>
-                        <input type="radio" name="USE_YN" value="Y" checked="checked" />
-                        사용 &nbsp; 
-					    <input type="radio" name="USE_YN" value="N" />
-                        미사용&nbsp; 
+                    <td> 
+                        @Html.RadioButtonFor(m => m.USE_YN, "Y", new { @id = "yes" })
+                        @Html.Label("yes","사용")
+                        @Html.RadioButtonFor(m => m.USE_YN,"N", new { @id = "no" })
+                        @Html.Label("no","미사용")
                     </td>
                 </tr>
             </tbody>
@@ -55,10 +64,12 @@
     </form>
 
     <div class="btn_center">
-        <span class="btnWrap medium"><a href="#" class="_btn_write">등록</a></span>
-        <span class="btnWrap medium"><a href="#" class="_btn_list">취소</a></span>
+        <span class="btnWrap medium"><a href="#" class="_btn_write">수정</a></span>
+        @*<span class="btnWrap medium"><a href="#" class="_btn_list">목록</a></span>*@
+        <span class="btnWrap medium"><a href="#" class="_btn_delete">취소</a></span>
     </div>
 </div>
+
 
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
@@ -68,8 +79,8 @@
             color:red;
         }
     </style>
-
     <script type="text/javascript">
+
         var editor;
         var editorItems = [
 					'source', '|', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
@@ -77,33 +88,54 @@
 					'insertunorderedlist', '|', 'emoticons', 'image', 'link', 'unlink', '|', 'preview', 'fullscreen'
         ];
         KindEditor.ready(function (K) {
+            //console.log(K);
             editor = K.create('textarea[id="BLOG_CONTENTS"]', {
                 allowFileManager: true,
                 allowUpload: true,
-                urlType: 'domain',
                 langType: 'ko',
                 items: editorItems,
-                formatUploadUrl: false,
                 fileManagerJson: '/KindEditor/FileManager',     //Browse file method 
                 uploadJson: '/KindEditor/UploadImage'           //Upload file method     
             });
         });
 
-        $(function () {
-            //게시글 등록
-            $("._btn_write").click(function (e) {
+        $(document).ready(function () {
+
+            //$("._btn_list").click(function () {
+            //    if (confirm("취소 하시겠습니까?") == true) {
+            //        location.replace("/bus/blog");
+            //    }
+            //});
+
+            $("._btn_delete").click(function () {
+                if (confirm("취소 하시겠습니까?") == true) {
+                    location.replace("/bus/blog");
+                }
+            });
+
+            $("._btn_write").click(function () {
+
                 var action_url = '/Bus/PostBlog';
 
                 if ($("#BLOG_TITLE").val() == '') {
                     alert("블로그 제목을 입력해 주세요.");
+                    $("#BLOG_TITLE").focus();
                     return false;
                 }
                 var blogContents = editor.html();
                 $("#BLOG_CONTENTS").val(encodeURIComponent(blogContents));
                 if (blogContents == '') {
                     alert("블로그 내용을 입력해 주세요.");
+                    $("#BLOG_CONTENTS").focus();
                     return false;
                 }
+                //if ($("input:checkbox[id='up_thubm_del']").is(":checked")) {
+                //    if ($("#THUMB_NAME").val() == '') {
+                //        alert("블로그 메인 이미지를 선택해 주세요.");
+                //        $("#Image").focus();
+                //        return false;
+                //    }
+                //}
 
                 var options = {
                     beforeSend: function () {
@@ -124,27 +156,7 @@
                 };
 
                 $('#insert_form').attr("action", action_url).ajaxForm(options).submit();
-                //var eventContent = (editor.html());
-                //var title = $("#title").val();
-                //data = {
-                //    blogTitle: title,
-                //    blogContents: eventContent
-                //}
-                //var onSuccess = function (result) {
-                //    if (result.Success) {
-                //        alert("블로그에 등록하였습니다.");
-                //        location.replace("/bus/blog");
-                //    }
-                //}
-                //var result = Ajax.AjaxResponseModelService(this, "/blog/postblog", data, onSuccess);
-            });
-
-            $("._btn_list").click(function () {
-                if (confirm("취소 하시겠습니까?")) {
-                    location.replace("/bus/blog");
-                }
-            });
-
-        });
+            })
+        })
     </script>
 }

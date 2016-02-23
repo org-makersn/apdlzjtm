@@ -190,6 +190,18 @@ namespace Common.Func
                 new ResizeImg(){width = 1000, height = 240, folder = @"profile\cover"}
             };
         }
+
+        /// <summary>
+        /// 블로그 메인 이미지 사이즈
+        /// </summary>
+        /// <returns></returns>
+        public static IList<ResizeImg> GetBlogMainResize()
+        {
+            return new List<ResizeImg>()
+            {
+                new ResizeImg(){width = 237, height = 140, folder = @"blog\thumb"}
+            };
+        }
     }
 
     /// <summary>
