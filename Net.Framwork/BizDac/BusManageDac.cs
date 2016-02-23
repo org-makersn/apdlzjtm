@@ -101,13 +101,33 @@ namespace Net.Framework.BizDac
 
         #region 블로그 관리
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IList<BusBlog> GetBusBlogList()
+        {
+            var state = _blogRepo.GetAll();
+            return state == null ? new List<BusBlog>() : state.OrderByDescending(m => m.NO).ToList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public BusBlog GetBlogByNo(long no)
+        {
+            return _blogRepo.First(m => m.NO == no);
+        }
+
+        /// <summary>
         /// 블로그 추가
         /// </summary>
         /// <param name="history"></param>
         /// <returns></returns>
-        public int AddBlog(BusBlog blog)
+        public long AddBlog(BusBlog blog)
         {
-            int identity = 0;
+            long identity = 0;
             bool ret = _blogRepo.Insert(blog);
 
             if (ret)

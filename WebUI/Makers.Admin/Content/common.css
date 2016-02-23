@@ -23,8 +23,8 @@ html, body{
 	scrollbar-3dlight-color:#DFDFDF;
 	scrollbar-shadow-color:#CFCFCF;
 	scrollbar-darkshadow-color:#BFBFBF;
-	scrollbar-track-color:EFEFEF;
-	scrollbar-arrow-color:7F7F7F;
+	scrollbar-track-color:#EFEFEF;
+	scrollbar-arrow-color:#7F7F7F;
 }
 * {margin:0; padding:0;}
 img { vertical-align:middle; border:0px;}
@@ -58,7 +58,7 @@ input[type="file"]{height:20px; border:1px solid #d8d8d8; font-size:11px; color:
 input[type="radio"]{height:14px; vertical-align:middle}
 input[type="checkbox"]{vertical-align:middle;}
 .boardTextarea{width:95%; padding:0 10px;}
-h1 , h2 , h3 , h4 {display:none;}
+/*h1 , h2 , h3 , h4 {display:none;}*/
 
 ul li.borderNone{background:none;}
 h3.leftTitle{display:block;}

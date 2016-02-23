@@ -101,16 +101,18 @@ namespace Net.Framework.Entity
     /// <summary>
         /// 블로그
     /// </summary>
-    //[Table("BUS_BLOG")]
+    [Table("BUS_BLOG")]
     public partial class BusBlog
     {
         [Key]
-        public int NO { get; set; }
+        public long NO { get; set; }
 
         [Required(ErrorMessage = "블로그 제목을 입력해주세요.")]
         public string BLOG_TITLE { get; set; }
 
         [Required(ErrorMessage = "블로그 내용을 입력해주세요.")]
+        [Column("BLOG_CONTENTS", TypeName = "text")]
+        [MaxLength]
         public string BLOG_CONTENTS { get; set; }
 
         public string THUMB_NAME { get; set; }

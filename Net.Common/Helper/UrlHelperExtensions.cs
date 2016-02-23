@@ -221,5 +221,17 @@ namespace Net.Common.Helper
             string fullPath = string.Format("{0}/{1}/{2}", instance.FileServerHost, instance.BannerFullImg, data);
             return urlHelper.Content(fullPath);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="urlHelper"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static string BlogThumbnail(this UrlHelper urlHelper, string data)
+        {
+            string fullPath = string.Format("{0}/{1}/{2}", instance.FileServerHost, instance.BlogThumbnail, data);
+            return urlHelper.Content(fullPath);
+        }
     }
 }

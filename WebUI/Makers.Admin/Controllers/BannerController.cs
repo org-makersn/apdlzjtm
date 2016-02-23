@@ -141,7 +141,7 @@ namespace Makers.Admin.Controllers
         /// <param name="up_image_del"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult BannerUpdate(int bannerNo, string title, string publish, string opener, string link, int priority, int bannerType, HttpPostedFileBase image, string up_image_del)
+        public ActionResult BannerUpdate(int bannerNo, string title, string PublishYn, string opener, string link, int priority, int bannerType, HttpPostedFileBase image, string up_image_del)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
@@ -150,31 +150,27 @@ namespace Makers.Admin.Controllers
             {
                 bannerT.Type = bannerType;
                 bannerT.Title = title;
-                bannerT.PublishYn = publish;
+                bannerT.PublishYn = PublishYn;
                 bannerT.OpenerYn = opener;
                 bannerT.Link = link;
 
                 var fileName = string.Empty;
 
-                if (up_image_del == "y" || String.IsNullOrEmpty(up_image_del))
+                if (!string.IsNullOrEmpty(up_image_del) && up_image_del == "y")
                 {
-                    //파일 삭제
-                    if (up_image_del == "y")
+                    //이미지 변경
+                    if (image != null)
                     {
+                        //파일 삭제
                         ApplicationConfiguration instance = ApplicationConfiguration.Instance;
                         string backupPath = string.Format(@"{0}\{1}\{2}", instance.FileServerUncPath, instance.BannerBackup, bannerT.Image);
                         string fullsizePath = string.Format(@"{0}\{1}\{2}", instance.FileServerUncPath, instance.BannerFullImg, bannerT.Image);
                         string thumbPath = string.Format(@"{0}\{1}\{2}", instance.FileServerUncPath, instance.BannerThumbnail, bannerT.Image);
-                        
+
                         new FileHelper().FileDelete(backupPath);
                         new FileHelper().FileDelete(fullsizePath);
                         new FileHelper().FileDelete(thumbPath);
 
-                        bannerT.Image = fileName;
-                    }
-                    //이미지 변경
-                    if (image != null)
-                    {
                         fileName = new UploadFunc().FileUpload(image, ImageReSize.GetBannerResize(), "Banner", null);
                         bannerT.Image = fileName;
                     }

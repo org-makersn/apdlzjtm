@@ -21,6 +21,12 @@
             foreach (var blog in Model)
             {
             <div class="q_low">
+                <div class="lowin">
+                    @if (!string.IsNullOrEmpty(blog.THUMB_RENAME))
+                    {
+                        <img src="@Url.BlogThumbnail(blog.THUMB_RENAME)" height="32" />
+                    }
+                </div>
                 <div class="lowin"><a href="#" class="_btn_view" rel="@blog.NO">@blog.BLOG_TITLE </a>&nbsp;[@blog.REG_DT.ToString("yyyy-MM-dd")]</div>
             </div>
             <div class="a_low">
@@ -33,7 +39,7 @@
         }
         else
         {
-            <div style="height: 200px; line-height:200px; text-align: center;">
+            <div style="height: 200px; line-height: 200px; text-align: center;">
                 등록된 블로그가 없습니다.
             </div>
         }
@@ -47,8 +53,32 @@
     <!-- // page_navi -->
     <!-- btn -->
     <div class="btn_right">
-        <span class="btnWrap medium"><a href="/bus/addblog" class="_btn_write">등록</a></span>
+        <span class="btnWrap medium"><a href="/bus/blog?mode=add" class="_btn_write">등록</a></span>
     </div>
     <!-- // btn -->
 
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function Notices() { };
+        Notices.VIew = function (val) {
+            //location.replace("/notices/View?no=" + val);
+        }
+        $(document).ready(function () {
+
+            //글보기
+            $("._btn_view").click(function () {
+                var $this_no = $(this).attr("rel");
+                location.href = '/bus/blog?no=' + $this_no + "&mode=edit";
+                return false;
+            });
+
+            $(".q_low").on("click", function () {
+                $(this).next().slideToggle();
+                $(".a_low").not($(this).next()).slideUp();
+            });
+
+        });
+    </script>
+}

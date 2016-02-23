@@ -172,7 +172,7 @@ ul.gallery_list li dd{width:350px;text-align:left;float:left; overflow:hidden; d
 .faq_wrap .q_low a{color:#2b2927}
 .faq_wrap .a_low{padding:15px 10px 15px 10px; border-top:1px dotted #e6ecf0; display:none;color:#7d7d7d;line-height:18px;}
 
-.faq_wrap .lowin{display:inline-block; padding:0 0 0 10px;}
+.faq_wrap .lowin{display:inline-block; /*padding:0 0 0 10px;*/}
 
 
 

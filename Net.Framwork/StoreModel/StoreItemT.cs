@@ -19,7 +19,9 @@ namespace Net.Framework.StoreModel
         public int MainImg { get; set; }
         [Column("ITEM_NAME")]
         public string ItemName { get; set; }
-        [Column("CONTENTS")]
+
+        [Column("CONTENTS", TypeName = "text")]
+        [MaxLength]
         public string Contents { get; set; }
         [Column("BASE_PRICE")]
         public int BasePrice { get; set; }
