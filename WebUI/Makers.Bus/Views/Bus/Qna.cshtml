@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Qna";
+}
+
+<!-- ContWrap -->
+<!-- Event -->
+<div class="subPage">
+    @Html.Action("SubHeader","Bus")
+    <div class="subCont">
+        <ul class="nostyle">
+            <li>
+                <div class="headerInput">분류</div>
+                <div class="inputRadio name">
+                    <a href="" class="radioBtn on" title="선택버튼"></a><span>불편/개선사항</span></a>
+                    <a href="" class="radioBtn" title="선택버튼"></a><span>채용관련</span></a>
+                    <a href="" class="radioBtn" title="선택버튼"></a><span>제휴 및 협력 관련</span></a>
+                    <a href="" class="radioBtn" title="선택버튼"></a><span>미디어 관련</span></a>
+                    <a href="" class="radioBtn" title="선택버튼"></a><span>기타</span></a>  
+                </div>
+            </li>
+            <li>
+                <div class="headerInput">이메일</div>
+                <div class="inputZone w750"><input name="name" type="text"></div>
+                </li>
+                <li>
+                <div class="headerInput">제목</div>
+                <div class="inputZone name w750"><input name="name" type="text"></div>
+                </li>
+                <li>
+                <div class="headerInput valign">내용</div>
+                <textarea name="name" type="text"></textarea>
+                </li>
+            
+        </ul>
+    <a class="bigButton">보내기</a>  
+    </div>
+</div> 
+	
+<!-- //contWrap -->

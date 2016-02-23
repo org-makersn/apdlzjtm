@@ -1,0 +1,37 @@
+﻿
+@{
+    string applyClass = "";
+    string qnaClass = "";
+    string faqClass = "";
+    string url = Request.RawUrl.ToUpper();
+    
+    if(url.Contains("APPLY"))
+    {
+        applyClass = "apply active";
+        qnaClass = "inquire";
+        faqClass = "qna";    
+    }
+    else if (url.Contains("QNA"))
+    {
+        applyClass = "apply";
+        qnaClass = "inquire active";
+        faqClass = "qna";
+    }
+    else if (url.Contains("FAQ"))
+    {
+        applyClass = "apply";
+        qnaClass = "inquire";
+        faqClass = "qna active";
+    }
+    
+ }
+
+<div class="subTop">
+    <div class="title apply">Application and Q&A</div>
+</div>
+
+<div class="tabMenu">
+    <a href="apply" class="@applyClass">신청</a><!--[D]현재 페이지일 때 클래스 active 추가-->
+    <a href="qna"  class="@qnaClass">문의</a>
+    <a href="faq"  class="@faqClass">FAQ</a>
+</div>

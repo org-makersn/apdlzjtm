@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Apply";
+}
+
+<!-- ContWrap -->
+<!-- Event -->
+<div class="subPage">
+    @Html.Action("SubHeader","Bus")
+    <div class="subCont">
+        <div class="disc">
+            1. 신청서를 다운받아 작성합니다. <br> 
+	        2. 기본정보를 입력하고 작성된 신청서를 업로드 합니다.<br>
+            3. 메이커버스를 신청합니다.
+        </div>
+        <a class="downApply">신청서 다운로드</a>
+        <ul>
+            <li>
+                <div class="title">신청학교</div>
+                <div class="headerInput">학교명</div>
+                <div class="inputZone"><input name="name" type="text"></div><br>
+                <div class="headerInput">학교주소</div>
+                <div class="inputZone address"><input name="name" type="text" ></div>
+            </li>
+            <li>
+                <div class="title mgT30">담당교사</div>
+                <div class="headerInput">성함</div>
+                <div class="inputZone name"><input name="name" type="text"></div><br>
+                <div class="headerInput">이메일</div>
+                <div class="inputZone"><input name="name" type="text"></div><br>
+                <div class="headerInput">전화번호</div>
+                <div class="inputZone address"><input name="name" type="text" value=""></div>
+                </li>
+            <li>
+                <div class="title  mgT30">신청서</div>
+                <a class="addFile">파일 추가</a>
+                <span class="subDisc">*파일타입 : PDF, hwp / 최대 사이즈 : 개당 100mb</span>
+            </li>
+        </ul>
+        <a class="bigButton">신청하기</a>  
+    </div>
+</div> 
+	
+<!-- //contWrap -->

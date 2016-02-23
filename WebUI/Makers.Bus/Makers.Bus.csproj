@@ -166,6 +166,7 @@
     <Compile Include="Configurations\BusConfigurations.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
+    <Compile Include="Controllers\BusController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -446,11 +447,17 @@
     <Content Include="Content\images\common\top_img_print01.png" />
     <Content Include="Content\images\common\top_txt_print01.png" />
     <Content Include="Content\images\common\top_txt_print02.png" />
+    <Content Include="Content\images\ico_top_apply.png" />
     <Content Include="Content\images\img_main01.png" />
     <Content Include="Content\images\img_main02.png" />
     <Content Include="Content\images\img_main03.png" />
+    <Content Include="Content\images\img_news.png" />
+    <Content Include="Content\images\img_textbook.png" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\logo_spon.png" />
     <Content Include="Content\images\placeholder-image.png" />
+    <Content Include="Content\images\radio_off.png" />
+    <Content Include="Content\images\radio_on.png" />
     <Content Include="Content\images\sp_ico_main.png" />
     <Content Include="Content\images\txt_main.png" />
     <Content Include="Content\script\shared.jquery.js" />
@@ -541,13 +548,16 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Blog\Index.cshtml" />
+    <Content Include="Views\Bus\Apply.cshtml" />
+    <Content Include="Views\Bus\Qna.cshtml" />
+    <Content Include="Views\Bus\Faq.cshtml" />
+    <Content Include="Views\Bus\SubHeader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Partner\" />
     <Folder Include="Views\Qna\" />
-    <Folder Include="Views\Submit\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
