@@ -136,6 +136,7 @@
     <Compile Include="Helper\SimpleRepository.cs" />
     <Compile Include="StoreContext.cs" />
     <Compile Include="StoreModel\StoreShippingT.cs" />
+    <Compile Include="Util\BusEnumType.cs" />
     <Compile Include="Util\EnumHelper.cs" />
     <Compile Include="Util\StoreEnumType.cs" />
     <Compile Include="Util\IPagedList.cs" />

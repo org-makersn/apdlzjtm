@@ -129,6 +129,46 @@ namespace Net.Framework.BizDac
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="useYn"></param>
+        /// <param name="takeNum"></param>
+        /// <returns></returns>
+        public IList<BusBlog> GetBusBlogListByOption(string useYn, int fromPage, int toPage)
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string targetQuery = @"select 
+	                                [NO]
+	                                , BLOG_TITLE
+	                                , BLOG_CONTENTS
+	                                , THUMB_RENAME
+	                                , VIEW_CNT
+	                                , REG_DT
+                                from (
+	                                select
+		                                [NO]
+		                                , BLOG_TITLE
+		                                , BLOG_CONTENTS
+		                                , THUMB_RENAME
+		                                , VIEW_CNT
+		                                , REG_DT
+		                                , ROW_NUMBER() OVER(ORDER BY REG_DT DESC) AS ROW_NUM 
+	                                from BUS_BLOG with(nolock)
+	                                where USE_YN = @USE_YN) as outQ
+                                where ROW_NUM BETWEEN @FROM_PAGE AND @TO_PAGE";
+
+            using (var cmd = new SqlCommand(targetQuery))
+            {
+                cmd.Parameters.Add("@USE_YN", SqlDbType.VarChar).Value = useYn;
+                cmd.Parameters.Add("@FROM_PAGE", SqlDbType.Int).Value = fromPage;
+                cmd.Parameters.Add("@TO_PAGE", SqlDbType.Int).Value = toPage;
+
+                var state = dbHelper.ExecuteMultiple<BusBlog>(cmd);
+                return state == null ? new List<BusBlog>() : state.OrderByDescending(m => m.NO).ToList();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public IList<BusBlog> GetBusBlogList()
         {

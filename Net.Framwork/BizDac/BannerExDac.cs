@@ -23,7 +23,7 @@ namespace Net.Framework.BizDac
             IEnumerable<BannerExT> state = null;
             if (type > 0)
             {
-                state = _bannerRepo.Get(m => m.Type == type);
+                state = _bannerRepo.Get(m => m.Type == type && m.PublishYn == "y");
             }
             else
             {

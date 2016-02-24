@@ -1,60 +1,72 @@
-﻿@{
+﻿@model IList<BusBlog>
+@{
     ViewBag.Title = "Index";
-    
+    //배너
+    IList<BannerExT> banners = ViewBag.MainBanner as IList<BannerExT>;
 }
 
 <!-- topVisual -->
 <div class="mainButtons">
-    <span class="top_txt">
-    </span>
-</div>   
+    <span class="top_txt"></span>
+</div>
 <div class="unslider-carousel has-dots topVisu">
     <ul>
-    <li style="background:url(content/images/img_main01.png) top center no-repeat #fff; background-size:cover;">
-    </li>
-    <li style="background:url(content/images/img_main02.png) top center no-repeat #fff; background-size:cover;">
-    </li>
-        <li style="background:url(content/images/img_main03.png) top center no-repeat #fff; background-size:cover;">
-    </li>                
+        @foreach (var banner in banners)
+        {
+            <li style="background: url(@Url.BannerFullImg(banner.Image)) top center no-repeat #fff; background-size: cover;"></li>
+        }
     </ul>
 </div>
-
 <!-- //topVisual -->
-    
 <div class="numWrap">
     <div class="current_num">
-        <div class="school"><span class="num">47</span><span class="title">방문학교</span></div>
+        <div class="school"><span class="num">@ViewData["SchoolCnt"]</span><span class="title">방문학교</span></div>
         <div class="line"></div>
-        <div class="modeling"><span class="num">2,173</span><span class="title">모델링<br>작업물</span></div>
+        <div class="modeling">
+            <span class="num">@ViewData["ModelingCnt"]</span><span class="title">모델링<br>
+                작업물</span>
+        </div>
         <div class="line"></div>
-        <div class="student"><span class="num">1,065</span><span class="title">워크샵<br>참가학생</span></div>
+        <div class="student">
+            <span class="num">@ViewData["StudentCnt"]</span><span class="title">워크샵<br>
+                참가학생</span>
+        </div>
         <div class="line"></div>
-        <div class="printer"><span class="num">24</span><span class="title">3D 프린터<br>지원</span></div>               
-        <div class="asof">2016년 2월 기준</div>
-    </div>            
-</div> 
-<!-- ContWrap -->
+        <div class="printer">
+            <span class="num">@ViewData["PrinterCnt"]</span><span class="title">3D 프린터<br>
+                지원</span>
+        </div>
+        @*<div class="asof">2016년 2월 기준</div>*@
+    </div>
+</div>
 <!-- Event -->
 <div class="graybg">
     <div class="mainTitle">
-    <h2>News</h2>
+        <h2>News</h2>
     </div>
     <div class="picList">
-        <a href="" class="box"><img src="content/images/img_news.png"><span class="title">로플랫, 더 많은 사람들을 위한 실내위치 로플랫</span><span class="date">2015.9.8</span></a>
-        <a href=""  class="box"><img src="content/images/img_news.png"><span class="title">로플랫, 더 많은 사람들을 위한 실내위치 로플랫</span><span class="date">2015.9.8</span></a>
-        <a href=""  class="box"><img src="content/images/img_news.png"><span class="title">로플랫, 더 많은 사람들을 위한 실내위치 로플랫</span><span class="date">2015.9.8</span></a>
+        @foreach (var blog in Model)
+        {
+            <a href="/blog/view/@blog.NO" class="box">
+                <img src="@Url.BlogThumbnail(blog.THUMB_RENAME)">
+                <span class="title">@blog.BLOG_TITLE</span>
+                <span class="date">@String.Format("{0:yyyy.MM.dd}", blog.REG_DT)</span>
+            </a>
+        }
     </div>
-<a href="blog.html" class="more">View More</a>
-</div> 
-<div class="contWrap"> 		
-<!-- 메이커버스를 후원하는 곳 -->
+    <a href="/blog" class="more">View More</a>
+</div>
+<!-- Event -->
+<!-- ContWrap -->
+<div class="contWrap">
+    <!-- 메이커버스를 후원하는 곳 -->
     <div class="mainTitle">
-    <h2>메이커버스<span class="sm">와 함께 달려요</span></h2>
+        <h2>메이커버스<span class="sm">와 함께 달려요</span></h2>
     </div>
     <div class="spon">
-    <div class="spon01"></div>
-    <div class="spon02"></div>
-    <div class="spon03"></div>
-    </div>           
+        <div class="spon01"></div>
+        <div class="spon02"></div>
+        <div class="spon03"></div>
+    </div>
 </div>
 <!-- //contWrap -->
