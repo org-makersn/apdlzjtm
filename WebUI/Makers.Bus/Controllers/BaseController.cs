@@ -23,15 +23,8 @@ namespace Makers.Bus.Controllers
 
         public BaseController()
         {
-            //ViewBag.CommonValJoson = JsonConvert.SerializeObject(commonValModel);
-            profileModel = Profile;
-            ViewBag.LogOnMemner = profileModel;
-            ViewBag.LogOnChk = profileModel.UserNo == 0 ? 0 : 1;
-
-            //ViewBag.HasStore = profileModel.UserNo > 0 ? new StoreMemberBiz().GetStoreMemberExists(profileModel.UserNo) : false;
-            ViewBag.HasStore = false;
-
-            ViewBag.IsMain = "N";
+            ViewData["AdminImgUrl"] = instance.AdminImgUrl;
+            ViewData["IsMain"] = "N";
         }
 
         private ProfileModel Profile

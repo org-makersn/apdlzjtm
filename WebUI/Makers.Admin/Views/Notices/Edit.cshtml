@@ -34,7 +34,7 @@
                         <label for="semi_content">내용</label></th>
                     <td>
                         @*@Html.TextArea("content", new { id = "content", style = "width:750px;height:350px" })*@
-                        <textarea id="content" style="width:750px;height:350px;">@(new HtmlFilter().PunctuationDecode(Model.SemiContent))</textarea>
+                        <textarea id="content" style="width:750px;height:350px;">@(HtmlFilter.PunctuationEncode(Model.SemiContent))</textarea>
                     </td>
                 </tr>
             </tbody>
@@ -68,7 +68,7 @@
                 fileManagerJson: '/KindEditor/FileManager',     //Browse file method 
                 uploadJson: '/KindEditor/UploadImage'           //Upload file method     
             });
-            @*editor.html('@Html.Raw((new HtmlFilter().PunctuationDecode(Model.SemiContent)))');*@
+            @*editor.html('@Html.Raw((HtmlFilter.PunctuationEncode(Model.SemiContent)))');*@
         });
 
 

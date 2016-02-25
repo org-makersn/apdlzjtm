@@ -1,0 +1,24 @@
+﻿@model IList<BusHistory>
+@{
+    ViewBag.Title = "소개";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>소개</h2>
+<div>진행현황</div>
+@foreach (var history in Model)
+{
+    <span>@history.PROGRESS_DT&nbsp;</span> 
+    <span>@history.TITLE</span>
+    <br />
+}
+
+
+<div>
+    <h4>1. 통계</h4>
+    <br />
+    <span>학교 : @ViewData["SchoolCnt"]</span> &nbsp;
+    <span>참여학생 : @ViewData["StudentCnt"]</span> &nbsp;
+    <span>모델링 작품 : @ViewData["ModelingCnt"]</span> &nbsp;
+    <span>프린터 지원 : @ViewData["PrinterCnt"]</span> &nbsp;
+</div>

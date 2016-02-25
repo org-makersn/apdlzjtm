@@ -6,9 +6,9 @@ using System.Web;
 
 namespace Net.Common.Filter
 {
-    public class HtmlFilter
+    public static class HtmlFilter
     {
-        public string UrlEncode(string str)
+        public static string UrlEncode(string str)
         {
             string sb = "";
 
@@ -16,7 +16,7 @@ namespace Net.Common.Filter
             return (sb);
         }
 
-        public string UrlDecode(string urlStr)
+        public static string UrlDecode(string urlStr)
         {
             HttpUtility.UrlDecode(urlStr, Encoding.UTF8);
 
@@ -28,7 +28,7 @@ namespace Net.Common.Filter
         /// </summary>
         /// <param name="contents"></param>
         /// <returns></returns>
-        public string HtmlEncoding(string contents)
+        public static string HtmlEncoding(string contents)
         {
             return WebUtility.HtmlEncode(contents);
         }
@@ -38,7 +38,7 @@ namespace Net.Common.Filter
         /// </summary>
         /// <param name="contents"></param>
         /// <returns></returns>
-        public string HtmlDecoding(string contents)
+        public static string HtmlDecoding(string contents)
         {
             return WebUtility.HtmlDecode(contents);
         }
@@ -48,7 +48,7 @@ namespace Net.Common.Filter
         /// </summary>
         /// <param name="strHtml"></param>
         /// <returns></returns>
-        public string Unused_HtmlToTxt(string strHtml)
+        public static string Unused_HtmlToTxt(string strHtml)
         {
             string[] aryReg ={
                         @"<script[^>]*?>.*?</script>",
@@ -85,7 +85,7 @@ namespace Net.Common.Filter
         }
 
         ///
-        public string PunctuationEncode(string str)
+        public static string PunctuationEncode(string str)
         {
             str = str.Replace(">", "&gt;");
             str = str.Replace("<", "&lt;");
@@ -96,7 +96,7 @@ namespace Net.Common.Filter
             return str;
         }
 
-        public string PunctuationDecode(string str)
+        public static string PunctuationDecode(string str)
         {
             str = str.Replace("&gt;", ">");
             str = str.Replace("&lt;", "<");
@@ -115,7 +115,7 @@ namespace Net.Common.Filter
         /// </summary>
         /// <param name="contents"></param>
         /// <returns></returns>
-        public string ConvertContent(string contents)
+        public static string ConvertContent(string contents)
         {
             //프로토콜부분 - 있을수도 없을수도
             //string ptProtocol = "(?:(ftp|https?|mailto|telnet):\\/\\/)?";
@@ -205,6 +205,48 @@ namespace Net.Common.Filter
             }
 
             return contents;
+        }
+
+        /// <summary>
+        /// 이미지 태그 제거
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        public static string FilterImgTag(string html, int outLen)
+        {
+            html = Regex.Replace(html, @"(<img\/?[^>]+>)", @"", RegexOptions.IgnoreCase);
+            if (outLen > 0)
+            {
+                int totalLen = html.Length;
+                if (totalLen > outLen)
+                {
+                    html = html.Substring(0, outLen) + "...";
+                }
+            }
+
+            return html;
+        }
+
+        /// <summary>
+        /// Html에서 Text만 추출
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        public static string StripHtml(string html, int outLen)
+        {
+            string output = string.Empty;
+            output = Regex.Replace(html, @"<[^>]*>", string.Empty);
+            output = Regex.Replace(output, @"^\s*$\n", string.Empty, RegexOptions.Multiline);
+
+            if (outLen > 0)
+            {
+                int totalLen = output.Length;
+                if (totalLen > outLen)
+                {
+                    output = output.Substring(0, outLen) + "......";
+                }
+            }
+            return output;
         }
     }
 }

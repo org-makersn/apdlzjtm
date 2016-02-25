@@ -66,11 +66,20 @@ namespace Net.Framework.BizDac
         }
 
         /// <summary>
+        /// 관리용
+        /// </summary>
+        /// <returns></returns>
+        public int getBusHistoryTotalCount()
+        {
+            return _historyRepo.QueryCount(m => m.NO > 0);
+        }
+
+        /// <summary>
         /// get all
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
-        public IList<BusHistory> GetBusHistoryList()
+        public IList<BusHistory> GetBusHistoryAll()
         {
             var state = _historyRepo.GetAll();
             return state == null ? new List<BusHistory>() : state.OrderByDescending(m => m.NO).ToList();
@@ -167,10 +176,29 @@ namespace Net.Framework.BizDac
         }
 
         /// <summary>
+        /// 프론트용
+        /// </summary>
+        /// <param name="useYn"></param>
+        /// <returns></returns>
+        public int GetBusBlogTotalCountByUseYn(string useYn)
+        {
+            return _blogRepo.QueryCount(m => m.USE_YN == useYn);
+        }
+
+        /// <summary>
+        /// 관리용 - 전체
+        /// </summary>
+        /// <returns></returns>
+        public int GetBusBlogTotalCount()
+        {
+            return _blogRepo.QueryCount(m => m.NO > 0);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public IList<BusBlog> GetBusBlogList()
+        public IList<BusBlog> GetBusBlogAll()
         {
             var state = _blogRepo.GetAll();
             return state == null ? new List<BusBlog>() : state.OrderByDescending(m => m.NO).ToList();
@@ -184,6 +212,25 @@ namespace Net.Framework.BizDac
         public BusBlog GetBlogByNo(long no)
         {
             return _blogRepo.First(m => m.NO == no);
+        }
+
+        /// <summary>
+        /// 조회수 증가
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public bool UpdateViewCnt(long no)
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string targetQuery = @"update BUS_BLOG set VIEW_CNT = VIEW_CNT + 1 where [NO] = @NO";
+
+            using (var cmd = new SqlCommand(targetQuery))
+            {
+                cmd.Parameters.Add("@NO", SqlDbType.BigInt).Value = no;
+
+                var state = dbHelper.ExecuteNonQuery(cmd);
+                return state > 0;
+            }
         }
 
         /// <summary>

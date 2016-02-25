@@ -1,6 +1,34 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model PagerQuery<PagerInfo, IList<BusBlog>>
+@{
+    ViewBag.Title = "블로그 리스트";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int idx = 0;
 }
 
-<h2>Index</h2>
+<div class="subTop">
+    <div class="title blog">Blog</div>
+</div>
+<div class="subPage blog">
+    @foreach (var blog in Model.EntityList)
+    {
+        string firstClass = idx == 0 ? "mgT30" : "";
+        <a href="/blog/view/@blog.NO" class="blogList @firstClass">
+            <span class="blogTitle">@blog.BLOG_TITLE</span>
+            <span class="blogCont">
+                @Html.Raw(HtmlFilter.StripHtml(blog.BLOG_CONTENTS, 160))
+            </span>
+            <!--[D]네줄까지만 보이도록-->
+            <span class="blogDate">@String.Format("{0:yyyy.MM.dd}", blog.REG_DT)</span>
+            <span class="blogImg">
+                <img src="@Url.BlogThumbnail(blog.THUMB_RENAME)" width="408" height="230"></span>
+        </a> 
+        idx++;
+    }
+
+    <!-- 페이징 -->
+    <div class="paging">
+        @Html.BlogPageNavigate(Model.Pager.CurrentPageIndex, Model.Pager.PageSize, Model.Pager.RecordCount)
+    </div>
+    <!-- //페이징 -->
+
+</div>

@@ -1,4 +1,5 @@
 ﻿using Common.Func;
+using Makers.Admin.Helper;
 using Makers.Admin.Models;
 using Makersn.Util;
 using Net.Common.Configurations;
@@ -39,6 +40,8 @@ namespace Makers.Admin.Controllers
             ViewData["Group"] = MenuModel(0);
             MakerBusState state = busManageDac.GetMakerbusState();
 
+            ViewData["HistoryCnt"] = busManageDac.getBusHistoryTotalCount();
+            ViewData["BlogCnt"] = busManageDac.GetBusBlogTotalCount();
 
             return View(state);
         }
@@ -84,11 +87,11 @@ namespace Makers.Admin.Controllers
             }
             else
             {
-                IList<BusHistory> list = busManageDac.GetBusHistoryList();
+                IList<BusHistory> list = busManageDac.GetBusHistoryAll();
 
                 ViewData["cnt"] = list.Count;
 
-                return View(list.ToPagedList(page, 30));
+                return View(list.ToPagedList(page, 50));
             }
         }
 
@@ -170,16 +173,31 @@ namespace Makers.Admin.Controllers
             else if (mode.Contains("edit"))
             {
                 BusBlog blog = busManageDac.GetBlogByNo(no);
-                blog.BLOG_CONTENTS = new HtmlFilter().PunctuationDecode(blog.BLOG_CONTENTS);
+                blog.BLOG_CONTENTS = HtmlFilter.PunctuationDecode(blog.BLOG_CONTENTS);
                 return View("UpdateBlog", blog);
             }
             else
             {
-                IList<BusBlog> list = busManageDac.GetBusBlogList();
+                int pageSize = 40;
 
-                ViewData["cnt"] = list.Count;
+                IList<BusBlog> list = null;
 
-                return View(list.ToPagedList(page, 30));
+                int fromIndex = ((page - 1) * pageSize) + 1;
+                int toIndex = page * pageSize;
+
+                int totalCnt = busManageDac.GetBusBlogTotalCount();
+
+                list = busManageDac.GetBusBlogAll();
+
+                PagerInfo pager = new PagerInfo();
+                pager.CurrentPageIndex = page;
+                pager.PageSize = pageSize;
+                pager.RecordCount = totalCnt;
+                PagerQuery<PagerInfo, IList<BusBlog>> model = new PagerQuery<PagerInfo, IList<BusBlog>>(pager, list);
+
+                ViewData["cnt"] = totalCnt;
+
+                return View(model);
             }
         }
 

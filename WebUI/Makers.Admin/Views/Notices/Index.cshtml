@@ -76,7 +76,7 @@ else
             <div class="a_low">
                 <div class="lowin">
 
-                    @Html.Raw(new HtmlFilter().PunctuationDecode(n.SemiContent))
+                    @Html.Raw(HtmlFilter.PunctuationDecode(n.SemiContent))
                 </div>
             </div>
         }

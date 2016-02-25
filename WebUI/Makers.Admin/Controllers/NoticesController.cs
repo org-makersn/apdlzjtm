@@ -45,7 +45,7 @@ namespace Makers.Admin.Controllers
 
             ViewData["Group"] = MenuModel(1);
             BoardT notices = nd.GetBoard(no);
-            notices.SemiContent = new HtmlFilter().PunctuationDecode(notices.SemiContent);
+            notices.SemiContent = HtmlFilter.PunctuationDecode(notices.SemiContent);
             ViewData["pre"] = nd.GetPreBoard(no);
             ViewData["next"] = nd.GetNextBoard(no);
             return View(notices);
@@ -64,7 +64,7 @@ namespace Makers.Admin.Controllers
         [HttpPost]
         public JsonResult AddNotices(string title, string content, string flag)
         {
-            //content = new HtmlFilter().PunctuationEncode(content);
+            //content = HtmlFilter.PunctuationEncode(content);
             BoardT n = new BoardT();
             n.Title = title;
             n.SemiContent = content;
@@ -99,7 +99,7 @@ namespace Makers.Admin.Controllers
 
         public JsonResult UpdateNotices(int no,string title, string content)
         {
-            //content = new HtmlFilter().PunctuationEncode(content);
+            //content = HtmlFilter.PunctuationEncode(content);
             BoardT n = new BoardT();
             n.No = no;
             n.Title = title;

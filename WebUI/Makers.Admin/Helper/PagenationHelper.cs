@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Makers.Bus.Helper
+namespace Makers.Admin.Helper
 {
     public static class PagenationHelper
     {

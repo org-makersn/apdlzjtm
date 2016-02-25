@@ -1,5 +1,4 @@
-﻿@model PagedList.IPagedList<BusBlog>
-@using PagedList.Mvc;
+﻿@model PagerQuery<PagerInfo, IList<BusBlog>>
 @{
     ViewBag.Title = "블로그";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -18,7 +17,7 @@
     <div class="faq_wrap">
         @if ((int)ViewData["cnt"] > 0)
         {
-            foreach (var blog in Model)
+            foreach (var blog in Model.EntityList)
             {
             <div class="q_low">
                 <div class="lowin">
@@ -32,7 +31,7 @@
             <div class="a_low">
                 <div class="lowin">
 
-                    @Html.Raw(new HtmlFilter().PunctuationDecode(blog.BLOG_CONTENTS))
+                    @Html.Raw(HtmlFilter.PunctuationDecode(blog.BLOG_CONTENTS))
                 </div>
             </div>
             }
@@ -48,7 +47,7 @@
 
     <!-- page_navi -->
     <div class="page_navi" style="padding-bottom: 0;">
-        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+        @Html.BlogPageNavigate(Model.Pager.CurrentPageIndex, Model.Pager.PageSize, Model.Pager.RecordCount)
     </div>
     <!-- // page_navi -->
     <!-- btn -->

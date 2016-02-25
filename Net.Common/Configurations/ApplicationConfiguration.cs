@@ -283,12 +283,18 @@ namespace Net.Common.Configurations
             {
                 // 추가
                 PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfile";
+                AdminImgUrl = ConfigurationManager.AppSettings["AdminImgUrl"] ?? @"http://admin.makersn.com";
             }
 
             /// <summary>
             /// 파일저장 
             /// </summary>
             public string PhysicalDir { get; private set; }
+
+            /// <summary>
+            /// 블로그 
+            /// </summary>
+            public string AdminImgUrl { get; private set; }
         }
         #endregion
     }

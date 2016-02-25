@@ -171,6 +171,7 @@
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\BusController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -451,17 +452,24 @@
     <Content Include="Content\images\common\top_img_print01.png" />
     <Content Include="Content\images\common\top_txt_print01.png" />
     <Content Include="Content\images\common\top_txt_print02.png" />
+    <Content Include="Content\images\ico_arrow.png" />
     <Content Include="Content\images\ico_top_apply.png" />
+    <Content Include="Content\images\ico_top_blog.png" />
+    <Content Include="Content\images\ico_top_partnership.png" />
+    <Content Include="Content\images\img_blog.png" />
     <Content Include="Content\images\img_main01.png" />
     <Content Include="Content\images\img_main02.png" />
     <Content Include="Content\images\img_main03.png" />
     <Content Include="Content\images\img_news.png" />
     <Content Include="Content\images\img_textbook.png" />
+    <Content Include="Content\images\line.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_spon.png" />
+    <Content Include="Content\images\partners.png" />
     <Content Include="Content\images\placeholder-image.png" />
     <Content Include="Content\images\radio_off.png" />
     <Content Include="Content\images\radio_on.png" />
+    <Content Include="Content\images\sp_btn_paging.png" />
     <Content Include="Content\images\sp_ico_main.png" />
     <Content Include="Content\images\txt_main.png" />
     <Content Include="Content\script\shared.jquery.js" />
@@ -513,7 +521,6 @@
     <Content Include="Content\css\font\NanumBarunGothicBold.eot" />
     <Content Include="Content\css\font\Roboto.woff" />
     <Content Include="Content\css\font\.DS_Store" />
-    <Content Include="Content\images\.DS_Store" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
@@ -557,6 +564,9 @@
     <Content Include="Views\Bus\Faq.cshtml" />
     <Content Include="Views\Bus\SubHeader.cshtml" />
     <Content Include="Views\Partner\Qna.cshtml" />
+    <Content Include="Views\Blog\View.cshtml" />
+    <Content Include="Views\Info\About.cshtml" />
+    <Content Include="Views\Info\Workshop.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

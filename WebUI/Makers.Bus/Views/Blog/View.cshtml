@@ -1,0 +1,11 @@
+﻿@model BusBlog
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>View</h2>
+
+<div>@Model.BLOG_TITLE</div>
+<div>조회수 @Model.VIEW_CNT</div>
+<div>@Html.Raw(Model.BLOG_CONTENTS)</div>

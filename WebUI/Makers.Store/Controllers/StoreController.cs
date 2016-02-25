@@ -49,8 +49,8 @@ namespace Makers.Store.Controllers
 
                 if (!string.IsNullOrEmpty(storeMember.StoreProfileMsg))
                 {
-                    storeMember.StoreProfileMsg = new HtmlFilter().PunctuationEncode(storeMember.StoreProfileMsg);
-                    storeMember.StoreProfileMsg = new HtmlFilter().ConvertContent(storeMember.StoreProfileMsg);
+                    storeMember.StoreProfileMsg = HtmlFilter.PunctuationEncode(storeMember.StoreProfileMsg);
+                    storeMember.StoreProfileMsg = HtmlFilter.ConvertContent(storeMember.StoreProfileMsg);
                 }
             }
 

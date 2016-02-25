@@ -7,8 +7,8 @@
 
     IList<StoreMaterialT> matList = ViewBag.MaterialList;
 
-    string contents = new HtmlFilter().PunctuationEncode(Model.CONTENTS);
-    contents = new HtmlFilter().ConvertContent(contents);
+    string contents = HtmlFilter.PunctuationEncode(Model.CONTENTS);
+    contents = HtmlFilterConvertContent(contents);
 
     string attrSuccess = ViewBag.AttrSuccess;
 }

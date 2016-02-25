@@ -19,13 +19,13 @@
     <div>
         <h4>2. 진행현황</h4>
         <br />
-        <span>횟수 : 35</span>
+        <span>횟수 : @ViewData["HistoryCnt"]</span>
     </div>
     <br />
     <div>
-        <h4>3. 블로그수</h4>
+        <h4>3. 블로그</h4>
         <br />
-        <span>횟수 : 35</span>
+        <span>블로그수 : @ViewData["BlogCnt"]</span>
     </div>
 
     <br />
@@ -33,12 +33,22 @@
     <div>
         <h3>n. 교재관리</h3>
         <br />
-        <div><a href="javascript:void(0)">사용하고 있는 교재</a></div>
+        <div>
+            <h4>교재 버전 히스토리:</h4>
+        </div>
         <br />
         <div>
             <form id="textbook_form" name="textbook_form" method="post" enctype="multipart/form-data">
-                교재 새로 업로드 하기<span id="progress"></span>:
+                <h4>교재 새로 업로드 하기<span id="progress"></span>:</h4>
+                <br />
+                <input type="text" id="version" name="version" value="" placeholder="교재 버전을 입력해주세요." style="width: 200px;" />
+                <span style="color: red">예) ver 1.0</span>
+                <br />
+                <br />
                 <input type="file" id="textbook" name="textbook" />
+                <br />
+                <br />
+                <span class="btnWrap medium"><a href="javascript:void(0);" id="upload" class="_btn_reg">업로드</a></span>
             </form>
         </div>
     </div>

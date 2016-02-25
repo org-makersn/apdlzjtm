@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <th>내용</th>
-                <td>@Html.Raw(new HtmlFilter().PunctuationEncode(Model.Comment))</td>
+                <td>@Html.Raw(HtmlFilter.PunctuationEncode(Model.Comment))</td>
             </tr>
             <tr>
                 <th>답변</th>

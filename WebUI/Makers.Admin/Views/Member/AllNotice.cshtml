@@ -36,7 +36,7 @@
 
                 @foreach (Makersn.Models.NoticeT notice in Model)
                 {
-                    notice.Comment = new HtmlFilter().PunctuationEncode(notice.Comment);
+                    notice.Comment = HtmlFilter.PunctuationEncode(notice.Comment);
                     <tr>
                         <td>
                             @Html.Raw(notice.Comment.Substring(3, notice.Comment.IndexOf("내용:") - 3))

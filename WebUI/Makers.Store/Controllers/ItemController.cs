@@ -58,8 +58,8 @@ namespace Makers.Store.Controllers
             }
 
             string itemContents = itemDetail != null ? itemDetail.Contents : string.Empty;
-            itemDetail.Contents = new HtmlFilter().PunctuationEncode(itemContents);
-            itemDetail.Contents = new HtmlFilter().ConvertContent(itemContents);
+            itemDetail.Contents = HtmlFilter.PunctuationEncode(itemContents);
+            itemDetail.Contents = HtmlFilter.ConvertContent(itemContents);
 
             ViewBag.MetaDescription = itemContents;
 

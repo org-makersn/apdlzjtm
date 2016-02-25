@@ -19,6 +19,18 @@ namespace Makers.Bus
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            RemoveWebFormEngines();
+        }
+
+        protected void RemoveWebFormEngines()
+        {
+            var viewEngines = ViewEngines.Engines;
+            var webFormEngines = viewEngines.OfType<WebFormViewEngine>().FirstOrDefault();
+            if (webFormEngines != null)
+            {
+                viewEngines.Remove(webFormEngines);
+            }
         }
     }
 }
