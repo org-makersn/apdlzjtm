@@ -46,11 +46,11 @@
 
                     <!-- MainMenu -->
                     <ul class="mainMenu">
-                        <li class="nav "><a href="/info/about">소개</a></li>
-                        <li class="nav"><a href="/info/workshop">워크샵</a></li>
-                        <li class="nav"><a href="/blog">블로그</a></li>
-                        <li class="nav"><a href="~/Bus/Apply">신청/문의</a></li>
-                        <li class="nav last"><a href="~/partner/Qna">파트너쉽</a></li>
+                        <li class="nav" id="about"><a href="/info/about">소개</a></li>
+                        <li class="nav" id="workshop"><a href="/info/workshop">워크샵</a></li>
+                        <li class="nav" id="blog"><a href="/blog">블로그</a></li>
+                        <li class="nav" id="Apply"><a href="~/Bus/Apply">신청/문의</a></li>
+                        <li class="nav last" id="Qna"><a href="~/partner/Qna">파트너쉽</a></li>
                         <!--li class="textbook"><a href="" >교재 다운로드</a></li-->
                         <li class="facebook"><a href="https://www.facebook.com/makerbus"></a></li>
                     </ul>
@@ -81,6 +81,7 @@
     </div>
     <!-- //Wrap -->
 
+    @ViewData["Menu"]
 </body>
 @RenderSection("scripts", required: false)
 <script type="text/javascript">
@@ -90,6 +91,10 @@
 
         window.open(link, name, "width=700, height=800, menubar=no, status=no, toolbar=no");
     }
+
+    $(function () {
+        $("#@ViewData["Menu"]").addClass("on");
+    });
 </script>
 </html>
 

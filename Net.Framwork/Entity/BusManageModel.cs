@@ -139,6 +139,22 @@ namespace Net.Framework.Entity
         public virtual string UPD_ID { get; set; }
     }
 
+    /// <summary>
+    /// 교재
+    /// </summary>
+    [Table("BUS_TEXTBOOK")]
+    public partial class BusTextbook
+    {
+        [Key]
+        public int NO { get; set; }
+        public string VERSION { get; set; }
+        public string RENAME { get; set; }
+        public string MIME_TYPE { get; set; }
+        public int DOWNLOAD_CNT { get; set; }
+        public virtual DateTime REG_DT { get; set; }
+        public virtual string REG_ID { get; set; }
+    }
+
     public partial class MakerBusState
     {
         public int SchoolCnt { get; set; }

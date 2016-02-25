@@ -1,6 +1,6 @@
-﻿@model MakerBusState
+﻿@model IList<BusTextbook>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "메이커버스";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,10 +10,10 @@
     <div>
         <h4>1. 통계</h4>
         <br />
-        <span>학교 : @Model.SchoolCnt</span> &nbsp;
-        <span>참여학생 : @Model.StudentCnt</span> &nbsp;
-        <span>모델링 작품 : @Model.ModelingCnt</span> &nbsp;
-        <span>프린터 지원 : @Model.PrinterCnt</span> &nbsp;
+        <span>학교 : @ViewBag.MakerBusState.SchoolCnt</span> &nbsp;
+        <span>참여학생 : @ViewBag.MakerBusState.StudentCnt</span> &nbsp;
+        <span>모델링 작품 : @ViewBag.MakerBusState.ModelingCnt</span> &nbsp;
+        <span>프린터 지원 : @ViewBag.MakerBusState.PrinterCnt</span> &nbsp;
     </div>
     <br />
     <div>
@@ -35,17 +35,28 @@
         <br />
         <div>
             <h4>교재 버전 히스토리:</h4>
+            @foreach (var book in Model)
+            {
+                <span>@String.Format("{0:yyyy.MM.dd}", book.REG_DT) == > <a href="@Url.BlogTextbookFile(book.RENAME)" target="_blank">@book.VERSION</a></span>
+                <br />
+            }
         </div>
         <br />
         <div>
             <form id="textbook_form" name="textbook_form" method="post" enctype="multipart/form-data">
                 <h4>교재 새로 업로드 하기<span id="progress"></span>:</h4>
                 <br />
-                <input type="text" id="version" name="version" value="" placeholder="교재 버전을 입력해주세요." style="width: 200px;" />
+                @*<input type="text" id="version" name="version" value="" placeholder="교재 버전을 입력해주세요." style="width: 200px;" />
                 <span style="color: red">예) ver 1.0</span>
                 <br />
-                <br />
-                <input type="file" id="textbook" name="textbook" />
+                <br />*@
+                <input type="file" id="textbookFile" name="textbookFile" 
+                    accept="application/pdf
+                    , application/vnd.ms-excel
+                    , application/vnd.ms-powerpoint
+                    , application/vnd.openxmlformats-officedocument.presentationml.slideshow
+                    , application/vnd.openxmlformats-officedocument.presentationml.presentation" />
+                 <span style="color: red">예) 파일명 ver 1.0.pdf</span>
                 <br />
                 <br />
                 <span class="btnWrap medium"><a href="javascript:void(0);" id="upload" class="_btn_reg">업로드</a></span>
@@ -58,9 +69,8 @@
 @section Scripts{
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
     <script type="text/javascript">
-        $("#textbook").change(function () {
+        $("#textbookFile").change(function () {
             var action_url = '/Bus/PostTextbook';
-            //pdf 파일만 업로드 가능하게 체크
 
             var options = {
                 beforeSend: function () {

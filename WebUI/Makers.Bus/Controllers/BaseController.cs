@@ -20,11 +20,15 @@ namespace Makers.Bus.Controllers
         public static ApplicationConfiguration.BusConfiguration instance = ApplicationConfiguration.BusConfiguration.Instance;
         protected static readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public ProfileModel profileModel;
+        public int page_size { get; set; }
 
         public BaseController()
         {
             ViewData["AdminImgUrl"] = instance.AdminImgUrl;
             ViewData["IsMain"] = "N";
+            ViewData["Menu"] = string.Empty;
+
+            page_size = int.Parse(instance.BlogPageSize);
         }
 
         private ProfileModel Profile

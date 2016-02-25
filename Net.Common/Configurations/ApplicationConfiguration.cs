@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace Net.Common.Configurations
 {
@@ -23,9 +24,6 @@ namespace Net.Common.Configurations
             BannerThumbnail = ConfigurationManager.AppSettings["BannerThumbnail"] ?? "banner/thumb";
             BannerFullImg = ConfigurationManager.AppSettings["BannerFullImg"] ?? "banner/fullsize";
             BannerBackup = ConfigurationManager.AppSettings["BannerBackup"] ?? "banner/backup";
-
-            BlogThumbnail = ConfigurationManager.AppSettings["BlogThumbnail"] ?? "blog/thumb";
-            BlogBackupImg = ConfigurationManager.AppSettings["BlogBackupImg"] ?? "blog/backup";
         }
 
         /// <summary>
@@ -72,16 +70,6 @@ namespace Net.Common.Configurations
         /// 
         /// </summary>
         public string BannerBackup { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string BlogThumbnail { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string BlogBackupImg { get; private set; }
 
 
         #region 디자인 Configurations
@@ -283,7 +271,11 @@ namespace Net.Common.Configurations
             {
                 // 추가
                 PhysicalDir = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"D:\uploadfile";
+                BlogThumbnail = ConfigurationManager.AppSettings["BlogThumbnail"] ?? "blog/thumb";
+                BlogBackupImg = ConfigurationManager.AppSettings["BlogBackupImg"] ?? "blog/backup";
+                BlogPageSize = ConfigurationManager.AppSettings["BlogPageSize"] ?? "10";
                 AdminImgUrl = ConfigurationManager.AppSettings["AdminImgUrl"] ?? @"http://admin.makersn.com";
+                TextbookFile = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"textbook";
             }
 
             /// <summary>
@@ -292,9 +284,29 @@ namespace Net.Common.Configurations
             public string PhysicalDir { get; private set; }
 
             /// <summary>
+            /// 
+            /// </summary>
+            public string BlogThumbnail { get; private set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public string BlogBackupImg { get; private set; }
+
+            /// <summary>
+            /// 블로그 pagesize 
+            /// </summary>
+            public string BlogPageSize { get; private set; }
+
+            /// <summary>
             /// 블로그 
             /// </summary>
             public string AdminImgUrl { get; private set; }
+
+            /// <summary>
+            /// 교재 
+            /// </summary>
+            public string TextbookFile { get; private set; }
         }
         #endregion
     }

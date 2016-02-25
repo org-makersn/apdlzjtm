@@ -33,12 +33,20 @@ namespace Common.Func
                 fileName = Guid.NewGuid().ToString() + extension;
             }
 
-            string[] modelingExt = { ".stl", ".obj"};
+            string[] modelingExt = { ".stl", ".obj" };
+
+            //같이 써도 되는데 혹시나 해서 ...
+            string[] etcExt = { ".pdf", ".ppt", "pptx", ".xls", "xlsx", "doc", "docx" };
 
             string saveDir = string.Empty;
 
             if (modelingExt.Contains(extension))
             {
+                saveDir = saveFilePath + Path.DirectorySeparatorChar + folder + Path.DirectorySeparatorChar;
+            }
+            else if (etcExt.Contains(extension))
+            {
+                fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss") + extension;
                 saveDir = saveFilePath + Path.DirectorySeparatorChar + folder + Path.DirectorySeparatorChar;
             }
             else

@@ -38,12 +38,14 @@ namespace Makers.Admin.Controllers
         public ActionResult Index()
         {
             ViewData["Group"] = MenuModel(0);
-            MakerBusState state = busManageDac.GetMakerbusState();
+
+            ViewBag.MakerBusState = busManageDac.GetMakerbusState();
 
             ViewData["HistoryCnt"] = busManageDac.getBusHistoryTotalCount();
             ViewData["BlogCnt"] = busManageDac.GetBusBlogTotalCount();
 
-            return View(state);
+            IList<BusTextbook> textbooks = busManageDac.GetBusTextbookLatest(0, 10);
+            return View(textbooks);
         }
 
         /// <summary>
@@ -52,13 +54,28 @@ namespace Makers.Admin.Controllers
         /// <param name="textbook"></param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult PostTextbook(HttpPostedFileBase textbook)
+        public JsonResult PostTextbook(HttpPostedFileBase textbookFile)
         {
             AjaxResponseModel response = new AjaxResponseModel();
-            string filename = string.Empty;
-            if (textbook != null)
+            if (textbookFile != null)
             {
-                response.Success = true;
+                string filename = string.Empty;
+                filename = new UploadFunc().FileUpload(textbookFile, null, "Textbook", null);
+
+                BusTextbook textbook = new BusTextbook();
+                textbook.VERSION = textbookFile.FileName;
+                textbook.RENAME = filename;
+                textbook.MIME_TYPE = textbookFile.ContentType;
+                textbook.DOWNLOAD_CNT = 0;
+                textbook.REG_DT = DateTime.Now;
+                textbook.REG_ID = Profile.UserNm;
+
+                int ret = busManageDac.AddTextbook(textbook);
+                if (ret > 0)
+                {
+                    response.Success = true;
+                    response.Result = ret.ToString();
+                }
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -258,9 +275,8 @@ namespace Makers.Admin.Controllers
                 {
                     if (paramDelThumb)
                     {
-                        ApplicationConfiguration instance = ApplicationConfiguration.Instance;
-                        string backupPath = string.Format(@"{0}\{1}\{2}", instance.FileServerUncPath, instance.BlogBackupImg, blog.THUMB_RENAME);
-                        string thumbPath = string.Format(@"{0}\{1}\{2}", instance.FileServerUncPath, instance.BlogThumbnail, blog.THUMB_RENAME);
+                        string backupPath = string.Format(@"{0}\{1}\{2}", ApplicationConfiguration.Instance.FileServerUncPath, ApplicationConfiguration.BusConfiguration.Instance.BlogBackupImg, blog.THUMB_RENAME);
+                        string thumbPath = string.Format(@"{0}\{1}\{2}", ApplicationConfiguration.Instance.FileServerUncPath, ApplicationConfiguration.BusConfiguration.Instance.BlogThumbnail, blog.THUMB_RENAME);
 
                         new FileHelper().FileDelete(backupPath);
                         new FileHelper().FileDelete(thumbPath);

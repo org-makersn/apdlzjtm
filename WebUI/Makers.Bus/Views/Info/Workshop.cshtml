@@ -1,6 +1,12 @@
-﻿@{
+﻿@model BusTextbook
+@{
     ViewBag.Title = "워크샵";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>워크샵</h2>
+
+@if (Model != null)
+{
+    <a href="/info/textbookdownload/@Model.NO">다운로드</a>
+}

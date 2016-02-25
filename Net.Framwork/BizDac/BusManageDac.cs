@@ -18,6 +18,7 @@ namespace Net.Framework.BizDac
         private ISimpleRepository<BusPartnerT> _makersPartnerRepo = new SimpleRepository<BusPartnerT>();
         private ISimpleRepository<BusHistory> _historyRepo = new SimpleRepository<BusHistory>();
         private ISimpleRepository<BusBlog> _blogRepo = new SimpleRepository<BusBlog>();
+        private ISimpleRepository<BusTextbook> _textbookRepo = new SimpleRepository<BusTextbook>();
 
         #region AddApplyMakerbus - 메이커버스 신청서 저장
         /// <summary>
@@ -219,7 +220,7 @@ namespace Net.Framework.BizDac
         /// </summary>
         /// <param name="no"></param>
         /// <returns></returns>
-        public bool UpdateViewCnt(long no)
+        public bool UpdateBlogViewCnt(long no)
         {
             dbHelper = new SqlDbHelper(connectionString);
             string targetQuery = @"update BUS_BLOG set VIEW_CNT = VIEW_CNT + 1 where [NO] = @NO";
@@ -363,6 +364,112 @@ namespace Net.Framework.BizDac
 
             return state.ToList();
         }
+        #endregion
+
+        #region 교재
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public BusTextbook GetBusTextbookByNo(int no)
+        {
+            return _textbookRepo.First(m => m.NO == no);
+        }
+
+        /// <summary>
+        /// 교재
+        /// </summary>
+        public BusTextbook GetBusTextbookLatest()
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string targetQuery = @"select top 1
+		                                [NO]
+		                                , VERSION
+		                                , RENAME
+		                                , DOWNLOAD_CNT
+		                                , REG_DT 
+	                                from BUS_TEXTBOOK with(nolock)
+                                    order by [NO] desc";
+
+            using (var cmd = new SqlCommand(targetQuery))
+            {
+                return dbHelper.ExecuteSingle<BusTextbook>(cmd);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fromPage"></param>
+        /// <param name="toPage"></param>
+        /// <returns></returns>
+        public List<BusTextbook> GetBusTextbookLatest(int fromPage, int toPage)
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string targetQuery = @"select 
+	                                [NO]
+	                                , VERSION
+	                                , RENAME
+	                                , DOWNLOAD_CNT
+	                                , REG_DT
+                                from (
+	                                select
+		                                [NO]
+		                                , VERSION
+		                                , RENAME
+		                                , DOWNLOAD_CNT
+		                                , REG_DT
+		                                , ROW_NUMBER() OVER(ORDER BY REG_DT DESC) AS ROW_NUM 
+	                                from BUS_TEXTBOOK with(nolock)
+	                            ) as outQ
+                                where ROW_NUM BETWEEN @FROM_PAGE AND @TO_PAGE";
+
+            using (var cmd = new SqlCommand(targetQuery))
+            {
+                cmd.Parameters.Add("@FROM_PAGE", SqlDbType.Int).Value = fromPage;
+                cmd.Parameters.Add("@TO_PAGE", SqlDbType.Int).Value = toPage;
+
+                var state = dbHelper.ExecuteMultiple<BusTextbook>(cmd);
+                return state == null ? new List<BusTextbook>() : state.OrderByDescending(m => m.NO).ToList();
+            }
+        }
+
+        /// <summary>
+        /// 교재 입력
+        /// </summary>
+        /// <param name="textbook"></param>
+        /// <returns></returns>
+        public int AddTextbook(BusTextbook textbook)
+        {
+            int identity = 0;
+            bool ret = _textbookRepo.Insert(textbook);
+
+            if (ret)
+            {
+                identity = textbook.NO;
+            }
+            return identity;
+        }
+
+        /// <summary>
+        /// 다운로드수 증가
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public bool UpdateTextbookDownloadCnt(long no)
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string targetQuery = @"update BUS_TEXTBOOK set DOWNLOAD_CNT = DOWNLOAD_CNT + 1 where [NO] = @NO";
+
+            using (var cmd = new SqlCommand(targetQuery))
+            {
+                cmd.Parameters.Add("@NO", SqlDbType.BigInt).Value = no;
+
+                var state = dbHelper.ExecuteNonQuery(cmd);
+                return state > 0;
+            }
+        } 
         #endregion
 
     }

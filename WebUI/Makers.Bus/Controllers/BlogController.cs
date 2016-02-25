@@ -15,6 +15,11 @@ namespace Makers.Bus.Controllers
     {
         BusManageDac busManageDac = new BusManageDac();
 
+        public BlogController()
+        {
+            ViewData["Menu"] = "blog";
+        }
+
         /// <summary>
         /// 블로그 리스트
         /// </summary>
@@ -22,7 +27,7 @@ namespace Makers.Bus.Controllers
         /// <returns></returns>
         public ActionResult Index(int page = 1)
         {
-            int pageSize = 40;
+            int pageSize = page_size;
 
             IList<BusBlog> list = null;
 
@@ -45,47 +50,59 @@ namespace Makers.Bus.Controllers
         /// 블로그 상세
         /// </summary>
         /// <returns></returns>
-        public ActionResult View(long no)
+        public ActionResult View(string no)
         {
-            BusBlog blog = busManageDac.GetBlogByNo(no);
-            if (blog != null)
-            {
-                string strNo = no.ToString();
-                int idx = 0;
+            long blogNo = 0;
 
-                //조회수 증가 방지
-                if (Request.Cookies["views"] == null)
+            BusBlog blog = new BusBlog();
+
+            if (long.TryParse(no, out blogNo))
+            {
+                blog = busManageDac.GetBlogByNo(blogNo);
+                if (blog != null)
                 {
-                    //생성 > 증가
-                    Response.Cookies["views"].Value = strNo;
-                    Response.Cookies["views"].Expires = DateTime.Now.AddDays(1);
-                    idx += 1;
+                    string strNo = no.ToString();
+                    int idx = 0;
+
+                    //조회수 증가 방지
+                    if (Request.Cookies["views"] == null)
+                    {
+                        //생성 > 증가
+                        Response.Cookies["views"].Value = strNo;
+                        Response.Cookies["views"].Expires = DateTime.Now.AddDays(1);
+                        idx += 1;
+                    }
+                    else
+                    {
+                        //비교
+                        string value = Request.Cookies["views"].Value;
+                        string[] arrNo = value.Split('`');
+                        if (!arrNo.Any(t => t == strNo))
+                        {
+                            //append > 증가
+                            Response.Cookies["views"].Value = value + "`" + strNo;
+                            idx += 1;
+                        }
+                    }
+
+                    if (idx > 0)
+                    {
+                        busManageDac.UpdateBlogViewCnt(blogNo);
+                        blog.VIEW_CNT += 1;
+                    }
+
+                    blog.BLOG_CONTENTS = HtmlFilter.PunctuationDecode(blog.BLOG_CONTENTS);
                 }
                 else
                 {
-                    //비교 > 증가
-                    string value = Request.Cookies["views"].Value;
-                    string[] arrNo = value.Split('`');
-                    if (!arrNo.Any(t => t == strNo))
-                    {
-                        //append > 증가
-                        Response.Cookies["views"].Value = value + "`" + strNo;
-                        idx += 1;
-                    }
+                    return Content("<script>alert('잘못된 게시글 입니다.'); location.href='/blog';</script>");
                 }
-
-                if (idx > 0)
-                {
-                    busManageDac.UpdateViewCnt(no);
-                    blog.VIEW_CNT += 1;
-                }
-
-                blog.BLOG_CONTENTS = HtmlFilter.PunctuationDecode(blog.BLOG_CONTENTS);
             }
             else
             {
-                return Content("<script>alert('잘못된 게시글 입니다.'); location.href='/';</script>");
+                return Content("<script>alert('잘못된 게시글 입니다.'); location.href='/blog';</script>");
             }
+
             return View(blog);
         }
     }

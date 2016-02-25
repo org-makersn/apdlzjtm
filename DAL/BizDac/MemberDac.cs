@@ -486,7 +486,7 @@ namespace Makersn.BizDac
 
         public IList<object> GetMemberYearGroup()
         {
-            string query = @"select year(reg_dt) as reg_dt from member group by year(reg_dt) order by reg_dt desc";
+            string query = @"select year(reg_dt) as reg_dt from member where reg_dt is not null group by year(reg_dt) order by reg_dt desc";
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IList<object> results = session.CreateSQLQuery(query).List<object>();
@@ -1698,13 +1698,13 @@ namespace Makersn.BizDac
 	                            select 
 		                            month(MAIN.REG_DT)  as Gbn,'order' as fortype, COUNT(1) as Total
 	                            from ORDER_REQ MAIN with(nolock)
-                                where MAIN.ORDER_STATUS = {2} and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
+                                where MAIN.ORDER_STATUS = {0} and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
                                 group by month(MAIN.REG_DT) , MAIN.ORDER_STATUS
 	                            union all
 								select 
 									month(MAIN.REG_DT)  as Gbn, 'sales' as fortype, SUM(OD.UNIT_PRICE) as Total
 								from ORDER_REQ MAIN, ORDER_DETAIL OD with(nolock)
-                                where MAIN.ORDER_STATUS = {2} and MAIN.NO = OD.ORDER_NO and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
+                                where MAIN.ORDER_STATUS = {0} and MAIN.NO = OD.ORDER_NO and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
                                 group by month(MAIN.REG_DT) , MAIN.ORDER_STATUS
                             ) as tb
                             PIVOT

@@ -8,6 +8,7 @@ namespace Net.Common.Helper
         private static ApplicationConfiguration instance = ApplicationConfiguration.Instance;
         private static ApplicationConfiguration.DesignConfiguration designInstance = ApplicationConfiguration.DesignConfiguration.Instance;
         private static ApplicationConfiguration.StoreConfiguration storeInstance = ApplicationConfiguration.StoreConfiguration.Instance;
+        private static ApplicationConfiguration.BusConfiguration busInstance = ApplicationConfiguration.BusConfiguration.Instance;
 
         private static readonly string version = typeof(UrlHelperExtensions).Assembly.GetName().Version.ToString();
 
@@ -230,7 +231,19 @@ namespace Net.Common.Helper
         /// <returns></returns>
         public static string BlogThumbnail(this UrlHelper urlHelper, string data)
         {
-            string fullPath = string.Format("{0}/{1}/{2}", instance.FileServerHost, instance.BlogThumbnail, data);
+            string fullPath = string.Format("{0}/{1}/{2}", instance.FileServerHost, busInstance.BlogThumbnail, data);
+            return urlHelper.Content(fullPath);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="urlHelper"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static string BlogTextbookFile(this UrlHelper urlHelper, string data)
+        {
+            string fullPath = string.Format("{0}/{1}/{2}", instance.FileServerHost, busInstance.TextbookFile, data);
             return urlHelper.Content(fullPath);
         }
     }
