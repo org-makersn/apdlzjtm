@@ -49,7 +49,7 @@ namespace Design.Web.Admin.Controllers
 
             ViewData["Group"] = MenuModel(1);
             BoardT notices = nd.GetBoard(no);
-            notices.SemiContent = new HtmlFilter().PunctuationDecode(notices.SemiContent);
+            notices.SemiContent = HtmlFilter.PunctuationDecode(notices.SemiContent);
             ViewData["pre"] = nd.GetPreBoard(no);
             ViewData["next"] = nd.GetNextBoard(no);
             return View(notices);
@@ -68,7 +68,7 @@ namespace Design.Web.Admin.Controllers
         [HttpPost]
         public JsonResult AddNotices(string title, string content, string flag)
         {
-            //content = new HtmlFilter().PunctuationEncode(content);
+            //content = HtmlFilter.PunctuationEncode(content);
             BoardT n = new BoardT();
             n.Title = title;
             n.SemiContent = content;

@@ -83,7 +83,7 @@ namespace Design.Web.Front.Controllers
 
             if (member.ProfileMsg != null)
             {
-                member.ProfileMsg = new HtmlFilter().PunctuationEncode(member.ProfileMsg);
+                member.ProfileMsg = HtmlFilter.PunctuationEncode(member.ProfileMsg);
                 member.ProfileMsg = CreateATag(member.ProfileMsg);
             };
             ViewBag.PrinterMember = _printerMemberDac.CheckSpotOpen(memberNo);
@@ -207,7 +207,7 @@ namespace Design.Web.Front.Controllers
 
             MemberT member = _memberDac.GetMemberProfile(memberNo);
 
-            if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().PunctuationEncode(member.ProfileMsg); };
+            if (member.ProfileMsg != null) { member.ProfileMsg = HtmlFilter.PunctuationEncode(member.ProfileMsg); };
             return PartialView(member);
         }
         #endregion
@@ -329,7 +329,7 @@ namespace Design.Web.Front.Controllers
             string memberNo = Base64Helper.Base64Encode(profileModel.UserNo.ToString());
             ViewBag.No = memberNo;
             MemberT member = _memberDac.GetMemberProfile(profileModel.UserNo);
-            if (member.ProfileMsg != null) { member.ProfileMsg = new HtmlFilter().PunctuationDecode(member.ProfileMsg); };
+            if (member.ProfileMsg != null) { member.ProfileMsg = HtmlFilter.PunctuationDecode(member.ProfileMsg); };
             return PartialView(member);
         }
         //public ActionResult Setting()

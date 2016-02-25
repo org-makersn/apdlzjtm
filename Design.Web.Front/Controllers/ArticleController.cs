@@ -180,7 +180,7 @@ namespace Design.Web.Front.Controllers
 
                 ViewBag.MetaDescription = detail.Contents;
 
-                detail.Contents = new HtmlFilter().PunctuationEncode(detail.Contents);
+                detail.Contents = HtmlFilter.PunctuationEncode(detail.Contents);
                 //detail.Contents = detail.Contents.Replace("#", "");
                 detail.Contents = chkContent(detail.Contents);
                 if ((detail.MemberNo != visitorNo && profileModel.UserLevel < 50) && detail.Visibility.ToUpper() == "N")
@@ -1580,7 +1580,7 @@ namespace Design.Web.Front.Controllers
             if (Int32.TryParse(no, out articleNo))
             {
                 detail = _articleDac.GetArticleDetailByArticleNo(articleNo, profileModel.UserNo);
-                detail.Contents = new HtmlFilter().PunctuationEncode(detail.Contents);
+                detail.Contents = HtmlFilter.PunctuationEncode(detail.Contents);
 
                 ViewBag.Files = _articleFileDac.GetFileList(articleNo);
                 ViewBag.MainImg = detail.MainImgName;
