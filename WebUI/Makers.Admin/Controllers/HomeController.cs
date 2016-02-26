@@ -1,6 +1,9 @@
 ﻿using Makers.Admin.Models;
 using Makersn.Util;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -65,5 +68,44 @@ namespace Makers.Admin.Controllers
 
             return Content("Success");
         }
+
+        ///// <summary>
+        ///// ExportExcel - xls
+        ///// </summary>
+        ///// <returns></returns>
+        //public FileResult ExportExcel()
+        //{
+        //    var sbHtml = new StringBuilder();
+        //    sbHtml.Append("<table border='1' cellspacing='0' cellpadding='0'>");
+        //    sbHtml.Append("<tr>");
+        //    var lstTitle = new List<string> { "컬럼1", "컬럼1", "컬럼3", "컬럼4" };
+        //    foreach (var item in lstTitle)
+        //    {
+        //        sbHtml.AppendFormat("<td style='font-size: 14px;text-align:center;background-color: #DCE0E2; font-weight:bold;' height='25'>{0}</td>", item);
+        //    }
+        //    sbHtml.Append("</tr>");
+
+        //    for (int i = 0; i < 1000; i++)
+        //    {
+        //        sbHtml.Append("<tr>");
+        //        sbHtml.AppendFormat("<td style='font-size: 12px;height:20px;'>{0}</td>", i);
+        //        sbHtml.AppendFormat("<td style='font-size: 12px;height:20px;'>{0}</td>", i);
+        //        sbHtml.AppendFormat("<td style='font-size: 12px;height:20px;'>{0}</td>", new Random().Next(20, 30) + i);
+        //        sbHtml.AppendFormat("<td style='font-size: 12px;height:20px;'>{0}</td>", DateTime.Now);
+        //        sbHtml.Append("</tr>");
+        //    }
+        //    sbHtml.Append("</table>");
+
+        //    ////방법 1
+        //    //byte[] fileContents = Encoding.Default.GetBytes(sbHtml.ToString());
+        //    //return File(fileContents, "application/ms-excel", "fileContents.xls");
+
+        //    //application/vnd.ms-excel - For BIFF .xls files
+        //    //application/vnd.openxmlformats-officedocument.spreadsheetml.sheet - For Excel2007 and above .xlsx files
+        //    //방법 2
+        //    byte[] fileContents = Encoding.Default.GetBytes(sbHtml.ToString());
+        //    var fileStream = new MemoryStream(fileContents);
+        //    return File(fileStream, "application/ms-excel", "fileStream.xls");
+        //}
     }
 }

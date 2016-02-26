@@ -105,10 +105,10 @@ namespace Net.Framework.Entity
         public string PROGRESS_DT { get; set; }
 
         public string USE_YN { get; set; }
-        public virtual DateTime REG_DT { get; set; }
-        public virtual string REG_ID { get; set; }
-        public virtual Nullable<DateTime> UPD_DT { get; set; }
-        public virtual string UPD_ID { get; set; }
+        public DateTime REG_DT { get; set; }
+        public string REG_ID { get; set; }
+        public Nullable<DateTime> UPD_DT { get; set; }
+        public string UPD_ID { get; set; }
     }
     
     /// <summary>
@@ -133,10 +133,10 @@ namespace Net.Framework.Entity
         public int VIEW_CNT { get; set; }
         public int AUTHOR { get; set; }
         public string USE_YN { get; set; }
-        public virtual DateTime REG_DT { get; set; }
-        public virtual string REG_ID { get; set; }
-        public virtual Nullable<DateTime> UPD_DT { get; set; }
-        public virtual string UPD_ID { get; set; }
+        public DateTime REG_DT { get; set; }
+        public string REG_ID { get; set; }
+        public Nullable<DateTime> UPD_DT { get; set; }
+        public string UPD_ID { get; set; }
     }
 
     /// <summary>
@@ -151,8 +151,24 @@ namespace Net.Framework.Entity
         public string RENAME { get; set; }
         public string MIME_TYPE { get; set; }
         public int DOWNLOAD_CNT { get; set; }
-        public virtual DateTime REG_DT { get; set; }
-        public virtual string REG_ID { get; set; }
+        public DateTime REG_DT { get; set; }
+        public string REG_ID { get; set; }
+    }
+
+    /// <summary>
+    /// 정보수집
+    /// </summary>
+    [Table("BUS_COLLECT")]
+    public partial class BusCollect
+    {
+        [Key]
+        public int NO { get; set; }
+        public string EDUCATION { get; set; }
+        public string PURPOSE { get; set; }
+        public string EMAIL { get; set; }
+        public string STATUS { get; set; }
+        public DateTime REG_DT { get; set; }
+        public string REG_ID { get; set; }
     }
 
     public partial class MakerBusState
