@@ -45,6 +45,7 @@
 .subTop .title.apply{background:url(../images/ico_top_apply.png) no-repeat 850px 60px}
 .subTop .title.partnership{background:url(../images/ico_top_partnership.png) no-repeat 850px 43px}
 .subTop .title.blog{background:url(../images/ico_top_blog.png) no-repeat 850px 53px}
+.subTop .title.workshop{background:url(../images/ico_top_workshop.png) no-repeat 850px 40px}
 
 
 /* TopVisual */
@@ -183,8 +184,9 @@
 .subPage .subCont ul li textarea{border:none;margin-left:47px; height: 300px; width: 750px;overflow-y: auto;padding: 10px;resize: none;font-size: 14px; color: #565656;background:#fff2e6;line-height:20px}
 
 /* 파트너쉽 */
+.subPage .subCont.work{padding-bottom:100px;}
 .subPage .subCont .title{margin-top:20px;margin-left:66px;font-size:26px;color:#fb810e;}
-.subPage .subCont .subTitle{margin:20px 0 50px 66px;font-size:18px;color:#565656;}
+.subPage .subCont .subTitle{margin:20px 100px 50px 66px;font-size:18px;color:#565656;line-height:30px}
 .subPage .line{display:block;margin-top:180px;width:100%;height:3px;background:url(../images/line.png) repeat-x}
 .subPage .imgPatner{display:inline-block;margin-left:90px;margin-top:45px;width:815px;height:241px;background:url(../images/partners.png) no-repeat}
 
@@ -195,6 +197,17 @@
 .subPage.blog .blogList .blogDate{display:inline-block;position:absolute;top:210px;left:65px;font-size:14px;color:#9f9f9f}
 .subPage.blog .blogList .blogImg{position:absolute;top:20px;right:20px}
 
+/* 워크샵 */
+.subPage .subCont .workshop1{position:relative;display:block;margin:0 0 0 70px;background:url(../images/ico_w1.png) no-repeat;width:110px;height:110px}
+.subPage .subCont .workshop2{position:relative;display:block;margin:20px 0 0 70px;background:url(../images/ico_w2.png) no-repeat;width:110px;height:110px}
+.subPage .subCont .workshop3{position:relative;display:block;margin:20px 0 0 70px;background:url(../images/ico_w3.png) no-repeat;width:110px;height:110px}
+.subPage .subCont .step{position:absolute;display:inline-block;width:100px;top:23px;left:130px;font-size:17px;font-weight:bold;font-family:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif}
+.subPage .subCont .wDisc{position:absolute;display:inline-block;width:700px;top:60px;left:130px;font-size:17px}
+.subPage .line.mg{display:block;margin-top:80px;width:100%;height:3px;background:url(../images/line.png) repeat-x}
+.subPage .imgTextbook{display:block;margin:30px 30px 0 65px;background:url(../images/img_textbook_sm.png) no-repeat;width:216px;height:144px}
+.subPage .imgTextbook .bookDisc{display:block;width:550px;margin:20px 10px 0 280px;font-size:17px;line-height:30px}
+.subPage .imgTextbook .bookDownload{cursor: pointer;margin-top:10px;display: inline-block; width: 190px;height: 40px;background: #fff;color: #fb810e;border: solid 2px #fb810e;text-align: center;line-height: 40px;font-size: 16px;font-weight: bold;}
+.subPage .imgTextbook .bookDownload:hover{background:#fb810e;color:#fff}
  
  /* Paging */
 .paging {text-align:center; margin:25px 0 26px 0;line-height:13px}

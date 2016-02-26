@@ -456,12 +456,17 @@
     <Content Include="Content\images\ico_top_apply.png" />
     <Content Include="Content\images\ico_top_blog.png" />
     <Content Include="Content\images\ico_top_partnership.png" />
+    <Content Include="Content\images\ico_top_workshop.png" />
+    <Content Include="Content\images\ico_w1.png" />
+    <Content Include="Content\images\ico_w2.png" />
+    <Content Include="Content\images\ico_w3.png" />
     <Content Include="Content\images\img_blog.png" />
     <Content Include="Content\images\img_main01.png" />
     <Content Include="Content\images\img_main02.png" />
     <Content Include="Content\images\img_main03.png" />
     <Content Include="Content\images\img_news.png" />
     <Content Include="Content\images\img_textbook.png" />
+    <Content Include="Content\images\img_textbook_sm.png" />
     <Content Include="Content\images\line.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_spon.png" />
@@ -521,6 +526,8 @@
     <Content Include="Content\css\font\NanumBarunGothicBold.eot" />
     <Content Include="Content\css\font\Roboto.woff" />
     <Content Include="Content\css\font\.DS_Store" />
+    <Content Include="Content\css\.DS_Store" />
+    <Content Include="Content\images\.DS_Store" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />

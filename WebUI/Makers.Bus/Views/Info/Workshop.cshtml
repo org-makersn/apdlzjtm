@@ -4,9 +4,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>워크샵</h2>
+<div class="subTop">
+    <div class="title workshop">Workshop</div>
+</div>
 
-@if (Model != null)
-{
-    <a href="/info/textbookdownload/@Model.NO">다운로드</a>
-}
+<!-- subPage -->
+<div class="subPage">
+    <div class="subCont mgT30 work">
+        <div class="title">워크샵</div>
+        <div class="subTitle">
+            메이커버스에서 진행하는 워크샵은 프린터, 교재, 강사가 모두 함께 
+방문하여 3시간을 기준으로 진행됩니다.
+            <br>
+            기업 교육이나 교육시간 변경은 문의를 남겨주시면 협의 가능합니다.
+        </div>
+        <div class="workshop1">
+            <span class="step">STEP 1</span>
+            <span class="wDisc">3D프린터 기술과 산업의 간략한 소개와 기초 모델링을 배워봅니다.</span>
+        </div>
+        <div class="workshop2">
+            <span class="step">STEP 2</span>
+            <span class="wDisc">자신이 직접 모델링한 물건은 3D프린팅으로 출력해 봅니다.</span>
+        </div>
+        <div class="workshop3">
+            <span class="step">STEP 3</span>
+            <span class="wDisc">출력을 기다리면서 모델링을 활용한 창의적 작품을 만들어보고 서로 발표하며 아이디어를 공유해 봅니다.</span>
+        </div>
+        <div class="line mg"></div>
+        <div class="title mgT40">메이커버스 교재</div>
+        <div class="imgTextbook">
+            <span class="bookDisc">메이커버스가 운용하는 ‘ 일일 메이킹 워크숍’은 3D프린터, 교육자료, 강사가 직접 학교에 찾아가 학생들에게 3D모델링과 프린팅을 가르쳐 주는 프로그램입니다.
+                <br>
+                크게 4가지의 주제로 나눠져 3시간의 교육프로그램을 운용하고 있습니다.
+                @if (Model != null)
+                {
+                    <a href="/info/textbookdownload/@Model.NO" class="bookDownload">교재 다운로드</a>
+                }
+            </span>
+        </div>
+    </div>
+
+</div>
+<!-- //subPage -->
