@@ -469,8 +469,17 @@ namespace Net.Framework.BizDac
                 var state = dbHelper.ExecuteNonQuery(cmd);
                 return state > 0;
             }
-        } 
-        #endregion
+        }
 
+        /// <summary>
+        /// 교재 지우기
+        /// </summary>
+        /// <param name="textbook"></param>
+        /// <returns></returns>
+        public bool DeleteTextbook(BusTextbook textbook)
+        {
+            return _textbookRepo.Delete(textbook.NO);
+        }
+        #endregion
     }
 }

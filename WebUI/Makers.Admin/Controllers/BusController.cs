@@ -79,6 +79,36 @@ namespace Makers.Admin.Controllers
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult DeleteTextbook(string no)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+            int bookNo = 0;
+            if (int.TryParse(no, out bookNo))
+            {
+                BusTextbook textbook = busManageDac.GetBusTextbookByNo(bookNo);
+                if (textbook != null)
+                {
+                    string bookPath = string.Format(@"{0}\{1}\{2}", ApplicationConfiguration.Instance.FileServerUncPath, ApplicationConfiguration.BusConfiguration.Instance.TextbookFile, textbook.RENAME);
+
+                    new FileHelper().FileDelete(bookPath);
+                    bool ret = busManageDac.DeleteTextbook(textbook);
+                    if (ret)
+                    {
+                        response.Success = true;
+                    }
+                }
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region History

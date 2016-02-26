@@ -34,11 +34,11 @@
         <h3>n. 교재관리</h3>
         <br />
         <div>
-            <h4>교재 버전 히스토리:</h4>
+            <h4>교재 버전 히스토리:</h4><br />
             @foreach (var book in Model)
             {
-                <span>@String.Format("{0:yyyy.MM.dd}", book.REG_DT) == > <a href="@Url.BlogTextbookFile(book.RENAME)" target="_blank">@book.VERSION</a></span>
-                <br />
+                <span data-bno="@book.NO" data-version="@book.VERSION" class="textbook" style=" color:red; font-weight:bold; cursor:pointer;">지우기</span>  <span>@String.Format("{0:yyyy.MM.dd}", book.REG_DT) (@book.DOWNLOAD_CNT) == > <a href="@Url.BlogTextbookFile(book.RENAME)" target="_blank">@book.VERSION</a>&nbsp;&nbsp;&nbsp;</span>  
+                <br /><br />
             }
         </div>
         <br />
@@ -94,6 +94,21 @@
             };
 
             $('#textbook_form').attr("action", action_url).ajaxForm(options).submit();
+        });
+
+        $("span.textbook").click(function () {
+            var bno = $(this).data("bno");
+            var version = $(this).data("version");
+            if (!confirm("[" + version +"]을(를) 삭제 하시겠습니까?")) return false;
+            var data = {
+                no: bno
+            }
+            var onSuccess = function (result) {
+                if (result.Success == true) {
+                    location.reload(true);
+                }
+            }
+            Ajax.AjaxResponseModelService(this, "/Bus/DeleteTextbook", data, onSuccess);
         });
     </script>
 }
