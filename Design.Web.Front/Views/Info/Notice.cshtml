@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Notice";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int index = 1;
 }
 
 <!-- contWrap -->
@@ -17,18 +19,19 @@
             {
                 <li>
                     <div class="titleBox">
-                        <a href="javascript:void(0);" data-no="@notice.No">
+                        <a href="javascript:void(0);" data-no="@notice.No" id="div_@index">
                             <span class="title">@notice.Title </span>
-                            <span class="date">@notice.RegDt.ToString("yyyy.MM.dd")</span>
+                            <span class="date">@notice.RegDt.ToString("yyyy/MM/dd")</span>
                             <span class="btnArrow"></span>
                         </a>
                     </div>
                     <div class="textBox">
                         <div class="textZone">
-                            @Html.Raw(new HtmlFilter().PunctuationDecode(notice.SemiContent))
+                            @Html.Raw(new Design.Web.Front.Filter.ContentFilter().HtmlDecode(notice.SemiContent))
                         </div>
                     </div>
                 </li>
+                index++;
             }
         </ul>
     </div>
@@ -98,5 +101,9 @@
             }
             return false;
         });
+
+        if("@ViewBag.Competition" != ""){
+            $("#div_1").click();
+        }
     });
 </script>

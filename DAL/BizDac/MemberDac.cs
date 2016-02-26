@@ -9,12 +9,17 @@ using NHibernate;
 using Makersn.Util;
 using NHibernate.Criterion;
 using System.Net;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Data;
 
 
 namespace Makersn.BizDac
 {
     public class MemberDac
     {
+        
+
         /// <summary>
         /// search target member
         /// </summary>
@@ -31,10 +36,10 @@ namespace Makersn.BizDac
                             (SELECT Count(0) AS UploadCnt FROM ARTICLE A WHERE  ( A.MEMBER_NO = m.NO) AND A.VISIBILITY = 'Y') AS UploadCntY,
                             (SELECT Count(0) AS UploadCnt FROM ARTICLE A WHERE  ( A.MEMBER_NO = m.NO) AND A.VISIBILITY = 'N') AS UploadCntN,
                             (SELECT Count(0) AS CommentCnt FROM ARTICLE_COMMENT IC WHERE  ( IC.MEMBER_NO = m.NO)) AS CommentCnt,
-                            (SELECT Count(0) AS OrderCnt FROM ORDER_REQ O WHERE (O.MEMBER_NO = m.NO AND O.ORDER_STATUS = '" + (int)(MakersnEnumTypes.OrderState.거래완료) + @"')) AS OrderCnt 
+                            (SELECT Count(0) AS OrderCnt FROM ORDER_REQ O WHERE (O.MEMBER_NO = m.NO AND O.ORDER_STATUS = '" + (int)(MakersnEnumTypes.OrderState.구매완료) + @"')) AS OrderCnt 
 	                        FROM MEMBER M with(nolock)
                             WHERE (M.DEL_FLAG  is null OR M.DEL_FLAG = 'N' ) AND M.LEVEL < 50 "
-                             + " AND REG_DT >= :startDt ";
+                        + " AND REG_DT >= :startDt ";
             if (endDt != "")
             {
                 query += " AND REG_DT <= :endDt ";
@@ -173,16 +178,16 @@ namespace Makersn.BizDac
             string query = @"SELECT 
 		                    m.NO, m.ID, m.BLOG_URL, m.NAME, m.EMAIL, m.URL,  m.SNS_TYPE, m.SNS_ID, m.PROFILE_MSG, m.PROFILE_PIC, m.COVER_PIC, m.REG_DT , p.REG_DT ,
                             (SELECT Count(0) FROM ORDER_REQ O WHERE (O.MEMBER_NO = m.NO)) AS RequstCnt,
-                            (SELECT Count(0) FROM ORDER_REQ O WHERE (O.MEMBER_NO = m.NO AND O.ORDER_STATUS <> '" + (int)(MakersnEnumTypes.OrderState.주문요청) + @"')) AS AcceptCnt,
+                            (SELECT Count(0) FROM ORDER_REQ O WHERE (O.MEMBER_NO = m.NO AND O.ORDER_STATUS <> '" + (int)(MakersnEnumTypes.OrderState.주문신청) + @"')) AS AcceptCnt,
                             (SELECT Count(0) FROM ORDER_REQ O WHERE (O.MEMBER_NO = m.NO AND O.ORDER_STATUS = '" + (int)(MakersnEnumTypes.OrderState.요청거부) + @"')) AS RejectCnt ,
-                            ISNULL((SELECT Sum(UNIT_PRICE) FROM ORDER_REQ O, ORDER_DETAIL OD WHERE (O.MEMBER_NO = m.NO AND O.NO = OD.ORDER_NO )),0) AS Sales,
+                            (SELECT Sum(UNIT_PRICE) FROM ORDER_REQ O, ORDER_DETAIL OD WHERE (O.MEMBER_NO = m.NO AND O.NO = OD.ORDER_NO )) AS Sales,
                             (SELECT Count(0) FROM PRINTER p WHERE p.MEMBER_NO = m.NO ) AS PrinterCnt ,
                             p.NAME
 	                        FROM MEMBER m 
                             JOIN PRINTER_MEMBER p
                             ON m.NO = p.MEMBER_NO 
                             WHERE (M.DEL_FLAG  is null OR M.DEL_FLAG = 'N' ) AND M.LEVEL < 50 "
-                         + " AND m.REG_DT >=  :startDt ";
+                        + " AND m.REG_DT >=  :startDt ";
             if (endDt != "")
             {
                 query += " AND m.REG_DT <= :endDt ";
@@ -418,10 +423,10 @@ namespace Makersn.BizDac
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(MemberStateT));
+                IQuery queryObj = session.CreateSQLQuery(query);
                 queryObj.SetParameter("start", start);
                 queryObj.SetParameter("end", end);
-                IList<MemberStateT> result = (IList<MemberStateT>)queryObj.List<MemberStateT>();
+                IList<MemberStateT> result = (IList<MemberStateT>)session.CreateSQLQuery(query).AddEntity(typeof(MemberStateT)).List<MemberStateT>();
 
                 return result;
             }
@@ -486,10 +491,49 @@ namespace Makersn.BizDac
 
         public IList<object> GetMemberYearGroup()
         {
-            string query = @"select year(reg_dt) as reg_dt from member where reg_dt is not null group by year(reg_dt) order by reg_dt desc";
+            //SqlConnection con = new SqlConnection(conStr);
+            //SqlCommand cmd = new SqlCommand();
+            //cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.CommandText = "GET_MEMBER_YEAR_GROUP";
+            //cmd.Connection = con;
+
+            //IList<object> list = new List<object>();
+
+            //try
+            //{
+            //    con.Open();
+            //    SqlDataReader sr = cmd.ExecuteReader();
+            //    while (sr.Read())
+            //    {
+            //        object row = new object();
+
+            //        row = (int)sr["REG_DT"];
+            //        list.Add(row);
+            //    }
+            //    sr.Close();
+            //    cmd.Connection.Close();
+            //    cmd.Dispose();
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
+            //finally
+            //{
+            //    con.Close();
+            //    con.Dispose();
+            //}
+
+            //return list;
+
+
+            string query = @"select year(reg_dt) as reg_dt from member group by year(reg_dt) order by reg_dt desc";
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                IList<object> results = session.CreateSQLQuery(query).List<object>();
+                IQuery queryObj = session.CreateSQLQuery(query);
+
+                IList<object> results = queryObj.List<object>();
                 return results;
             }
         }
@@ -723,7 +767,7 @@ namespace Makersn.BizDac
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="member"></param>
+        /// <param name="data"></param>
         /// <returns></returns>
         public int UpdateProfilePic(MemberT data)
         {
@@ -812,12 +856,54 @@ namespace Makersn.BizDac
         #region 프로필 페이지 카운트 가져오기
         public ProfileT GetCntList(int memberNo)
         {
-            string query = string.Format(@"SELECT
+            //SqlConnection con = new SqlConnection(conStr);
+            //SqlCommand cmd = new SqlCommand();
+            //cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.CommandText = "GET_PROFILE_CNT_LIST_FRONT";
+            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = memberNo;
+            //cmd.Connection = con;
+
+            //ProfileT profile = new ProfileT();
+
+            //try
+            //{
+            //    con.Open();
+            //    SqlDataReader sr = cmd.ExecuteReader();
+            //    while (sr.Read())
+            //    {
+            //        profile.DesignCnt = (int)sr["DesignCnt"];
+            //        profile.DraftCnt = (int)sr["DraftCnt"];
+            //        profile.LikesCnt = (int)sr["LikesCnt"];
+            //        profile.FollowingCnt = (int)sr["FollowingCnt"];
+            //        profile.FollowerCnt = (int)sr["FollowerCnt"];
+            //        profile.NoticeCnt = (int)sr["NoticeCnt"];
+            //        profile.MessageCnt = (int)sr["MessageCnt"];
+            //        profile.ListCnt = (int)sr["ListCnt"];
+            //    }
+            //    sr.Close();
+            //    cmd.Connection.Close();
+            //    cmd.Dispose();
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
+            //finally
+            //{
+            //    con.Close();
+            //    con.Dispose();
+            //}
+
+            //return profile;
+
+
+            string query = @"SELECT
 	                            (SELECT COUNT(0) FROM	ARTICLE		WITH(NOLOCK) WHERE	VISIBILITY='Y'  AND	MEMBER_NO	= :memberNo	   ) AS DesignCnt,
 	                            (SELECT COUNT(0) FROM	ARTICLE		WITH(NOLOCK) WHERE	VISIBILITY='N'  AND	MEMBER_NO	= :memberNo	   ) AS DraftCnt,
 	                            (
 								SELECT COUNT(0) FROM LIKES AS L WITH(NOLOCK) INNER JOIN ARTICLE AS A WITH(NOLOCK) ON L.ARTICLE_NO = A.NO AND A.VISIBILITY = 'Y' 
-								 WHERE						L.MEMBER_NO	= :memberNo	   
+								 WHERE						L.MEMBER_NO	=  :memberNo
 								
 								) AS LikesCnt,
 	                            (SELECT COUNT(0) FROM	FOLLOWER F	WITH(NOLOCK) INNER JOIN
@@ -828,13 +914,16 @@ namespace Makersn.BizDac
                                                                     WHERE						MEMBER_NO_REF= :memberNo   ) AS FollowerCnt, 
                                 (SELECT COUNT(0) FROM	NOTICE	    WITH(NOLOCK) WHERE	IS_NEW='Y'      AND	MEMBER_NO_REF= :memberNo   ) AS NoticeCnt,
                                 (SELECT COUNT(0) FROM	MEMBER_MSG	WITH(NOLOCK) WHERE	IS_NEW='Y'		AND	MEMBER_NO_REF= :memberNo   ) AS MessageCnt,
-                                (SELECT COUNT(0) FROM   LIST WITH(NOLOCK) WHERE MEMBER_NO = :memberNo ) AS ListCnt");
+                                (SELECT COUNT(0) FROM   LIST WITH(NOLOCK) WHERE MEMBER_NO = :memberNo ) AS ListCnt";
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query);
                 queryObj.SetParameter("memberNo", memberNo);
 
                 IList<object[]> result = queryObj.List<object[]>();
+
+
+
                 ProfileT profile = new ProfileT();
                 foreach (object[] row in result)
                 {
@@ -1044,17 +1133,11 @@ namespace Makersn.BizDac
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                return session.QueryOver<MemberT>().Where(m => (m.Id == membId && m.DelFlag != "Y")).OrderBy(o => o.No).Asc.Take(1).SingleOrDefault<MemberT>();
+                return session.QueryOver<MemberT>().Where(m => (m.Id == membId && m.DelFlag != "Y")).OrderBy(o=>o.No).Asc.Take(1).SingleOrDefault<MemberT>();
                 //return session.QueryOver<MemberT>().Where(m => (m.Id == membId && m.SnsId == openId)).SingleOrDefault<MemberT>();
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
         public IList<DashBoardStateT> SearchDashBoardStateTargetAll(string start = "", string end = "")
         {
             string[] arrGbn = { "오늘", "어제", "이번주", "지난주", "이번달", "지난달", "기간선택" };
@@ -1229,19 +1312,14 @@ namespace Makersn.BizDac
                 queryObj.SetParameter("end", end + " 23:59:59");
 
                 IList<DashBoardStateT> result = (IList<DashBoardStateT>)queryObj.List<DashBoardStateT>();
+
                 return result;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
         public IList<DashBoardStateT> GetMemberStateTargetDaily(string start, string end)
         {
-            string query = string.Format(@"select
+            string query = @"select
 	                            Gbn, 
 	                            ISNULL(pvt.em, 0) as EmailCnt, 
 	                            ISNULL(pvt.fb, 0) as FacebookCnt, 
@@ -1313,25 +1391,20 @@ namespace Makersn.BizDac
                             (
                                 SUM(Total)
                                 for fortype IN ([em],[fb],[drop],[article],[download],[spot],[printer],[order],[totalprice],[orderMemCnt])
-                            ) as pvt");
+                            ) as pvt";
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(DashBoardStateT));
                 queryObj.SetParameter("start", start);
-                queryObj.SetParameter("end", end);
+                queryObj.SetParameter("end",end);
 
                 IList<DashBoardStateT> result = (IList<DashBoardStateT>)queryObj.List<DashBoardStateT>();
+
                 return result;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
         public IList<DashBoardStateT> GetMemberStateTargetMonth(string start, string end)
         {
             {
@@ -1421,10 +1494,6 @@ namespace Makersn.BizDac
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public IList<DashBoardStateT> GetMemberStateTargetYear()
         {
             string query = @"select
@@ -1496,7 +1565,9 @@ namespace Makersn.BizDac
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                IList<DashBoardStateT> result = (IList<DashBoardStateT>)session.CreateSQLQuery(query).AddEntity(typeof(DashBoardStateT)).List<DashBoardStateT>();
+                IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(DashBoardStateT));
+
+                IList<DashBoardStateT> result = (IList<DashBoardStateT>)queryObj.List<DashBoardStateT>();
 
                 return result;
             }
@@ -1537,7 +1608,7 @@ namespace Makersn.BizDac
                             (
                                 SUM(Total)
                                 for fortype IN ([spotopen],[uploadedprinter],[order],[sales])
-                            ) as pvt ", (int)MakersnEnumTypes.OrderState.거래완료);
+                            ) as pvt ", (int)MakersnEnumTypes.OrderState.구매완료);
 
             string add_where = string.Empty;
             foreach (var gbn in arrGbn)
@@ -1608,7 +1679,7 @@ namespace Makersn.BizDac
                             (
                                 SUM(Total)
                                 for fortype IN ([spotopen],[uploadedprinter],[order],[sales])
-                            ) as pvt ", gbn, add_where, (int)MakersnEnumTypes.OrderState.거래완료);
+                            ) as pvt ", gbn, add_where, (int)MakersnEnumTypes.OrderState.구매완료);
             }
 
             using (ISession session = NHibernateHelper.OpenSession())
@@ -1624,7 +1695,7 @@ namespace Makersn.BizDac
 
         public IList<PrinterMemberStateT> SearchPrinterMemberStateTargetDaily(string start, string end)
         {
-            string query = string.Format(@"select
+            string query = @"select
 	                            Gbn, 
 	                            ISNULL(pvt.[spotopen], 0) as SpotOpenCnt, 
 	                            ISNULL(pvt.[uploadedprinter], 0) as UploadedPrinterCnt,
@@ -1647,26 +1718,27 @@ namespace Makersn.BizDac
 	                            select 
 		                            convert(date, MAIN.REG_DT) as Gbn,'order' as fortype, COUNT(1) as Total
 	                            from ORDER_REQ MAIN with(nolock)
-                                where MAIN.ORDER_STATUS = {2} and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
+                                where MAIN.ORDER_STATUS = :state and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
                                 group by convert(date, MAIN.REG_DT), MAIN.ORDER_STATUS
 	                            union all
 								select 
 									convert(date, MAIN.REG_DT) as Gbn, 'sales' as fortype, SUM(OD.UNIT_PRICE) as Total
 								from ORDER_REQ MAIN, ORDER_DETAIL OD with(nolock)
-                                where MAIN.ORDER_STATUS = {2} and MAIN.NO = OD.ORDER_NO and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
+                                where MAIN.ORDER_STATUS = :state and MAIN.NO = OD.ORDER_NO and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
                                 group by convert(date, MAIN.REG_DT), MAIN.ORDER_STATUS
                             ) as tb
                             PIVOT
                             (
                                 SUM(Total)
                                 for fortype IN ([spotopen],[uploadedprinter],[order],[sales])
-                            ) as pvt ", start, end, (int)MakersnEnumTypes.OrderState.거래완료);
+                            ) as pvt ";
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(PrinterMemberStateT));
                 queryObj.SetParameter("start", start);
                 queryObj.SetParameter("end", end);
+                queryObj.SetParameter("state", (int)MakersnEnumTypes.OrderState.구매완료);
                 IList<PrinterMemberStateT> result = (IList<PrinterMemberStateT>)queryObj.List<PrinterMemberStateT>();
 
                 return result;
@@ -1675,7 +1747,7 @@ namespace Makersn.BizDac
         }
         public IList<PrinterMemberStateT> SearchPrinterMemberStateTargetMonth(string start, string end)
         {
-            string query = string.Format(@"select
+            string query = @"select
 	                            Gbn, 
 	                            ISNULL(pvt.[spotopen], 0) as SpotOpenCnt, 
 	                            ISNULL(pvt.[uploadedprinter], 0) as UploadedPrinterCnt,
@@ -1698,34 +1770,36 @@ namespace Makersn.BizDac
 	                            select 
 		                            month(MAIN.REG_DT)  as Gbn,'order' as fortype, COUNT(1) as Total
 	                            from ORDER_REQ MAIN with(nolock)
-                                where MAIN.ORDER_STATUS = {0} and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
+                                where MAIN.ORDER_STATUS = :state and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
                                 group by month(MAIN.REG_DT) , MAIN.ORDER_STATUS
 	                            union all
 								select 
 									month(MAIN.REG_DT)  as Gbn, 'sales' as fortype, SUM(OD.UNIT_PRICE) as Total
 								from ORDER_REQ MAIN, ORDER_DETAIL OD with(nolock)
-                                where MAIN.ORDER_STATUS = {0} and MAIN.NO = OD.ORDER_NO and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
+                                where MAIN.ORDER_STATUS = :state and MAIN.NO = OD.ORDER_NO and MAIN.REG_DT >= :start and MAIN.REG_DT < :end
                                 group by month(MAIN.REG_DT) , MAIN.ORDER_STATUS
                             ) as tb
                             PIVOT
                             (
                                 SUM(Total)
                                 for fortype IN ([spotopen],[uploadedprinter],[order],[sales])
-                            ) as pvt ", (int)MakersnEnumTypes.OrderState.거래완료);
+                            ) as pvt ";
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(PrinterMemberStateT));
                 queryObj.SetParameter("start", start);
                 queryObj.SetParameter("end", end);
+                queryObj.SetParameter("state", (int)MakersnEnumTypes.OrderState.구매완료);
                 IList<PrinterMemberStateT> result = (IList<PrinterMemberStateT>)queryObj.List<PrinterMemberStateT>();
+
                 return result;
             }
 
         }
         public IList<PrinterMemberStateT> SearchPrinterMemberStateTargetYear()
         {
-            string query = string.Format(@"select
+            string query = @"select
 	                            Gbn, 
 	                            ISNULL(pvt.[spotopen], 0) as SpotOpenCnt, 
 	                            ISNULL(pvt.[uploadedprinter], 0) as UploadedPrinterCnt,
@@ -1747,56 +1821,69 @@ namespace Makersn.BizDac
 	                            select 
 		                            year(MAIN.REG_DT)  as Gbn,'order' as fortype, COUNT(1) as Total
 	                            from ORDER_REQ MAIN with(nolock)
-                                where MAIN.ORDER_STATUS = {0} 
+                                where MAIN.ORDER_STATUS = :state 
                                 group by year(MAIN.REG_DT) , MAIN.ORDER_STATUS
 	                            union all
 								select 
 									year(MAIN.REG_DT)  as Gbn, 'sales' as fortype, SUM(OD.UNIT_PRICE) as Total
 								from ORDER_REQ MAIN, ORDER_DETAIL OD with(nolock)
-                                where MAIN.ORDER_STATUS = {0} and MAIN.NO = OD.ORDER_NO 
+                                where MAIN.ORDER_STATUS = :state and MAIN.NO = OD.ORDER_NO 
                                 group by year(MAIN.REG_DT) , MAIN.ORDER_STATUS
                             ) as tb
                             PIVOT
                             (
                                 SUM(Total)
                                 for fortype IN ([spotopen],[uploadedprinter],[order],[sales])
-                            ) as pvt ",  (int)MakersnEnumTypes.OrderState.거래완료);
+                            ) as pvt ";
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                IList<PrinterMemberStateT> result = (IList<PrinterMemberStateT>)session.CreateSQLQuery(query).AddEntity(typeof(PrinterMemberStateT)).List<PrinterMemberStateT>();
+                IQuery queryObj = session.CreateSQLQuery(query).AddEntity(typeof(PrinterMemberStateT));
+                queryObj.SetParameter("state", (int)MakersnEnumTypes.OrderState.구매완료);
+                IList<PrinterMemberStateT> result = (IList<PrinterMemberStateT>)queryObj.List<PrinterMemberStateT>();
 
                 return result;
             }
 
         }
+        #region 비밀번호 암호화 코드 삭제해야됨
+//        public IList<ChgPwT> GetMemberPw()
+//        {
+//            using (ISession session = NHibernateHelper.OpenSession())
+//            {
+//                return session.QueryOver<ChgPwT>().List<ChgPwT>();
+//            }
+//        }
 
-        public int UpdateMemberByOrder(MemberT data)
-        {
-            int result = 0;
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                MemberT mem = session.QueryOver<MemberT>().Where(w => w.No == data.No).Take(1).SingleOrDefault<MemberT>();
-                if (mem != null)
-                {
-                    mem.Email = data.Email;
-                    mem.CellPhone = data.CellPhone;
-                    mem.UpdDt = data.UpdDt;
-                    mem.UpdId = data.UpdId;
-                    session.Update(mem);
-                    session.Flush();
-                    result = 1;
-                }
-            }
-            return result;
-        }
+//        public void InsertMemberPw(IList<ChgPwT> data)
+//        {
+//            using (ISession session = NHibernateHelper.OpenSession())
+//            {
+//                foreach (ChgPwT item in data)
+//                {
+//                    session.Update(item);
+//                }
+//                session.Flush();
+//            }
+//        }
 
-        public IList<MemberT> GetMemberListForSendAllNotice()
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                return session.QueryOver<MemberT>().Where(w => w.DelFlag != "Y" && w.Level < 50).List<MemberT>();
-            }
-        }
+//        public void ChgPwOnce(IList<ChgPwT> data)
+//        {
+//            string query = "";
+
+//            foreach (ChgPwT item in data)
+//            {
+//                query += string.Format(@" UPDATE MEMBER SET PASSWORD = (SELECT PW2 FROM CHGPASSWORD WHERE NO = {0}) 
+//                                                    WHERE NO = {0} ", item.No);
+//            }
+
+//            //using (ISession session = NHibernateHelper.OpenSession())
+//            //{
+//            //    session.CreateSQLQuery(query);
+//            //    session.Flush();
+//            //}
+
+//        }
+        #endregion
     }
 }

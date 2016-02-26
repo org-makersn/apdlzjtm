@@ -1,8 +1,8 @@
 ﻿using System.Web.Mvc;
 using Makersn.Models;
 using log4net;
-using Design.Web.Admin.Models;
 using Newtonsoft.Json;
+using Design.Web.Admin.Models;
 
 namespace Design.Web.Admin.Controllers
 {
@@ -18,6 +18,7 @@ namespace Design.Web.Admin.Controllers
         {
             //var user = System.Web.HttpContext.Current.User;
             //UserNm = user.Identity.Name;
+
             UserNm = Profile.UserNm;
             ViewBag.UserNm = UserNm;
 
@@ -25,12 +26,6 @@ namespace Design.Web.Admin.Controllers
             ViewBag.ArticleImgUrl = System.Configuration.ConfigurationManager.AppSettings["ArticleImgUrl"];
             ViewBag.AdminImgUrl = System.Configuration.ConfigurationManager.AppSettings["AdminImgUrl"];
             ViewBag.BannerUrl = System.Configuration.ConfigurationManager.AppSettings["BannerUrl"];
-            ViewBag.PrintImgUrl = System.Configuration.ConfigurationManager.AppSettings["PrinterImgUrl"];
-            ViewBag.MainUrl = System.Configuration.ConfigurationManager.AppSettings["MainUrl"];
-            ViewBag.CurrentDomain = System.Configuration.ConfigurationManager.AppSettings["CurrentDomain"];
-            ViewBag.TargetDomain = System.Configuration.ConfigurationManager.AppSettings["TargetDomain"];
-
-            ViewBag.StoreUrl = System.Configuration.ConfigurationManager.AppSettings["StoreUrl"];
 
             if (Profile.UserLevel < 50)
             {
@@ -62,7 +57,6 @@ namespace Design.Web.Admin.Controllers
                 return profileModel;
             }
         }
-
 
         /// <summary>
         /// 

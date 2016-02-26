@@ -19,7 +19,6 @@ namespace Makersn.Models
             Map(x => x.IsNew, "IS_NEW");
             Map(x => x.RegId, "REG_ID");
             Map(x => x.RegDt, "REG_DT");
-            Map(x => x.SiteGubun, "SITE_GUBUN");
         }
     }
 }

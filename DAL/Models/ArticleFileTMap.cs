@@ -42,7 +42,7 @@ namespace Makersn.Models
             Map(x => x.Y ,"Y_SIZE");
             Map(x => x.Z, "Z_SIZE");
             Map(x => x.Volume, "VOLUME");
-            Map(x => x.PrintVolume, "PRINT_VOLUME");
+            //Map(x => x.PrintVolume, "PRINT_VOLUME");
         }
     }
 }

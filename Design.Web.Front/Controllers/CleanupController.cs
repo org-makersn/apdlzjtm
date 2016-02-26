@@ -26,7 +26,7 @@ namespace Design.Web.Front.Controllers
             AjaxResponseModel response = new AjaxResponseModel();
             response.Success = false;
 
-            if (profileModel.UserLevel < 50)
+            if (Profile.UserLevel < 50 )
             {
                 return Json(response);
             }

@@ -1,14 +1,15 @@
-﻿using Design.Web.Front.Models;
-using Makersn.BizDac;
+﻿using Makersn.BizDac;
 using Makersn.Models;
-using Makersn.Util;
-using Net.Common.Helper;
-using PagedList;
+using Design.Web.Front.Helper;
+using Design.Web.Front.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using Makersn.Util;
 
 namespace Design.Web.Front.Controllers
 {
@@ -23,7 +24,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public ActionResult About()
         {
             ViewBag.InfoList = GetInfoList();
@@ -44,7 +45,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public ActionResult License()
         {
             ViewBag.InfoList = GetInfoList();
@@ -55,7 +56,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public ActionResult Terms()
         {
             ViewBag.InfoList = GetInfoList();
@@ -66,7 +67,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public ActionResult Privacy()
         {
             ViewBag.InfoList = GetInfoList();
@@ -76,7 +77,7 @@ namespace Design.Web.Front.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
+        [OutputCache(Duration = 60 * 60, VaryByParam = "none")]
         public ActionResult Blog()
         {
             ViewBag.InfoList = GetInfoList();
@@ -97,12 +98,16 @@ namespace Design.Web.Front.Controllers
         }
 
         //[OutputCache(Duration = 60 * 60, VaryByParam = "none")]
-        public ActionResult Notice(int page = 1)
+        public ActionResult Notice(int page = 1, string competition="")
         {
             ViewBag.InfoList = GetInfoList();
             NoticesDac noticesDac = new NoticesDac();
 
-            IList<BoardT> list = noticesDac.GetNoticesByContent("", "", "KR");
+            ViewBag.Competition = competition;
+
+            //IList<BoardT> list = noticesDac.GetNoticesByContent("", "");
+            IList<BoardT> list = noticesDac.GetNoticesList();
+            
             return View(list.OrderByDescending(o => o.No).ToPagedList(page, 10));
         }
 
@@ -116,14 +121,14 @@ namespace Design.Web.Front.Controllers
             contact.Comment = model.Comment;
             contact.CodeNo = model.QnACode;
             contact.RegDt = DateTime.Now;
-            contact.RegId = profileModel.UserId;
-            contact.MemberNo = profileModel.UserNo;
+            contact.RegId = Profile.UserId;
+            contact.MemberNo = Profile.UserNo;
             contact.RegIp = IPAddressHelper.GetClientIP();
             contact.State = 1;
             contact.Reply = "";
             contactDac.InsertQnA(contact);
 
-            sendEmailQnA(profileModel.UserId, model.Title, model.Comment, model.Email);
+            sendEmailQnA(Profile.UserId, model.Title, model.Comment, model.Email);
 
             return Json(new { Success = true });
         }

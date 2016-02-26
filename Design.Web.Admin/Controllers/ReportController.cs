@@ -9,7 +9,6 @@ using Makersn.Util;
 using System.Net;
 using System;
 using Design.Web.Admin.Helper;
-using Net.Common.Helper;
 
 namespace Design.Web.Admin.Controllers
 {
@@ -23,7 +22,7 @@ namespace Design.Web.Admin.Controllers
         public MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
-            menuModel.MainIndex = 5;
+            menuModel.MainIndex = 4;
             menuModel.SubIndex = subIndex;
             return menuModel;
         }

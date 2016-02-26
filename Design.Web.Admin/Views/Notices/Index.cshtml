@@ -1,6 +1,6 @@
 ﻿@model PagedList.IPagedList<Makersn.Models.BoardT>
 @using PagedList.Mvc;
-;
+@using Design.Web.Admin.Filter;
 @{
     ViewBag.Title = "공지사항";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,31 +10,6 @@
 
 
 <h2 class="contents_title">공지사항</h2>
-
-@if (ViewBag.Flag == "KR")
-{
-    <strong>
-        <a href="/notices">한국어 사이트</a>&nbsp;&nbsp;
-    </strong>
-}
-else
-{
-    <a href="/notices">한국어 사이트</a>
-}
-l
-&nbsp;
-@if (ViewBag.Flag == "EN")
-{
-    <strong><a href="/notices?langFlag=EN">영문 사이트</a></strong>
-}
-else
-{
-    <a href="/notices?langFlag=EN">영문 사이트</a>
-}
-<br />
-<br />
-<br />
-
 <!-- contents_zone -->
 <div class="contents_zone">
     @*<form id="search" name="search">*@
@@ -78,7 +53,7 @@ else
             <div class="a_low">
                 <div class="lowin">
 
-                    @Html.Raw(new HtmlFilter().PunctuationDecode(n.SemiContent))
+                    @Html.Raw(new ContentFilter().HtmlDecode(n.SemiContent))
                 </div>
             </div>
         }
@@ -92,12 +67,11 @@ else
     <!-- // page_navi -->
     <!-- btn -->
     <div class="btn_right">
-        <span class="btnWrap medium"><a href="/notices/write?flag=@ViewBag.Flag" class="_btn_write">등록</a></span>
+        <span class="btnWrap medium"><a href="/notices/write" class="_btn_write">등록</a></span>
     </div>
     <!-- // btn -->
 </div>
 
-<input type="hidden" id="langFlag" name="langFlag" value="@ViewBag.Flag" />
 
 @section Scripts{
     <script type="text/javascript">
@@ -119,20 +93,18 @@ else
                 $(".a_low").not($(this).next()).slideUp();
             });
 
+            $("._search_btn").click(function () {
+                var text = $("#stx").val();
+                var gubun = $("#sfl").val();
+
+                location.replace("/notices?text=" + text + "&gubun=" + gubun);
+            })
 
             $("#stx").keypress(function (event) {
                 if (event.keyCode == 13) {
                     $("._search_btn").click();
                 }
-            });
-            $("._search_btn").click(function () {
-                var text = $("#stx").val();
-                var gubun = $("#sfl").val();
-                var langFlag = "@ViewBag.Flag";
-
-                location.replace("/notices?text=" + text + "&gubun=" + gubun + "&langFlag=" + langFlag);
             })
-
         });
     </script>
 }

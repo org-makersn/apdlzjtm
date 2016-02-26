@@ -13,7 +13,7 @@ namespace Makers.Admin.Controllers
         private MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Admin";
-            menuModel.MainIndex = 7;
+            menuModel.MainIndex = 6;
             menuModel.SubIndex = subIndex;
 
             return menuModel;

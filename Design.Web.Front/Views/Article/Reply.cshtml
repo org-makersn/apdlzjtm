@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 @{
     ProfileModel profile = (ProfileModel)ViewBag.LogOnMemner;
-    HtmlFilter filter = new HtmlFilter();
+    Design.Web.Front.Filter.ContentFilter filter = new Design.Web.Front.Filter.ContentFilter();
 }
 
 <div class="repleZone" id="repleZone">
@@ -112,7 +112,7 @@
                             <a href="#" onclick="CancleReplyInReply(this, '@articleComment.MemberNo')" style="display:none" class="reply cancel hide">답글 취소</a>
                         </div>
                         <div id="comment_view_@articleComment.No" class="editArea">
-                            <div class="userText _memo">@Html.Raw(filter.PunctuationEncode(articleComment.Content))</div>
+                            <div class="userText _memo">@Html.Raw(filter.HtmlEncode(articleComment.Content))</div>
                             @*<div class="editBtnBox">
                                 @if (ViewBag.MemberNo == articleComment.MemberNo)
                                 {
@@ -166,10 +166,7 @@
                             userNm = inReply.Content.Contains("#user#") == true ? inReply.Content.Substring(0, inReply.Content.IndexOf("#")) : "";
 
                             string placeHolder = string.Empty;
-                            if (userNm != "") { 
-                                placeHolder = userNm + "님께 답글 쓰기"; 
-                                <input type="hidden" name="hfEditToName" value="@userNm" />
-                            }
+                           
                             
                             <div class="userText_reply">
                                 <p class="reply_bar"></p>
@@ -181,6 +178,11 @@
 
                                 @*이름 들어갈곳*@
                                 <p class="name">@inReply.MemberName</p>
+                                @if (userNm != "")
+                                {
+                                    placeHolder = userNm + "님께 답글 쓰기"; 
+                                    <input type="hidden" name="hfEditToName" value="@userNm" />
+                                }
 
                                 <div class="editInArea">
                                     <div class="userText_text"><strong>@userNm</strong> @inReply.Content.Substring(contentIdx)</div>

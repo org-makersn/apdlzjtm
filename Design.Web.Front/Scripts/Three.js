@@ -11910,8 +11910,6 @@ THREE.JSONLoader.prototype.load = function ( url, callback, texturePath ) {
 
 };
 
-
-//차승용 xhr.responseText 사이즈 오버됨
 THREE.JSONLoader.prototype.loadAjaxJSON = function ( context, url, callback, texturePath, callbackProgress ) {
 
 	var xhr = new XMLHttpRequest();

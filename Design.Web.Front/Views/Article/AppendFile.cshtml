@@ -17,7 +17,7 @@
         if (string.IsNullOrEmpty(Model.ImgName))
         {
         <img src="@Url.Content("~/Content/images/common/bg3dFile.png")" alt="3d파일이미지" title="@Model.Name">
-        <em class="fileName" style="font-size:small;color:black">@Model.Name</em>
+        <em class="fileName">@Model.Rename</em>
         }
         else
         {

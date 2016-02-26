@@ -24,7 +24,6 @@
                     <li><span>@Html.ActionLink("프린팅", "State", "Printing")</span></li>
                     <li><span>@Html.ActionLink("메이커버스", "Index", "Bus")</span></li>
                     <li><span>@Html.ActionLink("일반", "Index", "Banner")</span></li>
-                    <li><span>@Html.ActionLink("번역", "Index", "Translation")</span></li>
                     <li><span>@Html.ActionLink("관리자", "admin_auth", "Admin")</span></li>
                     @*<li><span>@Html.ActionLink("Settings", "Index", "Settings")</span></li>*@
                 </ul>
@@ -55,10 +54,7 @@
                             <li><span class="one">@Html.ActionLink("회원현황", "State", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("회원정보", "Index", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("스팟회원정보", "PrinterMember", "Member")</span></li>
-                            @*<li><span class="one">@Html.ActionLink("스토어회원정보", "StoreMember", "Member")</span></li>*@
-                            <li><span class="one">@Html.ActionLink("프린팅업체정보", "StorePrintingCom", "Member")</span></li>
                             <li><span class="one">@Html.ActionLink("탈퇴회원", "DropMember", "Member")</span></li>
-                            <li><span class="one">@Html.ActionLink("전체알림", "AllNotice", "Member")</span></li>
                         }
 
                         @if (menu.Group == "_Article")
@@ -71,12 +67,6 @@
                         {
                             <li><span class="one">@Html.ActionLink("프린팅 현황", "State", "Printing")</span></li>
                             <li><span class="one">@Html.ActionLink("프린팅 리스트", "Listing", "Printing")</span></li>
-                            <li><span class="one">@Html.ActionLink("프린터 등록", "AddPrinterModel", "Printing")</span></li>
-                            <li><span class="one">@Html.ActionLink("프린터 인증 신청", "ApprPrinterTest", "Printing")</span></li>
-                            <li><span class="one">@Html.ActionLink("프린터 인증 관리", "MngApprPrinterTest", "Printing")</span></li>
-                            <li><span class="one">@Html.ActionLink("결제 승인", "ApprPayment", "Printing")</span></li>
-                            <li><span class="one">@Html.ActionLink("환불 처리", "ApprPaymentCancle", "Printing")</span></li>
-                            <li><span class="one">@Html.ActionLink("스팟 정산", "Accounting", "Printing")</span></li>
                         }
 
                         @if (menu.Group == "_Management")

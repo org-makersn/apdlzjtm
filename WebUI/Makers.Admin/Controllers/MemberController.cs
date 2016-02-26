@@ -17,10 +17,9 @@ namespace Makers.Admin.Controllers
     [Authorize]
     public class MemberController : BaseController
     {
-        MemberDac _memberDac = new MemberDac();
-        NoticesDac _noticeDac = new NoticesDac();
+        MemberDac memberDac = new MemberDac();
 
-        private MenuModel MenuModel(int subIndex)
+        public MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Member";
             menuModel.MainIndex = 1;
@@ -41,7 +40,7 @@ namespace Makers.Admin.Controllers
             //if (startDt == null) { startDt = ""; };
             //if (endDt == null) { endDt = ""; };
             //List<MemberT> list = md.SelectQuery(startDt, endDt);
-            IList<MemberT> list = _memberDac.SelectQuery(startDt, endDt, name, id);
+            IList<MemberT> list = memberDac.SelectQuery(startDt, endDt, name, id);
             ViewData["cnt"] = list.Count;
 
             ViewBag.Gubun = gubun;
@@ -69,7 +68,7 @@ namespace Makers.Admin.Controllers
             if (start == "") { start = DateTime.Now.ToString("yyyy-MM-dd"); }
             if (end == "") { end = DateTime.Now.ToString("yyyy-MM-dd"); }
 
-            IList<DashBoardStateT> returnlst = _memberDac.SearchDashBoardStateTargetAll(start, end);
+            IList<DashBoardStateT> returnlst = memberDac.SearchDashBoardStateTargetAll(start, end);
             ViewBag.Start = start;
             ViewBag.End = end;
 
@@ -98,7 +97,7 @@ namespace Makers.Admin.Controllers
             //IList<MemberStateT> returnlst = new List<MemberStateT>();
             //IList<MemberStateT> statelst = memberDac.SearchMemberStateTargetDaily(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
             IList<DashBoardStateT> returnlst = new List<DashBoardStateT>();
-            IList<DashBoardStateT> statelst = _memberDac.GetMemberStateTargetDaily(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
+            IList<DashBoardStateT> statelst = memberDac.GetMemberStateTargetDaily(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
 
             for (int day = 1; day <= days; day++)
             {
@@ -125,7 +124,7 @@ namespace Makers.Admin.Controllers
             ViewData["Month"] = new SelectList(monthlst, "Value", "Key", makeDt.Month);
 
             //연도 셀렉트 아이템
-            IList<object> yearGroup = _memberDac.GetMemberYearGroup();
+            IList<object> yearGroup = memberDac.GetMemberYearGroup();
 
             Dictionary<string, string> YearList = new Dictionary<string, string>();
 
@@ -160,7 +159,7 @@ namespace Makers.Admin.Controllers
             //IList<MemberStateT> returnlst = new List<MemberStateT>();
             //IList<MemberStateT> statelst = memberDac.SearchMemberStateTargetMonth(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
             IList<DashBoardStateT> returnlst = new List<DashBoardStateT>();
-            IList<DashBoardStateT> statelst = _memberDac.GetMemberStateTargetMonth(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
+            IList<DashBoardStateT> statelst = memberDac.GetMemberStateTargetMonth(firstDay.ToShortDateString(), lastDay.AddDays(1).ToShortDateString());
 
             foreach (int item in Enum.GetValues(typeof(MakersnEnumTypes.MonthLst)))
             {
@@ -176,7 +175,7 @@ namespace Makers.Admin.Controllers
             }
 
             //연도 셀렉트 아이템
-            IList<object> yearGroup = _memberDac.GetMemberYearGroup();
+            IList<object> yearGroup = memberDac.GetMemberYearGroup();
 
             Dictionary<string, string> YearList = new Dictionary<string, string>();
 
@@ -196,7 +195,7 @@ namespace Makers.Admin.Controllers
 
             ViewData["Group"] = MenuModel(0);
             //IList<MemberStateT> statelst = memberDac.SearchMemberStateTargetYear();
-            IList<DashBoardStateT> statelst = _memberDac.GetMemberStateTargetYear();
+            IList<DashBoardStateT> statelst = memberDac.GetMemberStateTargetYear();
             return View(statelst);
         }
 
@@ -204,13 +203,13 @@ namespace Makers.Admin.Controllers
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
-            ViewData["Group"] = MenuModel(5);
+            ViewData["Group"] = MenuModel(3);
             ViewData["startDt"] = startDt;
             ViewData["endDt"] = endDt;
             ViewData["option"] = "name";
             if (id != "") { ViewData["option"] = "id"; };
             ViewData["text"] = name + id;
-            IList<MemberT> list = _memberDac.DropMemberSelectQuery(startDt, endDt, name, id);
+            IList<MemberT> list = memberDac.DropMemberSelectQuery(startDt, endDt, name, id);
             ViewData["cnt"] = list.Count;
             ViewData["listCnt"] = listCnt;
 
@@ -226,7 +225,7 @@ namespace Makers.Admin.Controllers
             ViewData["option"] = "name";
             if (id != "") { ViewData["option"] = "id"; };
             ViewData["text"] = name + id;
-            IList<PrinterMemberT> list = _memberDac.PrinterMemberSelectQuery(startDt, endDt, name, id);
+            IList<PrinterMemberT> list = memberDac.PrinterMemberSelectQuery(startDt, endDt, name, id);
             ViewData["cnt"] = list.Count;
             ViewData["listCnt"] = listCnt;
             return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
@@ -238,197 +237,5 @@ namespace Makers.Admin.Controllers
         //    public short Key { get; set; }
         //    public string Value { get; set; }
         //}
-
-        public ActionResult AllNotice(int page = 1)
-        {
-            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-
-            ViewData["Group"] = MenuModel(6);
-
-            IList<NoticeT> before = _noticeDac.GetAllNoticeList();
-
-            IList<string> chkComment = new List<string>();
-            IList<NoticeT> list = new List<NoticeT>();
-
-            foreach(NoticeT n in before){
-                if (!chkComment.Contains(n.Comment))
-                {
-                    list.Add(n);
-                    chkComment.Add(n.Comment);
-                }
-            }
-
-            return View(list.OrderByDescending(o=>o.RegDt).ToPagedList(page,20));
-        }
-
-        public ActionResult SendNotice()
-        {
-            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-
-            ViewData["Group"] = MenuModel(7);
-            return View();
-        }
-
-        public JsonResult AddAllNotice(string title, string content)
-        {
-            NoticeT notice = new NoticeT();
-            notice.IdxName = "n:0";
-            notice.ArticleNo = 0;
-            notice.MemberNo = Profile.UserNo;
-            notice.IsNew = "Y";
-            notice.RefNo = 0;
-            notice.Type = "AllNotice";
-            notice.Comment = "제목:" + title.Replace("'","''") + "내용:" + content.Replace("'","''");
-            notice.RegDt = DateTime.Now;
-            notice.RegId = Profile.UserId;
-            notice.RegIp = IPAddressHelper.GetClientIP();
-
-            IList<MemberT> memberList = _memberDac.GetMemberListForSendAllNotice();
-
-            //foreach (MemberT member in memberList)
-            //{
-            //    if (member.Email != "" && member.Email != "0")
-            //    {
-            //        try
-            //        {
-            //            sendNoticeEmail(member.Email, title, content);
-            //        }
-            //        catch
-            //        {
-
-            //        }
-            //    }
-            //}
-
-            //sendNoticeEmail("astio002@nate.com", title, content);
-            //sendNoticeEmail("astio022@naver.com", title, content);
-            //sendNoticeEmail("chasy@makersi.com", title, content);
-            //sendNoticeEmail("astio022@hanmail.net", title, content);
-            //sendNoticeEmail("ryan@makersi.com", title, content);
-            //강희주 위로 전송 실패 521
-
-            bool Success = _noticeDac.InsertAllNotice(notice, memberList);
-            //bool Success = true;
-
-            return Json(new { Success = Success });
-        }
-
-        //public JsonResult sendNoticeEmail(string email, string title, string content)
-        //{
-        //    SendMailModels oMail = new SendMailModels();
-        //    content = HtmlFilter.PunctuationEncode(content);
-        //    oMail.SendMail("sendNotice", email, new String[] { title, content });
-        //    return Json(new AjaxResponseModel { Success = true, Message = "발송되었습니다." });
-        //}
-
-
-        #region 스토어 맴버(디자이너) 관리
-        /// <summary>
-        /// 스토어 맴버 리스트 
-        /// </summary>
-        /// <param name="startDt"></param>
-        /// <param name="endDt"></param>
-        /// <param name="page"></param>
-        /// <param name="listCnt"></param>
-        /// <param name="name"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-   
-        public ActionResult StoreMember(string startDt = "", string endDt = "", int page = 1, int listCnt = 20, string name = "", string id = "")
-        {
-            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-
-            ViewData["Group"] = MenuModel(3);
-            ViewData["startDt"] = startDt;
-            ViewData["endDt"] = endDt;
-            ViewData["option"] = "name";
-            if (id != "") { ViewData["option"] = "id"; };
-            ViewData["text"] = name + id;
-            IList<StoreMemberT> list = new StoreMemberBiz().GetAllStoreMember();
-            list = list.Where(w => w.StoreName.Contains(name)).ToList();
-            DateTime dateStart;
-            DateTime dateEnd;
-            try
-            {
-                dateStart = Convert.ToDateTime(startDt);
-                list = list.Where(w => w.RegDt > dateStart).ToList();
-            }
-            catch (Exception e) { } 
-            try
-            {
-                dateEnd = Convert.ToDateTime(endDt);
-                list = list.Where(w => w.RegDt > dateEnd).ToList();
-            }
-            catch (Exception e) { }
-            ViewData["cnt"] = list.Count;
-            ViewData["listCnt"] = listCnt;
-            return View(list.OrderByDescending(o => o.No).ToPagedList(page, listCnt));
-        }
-        #endregion
-
-        #region 프린팅 업체 관리
-        public ActionResult StorePrintingCom(string startDt = "", string endDt = "", int page = 1, int listCnt = 20, string name = "", string id = "")
-        {
-            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-
-            ViewData["Group"] = MenuModel(4);
-            ViewData["startDt"] = startDt;
-            ViewData["endDt"] = endDt;
-            ViewData["option"] = "name";
-            if (id != "") { ViewData["option"] = "id"; };
-            ViewData["text"] = name + id;
-            IList<StorePrintingCompanyT> list = new StorePrintingCompanyBiz().getAllStorePrintingCompany();
-            list = list.Where(w => w.NAME.Contains(name)).ToList();
-            DateTime dateStart;
-            DateTime dateEnd;
-            try
-            {
-                dateStart = Convert.ToDateTime(startDt);
-                list = list.Where(w => w.REG_DT > dateStart).ToList();
-            }
-            catch (Exception e) { }
-            try
-            {
-                dateEnd = Convert.ToDateTime(endDt);
-                list = list.Where(w => w.REG_DT > dateEnd).ToList();
-            }
-            catch (Exception e) { }
-            ViewData["cnt"] = list.Count;
-            ViewData["listCnt"] = listCnt;
-            return View(list.OrderByDescending(o => o.NO).ToPagedList(page, listCnt));
-        }
-
-        [Authorize, HttpGet]
-        public ActionResult StorePrintingComInsert()
-        {
-
-            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-            ViewData["Group"] = MenuModel(4);
-
-            return View();
-        }
-        [HttpPost]
-        public ActionResult StorePrintingComInsert(string Name, string PhoneNum, string Addr1, string Addr2, string PostNum, string ManagerName,string  Url)
-        {
-
-            if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-            ViewData["Group"] = MenuModel(4);
-            StorePrintingCompanyT storePrintingCom = new StorePrintingCompanyT();
-            storePrintingCom.NAME = Name;
-            storePrintingCom.OFFICE_PHONE = PhoneNum;
-            storePrintingCom.ADDR1 = Addr1;
-            storePrintingCom.ADDR2 = Addr2;
-            storePrintingCom.POST_CODE = PostNum;
-            storePrintingCom.MANAGER_NAME = ManagerName;
-            storePrintingCom.URL = Url;
-            storePrintingCom.REG_ID = Profile.UserId;
-            storePrintingCom.REG_DT = DateTime.Now;
-            new StorePrintingCompanyBiz().add(storePrintingCom);
-
-            return Redirect("StorePrintingCom");
-        }
-
-        #endregion
-
     }
 }

@@ -1,14 +1,13 @@
-﻿using Design.Web.Admin.Models;
-using Makersn.BizDac;
-using Makersn.Models;
-using Makersn.Util;
-using PagedList;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using Makersn.BizDac;
+using Makersn.Models;
+using PagedList;
+using Makersn.Util;
+using Design.Web.Admin.Models;
 
 namespace Design.Web.Admin.Controllers
 {
@@ -22,12 +21,12 @@ namespace Design.Web.Admin.Controllers
         public MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
-            menuModel.MainIndex = 5;
+            menuModel.MainIndex = 4;
             menuModel.SubIndex = subIndex;
             return menuModel;
         }
 
-        public ActionResult Index(string sfl = null, string query = null, int page = 1, int type = 0)
+        public ActionResult Index(string sfl = null, string query = null, int page = 1, int type = 1)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
@@ -86,7 +85,7 @@ namespace Design.Web.Admin.Controllers
             bannerT.RegId = "admin";
             bannerT.RegDt = DateTime.Now;
             var result = bannerDac.InsertBanner(bannerT);
-
+            
             return Redirect("/banner?type=" + bannerType);
         }
 
@@ -101,7 +100,7 @@ namespace Design.Web.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult BannerUpdate(int bannerNo, string title, string publish, string opener, string link, int priority, int bannerType, HttpPostedFileBase image, string up_image_del)
+        public ActionResult BannerUpdate(int bannerNo, string title, string publish, string opener, string link, int priority,int bannerType, HttpPostedFileBase image, string up_image_del)
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 

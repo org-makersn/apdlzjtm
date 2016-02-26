@@ -12,7 +12,7 @@
     <h2 class="contents_title">디자인 관리</h2>
 
 
-    <form id="search" name="search">
+    @*<form id="search" name="search">*@
         <input type="hidden" id="date" name="date">
         <input type="hidden" id="sst" name="sst">
         <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
@@ -62,7 +62,7 @@
             <span class="btnWrap medium"><a href="javascript:ArticleRecommendRequest.SearchEdit();" class="_search_btn">검색</a></span>
             <span class="btnWrap medium"><a href="javascript:void();"  onclick="$('#searchBox').val('');" class="_reset">초기화</a></span>
         </div>
-    </form>
+    @*</form>*@
 
 
 
@@ -172,3 +172,11 @@
         <div class="box_right_zone">
         </div>
     </div>
+
+<script type="text/javascript">
+    $("#searchBox").keypress(function (event) {
+        if (event.keyCode == 13) {
+            ArticleRecommendRequest.SearchEdit();
+        }
+    });
+</script>

@@ -55,7 +55,7 @@ namespace Makersn.BizDac
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query);
-                queryObj.SetParameter("no", no);
+                queryObj.SetParameter("no",no);
                 IList<object[]> results = queryObj.List<object[]>();
                 session.Flush();
 

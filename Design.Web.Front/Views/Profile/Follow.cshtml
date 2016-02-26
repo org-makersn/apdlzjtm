@@ -21,8 +21,8 @@
         {
             profilePic = ViewBag.ProfileImgUrl + follower.ProfilePic;
         }
-        //string No = follower.MemberBlog == null ? "?no="+ Base64Helper.Base64Encode(@follower.MemberNo.ToString()) : follower.MemberBlog;
-        string No = Base64Helper.Base64Encode(@follower.MemberNo.ToString());
+        //string No = follower.MemberBlog == null ? "?no="+ Design.Web.Front.Helper.Base64Helper.Base64Encode(@follower.MemberNo.ToString()) : follower.MemberBlog;
+        string No = Design.Web.Front.Helper.Base64Helper.Base64Encode(@follower.MemberNo.ToString());
         string className = index % 4 == 0 ? "mgR0" : "";
         <!-- 팔로워 1set -->
         <div class="followBox @className">

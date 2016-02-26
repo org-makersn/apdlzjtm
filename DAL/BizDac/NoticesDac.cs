@@ -6,22 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Makersn.Models;
 using NHibernate;
+using System.Data.SqlClient;
+using System.Data;
+using System.Configuration;
 
 namespace Makersn.BizDac
 {
     public class NoticesDac
     {
-        public IList<BoardT> GetBoardList(string flag)
+        
+
+        public IList<BoardT> GetNoticesList()
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                IList<BoardT> list = session.QueryOver<BoardT>().Where(n => n.BoardSetNo == 1 && n.LangFlag == flag).OrderBy(o => o.BoardSetNoSeq).Desc.List();
+                IList<BoardT> list = session.QueryOver<BoardT>().Where(n => n.BoardSetNo == 1).OrderBy(o => o.BoardSetNoSeq).Desc.List();
                 session.Flush();
                 return list;
             }
         }
 
-        public BoardT GetBoard(int no)
+        public BoardT GetNotices(int no)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -31,7 +36,7 @@ namespace Makersn.BizDac
             }
         }
 
-        public BoardT GetPreBoard(int no)
+        public BoardT GetPreNotices(int no)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -41,7 +46,7 @@ namespace Makersn.BizDac
                 return notices;
             }
         }
-        public BoardT GetNextBoard(int no)
+        public BoardT GetNextNotices(int no)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -52,7 +57,7 @@ namespace Makersn.BizDac
             }
         }
 
-        public int InsertBoard(BoardT n)
+        public int InsertNotices(BoardT n)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -62,7 +67,7 @@ namespace Makersn.BizDac
                 return result;
             }
         }
-        public void DeleteBoard(BoardT n)
+        public void DeleteNotices(BoardT n)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -71,7 +76,7 @@ namespace Makersn.BizDac
             }
         }
 
-        public void UpdateBoard(BoardT n)
+        public void UpdateNotices(BoardT n)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -99,14 +104,14 @@ namespace Makersn.BizDac
             }
         }
 
-        public IList<BoardT> GetNoticesByContent(string text, string gubun, string flag)
+        public IList<BoardT> GetNoticesByContent(string text, string gubun)
         {
             IList<BoardT> list = new List<BoardT>();
             string[] textList = text.Split(' ');
 
-            string query = string.Format(@"SELECT NO, TITLE, SEMI_CONTENT, REG_DT
+            string query = @"SELECT NO, TITLE, SEMI_CONTENT, REG_DT
                                 FROM BOARD WITH(NOLOCK)
-                                WHERE 1=1 AND LANG_FLAG='{0}'", flag);
+                                WHERE 1=1 ";
             if (gubun == "sfl1")
             {
                 for (int i = 0; i < textList.Length; i++)
@@ -175,54 +180,128 @@ namespace Makersn.BizDac
 
         public int GetNoticesCntByMemberNo(int no)
         {
-            string query = string.Format(@" SELECT 
+            //SqlConnection con = new SqlConnection(conStr);
+            //SqlCommand cmd = new SqlCommand();
+            //cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.CommandText = "GET_NOTICE_CNT_BY_MEMBER_NO_FRONT";
+            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = no;
+            //cmd.Connection = con;
+
+            //int result = 0;
+
+            //try
+            //{
+            //    con.Open();
+            //    SqlDataReader sr = cmd.ExecuteReader();
+            //    while (sr.Read())
+            //    {
+            //        result = (int)sr.GetValue(0);
+            //    }
+            //    sr.Close();
+            //    cmd.Connection.Close();
+            //    cmd.Dispose();
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
+            //finally
+            //{
+            //    con.Close();
+            //    con.Dispose();
+            //}
+
+            //return result;
+
+            string query = @" SELECT 
                                              (SELECT COUNT(0) FROM NOTICE N WITH(NOLOCK) INNER JOIN MEMBER M WITH(NOLOCK)
 					                                            ON N.MEMBER_NO_REF = M.NO
 					                                            AND M.ALL_IS='on' AND M.REPLE_IS='on' AND N.TYPE = 'comment' AND N.IS_NEW = 'Y'
-					                                            WHERE M.NO = {0}) +
+					                                            WHERE M.NO = :no) +
 
                                              (SELECT COUNT(0) FROM NOTICE N WITH(NOLOCK) INNER JOIN MEMBER M WITH(NOLOCK)
 					                                            ON N.MEMBER_NO_REF = M.NO
 					                                            AND M.ALL_IS='on' AND M.LIKE_IS='on' AND N.TYPE = 'like' AND N.IS_NEW = 'Y'
-					                                            WHERE M.NO = {0})+
+					                                            WHERE M.NO = :no)+
 
                                             (SELECT COUNT(0) FROM NOTICE N WITH(NOLOCK) INNER JOIN MEMBER M WITH(NOLOCK)
 					                                            ON N.MEMBER_NO_REF = M.NO
 					                                            AND N.TYPE = 'AllNotice' AND N.IS_NEW = 'Y'
-					                                            WHERE M.NO = {0})+
+					                                            WHERE M.NO = :no)+
 
                                             (SELECT COUNT(0) FROM NOTICE N WITH(NOLOCK) INNER JOIN MEMBER M WITH(NOLOCK)
 					                                            ON N.MEMBER_NO_REF = M.NO
 					                                            AND N.TYPE = 'inComment' AND N.IS_NEW = 'Y' AND M.REPLE_IS='on' 
-					                                            WHERE M.NO = {0})+
+					                                            WHERE M.NO = :no)+
 
                                             (SELECT COUNT(0) FROM FOLLOWER F WITH(NOLOCK) INNER JOIN MEMBER M WITH(NOLOCK)
 					                                            ON F.MEMBER_NO_REF = M.NO
 					                                            AND  M.ALL_IS='on' AND M.FOLLOW_IS='on' AND F.IS_NEW = 'Y'
-					                                            WHERE M.NO = {0})+
-
-                                            (SELECT COUNT(0) FROM PRINTER_NOTICE WITH(NOLOCK)
-                                                                WHERE MEMBER_NO_REF = {0} AND IS_NEW = 'Y')", no);
+					                                            WHERE M.NO = :no)";
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                int result = (int)session.CreateSQLQuery(query).UniqueResult();
+                //int result = (int)session.CreateSQLQuery(query).UniqueResult();
 
-                //int noticeCnt = session.QueryOver<NoticeT>().Where(n => n.MemberNoRef == no && n.IsNew == "Y").RowCount();
-                //int followCnt = session.QueryOver<FollowerT>().Where(f => f.MemberNoRef == no && f.IsNew=="Y").RowCount();
-                //return noticeCnt + followCnt;
+                IQuery queryObj = session.CreateSQLQuery(query);
+                queryObj.SetParameter("no", no);
+
+                int result = (int)queryObj.UniqueResult();
+
                 return result;
             }
         }
 
         public IList<NoticeT> GetNoticeList(int no)
         {
-            string query = string.Format(@"SELECT M.PROFILE_PIC, M.NAME, N.TYPE, N.COMMENT, N.REG_DT, N.ARTICLE_NO, TD.TITLE, N.MEMBER_NO
+            //SqlConnection con = new SqlConnection(conStr);
+            //SqlCommand cmd = new SqlCommand();
+            //cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.CommandText = "GET_NOTICE_LIST_FRONT";
+            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = no;
+            //cmd.Connection = con;
+
+            //IList<NoticeT> list = new List<NoticeT>();
+
+            //try
+            //{
+            //    con.Open();
+            //    SqlDataReader sr = cmd.ExecuteReader();
+            //    while (sr.Read())
+            //    {
+            //        NoticeT n = new NoticeT();
+            //        n.MemberProfilePic = sr["PROFILE_PIC"].ToString();
+            //        n.MemberName = sr["NAME"].ToString();
+            //        n.Type = sr["TYPE"].ToString();
+            //        n.Comment = sr["COMMENT"].ToString();
+            //        n.RegDt = (DateTime)sr["REG_DT"];
+            //        n.RefNo = Convert.ToInt64(sr["ARTICLE_NO"]);
+            //        n.ArticleTItle = sr["TITLE"].ToString();
+            //        n.MemberNo = (int)sr["MEMBER_NO"];
+            //        list.Add(n);
+            //    }
+            //    sr.Close();
+            //    cmd.Connection.Close();
+            //    cmd.Dispose();
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
+            //finally
+            //{
+            //    con.Close();
+            //    con.Dispose();
+            //}
+
+            //return list;
+
+            string query = string.Format(@"SELECT M.PROFILE_PIC, M.NAME, N.TYPE, N.COMMENT, N.REG_DT, N.ARTICLE_NO, A.TITLE, N.MEMBER_NO
 							FROM NOTICE N WITH(NOLOCK) INNER JOIN MEMBER M WITH(NOLOCK)
                             ON N.MEMBER_NO = M.NO AND M.DEL_FLAG = 'N'
                             LEFT OUTER JOIN ARTICLE A WITH(NOLOCK)
                             ON N.ARTICLE_NO = A.NO
-						    LEFT OUTER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK)
-						    ON TD.ARTICLE_NO = A.NO AND TD.NO = (SELECT MIN(NO) FROM TRANSLATION_DETAIL TD2 WITH(NOLOCK) WHERE TD2.ARTICLE_NO = A.NO )
                             WHERE N.MEMBER_NO_REF = :no 
 
 							AND (
@@ -235,16 +314,13 @@ namespace Makersn.BizDac
 
 							UNION ALL
 
-							SELECT M.PROFILE_PIC ,M.NAME,'newArticle' AS TYPE, '' AS COMMENT, A.REG_DT, A.NO, TD.TITLE, A.MEMBER_NO
+							SELECT M.PROFILE_PIC ,M.NAME,'newArticle' AS TYPE, '' AS COMMENT, A.REG_DT, A.NO, A.TITLE, A.MEMBER_NO
 							FROM ARTICLE A WITH(NOLOCK)
 							INNER JOIN MEMBER M WITH(NOLOCK)
 							ON A.MEMBER_NO = M.NO AND M.DEL_FLAG = 'N'
-							INNER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK)
-							ON TD.ARTICLE_NO = A.NO AND TD.NO = (SELECT MIN(NO) FROM TRANSLATION_DETAIL TD2 WITH(NOLOCK) WHERE TD2.ARTICLE_NO = A.NO )
-                            WHERE MEMBER_NO IN (SELECT MEMBER_NO_REF FROM FOLLOWER F WITH(NOLOCK) WHERE A.REG_DT >= F.REG_DT AND F.MEMBER_NO = :no)
+							WHERE MEMBER_NO IN (SELECT MEMBER_NO_REF FROM FOLLOWER F WITH(NOLOCK) WHERE A.REG_DT >= F.REG_DT AND F.MEMBER_NO = :no)
 							AND (SELECT FOLLOW_IS FROM MEMBER WITH(NOLOCK) WHERE NO = :no) = 'on'
 							AND (SELECT ALL_IS FROM MEMBER WITH(NOLOCK) WHERE NO = :no) = 'on'
-							
 
 							UNION ALL
 
@@ -263,22 +339,17 @@ namespace Makersn.BizDac
                             ON N.MEMBER_NO = M.NO AND M.DEL_FLAG = 'N'
                             WHERE N.MEMBER_NO_REF = :no 
                             AND N.TYPE = 'notice' AND N.ARTICLE_NO is not null
-
-                            UNION ALL
-        
-							SELECT M.PROFILE_PIC, M.NAME, PN.TYPE, PN.COMMENT, PN.REG_DT, PN.ORDER_NO, '' AS TITLE, PN.MEMBER_NO
-                            FROM PRINTER_NOTICE PN WITH(NOLOCK) INNER JOIN MEMBER M WITH(NOLOCK)
-		                    ON PN.MEMBER_NO = M.NO
-		                    WHERE PN.MEMBER_NO_REF = :no
                             ", no);
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query);
                 queryObj.SetParameter("no", no);
+
                 IList<object[]> result = queryObj.List<object[]>();
 
-                IList<NoticeT> list = new List<NoticeT>(); 
+                IList<NoticeT> list = new List<NoticeT>();
+                //IList<object[]> result = session.CreateSQLQuery(query).List<object[]>();
                 foreach (object[] row in result)
                 {
                     NoticeT n = new NoticeT();
@@ -287,7 +358,6 @@ namespace Makersn.BizDac
                     n.Type = (string)row[2];
                     n.Comment = (string)row[3];
                     n.RegDt = (DateTime)row[4];
-                    //n.RefNo = (long)row[5];
                     n.RefNo = Convert.ToInt64(row[5]);
                     n.ArticleTItle = (string)row[6];
                     n.MemberNo = (int)row[7];
@@ -330,9 +400,19 @@ namespace Makersn.BizDac
         #region 확인여부
         public void UpdateNoticeIsNew(int no)
         {
+            //SqlConnection con = new SqlConnection(conStr);
+            //SqlCommand cmd = new SqlCommand();
+            //cmd.CommandType = CommandType.StoredProcedure;
+            //cmd.CommandText = "UPDATE_NOTICE_IS_NEW_FRONT";
+            //cmd.Parameters.Add("@MEMBER_NO", SqlDbType.Int).Value = no;
+            //cmd.Connection = con;
+            //con.Open();
+            //cmd.ExecuteNonQuery();
+            //con.Close();
+
+
             string query = @"UPDATE NOTICE SET IS_NEW = 'N' WHERE IS_NEW='Y' AND MEMBER_NO_REF = :no";
             query += @" UPDATE FOLLOWER SET IS_NEW = 'N' WHERE IS_NEW='Y' AND MEMBER_NO_REF = :no";
-            query += @" UPDATE PRINTER_NOTICE SET IS_NEW = 'N' WHERE IS_NEW='Y' AND MEMBER_NO_REF = :no";
             using (ISession session = NHibernateHelper.OpenSession())
             {
 
@@ -345,6 +425,7 @@ namespace Makersn.BizDac
                     //{
                     //    session.Update(list);
                     //}
+
                     IQuery queryObj = session.CreateSQLQuery(query);
                     queryObj.SetParameter("no", no);
                     queryObj.ExecuteUpdate();
@@ -377,120 +458,10 @@ namespace Makersn.BizDac
             }
         }
 
-        #region 출력 이미지 가져오기
-        public IList<NoticeT> GetPrinterOutputImage(IList<NoticeT> data, IList<NoticeT> result)
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                foreach (NoticeT noti in data)
-                {
-                    noti.OutputImageList = session.QueryOver<PrinterOutputImageT>().Where(w => w.OrderNo == noti.RefNo).List<PrinterOutputImageT>();
-                    result.Add(noti);
-                }
-            }
-
-            return result;
-        }
-        #endregion
-
-        #region All Notice 삽입
-        public bool InsertAllNotice(NoticeT data, IList<MemberT> memberList)
-        {
-            bool result = false;
-
-            string query = "BEGIN TRANSACTION; ";
-
-            foreach (MemberT member in memberList)
-            {
-                query += string.Format(@" INSERT INTO NOTICE (IDX_NAME, ARTICLE_NO, MEMBER_NO, MEMBER_NO_REF, REF_NO, TYPE, COMMENT, IS_NEW, REG_ID, REG_DT, REG_IP)
-                    values('{0}',{1},{2},{3},{4},'{5}','{6}','{7}','{8}',GETDATE(),'{10}') ",
-                    data.IdxName, data.ArticleNo, data.MemberNo, member.No, data.RefNo, data.Type, data.Comment, data.IsNew, data.RegId, data.RegDt, data.RegIp);
-            }
-            query += "COMMIT TRANSACTION;";
-
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                try
-                {
-                    using (ITransaction transaction = session.BeginTransaction())
-                    {
-                        session.CreateSQLQuery(query).ExecuteUpdate();
-                        transaction.Commit();
-                        session.Flush();
-                    }
-                    result = true;
-                }
-                catch
-                {
-
-                }
-            }
-            return result;
-
-//            bool result = false;
-
-//            //string query = "BEGIN TRANSACTION; ";
-//            string query = "";
-
-//            foreach (MemberT member in memberList)
-//            {
-////                query += string.Format(@" INSERT INTO NOTICE (IDX_NAME, ARTICLE_NO, MEMBER_NO, MEMBER_NO_REF, REF_NO, TYPE, COMMENT, IS_NEW, REG_ID, REG_DT, REG_IP)
-////                    values('{0}',{1},{2},{3},{4},'{5}','{6}','{7}','{8}',GETDATE(),'{10}') ",
-////                    data.IdxName, data.ArticleNo, data.MemberNo, member.No, data.RefNo, data.Type, data.Comment, data.IsNew, data.RegId, data.RegDt, data.RegIp);
-
-//                query += string.Format(@" INSERT INTO NOTICE (IDX_NAME, ARTICLE_NO, MEMBER_NO, MEMBER_NO_REF, REF_NO, TYPE, COMMENT, IS_NEW, REG_ID, REG_DT, REG_IP)
-//                    values(:IdxName, :ArticleNo,:MemberNo,?,:RefNo,:_Type,:Comment,:IsNew,:RegId,GETDATE(),:RegIp) ");
-//            }
-//            //query += "COMMIT TRANSACTION;";
-
-//            using (ISession session = NHibernateHelper.OpenSession())
-//            {
-//                try
-//                {
-//                    using (ITransaction transaction = session.BeginTransaction())
-//                    {
-//                        IQuery queryObj = session.CreateSQLQuery(query);
-//                        queryObj.SetParameter("IdxName", data.IdxName);
-//                        queryObj.SetParameter("ArticleNo", data.ArticleNo);
-//                        queryObj.SetParameter("MemberNo", data.MemberNo);
-//                        queryObj.SetParameter("RefNo", data.RefNo);
-//                        queryObj.SetParameter("_Type", data.Type);
-//                        queryObj.SetParameter("Comment", data.Comment);
-//                        queryObj.SetParameter("IsNew", data.IsNew);
-//                        queryObj.SetParameter("RegId", data.RegId);
-//                        queryObj.SetParameter("RegIp", data.RegIp);
-
-//                        for (int i = 0; i < memberList.Count; i ++  ) {
-
-//                            queryObj.SetParameter(i, memberList[i].No);
-//                        }
-//                        int a = queryObj.ExecuteUpdate();
-//                        transaction.Commit();
-//                        session.Flush();
-//                    }
-//                    result = true;
-//                }
-//                catch
-//                {
-
-//                }
-//            }
-//            return result;
-        }
-        #endregion
-
-        public IList<NoticeT> GetAllNoticeList()
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                return session.QueryOver<NoticeT>().Where(w => w.Type == "AllNotice").List<NoticeT>();
-            }
-        }
-
         #region
         public void InsertNoticeByComment(NoticeT data)
         {
-            using(ISession session = NHibernateHelper.OpenSession())
+            using (ISession session = NHibernateHelper.OpenSession())
             {
                 session.Save(data);
             }

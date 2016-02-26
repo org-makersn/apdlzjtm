@@ -1,24 +1,28 @@
-﻿using FluentNHibernate.Cfg;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using Makersn.Models;
 using NHibernate;
 using NHibernate.Caches.SysCache;
+using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
-using System;
-using System.Configuration;
-using System.Web;
 
-
-namespace Makersn
+namespace Makersn.Models
 {
     public class NHibernateHelper
     {
-        private static readonly DbSettings instance = new DbSettings();
-        private static DbSettings Instance { get { return instance; } }
-
         private static ISessionFactory sessionFactory;
-        
+
+        private static readonly string _Server_IP = "makersndb_real";
+        private static readonly string _UserNm = "luckymun";
+        private static readonly string _Password = "pingoli1234";
+        private static readonly string _Database = "dbluckymun";
+
         private static ISessionFactory GetSessionFactory<T>() where T : ICurrentSessionContext
         {
             if (sessionFactory == null)
@@ -29,10 +33,10 @@ namespace Makersn
                             //.ShowSql()
                         #endif
                             .ConnectionString(c => c
-                                        .Server(instance._Server_IP)
-                                        .Database(instance._Database)
-                                        .Username(instance._UserNm)
-                                        .Password(instance._Password)))
+                                        .Server(_Server_IP)
+                                        .Database(_Database)
+                                        .Username(_UserNm)
+                                        .Password(_Password)))
                         .Mappings(m => m.FluentMappings
                             .AddFromAssemblyOf<ArticleT>()
                             .AddFromAssemblyOf<ArticleCommentT>()
@@ -107,35 +111,34 @@ namespace Makersn
             }
         }
 
-        public class DbSettings
-        {
-            public DbSettings()
-            {
-                _Server_IP = ConfigurationManager.AppSettings["DBServerIP"] ?? "storedb_dev";
-                _UserNm = ConfigurationManager.AppSettings["DBUser"] ?? "0000";
-                _Password = ConfigurationManager.AppSettings["DBPwd"] ?? "0000";
-                _Database = ConfigurationManager.AppSettings["Database"] ?? "0000";
-            }
+    //    public static void executeUpdate(String hql, String... params) {
 
-            /// <summary>
-            /// 
-            /// </summary>
-            public string _Server_IP { get; private set; }
+    //    Session session = openSession();
+    //    Transaction tx = null;
 
-            /// <summary>
-            /// 
-            /// </summary>
-            public string _UserNm { get; private set; }
+    //    try {
+    //        tx = session.beginTransaction();
+    //        Query query = session.createQuery(hql);
 
-            /// <summary>
-            /// 
-            /// </summary>
-            public string _Password { get; private set; }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            public string _Database { get; private set; }
-        }
+    //        if (params != null && params.length > 0) {
+    //            for (int i = 0; i < params.length; i++) {
+    //                query.setParameter(i, params[i]);
+    //                // System.out.println("query influenced: "+params[i]);
+    //            }
+    //        }
+    //        System.out.println("query influenced: " + query.getQueryString());
+    //        int n = query.executeUpdate();
+    //        System.out.println("query influence: " + n);
+    //        tx.commit();
+    //    } catch (Exception e) {
+    //        if (tx != null)
+    //            tx.rollback();
+    //        throw new RuntimeException(e.getMessage());
+    //    } finally {
+    //        if (session != null && session.isOpen()) {
+    //            session.close();
+    //        }
+    //    }
+    //}
     }
 }

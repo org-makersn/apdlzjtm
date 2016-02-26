@@ -13,12 +13,12 @@
 <div class="message">
     <div class="messageL">
         <p class="tit">메세지 보관함</p>
-        <ul style="height:90%;">
+        <ul>
 
             @foreach (Makersn.Models.MessageT message in Model)
             {
-                string memberNo = Base64Helper.Base64Encode(message.MemberNo.ToString());
-                string memberNoRef = Base64Helper.Base64Encode(message.MemberNoRef.ToString());
+                string memberNo = Design.Web.Front.Helper.Base64Helper.Base64Encode(message.MemberNo.ToString());
+                string memberNoRef = Design.Web.Front.Helper.Base64Helper.Base64Encode(message.MemberNoRef.ToString());
 
                 string profilePic = string.Empty;
 
@@ -42,9 +42,9 @@
                         @*<p class="name"><a href="/Profile?no=@(memberNo == ViewBag.No ? memberNoRef : memberNo)" class="boldF">@message.MemberName</a></p>*@
                         <p class="name"><a class="boldF">@message.MemberName</a></p>
 
-                        <p class="txt" style="word-break: break-all;">@(message.MsgGubun == "MSG" ? message.Comment : "사진")</p>
+                        <p class="txt" style="word-break:break-all;">@(message.MsgGubun == "MSG" ? message.Comment : "사진")</p>
                     </div>
-                    <p class="date">@message.RegDt.ToString("MM.dd")</p>
+                    <p class="date">@message.RegDt.ToString("M")</p>
                 </li>
                 <!--//message 1set --> 
             }
@@ -94,9 +94,6 @@
             $(this).addClass("on");
             GetMessage(memberNo, memberNoRef);
         })
-        if (!parseInt("@ViewBag.NoticeCnt") > 0) {
-            $(".printing_btn .new").remove();
-        }
     });
 
     function GetMessage(val1, val2) {
@@ -137,7 +134,7 @@
                     $("#txtMessage").focus();
                 }
                 //console.log(response);
-
+             
             },
             complete: function (response) {
                 //$(".msgWrap").scrollTop($(".msgWrap")[0].scrollHeight);

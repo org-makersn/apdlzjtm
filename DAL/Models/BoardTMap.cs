@@ -14,7 +14,6 @@ namespace Makersn.Models
             Id(x => x.No, "NO");
             Map(x => x.BoardSetNoSeq, "BOARD_SET_NO_SEQ");
             Map(x => x.BoardSetNo, "BOARD_SET_NO");
-            Map(x => x.LangFlag, "LANG_FLAG");
             Map(x => x.Title, "TITLE");
             Map(x => x.Writer, "WRITER");
             Map(x => x.SemiContent, "SEMI_CONTENT").CustomType("StringClob").CustomSqlType("text");

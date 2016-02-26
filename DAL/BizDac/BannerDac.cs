@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using NHibernate;
 using Makersn.Models;
 using NHibernate.Criterion.Lambda;
-using Makersn.Util;
 
 namespace Makersn.BizDac
 {
@@ -31,7 +30,7 @@ namespace Makersn.BizDac
         }
 
         /// <summary>
-        /// 배너 검색 type = 0 메인, 1 디자인, 2 프린팅, 3 스토어, 4 메이커버스
+        /// 배너 검색 type = 0 메인, 1 디자인, 2 프린팅
         /// </summary>
         /// <param name="sfl"></param>
         /// <param name="query"></param>
@@ -48,6 +47,8 @@ namespace Makersn.BizDac
                 searchQuery += " AND (";
                 for (int i = 0; i < queryLst.Length; i++)
                 {
+                    //if (i == 0) { searchQuery += @" TITLE LIKE '%" + queryLst[i] + "' "; }
+                    //else { searchQuery += " OR TITLE LIKE '%" + queryLst[i] + "' "; }
                     if (i == 0) { searchQuery += @" TITLE LIKE ? "; }
                     else { searchQuery += " OR TITLE LIKE ? "; }
                 }
@@ -56,11 +57,15 @@ namespace Makersn.BizDac
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
+                //IList<BannerT> banners = session.QueryOver<BannerT>()
+                //                        .OrderBy(o => o.No).Desc
+                //                        .List();
+
                 IQuery queryObj = session.CreateSQLQuery(searchQuery).AddEntity(typeof(BannerT));
-                queryObj.SetParameter("type", type);
+                queryObj.SetParameter("type",type);
                 for (int i = 0; i < queryLst.Length; i++)
                 {
-                    queryObj.SetParameter(i, "%" + queryLst[i] + "%");
+                    queryObj.SetParameter(i, "%"+queryLst[i]+"%");
                 }
                 IList<BannerT> banners = (IList<BannerT>)queryObj.List<BannerT>();
                 session.Flush();
@@ -173,7 +178,7 @@ namespace Makersn.BizDac
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                IList<BannerT> list = session.QueryOver<BannerT>().Where(w => w.PublishYn == "y" && w.Type == (int)MakersnEnumTypes.BannerType.Design).OrderBy(o => o.Priority).Desc.List<BannerT>();
+                IList<BannerT> list = session.QueryOver<BannerT>().Where(w => w.PublishYn == "y" && w.Type == 1).OrderBy(o=>o.Priority).Desc.List<BannerT>();
                 return list;
             }
         }

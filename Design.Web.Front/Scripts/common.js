@@ -82,8 +82,7 @@ $(function () {
     /* 마이페이지 영역 제외 클릭시 마이페이지 팝업 닫기 */
     $(".wrap").click(function (e) {
         if ($(".topMypage").css("display") == "block") {
-            console.log(e.target.id);
-            if (e.target.id != "showTop" && e.target.id != "showTopNew") {
+            if (e.target.id != "showTop") {
                 mypageOut();
             }
         }
@@ -168,11 +167,8 @@ function loginGo() {
 
 /* 회원가입 */
 function joinGo() {
-    alert("현재 클로즈 베타 테스트 중으로 \n초대를 통해서만 이용할 수 있습니다.");
-    return false;
-
-    //popupClose();
-    //$('.popupArea.join').show();
+    popupClose();
+    $('.popupArea.join').show();
 }
 
 /* 회원가입완료 */

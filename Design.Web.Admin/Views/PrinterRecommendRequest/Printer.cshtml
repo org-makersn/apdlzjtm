@@ -41,8 +41,8 @@
         }
 
         PrinterRecommendRequest.RecommendListUpdatePriority = function (val) {
-            var no = $(val).parents("tr").find("td").eq(0).text();
-            var priority = $(val).val();
+            var no = val;
+            var priority = $("#priority").val();
             Ajax.SyncGetPartialView("/PrinterRecommendRequest/RecommendListUpdatePriority", { no: no, priority: priority }, "RecommendList");
         }
         PrinterRecommendRequest.RecommendListEdit = function (val) {

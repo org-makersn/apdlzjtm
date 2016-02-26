@@ -19,7 +19,6 @@ namespace Makersn.Models
             Map(x => x.Password, "PASSWORD");
             Map(x => x.Name, "NAME");
             Map(x => x.Email, "EMAIL");
-            Map(x => x.CellPhone, "CELL_PHONE");
             Map(x => x.Url, "URL");
             Map(x => x.SnsType, "SNS_TYPE");
             Map(x => x.SnsId, "SNS_ID");

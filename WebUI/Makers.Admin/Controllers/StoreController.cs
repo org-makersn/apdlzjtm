@@ -40,21 +40,21 @@ namespace Makers.Admin.Controllers
         /// <param name="status"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public ActionResult ProductCertificateList(string query = "", int status = (int)MakersnEnumTypes.ProductCertificateStatus.Request, int page = 1)
-        {
+        //public ActionResult ProductCertificateList(string query = "", int status = (int)MakersnEnumTypes.ProductCertificateStatus.Request, int page = 1)
+        //{
 
-            if(Profile.UserLevel < 50) { return Redirect("/account/logon"); }
-            ViewData["Group"] = MenuModel(1);
+        //    if(Profile.UserLevel < 50) { return Redirect("/account/logon"); }
+        //    ViewData["Group"] = MenuModel(1);
 
-            List<StoreProductT> productList = new StoreProductBiz().searchProductWithCertification(status, query);
-            ViewBag.ProductList = productList;
+        //    List<StoreProductT> productList = new StoreProductBiz().searchProductWithCertification(status, query);
+        //    ViewBag.ProductList = productList;
 
-            ViewData["certificateType"] = status;
-            ViewData["query"] = query;
-            ViewData["cnt"] = productList.Count;
+        //    ViewData["certificateType"] = status;
+        //    ViewData["query"] = query;
+        //    ViewData["cnt"] = productList.Count;
 
-            return View(productList.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
-        }
+        //    return View(productList.OrderByDescending(p => p.REG_DT).ToPagedList(page, 20));
+        //}
 
         /// <summary>
         /// 

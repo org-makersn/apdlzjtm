@@ -56,12 +56,12 @@
                     <td>@printer.No</td>
                     <td>
                         <p class="memb_img">
-                            <a @*href="javascript:ArticleRecommendRequest.RecommendListEdit(@printer.No);" *@class="_btn_edit" id="img">
-                                <img src="@ViewBag.PrintImgUrl@printer.ImageName") width="100px" height="100px" /></a>
+                            <a href="javascript:ArticleRecommendRequest.RecommendListEdit(@printer.No);" class="_btn_edit" id="img">
+                                <img src="@ViewBag.PrinterImgUrl@printer.ImageName") width="100px" height="100px" /></a>
                         <p>
                     </td>
-                    <td class="ta_left"><a @*href="javascript:PrinterRecommendRequest.RecommendListEdit(@printer.No);"*@  class="_btn_edit" id="title">@printer.PrinterMemberName<br>@printer.Brand</a></td>
-                    <td><input value ="@printer.RecommendPriority" onchange="javascript:PrinterRecommendRequest.RecommendListUpdatePriority(this)"></td>
+                    <td class="ta_left"><a href="javascript:PrinterRecommendRequest.RecommendListEdit(@printer.No);"  class="_btn_edit" id="title">@printer.PrinterMemberName<br>@printer.Brand</a></td>
+                    <td>@printer.RecommendPriority</td>
                     
                     <td><a id="visibility" href="javascript:PrinterRecommendRequest.RecommendListUpdateVisibility(@printer.No);">@(printer.RecommendVisibility == "Y" ? "사용" : "비사용")</a></td>
                 </tr>

@@ -1,54 +1,43 @@
-﻿using Design.Web.Front.Configurations;
-using Design.Web.Front.Models;
-using Makersn.BizDac;
-using Makersn.Util;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Makersn.Models;
+using Makersn.Util;
+using Design.Web.Front.Models;
+using Newtonsoft.Json;
+using Makersn.BizDac;
 
 namespace Design.Web.Front.Controllers
 {
     public class BaseController : Controller
     {
-        public ApplicationConfiguration instance = ApplicationConfiguration.Instance;
+        //private static readonly MemberT anonymous = new MemberT();
+        private ProfileModel profileModel;
 
-        public ProfileModel profileModel;
-
-        PrinterMemberDac _printerMemberDac = new PrinterMemberDac();
         NoticesDac _noticesDac = new NoticesDac();
         MessageDac _messageDac = new MessageDac();
 
         public BaseController()
         {
-            profileModel = Profile;
-
-            ViewBag.LogOnMemner = profileModel;
-            ViewBag.LogOnChk = profileModel.UserNo == 0 ? 0 : 1;
-            ViewBag.SpotChk = _printerMemberDac.GetPrinterMemberByNo(profileModel.UserNo);
+            ViewBag.LogOnMemner = Profile;
+            ViewBag.LogOnChk = Profile.UserNo == 0 ? 0 : 1;
             ViewBag.MenuList = GetArticleList();
-
+            
             //클릭시 가져오는걸로
-            ViewBag.NoticeCnt = _noticesDac.GetNoticesCntByMemberNo(profileModel.UserNo);
-            ViewBag.MessageCnt = _messageDac.GetNewMessageCount(profileModel.UserNo);
+            //ViewBag.NoticeCnt = _noticesDac.GetNoticesCntByMemberNo(Profile.UserNo);
+            //ViewBag.MessageCnt = _messageDac.GetNewMessageCount(Profile.UserNo);
 
-            ViewBag.ProfileImgUrl = instance.ProfileImgUrl;
-            ViewBag.ArticleImgUrl = instance.ArticleImgUrl;
-            ViewBag.Article3DUrl = instance.Article3DUrl;
-            ViewBag.ArticleJsUrl = instance.Article3DJsUrl;
-            ViewBag.AdminImgUrl = instance.AdminImgUrl;
-            ViewBag.PrintImgUrl = instance.PrinterImgUrl;
-
-            ViewBag.CurrentDomain = instance.CurrentDomain;
-            ViewBag.TargetDomain = instance.TargetDomain;
-            ViewBag.LangFlag = System.Configuration.ConfigurationManager.AppSettings["LangFlag"];
-            ViewBag.LangFlagName = ViewBag.LangFlag == "KR" ? "한국어" : ViewBag.LangFlag == "EN" ? "English" : "";
+            ViewBag.ProfileImgUrl = System.Configuration.ConfigurationManager.AppSettings["ProfileImgUrl"];
+            ViewBag.ArticleImgUrl = System.Configuration.ConfigurationManager.AppSettings["ArticleImgUrl"];
+            ViewBag.Article3DUrl = System.Configuration.ConfigurationManager.AppSettings["Article3DUrl"];
+            ViewBag.AdminImgUrl = System.Configuration.ConfigurationManager.AppSettings["AdminImgUrl"];
+            ViewBag.ArticleJsUrl = System.Configuration.ConfigurationManager.AppSettings["Article3DJsUrl"];
+            ViewBag.PrinterUrl = System.Configuration.ConfigurationManager.AppSettings["PrinterImgUrl"];
 
             ViewBag.IsMain = "N";
-
         }
 
-        private ProfileModel Profile
+        public ProfileModel Profile
         {
             get
             {
@@ -98,11 +87,11 @@ namespace Design.Web.Front.Controllers
                 model.MenuCodeNo = menu.Key;
                 if (menu.Key > 0)
                 {
-                    model.MenuUrl = "/cate/" + Enum.GetName(typeof(MakersnEnumTypes.CateNameToUrl), menu.Key);
+                    model.MenuUrl = "/design?codeNo=" + menu.Key;
                 }
                 else
                 {
-                    model.MenuUrl = "/cate";
+                    model.MenuUrl = "/design";
                 }
                 list.Add(model);
             }

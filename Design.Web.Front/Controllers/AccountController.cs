@@ -1,22 +1,22 @@
-﻿using Design.Web.Front.Models;
-using DotNetOpenAuth.AspNet;
-using Makersn.BizDac;
-using Makersn.Models;
-using Makersn.Util;
-using Microsoft.Web.WebPages.OAuth;
-using Net.Common.Helper;
-using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Net;
+﻿using System;
 using System.Web.Mvc;
 using System.Web.Security;
+using Makersn.BizDac;
+using Makersn.Models;
+using Design.Web.Front.Models;
+using Makersn.Util;
+using Microsoft.Web.WebPages.OAuth;
+using DotNetOpenAuth.AspNet;
+using System.IO;
+using System.Net;
+using Newtonsoft.Json;
+using Design.Web.Front.Helper;
 
 namespace Design.Web.Front.Controllers
 {
     public class AccountController : BaseController
     {
-        private MemberDac _memberDac = new MemberDac();
+        private MemberDac memberDac = new MemberDac();
         CryptFilter crypt = new CryptFilter();
 
         //[Authorize]
@@ -45,8 +45,8 @@ namespace Design.Web.Front.Controllers
             response.Success = false;
             if (ModelState.IsValid)
             {
-                string ip = IPAddressHelper.GetIP(this);
-                MemberT member = _memberDac.GetMemberForMemberLogOn(model.UserId, model.Password, ip);
+                string ip = Design.Web.Front.Helper.IPAddressHelper.GetIP(this);
+                MemberT member = memberDac.GetMemberForMemberLogOn(model.UserId, model.Password, ip);
                 if (member != null)
                 {
                     if (member.emailCertify == "N")
@@ -128,7 +128,7 @@ namespace Design.Web.Front.Controllers
                 member.emailCertify = "N";
 
 
-                if (_memberDac.AddMember(member))
+                if (memberDac.AddMember(member))
                 {
                     //원래 회원가입시 자동 로그인 기능으로 추가하였으나, 이메일 인증 추가로 인해 주석
                     //AccountModels.LogOnModel model = new AccountModels.LogOnModel();
@@ -147,7 +147,7 @@ namespace Design.Web.Front.Controllers
         }
         #endregion
 
-        #region 이메일 인증 발송
+        #region
         public void sendEmailCertify(int memberNo, string name, string email)
         {
             string no = Base64Helper.Base64Encode(memberNo.ToString());
@@ -159,12 +159,12 @@ namespace Design.Web.Front.Controllers
         }
         #endregion
 
-        #region 이메일 인증
+        #region
         public ActionResult EmailCertify(string chk)
         {
             int memberNo = int.Parse(Base64Helper.Base64Decode(chk));
 
-            bool result = _memberDac.UpdateMemberEmailCertify(memberNo);
+            bool result = memberDac.UpdateMemberEmailCertify(memberNo);
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
@@ -181,7 +181,7 @@ namespace Design.Web.Front.Controllers
         public ActionResult ChangeEmailCertify(string chk)
         {
             int memberNo = int.Parse(Base64Helper.Base64Decode(chk));
-            bool result = _memberDac.UpdateEmailandId(memberNo);
+            bool result = memberDac.UpdateEmailandId(memberNo);
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
@@ -198,7 +198,7 @@ namespace Design.Web.Front.Controllers
         public ActionResult CancleEmailCertify(string chk)
         {
             int memberNo = int.Parse(Base64Helper.Base64Decode(chk));
-            bool result = _memberDac.UpdateEmailCancel(memberNo);
+            bool result = memberDac.UpdateEmailCancel(memberNo);
             if (result)
             {
                 //return RedirectToAction("Index", "Main");
@@ -218,7 +218,7 @@ namespace Design.Web.Front.Controllers
             string Subject = "makersn의 임시비밀번호가 발급되었습니다.";
             string Body = TemporaryPassword();
 
-            if (!_memberDac.UpdateTemporaryPassword(email, Body))
+            if (!memberDac.UpdateTemporaryPassword(email, Body))
             {
                 return Json(new { Success = false });
             }
@@ -262,7 +262,7 @@ namespace Design.Web.Front.Controllers
                 return RedirectToAction("ExternalLoginFailure");
             }
 
-            MemberT memberT = _memberDac.IsMemberExistById(result.UserName, result.ProviderUserId);
+            MemberT memberT = memberDac.IsMemberExistById(result.UserName, result.ProviderUserId);
             ProfileModel profile = new ProfileModel();
 
             if (memberT != null)
@@ -310,7 +310,7 @@ namespace Design.Web.Front.Controllers
                 memberT.Name = result.ExtraData["name"];
                 memberT.SnsId = result.ProviderUserId;
                 memberT.ProfilePic = fileNm;
-                memberT.Email = result.UserName;
+                memberT.Email = result.UserName.Contains("@") ? result.UserName : null;
                 memberT.Level = 10;
                 memberT.Status = "1";
                 memberT.SnsType = "fb";
@@ -325,7 +325,7 @@ namespace Design.Web.Front.Controllers
                 memberT.RegId = result.UserName;
                 memberT.emailCertify = "Y";
 
-                if (_memberDac.AddMember(memberT))
+                if (memberDac.AddMember(memberT))
                 {
                     profile.UserNo = memberT.No;
                     profile.UserNm = memberT.Name;
@@ -443,7 +443,5 @@ namespace Design.Web.Front.Controllers
             }
         }
         #endregion
-
-        
     }
 }

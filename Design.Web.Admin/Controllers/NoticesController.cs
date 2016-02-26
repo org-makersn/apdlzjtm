@@ -1,12 +1,12 @@
-﻿using Design.Web.Admin.Models;
-using Makersn.BizDac;
-using Makersn.Models;
-using Net.Common.Filter;
-using PagedList;
+﻿using Makersn.BizDac;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Makersn.Models;
+using PagedList;
+using Design.Web.Admin.Filter;
+using Design.Web.Admin.Models;
 
 
 
@@ -22,24 +22,23 @@ namespace Design.Web.Admin.Controllers
         public MenuModel MenuModel(int subIndex)
         {
             menuModel.Group = "_Management";
-            menuModel.MainIndex = 5;
+            menuModel.MainIndex = 4;
             menuModel.SubIndex = subIndex;
             return menuModel;
         }
 
-        public ActionResult Index(int page = 1, string text="", string gubun = "", string langFlag = "KR")
+        public ActionResult Index(int page = 1, string text="", string gubun = "")
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             ViewData["Group"] = MenuModel(1);
 
             IList<BoardT> list;
-            if (text.Trim() == "") { list = nd.GetBoardList(langFlag); }
-            else { list = nd.GetNoticesByContent(text, gubun, langFlag); }
+            if (text.Trim() == "") { list = nd.GetNoticesList(); }
+            else { list = nd.GetNoticesByContent(text, gubun); }
             ViewData["gubun"] = gubun;
             ViewData["cnt"] = list.Count;
             ViewData["text"] = text;
-            ViewBag.Flag = langFlag;
             return View(list.OrderByDescending(o => o.No).ToPagedList(page, 20));
         }
 
@@ -48,31 +47,29 @@ namespace Design.Web.Admin.Controllers
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             ViewData["Group"] = MenuModel(1);
-            BoardT notices = nd.GetBoard(no);
-            notices.SemiContent = HtmlFilter.PunctuationDecode(notices.SemiContent);
-            ViewData["pre"] = nd.GetPreBoard(no);
-            ViewData["next"] = nd.GetNextBoard(no);
+            BoardT notices = nd.GetNotices(no);
+            notices.SemiContent = new ContentFilter().HtmlDecode(notices.SemiContent);
+            ViewData["pre"] = nd.GetPreNotices(no);
+            ViewData["next"] = nd.GetNextNotices(no);
             return View(notices);
         }
 
-        public ActionResult write(string flag="KR")
+        public ActionResult write()
         {
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             ViewData["Group"] = MenuModel(1);
-            ViewData["Name"] = "admin"; 
-            ViewBag.Flag = flag;
+            ViewData["Name"]= "admin";
             return View();
         }
 
         [HttpPost]
-        public JsonResult AddNotices(string title, string content, string flag)
+        public JsonResult AddNotices(string title, string content)
         {
-            //content = HtmlFilter.PunctuationEncode(content);
+            content = new ContentFilter().HtmlEncode(content);
             BoardT n = new BoardT();
             n.Title = title;
             n.SemiContent = content;
-            n.LangFlag = flag;
             n.BoardSetNo = 1;
             n.Writer = "admin";
             n.RegId = "admin";
@@ -80,7 +77,7 @@ namespace Design.Web.Admin.Controllers
             n.RegDt = DateTime.Now;
             n.Cnt = 0;
 
-            nd.InsertBoard(n);
+            nd.InsertNotices(n);
             return Json(new AjaxResponseModel { Success=true, Message="저장되었습니다." });
         }
 
@@ -88,7 +85,7 @@ namespace Design.Web.Admin.Controllers
         {
             BoardT n = new BoardT();
             n.No = no;
-            nd.DeleteBoard(n);
+            nd.DeleteNotices(n);
             return Json(new AjaxResponseModel { Success=true, Message = "삭제되었습니다."});
         }
 
@@ -97,20 +94,20 @@ namespace Design.Web.Admin.Controllers
             if (Profile.UserLevel < 50) { return Redirect("/account/logon"); }
 
             ViewData["Group"] = MenuModel(1);
-            BoardT n = nd.GetBoard(no);
+            BoardT n = nd.GetNotices(no);
             return View(n);
         }
 
         public JsonResult UpdateNotices(int no,string title, string content)
         {
-            //content = new HtmlFilter().PunctuationEncode(content);
+            content = new ContentFilter().HtmlEncode(content);
             BoardT n = new BoardT();
             n.No = no;
             n.Title = title;
             n.SemiContent = content;
             n.UpdDt = DateTime.Now;
             n.UpdId = "admin";
-            nd.UpdateBoard(n);
+            nd.UpdateNotices(n);
             return Json(new AjaxResponseModel { Success = true, Message = "수정되었습니다." });
         }
     }

@@ -9,7 +9,6 @@ using Makersn.Util;
 using Makersn.BizDac;
 using Makersn.Models;
 using Design.Web.Admin.Models;
-using Net.Common.Helper;
 
 namespace Design.Web.Admin.Controllers
 {
@@ -34,7 +33,7 @@ namespace Design.Web.Admin.Controllers
 
             ViewData["Group"] = MenuModel(1);
 
-            IList<ArticleT> list = articleDac.GetArticleListByAdminPage(cate,"",visibility, text);
+            IList<ArticleT> list = articleDac.GetArticleListByAdminPage(cate, visibility, text);
             ViewData["cnt"] = list.Count;
             ViewData["cateList"] = articleDac.GetArticleCodeNo();
             ViewData["setCate"] = cate;

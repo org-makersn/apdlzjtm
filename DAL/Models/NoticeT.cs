@@ -29,9 +29,5 @@ namespace Makersn.Models
         public virtual string MemberProfilePic { get; set; }
         [IgnoreDataMember]
         public virtual string MemberName { get; set; }
-
-        [IgnoreDataMember]
-        public virtual IList<PrinterOutputImageT> OutputImageList { get; set; }
     }
-
 }

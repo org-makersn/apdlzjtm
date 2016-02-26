@@ -1,5 +1,5 @@
 ﻿@model Makersn.Models.ContactT
-
+@using Design.Web.Admin.Filter
 @using Design.Web.Admin.Helper
 @{
     ViewBag.Title = "문의사항";
@@ -33,7 +33,7 @@
             </tr>
             <tr>
                 <th>내용</th>
-                <td>@Html.Raw(new HtmlFilter().PunctuationEncode(Model.Comment))</td>
+                <td>@Html.Raw(new ContentFilter().HtmlEncode(Model.Comment))</td>
             </tr>
             <tr>
                 <th>답변</th>
@@ -61,7 +61,7 @@
     <script type="text/javascript">
         var sendAnswer = function () {
             if (confirm("답변메일을 발송하시겠습니까?")) {
-                @*var data = {
+                var data = {
                     email: "@Model.Email",
                     title: "@Model.Title",
                     comment:"@Model.Comment",
@@ -72,20 +72,6 @@
                         alert(result.Message);
                     }
                 }
-                Ajax.AjaxResponseModelService(this, "/contact/sendAnswer", data, onSuccess);*@
-
-                var data = {
-                    no: "@Model.No",
-                    answer: $("#reply").val()
-                }
-                var onSuccess = function (result) {
-                    if (result.Success) {
-                        alert(result.Message);
-                        $("input:radio[name=State]").removeAttr("checked");
-                        $("#State1").click();
-                        editContact();
-                    }
-                }
                 Ajax.AjaxResponseModelService(this, "/contact/sendAnswer", data, onSuccess);
             }
         };
@@ -93,30 +79,26 @@
         $(document).ready(function () {
             $("._btn_edit").click(function () {
                 if (!confirm("답변을 등록 하시겠습니까?")) { return false }
-                editContact();
-               
+
+                var no = "@Model.No";
+                var reply = $("#reply").val();
+                var state = $("input:radio[name=State]:checked").val();
+
+                var data = {
+                    no: no,
+                    reply: reply,
+                    state: state
+                }
+
+                var onSuccess = function (result) {
+                    if (result.Success == true) {
+                        location.replace("/contact");
+                    }
+
+                }
+                var result = Ajax.AjaxResponseModelService(this, "/contact/UpdateContact", data, onSuccess);
             })
 
         })
-
-        function editContact() {
-            var no = "@Model.No";
-            var reply = $("#reply").val();
-            var state = $("input:radio[name=State]:checked").val();
-
-            var data = {
-                no: no,
-                reply: reply,
-                state: state
-            }
-
-            var onSuccess = function (result) {
-                if (result.Success == true) {
-                    location.replace("/contact");
-                }
-
-            }
-            var result = Ajax.AjaxResponseModelService(this, "/contact/UpdateContact", data, onSuccess);
-        }
     </script>
 }

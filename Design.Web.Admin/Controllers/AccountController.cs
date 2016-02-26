@@ -1,10 +1,9 @@
-﻿using Design.Web.Admin.Models;
+﻿using System.Web.Mvc;
+using System.Web.Security;
 using Makersn.BizDac;
 using Makersn.Models;
-using Net.Common.Helper;
+using Design.Web.Admin.Models;
 using Newtonsoft.Json;
-using System.Web.Mvc;
-using System.Web.Security;
 
 namespace Design.Web.Admin.Controllers
 {
@@ -42,7 +41,7 @@ namespace Design.Web.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                string ip = IPAddressHelper.GetIP(this);
+                string ip =Design.Web.Admin.Helper.IPAddressHelper.GetIP(this);
                 MemberT member = memberDac.GetMemberForAdminLogOn(model.UserId, model.Password, ip);
                 if (member != null)
                 {

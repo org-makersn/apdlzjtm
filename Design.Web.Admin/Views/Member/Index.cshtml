@@ -10,7 +10,7 @@
 
 <div class="contents_zone" style="width: 950px;">
 
-    <form id="search" name="search">
+    @*<form id="search" name="search">*@
         <input type="hidden" id="date" name="date">
         <table class="tbl_style1" summary="검색 테이블" style="margin-bottom: 10px;">
             <colgroup>
@@ -47,7 +47,7 @@
                 </tr>
             </tbody>
         </table>
-    </form>
+    @*</form>*@
 
     <div class="btn_center">
         <span class="btnWrap medium" id="btnSearch"><a href="javascript:memberList.Search()">검색</a></span>
@@ -173,8 +173,7 @@
         }
         memberList.GoProfile = function (val) {
             window.open(
-                //'@(ViewBag.TargetDomain)/profile?no=' + val,
-                "http://www.makersn.com/profile?no=" + val,
+                'http://www.makersn.com/profile?no=' + val,
                 ''
                 );
         }

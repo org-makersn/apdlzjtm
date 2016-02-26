@@ -11,12 +11,12 @@ namespace Makersn.Models
     {
         public NoticeTMap(){
             Id(x => x.No,"NO");
-            Map(x => x.IdxName, "IDX_NAME");
             Map(x => x.ArticleNo, "ARTICLE_NO");
+            Map(x => x.IdxName, "IDX_NAME");
             Map(x => x.MemberNo, "MEMBER_NO");
             Map(x => x.MemberNoRef, "MEMBER_NO_REF");
-            Map(x => x.RefNo, "REF_NO");
             Map(x => x.Type, "TYPE");
+            Map(x => x.RefNo, "REF_NO");
             Map(x => x.Comment, "COMMENT");
             Map(x => x.IsNew, "IS_NEW");
             Map(x => x.RegId, "REG_ID");

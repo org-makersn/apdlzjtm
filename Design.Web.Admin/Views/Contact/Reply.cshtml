@@ -1,5 +1,5 @@
 ﻿@model Makersn.Models.ContactT
-
+@using Design.Web.Admin.Filter
 @using Design.Web.Admin.Helper
 @{
     ViewBag.Title = "문의사항";
@@ -33,7 +33,7 @@
             </tr>
             <tr>
                 <th>내용</th>
-                <td>@Html.Raw(new HtmlFilter().PunctuationEncode(Model.Comment))</td>
+                <td>@Html.Raw(new ContentFilter().HtmlEncode(Model.Comment))</td>
             </tr>
             <tr>
                 <th>답변</th>

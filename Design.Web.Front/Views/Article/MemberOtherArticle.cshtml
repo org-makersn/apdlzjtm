@@ -1,7 +1,7 @@
 ﻿@model IList<Makersn.Models.ArticleT>
 @{
     string No = Base64Helper.Base64Encode(Model[0].MemberNo.ToString());
-    
+
     int index = 1;
     int recoIndex = 1;
 }
@@ -21,10 +21,10 @@
                   string className = index % 2 == 0 ? "class=mgR0" : "";
             <li @className>
                 <p class="img">
-                    <a href="/design/Detail/@a.No">
+                    <a href="/design/Detail?no=@a.No">
                         <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@a.ImageName" alt="@a.Title" /></a>
                 </p>
-                <p class="txt"><a href="/design/Detail/@a.No">@a.Title</a></p>
+                <p class="txt"><a href="/design/Detail?no=@a.No">@a.Title</a></p>
             </li>
                   index++;
               }
@@ -46,11 +46,11 @@
             string className = recoIndex % 2 == 0 ? "class=mgR0" : "";
             <li @className>
                 <p class="img">
-                    <a href="/design/Detail/@recommend.No">
+                    <a href="/design/Detail?no=@recommend.No">
                         <img src="@Url.Content("~/Content/images/placeholder-image.png")" class="lazy-load" data-original="@ViewBag.ArticleImgUrl@recommend.MainImgName" alt="@recommend.Title" /></a>
                         @*<img src="@ViewBag.ArticleImgUrl@recommend.MainImgName" alt="@recommend.Title" /></a>*@
                 </p>
-                <p class="txt"><a href="/design/Detail/@recommend.No">@recommend.Title</a></p>
+                <p class="txt"><a href="/design/Detail?no=@recommend.No">@recommend.Title</a></p>
             </li>
             recoIndex++;
         }

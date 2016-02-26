@@ -12,7 +12,11 @@ namespace Makersn.BizDac
     {
         public IList<ReportT> getReportList()
         {
-            string query = @"SELECT AR.NO, AF.PATH, AF.NAME, TD.TITLE, C.NAME AS CATEGORY, M.NAME AS A_NAME , A.REG_DT, (SELECT NAME FROM MEMBER WHERE NO = AR.MEMBER_NO) AS R_NAME, AR.REG_DT AS R_DT, A.VISIBILITY, A.NO AS A_NO
+            //using (ISession session = NHibernateHelper.OpenSession()){
+            //    IList<ReportT> list = session.QueryOver<ReportT>().OrderBy(o => o.No).Desc.List();
+            //    return list;
+            //}
+            string query = @"SELECT AR.NO, AF.PATH, AF.NAME, A.TITLE, C.NAME AS CATEGORY, M.NAME AS A_NAME , A.REG_DT, (SELECT NAME FROM MEMBER WHERE NO = AR.MEMBER_NO) AS R_NAME, AR.REG_DT AS R_DT, A.VISIBILITY, A.NO AS A_NO
                             FROM ARTICLE_REPORT AR INNER JOIN  ARTICLE A WITH(NOLOCK) 
 												ON AR.ARTICLE_NO = A.NO
 												INNER JOIN ARTICLE_FILE AS AF WITH(NOLOCK)
@@ -20,13 +24,10 @@ namespace Makersn.BizDac
 					                            LEFT JOIN CODE AS C WITH(NOLOCK)
 					                            ON A.CODE_NO = C.NO
 					                            LEFT JOIN MEMBER AS M WITH(NOLOCK)
-					                            ON A.MEMBER_NO = M.NO
-												INNER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK)
-												ON TD.ARTICLE_NO = A.NO AND TD.NO = (SELECT MIN(NO) FROM TRANSLATION_DETAIL TD2 WITH(NOLOCK) WHERE TD2.ARTICLE_NO = A.NO)";
+					                            ON A.MEMBER_NO = M.NO";
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query);
-                
                 IList<object[]> results = queryObj.List<object[]>();
                 session.Flush();
 
@@ -53,9 +54,14 @@ namespace Makersn.BizDac
 
         public ReportT getReportByNo(int no)
         {
+            //using (ISession session = NHibernateHelper.OpenSession())
+            //{
+            //    ReportT report = session.QueryOver<ReportT>().Where(r => r.No == no).SingleOrDefault<ReportT>();
+            //    return report;
+            //}
             ReportT reportT = new ReportT();
 
-            string query = @"SELECT AR.NO, AF.PATH, AF.NAME, TD.TITLE, C.NAME AS CATEGORY, M.NAME AS A_NAME , A.REG_DT, 
+            string query = @"SELECT AR.NO, AF.PATH, AF.NAME, A.TITLE, C.NAME AS CATEGORY, M.NAME AS A_NAME , A.REG_DT, 
                             (SELECT NAME FROM MEMBER WHERE NO = AR.MEMBER_NO) AS R_NAME, AR.REG_DT AS R_DT, A.VISIBILITY, A.NO AS A_NO,
                             (SELECT ID FROM MEMBER WHERE NO = A.MEMBER_NO) AS A_ID, (SELECT ID FROM MEMBER WHERE NO = AR.MEMBER_NO) AS R_ID,
                             AR.REGISTER_COMMENT, AR.REPORTER_COMMENT, AR.REPORT, AR.STATE
@@ -68,15 +74,12 @@ namespace Makersn.BizDac
 					                            ON A.CODE_NO = C.NO
 					                            LEFT JOIN MEMBER AS M WITH(NOLOCK)
 					                            ON A.MEMBER_NO = M.NO
-                                                INNER JOIN TRANSLATION_DETAIL TD WITH(NOLOCK)
-                                                ON A.NO = TD.ARTICLE_NO
-                            WHERE AR.No = :no ";
+                            WHERE AR.No = :no";
 
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 IQuery queryObj = session.CreateSQLQuery(query);
                 queryObj.SetParameter("no", no);
-
                 IList<object[]> results = queryObj.List<object[]>();
                 session.Flush();
 

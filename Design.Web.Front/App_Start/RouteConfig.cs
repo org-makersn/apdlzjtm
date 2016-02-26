@@ -22,13 +22,6 @@ namespace Design.Web.Front
             //    );
 
             routes.MapRoute(
-                name: "cate",
-                url: "cate/{cateNm}",
-                defaults: new { controller = "article", action = "index", cateNm = UrlParameter.Optional },
-                namespaces: new[] { "Design.Web.Front" }
-                );
-
-            routes.MapRoute(
                 name: "beforeArticle",
                 url: "items/detail/id/{no}",
                 defaults: new { controller = "article", action = "detail", no = UrlParameter.Optional },
@@ -48,41 +41,6 @@ namespace Design.Web.Front
                defaults: new { controller = "article", action = "Index", no = UrlParameter.Optional },
                namespaces: new[] { "Design.Web.Front" }
            );
-
-            routes.MapRoute(
-                name: "review",
-                url: "review/{action}/{no}",
-                defaults: new { controller = "review", action = "index", no = UrlParameter.Optional },
-                namespaces: new[] { "Design.Web.Front" }
-            );
-
-            routes.MapRoute(
-                name: "common",
-                url: "common/{action}/{no}",
-                defaults: new { controller = "common", action = "index", no = UrlParameter.Optional },
-                namespaces: new[] { "Design.Web.Front" }
-            );
-
-            routes.MapRoute(
-                        name: "printing",
-                        url: "printing/{action}/{no}",
-                        defaults: new { controller = "printing", action = "Index", no = UrlParameter.Optional },
-                        namespaces: new[] { "Design.Web.Front" }
-                    );
-
-            routes.MapRoute(
-                name: "printingprofile",
-                url: "printingprofile/{action}/{no}",
-                defaults: new { controller = "printingprofile", action = "Index", no = UrlParameter.Optional },
-                namespaces: new[] { "Design.Web.Front" }
-            );
-
-            routes.MapRoute(
-                name: "order",
-                url: "order/{action}/{no}",
-                defaults: new { controller = "order", action = "Index", no = UrlParameter.Optional },
-                namespaces: new[] { "Design.Web.Front" }
-            );
 
             routes.MapRoute(
                 name: "article",
@@ -124,40 +82,18 @@ namespace Design.Web.Front
                 namespaces: new[] { "Design.Web.Front" }
             );
 
-			routes.MapRoute(
-				name: "product",
-				url: "product/{action}/{no}",
-				defaults: new { controller = "product", action = "index", no = UrlParameter.Optional }
-			 );
-
-
             routes.MapRoute(
-                name: "Store",
-                url: "Store/{action}/{no}",
-                defaults: new { controller = "Store", action = "Index", no = UrlParameter.Optional },
-                namespaces: new[] { "Design.Web.Front" }
-            );
-
-
-
-            routes.MapRoute(
-                 name: "blog",
-                 url: "{url}",
-                 defaults: new { controller = "main", action = "index", url = UrlParameter.Optional }
+             name: "blog",
+             url: "{url}",
+             defaults: new { controller = "main", action = "index", url = UrlParameter.Optional }
              );
 
             routes.MapRoute(
-                 name: "spot",
-                 url: "spot/{url}",
-                 defaults: new { controller = "PrintingProfile", action = "index", url = UrlParameter.Optional }
-             );
-
-            routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{no}",
-                defaults: new { controller = "Main", action = "Index", no = UrlParameter.Optional },
-                namespaces: new[] { "Design.Web.Front" }
-            );
+                      name: "Default",
+                      url: "{controller}/{action}/{no}",
+                      defaults: new { controller = "Main", action = "Index", no = UrlParameter.Optional },
+                      namespaces: new[] { "Design.Web.Front" }
+                  );
 
 
 

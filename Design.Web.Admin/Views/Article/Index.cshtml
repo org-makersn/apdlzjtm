@@ -8,7 +8,7 @@
 }
 <h2 class="contents_title">디자인 리스트</h2>
 
-<form id="search" name="search">
+@*<form id="search" name="search">*@
     <input type="hidden" id="date" name="date">
     <input type="hidden" id="sst" name="sst">
     <table class="tbstyle01" summary="검색 테이블" style="margin-bottom: 10px;">
@@ -61,7 +61,7 @@
         <span class="btnWrap medium"><a href="javascript:article.Search();" class="_search_btn">검색</a></span>
         <span class="btnWrap medium"><a href="javascript:article.void();" class="_reset" onclick="$('#searchBox').val('');">초기화</a></span>
     </div>
-</form>
+@*</form>*@
 
 
 
@@ -96,6 +96,7 @@
         <col width="7%" />
         <col width="7%" />
         <col width="7%" />
+        <col width="7%" />
     </colgroup>
     <thead>
         <tr>
@@ -109,6 +110,7 @@
             @*<th>조회수</th>
             <th>좋아요</th>
             <th>코멘트</th>*@
+            <th>다운로드 수</th>
             <th>인기도</th>
             <th>게시일</th>
             <th>노출여부</th>
@@ -131,6 +133,7 @@
                 @*<td>@article.ViewCnt</td>
                 <td>@article.LikeCnt</td>
                 <td>@article.CommentCnt</td>*@
+                <td>@article.DownloadCnt</td>
                 <td>@article.Pop</td>
                 <td>@article.RegDt.ToString("yyyy-MM-dd")</td>
                 <td>@(article.Visibility == "Y" ? "노출" : "비노출")</td>
@@ -144,7 +147,9 @@
 
     <!-- page_navi -->
     <div class="page_navi">
-        @Html.PagedListPager(Model, page => Url.Action("/", new { page }))
+        
+            @Html.PagedListPager(Model, page => Url.Action("/", new { cate = (int)ViewData["setCate"],page }));
+        
     </div>
     <!-- // page_navi -->
 

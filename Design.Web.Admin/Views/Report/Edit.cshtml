@@ -1,5 +1,5 @@
 ﻿@model Makersn.Models.ReportT
-
+@using Design.Web.Admin.Filter
 @using Design.Web.Admin.Helper
 @{
     ViewBag.Title = "리포트";
@@ -49,7 +49,7 @@
         <tr>
             <th>리포트 내용</th>
             <td colspan="3" style="word-break:break-all">
-                @Html.Raw(new HtmlFilter().PunctuationEncode(Model.Report))
+                @Html.Raw(new ContentFilter().HtmlEncode(Model.Report))
             </td>
         </tr>
     </tbody>
