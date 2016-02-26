@@ -134,7 +134,11 @@
     <!-- // page_navi -->
     <!-- btn -->
     <div class="btn_right">
-        <span class="btnWrap medium"><a href="#" id="AddBanner" class="_btn_write">등록</a></span>
+        @if (string.IsNullOrEmpty(banner0))
+        {
+            <span class="btnWrap medium"><a href="#" id="AddBanner" class="_btn_write">등록</a></span>
+        }
+        
     </div>
     <!-- // btn -->
 

@@ -23,25 +23,25 @@
                 <tr>
                     <th>관리용 제목</th>
                     <td>
-                        
-                    @Html.EditorFor(model => model.TITLE, new { @class = "input_text",style = "width: 75%;"})
-                    <br />@Html.ValidationMessageFor(model => model.TITLE)
+
+                        @Html.EditorFor(model => model.TITLE, new { @class = "input_text", style = "width: 75%;" })
+                        <br />@Html.ValidationMessageFor(model => model.TITLE)
                     </td>
                 </tr>
                 <tr>
                     <th>진행일자</th>
                     <td>
-                        @Html.TextBoxFor(model => model.PROGRESS_DT, new { @class = "input_text",style="width: 30%;" })
+                        @Html.TextBoxFor(model => model.PROGRESS_DT, new { @class = "input_text", style = "width: 30%;" })
                         @Html.ValidationMessageFor(model => model.PROGRESS_DT)
                     </td>
                 </tr>
                 <tr>
                     <th>노출여부</th>
                     <td>
-                        <input type="radio" name="USE_YN" value="Y" checked="checked" />
-                        사용 &nbsp; 
-					<input type="radio" name="USE_YN" value="N" />
-                        미사용&nbsp; 
+                        @Html.RadioButtonFor(m => m.USE_YN, "Y", new { @id = "yes" })
+                        @Html.Label("yes", "사용")
+                        @Html.RadioButtonFor(m => m.USE_YN, "N", new { @id = "no" })
+                        @Html.Label("no", "미사용")
                     </td>
                 </tr>
             </tbody>
@@ -63,16 +63,16 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
     <style type="text/css">
-        .uploadify-queue-item .cancel a
-        {
+        .uploadify-queue-item .cancel a {
             background: url('/Content/uploadify-cancel.png') 0 0 no-repeat;
             float: right;
             height: 16px;
             text-indent: -9999px;
             width: 16px;
         }
+
         .field-validation-error {
-            color:red;
+            color: red;
         }
     </style>
 

@@ -105,7 +105,7 @@ namespace Makers.Admin.Controllers
             bannerT.Link = link;
             bannerT.Image = fileName;
             bannerT.Priority = priority;
-            bannerT.RegId = "admin";
+            bannerT.RegId = Profile.UserNm;
             bannerT.RegDt = DateTime.Now;
             var result = bannerDac.AddBanner(bannerT);
 
@@ -176,7 +176,7 @@ namespace Makers.Admin.Controllers
                     }
                 }
                 bannerT.Priority = priority;
-                bannerT.UpdId = "admin";
+                bannerT.UpdId = Profile.UserNm;
                 bannerT.UpdDt = DateTime.Now;
 
                 bool ret = bannerDac.UpdateBanner(bannerT);
