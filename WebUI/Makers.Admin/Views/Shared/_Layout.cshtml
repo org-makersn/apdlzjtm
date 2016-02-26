@@ -33,7 +33,7 @@
                 @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                 {
                     @Html.AntiForgeryToken()
-                    <span class="btnWrap small"><a href="/main">사용자메인</a></span>
+                    <span class="btnWrap small"><a href="http://www.makersn.com" target="_blank">사용자메인</a></span>
                     <span class="btnWrap small"><a href="javascript:document.getElementById('logoutForm').submit()">로그오프</a></span>
                 }
             </div>

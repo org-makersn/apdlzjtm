@@ -1,4 +1,5 @@
-﻿using Net.Common.Helper;
+﻿using Net.Common.Configurations;
+using Net.Common.Helper;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,7 +19,7 @@ namespace Common.Func
     {
         FileHelper fileHelper = new FileHelper();
 
-        private static string saveFilePath = "\\\\192.168.219.120\\fileupload";
+        private static string saveFilePath = ApplicationConfiguration.Instance.FileServerUncPath;
 
         public string FileUpload(HttpPostedFileBase fileBase, IList<ResizeImg> imgList, string folder, string fileName)
         {
@@ -207,7 +208,8 @@ namespace Common.Func
         {
             return new List<ResizeImg>()
             {
-                new ResizeImg(){width = 300, height = 169, folder = @"blog\thumb"}
+                //new ResizeImg(){width = 300, height = 169, folder = @"blog\thumb"}
+                new ResizeImg(){width = 408, height = 230, folder = @"blog\thumb"}
             };
         }
     }

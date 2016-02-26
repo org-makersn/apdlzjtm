@@ -38,7 +38,7 @@
                 크게 4가지의 주제로 나눠져 3시간의 교육프로그램을 운용하고 있습니다.
                 @if (Model != null)
                 {
-                    <a href="/info/textbookdownload/@Model.NO" class="bookDownload">교재 다운로드</a>
+                    <a href="javascript:void(0)" class="bookDownload" id="bookDownload" data-no="@Model.NO">교재 다운로드</a>
                 }
             </span>
         </div>
@@ -46,3 +46,15 @@
 
 </div>
 <!-- //subPage -->
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#bookDownload").click(function () {
+                var bno = $(this).data("no");
+                location.href = "/info/textbookdownload/" + bno;
+            });
+        });
+    </script>
+}

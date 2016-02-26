@@ -14,9 +14,9 @@ namespace Net.Common.Configurations
         /// </summary>
         private ApplicationConfiguration()
         {
-            FileSeviceDomain = ConfigurationManager.AppSettings["SeviceDomain"] ?? "local.file.makersn.com";
+            FileSeviceDomain = ConfigurationManager.AppSettings["SeviceDomain"] ?? "file001.makersn.com";
             FileServerHost = string.Format("http://{0}", FileSeviceDomain);
-            FileServerUncPath = ConfigurationManager.AppSettings["FileServerUncPath"] ?? @"\\192.168.219.120\fileupload";
+            FileServerUncPath = ConfigurationManager.AppSettings["FileServerUncPath"] ?? @"\\localhost\makersn_fileupload";
 
             ProfileImg = ConfigurationManager.AppSettings["ProfileImg"] ?? "profile/thumb";
             ProfileCover = ConfigurationManager.AppSettings["ProfileCover"] ?? "profile/cover";
