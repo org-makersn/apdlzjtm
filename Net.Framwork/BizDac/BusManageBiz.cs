@@ -19,5 +19,25 @@ namespace Net.Framework.BizDac
         {
             return new BusManageDac().AddApplyMakerbus(data);
         }
+
+        /// <summary>
+        /// 메이커버스 문의사항 저장
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public int AddMakerBusQna(BusQnaT data)
+        {
+            return new BusManageDac().AddMakerBusQna(data);
+        }
+
+        /// <summary>
+        /// 메이커버스 파트너쉽 문의사항 저장
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public int AddMakerBusPartnershipQna(BusPartnershipQnaT data)
+        {
+            return new BusManageDac().AddMakerBusPartnershipQna(data);
+        }
     }
 }

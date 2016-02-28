@@ -40,7 +40,7 @@ namespace Net.Framework.Entity
         [Key]
         public int NO { get; set; }
         
-        public string CATEGORY { get; set; }
+        public int CATEGORY { get; set; }
         public string EMAIL { get; set; }
         public string TITLE { get; set; }
         public string CONTENTS { get; set; }

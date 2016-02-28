@@ -49,9 +49,10 @@
 
 <!-- ContWrap -->
 <!-- Event -->
+<form id="applyForm" name="applyForm" method="post" enctype="multipart/form-data">
 <div class="subPage">
     @Html.Action("SubHeader","Bus")
-    <form id="applyForm" name="applyForm" method="post" enctype="multipart/form-data">
+
     <div class="subCont">
         <div class="disc">
             1. 신청서를 다운받아 작성합니다. <br> 
@@ -77,7 +78,7 @@
                 <div class="inputZone address"><input  type="text" id="txtManagerTel" name="ManagerTel"></div>
                 </li>
             <li>
-                <div class="title  mgT30">신청서</div>
+                <div class="title mgT30">신청서</div>
                 @*<a class="addFile">파일 추가</a>*@
                 <input type="file" id="fApplyFile" name="applyFile" title="파일추가">
                 <span class="subDisc">*파일타입 : PDF, hwp / 최대 사이즈 : 개당 100mb</span>
@@ -86,7 +87,7 @@
         </ul>
         <a class="bigButton" id="bigButton">신청하기</a>  
     </div>
-    </form>
 </div> 
+</form>
 	
 <!-- //contWrap -->

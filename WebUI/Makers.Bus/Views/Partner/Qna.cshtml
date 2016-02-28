@@ -1,3 +1,65 @@
 ﻿@{
     ViewBag.Title = "파트너쉽 문의";
 }
+@section scripts{
+<script type="text/javascript">
+
+    $("#bigButton").on("click", function () {
+
+        var email = $("#txtEmail").val();
+        var title = $("#txtTitle").val();
+        var contents = $("#txtContents").val();
+
+        if (email == "") {
+            alert("이메일을 입력하세요");
+            return false;
+        }
+        if (title == "") {
+            alert("제목을 입력하세요");
+            return false;
+        }
+        if (contents == "") {
+            alert("내용을 입력하세요");
+            return false;
+        }
+
+        var url = "AddMakerBusPartnershipQna";
+
+        $("#qnaForm").attr('action', url);
+        $("#qnaForm").submit();
+    })
+
+</script>
+}
+
+<form id="qnaForm" name="qnaForm" method="post" enctype="multipart/form-data">
+<div class="subTop">
+    <div class="title partnership">Partnership</div>
+</div>
+<div class="subPage">    
+    <div class="subCont mgT30">
+        <div class="wTitle">파트너쉽 문의</div>
+        <div class="subTitle">메이커버스와 함께 메이커 교육을 확산시키는 일에 동참해주세요.</div>
+        <ul class="nostyle">
+            <li>
+                <div class="headerInput">이메일</div>
+                <div class="inputZone w750"><input name="email" id="txtEmail" type="text"></div>
+                </li>
+                <li>
+                <div class="headerInput">제목</div>
+                <div class="inputZone name w750"><input name="title" id="txtTitle" type="text"></div>
+                </li>
+                <li>
+                <div class="headerInput valign">내용</div>
+                <textarea type="text" id="txtContents" name="contents"></textarea>
+                </li>
+            
+        </ul>
+        <a class="bigButton" id="bigButton">보내기</a> 
+        <div class="line"></div> 
+        <div class="wTitle mgT40">메이커버스 파트너</div>
+        <div class="imgPatner"></div>
+    </div>
+      
+</div> 
+</form>

@@ -1,9 +1,62 @@
 ﻿@{
     ViewBag.Title = "문의";
 }
+@section scripts{
+<script type="text/javascript">
 
-<!-- ContWrap -->
-<!-- Event -->
+    $("#bigButton").on("click", function () {
+
+        var category = $("#hidCategory").val();
+        var email = $("#txtEmail").val();
+        var title = $("#txtTitle").val();
+        var contents = $("#txtContents").val();
+
+        if (category == "") {
+            alert("카테고리를 선택해주세요");
+            return false;
+        }
+        if (email == "") {
+            alert("이메일을 입력하세요");
+            return false;
+        }
+        if (title == "") {
+            alert("제목을 입력하세요");
+            return false;
+        }
+        if (contents == "") {
+            alert("내용을 입력하세요");
+            return false;
+        }
+
+        var url = "AddMakerBusQna";
+
+        category = Number(category);
+
+        $("#qnaForm").attr('action', url);
+        $("#qnaForm").submit();
+    })
+
+    function SelCategory(obj, cateIndex, val) {
+
+        var selCategory = $("a[name='selCategory']");
+
+        selCategory.each(function (index) {
+            if (cateIndex == index) {
+                $(this).addClass("on");
+            }
+            else {
+                $(this).removeClass("on");
+            }
+        })
+                
+        $("#hidCategory").val(val);
+    }
+
+
+</script>
+}
+
+<form id="qnaForm" name="qnaForm" method="post" enctype="multipart/form-data">
 <div class="subPage">
     @Html.Action("SubHeader","Bus")
     <div class="subCont">
@@ -11,29 +64,29 @@
             <li>
                 <div class="headerInput">분류</div>
                 <div class="inputRadio name">
-                    <a href="" class="radioBtn on" title="선택버튼"></a><span>불편/개선사항</span></a>
-                    <a href="" class="radioBtn" title="선택버튼"></a><span>채용관련</span></a>
-                    <a href="" class="radioBtn" title="선택버튼"></a><span>제휴 및 협력 관련</span></a>
-                    <a href="" class="radioBtn" title="선택버튼"></a><span>미디어 관련</span></a>
-                    <a href="" class="radioBtn" title="선택버튼"></a><span>기타</span></a>  
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 0, 2001)" name="selCategory" title="선택버튼"></a><span>불편/개선사항</span>
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 1, 2002)" name="selCategory" title="선택버튼"></a><span>채용관련</span>
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 2, 2003)" name="selCategory" title="선택버튼"></a><span>제휴 및 협력 관련</span>
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 3, 2004)" name="selCategory" title="선택버튼"></a><span>미디어 관련</span>
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 4, 2005)" name="selCategory" title="선택버튼"></a><span>기타</span>
                 </div>
             </li>
             <li>
                 <div class="headerInput">이메일</div>
-                <div class="inputZone w750"><input name="name" type="text"></div>
+                <div class="inputZone w750"><input name="email" id="txtEmail" type="text"></div>
                 </li>
                 <li>
                 <div class="headerInput">제목</div>
-                <div class="inputZone name w750"><input name="name" type="text"></div>
+                <div class="inputZone name w750"><input name="title" id="txtTitle" type="text"></div>
                 </li>
                 <li>
                 <div class="headerInput valign">내용</div>
-                <textarea name="name" type="text"></textarea>
+                <textarea name="contents" id="txtContents"></textarea>
                 </li>
             
         </ul>
-    <a class="bigButton">보내기</a>  
+    <a class="bigButton" id="bigButton">보내기</a>  
     </div>
-</div> 
-	
-<!-- //contWrap -->
+    <input type="hidden" id="hidCategory" name="category" />
+</div> 	
+</form>

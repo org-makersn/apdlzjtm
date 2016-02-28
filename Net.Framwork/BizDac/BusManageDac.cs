@@ -281,6 +281,25 @@ namespace Net.Framework.BizDac
         }
         #endregion
 
+        #region AddMakerBusPartnershipQna - 메이커버스 파트너쉽 문의사항 저장
+        /// <summary>
+        /// 메이커버스 파트너쉽 문의사항 저장
+        /// </summary>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        internal int AddMakerBusPartnershipQna(BusPartnershipQnaT data)
+        {
+            int identity = 0;
+            bool ret = _makerbusPartnershipQnaRepo.Insert(data);
+
+            if (ret)
+            {
+                identity = data.NO;
+            }
+            return identity;
+        }
+        #endregion
+
         #region 통계
         /// <summary>
         /// 통계
