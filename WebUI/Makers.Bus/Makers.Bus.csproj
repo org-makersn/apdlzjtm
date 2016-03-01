@@ -528,6 +528,7 @@
     <Content Include="Content\css\font\.DS_Store" />
     <Content Include="Content\css\.DS_Store" />
     <Content Include="Content\images\.DS_Store" />
+    <None Include="Properties\PublishProfiles\Makers.Bus.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />

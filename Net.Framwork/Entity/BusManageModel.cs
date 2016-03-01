@@ -30,15 +30,15 @@ namespace Net.Framework.Entity
         public virtual string MEMO { get; set; }
         public virtual DateTime REG_DT { get; set; }
         public virtual string REG_ID { get; set; }
-        public virtual Nullable<DateTime> CHG_DT { get; set; }
-        public virtual string CHG_ID { get; set; }
+        public virtual Nullable<DateTime> UPD_DT { get; set; }
+        public virtual string UPD_ID { get; set; }
     }
 
     [Table("BUS_QNA")]
     public partial class BusQnaT
     {
         [Key]
-        public int NO { get; set; }
+        public Int64 NO { get; set; }
         
         public int CATEGORY { get; set; }
         public string EMAIL { get; set; }
@@ -56,17 +56,18 @@ namespace Net.Framework.Entity
 
         public string TITLE { get; set; }
         public string CONTENTS { get; set; }
+        public string USE_YN { get; set; }
         public DateTime REG_DT { get; set; }
         public string REG_ID { get; set; }
-        public Nullable<DateTime> CHG_DT { get; set; }
-        public string CHG_ID { get; set; }
+        public Nullable<DateTime> UPD_DT { get; set; }
+        public string UPD_ID { get; set; }
     }
 
     [Table("BUS_PARTNERSHIP_QNA")]
     public partial class BusPartnershipQnaT
     {
         [Key]
-        public int NO { get; set; }
+        public Int64 NO { get; set; }
 
         public string EMAIL { get; set; }
         public string TITLE { get; set; }
@@ -79,14 +80,14 @@ namespace Net.Framework.Entity
     public partial class BusPartnerT
     {
         [Key]
-        public int NO { get; set; }
+        public Int64 NO { get; set; }
 
         public string PARTNER_NAME { get; set; }
         public string LOGO_IMAGE { get; set; }
         public DateTime REG_DT { get; set; }
         public string REG_ID { get; set; }
-        public Nullable<DateTime> CHG_DT { get; set; }
-        public string CHG_ID { get; set; }
+        public Nullable<DateTime> UPD_DT { get; set; }
+        public string UPD_ID { get; set; }
     }
     
     /// <summary>

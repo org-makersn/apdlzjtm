@@ -1,0 +1,117 @@
+﻿@model BusFaqT
+@{
+    ViewBag.Title = "자주묻는질문 과 답변 수정";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="contents_zone">
+    <h2 class="contents_title">자주묻는질문 과 답변</h2>
+
+    <form id="insert_form" name="insert_form" method="post">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @Html.Hidden("mode", "edit")
+        @Html.Hidden("NO", Model.NO)
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="200x" />
+                <col width="auto" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+            <tbody>
+                <tr>
+                    <th>질문</th>
+                    <td>
+
+                        @Html.EditorFor(model => model.TITLE, new { @class = "input_text", style = "width: 75%;" })
+                        <br />@Html.ValidationMessageFor(model => model.TITLE)
+                    </td>
+                </tr>
+                <tr>
+                    <th>답변</th>
+                    <td>
+                        @Html.TextBoxFor(model => model.CONTENTS, new { @class = "input_text", style = "width: 100%;" })
+                        @Html.ValidationMessageFor(model => model.CONTENTS)
+                    </td>
+                </tr>
+                <tr>
+                    <th>노출여부</th>
+                    <td>
+                        @Html.RadioButtonFor(m => m.USE_YN, "Y", new { @id = "yes" })
+                        @Html.Label("yes", "사용")
+                        @Html.RadioButtonFor(m => m.USE_YN, "N", new { @id = "no" })
+                        @Html.Label("no", "미사용")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <!-- btn -->
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="Update" class="_btn_reg">수정</a></span>
+        <span class="btnWrap medium"><a href="javascript:void(0);" id="GoList" class="_btn_list">목록</a></span>
+        @*<span class="btnWrap medium"><a href="javascript:void(0);" id="Delete" class="_btn_delete">삭제</a></span>*@
+    </div>
+
+    <!-- // btn -->
+    <br />
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+    <style type="text/css">
+        .uploadify-queue-item .cancel a {
+            background: url('/Content/uploadify-cancel.png') 0 0 no-repeat;
+            float: right;
+            height: 16px;
+            text-indent: -9999px;
+            width: 16px;
+        }
+
+        .field-validation-error {
+            color: red;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function Add() { }
+        Add.Init = function () {
+        }
+
+        $("#Update").click(function () {
+
+            var action_url = '/Bus/PostFaq';
+            var options = {
+                beforeSend: function () {
+
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                },
+                success: function (response) {
+                    if (response.Success) {
+                        window.location.href = "/bus/faq";
+                    }
+                },
+                complete: function (response) {
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            };
+
+            $('#insert_form').attr("action", action_url).ajaxForm(options).submit();
+        });
+
+        $("#GoList").click(function () {
+            $(location).attr("href", "/bus/faq");
+        });
+
+        $(function () {
+            Add.Init();
+
+        });
+    </script>
+}

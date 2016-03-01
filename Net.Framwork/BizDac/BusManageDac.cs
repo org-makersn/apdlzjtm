@@ -20,40 +20,6 @@ namespace Net.Framework.BizDac
         private ISimpleRepository<BusBlog> _blogRepo = new SimpleRepository<BusBlog>();
         private ISimpleRepository<BusTextbook> _textbookRepo = new SimpleRepository<BusTextbook>();
 
-        #region AddApplyMakerbus - 메이커버스 신청서 저장
-        /// <summary>
-        /// 메이커버스 신청서 저장
-        /// </summary>
-        /// <param name="banner"></param>
-        /// <returns></returns>
-        public int AddApplyMakerbus(BusApplySchoolT data)
-        {
-            int identity = 0;
-            bool ret = _makerbusApplyRepo.Insert(data);
-
-            if (ret)
-            {
-                identity = data.NO;
-            }
-            return identity;
-        }
-        #endregion
-
-        #region GetApplyMakerbusList - 메이커버스 전체 리스트
-        /// <summary>
-        /// 메이커버스 전체 리스트
-        /// </summary>
-        /// <returns></returns>
-        public List<BusApplySchoolT> GetMakerbusList()
-        {
-            IEnumerable<BusApplySchoolT> state = new List<BusApplySchoolT>();
-
-            state = _makerbusApplyRepo.GetAll();
-
-            return state.ToList();
-        }
-        #endregion
-
         #region 진행현황 관리
         /// <summary>
         /// 
@@ -262,15 +228,47 @@ namespace Net.Framework.BizDac
         }
         #endregion
 
-        #region AddMakerBusQna - 메이커버스 문의사항 저장
+        #region 메이커버스 신청 관리
+        /// <summary>
+        /// 메이커버스 신청서 저장
+        /// </summary>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        public int AddApplyMakerbus(BusApplySchoolT data)
+        {
+            int identity = 0;
+            bool ret = _makerbusApplyRepo.Insert(data);
+
+            if (ret)
+            {
+                identity = data.NO;
+            }
+            return identity;
+        }
+
+        /// <summary>
+        /// 메이커버스 전체 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusApplySchoolT> GetMakerbusList()
+        {
+            IEnumerable<BusApplySchoolT> state = new List<BusApplySchoolT>();
+
+            state = _makerbusApplyRepo.GetAll();
+
+            return state.ToList();
+        }
+        #endregion
+
+        #region 메이커버스 문의사항 관리
         /// <summary>
         /// 메이커버스 문의사항 저장
         /// </summary>
         /// <param name="banner"></param>
         /// <returns></returns>
-        internal int AddMakerBusQna(BusQnaT data)
+        public Int64 AddMakerBusQna(BusQnaT data)
         {
-            int identity = 0;
+            Int64 identity = 0;
             bool ret = _makerbusQnaRepo.Insert(data);
 
             if (ret)
@@ -279,17 +277,82 @@ namespace Net.Framework.BizDac
             }
             return identity;
         }
+
+        /// <summary>
+        /// 메이커버스 문의사항 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusQnaT> GetMakerbusQnaList()
+        {
+            IEnumerable<BusQnaT> state = new List<BusQnaT>();
+
+            state = _makerbusQnaRepo.GetAll();
+
+            return state.ToList();
+        }
         #endregion
 
-        #region AddMakerBusPartnershipQna - 메이커버스 파트너쉽 문의사항 저장
+        #region 메이커버스 자주묻는질문 과 답변 관리
+        /// <summary>
+        /// 메이커버스 자주묻는질문 과 답변 저장
+        /// </summary>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        public int AddMakerBusFaq(BusFaqT data)
+        {
+            int identity = 0;
+            bool ret = _makerbusFaqRepo.Insert(data);
+
+            if (ret)
+            {
+                identity = data.NO;
+            }
+            return identity;
+        }
+
+        /// <summary>
+        /// 자주묻는질문 과 답변 수정
+        /// </summary>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        public bool UpdateFaq(BusFaqT data)
+        {
+            return _makerbusFaqRepo.Update(data);
+        }
+
+        /// <summary>
+        /// 메이커버스 자주묻는질문 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusFaqT> GetMakersbusFaqList()
+        {
+            IEnumerable<BusFaqT> state = new List<BusFaqT>();
+
+            state = _makerbusFaqRepo.GetAll();
+
+            return state.ToList();
+        }
+
+        /// <summary>
+        /// get
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public BusFaqT GetBusFaqByNo(int no)
+        {
+            return _makerbusFaqRepo.First(m => m.NO == no);
+        }
+        #endregion
+
+        #region 메이커버스 파트너쉽 문의사항 관리
         /// <summary>
         /// 메이커버스 파트너쉽 문의사항 저장
         /// </summary>
         /// <param name="banner"></param>
         /// <returns></returns>
-        internal int AddMakerBusPartnershipQna(BusPartnershipQnaT data)
+        public Int64 AddMakerBusPartnershipQna(BusPartnershipQnaT data)
         {
-            int identity = 0;
+            Int64 identity = 0;
             bool ret = _makerbusPartnershipQnaRepo.Insert(data);
 
             if (ret)
@@ -297,6 +360,34 @@ namespace Net.Framework.BizDac
                 identity = data.NO;
             }
             return identity;
+        }
+
+        /// <summary>
+        /// 메이커버스 파트너쉽 문의사항 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusPartnershipQnaT> GetMakersbusPartnershipQnaList()
+        {
+            IEnumerable<BusPartnershipQnaT> state = new List<BusPartnershipQnaT>();
+
+            state = _makerbusPartnershipQnaRepo.GetAll();
+
+            return state.ToList();
+        }
+        #endregion
+
+        #region 메이커스 파트너 관리
+        /// <summary>
+        /// 메이커버스 파트너쉽 문의사항 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusPartnerT> GetMakersPartnerList()
+        {
+            IEnumerable<BusPartnerT> state = new List<BusPartnerT>();
+
+            state = _makersPartnerRepo.GetAll();
+
+            return state.ToList();
         }
         #endregion
 
@@ -323,66 +414,6 @@ namespace Net.Framework.BizDac
                 return dbHelper.ExecuteSingle<MakerBusState>(cmd);
             }
         } 
-        #endregion
-
-        #region GetMakerbusQnaList - 메이커버스 문의사항 리스트
-        /// <summary>
-        /// 메이커버스 문의사항 리스트
-        /// </summary>
-        /// <returns></returns>
-        public List<BusQnaT> GetMakerbusQnaList()
-        {
-            IEnumerable<BusQnaT> state = new List<BusQnaT>();
-
-            state = _makerbusQnaRepo.GetAll();
-
-            return state.ToList();
-        }
-        #endregion
-
-        #region GetMakersbusFaqList - 메이커버스 자주묻는질문 리스트
-        /// <summary>
-        /// 메이커버스 자주묻는질문 리스트
-        /// </summary>
-        /// <returns></returns>
-        public List<BusFaqT> GetMakersbusFaqList()
-        {
-            IEnumerable<BusFaqT> state = new List<BusFaqT>();
-
-            state = _makerbusFaqRepo.GetAll();
-
-            return state.ToList();
-        }
-        #endregion
-
-        #region GetMakersbusPartnershipQnaList - 메이커버스 파트너쉽 문의사항 리스트
-        /// <summary>
-        /// 메이커버스 파트너쉽 문의사항 리스트
-        /// </summary>
-        /// <returns></returns>
-        public List<BusPartnershipQnaT> GetMakersbusPartnershipQnaList()
-        {
-            IEnumerable<BusPartnershipQnaT> state = new List<BusPartnershipQnaT>();
-
-            state = _makerbusPartnershipQnaRepo.GetAll();
-
-            return state.ToList();
-        }
-        #endregion
-
-        #region GetMakersPartnerList - 메이커스 파트너 리스트
-        /// <summary>
-        /// 메이커버스 파트너쉽 문의사항 리스트
-        /// </summary>
-        /// <returns></returns>
-        public List<BusPartnerT> GetMakersPartnerList()
-        {
-            IEnumerable<BusPartnerT> state = new List<BusPartnerT>();
-
-            state = _makersPartnerRepo.GetAll();
-
-            return state.ToList();
-        }
         #endregion
 
         #region 교재

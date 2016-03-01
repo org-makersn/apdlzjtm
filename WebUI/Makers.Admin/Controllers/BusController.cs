@@ -410,13 +410,83 @@ namespace Makers.Admin.Controllers
 
             ViewData["Group"] = MenuModel(5);
 
-            IList<BusFaqT> list = busManageDac.GetMakersbusFaqList();
-            list = list.OrderByDescending(p => p.REG_DT).ToList();
+            if (mode.Contains("add"))
+            {
+                return View("AddFaq");
+            }
+            else if (mode.Contains("edit"))
+            {
+                BusFaqT faq = busManageDac.GetBusFaqByNo(no);
+                return View("UpdateFaq", faq);
+            }
+            else
+            {
+                IList<BusFaqT> list = busManageDac.GetMakersbusFaqList();
 
-            ViewData["cnt"] = list.Count;
+                ViewData["cnt"] = list.Count;
 
-            return View(list.ToPagedList(page, 30));
+                return View(list.ToPagedList(page, 50));
+            }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult PostFaq(FormCollection collection)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+
+            string paramMode = collection["mode"];
+
+            string paramTitle = collection["TITLE"];
+            string paramContents = collection["CONTENTS"];
+            string paramUseYn = collection["USE_YN"];
+
+            if (paramMode.Contains("add"))
+            {
+                BusFaqT faq = new BusFaqT();
+                faq.TITLE = paramTitle;
+                faq.USE_YN = paramUseYn;
+                faq.CONTENTS = paramContents;
+                faq.REG_DT = DateTime.Now;
+                faq.REG_ID = Profile.UserNm;
+
+                Int64 ret = busManageDac.AddMakerBusFaq(faq);
+                if (ret > 0)
+                {
+                    response.Success = true;
+                    response.Result = ret.ToString();
+                }
+            }
+
+            if (paramMode.Contains("edit"))
+            {
+                int no = Convert.ToInt32(collection["NO"]);
+                BusFaqT faq = busManageDac.GetBusFaqByNo(no);
+                if (faq != null)
+                {
+                    faq.TITLE = paramTitle;
+                    faq.USE_YN = paramUseYn;
+                    faq.CONTENTS = paramContents;
+                    faq.UPD_DT = DateTime.Now;
+                    faq.UPD_ID = Profile.UserNm;
+
+                    bool ret = busManageDac.UpdateFaq(faq);
+                    if (ret)
+                    {
+                        response.Success = true;
+                        response.Result = faq.NO.ToString();
+                    }
+                }
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region Partnership - 메이커버스 파트너쉽 문의사항
@@ -464,5 +534,7 @@ namespace Makers.Admin.Controllers
             return View(list.ToPagedList(page, 30));
         }
         #endregion
+
+
     }
 }

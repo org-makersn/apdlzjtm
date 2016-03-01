@@ -25,7 +25,7 @@ namespace Net.Framework.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public int AddMakerBusQna(BusQnaT data)
+        public Int64 AddMakerBusQna(BusQnaT data)
         {
             return new BusManageDac().AddMakerBusQna(data);
         }
@@ -35,7 +35,7 @@ namespace Net.Framework.BizDac
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public int AddMakerBusPartnershipQna(BusPartnershipQnaT data)
+        public Int64 AddMakerBusPartnershipQna(BusPartnershipQnaT data)
         {
             return new BusManageDac().AddMakerBusPartnershipQna(data);
         }

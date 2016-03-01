@@ -84,7 +84,7 @@ namespace Makers.Bus.Controllers
             data.REG_DT = DateTime.Now;
             data.REG_ID = email;
 
-            int result = biz.AddMakerBusQna(data);
+            Int64 result = biz.AddMakerBusQna(data);
 
             if (result > 0)
             {
