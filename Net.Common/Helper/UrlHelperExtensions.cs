@@ -246,5 +246,17 @@ namespace Net.Common.Helper
             string fullPath = string.Format("{0}/{1}/{2}", instance.FileServerHost, busInstance.TextbookFile, data);
             return urlHelper.Content(fullPath);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="urlHelper"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static string PartnershipThumbnail(this UrlHelper urlHelper, string data)
+        {
+            string fullPath = string.Format("{0}/{1}/{2}", instance.FileServerHost, busInstance.PartnershipThumbnail, data);
+            return urlHelper.Content(fullPath);
+        }
     }
 }

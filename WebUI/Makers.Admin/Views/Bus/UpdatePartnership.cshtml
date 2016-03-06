@@ -1,0 +1,113 @@
+﻿@model BusPartnerT
+@{
+    ViewBag.Title = "UpdatePartnership";
+}
+
+<div class="contents_zone">
+    <h2 class="contents_title">파트너 등록</h2>
+
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @Html.Hidden("mode", "edit")
+        @Html.HiddenFor(model => model.NO)
+
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="20%" />
+                <col width="80%" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <label for="title">파트너사명</label></th>
+                    <td>
+                        @Html.EditorFor(model => model.PARTNER_NAME, new { htmlAttributes = new { @class = "input_text", placeholder = "파트너사명을 입력하세요." } })
+                        <br />@Html.ValidationMessageFor(model => model.PARTNER_NAME)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="LOGO_IMAGE">로고 이미지</label></th>
+                    <td>
+                        @Html.TextBoxFor(model => model.LOGO_IMAGE, new { type = "file", @class = "input_text", style = "width:50%;" })
+                        @Html.ValidationMessageFor(model => model.LOGO_IMAGE)
+                        @if (!String.IsNullOrEmpty(Model.LOGO_IMAGE))
+                        {
+                            <p>
+                                <img src="@Url.BlogThumbnail(Model.LOGO_IMAGE)" height="36">
+                                <input type="checkbox" id="up_thumb_del" name="up_thumb_del" value="true" /><label for="up_thumb_del">파일삭제</label>
+                            </p>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th>노출여부</th>
+                    <td> 
+                        @Html.RadioButtonFor(m => m.USE_YN, "Y", new { @id = "yes" })
+                        @Html.Label("yes","사용")
+                        @Html.RadioButtonFor(m => m.USE_YN,"N", new { @id = "no" })
+                        @Html.Label("no","미사용")
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="#" class="_btn_write">수정</a></span>
+        @*<span class="btnWrap medium"><a href="#" class="_btn_list">목록</a></span>*@
+        <span class="btnWrap medium"><a href="#" class="_btn_delete">취소</a></span>
+    </div>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+    <style type="text/css">
+        .field-validation-error {
+            color:red;
+        }
+    </style>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("._btn_delete").click(function () {
+                if (confirm("취소 하시겠습니까?") == true) {
+                    location.replace("/bus/Partnership");
+                }
+            });
+
+            $("._btn_write").click(function () {
+
+                var action_url = '/Bus/PostPartnership';
+
+                if ($("#PARTNER_NAME").val() == '') {
+                    alert("파트너사명을 입력해 주세요.");
+                    $("#PARTNER_NAME").focus();
+                    return false;
+                }
+
+                var options = {
+                    beforeSend: function () {
+
+                    },
+                    uploadProgress: function (event, position, total, percentComplete) {
+                    },
+                    success: function (response) {
+                        if (response.Success) {
+                            window.location.href = "/bus/partnership";
+                        }
+                    },
+                    complete: function (response) {
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                };
+
+                $('#insert_form').attr("action", action_url).ajaxForm(options).submit();
+            })
+        })
+    </script>
+}

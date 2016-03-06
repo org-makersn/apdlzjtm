@@ -32,8 +32,8 @@
                 {
                 <tr>
                     <td>@data.NO</td>
-                    <td>@data.EVENT_DATE.ToString().Substring(0,10)</td>
-                    <td class="ta_left"><a href="javascript:History.GoEdit(@data.NO)" class="_btn_edit" id="title">@data.SCHOOL_NAME</a></td>
+                    <td>@data.EVENT_DATE.ToString()</td>
+                    <td class="ta_left"><a href="javascript:Apply.GoEdit(@data.NO)" class="_btn_edit" id="title">@data.SCHOOL_NAME</a></td>
                     <td>@data.MAKERBUS_YN</td>
                 </tr>
                 }
@@ -47,9 +47,34 @@
         </tbody>
     </table>
     
-    <!-- page_navi -->
+     <!-- page_navi -->
     <div class="page_navi">
-        @Html.PagedListPager(Model, page => Url.Action("/", new { page = page, query = ViewData["query"] }))
+        @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("Apply", new { page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "Apply",
+                OnSuccess = "goTop();"
+            })
+        )
     </div>
     <!-- // page_navi -->
 </div>
+@section Scripts{
+    <script type="text/javascript">
+        function Apply() { }
+        Apply.Init = function () {
+        }
+
+        Apply.GoEdit = function (val) {
+            location.replace("/bus/apply?no=" + val + "&mode=edit");
+        }
+
+        $(document).ready(function () {
+            Apply.Init();
+        });
+    </script>
+}

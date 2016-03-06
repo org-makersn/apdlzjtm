@@ -84,6 +84,7 @@ namespace Net.Framework.Entity
 
         public string PARTNER_NAME { get; set; }
         public string LOGO_IMAGE { get; set; }
+        public string USE_YN { get; set; }
         public DateTime REG_DT { get; set; }
         public string REG_ID { get; set; }
         public Nullable<DateTime> UPD_DT { get; set; }
@@ -178,5 +179,19 @@ namespace Net.Framework.Entity
         public int StudentCnt { get; set; }
         public int ModelingCnt { get; set; }
         public int PrinterCnt { get; set; }
+    }
+
+    [Table("CODE")]
+    public partial class Code
+    {
+        [Key]
+        public int NO { get; set; }
+        public int IDX { get; set; }
+        public string NAME { get; set; }
+        public string CODE_GBN { get; set; }
+        public string CODE_KEY { get; set; }
+        public string VISIBILITY { get; set; }
+        public DateTime REG_DT { get; set; }
+        public string REG_ID { get; set; }
     }
 }

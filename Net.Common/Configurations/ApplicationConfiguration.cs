@@ -276,6 +276,8 @@ namespace Net.Common.Configurations
                 BlogPageSize = ConfigurationManager.AppSettings["BlogPageSize"] ?? "10";
                 AdminImgUrl = ConfigurationManager.AppSettings["AdminImgUrl"] ?? @"http://admin.makersn.com";
                 TextbookFile = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"textbook";
+                PartnershipThumbnail = ConfigurationManager.AppSettings["PartnershipThumbnail"] ?? "partnership/thumb";
+                PartnershipBackupImg = ConfigurationManager.AppSettings["PartnershipBackupImg"] ?? "partnership/backup";
             }
 
             /// <summary>
@@ -307,6 +309,17 @@ namespace Net.Common.Configurations
             /// 교재 
             /// </summary>
             public string TextbookFile { get; private set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public string PartnershipThumbnail { get; private set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public string PartnershipBackupImg { get; private set; }
+
         }
         #endregion
     }

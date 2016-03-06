@@ -11,6 +11,7 @@ using Net.Common.Helper;
 using Net.Common.Model;
 using Net.Framework.Entity;
 using Net.Framework.BizDac;
+using Makers.Bus.Helper;
 
 namespace Makers.Bus.Controllers
 {
@@ -34,9 +35,24 @@ namespace Makers.Bus.Controllers
             return View();
         }
 
-        public ActionResult Faq()
+        public ActionResult Faq(int page = 1)
         {
-            return View();
+            BusManageDac dac = new BusManageDac();
+            int pageSize = page_size;
+
+            IList<BusFaqT> list = dac.GetMakersbusFaqList();
+
+            int fromIndex = ((page - 1) * pageSize) + 1;
+            int toIndex = page * pageSize;
+
+            int totalCnt = list.Count;
+
+            PagerInfo pager = new PagerInfo();
+            pager.CurrentPageIndex = page;
+            pager.PageSize = pageSize;
+            pager.RecordCount = totalCnt;
+            PagerQuery<PagerInfo, IList<BusFaqT>> model = new PagerQuery<PagerInfo, IList<BusFaqT>>(pager, list);
+            return View(model);
         }
 
         public PartialViewResult SubHeader()

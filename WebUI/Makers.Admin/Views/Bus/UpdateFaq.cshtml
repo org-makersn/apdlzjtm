@@ -31,7 +31,7 @@
                 <tr>
                     <th>답변</th>
                     <td>
-                        @Html.TextBoxFor(model => model.CONTENTS, new { @class = "input_text", style = "width: 100%;" })
+                        @Html.TextAreaFor(model => model.CONTENTS, new { style = "height: 350px;" })
                         @Html.ValidationMessageFor(model => model.CONTENTS)
                     </td>
                 </tr>

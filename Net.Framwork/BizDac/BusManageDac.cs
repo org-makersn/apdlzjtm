@@ -19,6 +19,7 @@ namespace Net.Framework.BizDac
         private ISimpleRepository<BusHistory> _historyRepo = new SimpleRepository<BusHistory>();
         private ISimpleRepository<BusBlog> _blogRepo = new SimpleRepository<BusBlog>();
         private ISimpleRepository<BusTextbook> _textbookRepo = new SimpleRepository<BusTextbook>();
+        private ISimpleRepository<Code> _codeRepo = new SimpleRepository<Code>();
 
         #region 진행현황 관리
         /// <summary>
@@ -258,6 +259,39 @@ namespace Net.Framework.BizDac
 
             return state.ToList();
         }
+
+        /// <summary>
+        /// 메이커버스 신청학교 정보 수정
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool UpdateApplySchoolInfo(BusApplySchoolT data)
+        {
+            return _makerbusApplyRepo.Update(data);
+        }
+
+        /// <summary>
+        /// get
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public BusApplySchoolT GetApplySchoolByNo(int no)
+        {
+            return _makerbusApplyRepo.First(m => m.NO == no);
+        }
+
+        /// <summary>
+        /// 메이커버스 신청학교 리스트
+        /// </summary>
+        /// <returns></returns>
+        public List<BusApplySchoolT> GetApplySchoolList()
+        {
+            IEnumerable<BusApplySchoolT> state = new List<BusApplySchoolT>();
+
+            state = _makerbusApplyRepo.GetAll();
+
+            return state.ToList();
+        }
         #endregion
 
         #region 메이커버스 문의사항 관리
@@ -378,7 +412,35 @@ namespace Net.Framework.BizDac
 
         #region 메이커스 파트너 관리
         /// <summary>
-        /// 메이커버스 파트너쉽 문의사항 리스트
+        /// 메이커스 파트너 저장
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public Int64 AddMakerBusPartnership(BusPartnerT data)
+        {
+            Int64 identity = 0;
+            bool ret = _makersPartnerRepo.Insert(data);
+
+            if (ret)
+            {
+                identity = data.NO;
+            }
+            return identity;
+        }
+
+        /// <summary>
+        /// 메이커스 파트너 수정
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool UpdatePartnership(BusPartnerT data)
+        {
+            return _makersPartnerRepo.Update(data);
+        }
+        
+
+        /// <summary>
+        /// 메이커스 파트너 리스트
         /// </summary>
         /// <returns></returns>
         public List<BusPartnerT> GetMakersPartnerList()
@@ -389,6 +451,17 @@ namespace Net.Framework.BizDac
 
             return state.ToList();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public BusPartnerT GetPartnershipByNo(long no)
+        {
+            return _makersPartnerRepo.First(m => m.NO == no);
+        }
+
         #endregion
 
         #region 통계
@@ -530,6 +603,30 @@ namespace Net.Framework.BizDac
         {
             return _textbookRepo.Delete(textbook.NO);
         }
+        #endregion
+
+        #region 카테고리명 Get
+        /// <summary>
+        /// 카테고리명 Get
+        /// </summary>
+        /// <param name="categoryIdx"></param>
+        /// <returns></returns>
+        public string GetCategoryCodeName(int categoryIdx)
+        {
+
+            dbHelper = new SqlDbHelper(connectionString);
+            string targetQuery = @"select NAME from CODE where NO = @IDX";
+
+            using (var cmd = new SqlCommand(targetQuery))
+            {
+                cmd.Parameters.Add("@IDX", SqlDbType.Int).Value = categoryIdx;
+
+                Code state = dbHelper.ExecuteSingle<Code>(cmd);
+                return state.NAME;
+            }
+
+        }
+
         #endregion
     }
 }

@@ -341,7 +341,7 @@ namespace Makers.Admin.Controllers
         } 
         #endregion
 
-        #region Apply - 메이커버스 신청 리스트
+        #region Apply - 메이커버스 신청
         /// <summary>
         /// 메이커버스 신청
         /// </summary>
@@ -357,19 +357,67 @@ namespace Makers.Admin.Controllers
 
             if (mode.Contains("edit"))
             {
-               List<BusApplySchoolT> list = busManageDac.GetMakerbusList();
-               list = list.OrderByDescending(p => p.EVENT_DATE).ToList();
-                return View("UpdateApplyMakerBus", list);
+                BusApplySchoolT applySchool = busManageDac.GetApplySchoolByNo(no);
+                return View("UpdateApplySchool", applySchool);
             }
             else
             {
-                IList<BusApplySchoolT> list = busManageDac.GetMakerbusList();
+                IList<BusApplySchoolT> list = busManageDac.GetApplySchoolList();
                 list = list.OrderByDescending(p => p.EVENT_DATE).ToList();
 
                 ViewData["cnt"] = list.Count;
 
-                return View(list.ToPagedList(page, 30));
+                return View(list.ToPagedList(page, 50));
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult PostApplySchool(FormCollection collection)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+
+            string paramMode = collection["mode"];
+
+            string paramMakerbusYn = collection["MAKERBUS_YN"];
+            int paramParticipationCount = collection["PARTICIPATION_COUNT"] != "" ? int.Parse(collection["PARTICIPATION_COUNT"]) : 0;
+            int paramModelingCount = collection["MODELING_COUNT"] != "" ? int.Parse(collection["MODELING_COUNT"]) : 0;
+            int paramSupportPrinterCount = collection["SUPPORT_PRINTER_COUNT"] != "" ? int.Parse(collection["SUPPORT_PRINTER_COUNT"]) : 0;
+            string paramEventDate = collection["EVENT_DATE"];
+            string paramStartTime = collection["START_TIME"];
+            string paramMemo = collection["MEMO"];
+
+            if (paramMode.Contains("edit"))
+            {
+                int no = Convert.ToInt32(collection["NO"]);
+                BusApplySchoolT applySchool = busManageDac.GetApplySchoolByNo(no);
+                if (applySchool != null)
+                {
+                    applySchool.MAKERBUS_YN = paramMakerbusYn;
+                    applySchool.PARTICIPATION_COUNT = paramParticipationCount;
+                    applySchool.MODELING_COUNT = paramModelingCount;
+                    applySchool.SUPPORT_PRINTER_COUNT = paramSupportPrinterCount;
+                    applySchool.EVENT_DATE = Convert.ToDateTime(paramEventDate);
+                    applySchool.START_TIME = paramStartTime;
+                    applySchool.MEMO = paramMemo;
+                    applySchool.UPD_DT = DateTime.Now;
+                    applySchool.UPD_ID = Profile.UserId;
+
+                    bool ret = busManageDac.UpdateApplySchoolInfo(applySchool);
+                    if (ret)
+                    {
+                        response.Success = true;
+                        response.Result = applySchool.NO.ToString();
+                    }
+                }
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -505,14 +553,15 @@ namespace Makers.Admin.Controllers
 
             IList<BusPartnershipQnaT> list = busManageDac.GetMakersbusPartnershipQnaList();
             list = list.OrderByDescending(p => p.REG_DT).ToList();
-
+            
             ViewData["cnt"] = list.Count;
 
             return View(list.ToPagedList(page, 30));
         }
+
         #endregion
 
-        #region Partner - 메이커스 파트너 리스트
+        #region Partner - 메이커스 파트너 관리
         /// <summary>
         /// 메이커스 파트너 리스트
         /// </summary>
@@ -526,15 +575,100 @@ namespace Makers.Admin.Controllers
 
             ViewData["Group"] = MenuModel(7);
 
-            IList<BusPartnerT> list = busManageDac.GetMakersPartnerList();
-            list = list.OrderByDescending(p => p.REG_DT).ToList();
+            if (mode.Contains("add"))
+            {
+                return View("AddPartner");
+            }
+            else if (mode.Contains("edit"))
+            {
+                BusPartnerT partner = busManageDac.GetPartnershipByNo(no);
+                return View("UpdatePartnership", partner);
+            }
+            else
+            {
+                IList<BusPartnerT> list = busManageDac.GetMakersPartnerList();
+                list = list.OrderByDescending(p => p.REG_DT).ToList();
 
-            ViewData["cnt"] = list.Count;
+                ViewData["cnt"] = list.Count;
 
-            return View(list.ToPagedList(page, 30));
+                return View(list.ToPagedList(page, 50));
+            }
         }
-        #endregion
 
+        [HttpPost]
+        public JsonResult PostPartnership(FormCollection collection, HttpPostedFileBase LOGO_IMAGE)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+
+            string paramMode = collection["mode"];
+
+            string paramPartnerName = collection["PARTNER_NAME"];
+            HttpPostedFileBase paramThumb = LOGO_IMAGE;
+            bool paramDelThumb = collection["up_thumb_del"] == "true";
+            string paramUseYn = collection["USE_YN"];
+
+            string fileName = string.Empty;
+            if (paramMode.Contains("add"))
+            {
+                BusPartnerT partner = new BusPartnerT();
+                if (paramThumb != null)
+                {
+                    fileName = new UploadFunc().FileUpload(paramThumb, ImageReSize.GetBlogMainResize(), "Partnership", null);
+
+                    partner.LOGO_IMAGE = paramThumb.FileName;
+                }
+                partner.PARTNER_NAME = paramPartnerName;
+                partner.USE_YN = paramUseYn;
+                partner.REG_DT = DateTime.Now;
+                partner.REG_ID = Profile.UserNm;
+
+                long ret = busManageDac.AddMakerBusPartnership(partner);
+                if (ret > 0)
+                {
+                    response.Success = true;
+                    response.Result = ret.ToString();
+                }
+            }
+
+            if (paramMode.Contains("edit"))
+            {
+                long No = long.Parse(collection["NO"]);
+
+                BusPartnerT partner = busManageDac.GetPartnershipByNo(No);
+                partner.PARTNER_NAME = paramPartnerName;
+                if (paramThumb != null)
+                {
+                    if (paramDelThumb)
+                    {
+                        string backupPath = string.Format(@"{0}\{1}\{2}", ApplicationConfiguration.Instance.FileServerUncPath, ApplicationConfiguration.BusConfiguration.Instance.PartnershipBackupImg, partner.LOGO_IMAGE);
+                        string thumbPath = string.Format(@"{0}\{1}\{2}", ApplicationConfiguration.Instance.FileServerUncPath, ApplicationConfiguration.BusConfiguration.Instance.PartnershipThumbnail, partner.LOGO_IMAGE);
+
+                        new FileHelper().FileDelete(backupPath);
+                        new FileHelper().FileDelete(thumbPath);
+
+                        fileName = new UploadFunc().FileUpload(paramThumb, ImageReSize.GetBlogMainResize(), "Partnership", null);
+
+                        partner.LOGO_IMAGE = paramThumb.FileName;
+                    }
+                }
+                partner.USE_YN = paramUseYn;
+                partner.UPD_DT = DateTime.Now;
+                partner.UPD_ID = Profile.UserNm;
+
+                bool ret = busManageDac.UpdatePartnership(partner);
+                if (ret)
+                {
+                    response.Success = true;
+                    response.Result = partner.NO.ToString();
+                }
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+
+        #endregion
 
     }
 }

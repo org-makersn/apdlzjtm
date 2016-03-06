@@ -8,47 +8,49 @@
 <div class="contents_zone">
     <h2 class="contents_title">파트너쉽 문의사항</h2>
 
-    <table cellpadding="0" cellspacing="0" border="0" class="tbl_style" summary="">
-        <caption>리스트 게시판</caption>
-        <colgroup>
-            <col width="8%" />
-            <col width="10%" />
-            <col width="*" />
-            <col width="10%" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th>No</th>                
-                <th>제목</th>
-                <th>등록일</th>
-                <th>등록자</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if ((int)ViewData["cnt"] > 0)
-            {
-                foreach (var data in Model)
-                {
-                <tr>
-                    <td>@data.NO</td>
-                    <td class="ta_left"><a href="javascript:History.GoEdit(@data.NO)" class="_btn_edit" id="title">@data.TITLE</a></td>
-                    <td>@data.REG_DT.ToString().Substring(0,10)</td>
-                    <td>@data.REG_ID</td>
-                </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="7" style="height: 200px; text-align: center; vertical-align: middle;">문의사항이 없습니다.</td>
-                </tr>	
-            }
-        </tbody>
-    </table>
+   
     
+    <div class="faq_wrap">
+        @if ((int)ViewData["cnt"] > 0)
+        {
+            foreach (var data in Model)
+            {
+            <div class="q_low">
+                <div class="lowin"><a href="#" class="_btn_view" rel="@data.NO">@data.TITLE </a>&nbsp;[@data.REG_DT.ToString("yyyy-MM-dd")]</div>
+            </div>
+            <div class="a_low">
+                <b>[작성자] <a href="mailTo:@data.EMAIL">@data.EMAIL</a></b>
+                <br />
+                <div class="lowin">
+                    @Html.Raw(HtmlFilter.PunctuationDecode(data.CONTENTS))
+                </div>
+            </div>
+            }
+        }
+        else
+        {
+            <div style="height: 200px; line-height: 200px; text-align: center;">
+                등록된 문의사항이 없습니다.
+            </div>
+        }
+    </div>
+
     <!-- page_navi -->
     <div class="page_navi">
         @Html.PagedListPager(Model, page => Url.Action("/", new { page = page, query = ViewData["query"] }))
     </div>
     <!-- // page_navi -->
 </div>
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(".q_low").on("click", function () {
+                $(this).next().slideToggle();
+                $(".a_low").not($(this).next()).slideUp();
+            });
+
+        });
+    </script>
+}

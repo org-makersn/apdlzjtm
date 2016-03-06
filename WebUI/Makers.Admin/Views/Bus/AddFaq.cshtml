@@ -31,7 +31,7 @@
                     <th>자주묻는질문 답변</th>
                     <td>
                         
-                    @Html.EditorFor(model => model.CONTENTS, new { @class = "input_text",style = "width: 75%;"})
+                    @Html.TextAreaFor(model => model.CONTENTS, new { style = "height: 350px;"})
                     <br />@Html.ValidationMessageFor(model => model.CONTENTS)
                     </td>
                 </tr>

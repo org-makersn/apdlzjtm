@@ -1,0 +1,103 @@
+﻿@model BusPartnerT
+@{
+    ViewBag.Title = "파트너쉽";
+}
+
+<div class="contents_zone">
+    <h2 class="contents_title">파트너 등록</h2>
+
+    <form id="insert_form" name="insert_form" method="post" enctype="multipart/form-data">
+        @Html.Hidden("mode", "add")
+
+        <table class="tbl_style1" summary="게시판 테이블">
+            <colgroup>
+                <col width="20%" />
+                <col width="80%" />
+            </colgroup>
+            <caption>게시판</caption>
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <label for="title">파트너사명</label></th>
+                    <td>
+                        @Html.EditorFor(model => model.PARTNER_NAME, new { htmlAttributes = new { @class = "input_text", placeholder = "파트너사명을 입력하세요." } })
+                        <br />@Html.ValidationMessageFor(model => model.PARTNER_NAME)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="LOGO_IMAGE">로고 이미지</label></th>
+                    <td>
+                        @Html.TextBoxFor(model => model.LOGO_IMAGE, new { type = "file", @class = "input_text", style = "width:50%;" })
+                        @Html.ValidationMessageFor(model => model.LOGO_IMAGE)
+                    </td>
+                </tr>
+                <tr>
+                    <th>노출여부</th>
+                    <td>
+                        <input type="radio" name="USE_YN" value="Y" checked="checked" />
+                        사용 &nbsp; 
+					    <input type="radio" name="USE_YN" value="N" />
+                        미사용&nbsp; 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <div class="btn_center">
+        <span class="btnWrap medium"><a href="#" class="_btn_write">등록</a></span>
+        <span class="btnWrap medium"><a href="#" class="_btn_list">취소</a></span>
+    </div>
+</div>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="@Url.VersionedContent("~/Scripts/jquery.form.min.js")"></script>
+    <style type="text/css">
+        .field-validation-error {
+            color:red;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(function () {
+            //게시글 등록
+            $("._btn_write").click(function (e) {
+                var action_url = '/Bus/PostPartnership';
+
+                if ($("#PARTNER_NAME").val() == '') {
+                    alert("파트너사명을 입력해 주세요.");
+                    return false;
+                }
+                
+                var options = {
+                    beforeSend: function () {
+
+                    },
+                    uploadProgress: function (event, position, total, percentComplete) {
+                    },
+                    success: function (response) {
+                        if (response.Success) {
+                            window.location.href = "/bus/Partnership";
+                        }
+                    },
+                    complete: function (response) {
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                };
+
+                $('#insert_form').attr("action", action_url).ajaxForm(options).submit();
+
+            });
+
+            $("._btn_list").click(function () {
+                if (confirm("취소 하시겠습니까?")) {
+                    location.replace("/bus/Partnership");
+                }
+            });
+
+        });
+    </script>
+}

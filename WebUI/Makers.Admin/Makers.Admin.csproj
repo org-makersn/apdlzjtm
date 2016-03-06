@@ -1005,6 +1005,9 @@
     <Content Include="Views\Bus\Partnership.cshtml" />
     <Content Include="Views\Bus\AddFaq.cshtml" />
     <Content Include="Views\Bus\UpdateFaq.cshtml" />
+    <Content Include="Views\Bus\UpdateApplySchool.cshtml" />
+    <Content Include="Views\Bus\AddPartner.cshtml" />
+    <Content Include="Views\Bus\UpdatePartnership.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

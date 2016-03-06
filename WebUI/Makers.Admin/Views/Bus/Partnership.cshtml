@@ -32,7 +32,7 @@
                 <tr>
                     <td>@data.NO</td>
                     <td><img src="@Url.BlogThumbnail(data.LOGO_IMAGE)" height="32" /></td>
-                    <td class="ta_left"><a href="javascript:History.GoEdit(@data.NO)" class="_btn_edit" id="title">@data.PARTNER_NAME</a></td>
+                    <td class="ta_left"><a href="javascript:Partnership.GoEdit(@data.NO)" class="_btn_edit" id="title">@data.PARTNER_NAME</a></td>
                     <td>@data.REG_DT.ToString().Substring(0,10)</td>
                 </tr>
                 }
@@ -52,9 +52,34 @@
     </div>
     <!-- // btn -->
     
-    <!-- page_navi -->
+     <!-- page_navi -->
     <div class="page_navi">
-        @Html.PagedListPager(Model, page => Url.Action("/", new { page = page, query = ViewData["query"] }))
+        @Html.PagedListPager((PagedList.IPagedList)Model,
+            page => Url.Action("Partnership", new { page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+            new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "Partnership",
+                OnSuccess = "goTop();"
+            })
+        )
     </div>
     <!-- // page_navi -->
 </div>
+@section Scripts{
+    <script type="text/javascript">
+        function Partnership() { }
+        Partnership.Init = function () {
+        }
+
+        Partnership.GoEdit = function (val) {
+            location.replace("/bus/partnership?no=" + val + "&mode=edit");
+        }
+
+        $(document).ready(function () {
+            Partnership.Init();
+        });
+    </script>
+}
