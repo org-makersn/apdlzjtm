@@ -4,21 +4,106 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>소개</h2>
-<div>진행현황</div>
-@foreach (var history in Model)
-{
-    <span>@history.PROGRESS_DT&nbsp;</span> 
-    <span>@history.TITLE</span>
-    <br />
-}
-
-
-<div>
-    <h4>1. 통계</h4>
-    <br />
-    <span>학교 : @ViewData["SchoolCnt"]</span> &nbsp;
-    <span>참여학생 : @ViewData["StudentCnt"]</span> &nbsp;
-    <span>모델링 작품 : @ViewData["ModelingCnt"]</span> &nbsp;
-    <span>프린터 지원 : @ViewData["PrinterCnt"]</span> &nbsp;
+<!-- //Header -->
+<div class="subTop">
+    <div class="title intro">Introduction</div>
 </div>
+<!-- //Header -->
+
+
+<div class="contWrap">
+    <!-- 메이커버스 소개 -->
+    <div class="mainTitle">
+        <h2>메이커버스<span class="sm">는</span></h2>
+    </div>
+    <div class="mainDesc">
+        <h3>3D 프린터, 만들기 도구, 강사를 태운 버스가 직접 학교에 방문하여 진행하는 “찾아가는 일일 메이킹 워크샵” 프로그램입니다.
+            <br>
+            신청된 학교 중 선별하여 학교에는 무료로 방문합니다.
+        </h3>
+    </div>
+    <div class="intro">
+        <div class="workshop">
+            <div class="introDesc">
+                3D 프린팅&모델링<br>
+                일일 워크샵 (3시간)
+            </div>
+        </div>
+        <div class="lecturer">
+            <div class="introDesc">
+                워크샵 강사 및<br>
+                스탭
+            </div>
+        </div>
+        <div class="printer">
+            <div class="introDesc">
+                3D 프린터 및<br>
+                관련 교보재
+            </div>
+        </div>
+    </div>
+</div>
+<!--// 메이커버스 소개 -->
+<div class="graybg intro">
+    <div class="mainTitle">
+        <h2>진행 현황</h2>
+    </div>
+    <div class="current_sit">
+        <div class="current_sit1">
+            <div class="school">
+                <span class="num">@ViewData["SchoolCnt"]</span><span class="title">방문학교</span><span class="numDisc">초등학교: 신남성초, 00초, 00초
+                    <br>
+                    중학교: 가평중, 00중,00중
+                    <br>
+                    고등학교: 00고, 00고
+                </span>
+            </div>
+            <div class="student">
+                <span class="num">@ViewData["StudentCnt"]</span><span class="title">워크샵<br>
+                    참가학생</span><span class="numDisc">전국의 1000여명의 학생들이<br>
+                        메이커버스 워크샵을 참여해<br>
+                        주었습니다.</span>
+            </div>
+        </div>
+        <div class="current_sit2">
+            <div class="modeling">
+                <span class="num">@ViewData["ModelingCnt"]</span><span class="title">모델링<br>
+                    작업물</span><span class="numDisc">참여학 학생들이 생성한
+                        <br>
+                        모델링 파일의 수가
+                        <br>
+                        1000여개가 됩니다.</span>
+            </div>
+            <div class="printer">
+                <span class="num">@ViewData["PrinterCnt"]</span><span class="title">3D 프린터<br>
+                    지원</span><span class="numDisc">2015년 25학교에 각각
+                        <br>
+                        한대씩의 3D 프린터를
+                        <br>
+                        지원하였습니다.</span>
+            </div>
+        </div>
+    </div>
+    <div class="history">
+        <div class="line"></div>
+        <div class="col1">
+            @foreach (var history in Model)
+            {
+                @history.PROGRESS_DT
+                <br />
+            }
+        </div>
+        <div class="col2">
+
+            @foreach (var history in Model)
+            {
+                @history.TITLE
+                <br />
+            }
+        </div>
+
+    </div>
+
+</div>
+
+

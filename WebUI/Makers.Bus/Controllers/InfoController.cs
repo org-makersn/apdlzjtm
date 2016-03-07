@@ -27,6 +27,7 @@ namespace Makers.Bus.Controllers
         public ActionResult About()
         {
             ViewData["Menu"] = "about";
+            ViewData["IsMain"] = "Y";
             //통계
             MakerBusState state = busManageDac.GetMakerbusState();
             ViewData["SchoolCnt"] = string.Format("{0:n0}", state.SchoolCnt);

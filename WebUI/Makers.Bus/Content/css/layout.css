@@ -46,6 +46,7 @@
 .subTop .title.partnership{background:url(../images/ico_top_partnership.png) no-repeat 850px 43px}
 .subTop .title.blog{background:url(../images/ico_top_blog.png) no-repeat 850px 53px}
 .subTop .title.workshop{background:url(../images/ico_top_workshop.png) no-repeat 850px 40px}
+.subTop .title.intro{background:url(../images/ico_top_intro.png) no-repeat 850px 48px}
 
 
 /* TopVisual */
@@ -59,7 +60,7 @@
 
 .topVisu .top_cover_img{position:absolute;top:15%;left:50%;margin-left:-420px;display:block;width:834px;height:275px;background:url(../images/main_cover_3d_txt.png) no-repeat}
 
-.mainButtons .top_txt{z-index:201;position:absolute;top:13.5%;left:50%;margin-left:-225px;display:block;width:500px;height:166px;background:url(../images/txt_main.png) no-repeat}
+.mainButtons .top_txt{z-index:201;position:absolute;top:6.7%;left:50%;margin-left:-225px;display:block;width:500px;height:166px;background:url(../images/txt_main.png) no-repeat}
 .mainButtons .top_btn_apply{z-index:201;position:absolute;top:138%;left:50%;width:262px;height:52px;background-color:#fb810e;color:#fff;font-size:18px;line-height:52px;font-weight:bold;text-align:center;margin-left:-288px;border-radius:9px;-ms-border-radius:9px;-webkit-border-radius:9px;}
 .mainButtons .top_btn_apply:hover{background-color:#e86e00}
 .mainButtons .top_btn_inquire{z-index:201;position:absolute;top:138%;left:50%;width:262px;height:52px;background-color:#fb810e;color:#fff;font-size:18px;line-height:52px;font-weight:bold;text-align:center;margin-left:10px;border-radius:9px;-ms-border-radius:9px;-webkit-border-radius:9px;}
@@ -67,9 +68,9 @@
 
 
 /* MainSlide */
-.unslider-carousel	{position:relative;overflow:hidden;background:#000;display:block;height:520px;width:100%; }
+.unslider-carousel	{position:relative;overflow:hidden;background:#000;display:block;height:260px;width:100%; }
 .unslider-carousel ul	{list-style:none;margin:0;width:100%}
-.unslider-carousel ul li	{float:left; height:520px;width:100%;padding:0;margin:0;display:block;position:relative}
+.unslider-carousel ul li	{float:left; height:260px;width:100%;padding:0;margin:0;display:block;position:relative}
 .unslider-carousel ul:after{content:"";display:block;clear:both}
 .unslider-carousel .container	{margin:0 auto;position:relative;top:80%;-webkit-transform:translateY(-80%);-ms-transform:translateY(-80%);transform:translateY(-80%)}
 .unslider-carousel .container p.txt1 { font-family: Roboto; font-size: 42px; color:#fff; text-align: center; }
@@ -90,19 +91,19 @@
 .current_num .school{float:left;display:inline-block;margin-left:43px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat;text-align:center;}
 .current_num .line{float:left;display:block;margin-left:55px;width:1px;height:91px;background-color:#d9d9d9}
 .current_num .printer{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -113px 0;text-align:center;}
-.current_num .student{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -226px 0;text-align:center;}
-.current_num .modeling{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -339px 0;text-align:center;}
+.current_num .student{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -339px 0;text-align:center;}
+.current_num .modeling{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -226px 0;text-align:center;}
 .current_num:after{content:"";display:block;clear:both}
 .current_num .num{display:block;margin-left:110px;padding-top:10px;width:100px;font-size:33px;color:#fb810e;font-weight:bold;text-align:center;letter-spacing:-1px}
 .current_num .title{display:block;margin-left:90px;width:100px;font-size:15px;color:#fb810e;text-align:center}
 .current_num .school .num{margin-left:90px}
 .current_num .school .title{margin-left:91px;padding-top:5px}
 .current_num .printer .num{margin-left:96px}
-.current_num .printer .title{margin-left:97px}
+.current_num .printer .title{margin-left:97px;padding-top:5px}
 .current_num .student .num{margin-left:100px}
-.current_num .student .title{margin-left:101px}
+.current_num .student .title{margin-left:101px;padding-top:5px}
 .current_num .modeling .num{margin-left:100px}
-.current_num .modeling .title{margin-left:101px}
+.current_num .modeling .title{margin-left:101px;padding-top:5px}
 .current_num .asof{float:left;margin-left:46%;margin-top:24px;color:#A8A8A8;}
 
 .contWrap.line{position:absolute;top:700px;display:block;width:100%;height:1px;background:#000;}
@@ -140,6 +141,44 @@
 .more{position:absolute;top:50%;top:425px;left:50%;margin-left:-48px;margin-bottom: 37px;display: inline-block;width: 120px;height: 35px;background: #f4f4f6;color: #fb810e;border: solid 2px #fb810e;text-align: center;line-height: 35px;font-size: 14px;font-weight: bold;border-radius:3px;-ms-border-radius:3px;-webkit-border-radius:3px}
 .more:hover{background:#fb810e;color:#ffffff}
 
+/* 소개 */
+.graybg.intro{margin-bottom:-100px;height:800px}
+.current_sit{position:absolute;left:50%;margin-left:-480px}
+.current_sit1{margin-top:10px;width:800px;}
+.current_sit2{margin-top:40px;width:800px;}
+.current_sit1 .school{float:left;display:inline-block;margin-left:43px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat;text-align:center;}
+.current_sit1 .student{float:left;display:inline-block;margin-left:350px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -226px 0;text-align:center;}
+.current_sit1:after{content:"";display:block;clear:both}
+.current_sit2 .modeling{float:left;display:inline-block;margin-left:40px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -339px 0;text-align:center;}
+.current_sit2 .printer{float:left;display:inline-block;margin-left:350px;margin-right:60px;width:98px;height:98px;background:url(../images/sp_ico_main.png) no-repeat -113px 0;text-align:center;}
+.current_sit .line{float:left;display:block;margin-left:55px;width:1px;height:91px;background-color:#d9d9d9}
+
+.current_sit1 .num,.current_sit2 .num{display:block;margin-left:140px;padding-top:10px;width:100px;font-size:33px;color:#fb810e;font-weight:bold;text-align:center;letter-spacing:-1px}
+
+.current_sit1 .school .numDisc{float:left;margin-left:220px;margin-top:-50px;width:200px;font-size:13px;text-align:left}
+.current_sit1 .student .numDisc{float:left;margin-left:220px;margin-top:-50px;width:200px;font-size:13px;text-align:left}
+.current_sit2 .modeling .numDisc{float:left;margin-left:220px;margin-top:-50px;width:200px;font-size:13px;text-align:left}
+.current_sit2 .printer .numDisc{float:left;margin-left:220px;margin-top:-50px;width:200px;font-size:13px;text-align:left}
+.current_sit:after{content:"";display:block;clear:both}
+.current_sit1:after{content:"";display:block;clear:both}
+.current_sit2:after{content:"";display:block;clear:both}
+.current_sit1 .title{display:block;margin-left:90px;width:100px;font-size:15px;color:#fb810e;text-align:center}
+.current_sit2 .title{display:block;margin-left:90px;width:100px;font-size:15px;color:#fb810e;text-align:center}
+.current_sit1 .school .num{margin-left:110px}
+.current_sit1 .school .title{margin-left:111px;padding-top:5px}
+.current_sit2 .printer .num{margin-left:106px}
+.current_sit2 .printer .title{margin-left:107px}
+.current_sit1 .student .num{margin-left:110px}
+.current_sit1 .student .title{margin-left:111px}
+.current_sit2 .modeling .num{margin-left:110px}
+.current_sit2 .modeling .title{margin-left:111px}
+
+.history{display:inline-block;position:absolute;left:50%;top:450px;margin-left:-130px;font-size:17px;line-height:30px}
+.history .line{display:block;width:80px;height:1px;background:#fb810e;position:absolute;left:50%;top:-20px;margin-left:-60px}
+.history .col1{width:100px;float:left}
+.history .col2{width:200px;float:left}
+
+
 /* 신청문의 */
 .subPage{position:relative;width:100%; margin:0 auto; background:#f4f4f6}
 .subPage .tabMenu{margin:0 auto;padding-top:30px;width:1025px}
@@ -152,7 +191,7 @@
 
 .subPage .subCont{position:relative;margin:0 auto;padding-top:30px;padding-bottom:200px;width:1025px;background:#fff;}
 .subPage .subCont .disc{padding-left:56px;font-size:18px;line-height:42px}
-.subPage .subCont .downApply{cursor:pointer;position:absolute;right:50px;top:40px;width:158px;height:45px;background:#fb810e;color:#fff;font-size:17px;text-align:center;line-height:45px;border-radius:3px;-ms-border-radius:3px;-webkit-border-radius:3px}
+.subPage .subCont .downApply{cursor:pointer;position:absolute;right:560px;top:34px;width:140px;height:30px;background:#fb810e;color:#fff;font-size:16px;text-align:center;line-height:30px;border-radius:3px;-ms-border-radius:3px;-webkit-border-radius:3px}
 .subPage .subCont .downApply:hover{background:#e86e00}
 
 .subPage .subCont ul{margin-top:30px}
@@ -198,7 +237,7 @@
 .subPage.blog .blogList .blogImg{position:absolute;top:20px;right:20px}
 
 /* 워크샵 */
-.subPage .subCont .wTitle{margin-top:20px;margin-left:67px;font-size:26px;color:#fb810e;}
+.subPage .subCont .wTitle{margin-top:20px;margin-left:66px;font-size:26px;color:#fb810e;}
 .subPage .subCont .workshop1{position:relative;display:block;margin:0 0 0 70px;background:url(../images/ico_w1.png) no-repeat;width:110px;height:110px}
 .subPage .subCont .workshop2{position:relative;display:block;margin:20px 0 0 70px;background:url(../images/ico_w2.png) no-repeat;width:110px;height:110px}
 .subPage .subCont .workshop3{position:relative;display:block;margin:20px 0 0 70px;background:url(../images/ico_w3.png) no-repeat;width:110px;height:110px}

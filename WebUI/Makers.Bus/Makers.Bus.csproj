@@ -455,6 +455,7 @@
     <Content Include="Content\images\ico_arrow.png" />
     <Content Include="Content\images\ico_top_apply.png" />
     <Content Include="Content\images\ico_top_blog.png" />
+    <Content Include="Content\images\ico_top_intro.png" />
     <Content Include="Content\images\ico_top_partnership.png" />
     <Content Include="Content\images\ico_top_workshop.png" />
     <Content Include="Content\images\ico_w1.png" />
