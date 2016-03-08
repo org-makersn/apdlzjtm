@@ -614,7 +614,7 @@ namespace Makers.Admin.Controllers
                 BusPartnerT partner = new BusPartnerT();
                 if (paramThumb != null)
                 {
-                    fileName = new UploadFunc().FileUpload(paramThumb, ImageReSize.GetBlogMainResize(), "Partnership", null);
+                    fileName = new UploadFunc().FileUpload(paramThumb, null, "Partnership", null);
 
                     partner.LOGO_IMAGE = paramThumb.FileName;
                 }
@@ -647,7 +647,7 @@ namespace Makers.Admin.Controllers
                         new FileHelper().FileDelete(backupPath);
                         new FileHelper().FileDelete(thumbPath);
 
-                        fileName = new UploadFunc().FileUpload(paramThumb, ImageReSize.GetBlogMainResize(), "Partnership", null);
+                        fileName = new UploadFunc().FileUpload(paramThumb, null, "Partnership", null);
 
                         partner.LOGO_IMAGE = paramThumb.FileName;
                     }

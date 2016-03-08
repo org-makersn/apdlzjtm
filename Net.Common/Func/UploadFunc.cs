@@ -37,7 +37,7 @@ namespace Common.Func
             string[] modelingExt = { ".stl", ".obj" };
 
             //같이 써도 되는데 혹시나 해서 ...
-            string[] etcExt = { ".pdf", ".ppt", "pptx", ".xls", "xlsx", "doc", "docx" };
+            string[] etcExt = { ".pdf", ".ppt", "pptx", ".xls", "xlsx", "doc", "docx", "hwp" };
 
             string saveDir = string.Empty;
 
