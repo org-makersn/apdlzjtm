@@ -81,8 +81,8 @@ namespace Makers.Bus.Controllers
             int result = biz.AddApplyMakerBus(data);
             if (result > 0)
             {
-                Response.Write("<script type='text/javascript'>alert('신청되었습니다.')</script>");
-                Response.Redirect("Apply");
+                Response.Write("<script type='text/javascript'>alert('신청되었습니다.');</script>");
+                Response.Write("<script type='text/javascript'>location.href = 'Apply';</script>");
             }
             
         }
@@ -105,7 +105,7 @@ namespace Makers.Bus.Controllers
             if (result > 0)
             {
                 Response.Write("<script type='text/javascript'>alert('정상적으로 문의사항을 보냈습니다.')</script>");
-                Response.Redirect("Qna");
+                Response.Write("<script type='text/javascript'>location.href = 'Qna';</script>");
             }
         }
 

@@ -862,6 +862,7 @@
     <Content Include="KindEditor\makersdev.co.kr\FileUpload\KindEditor\attached\image\20150520\7e461297-eb83-44b7-aa54-da2ebeb0086e.jpg" />
     <Content Include="KindEditor\makersdev.co.kr\FileUpload\KindEditor\attached\image\20150520\df67ca4e-abfb-4401-a5b8-69dd73f014fa.jpg" />
     <Content Include="MailFormat.xml" />
+    <None Include="Properties\PublishProfiles\makers.admin.pubxml" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\AjaxModel.js" />
     <Content Include="Scripts\calendar\datepicker.js" />

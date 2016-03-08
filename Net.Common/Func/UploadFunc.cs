@@ -37,7 +37,7 @@ namespace Common.Func
             string[] modelingExt = { ".stl", ".obj" };
 
             //같이 써도 되는데 혹시나 해서 ...
-            string[] etcExt = { ".pdf", ".ppt", "pptx", ".xls", "xlsx", "doc", "docx", "hwp" };
+            string[] etcExt = { ".pdf", ".ppt", "pptx", ".xls", ".xlsx", ".doc", ".docx", ".hwp" };
 
             string saveDir = string.Empty;
 
@@ -165,6 +165,19 @@ namespace Common.Func
             {
                 new ResizeImg(){width = 630, height = 470, folder = @"store\img-files"},
                 new ResizeImg(){width = 160, height = 120, folder = @"store\img-files\thumb"}
+            };
+        }
+
+        /// <summary>
+        /// 파트너사 로고 이미지
+        /// </summary>
+        /// <returns></returns>
+        public static IList<ResizeImg> GetPartnerResize()
+        {
+            return new List<ResizeImg>()
+            {
+                new ResizeImg(){width = 260, height = 140, folder = @"partner\img-files"},
+                new ResizeImg(){width = 160, height = 120, folder = @"partner\img-files\thumb"}
             };
         }
 

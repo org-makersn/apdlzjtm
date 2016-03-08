@@ -276,8 +276,8 @@ namespace Net.Common.Configurations
                 BlogPageSize = ConfigurationManager.AppSettings["BlogPageSize"] ?? "10";
                 AdminImgUrl = ConfigurationManager.AppSettings["AdminImgUrl"] ?? @"http://admin.makersn.com";
                 TextbookFile = ConfigurationManager.AppSettings["PhysicalDir"] ?? @"textbook";
-                PartnershipThumbnail = ConfigurationManager.AppSettings["PartnershipThumbnail"] ?? "partnership/thumb";
-                PartnershipBackupImg = ConfigurationManager.AppSettings["PartnershipBackupImg"] ?? "partnership/backup";
+                PartnershipThumbnail = ConfigurationManager.AppSettings["PartnershipThumbnail"] ?? "partner/thumb";
+                PartnershipBackupImg = ConfigurationManager.AppSettings["PartnershipBackupImg"] ?? "partner/backup";
             }
 
             /// <summary>

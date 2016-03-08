@@ -363,7 +363,7 @@ namespace Makers.Admin.Controllers
             else
             {
                 IList<BusApplySchoolT> list = busManageDac.GetApplySchoolList();
-                list = list.OrderByDescending(p => p.EVENT_DATE).ToList();
+                list = list.OrderByDescending(p => p.NO).ToList();
 
                 ViewData["cnt"] = list.Count;
 
@@ -614,7 +614,7 @@ namespace Makers.Admin.Controllers
                 BusPartnerT partner = new BusPartnerT();
                 if (paramThumb != null)
                 {
-                    fileName = new UploadFunc().FileUpload(paramThumb, null, "Partnership", null);
+                    fileName = new UploadFunc().FileUpload(paramThumb, ImageReSize.GetPartnerResize(), "Partner", null);
 
                     partner.LOGO_IMAGE = paramThumb.FileName;
                 }
@@ -647,7 +647,7 @@ namespace Makers.Admin.Controllers
                         new FileHelper().FileDelete(backupPath);
                         new FileHelper().FileDelete(thumbPath);
 
-                        fileName = new UploadFunc().FileUpload(paramThumb, null, "Partnership", null);
+                        fileName = new UploadFunc().FileUpload(paramThumb, ImageReSize.GetPartnerResize(), "Partner", null);
 
                         partner.LOGO_IMAGE = paramThumb.FileName;
                     }

@@ -46,7 +46,7 @@ namespace Makers.Bus.Controllers
             if (result > 0)
             {
                 Response.Write("<script type='text/javascript'>alert('정상적으로 파트너쉽 문의사항을 보냈습니다.')</script>");
-                Response.Redirect("Qna");
+                Response.Write("<script type='text/javascript'>location.href = 'Qna';</script>");
             }
         }
 
