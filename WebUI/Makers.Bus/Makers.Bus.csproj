@@ -472,6 +472,7 @@
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_spon.png" />
     <Content Include="Content\images\partners.png" />
+    <Content Include="Content\images\partners_main.png" />
     <Content Include="Content\images\placeholder-image.png" />
     <Content Include="Content\images\radio_off.png" />
     <Content Include="Content\images\radio_on.png" />
