@@ -221,8 +221,7 @@ namespace Common.Func
         {
             return new List<ResizeImg>()
             {
-                //new ResizeImg(){width = 300, height = 169, folder = @"blog\thumb"}
-                new ResizeImg(){width = 408, height = 230, folder = @"blog\thumb"}
+                new ResizeImg(){width = 300, height = 169, folder = @"blog\thumb"}
             };
         }
     }
