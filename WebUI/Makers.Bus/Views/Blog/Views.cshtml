@@ -1,0 +1,20 @@
+﻿@model BusBlog
+@{
+    ViewBag.Title = Model.BLOG_TITLE.Length > 15 ? Model.BLOG_TITLE.Substring(0, 15) + "..." : Model.BLOG_TITLE;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="subTop">
+    <div class="title blog">Blog</div>
+</div>
+
+<div class="subPage">
+    <div class="subCont mgT30 part">
+        <div class="wTitle">@Model.BLOG_TITLE</div>
+        <div class="blogDate">@String.Format("{0:yyyy-MM-dd}", Model.REG_DT)@* (@Model.VIEW_CNT)*@</div>
+        <div class="blogContent">
+            @Html.Raw(Model.BLOG_CONTENTS)
+        </div>
+    </div>
+
+</div>

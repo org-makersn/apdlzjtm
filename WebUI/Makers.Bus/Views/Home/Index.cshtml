@@ -47,7 +47,7 @@
     <div class="picList">
         @foreach (var blog in Model)
         {
-            <a href="/blog/view/@blog.NO" class="box">
+            <a href="/blog/views/@blog.NO" class="box">
                 <img src="@Url.BlogThumbnail(blog.THUMB_RENAME)">
                 <span class="title">@blog.BLOG_TITLE</span>
                 <span class="date">@String.Format("{0:yyyy.MM.dd}", blog.REG_DT)</span>

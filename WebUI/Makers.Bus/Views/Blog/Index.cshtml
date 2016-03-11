@@ -12,7 +12,7 @@
     @foreach (var blog in Model.EntityList)
     {
         string firstClass = idx == 0 ? "mgT30" : "";
-        <a href="/blog/view/@blog.NO" class="blogList @firstClass">
+        <a href="/blog/views/@blog.NO" class="blogList @firstClass">
             <span class="blogTitle">@blog.BLOG_TITLE</span>
             <span class="blogCont">
                 @Html.Raw(HtmlFilter.StripHtml(blog.BLOG_CONTENTS, 160))

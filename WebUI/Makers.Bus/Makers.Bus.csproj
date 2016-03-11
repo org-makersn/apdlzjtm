@@ -575,9 +575,9 @@
     <Content Include="Views\Bus\Faq.cshtml" />
     <Content Include="Views\Bus\SubHeader.cshtml" />
     <Content Include="Views\Partner\Qna.cshtml" />
-    <Content Include="Views\Blog\View.cshtml" />
     <Content Include="Views\Info\About.cshtml" />
     <Content Include="Views\Info\Workshop.cshtml" />
+    <Content Include="Views\Blog\Views.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
