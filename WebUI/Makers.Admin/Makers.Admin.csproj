@@ -858,9 +858,6 @@
     <Content Include="Content\uploadify.swf" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="KindEditor\makersdev.co.kr\FileUpload\KindEditor\attached\image\20150520\4812ee7e-1b2a-410f-96e0-dc399f833731.jpg" />
-    <Content Include="KindEditor\makersdev.co.kr\FileUpload\KindEditor\attached\image\20150520\7e461297-eb83-44b7-aa54-da2ebeb0086e.jpg" />
-    <Content Include="KindEditor\makersdev.co.kr\FileUpload\KindEditor\attached\image\20150520\df67ca4e-abfb-4401-a5b8-69dd73f014fa.jpg" />
     <Content Include="MailFormat.xml" />
     <None Include="Properties\PublishProfiles\makers.admin.pubxml" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
@@ -874,6 +871,8 @@
     <Content Include="Scripts\jquery-2.2.0.min.map" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery-ui-1.9.2.custom.min.css" />
+    <Content Include="Scripts\jquery-ui-1.9.2.custom.min.js" />
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.form.min.js" />
     <Content Include="Scripts\jquery.form.min.js.map" />

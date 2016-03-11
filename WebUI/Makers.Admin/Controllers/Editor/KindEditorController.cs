@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Net.Common.Configurations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,21 +13,16 @@ namespace Makers.Admin.Controllers.Editor
     public class KindEditorController : Controller
     {
         //you can specify an absolute path，
-        //private static string rootPath = AppDomain.CurrentDomain.BaseDirectory + "/FileUpload/KindEditor/attached/";
-        private static string rootPath = "/FileUpload/KindEditor/attached/";
+        private static string rootPath = "/kindeditor/attached/";
+        private string saveFilePath = ApplicationConfiguration.Instance.FileServerUncPath + rootPath;
+        private string hostFilePath = ApplicationConfiguration.Instance.FileServerHost + rootPath;
+
         //file extension
         private static string[] fileTypes = { "gif", "jpg", "jpeg", "png", "bmp" };
-
-        //private HttpContext context;
 
         [HttpPost]
         public ActionResult UploadImage()
         {
-            //String projectUrl = Request.Path.Substring(0, Request.Path.LastIndexOf("/") + 1);
-
-            string savePath = rootPath;
-            string saveUrl = rootPath;
-
             Hashtable extFileHash = new Hashtable();
             extFileHash.Add("image", "gif,jpg,jpeg,png,bmp");
             extFileHash.Add("flash", "swf,flv");
@@ -46,8 +42,7 @@ namespace Makers.Admin.Controllers.Editor
                 return Json(hashResult, JsonRequestBehavior.AllowGet);
             }
 
-            string dirPath = Server.MapPath(savePath);
-            if (!Directory.Exists(dirPath))
+            if (!Directory.Exists(saveFilePath))
             {
                 hashResult = new Hashtable();
                 hashResult["error"] = 1;
@@ -88,29 +83,27 @@ namespace Makers.Admin.Controllers.Editor
             }
 
             //Create Directory
-            dirPath += dirName + "/";
-            saveUrl += dirName + "/";
-            if (!Directory.Exists(dirPath))
+            saveFilePath += dirName + "/";
+            hostFilePath += dirName + "/";
+            if (!Directory.Exists(saveFilePath))
             {
-                Directory.CreateDirectory(dirPath);
+                Directory.CreateDirectory(saveFilePath);
             }
 
             string ymd = DateTime.Now.ToString("yyyyMMdd", DateTimeFormatInfo.InvariantInfo);
-            dirPath += ymd + "/";
-            saveUrl += ymd + "/";
-            if (!Directory.Exists(dirPath))
+            saveFilePath += ymd + "/";
+            hostFilePath += ymd + "/";
+            if (!Directory.Exists(saveFilePath))
             {
-                Directory.CreateDirectory(dirPath);
+                Directory.CreateDirectory(saveFilePath);
             }
 
             string newFileName = Guid.NewGuid().ToString() + fileExt;
-            string filePath = dirPath + newFileName;
+            string filePath = saveFilePath + newFileName;
 
             imgFile.SaveAs(Path.GetFullPath(filePath));
-            
-            //imgFile.SaveAs(filePath);
 
-            string fileUrl = saveUrl + newFileName;
+            string fileUrl = hostFilePath + newFileName;
 
             hashResult = new Hashtable();
             hashResult["error"] = 0;
@@ -121,17 +114,11 @@ namespace Makers.Admin.Controllers.Editor
 
         public ActionResult FileManager()
         {
-            //string aspxUrl = Request.Path.Substring(0, Request.Path.LastIndexOf("/") + 1);
-
-            string rootUrl = rootPath;
-            string fileTypes = "gif,jpg,jpeg,png,bmp";
-
             string currentPath = "";
             string currentUrl = "";
             string currentDirPath = "";
             string moveupDirPath = "";
 
-            string dirPath = Server.MapPath(rootPath);
             string dirName = Request.QueryString["dir"];
             if (!String.IsNullOrEmpty(dirName))
             {
@@ -140,56 +127,53 @@ namespace Makers.Admin.Controllers.Editor
                     Response.Write("Invalid Directory name.");
                     Response.End();
                 }
-                dirPath += dirName + "/";
-                //rootUrl += dirName + "/";
-                if (!Directory.Exists(dirPath))
+                saveFilePath += dirName + "/";
+                hostFilePath += dirName + "/";
+
+                if (!Directory.Exists(saveFilePath))
                 {
-                    Directory.CreateDirectory(dirPath);
+                    Directory.CreateDirectory(saveFilePath);
                 }
             }
 
-            //根据path参数，设置各路径和URL
             string path = Request.QueryString["path"];
             path = String.IsNullOrEmpty(path) ? "" : path;
             if (path == "")
             {
-                currentPath = Server.MapPath(rootPath);
-                currentUrl = rootUrl;
+                currentPath = saveFilePath;
+                currentUrl = hostFilePath;
                 currentDirPath = "";
                 moveupDirPath = "";
             }
             else
             {
-                currentPath = Server.MapPath(rootPath) + path;
-                currentUrl = rootUrl + path;
+                currentPath = saveFilePath + path;
+                currentUrl = hostFilePath + path;
                 currentDirPath = path;
                 moveupDirPath = Regex.Replace(currentDirPath, @"(.*?)[^\/]+\/$", "$1");
             }
 
-            //排序形式，name or size or type
             string order = Request.QueryString["order"];
             order = String.IsNullOrEmpty(order) ? "" : order.ToLower();
 
-            //不允许使用..移动到上一级目录
             if (Regex.IsMatch(path, @"\.\."))
             {
                 Response.Write("Access is not allowed.");
                 Response.End();
             }
-            //最后一个字符不是/
+
             if (path != "" && !path.EndsWith("/"))
             {
                 Response.Write("Parameter is not valid.");
                 Response.End();
             }
-            //目录不存在或不是目录
+
             if (!Directory.Exists(currentPath))
             {
                 Response.Write("Directory does not exist.");
                 Response.End();
             }
 
-            //遍历目录取得文件信息
             string[] dirList = Directory.GetDirectories(currentPath);
             string[] fileList = Directory.GetFiles(currentPath);
 
@@ -237,7 +221,7 @@ namespace Makers.Admin.Controllers.Editor
                 hash["is_dir"] = false;
                 hash["has_file"] = false;
                 hash["filesize"] = file.Length;
-                hash["is_photo"] = (Array.IndexOf(fileTypes.Split(','), file.Extension.Substring(1).ToLower()) >= 0);
+                hash["is_photo"] = (Array.IndexOf(fileTypes, file.Extension.Substring(1).ToLower()) >= 0);
                 hash["filetype"] = file.Extension.Substring(1);
                 hash["filename"] = file.Name;
                 hash["datetime"] = file.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss");

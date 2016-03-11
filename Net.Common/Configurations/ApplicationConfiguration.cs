@@ -10,7 +10,7 @@ namespace Net.Common.Configurations
         public static ApplicationConfiguration Instance { get { return instance; } }
 
         /// <summary>
-        /// 공용 - 회원관련
+        /// 공용 - 회원관련, 파일관련
         /// </summary>
         private ApplicationConfiguration()
         {
