@@ -46,14 +46,14 @@
             int titleLength = blogTitle.Length;
             <a href="/blog/views/@blog.NO" class="box">
                 <img src="@Url.BlogThumbnail(blog.THUMB_RENAME)">
-                <span class="title">
+                <div class="title">
                     @if (titleLength > 26)
                     {
                         blogTitle = blogTitle.Substring(0, 27) + "...";
                     }
                     @blogTitle
-                    <span class="date">@String.Format("{0:yyyy.MM.dd}", blog.REG_DT)</span>
-                </span>
+                </div>
+                <div class="date">@String.Format("{0:yyyy.MM.dd}", blog.REG_DT)</div>
             </a>
         }
     </div>
