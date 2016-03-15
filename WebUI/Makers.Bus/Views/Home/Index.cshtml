@@ -3,6 +3,7 @@
     ViewBag.Title = "메이커버스";
     //배너
     IList<BannerExT> banners = ViewBag.MainBanner as IList<BannerExT>;
+    BusStateExT busState = ViewBag.BusState as BusStateExT;
 }
 
 <!-- topVisual -->
@@ -20,37 +21,39 @@
 <!-- //topVisual -->
 <div class="numWrap">
     <div class="current_num">
-        <div class="school"><span class="num">@ViewData["SchoolCnt"]</span><span class="title">방문학교</span></div>
+        <div class="school"><span class="num">@string.Format("{0:n0}", busState.SCHOOL_CNT)</span><span class="title">방문학교</span></div>
         <div class="line"></div>
-        <div class="modeling">
-            <span class="num">@ViewData["ModelingCnt"]</span><span class="title">모델링<br>
-                작업물</span>
-        </div>
+        <div class="modeling"><span class="num">@string.Format("{0:n0}", busState.STUDENT_CNT)</span><span class="title">참여학생</span></div>
         <div class="line"></div>
-        <div class="student">
-            <span class="num">@ViewData["StudentCnt"]</span><span class="title">워크샵<br>
-                참가학생</span>
-        </div>
+        <div class="student"><span class="num">@string.Format("{0:n0}", busState.MODELING_CNT)</span><span class="title">모델링 작품</div>
         <div class="line"></div>
-        <div class="printer">
-            <span class="num">@ViewData["PrinterCnt"]</span><span class="title">3D 프린터<br>
-                지원</span>
-        </div>
-        @*<div class="asof">2016년 2월 기준</div>*@
+        <div class="printer"><span class="num">@string.Format("{0:n0}", busState.PRINTER_CNT)</span><span class="title">프린터 지원</span></div>
+        @if (!string.IsNullOrEmpty(busState.STATE_MESSAGE))
+        {
+            <div class="asof">@busState.STATE_MESSAGE</div>
+        }
     </div>
 </div>
 <!-- Event -->
 <div class="graybg">
     <div class="mainTitle">
-        <h2>블로그</h2>
+        <h2>Blog</h2>
     </div>
     <div class="picList">
         @foreach (var blog in Model)
         {
+            string blogTitle = blog.BLOG_TITLE;
+            int titleLength = blogTitle.Length;
             <a href="/blog/views/@blog.NO" class="box">
                 <img src="@Url.BlogThumbnail(blog.THUMB_RENAME)">
-                <span class="title">@blog.BLOG_TITLE</span>
-                <span class="date">@String.Format("{0:yyyy.MM.dd}", blog.REG_DT)</span>
+                <span class="title">
+                    @if (titleLength > 26)
+                    {
+                        blogTitle = blogTitle.Substring(0, 27) + "...";
+                    }
+                    @blogTitle
+                    <span class="date">@String.Format("{0:yyyy.MM.dd}", blog.REG_DT)</span>
+                </span>
             </a>
         }
     </div>
@@ -65,7 +68,7 @@
     </div>
     <div class="spon">
         <div class="spon01"></div>
-       @* <div class="spon02"></div>
+        @* <div class="spon02"></div>
         <div class="spon03"></div>*@
     </div>
 </div>

@@ -478,6 +478,7 @@
     <Content Include="Content\images\radio_on.png" />
     <Content Include="Content\images\sp_btn_paging.png" />
     <Content Include="Content\images\sp_ico_main.png" />
+    <Content Include="Content\images\sp_ico_main_intro.png" />
     <Content Include="Content\images\txt_main.png" />
     <Content Include="Content\script\shared.jquery.js" />
     <Content Include="Content\themes\base\accordion.css" />

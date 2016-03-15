@@ -37,7 +37,8 @@ namespace Makers.Admin.Controllers
         {
             ViewData["Group"] = MenuModel(0);
 
-            ViewBag.MakerBusState = busManageDac.GetMakerbusState();
+            //ViewBag.MakerBusState = busManageDac.GetMakerbusState();
+            ViewBag.MakerBusState = busManageDac.GetBusStateExT();
 
             ViewData["HistoryCnt"] = busManageDac.getBusHistoryTotalCount();
             ViewData["BlogCnt"] = busManageDac.GetBusBlogTotalCount();
@@ -670,5 +671,42 @@ namespace Makers.Admin.Controllers
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult PostState(FormCollection collection)
+        {
+            AjaxResponseModel response = new AjaxResponseModel();
+            response.Success = false;
+            if (!string.IsNullOrEmpty(collection["SchoolCnt"]) && !string.IsNullOrEmpty(collection["StudentCnt"]) && !string.IsNullOrEmpty(collection["ModelingCnt"]) && !string.IsNullOrEmpty(collection["PrinterCnt"]))
+            {
+                int schoolCnt = int.Parse(collection["SchoolCnt"]);
+                int studentCnt = int.Parse(collection["StudentCnt"]);
+                int modelingCnt = int.Parse(collection["ModelingCnt"]);
+                int printerCnt = int.Parse(collection["PrinterCnt"]);
+                string stateMsg = collection["StateMessage"];
+
+                BusStateExT busState = busManageDac.GetBusStateExT();
+                busState.SCHOOL_CNT = schoolCnt;
+                busState.STUDENT_CNT = studentCnt;
+                busState.MODELING_CNT = modelingCnt;
+                busState.PRINTER_CNT = printerCnt;
+                busState.STATE_MESSAGE = stateMsg;
+
+                busState.UPD_DT = DateTime.Now;
+                busState.UPD_ID = Profile.UserNm;
+
+                bool ret = busManageDac.UpdateBusStateExT(busState);
+                if (ret)
+                {
+                    response.Success = true;
+                }
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
     }
 }

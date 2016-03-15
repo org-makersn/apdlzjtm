@@ -20,6 +20,7 @@ namespace Net.Framework.BizDac
         private ISimpleRepository<BusBlog> _blogRepo = new SimpleRepository<BusBlog>();
         private ISimpleRepository<BusTextbook> _textbookRepo = new SimpleRepository<BusTextbook>();
         private ISimpleRepository<Code> _codeRepo = new SimpleRepository<Code>();
+        private ISimpleRepository<BusStateExT> _stateRepo = new SimpleRepository<BusStateExT>();
 
         #region 진행현황 관리
         /// <summary>
@@ -627,6 +628,34 @@ namespace Net.Framework.BizDac
 
         }
 
+        #endregion
+
+        #region BusStateExT
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public bool UpdateBusStateExT(BusStateExT state)
+        {
+            return _stateRepo.Update(state);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public BusStateExT GetBusStateExT()
+        {
+            dbHelper = new SqlDbHelper(connectionString);
+            string targetQuery = @"SELECT NO, SCHOOL_CNT, STUDENT_CNT, MODELING_CNT, PRINTER_CNT, STATE_MESSAGE, REG_DT, REG_ID, UPD_DT, UPD_ID FROM BUS_STATE with(nolock) WHERE NO = 1 ";
+
+            using (var cmd = new SqlCommand(targetQuery))
+            {
+                var state = dbHelper.ExecuteSingle<BusStateExT>(cmd);
+                return state == null ? new BusStateExT() : state;
+            }
+        } 
         #endregion
     }
 }

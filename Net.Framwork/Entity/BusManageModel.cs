@@ -194,4 +194,20 @@ namespace Net.Framework.Entity
         public DateTime REG_DT { get; set; }
         public string REG_ID { get; set; }
     }
+
+    [Table("BUS_STATE")]
+    public partial class BusStateExT
+    {
+        [Key]
+        public int NO { get; set; }
+        public int SCHOOL_CNT { get; set; }
+        public int STUDENT_CNT { get; set; }
+        public int MODELING_CNT { get; set; }
+        public int PRINTER_CNT { get; set; }
+        public string STATE_MESSAGE { get; set; }
+        public DateTime REG_DT { get; set; }
+        public string REG_ID { get; set; }
+        public Nullable<DateTime> UPD_DT { get; set; }
+        public string UPD_ID { get; set; }
+    }
 }

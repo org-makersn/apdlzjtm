@@ -1,6 +1,7 @@
 ﻿using Net.Framework.BizDac;
 using Net.Framework.Entity;
 using Net.Framework.Util;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -22,11 +23,14 @@ namespace Makers.Bus.Controllers
             ViewBag.MainBanner = banners;
 
             //통계
-            MakerBusState state = busManageDac.GetMakerbusState();
-            ViewData["SchoolCnt"] = string.Format("{0:n0}", state.SchoolCnt);
-            ViewData["StudentCnt"] = string.Format("{0:n0}", state.StudentCnt);
-            ViewData["ModelingCnt"] = string.Format("{0:n0}", state.ModelingCnt);
-            ViewData["PrinterCnt"] = string.Format("{0:n0}", state.PrinterCnt);
+            //MakerBusState state = busManageDac.GetMakerbusState();
+            //ViewData["SchoolCnt"] = string.Format("{0:n0}", state.SchoolCnt);
+            //ViewData["StudentCnt"] = string.Format("{0:n0}", state.StudentCnt);
+            //ViewData["ModelingCnt"] = string.Format("{0:n0}", state.ModelingCnt);
+            //ViewData["PrinterCnt"] = string.Format("{0:n0}", state.PrinterCnt);
+
+            BusStateExT state = busManageDac.GetBusStateExT();
+            ViewBag.BusState = state;
 
             IList<BusBlog> blogs = busManageDac.GetBusBlogListByOption("Y", 1, 3);
 
