@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "메이커버스 소개";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    BusStateExT busState = ViewBag.BusState as BusStateExT;
 }
 
 <!-- //Header -->
@@ -51,7 +52,7 @@
     <div class="current_sit">
         <div class="current_sit1">
             <div class="school">
-                <span class="num">@ViewData["SchoolCnt"]</span><span class="title">방문학교</span><span class="numDisc">초등학교: 신남성초, 00초, 00초
+                <span class="num">@string.Format("{0:n0}", busState.SCHOOL_CNT)</span><span class="title">방문학교</span><span class="numDisc">초등학교: 신남성초, 00초, 00초
                     <br>
                     중학교: 가평중, 00중,00중
                     <br>
@@ -59,7 +60,7 @@
                 </span>
             </div>
             <div class="student">
-                <span class="num">@ViewData["StudentCnt"]</span><span class="title">워크샵<br>
+                <span class="num">@string.Format("{0:n0}", busState.STUDENT_CNT)</span><span class="title">워크샵<br>
                     참가학생</span><span class="numDisc">전국의 1000여명의 학생들이<br>
                         메이커버스 워크샵을 참여해<br>
                         주었습니다.</span>
@@ -67,7 +68,7 @@
         </div>
         <div class="current_sit2">
             <div class="modeling">
-                <span class="num">@ViewData["ModelingCnt"]</span><span class="title">모델링<br>
+                <span class="num">@string.Format("{0:n0}", busState.MODELING_CNT)</span><span class="title">모델링<br>
                     작업물</span><span class="numDisc">참여학 학생들이 생성한
                         <br>
                         모델링 파일의 수가
@@ -75,7 +76,7 @@
                         1000여개가 됩니다.</span>
             </div>
             <div class="printer">
-                <span class="num">@ViewData["PrinterCnt"]</span><span class="title">3D 프린터<br>
+                <span class="num">@string.Format("{0:n0}", busState.PRINTER_CNT)</span><span class="title">3D 프린터<br>
                     지원</span><span class="numDisc">2015년 25학교에 각각
                         <br>
                         한대씩의 3D 프린터를

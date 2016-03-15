@@ -29,11 +29,8 @@ namespace Makers.Bus.Controllers
             ViewData["Menu"] = "about";
             ViewData["IsMain"] = "Y";
             //통계
-            MakerBusState state = busManageDac.GetMakerbusState();
-            ViewData["SchoolCnt"] = string.Format("{0:n0}", state.SchoolCnt);
-            ViewData["StudentCnt"] = string.Format("{0:n0}", state.StudentCnt);
-            ViewData["ModelingCnt"] = string.Format("{0:n0}", state.ModelingCnt);
-            ViewData["PrinterCnt"] = string.Format("{0:n0}", state.PrinterCnt);
+            BusStateExT state = busManageDac.GetBusStateExT();
+            ViewBag.BusState = state;
 
             IList<BusHistory> historyList = busManageDac.getBusHistoryListByUseYn("Y");
 
