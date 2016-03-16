@@ -3,6 +3,7 @@ using Net.Framework.Entity;
 using Net.Framework.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Makers.Bus.Controllers
@@ -20,6 +21,7 @@ namespace Makers.Bus.Controllers
         {
             ViewData["IsMain"] = "Y";
             IList<BannerExT> banners = new BannerExDac().GetAllBannerList((int)BannerType.Bus);
+            banners = banners.OrderBy(m => m.Priority).ToList();
             ViewBag.MainBanner = banners;
 
             //통계
