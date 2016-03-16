@@ -28,6 +28,11 @@
             return false;
         }
 
+        if (!emailcheck(email)) {
+            alert("이메일 형식을 맞춰주세요");
+            return false;
+        }
+
         var url = "AddMakerBusQna";
 
         category = Number(category);
@@ -52,6 +57,18 @@
         $("#hidCategory").val(val);
     }
 
+    function emailcheck(strValue)
+    {
+        var regExp = /[0-9a-zA-Z][_0-9a-zA-Z-]*@@[_0-9a-zA-Z-]+(\.[_0-9a-zA-Z-]+){1,2}$/;
+    //입력을 안했으면
+    if(strValue.lenght == 0)
+    {return false;}
+    //이메일 형식에 맞지않으면
+    if (!strValue.match(regExp))
+    {return false;}
+    return true;
+}
+
 
 </script>
 }
@@ -64,10 +81,11 @@
             <li>
                 <div class="headerInput">분류</div>
                 <div class="inputRadio name">
-                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 0, 2001)" name="selCategory" title="선택버튼"></a><span>불편/개선사항</span>
-                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 1, 2002)" name="selCategory" title="선택버튼"></a><span>채용관련</span>
-                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 2, 2003)" name="selCategory" title="선택버튼"></a><span>제휴 및 협력 관련</span>
-                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 3, 2004)" name="selCategory" title="선택버튼"></a><span>미디어 관련</span>
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 0, 2006)" name="selCategory" title="선택버튼"></a><span>워크샵 관련</span>
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 1, 2004)" name="selCategory" title="선택버튼"></a><span>미디어 관련</span>
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 2, 2002)" name="selCategory" title="선택버튼"></a><span>채용관련</span>
+                    <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 3, 2001)" name="selCategory" title="선택버튼"></a><span>불편/개선사항</span>
+                    @*<a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 2, 2003)" name="selCategory" title="선택버튼"></a><span>제휴 및 협력 관련</span>*@                   
                     <a href="javascript:void(0);" class="radioBtn" onclick="SelCategory(this, 4, 2005)" name="selCategory" title="선택버튼"></a><span>기타</span>
                 </div>
             </li>
