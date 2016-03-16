@@ -64,7 +64,7 @@
                 <tr>
                     <th>신청서</th>
                     <td>
-                        <a href="@Model.APPLY_PATH">@Model.APPLY_PATH</a>
+                        <a href="javascript:void(0);" onclick="ApplyDownload('@Model.APPLY_PATH');">@Model.APPLY_PATH</a>
                     </td>
                 </tr>
                 <tr>
@@ -194,6 +194,10 @@
             buttonImageOnly: true,
             dateFormat: 'yy-mm-dd'
         });
+
+        function ApplyDownload(url) {
+            location.href = "http://182.162.141.59:8002/Apply/" + url;
+        }
 
     </script>
 }
