@@ -6,42 +6,48 @@
 
     $("#bigButton").on("click", function () {
 
-        var sName = $("#txtSchoolName").val();
-        var sAddr = $("#txtSchoolAddr").val();
-        var mName = $("#txtManagerName").val();
-        var mEmail = $("#txtManagerEmail").val();
-        var mTel = $("#txtManagerTel").val();
-        var applyFile = $("#fApplyFile").val();
+        //var sName = $("#txtSchoolName").val();
+        //var sAddr = $("#txtSchoolAddr").val();
+        //var mName = $("#txtManagerName").val();
+        //var mEmail = $("#txtManagerEmail").val();
+        //var mTel = $("#txtManagerTel").val();
+        //var applyFile = $("#fApplyFile").val();
 
-        if (sName == "") {
-            alert("학교명을 입력하세요");
-            return false;
-        }
-        if (sAddr == "") {
-            alert("학교주소를 입력하세요");
-            return false;
-        }
-        if (mName == "") {
-            alert("담당교사 성함을 입력하세요");
-            return false;
-        }
-        if (mEmail == "") {
-            alert("담당교사 이메일을 입력하세요");
-            return false;
-        }
-        if (mTel == "") {
-            alert("담당교사 연락처를 입력하세요");
-            return false;
-        }
-        if (applyFile == "") {
-            alert("신청서를 업로드해주세요");
-            return false;
-        }
+        //if (sName == "") {
+        //    alert("학교명을 입력하세요");
+        //    return false;
+        //}
+        //if (sAddr == "") {
+        //    alert("학교주소를 입력하세요");
+        //    return false;
+        //}
+        //if (mName == "") {
+        //    alert("담당교사 성함을 입력하세요");
+        //    return false;
+        //}
+        //if (mEmail == "") {
+        //    alert("담당교사 이메일을 입력하세요");
+        //    return false;
+        //}
+        //if (mTel == "") {
+        //    alert("담당교사 연락처를 입력하세요");
+        //    return false;
+        //}
+        //if (applyFile == "") {
+        //    alert("신청서를 업로드해주세요");
+        //    return false;
+        //}
 
-        var url = "AddApplyMakerBus";
+        //var url = "AddApplyMakerBus";
 
-        $("#applyForm").attr('action', url);
-        $("#applyForm").submit();
+        //$("#applyForm").attr('action', url);
+        //$("#applyForm").submit();
+
+        alert("준비중입니다.");
+    })
+
+    $(".downApply").on("click", function () {
+        alert("준비중입니다.");
     })
 
 </script>    
