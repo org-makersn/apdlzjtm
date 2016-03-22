@@ -234,7 +234,7 @@
 .subPage.blog .blogList .blogCont{display:inline-block;position:absolute;top:85px;left:65px;width:600px;font-size:14px;color:#565656;line-height:22px}
 .subPage.blog .blogList .blogDate{display:inline-block;position:absolute;top:175px;left:65px;font-size:14px;color:#9f9f9f}
 .subPage.blog .blogList .blogImg{position:absolute;top:20px;right:20px}
-.blogContent{margin:20px 100px 50px 66px;font-size:18px;line-height:37px}
+.blogContent{margin:20px 100px 50px 66px;font-size:18px;line-height:30px}
 .blogContent img{margin:20px 0 20px 0}
 .blogDateIn{margin:20px 100px 50px 66px;font-size:14px;color:#9f9f9f}
 

@@ -29,7 +29,7 @@ namespace Makers.Admin.Controllers.Editor
             extFileHash.Add("media", "swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb");
             extFileHash.Add("file", "doc,docx,xls,xlsx,ppt,htm,html,txt,zip,rar,gz,bz2");
 
-            int maxSize = 1000000;
+            int maxSize = 1048576000;
 
             Hashtable hashResult = new Hashtable();
 

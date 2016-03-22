@@ -88,14 +88,17 @@
 					'insertunorderedlist', '|', 'emoticons', 'image', 'link', 'unlink', '|', 'preview', 'fullscreen'
         ];
         KindEditor.ready(function (K) {
-            //console.log(K);
             editor = K.create('textarea[id="BLOG_CONTENTS"]', {
+                width: "800px",
+                newlineTag: "p",
                 allowFileManager: true,
                 allowUpload: true,
+                urlType: 'domain',
                 langType: 'ko',
                 items: editorItems,
+                formatUploadUrl: false,
                 fileManagerJson: '/KindEditor/FileManager',     //Browse file method 
-                uploadJson: '/KindEditor/UploadImage'           //Upload file method     
+                uploadJson: '/KindEditor/UploadImage'          //Upload file method     
             });
         });
 
