@@ -40,7 +40,7 @@ namespace Makers.Bus.Controllers
             BusManageDac dac = new BusManageDac();
             int pageSize = page_size;
 
-            IList<BusFaqT> list = dac.GetMakersbusFaqList();
+            IList<BusFaqT> list = dac.GetMakersbusFaqList().Where(p => p.USE_YN.Equals("Y")).ToList();
 
             int fromIndex = ((page - 1) * pageSize) + 1;
             int toIndex = page * pageSize;
