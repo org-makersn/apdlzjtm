@@ -23,7 +23,7 @@ namespace Makers.Bus.Controllers
         /// 소개
         /// </summary>
         /// <returns></returns>
-        [OutputCache(Duration = 300, VaryByParam = "none")]
+        //[OutputCache(Duration = 300, VaryByParam = "none")]
         public ActionResult About()
         {
             ViewData["Menu"] = "about";

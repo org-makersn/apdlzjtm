@@ -471,6 +471,7 @@
     <Content Include="Content\images\line.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_spon.png" />
+    <Content Include="Content\images\main_txt_event.png" />
     <Content Include="Content\images\partners.png" />
     <Content Include="Content\images\partners_main.png" />
     <Content Include="Content\images\placeholder-image.png" />
@@ -580,6 +581,7 @@
     <Content Include="Views\Info\About.cshtml" />
     <Content Include="Views\Info\Workshop.cshtml" />
     <Content Include="Views\Blog\Views.cshtml" />
+    <Content Include="Views\Home\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

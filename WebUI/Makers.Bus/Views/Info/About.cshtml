@@ -20,7 +20,7 @@
     <div class="mainDesc">
         <h3>3D 프린터, 만들기 도구, 강사를 태운 버스가 직접 학교에 방문하여 진행하는 “찾아가는 일일 메이킹 워크샵” 프로그램입니다.
             <br>
-            신청된 학교 중 선별하여 학교에는 무료로 방문합니다.
+            신청한 학교 중 선정하여 무료로 방문 교육을 진행합니다.
         </h3>
     </div>
     <div class="intro">
@@ -52,39 +52,46 @@
     <div class="current_sit">
         <div class="current_sit1">
             <div class="school">
-                <span class="num">@string.Format("{0:n0}", busState.SCHOOL_CNT)</span><span class="title">방문학교</span><span class="numDisc">초등학교: 신남성초, 00초, 00초
+                <span class="num">@string.Format("{0:n0}", busState.SCHOOL_CNT)</span><span class="title">방문학교</span>
+                <span class="numDisc">초중고 모두 신청 가능하며,
                     <br>
-                    중학교: 가평중, 00중,00중
+                    3D 프린팅 또는 모델링 수준에 따라 
                     <br>
-                    고등학교: 00고, 00고
+                    교육 내용이 달라집니다. 
                 </span>
             </div>
             <div class="student">
-                <span class="num">@string.Format("{0:n0}", busState.STUDENT_CNT)</span><span class="title">워크샵<br>
-                    참가학생</span><span class="numDisc">전국의 1000여명의 학생들이<br>
-                        메이커버스 워크샵을 참여해<br>
-                        주었습니다.</span>
+                <span class="num">@string.Format("{0:n0}", busState.STUDENT_CNT)</span>
+                <span class="title">워크샵<br>
+                    참가학생</span>
+                <span class="numDisc">전국 1000여명의 학생들이<br>
+                    메이커버스 수업에 <br />참여하였습니다.
+                </span>
             </div>
         </div>
         <div class="current_sit2">
             <div class="modeling">
                 <span class="num">@string.Format("{0:n0}", busState.MODELING_CNT)</span><span class="title">모델링<br>
-                    작업물</span><span class="numDisc">참여학 학생들이 생성한
+                    작업물</span><span class="numDisc">
+                        참여한 학생들은 열쇠고리, 악세사리,
                         <br>
-                        모델링 파일의 수가
+                        미래의 건물 또는 탈 것 등
                         <br>
-                        1000여개가 됩니다.</span>
+                        다양한 콘텐츠를 창작합니다.
+                    </span>
             </div>
             <div class="printer">
                 <span class="num">@string.Format("{0:n0}", busState.PRINTER_CNT)</span><span class="title">3D 프린터<br>
-                    지원</span><span class="numDisc">2015년 25학교에 각각
+                    지원</span>
+                <span class="numDisc">메이커버스 학교 3D 프린터
                         <br>
-                        한대씩의 3D 프린터를
-                        <br>
-                        지원하였습니다.</span>
+                    지원 프로젝트를 통해 3D 프린터를 <br>
+                    지원 받은 학교 수 입니다.
+                </span>
             </div>
         </div>
     </div>
+
     <div class="history">
         <div class="line"></div>
         <div class="col1">
@@ -102,9 +109,7 @@
                 <br />
             }
         </div>
-
     </div>
-
 </div>
 
 
