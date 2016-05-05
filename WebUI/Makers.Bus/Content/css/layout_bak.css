@@ -62,15 +62,16 @@
 
 
 .mainButtons .top_txt{z-index:201;position:absolute;top:10.6%;left:50%;margin-left:-225px;display:block;width:500px;height:166px;background:url(../images/txt_main.png) no-repeat}
-.mainButtons .top_txt_event{z-index:201;position:absolute;top:10.6%;left:50%;margin-left:-310px;display:block;width:800px;height:166px;background:url(../images/main_txt_event.png) no-repeat}
+.mainButtons .top_txt_event{z-index:201;position:absolute;top:10.6%;left:50%;margin-left:-300px;display:block;width:800px;height:166px;background:url(../images/main_txt_event.png) no-repeat}
 
 .mainButtons .top_btn_apply{z-index:201;position:absolute;top:138%;left:50%;width:262px;height:52px;background-color:#fb810e;color:#fff;font-size:18px;line-height:52px;font-weight:bold;text-align:center;margin-left:-288px;border-radius:9px;-ms-border-radius:9px;-webkit-border-radius:9px;}
 .mainButtons .top_btn_apply:hover{background-color:#e86e00}
 .mainButtons .top_btn_inquire{z-index:201;position:absolute;top:138%;left:50%;width:262px;height:52px;background-color:#fb810e;color:#fff;font-size:18px;line-height:52px;font-weight:bold;text-align:center;margin-left:10px;border-radius:9px;-ms-border-radius:9px;-webkit-border-radius:9px;}
 .mainButtons .top_btn_inquire:hover{background-color:#e86e00}
 
-.mainButtons .top_btn_event{z-index:201;position:absolute;top:75%;left:50%;width:200px;height:55px;border:solid 2px #fff;background:none;color:#fff;font-size:26px;line-height:55px;font-weight:bold;text-align:center;margin-left:-190px;border-radius:2px;-ms-border-radius:2px;-webkit-border-radius:2px;}
+.mainButtons .top_btn_event{z-index:201;position:absolute;top:75%;left:50%;width:105px;height:30px;border:solid 2px #fff;background:none;color:#fff;font-size:15px;line-height:28px;font-weight:bold;text-align:center;margin-left:-143px;border-radius:2px;-ms-border-radius:2px;-webkit-border-radius:2px;}
 .mainButtons .top_btn_event:hover{border:solid 2px #fb810e;color:#fb810e}
+
 
 
 /* MainSlide */
@@ -141,12 +142,12 @@
 .graybg .picList{margin:0 auto;display:block;width:1055px;height:320px;text-align:center;}
 .graybg .picList a.box{display:inline-block;float:left;;margin-left:15px;margin-right:15px;padding:10px;width:321px;height:236px;background:#fff;text-align:left}
 .graybg .picList .box .title{display:inline-block;line-height:19px;font-size:14px;color:#333333;padding:10px 7px 0 7px}
-.graybg .picList .box .date{font-size:12px;color:#999999;padding:0 7px 0 0}
+.graybg .picList .box .date{font-size:12px;color:#999999;padding:0 7px 0 7px; line-height:25px;}
 .more{position:absolute;top:356px;left:49.4%;margin-left:-48px;margin-bottom: 37px;display: inline-block;width: 120px;height: 35px;background: #f4f4f6;color: #fb810e;border: solid 2px #fb810e;text-align: center;line-height: 35px;font-size: 14px;font-weight: bold;border-radius:3px;-ms-border-radius:3px;-webkit-border-radius:3px}
 .more:hover{background:#fb810e;color:#ffffff}
 
 /* 소개 */
-.graybg.intro{margin-bottom:-100px;height:800px}
+.graybg.intro{margin-bottom:-100px;height:880px}
 .current_sit{position:absolute;left:50%;margin-left:-480px}
 .current_sit1{margin-top:10px;width:800px;}
 .current_sit2{margin-top:40px;width:800px;}
@@ -160,7 +161,7 @@
 .current_sit1 .num,.current_sit2 .num{display:block;margin-left:140px;padding-top:10px;width:100px;font-size:33px;color:#fb810e;font-weight:bold;text-align:center;letter-spacing:-1px}
 
 .current_sit1 .school .numDisc{float:left;margin-left:220px;margin-top:-50px;width:200px;font-size:13px;text-align:left}
-.current_sit1 .student .numDisc{float:left;margin-left:220px;margin-top:-50px;width:200px;font-size:13px;text-align:left}
+.current_sit1 .student .numDisc{float:left;margin-left:220px;margin-top:-70px;width:200px;font-size:13px;text-align:left}
 .current_sit2 .modeling .numDisc{float:left;margin-left:220px;margin-top:-50px;width:200px;font-size:13px;text-align:left}
 .current_sit2 .printer .numDisc{float:left;margin-left:220px;margin-top:-50px;width:200px;font-size:13px;text-align:left}
 .current_sit:after{content:"";display:block;clear:both}
@@ -177,11 +178,10 @@
 .current_sit2 .modeling .num{margin-left:110px;margin-top:7px}
 .current_sit2 .modeling .title{margin-left:111px;padding-top:5px}
 
-.history{display:inline-block;position:absolute;left:50%;top:450px;margin-left:-130px;font-size:17px;line-height:30px}
+.history{display:inline-block;position:absolute;left:42%;top:450px;margin-left:-130px;font-size:17px;line-height:30px}
 .history .line{display:block;width:80px;height:1px;background:#fb810e;position:absolute;left:50%;top:-20px;margin-left:-60px}
 .history .col1{width:100px;float:left}
-.history .col2{width:200px;float:left}
-
+.history .col2{width:500px;float:left}
 
 /* 신청문의 */
 .subPage{position:relative;width:100%; margin:0 auto; background:#f4f4f6}
@@ -235,12 +235,12 @@
 .subPage .imgPatner{display:inline-block;margin-left:105px;margin-top:45px;width:815px;height:241px;background:url(../images/partners.png) no-repeat}
 
 /* 블로그 */
-.subPage.blog .blogList{position:relative;display:block;margin:0 auto;margin-bottom:20px;width:1025px;height:272px;background:#fff;}
-.subPage.blog .blogList .blogTitle{display:inline-block;position:absolute;top:35px;left:65px;font-size:25px;color:#6a6969}
-.subPage.blog .blogList .blogCont{display:inline-block;position:absolute;top:85px;left:65px;width:410px;font-size:14px;color:#565656;line-height:22px}
-.subPage.blog .blogList .blogDate{display:inline-block;position:absolute;top:210px;left:65px;font-size:14px;color:#9f9f9f}
+.subPage.blog .blogList{position:relative;display:block;margin:0 auto;margin-bottom:20px;width:1025px;height:209px;background:#fff;}
+.subPage.blog .blogList .blogTitle{display:inline-block;position:absolute;top:35px;left:65px;font-size:21px;color:#6a6969}
+.subPage.blog .blogList .blogCont{display:inline-block;position:absolute;top:85px;left:65px;width:600px;font-size:14px;color:#565656;line-height:22px}
+.subPage.blog .blogList .blogDate{display:inline-block;position:absolute;top:175px;left:65px;font-size:14px;color:#9f9f9f}
 .subPage.blog .blogList .blogImg{position:absolute;top:20px;right:20px}
-.blogContent{margin:20px 100px 50px 66px;font-size:18px;line-height:37px}
+.blogContent{margin:20px 100px 50px 66px;font-size:18px;line-height:30px}
 .blogContent img{margin:20px 0 20px 0}
 .blogDateIn{margin:20px 100px 50px 66px;font-size:14px;color:#9f9f9f}
 
