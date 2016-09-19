@@ -64,6 +64,16 @@
 </style>
 
 <script type="text/javascript">
+    $.urlParam = function (name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return results[1] || 0;
+        }
+    }
+    
     $(function () {
         $(".mainMenu li a").removeClass("on");
         //$('.noticeList ul li .titleBox a').on('click', function (e) {
@@ -105,5 +115,10 @@
         if("@ViewBag.Competition" != ""){
             $("#div_1").click();
         }
+        
+        var no = $.urlParam('param1');
+
+        $('.noticeList ul li .titleBox a[data-no=' + no + ']').click();
+        
     });
 </script>
